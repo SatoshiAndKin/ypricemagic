@@ -527,6 +527,10 @@ class UniswapV3(a_sync.ASyncGenericBase):
         Returns:
             The per-unit price of the token in USD, or None if not available.
 
+        Examples:
+            >>> uniswap_v3 = UniswapV3(...)
+            >>> price = await uniswap_v3.get_price("0xTokenAddress", 1234567)
+
         See Also:
             :func:`y.prices.magic.get_price`
         """

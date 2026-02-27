@@ -142,6 +142,11 @@ class UniswapMultiplexer(ASyncGenericSingleton):
             amount: The amount of tokens to quote (in human-readable units).
                 When provided, the quote accounts for price impact.
 
+        Examples:
+            >>> multiplexer = UniswapMultiplexer(asynchronous=True)
+            >>> price = await multiplexer.get_price("0xTokenAddress", block=12345678)
+            >>> print(price)
+
         See Also:
             - :meth:`~UniswapMultiplexer.routers_by_depth`
         """

@@ -98,6 +98,12 @@ class UniswapV1(a_sync.ASyncGenericBase):
         Returns:
             The per-unit price of the token in USD, or None if the price cannot be determined.
 
+        Examples:
+            >>> uniswap_v1 = UniswapV1()
+            >>> price = await uniswap_v1.get_price("0xTokenAddress", 12345678)
+            >>> print(price)
+            1.23
+
         See Also:
             - :class:`~y.datatypes.UsdPrice`
         """
