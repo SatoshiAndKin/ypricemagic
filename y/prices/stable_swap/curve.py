@@ -1,5 +1,6 @@
 from asyncio import CancelledError, Task, create_task, sleep
 from collections import defaultdict
+from decimal import Decimal
 from enum import IntEnum
 from functools import cached_property
 from itertools import filterfalse
@@ -374,11 +375,13 @@ class CurvePool(ERC20):
         block: Block | None = None,
         ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,
+        amount: Decimal | int | float | None = None,
     ) -> WeiBalance | None:
         tokens = await self.__coins__
         token_in: ERC20 = tokens[coin_ix_in]
         token_out: ERC20 = tokens[coin_ix_out]
-        amount_in = await token_in.__scale__
+        scale = await token_in.__scale__
+        amount_in = int(Decimal(str(amount)) * scale) if amount is not None else scale
         contract = await Contract.coroutine(self.address)
         try:
             amount_out = await contract.get_dy.coroutine(
@@ -673,6 +676,7 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
         block: Block | None = None,
         ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,
+        amount: Decimal | int | float | None = None,
     ) -> UsdPrice | None:
         try:
             pools = (await self.__coin_to_pools__)[token_in]
@@ -728,13 +732,16 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
             block=block,
             ignore_pools=ignore_pools,
             skip_cache=skip_cache,
+            amount=amount,
             sync=False,
         )
         if dy is None:
             return None
 
+        _amount = Decimal(str(amount)) if amount is not None else Decimal(1)
         try:
-            return await dy.__value_usd__
+            usd_value = await dy.__value_usd__
+            return UsdPrice(usd_value / _amount)
         except yPriceMagicError as e:
             logger.debug("%s for %s at block %s", type(e.exception).__name__, token_in, block)
             if not isinstance(e.exception, PriceError):
@@ -746,6 +753,7 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
                 block,
                 ignore_pools=(*ignore_pools, pool),
                 skip_cache=skip_cache,
+                amount=amount,
             )
 
     @a_sync.aka.cached_property

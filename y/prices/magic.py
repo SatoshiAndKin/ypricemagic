@@ -1,4 +1,5 @@
 from collections.abc import Callable, Iterable
+from decimal import Decimal
 from functools import wraps
 from logging import DEBUG, Logger, getLogger
 from typing import Literal, TypeVar, overload
@@ -55,6 +56,7 @@ async def get_price(
     skip_cache: bool = ENVS.SKIP_CACHE,
     ignore_pools: tuple[Pool, ...] = (),
     silent: bool = False,
+    amount: Decimal | int | float | None = None,
 ) -> UsdPrice | None: ...
 
 
@@ -67,6 +69,7 @@ async def get_price(
     skip_cache: bool = ENVS.SKIP_CACHE,
     ignore_pools: tuple[Pool, ...] = (),
     silent: bool = False,
+    amount: Decimal | int | float | None = None,
 ) -> UsdPrice: ...
 
 
@@ -79,6 +82,7 @@ async def get_price(
     skip_cache: bool = ENVS.SKIP_CACHE,
     ignore_pools: tuple[Pool, ...] = (),
     silent: bool = False,
+    amount: Decimal | int | float | None = None,
 ) -> UsdPrice | None:
     """
     Get the price of a token in USD.
@@ -90,6 +94,9 @@ async def get_price(
         skip_cache (optional): If True, bypass the cache and fetch the price directly. Defaults to :obj:`ENVS.SKIP_CACHE`.
         ignore_pools (optional): A tuple of pool addresses to ignore when fetching the price.
         silent: If True, suppress error logging. Defaults to False.
+        amount: The amount of tokens to quote in human-readable units (e.g. 1000 = 1000 tokens).
+            When provided, the price accounts for price impact on DEX sources. The returned
+            price is still per-unit (USD per token). Defaults to None (spot price for 1 token).
 
     Returns:
         The price of the token in USD, or None if the price couldn't be determined and fail_to_None is True.
@@ -106,6 +113,8 @@ async def get_price(
         >>> from y import get_price
         >>> price = get_price("0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e", 12345678)
         >>> print(price)
+        >>> # Get price with price impact for selling 1000 tokens:
+        >>> price = get_price("0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e", 12345678, amount=1000)
 
     See Also:
         :func:`get_prices`
@@ -120,6 +129,7 @@ async def get_price(
             ignore_pools=ignore_pools,
             skip_cache=skip_cache,
             silent=silent,
+            amount=amount,
         )
     except (ContractNotFound, NonStandardERC20, PriceError) as e:
         symbol = await ERC20(token_address, asynchronous=True).symbol
@@ -136,6 +146,7 @@ async def get_prices(
     fail_to_None: Literal[True],
     skip_cache: bool = ENVS.SKIP_CACHE,
     silent: bool = False,
+    amounts: Iterable[Decimal | int | float | None] | None = None,
 ) -> list[UsdPrice | None]: ...
 
 
@@ -147,6 +158,7 @@ async def get_prices(
     fail_to_None: bool = False,
     skip_cache: bool = ENVS.SKIP_CACHE,
     silent: bool = False,
+    amounts: Iterable[Decimal | int | float | None] | None = None,
 ) -> list[UsdPrice]: ...
 
 
@@ -158,6 +170,7 @@ async def get_prices(
     fail_to_None: bool = False,
     skip_cache: bool = ENVS.SKIP_CACHE,
     silent: bool = False,
+    amounts: Iterable[Decimal | int | float | None] | None = None,
 ) -> list[UsdPrice | None]:
     """
     Get prices for multiple tokens in USD.
@@ -171,6 +184,9 @@ async def get_prices(
         fail_to_None (optional): If True, return None for tokens whose price couldn't be determined. Defaults to False.
         skip_cache (optional): If True, bypass the cache and fetch prices directly. Defaults to :obj:`ENVS.SKIP_CACHE`.
         silent (optional): If True, suppress error logging and any progress indicators. Defaults to False.
+        amounts: An iterable of per-token amounts (in human-readable units) parallel to
+            ``token_addresses``. When provided, each price accounts for price impact on DEX
+            sources. The returned prices are still per-unit. Defaults to None (spot prices).
 
     Returns:
         A list of token prices in USD, in the same order as the input :samp:`token_addresses`.
@@ -178,11 +194,28 @@ async def get_prices(
     Examples:
         >>> from y import get_prices
         >>> prices = get_prices(["0x123...", "0x456..."], block=12345678)
-        >>> print(prices)
+        >>> # With per-token amounts for price impact:
+        >>> prices = get_prices(["0x123...", "0x456..."], block=12345678, amounts=[1000, 500])
 
     See Also:
         :func:`get_price` and :func:`map_prices`
     """
+    if amounts is not None:
+        block_number = block or await dank_mids.eth.block_number
+        return list(
+            await igather(
+                get_price(
+                    t,
+                    block_number,
+                    fail_to_None=fail_to_None,
+                    skip_cache=skip_cache,
+                    silent=silent,
+                    amount=a,
+                    sync=False,
+                )
+                for t, a in zip(token_addresses, amounts)
+            )
+        )
     return await map_prices(
         token_addresses,
         block or await dank_mids.eth.block_number,
@@ -200,6 +233,7 @@ def map_prices(
     fail_to_None: Literal[True],
     skip_cache: bool = ENVS.SKIP_CACHE,
     silent: bool = False,
+    amount: Decimal | int | float | None = None,
 ) -> a_sync.TaskMapping[_TAddress, UsdPrice | None]: ...
 
 
@@ -211,6 +245,7 @@ def map_prices(
     fail_to_None: bool = False,
     skip_cache: bool = ENVS.SKIP_CACHE,
     silent: bool = False,
+    amount: Decimal | int | float | None = None,
 ) -> a_sync.TaskMapping[_TAddress, UsdPrice]: ...
 
 
@@ -221,6 +256,7 @@ def map_prices(
     fail_to_None: bool = False,
     skip_cache: bool = ENVS.SKIP_CACHE,
     silent: bool = False,
+    amount: Decimal | int | float | None = None,
 ) -> a_sync.TaskMapping[_TAddress, UsdPrice | None]:
     """
     Map token addresses to their prices asynchronously.
@@ -231,6 +267,8 @@ def map_prices(
         fail_to_None (optional): If True, map tokens whose price couldn't be determined to None. Defaults to False.
         skip_cache (optional): If True, bypass the cache and fetch prices directly. Defaults to :obj:`ENVS.SKIP_CACHE`.
         silent (optional): If True, suppress error logging. Defaults to False.
+        amount: A uniform amount of tokens (in human-readable units) to use for each price query.
+            When provided, prices account for price impact on DEX sources. Defaults to None.
 
     Returns:
         A :class:`~a_sync.TaskMapping` object mapping token addresses to their USD prices.
@@ -252,6 +290,7 @@ def map_prices(
         fail_to_None=fail_to_None,
         skip_cache=skip_cache,
         silent=silent,
+        amount=amount,
     )
 
 
@@ -275,10 +314,12 @@ def __cache(get_price: Callable[_P, _T]) -> Callable[_P, _T]:
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
         silent: bool = False,
+        amount: Decimal | int | float | None = None,
     ) -> UsdPrice | None:
         from y._db.utils import price as db
 
-        if not skip_cache and (price := await db.get_price(token, block)):
+        # Only use disk cache for unit prices (amount=None)
+        if amount is None and not skip_cache and (price := await db.get_price(token, block)):
             cache_logger.debug("disk cache -> %s", price)
             return price
         price = await get_price(
@@ -287,8 +328,9 @@ def __cache(get_price: Callable[_P, _T]) -> Callable[_P, _T]:
             fail_to_None=fail_to_None,
             ignore_pools=ignore_pools,
             silent=silent,
+            amount=amount,
         )
-        if price and not skip_cache:
+        if price and amount is None and not skip_cache:
             db.set_price(token, block, price)
         return price
 
@@ -306,6 +348,7 @@ async def _get_price(
     skip_cache: bool = ENVS.SKIP_CACHE,
     ignore_pools: tuple[Pool, ...] = (),
     silent: bool = False,
+    amount: Decimal | int | float | None = None,
 ) -> UsdPrice | None:  # sourcery skip: remove-redundant-if
     """
     Internal function to get the price of a token.
@@ -319,6 +362,7 @@ async def _get_price(
         skip_cache: If True, bypass the cache and fetch the price directly.
         ignore_pools: A tuple of pool addresses to ignore when fetching the price.
         silent: If True, suppress error logging.
+        amount: The amount of tokens (human-readable units) to use for DEX quotes.
 
     Returns:
         The price of the token in USD, or None if the price couldn't be determined and fail_to_None is True.
@@ -349,7 +393,9 @@ async def _get_price(
                 logger=logger,
             )
         if price is None:
-            price = await _get_price_from_dexes(token, block, ignore_pools, skip_cache, logger)
+            price = await _get_price_from_dexes(
+                token, block, ignore_pools, skip_cache, logger, amount=amount
+            )
         if price:
             await utils.sense_check(token, block, price)
         else:
@@ -572,6 +618,7 @@ async def _get_price_from_dexes(
     ignore_pools,
     skip_cache: bool,
     logger: Logger,
+    amount: Decimal | int | float | None = None,
 ):
     """
     Attempt to get the price from decentralized exchanges.
@@ -584,6 +631,8 @@ async def _get_price_from_dexes(
         ignore_pools: A tuple of pool addresses to ignore when fetching the price.
         skip_cache: If True, bypass the cache and fetch the price directly.
         logger: A logger instance for recording debug information.
+        amount: The amount of tokens (human-readable units) to use for quotes.
+            When provided, the price accounts for price impact.
 
     Returns:
         The price of the token if it can be determined from DEXes, or None otherwise.
@@ -617,7 +666,12 @@ async def _get_price_from_dexes(
         if debug_logs_enabled:
             log_debug("trying %s", dex)
         price = await getattr(dex, method)(
-            token, block, ignore_pools=ignore_pools, skip_cache=skip_cache, sync=False
+            token,
+            block,
+            ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
+            amount=amount,
+            sync=False,
         )
         if debug_logs_enabled:
             log_debug("%s -> %s", dex, price)
@@ -633,7 +687,12 @@ async def _get_price_from_dexes(
 
     # If price is 0, we can at least try to see if balancer gives us a price. If not, its probably a shitcoin.
     if price := await balancer_multiplexer.get_price(
-        token, block=block, skip_cache=skip_cache, ignore_pools=ignore_pools, sync=False
+        token,
+        block=block,
+        skip_cache=skip_cache,
+        ignore_pools=ignore_pools,
+        amount=amount,
+        sync=False,
     ):
         if debug_logs_enabled:
             log_debug("balancer -> %s", price)

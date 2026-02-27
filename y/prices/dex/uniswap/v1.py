@@ -1,4 +1,5 @@
 from contextlib import suppress
+from decimal import Decimal
 from logging import DEBUG, getLogger
 from typing import Any
 
@@ -81,6 +82,7 @@ class UniswapV1(a_sync.ASyncGenericBase):
         block: Block | None,
         ignore_pools: tuple[Pool, ...] = (),  # unused
         skip_cache: bool = ENVS.SKIP_CACHE,  # unused
+        amount: Decimal | int | float | None = None,
     ) -> UsdPrice | None:
         """
         Get the price of a token in USD.
@@ -90,15 +92,11 @@ class UniswapV1(a_sync.ASyncGenericBase):
             block: The block number at which to get the price.
             ignore_pools: Unused parameter.
             skip_cache: Unused parameter.
+            amount: The amount of tokens to quote (in human-readable units).
+                When provided, the quote accounts for price impact.
 
         Returns:
-            The price of the token in USD, or None if the price cannot be determined.
-
-        Examples:
-            >>> uniswap_v1 = UniswapV1()
-            >>> price = await uniswap_v1.get_price("0xTokenAddress", 12345678)
-            >>> print(price)
-            1.23
+            The per-unit price of the token in USD, or None if the price cannot be determined.
 
         See Also:
             - :class:`~y.datatypes.UsdPrice`
@@ -111,18 +109,24 @@ class UniswapV1(a_sync.ASyncGenericBase):
         if exchange is None:
             return None
 
+        if amount is not None:
+            _amount = Decimal(str(amount))
+            raw_amount = int(_amount * 10**decimals)
+        else:
+            _amount = Decimal(1)
+            raw_amount = 10**decimals
+
         try:
             eth_bought = await exchange.getTokenToEthInputPrice.coroutine(
-                10**decimals, block_identifier=block
+                raw_amount, block_identifier=block
             )
-            usdc_bought = (
+            usdc_bought = Decimal(
                 await usdc_exchange.getEthToTokenInputPrice.coroutine(
                     eth_bought, block_identifier=block
                 )
-                / 1e6
-            )
-            fees = 0.997**2
-            return UsdPrice(usdc_bought / fees)
+            ) / Decimal(1e6)
+            fees = Decimal("0.997") ** 2
+            return UsdPrice(usdc_bought / fees / _amount)
         except ValueError as e:
             if "invalid jump destination" in str(e):
                 return None

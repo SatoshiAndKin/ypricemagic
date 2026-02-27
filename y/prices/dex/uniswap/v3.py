@@ -511,6 +511,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
         block: Block | None = None,
         ignore_pools: tuple[Pool, ...] = (),  # unused
         skip_cache: bool = ENVS.SKIP_CACHE,  # unused
+        amount: Decimal | int | float | None = None,
     ) -> UsdPrice | None:
         """
         Get the price of a token in USD.
@@ -520,13 +521,11 @@ class UniswapV3(a_sync.ASyncGenericBase):
             block: The block number to get the price at.
             ignore_pools: Pools to ignore (unused).
             skip_cache: Whether to skip cache (unused).
+            amount: The amount of tokens to quote (in human-readable units).
+                When provided, the quote accounts for price impact.
 
         Returns:
-            The price of the token in USD, or None if not available.
-
-        Examples:
-            >>> uniswap_v3 = UniswapV3(...)
-            >>> price = await uniswap_v3.get_price("0xTokenAddress", 1234567)
+            The per-unit price of the token in USD, or None if not available.
 
         See Also:
             :func:`y.prices.magic.get_price`
@@ -545,7 +544,14 @@ class UniswapV3(a_sync.ASyncGenericBase):
         if debug_logs_enabled := logger.isEnabledFor(DEBUG):
             logger._log(DEBUG, "paths: %s", (paths,))
 
-        amount_in = await ERC20._get_scale_for(token)
+        scale = await ERC20._get_scale_for(token)
+        if amount is not None:
+            _amount = Decimal(str(amount))
+            amount_in = int(_amount * scale)
+        else:
+            _amount = Decimal(1)
+            amount_in = scale
+
         results = await igather(self._quote_exact_input(path, amount_in, block) for path in paths)
 
         if debug_logs_enabled:
@@ -554,7 +560,9 @@ class UniswapV3(a_sync.ASyncGenericBase):
         outputs = list(filter(None, results))
         if debug_logs_enabled:
             logger._log(DEBUG, "outputs: %s", (outputs,))
-        return UsdPrice(max(outputs)) if outputs else None
+        if not outputs:
+            return None
+        return UsdPrice(max(outputs) / _amount)
 
     @stuck_coro_debugger
     @a_sync.a_sync(ram_cache_maxsize=100_000, ram_cache_ttl=60 * 60)

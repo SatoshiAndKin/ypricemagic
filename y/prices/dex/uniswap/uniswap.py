@@ -1,6 +1,7 @@
 import logging
 import threading
 from contextlib import suppress
+from decimal import Decimal
 from typing import Union
 
 from a_sync import ASyncGenericSingleton, igather
@@ -127,9 +128,10 @@ class UniswapMultiplexer(ASyncGenericSingleton):
         block: Block | None = None,
         ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,
+        amount: Decimal | int | float | None = None,
     ) -> UsdPrice | None:
         """
-        Calculate a price based on Uniswap Router quote for selling one `token_in`.
+        Calculate a price based on Uniswap Router quote for selling `token_in`.
         Always finds the deepest swap path for `token_in`.
 
         Args:
@@ -137,11 +139,8 @@ class UniswapMultiplexer(ASyncGenericSingleton):
             block: The block number to query. Defaults to the latest block.
             ignore_pools: A tuple of Pool objects to ignore when checking liquidity.
             skip_cache: If True, skip using the cache while fetching price data.
-
-        Examples:
-            >>> multiplexer = UniswapMultiplexer(asynchronous=True)
-            >>> price = await multiplexer.get_price("0xTokenAddress", block=12345678)
-            >>> print(price)
+            amount: The amount of tokens to quote (in human-readable units).
+                When provided, the quote accounts for price impact.
 
         See Also:
             - :meth:`~UniswapMultiplexer.routers_by_depth`
@@ -162,6 +161,7 @@ class UniswapMultiplexer(ASyncGenericSingleton):
                 block=block,
                 ignore_pools=ignore_pools,
                 skip_cache=skip_cache,
+                amount=amount,
                 sync=False,
             )
             logger.debug("%s -> %s", router, price)

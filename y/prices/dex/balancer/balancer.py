@@ -1,4 +1,5 @@
 import logging
+from decimal import Decimal
 from typing import Final, final
 
 import a_sync
@@ -163,6 +164,7 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
+        amount: Decimal | int | float | None = None,
     ) -> UsdPrice | None:
         """
         Get the price of a token using Balancer pools.

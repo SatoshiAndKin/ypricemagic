@@ -494,10 +494,14 @@ class UniswapRouterV2(ContractBase):
         paired_against: Address = WRAPPED_GAS_COIN,
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
+        amount: Decimal | int | float | None = None,
     ) -> UsdPrice | None:
         """
-        Calculate a price based on Uniswap Router quote for selling one `token_in`.
+        Calculate a price based on Uniswap Router quote for selling `token_in`.
         Always uses intermediate WETH pair if `[token_in,weth,token_out]` swap path available.
+
+        When `amount` is provided (in human-readable token units), the quote accounts
+        for price impact. The returned price is still per-unit (USD per token).
         """
 
         token_in, token_out, path = str(token_in), str(token_out), None
@@ -510,9 +514,16 @@ class UniswapRouterV2(ContractBase):
             return 1
 
         try:
-            amount_in = await ERC20._get_scale_for(token_in)
+            scale = await ERC20._get_scale_for(token_in)
         except NonStandardERC20:
             return None
+
+        if amount is not None:
+            _amount = Decimal(str(amount))
+            amount_in = int(_amount * scale)
+        else:
+            _amount = Decimal(1)
+            amount_in = scale
 
         debug_logs = logger.isEnabledFor(DEBUG)
 
@@ -555,7 +566,7 @@ class UniswapRouterV2(ContractBase):
                 )
 
                 if paired_with_price:
-                    return amount_out * Decimal(paired_with_price)
+                    return UsdPrice(amount_out * Decimal(paired_with_price) / _amount)
 
         # If we still don't have a workable path, try this smol brain method
         if path is None:
@@ -563,14 +574,14 @@ class UniswapRouterV2(ContractBase):
             # NOTE: does this ever run anymore? can we take it out?
             logger.warning("using smol brain path selector")
 
-        fees = 0.997 ** (len(path) - 1)
+        fees = Decimal(0.997) ** (len(path) - 1)
         if debug_logs:
             log_debug("router: %s     path: %s", self.label, path)
         quote = await self.get_quote(amount_in, path, block=block, sync=False)
         if quote is not None:
             out_scale = await ERC20._get_scale_for(path[-1])
-            amount_out = quote[-1] / out_scale
-            return UsdPrice(amount_out / fees)
+            amount_out = Decimal(quote[-1]) / out_scale
+            return UsdPrice(amount_out / fees / _amount)
 
     @continue_on_revert
     @stuck_coro_debugger
