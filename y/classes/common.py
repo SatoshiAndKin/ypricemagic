@@ -902,6 +902,21 @@ class WeiBalance(a_sync.ASyncGenericBase):
             >>> await balance.price
             Decimal('1.23')
         """
+        # WeiBalance is only created by DEX pricing paths (Curve, V2, V3)
+        # when converting a quote denominated in a paired token to USD.
+        # If the paired token is a known stablecoin, skip the expensive
+        # recursive get_price() call and assume $1.  This shortcuts the
+        # "last hop" -- e.g. pricing MIC via a USDT pair, or YB via a
+        # crvUSD pair, without recursing into full stablecoin pricing.
+        #
+        # FUTURE_TODO: Replace this $1 assumption with the real stablecoin
+        # price.  A batched multicall for Chainlink feeds (one per block)
+        # would be fast enough to use here without adding sequential latency.
+        from y.constants import STABLECOINS
+
+        if str(self.token.address) in STABLECOINS:
+            self._logger.debug("stablecoin shortcut for %s", self.token)
+            return Decimal(1)
         result = await self.token.price(
             block=self.block,
             skip_cache=self._skip_cache,

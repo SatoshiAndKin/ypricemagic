@@ -8,7 +8,6 @@ from y import constants
 from y import convert
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y.classes.common import ERC20
-from y.constants import STABLECOINS
 from y.datatypes import Address, AnyAddressType
 from y.prices import (
     convex,
@@ -180,6 +179,8 @@ async def check_bucket(token: AnyAddressType) -> str:
 # these require neither calls to the chain nor contract initialization, just string comparisons (pretty sure)
 string_matchers = {
     "wrapped gas coin": lambda address: address == "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+    # Only USDC is hardcoded to $1.  Other stablecoins (USDT, DAI, crvUSD, …)
+    # get real prices via Chainlink / DEX so depeg events are reflected.
     "stable usd": lambda address: constants.usdc is not None and address == constants.usdc.address,
     "one to one": one_to_one.is_one_to_one_token,
     "wsteth": wsteth.is_wsteth,
