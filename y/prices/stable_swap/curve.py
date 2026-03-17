@@ -3,7 +3,7 @@ from collections import defaultdict
 from decimal import Decimal
 from enum import IntEnum
 from functools import cached_property
-from itertools import filterfalse
+
 from logging import DEBUG, getLogger
 from typing import Any, TypeVar
 
@@ -679,15 +679,14 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
         amount: Decimal | int | float | None = None,
     ) -> UsdPrice | None:
         try:
-            pools = (await self.__coin_to_pools__)[token_in]
+            pool_addrs = (await self.__coin_to_pools__)[token_in]
         except KeyError:
             return None
 
-        for pool in ignore_pools:
-            try:
-                pools.remove(pool)
-            except ValueError:
-                continue
+        ignored = {str(p) for p in ignore_pools}
+        pool_addrs = [a for a in pool_addrs if a not in ignored]
+
+        pools = [CurvePool(a, asynchronous=True) for a in pool_addrs]
 
         if pools and block is not None:
             pools = [
@@ -757,21 +756,48 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
             )
 
     @a_sync.aka.cached_property
-    async def coin_to_pools(self) -> dict[str, list[CurvePool]]:
-        mapping = defaultdict(set)
+    async def coin_to_pools(self) -> dict[str, list[str]]:
+        """Lightweight coin-to-pool-address mapping.
+
+        Returns ``dict[coin_address, list[pool_address]]``.  Only addresses
+        are stored so the heavy :class:`CurvePool` / brownie ``Contract``
+        objects can be garbage-collected after the build phase.
+
+        Each pool is instantiated via :class:`CurvePool` to reuse the
+        battle-tested ``coins`` property, then its singleton is deleted so
+        the object graph doesn't pin ~7 GiB of memory.  brownie persists
+        ABIs to ``deployments.db``, so re-creating a ``CurvePool`` later
+        loads from the sqlite cache -- no etherscan hit.
+        """
+        mapping: dict[str, set[str]] = defaultdict(set)
         await self.load_all()
-        for pool in {CurvePool(pool) for pools in self.factories.values() for pool in pools}:
-            for coin in await pool.__coins__:
-                mapping[coin].add(pool)
+        all_pool_addrs = {pool for pools in self.factories.values() for pool in pools}
+        for pool_addr in all_pool_addrs:
+            try:
+                pool = CurvePool(pool_addr, asynchronous=True)
+                coins = await pool.__coins__
+                for coin in coins:
+                    mapping[str(coin.address)].add(pool_addr)
+            except Exception as e:
+                logger.debug("failed to get coins for pool %s: %s", pool_addr, e)
+                continue
+            finally:
+                # Remove the singleton so the CurvePool (and its brownie
+                # Contract) can be garbage-collected.  The metaclass pattern
+                # is established in y/exceptions.py:201-202.
+                CurvePool._ChecksumASyncSingletonMeta__instances[False].pop(pool_addr, None)  # type: ignore [attr-defined]
         return {coin: list(pools) for coin, pools in mapping.items()}
 
-    __coin_to_pools__: HiddenMethodDescriptor[Self, dict[str, list[CurvePool]]]
+    __coin_to_pools__: HiddenMethodDescriptor[Self, dict[str, list[str]]]
 
     async def check_liquidity(
         self, token: Address, block: Block, ignore_pools: tuple[Pool, ...]
     ) -> int:
-        if pools_for_token := (await self.__coin_to_pools__).get(token):
-            if pools := list(filterfalse(ignore_pools.__contains__, pools_for_token)):
+        if pool_addrs := (await self.__coin_to_pools__).get(token):
+            ignored = {str(p) for p in ignore_pools}
+            pool_addrs = [a for a in pool_addrs if a not in ignored]
+            if pool_addrs:
+                pools = [CurvePool(a, asynchronous=True) for a in pool_addrs]
                 return await CurvePool.check_liquidity.max(
                     pools, token=token, block=block, sync=False
                 )
