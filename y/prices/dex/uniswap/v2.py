@@ -653,7 +653,7 @@ class UniswapRouterV2(ContractBase):
                 )
                 if not terminal_price:
                     return None
-                amount_out *= Decimal(terminal_price)
+                amount_out *= Decimal(terminal_price.price)
 
             price = UsdPrice(amount_out)
             terminal_token = terminal if terminal != "USD" else "USD"
