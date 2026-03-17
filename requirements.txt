@@ -1,20 +1,20 @@
 aiosqlite==0.22.1
 asyncpg>=0.31,<0.32
 bobs_lazy_logging==0.0.5
-cachebox>=5.0,<6
+cachebox>=5.2,<6
 cchecksum>=0.0.3,<1
-checksum_dict>=2.1.9,<3
-dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@fix/macos-semaphore-limit
+checksum_dict>=2.1.16,<3
+dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@master
 eth-brownie==1.22.0.dev2
-eth_retry>=0.2.1
-evmspec>=0.3.4
-ez-a-sync>=0.34.0,<1
+eth_retry>=0.3.7
+evmspec>=0.5.1
+ez-a-sync>=0.34.2,<1
 faster-eth-abi>=5.2.12,<6
 faster-eth-utils
-inflection>=0.1,<0.6
-joblib>=1.0.1
-multicall>=0.8.2
-pony
+inflection>=0.5.1,<0.6
+joblib>=1.5.3
+multicall>=0.15.2
+pony>=0.7.19
 pony-stubs==0.5.2
-python-dateutil
-typed-envs>=0.2.2,<0.3
+python-dateutil>=2.9
+typed-envs>=0.2.4,<0.3
