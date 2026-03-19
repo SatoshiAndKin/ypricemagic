@@ -36,10 +36,12 @@ async def check_bucket(token: AnyAddressType) -> str:
 
     This function classifies a token by performing a set of tests in the following order:
 
-    1. It first attempts to retrieve a cached bucket from the database via
-       :func:`y._db.utils.token.get_bucket`.
-    2. Next, it applies simple string-based comparisons defined in the ``string_matchers``
-       dictionary.
+    1. It first applies simple string-based comparisons defined in the ``string_matchers``
+       dictionary.  These are pure synchronous checks against constants (e.g. STABLECOINS)
+       and always take priority over cached DB entries so that tokens added to constants
+       after being first seen are always classified correctly.
+    2. If no string matcher matched, it attempts to retrieve a cached bucket from the
+       database via :func:`y._db.utils.token.get_bucket`.
     3. If no bucket is determined, it concurrently executes a set of asynchronous "calls-only"
        tests for further classification. The function will return immediately once any of these
        tests confirms the token’s membership in a bucket.
@@ -82,16 +84,13 @@ async def check_bucket(token: AnyAddressType) -> str:
     token_address = await convert.to_address_async(token)
     logger = get_price_logger(token_address, block=None, extra="buckets")
 
-    import y._db.utils.token as db
-
-    bucket = await db.get_bucket(token_address)
-    if bucket:
-        logger.debug("returning bucket %s from ydb", bucket)
-        return bucket
-
     debug_logs_enabled = logger.isEnabledFor(DEBUG)
 
-    # these require neither calls to the chain nor contract initialization, just string comparisons (pretty sure)
+    import y._db.utils.token as db
+
+    # String matchers are pure synchronous checks against constants (e.g. STABLECOINS).
+    # They must run BEFORE the DB cache lookup so that tokens added to constants after
+    # being first seen are always classified correctly (not stuck with stale cache).
     for bucket, check in string_matchers.items():
         if check(token):
             if debug_logs_enabled:
@@ -100,6 +99,11 @@ async def check_bucket(token: AnyAddressType) -> str:
             return bucket
         elif debug_logs_enabled:
             await __log_not_bucket(token_address, bucket)
+
+    bucket = await db.get_bucket(token_address)
+    if bucket:
+        logger.debug("returning bucket %s from ydb", bucket)
+        return bucket
 
     # Check these first, these tests involve asynchronous eth_calls and are launched concurrently.
     futs = [
