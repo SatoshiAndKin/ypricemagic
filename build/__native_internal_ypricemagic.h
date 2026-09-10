@@ -6,7 +6,7 @@
 
 int CPyGlobalsInit(void);
 
-extern PyObject *CPyStatics[674];
+extern PyObject *CPyStatics[680];
 extern const char * const CPyLit_Str[];
 extern const char * const CPyLit_Bytes[];
 extern const char * const CPyLit_Int[];
@@ -210,7 +210,7 @@ extern PyObject *CPyStatic_decorators___db_session_cached;
 extern PyObject *CPyStatic_decorators____result_count_logger;
 extern PyObject *CPyStatic_decorators____result_count_logger_debug;
 extern PyObject *CPyStatic_decorators____result_count_logger_is_enabled_for;
-extern tuple_T2OI CPyStatic_decorators____CHAIN_INFO;
+extern tuple_T2OO CPyStatic_decorators____CHAIN_INFO;
 extern PyObject *CPyStatic_decorators___y____db___decorators___log_result_count___arg_names;
 extern PyTypeObject *CPyType_decorators___retry_locked_env;
 extern PyObject *CPyDef_decorators___retry_locked_env(void);
@@ -284,6 +284,10 @@ extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___CONTRACT_CACHE_TTL;
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___GETLOGS_BATCH_SIZE;
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___GETLOGS_DOP;
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___CHECKSUM_CACHE_MAXSIZE;
+extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___DEFAULT_CACHE_MAXSIZE;
+extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___BLOCK_CACHE_MAXSIZE;
+extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___CONTRACT_CACHE_MAXSIZE;
+extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___PRICE_CACHE_MAXSIZE;
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___DB_PROVIDER;
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___SQLITE_PATH;
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___DB_HOST;

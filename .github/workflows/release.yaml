@@ -75,7 +75,7 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -102,8 +102,6 @@ jobs:
 
       - name: Build wheels
         env:
-          # Skip PyPy
-          CIBW_SKIP: pp*
           # On Linux: manylinux / musllinux arches
           CIBW_ARCHS_LINUX: ${{ matrix.cibw_archs_linux || '' }}
           # On Windows: AMD64 / x86
@@ -128,7 +126,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 

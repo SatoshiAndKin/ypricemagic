@@ -4,12 +4,12 @@ bobs_lazy_logging==0.0.5
 cachebox>=5.2,<6
 cchecksum>=0.0.3,<1
 checksum_dict>=2.1.9,<3
-dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@master
-eth-brownie==1.22.0.dev2
+dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@a77b883542ca7e7580a217a24005230e85b40d0c
+eth-brownie==1.22.2
 eth_retry>=0.2.1
 evmspec>=0.3.4
 ez-a-sync>=0.34.0,<1
-faster-eth-abi>=5.2.12,<6
+faster-eth-abi>=5.2.30,<6
 faster-eth-utils
 inflection>=0.1,<0.6
 joblib>=1.0.1
