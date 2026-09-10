@@ -210,7 +210,7 @@ extern PyObject *CPyStatic_decorators___db_session_cached;
 extern PyObject *CPyStatic_decorators____result_count_logger;
 extern PyObject *CPyStatic_decorators____result_count_logger_debug;
 extern PyObject *CPyStatic_decorators____result_count_logger_is_enabled_for;
-extern tuple_T2OO CPyStatic_decorators____CHAIN_INFO;
+extern tuple_T2OI CPyStatic_decorators____CHAIN_INFO;
 extern PyObject *CPyStatic_decorators___y____db___decorators___log_result_count___arg_names;
 extern PyTypeObject *CPyType_decorators___retry_locked_env;
 extern PyObject *CPyDef_decorators___retry_locked_env(void);
