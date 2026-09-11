@@ -85,3 +85,19 @@ Usage:
     (Replace <target> with the token address or symbol, for example:
         ypricemagic db select 0x123abc... or
         ypricemagic db select MOON)
+
+db reset-prices
+~~~~~~~~~~~~~~~
+Description:
+    Back up the configured SQLite database and remove one chain's cached prices.
+    Stop all writers before this command. The backup path must not exist.
+    The command checks the backup, reports deleted rows, and preserves metadata,
+    events, discovery data, and prices for other chains. Restart writers after
+    the command to clear memory caches. Prices rebuild on demand.
+
+Usage::
+
+    BROWNIE_NETWORK_ID=mainnet ypricemagic db reset-prices --chain 1 --backup /path/to/backup.sqlite
+
+The command uses ``YPRICEMAGIC_SQLITE_PATH`` when set, or the default database at
+``~/.ypricemagic/ypricemagic.sqlite``. It does not stop or restart other processes.

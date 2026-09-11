@@ -1,6 +1,7 @@
 [build-system]
 requires = [
   "setuptools",
+  "tomli; python_version < '3.11'",
   "wheel",
   "mypy[mypyc]==1.19.1",
   "pony-stubs==0.5.2",
@@ -22,15 +23,26 @@ requires = [
 
 [tool.mypy]
 plugins = ["typed_envs.mypy_plugin", "a_sync_mypy_plugin"]
-files = ["."]
+files = ["y", "tests"]
+exclude = ["^build/", "^cache/", "^env/", "^[.]worktrees/"]
 strict = true
 pretty = true
 show_error_codes = true
 show_error_context = true
-install_types = true
-non_interactive = true
+incremental = false
+follow_imports = "silent"
+
+[[tool.mypy.overrides]]
+module = ["y._db.brownie", "y._db.config", "y._db.decorators", "y._db.utils.stringify", "y.ENVIRONMENT_VARIABLES", "y.convert", "y.exceptions", "y.networks", "y.prices.utils.sense_check", "y.utils.gather"]
+disable_error_code = ["import-not-found", "no-untyped-def", "no-untyped-call", "unused-ignore"]
+
+[tool.mypyc]
+files = ["y/_db/brownie.py", "y/_db/config.py", "y/_db/decorators.py", "y/_db/utils/stringify.py", "y/ENVIRONMENT_VARIABLES.py", "y/convert.py", "y/exceptions.py", "y/networks.py", "y/prices/utils/sense_check.py", "y/utils/gather.py"]
 
 [tool.pytest.ini_options]
+addopts = "-W ignore -s"
+testpaths = ["tests"]
+norecursedirs = ["env", "build", "cache", ".worktrees"]
 timeout = 600
 asyncio_task_timeout = 600
 

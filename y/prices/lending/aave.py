@@ -14,10 +14,12 @@ from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20, ContractBase
 from y.contracts import Contract
-from y.datatypes import Address, AddressOrContract, AnyAddressType, Block, UsdPrice
+from y.datatypes import Address, AddressOrContract, AnyAddressType, Block, PriceResult
 from y.networks import Network
+from y.prices._candidates import derive_price, gather_owned
 from y.utils import hasall
 from y.utils.logging import get_price_logger
 from y.utils.raw_calls import raw_call
@@ -346,57 +348,79 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
         )
         return await pool.underlying(atoken_address, sync=False)
 
+    @stuck_coro_debugger
     async def get_price(
         self,
         atoken_address: AddressOrContract,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice:
+    ) -> PriceResult | None:
         underlying: ERC20 = await self.underlying(atoken_address, sync=False)
-        return await underlying.price(block, skip_cache=skip_cache, sync=False)
+        child = await underlying.price(block, skip_cache=skip_cache, sync=False)
+        if child is None:
+            return None
+        return derive_price(
+            atoken_address,
+            float(child),
+            f"Aave {atoken_address} underlying {underlying.address}",
+            child,
+        )
 
+    @stuck_coro_debugger
     async def get_price_wrapped_v2(
         self,
         atoken_address: AddressOrContract,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice | None:
+    ) -> PriceResult | None:
         return await self._get_price_wrapped(
             atoken_address, "staticToDynamicAmount", block=block, skip_cache=skip_cache
         )
 
+    @stuck_coro_debugger
     async def get_price_wrapped_v3(
         self,
         atoken_address: AddressOrContract,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice | None:
+    ) -> PriceResult | None:
         return await self._get_price_wrapped(
             atoken_address, "convertToAssets", block=block, skip_cache=skip_cache
         )
 
+    @stuck_coro_debugger
     async def _get_price_wrapped(
         self,
         atoken_address: AddressOrContract,
         method: str,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice | None:
-        contract, scale = await cgather(
-            Contract.coroutine(atoken_address),
-            ERC20._get_scale_for(atoken_address),
+    ) -> PriceResult | None:
+        contract, scale = await gather_owned(
+            [
+                Contract.coroutine(atoken_address),
+                ERC20._get_scale_for(atoken_address),
+            ]
         )
         try:
-            underlying, price_per_share = await cgather(
-                # NOTE: We can probably cache this without breaking anything
-                contract.ATOKEN.coroutine(block_identifier=block),
-                getattr(contract, method).coroutine(scale, block_identifier=block),
+            underlying, price_per_share = await gather_owned(
+                [
+                    # NOTE: We can probably cache this without breaking anything
+                    contract.ATOKEN.coroutine(block_identifier=block),
+                    getattr(contract, method).coroutine(scale, block_identifier=block),
+                ]
             )
         except ContractLogicError:
             return None
         price_per_share /= Decimal(scale)
-        return price_per_share * Decimal(
-            await ERC20(underlying, asynchronous=True).price(block, skip_cache=skip_cache)
+        child = await ERC20(underlying, asynchronous=True).price(block, skip_cache=skip_cache)
+        if child is None:
+            return None
+        return derive_price(
+            atoken_address,
+            price_per_share * Decimal(float(child)),
+            f"Aave wrapped {atoken_address} via {method}",
+            child,
         )
 
 

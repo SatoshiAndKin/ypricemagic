@@ -3,17 +3,22 @@
 This module tests the following exotic token types:
 - Pickle pSLP: underlying × getRatio()
 - PoolTogether V4 Ticket: 1:1 with controller().getToken()
-- xPREMIA: PREMIA × getXPremiaToPremiaRatio()
+- xPREMIA: PREMIA × readable PREMIA backing per share
 - xTAROT: Fantom-only (skipped on mainnet)
 - Tarot SupplyVault: Fantom-only (skipped on mainnet)
 """
 
+from decimal import Decimal
+
+import dank_mids
 import pytest
 
 from tests.fixtures import mainnet_only
 from y.datatypes import PriceResult
-from y.prices import magic
+from y.prices import exotic_tokens, magic
+from y.prices.exotic_tokens import _XPREMIA_ADDRESS
 from y.prices.utils.buckets import check_bucket
+from y.utils.raw_calls import raw_call
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Token addresses
@@ -26,7 +31,7 @@ PSLP_ETH_USDC = "0x8c2D16B7F6D3F989eb4878EcF13D695A7d504E43"
 PT_USDC_TICKET = "0xdd4d117723C257CEe402285D3aCF218E9A8236E1"
 
 # xPREMIA (PremiaStaking) on mainnet
-XPREMIA = "0x16f9D564Df80376C61AC914205D3fDff7057d610"
+XPREMIA = _XPREMIA_ADDRESS
 PREMIA = "0x6399C842dD2bE3dE30BF99Bc7D1bBF6Fa3650E70"
 
 # xTAROT on Fantom
@@ -79,9 +84,9 @@ async def test_pickle_pslp_returns_price_result():
     assert isinstance(result, PriceResult), f"Expected PriceResult, got {type(result)}"
     assert result.path, "PriceResult should have at least one step in path"
     source = result.path[0].source
-    assert "Pickle" in source or "pSLP" in source, (
-        f"Source string should mention Pickle/pSLP, got '{source}'"
-    )
+    assert (
+        "Pickle" in source or "pSLP" in source
+    ), f"Source string should mention Pickle/pSLP, got '{source}'"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -141,14 +146,31 @@ async def test_xpremia_bucket():
 @mainnet_only
 @pytest.mark.asyncio_cooperative
 async def test_xpremia_price():
-    """xPREMIA should resolve to a nonzero price related to PREMIA."""
-    result = await magic.get_price(
-        XPREMIA, TEST_BLOCK, fail_to_None=True, skip_cache=True, sync=False
+    """Verify deployment identity and independently calculate backing per share."""
+    assert await dank_mids.eth.get_code(XPREMIA, block_identifier=TEST_BLOCK)
+    assert (
+        await raw_call(XPREMIA, "premia()", output="address", block=TEST_BLOCK, sync=False)
+        == PREMIA
     )
-    assert result is not None, "xPREMIA price should not be None"
-
-    price = float(result.price if isinstance(result, PriceResult) else result)
-    assert price > 0, f"xPREMIA price should be positive, got {price}"
+    balance = await raw_call(
+        PREMIA, "balanceOf(address)", inputs=XPREMIA, output="int", block=TEST_BLOCK, sync=False
+    )
+    supply = await raw_call(XPREMIA, "totalSupply()", output="int", block=TEST_BLOCK, sync=False)
+    decimals = await raw_call(XPREMIA, "decimals()", output="int", block=TEST_BLOCK, sync=False)
+    premia_decimals = await raw_call(
+        PREMIA, "decimals()", output="int", block=TEST_BLOCK, sync=False
+    )
+    child = await magic.get_price(PREMIA, TEST_BLOCK, skip_cache=True, sync=False)
+    expected = (
+        Decimal(balance)
+        / 10**premia_decimals
+        / (Decimal(supply) / 10**decimals)
+        * Decimal(str(float(child)))
+    )
+    result = await exotic_tokens.get_price_xpremia(XPREMIA, TEST_BLOCK, skip_cache=True, sync=False)
+    assert float(result) == pytest.approx(float(expected))
+    assert result.path[0].token == XPREMIA
+    assert result.path[1].token == PREMIA
 
 
 @mainnet_only

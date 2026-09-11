@@ -2,14 +2,15 @@ import logging
 from decimal import Decimal
 
 import a_sync
-from a_sync import cgather
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
+from y._decorators import stuck_coro_debugger
 from y.constants import CHAINID, CONNECTED_TO_MAINNET, weth
-from y.datatypes import AnyAddressType, Block, UsdPrice
+from y.datatypes import AnyAddressType, Block, PriceResult
 from y.networks import Network
 from y.prices import magic
+from y.prices._candidates import derive_price, gather_owned
 from y.utils.raw_calls import raw_call
 
 logger = logging.getLogger(__name__)
@@ -58,9 +59,10 @@ class wstEth(a_sync.ASyncGenericBase):
         except KeyError:
             self.address = None
 
+    @stuck_coro_debugger
     async def get_price(
         self, block: Block | None = None, skip_cache: bool = ENVS.SKIP_CACHE
-    ) -> UsdPrice:
+    ) -> PriceResult:
         """
         Fetch the price of wstETH in USD.
 
@@ -85,12 +87,19 @@ class wstEth(a_sync.ASyncGenericBase):
             - :func:`y.utils.raw_calls.raw_call`
             - :func:`y.prices.magic.get_price`
         """
-        share_price, weth_price = await cgather(
-            raw_call(self.address, "stEthPerToken()", output="int", block=block, sync=False),
-            magic.get_price(weth, block, skip_cache=skip_cache, sync=False),
+        share_price, weth_price = await gather_owned(
+            [
+                raw_call(self.address, "stEthPerToken()", output="int", block=block, sync=False),
+                magic.get_price(weth, block, skip_cache=skip_cache, sync=False),
+            ]
         )
         share_price /= Decimal(10**18)
-        return UsdPrice(share_price * Decimal(float(weth_price)))
+        return derive_price(
+            self.address,
+            share_price * Decimal(float(weth_price)),
+            "Lido wstETH via stEthPerToken",
+            weth_price,
+        )
 
 
 wsteth = wstEth(asynchronous=True)

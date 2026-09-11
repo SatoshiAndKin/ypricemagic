@@ -1,8 +1,12 @@
-from a_sync import cgather
+from abc import abstractmethod
+from itertools import product
+
+import dank_mids
 
 from y._decorators import continue_on_revert, stuck_coro_debugger
-from y.datatypes import Address, Block
+from y.datatypes import Address, Block, Pool
 from y.exceptions import call_reverted
+from y.prices._candidates import gather_owned, pool_address
 from y.prices.dex.uniswap.v2 import Path, UniswapRouterV2, UniswapV2Pool
 from y.utils.cache import a_sync_ttl_cache
 
@@ -24,8 +28,8 @@ class SolidlyRouterBase(UniswapRouterV2):
     @continue_on_revert
     @stuck_coro_debugger
     async def get_quote(
-        self, amount_in: int, path: Path, block: Block | None = None
-    ) -> tuple[int, int]:
+        self, amount_in: int, path: Path, block: Block | None = None, pools: tuple[Pool, ...] = ()
+    ) -> tuple[int, ...] | None:
         """
         Get a price quote for a given input amount and swap path.
 
@@ -49,21 +53,59 @@ class SolidlyRouterBase(UniswapRouterV2):
             >>> quote = await router.get_quote(1000, ["0xTokenA", "0xTokenB"])
             >>> print(quote)
         """
-        routes = await self.get_routes_from_path(path, block)
-        try:
-            return await self.contract.getAmountsOut.coroutine(
-                amount_in, routes, block_identifier=block
+        if block is None:
+            block = await dank_mids.eth.block_number
+        variants = await self.get_routes_from_path(path, block, pools=pools, sync=False)
+
+        async def quote(routes):
+            try:
+                return await self.contract.getAmountsOut.coroutine(
+                    amount_in, routes, block_identifier=block
+                )
+            except Exception as exc:
+                strings = (
+                    "INSUFFICIENT_INPUT_AMOUNT",
+                    "INSUFFICIENT_LIQUIDITY",
+                    "INSUFFICIENT_OUT_LIQUIDITY",
+                    "Sequence has incorrect length",
+                    "Call reverted: Integer overflow",
+                )
+                if not call_reverted(exc) and not any(text in str(exc) for text in strings):
+                    raise
+                return None
+
+        quotes = await gather_owned(quote(routes) for routes in variants)
+        return max(
+            (quote for quote in quotes if quote and quote[-1] > 0),
+            key=lambda quote: quote[-1],
+            default=None,
+        )
+
+    def _encode_route(self, start, end, stable):
+        return (start, end, stable)
+
+    @abstractmethod
+    async def get_pool(
+        self, input_token: Address, output_token: Address, stable: bool, block: Block
+    ) -> UniswapV2Pool | None:
+        """Resolve the router's stable or volatile pool at the requested block."""
+        raise NotImplementedError
+
+    @stuck_coro_debugger
+    async def get_routes_from_path(self, path: Path, block: Block, pools: tuple[Pool, ...] = ()):
+        """Return every eligible stable/volatile route for this path at this block."""
+        choices = []
+        for index, (start, end) in enumerate(zip(path, path[1:])):
+            found = await gather_owned(
+                self.get_pool(start, end, stable, block, sync=False) for stable in (False, True)
             )
-        except Exception as e:
-            strings = (
-                "INSUFFICIENT_INPUT_AMOUNT",
-                "INSUFFICIENT_LIQUIDITY",
-                "INSUFFICIENT_OUT_LIQUIDITY",
-                "Sequence has incorrect length",
-                "Call reverted: Integer overflow",
-            )
-            if not call_reverted(e) and not any(map(str(e).__contains__, strings)):
-                raise
+            routes = []
+            for stable, pool in zip((False, True), found):
+                if pool is None or (pools and pool_address(pool) != pool_address(pools[index])):
+                    continue
+                routes.append(self._encode_route(start, end, stable))
+            choices.append(routes)
+        return [list(routes) for routes in product(*choices)]
 
 
 class SolidlyPool(UniswapV2Pool):
@@ -143,72 +185,3 @@ class SolidlyRouter(SolidlyRouterBase):
         pool_address = await self.pair_for(input_token, output_token, stable, sync=False)
         if await self.contract.isPair.coroutine(pool_address, block_identifier=block):
             return SolidlyPool(pool_address, asynchronous=self.asynchronous)
-
-    @stuck_coro_debugger
-    async def get_routes_from_path(
-        self, path: Path, block: Block
-    ) -> list[tuple[Address, Address, bool]]:
-        """
-        Determine the swap routes from a given path.
-
-        This method calculates the swap routes for a given path by checking for
-        available stable and unstable pools and selecting the deepest pool.
-
-        Args:
-            path: The swap path as a list of token addresses.
-            block: The block number to query.
-
-        Returns:
-            A list of tuples, each containing the input token, output token, and
-            a boolean indicating whether the pool is stable.
-
-        Raises:
-            ValueError: If no pool is found for a token pair.
-
-        Examples:
-            >>> router = SolidlyRouter("0xRouterAddress")
-            >>> routes = await router.get_routes_from_path(["0xTokenA", "0xTokenB"], 12345678)
-            >>> print(routes)
-        """
-        routes = []
-        for i in range(len(path) - 1):
-            input_token, output_token = path[i], path[i + 1]
-            # Try for a stable pool first and use that if available
-            stable_pool, unstable_pool = await cgather(
-                self.get_pool(input_token, output_token, True, block, sync=False),
-                self.get_pool(input_token, output_token, False, block, sync=False),
-            )
-
-            if stable_pool and unstable_pool:
-                # We have to find out which of these pools is deepest
-                stable_reserves, unstable_reserves = await cgather(
-                    stable_pool.reserves(block=block, sync=False),
-                    unstable_pool.reserves(block=block, sync=False),
-                )
-                stable_reserves = tuple(stable_reserves)
-                unstable_reserves = tuple(unstable_reserves)
-
-                # NOTE: using `__token0__` and `__token1__` is faster than `__tokens__` since they're already cached and return instantly
-                #       it also creates 2 fewer tasks and 1 fewer future than `__tokens__` since there is no use of `asyncio.gather`.
-                if (
-                    await stable_pool.__token0__ == await unstable_pool.__token0__
-                    and await stable_pool.__token1__ == await unstable_pool.__token1__
-                ):
-                    stable_reserve = stable_reserves[0]
-                    unstable_reserve = unstable_reserves[0]
-                else:  # Order of tokens is flip flopped in the pools
-                    stable_reserve = stable_reserves[0]
-                    unstable_reserve = unstable_reserves[1]
-                if stable_reserve >= unstable_reserve:
-                    is_stable = True
-                elif stable_reserve < unstable_reserve:
-                    is_stable = False
-                routes.append([input_token, output_token, is_stable])
-            elif stable_pool:
-                routes.append([input_token, output_token, True])
-            elif unstable_pool:
-                routes.append([input_token, output_token, False])
-            else:
-                raise ValueError("Not sure why this function is even running if no pool is found")
-
-        return routes

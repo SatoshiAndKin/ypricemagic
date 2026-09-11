@@ -3,6 +3,7 @@ import threading
 from contextlib import suppress
 from typing import Union
 
+import dank_mids
 from a_sync import ASyncGenericSingleton, igather
 from brownie import ZERO_ADDRESS
 from web3.exceptions import ContractLogicError
@@ -12,8 +13,9 @@ from y import convert
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import CONNECTED_TO_MAINNET
-from y.datatypes import Address, AnyAddressType, Block, Pool, UsdPrice
+from y.datatypes import Address, AnyAddressType, Block, Pool, PriceResult
 from y.exceptions import NonStandardERC20, contract_not_verified
+from y.prices._candidates import derive_price, select_price
 from y.prices.dex.solidly import SolidlyRouter
 from y.prices.dex.uniswap import v3
 from y.prices.dex.uniswap.v1 import UniswapV1
@@ -21,7 +23,7 @@ from y.prices.dex.uniswap.v2 import NotAUniswapV2Pool, UniswapRouterV2, UniswapV
 from y.prices.dex.uniswap.v2_forks import UNISWAPS
 from y.prices.dex.uniswap.v3 import UniswapV3, uniswap_v3
 from y.prices.dex.velodrome import VelodromeRouterV2
-from y.utils.logging import _gh_issue_request, get_price_logger
+from y.utils.logging import _gh_issue_request
 
 logger = logging.getLogger(__name__)
 
@@ -127,10 +129,10 @@ class UniswapMultiplexer(ASyncGenericSingleton):
         block: Block | None = None,
         ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice | None:
+    ) -> PriceResult | None:
         """
         Calculate a price based on Uniswap Router quote for selling one `token_in`.
-        Always finds the deepest swap path for `token_in`.
+        Compare every supported router and select its highest valid USD quote.
 
         Args:
             token_in: The address of the input token.
@@ -146,27 +148,26 @@ class UniswapMultiplexer(ASyncGenericSingleton):
         See Also:
             - :meth:`~UniswapMultiplexer.routers_by_depth`
         """
-        router: Uniswap
         token_in = await convert.to_address_async(token_in)
-        logger = get_price_logger(token_in, block, extra=type(self).__name__)
-        routers_by_depth = await self.routers_by_depth(
-            token_in, block=block, ignore_pools=ignore_pools, sync=False
-        )
-        logger.debug("uniswap routers by depth: %s", routers_by_depth)
-        for router in routers_by_depth:
-            # tries each known router from most to least liquid
-            # returns the first price we get back, almost always from the deepest router
-            logger.debug("fetching from %s", router)
-            price = await router.get_price(
-                token_in,
-                block=block,
-                ignore_pools=ignore_pools,
-                skip_cache=skip_cache,
-                sync=False,
+        if block is None:
+            block = await dank_mids.eth.block_number
+        price, source = await select_price(
+            (
+                f"Uniswap {type(router).__name__} {getattr(router, 'address', getattr(router, '_factory', 'v1'))}",
+                router.get_price(
+                    token_in,
+                    block=block,
+                    ignore_pools=ignore_pools,
+                    skip_cache=skip_cache,
+                    sync=False,
+                ),
             )
-            logger.debug("%s -> %s", router, price)
-            if price:
+            for router in self.uniswaps
+        )
+        if price is not None:
+            if isinstance(price, PriceResult):
                 return price
+            return derive_price(token_in, float(price), source or "Uniswap")
 
     @stuck_coro_debugger
     async def routers_by_depth(
@@ -174,7 +175,7 @@ class UniswapMultiplexer(ASyncGenericSingleton):
         token_in: AnyAddressType,
         block: Block | None = None,
         ignore_pools: tuple[Pool, ...] = (),
-    ) -> list[UniswapRouterV2]:
+    ) -> list[Uniswap]:
         """
         Get Uniswap routers sorted by liquidity depth for a given token.
 
@@ -203,9 +204,12 @@ class UniswapMultiplexer(ASyncGenericSingleton):
             uniswap.check_liquidity(token_in, block, ignore_pools=ignore_pools, sync=False)
             for uniswap in self.uniswaps
         )
-        depth_to_router = dict(zip(liquidity, self.uniswaps))
         return [
-            depth_to_router[balance] for balance in sorted(depth_to_router, reverse=True) if balance
+            router
+            for depth, router in sorted(
+                zip(liquidity, self.uniswaps), key=lambda item: item[0], reverse=True
+            )
+            if depth
         ]
 
     @stuck_coro_debugger

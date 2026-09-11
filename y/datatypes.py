@@ -54,7 +54,7 @@ Examples:
     >>> any_address_int = 12345678
 """
 
-Pool = Union["UniswapV2Pool", "CurvePool", "BalancerV2Pool"]
+Pool = Union[AddressOrContract, "UniswapV2Pool", "CurvePool", "BalancerV2Pool"]
 """
 A union of types representing liquidity pools.
 
@@ -128,14 +128,8 @@ class PriceStep:
     def __repr__(self) -> str:
         """Return a concise string representation of the price step."""
         # Truncate long addresses for readability
-        tok = (
-            self.token[:6] + "..." + self.token[-4:]
-            if len(self.token) > 12
-            else self.token
-        )
-        return (
-            f"PriceStep(token='{tok}', price={self.price}, source='{self.source}')"
-        )
+        tok = self.token[:6] + "..." + self.token[-4:] if len(self.token) > 12 else self.token
+        return f"PriceStep(token='{tok}', price={self.price}, source='{self.source}')"
 
 
 @dataclass(eq=False)

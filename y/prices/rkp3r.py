@@ -2,13 +2,14 @@ import logging
 from decimal import Decimal
 
 import a_sync
-from a_sync import cgather
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._decorators import stuck_coro_debugger
 from y.constants import CONNECTED_TO_MAINNET
 from y.contracts import Contract
-from y.datatypes import Address, Block
+from y.datatypes import Address, Block, PriceResult
 from y.prices import magic
+from y.prices._candidates import derive_price, gather_owned
 
 logger = logging.getLogger(__name__)
 
@@ -36,9 +37,10 @@ def is_rkp3r(address: Address) -> bool:
 
 
 @a_sync.a_sync(default="sync")
+@stuck_coro_debugger
 async def get_price(
     address: Address, block: Block | None = None, skip_cache: bool = ENVS.SKIP_CACHE
-) -> Decimal:
+) -> PriceResult:
     """
     Get the discounted price of the RKP3R token based on the underlying KP3R token price.
 
@@ -70,11 +72,18 @@ async def get_price(
         - :func:`~y.prices.magic.get_price`
         - :func:`~y.prices.rkp3r.get_discount`
     """
-    price, discount = await cgather(
-        magic.get_price(KP3R, block=block, skip_cache=skip_cache, sync=False),
-        get_discount(block),
+    price, discount = await gather_owned(
+        [
+            magic.get_price(KP3R, block=block, skip_cache=skip_cache, sync=False),
+            get_discount(block),
+        ]
     )
-    return Decimal(float(price)) * (100 - discount) / 100
+    return derive_price(
+        address,
+        Decimal(float(price)) * (100 - discount) / 100,
+        f"rKP3R {address} discounted KP3R",
+        price,
+    )
 
 
 async def get_discount(block: Block | None = None) -> Decimal:

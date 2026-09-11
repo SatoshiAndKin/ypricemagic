@@ -2,7 +2,6 @@ import logging
 from decimal import Decimal
 
 import a_sync
-from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import ZERO_ADDRESS, chain
 from web3.exceptions import ContractLogicError
@@ -12,8 +11,9 @@ from y import convert
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.contracts import Contract, has_methods
-from y.datatypes import Address, AnyAddressType, Block, UsdPrice
+from y.datatypes import Address, AnyAddressType, Block, PriceResult
 from y.networks import Network
+from y.prices._candidates import derive_price, gather_owned
 from y.utils.cache import a_sync_ttl_cache
 from y.utils.raw_calls import raw_call
 
@@ -91,7 +91,12 @@ async def _prime_factory_cache() -> None:
             await _load_factory_pools(factory)
 
 
-@a_sync.a_sync(default="sync", cache_type="memory", ram_cache_ttl=5 * 60, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+@a_sync.a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=5 * 60,
+    ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE,
+)
 async def is_stargate_lp(token_address: AnyAddressType) -> bool:
     token_address = await convert.to_address_async(token_address)
     await _prime_factory_cache()
@@ -194,9 +199,9 @@ class StargatePool(ERC20):
         self,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice | None:
+    ) -> PriceResult | None:
         try:
-            lp_scale, underlying = await cgather(self.__scale__, self.__underlying__)
+            lp_scale, underlying = await gather_owned([self.__scale__, self.__underlying__])
         except ValueError:
             return None
 
@@ -204,15 +209,22 @@ class StargatePool(ERC20):
         if amount_ld is None:
             return None
 
-        underlying_scale, underlying_price = await cgather(
-            underlying.__scale__,
-            underlying.price(block, skip_cache=skip_cache, sync=False),
+        underlying_scale, underlying_price = await gather_owned(
+            [
+                underlying.__scale__,
+                underlying.price(block, skip_cache=skip_cache, sync=False),
+            ]
         )
         if underlying_price is None:
             return None
 
         ratio = Decimal(amount_ld) / Decimal(underlying_scale)
-        return UsdPrice(ratio * Decimal(float(underlying_price)))
+        return derive_price(
+            self.address,
+            ratio * Decimal(float(underlying_price)),
+            f"Stargate {self.address} via amountLPtoLD",
+            underlying_price,
+        )
 
 
 @a_sync.a_sync(default="sync")
@@ -220,6 +232,6 @@ async def get_price(
     token_address: AnyAddressType,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
-) -> UsdPrice | None:
+) -> PriceResult | None:
     pool = StargatePool(token_address, asynchronous=True)
     return await pool.price(block=block, skip_cache=skip_cache, sync=False)

@@ -8,8 +8,8 @@ from logging import DEBUG, getLogger
 from typing import DefaultDict, Final, Literal, Union
 
 import a_sync
+import dank_mids
 import eth_retry
-from a_sync import igather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie.network.event import _EventItem
 from eth_abi.exceptions import InvalidPointer
@@ -23,10 +23,21 @@ from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20, ContractBase
 from y.constants import CHAINID, CONNECTED_TO_MAINNET, usdc, weth
 from y.contracts import Contract, contract_creation_block_async
-from y.datatypes import Address, AnyAddressType, Block, Pool, UsdPrice
-from y.exceptions import ContractNotVerified, NonStandardERC20, TokenNotFound, call_reverted
+from y.datatypes import Address, AnyAddressType, Block, Pool, PriceResult
+from y.exceptions import (
+    ContractNotVerified,
+    NonStandardERC20,
+    TokenNotFound,
+    call_reverted,
+)
 from y.interfaces.uniswap.quoterv3 import UNIV3_QUOTER_ABI
 from y.networks import Network
+from y.prices._candidates import (
+    derive_price,
+    gather_owned,
+    pool_is_ignored,
+    select_price,
+)
 from y.utils.events import ProcessedEvents
 
 # https://github.com/Uniswap/uniswap-v3-periphery/blob/main/deploys.md
@@ -504,21 +515,20 @@ class UniswapV3(a_sync.ASyncGenericBase):
             cache[most_recent_deploy_block]
 
     @stuck_coro_debugger
-    @a_sync.a_sync(cache_type="memory", ram_cache_ttl=ENVS.CACHE_TTL, ram_cache_maxsize=ENVS.PRICE_CACHE_MAXSIZE)
     async def get_price(
         self,
         token: Address,
         block: Block | None = None,
-        ignore_pools: tuple[Pool, ...] = (),  # unused
+        ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,  # unused
-    ) -> UsdPrice | None:
+    ) -> PriceResult | None:
         """
         Get the price of a token in USD.
 
         Args:
             token: The address of the token.
             block: The block number to get the price at.
-            ignore_pools: Pools to ignore (unused).
+            ignore_pools: Pools to exclude from every route leg.
             skip_cache: Whether to skip cache (unused).
 
         Returns:
@@ -531,30 +541,46 @@ class UniswapV3(a_sync.ASyncGenericBase):
         See Also:
             :func:`y.prices.magic.get_price`
         """
+        if block is None:
+            block = await dank_mids.eth.block_number
+        token = await convert.to_address_async(token)
         quoter = await self.__quoter__
-        if block and block < await contract_creation_block_async(quoter, True):
+        if block < await contract_creation_block_async(quoter, True):
             return None
-
-        paths: list[Path] = [(token, fee, usdc.address) for fee in self.fee_tiers]
-        if token != weth:
+        paths: list[tuple[Address | int, ...]] = [
+            (token, fee, usdc.address) for fee in self.fee_tiers if token != usdc.address
+        ]
+        if token not in (weth.address, usdc.address):
             paths += [
-                (token, fee, weth.address, self.fee_tiers[0], usdc.address)
+                (token, fee, weth.address, second_fee, usdc.address)
                 for fee in self.fee_tiers
+                for second_fee in self.fee_tiers
             ]
-
-        if debug_logs_enabled := logger.isEnabledFor(DEBUG):
-            logger._log(DEBUG, "paths: %s", (paths,))
-
         amount_in = await ERC20._get_scale_for(token)
-        results = await igather(self._quote_exact_input(path, amount_in, block) for path in paths)
+        factory = await self.__factory__
 
-        if debug_logs_enabled:
-            logger._log(DEBUG, "results: %s", (results,))
+        @stuck_coro_debugger
+        async def quote(path):
+            pools = await gather_owned(
+                factory.getPool.coroutine(path[i], path[i + 2], path[i + 1], block_identifier=block)
+                for i in range(0, len(path) - 2, 2)
+            )
+            if any(
+                int(str(pool), 16) == 0 or pool_is_ignored(pool, ignore_pools) for pool in pools
+            ):
+                return None
+            price = await self._quote_exact_input(path, amount_in, BlockNumber(block))
+            if price is not None:
+                return derive_price(
+                    token,
+                    price,
+                    f"Uniswap V3 {self._factory} pools {' '.join(map(str, pools))} route {' -> '.join(map(str, path))}",
+                )
 
-        outputs = list(filter(None, results))
-        if debug_logs_enabled:
-            logger._log(DEBUG, "outputs: %s", (outputs,))
-        return UsdPrice(max(outputs)) if outputs else None
+        price, _ = await select_price(
+            (f"Uniswap V3 {self._factory} {path}", quote(path)) for path in paths
+        )
+        return price
 
     @stuck_coro_debugger
     @a_sync.a_sync(ram_cache_maxsize=100_000, ram_cache_ttl=60 * 60)

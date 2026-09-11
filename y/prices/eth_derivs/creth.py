@@ -1,13 +1,15 @@
 import logging
 
-from a_sync import a_sync, cgather
+from a_sync import a_sync
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import CONNECTED_TO_MAINNET, weth
-from y.datatypes import AnyAddressType, Block, UsdPrice
+from y.datatypes import AnyAddressType, Block, PriceResult
 from y.prices import magic
+from y.prices._candidates import derive_price, gather_owned
 from y.utils.raw_calls import raw_call
 
 logger = logging.getLogger(__name__)
@@ -33,11 +35,12 @@ def is_creth(token: AnyAddressType) -> bool:
 
 
 @a_sync(default="sync")
+@stuck_coro_debugger
 async def get_price_creth(
     token: AnyAddressType,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
-) -> UsdPrice:
+) -> PriceResult:
     """Get the price of crETH in USD.
 
     This function retrieves the accumulated balance and total supply of crETH,
@@ -59,10 +62,14 @@ async def get_price_creth(
         - :class:`y.classes.common.ERC20`
     """
     address = await convert.to_address_async(token)
-    total_balance, total_supply, weth_price = await cgather(
-        raw_call(address, "accumulated()", output="int", block=block, sync=False),
-        ERC20(address, asynchronous=True).total_supply(block),
-        magic.get_price(weth, block, skip_cache=skip_cache, sync=False),
+    total_balance, total_supply, weth_price = await gather_owned(
+        [
+            raw_call(address, "accumulated()", output="int", block=block, sync=False),
+            ERC20(address, asynchronous=True).total_supply(block),
+            magic.get_price(weth, block, skip_cache=skip_cache, sync=False),
+        ]
     )
     per_share = total_balance / total_supply
-    return per_share * weth_price
+    return derive_price(
+        address, per_share * float(weth_price), f"crETH {address} backing per share", weth_price
+    )

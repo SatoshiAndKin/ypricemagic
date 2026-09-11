@@ -7,16 +7,19 @@ from random import randint
 from time import time
 from typing import Any, Final, final
 
-import dank_mids
 import cachebox
+import dank_mids
 from aiohttp import ClientResponse, ClientSession, ClientTimeout, TCPConnector
-from aiohttp.client_exceptions import ClientConnectorSSLError, ClientError, ContentTypeError
+from aiohttp.client_exceptions import (
+    ClientConnectorSSLError,
+    ClientError,
+    ContentTypeError,
+)
 from dank_mids.helpers._session import HTTPStatusExtended
 
 from y import ENVIRONMENT_VARIABLES as ENVS
-from y.classes.common import UsdPrice
 from y.constants import CHAINID, NETWORK_NAME
-from y.datatypes import Address, Block
+from y.datatypes import Address, Block, UsdPrice
 
 logger: Final = logging.getLogger(__name__)
 
@@ -301,7 +304,7 @@ async def read_response(
                 exc_info=True,
             )
             msg = ""
-                
+
         if msg:
             logger.warning(msg)
         _set_resume_at(_get_retry_header(response))

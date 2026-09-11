@@ -10,7 +10,7 @@ import a_sync
 from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
 from a_sync.a_sync.method import ASyncBoundMethod
-from brownie import Contract, chain, web3
+from brownie import chain, web3
 from brownie.convert.datatypes import HexString
 from brownie.exceptions import ContractNotFound
 from eth_retry import auto_retry
@@ -23,8 +23,14 @@ from y import convert
 from y._decorators import stuck_coro_debugger
 from y.classes.singleton import ChecksumASyncSingletonMeta
 from y.constants import EEE_ADDRESS
-from y.contracts import Contract, build_name, contract_creation_block_async, has_method, probe
-from y.datatypes import Address, AnyAddressType, Block, Pool, UsdPrice
+from y.contracts import (
+    Contract,
+    build_name,
+    contract_creation_block_async,
+    has_method,
+    probe,
+)
+from y.datatypes import Address, AnyAddressType, Block, Pool, PriceResult
 from y.exceptions import ContractNotVerified, MessedUpBrownieContract, NonStandardERC20
 from y.networks import Network
 from y.utils import _erc20, logging, raw_calls
@@ -415,7 +421,7 @@ class ERC20(ContractBase):
         return_None_on_failure: bool = False,
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
-    ) -> UsdPrice | None:
+    ) -> PriceResult | None:
         """
         Get the price of the token in USD.
 
@@ -451,7 +457,7 @@ class ERC20(ContractBase):
         )
 
     @classmethod
-    async def _get_scale_for(cls, address: AnyAddressType) -> Awaitable[int]:
+    async def _get_scale_for(cls, address: AnyAddressType) -> int:
         # We use async ERC20 for memory sake since internal objects are
         # often async and we can avoid duplication 2x a/sync objs
         token = ERC20(address, asynchronous=True)
@@ -908,11 +914,9 @@ class WeiBalance(a_sync.ASyncGenericBase):
             ignore_pools=self._ignore_pools,
             sync=False,
         )
-        # magic.get_price returns PriceResult; extract .price for Decimal()
-        from y.datatypes import PriceResult as _PriceResult
-        if isinstance(raw_price, _PriceResult):
-            raw_price = raw_price.price
-        price = Decimal(raw_price)
+        if raw_price is None:
+            raise ValueError(f"No price for {self.token.address} at {self.block}")
+        price = Decimal(raw_price.price)
         self._logger.debug("balance: %s  price: %s", self, price)
         return price
 

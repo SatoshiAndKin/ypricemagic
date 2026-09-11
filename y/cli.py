@@ -8,6 +8,7 @@ import argparse
 import os
 import subprocess
 import sys
+from pathlib import Path
 from pprint import pprint
 
 from cchecksum import to_checksum_address
@@ -205,6 +206,22 @@ def db_select(target: str) -> None:
             pprint(details)
 
 
+def db_reset_prices(backup: str, chain: int) -> None:
+    """Back up the configured SQLite database and clear one chain's prices."""
+    from y._db.config import connection_settings
+    from y._db.price_cache import reset_prices
+
+    if connection_settings["provider"] != "sqlite":
+        raise ValueError("reset-prices requires a selected SQLite database")
+    database = Path(str(connection_settings["filename"]))
+    report = reset_prices(database, chain, Path(backup))
+    print(f"Database: {database}")
+    print(f"Backup: {backup}")
+    print(f"Chain {chain}: deleted {report['deleted']} of {report['before']} price rows")
+    print(f"Preserved {report['other_chain_rows']} price rows for other chains")
+    print("Restart writers to clear memory caches. Prices rebuild on demand.")
+
+
 def main() -> None:
     """
     The main entry point for the CLI.
@@ -253,6 +270,12 @@ def main() -> None:
         "--block", type=str, help="Specify a block number to clear cached price data for."
     )
 
+    reset_parser = db_subparsers.add_parser(
+        "reset-prices", help="Back up SQLite and clear one chain's prices; stop writers first"
+    )
+    reset_parser.add_argument("--chain", type=int, required=True)
+    reset_parser.add_argument("--backup", required=True, help="New backup file path")
+
     # db nuke command
     nuke_parser = db_subparsers.add_parser("nuke", help="Drop all tables in the database")
     nuke_parser.add_argument("--force", action="store_true", help="Skip confirmation prompt")
@@ -287,7 +310,9 @@ def main() -> None:
 
     # Dispatch commands
     if args.command == "db":
-        if args.db_command == "nuke":
+        if args.db_command == "reset-prices":
+            db_reset_prices(args.backup, args.chain)
+        elif args.db_command == "nuke":
             db_nuke(force=args.force)
         elif args.db_command == "clear":
             db_clear(token=args.token, block=args.block)

@@ -7,9 +7,9 @@ buckets but have well-known patterns:
   Price = underlying × getRatio() / 1e18.
 - **PoolTogether V4 Ticket**: Has ``controller()`` + name matches
   ``'PoolTogether * Ticket'``. Price = 1:1 with ``controller().getToken()``.
-- **xPREMIA**: Symbol == ``'xPREMIA'``, has ``getXPremiaToPremiaRatio()``.
-  Price = PREMIA × ratio / 1e18.
-- **xTAROT**: Symbol == ``'xTAROT'``, has ``shareValuedAsUnderlying()`` and ``underlying()``.
+- **xPREMIA**: Known staking deployment with ``premia()``.
+  Price = PREMIA × readable PREMIA backing / readable share supply.
+- **xTAROT**: Symbol == ``'xTAROT'``, has ``shareValuedAsUnderlying(uint256)`` and ``underlying()``.
   Price = underlying × shareValuedAsUnderlying(1e18) / underlying_scale.
 - **Tarot SupplyVault**: name == ``'SupplyVault'``, has ``getSupplyRate()`` + ``underlying()``.
   Same pricing as xTAROT.
@@ -19,6 +19,7 @@ import logging
 from decimal import Decimal
 
 import a_sync
+import dank_mids
 from brownie import ZERO_ADDRESS
 
 from y import ENVIRONMENT_VARIABLES as ENVS
@@ -26,7 +27,9 @@ from y import convert
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.contracts import has_methods
-from y.datatypes import AnyAddressType, Block, UsdPrice
+from y.datatypes import AnyAddressType, Block, PriceResult
+from y.exceptions import NonStandardERC20
+from y.prices._candidates import derive_price, gather_owned
 from y.utils.cache import optional_async_diskcache
 from y.utils.raw_calls import raw_call
 
@@ -35,8 +38,8 @@ logger = logging.getLogger(__name__)
 # ─────────────────────────────────────────────────────────────────────────────
 # PREMIA token address (used by xPREMIA pricing)
 _PREMIA_ADDRESS = "0x6399C842dD2bE3dE30BF99Bc7D1bBF6Fa3650E70"
-# xPREMIA staking contract — symbol() reverts (NonStandardERC20), so we match by address.
-_XPREMIA_ADDRESS = "0x16f9D564Df80376C61AC914205D3fDfB8a32f98b"
+# Mainnet Premia V1 staking deployment; verified with code and premia() at block 15,000,000.
+_XPREMIA_ADDRESS = "0x16f9D564Df80376C61AC914205D3fDff7057d610"
 
 
 def _shorten_address(address: str) -> str:
@@ -52,7 +55,12 @@ def _shorten_address(address: str) -> str:
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-@a_sync.a_sync(default="sync", cache_type="memory", ram_cache_ttl=5 * 60, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+@a_sync.a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=5 * 60,
+    ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE,
+)
 @stuck_coro_debugger
 @optional_async_diskcache
 async def is_pickle_pslp(token_address: AnyAddressType) -> bool:
@@ -89,7 +97,7 @@ async def get_price_pickle_pslp(
     token_address: AnyAddressType,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
-) -> UsdPrice | None:
+) -> PriceResult | None:
     """Get the USD price of a Pickle pSLP token.
 
     Price = underlying_price × getRatio() / 1e18.
@@ -136,7 +144,12 @@ async def get_price_pickle_pslp(
     if not underlying_price:
         return None
 
-    return UsdPrice(Decimal(str(float(underlying_price))) * ratio)
+    return derive_price(
+        token_address,
+        Decimal(str(float(underlying_price))) * ratio,
+        f"Pickle pSLP {token_address} via getRatio",
+        underlying_price,
+    )
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -144,7 +157,12 @@ async def get_price_pickle_pslp(
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-@a_sync.a_sync(default="sync", cache_type="memory", ram_cache_ttl=5 * 60, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+@a_sync.a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=5 * 60,
+    ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE,
+)
 @stuck_coro_debugger
 @optional_async_diskcache
 async def is_pool_together_v4_ticket(token_address: AnyAddressType) -> bool:
@@ -186,7 +204,7 @@ async def get_price_pool_together_v4(
     token_address: AnyAddressType,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
-) -> UsdPrice | None:
+) -> PriceResult | None:
     """Get the USD price of a PoolTogether V4 Ticket.
 
     Tickets are 1:1 with the underlying token returned by
@@ -226,9 +244,17 @@ async def get_price_pool_together_v4(
     if not underlying_address or underlying_address == ZERO_ADDRESS:
         return None
 
-    return await magic.get_price(
+    child = await magic.get_price(
         underlying_address, block=block, skip_cache=skip_cache, sync=False
     )
+    if child is not None:
+        return derive_price(
+            token_address,
+            float(child),
+            f"PoolTogether V4 Ticket {token_address} 1:1 with underlying",
+            child,
+        )
+    return None
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -236,13 +262,18 @@ async def get_price_pool_together_v4(
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-@a_sync.a_sync(default="sync", cache_type="memory", ram_cache_ttl=5 * 60, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+@a_sync.a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=5 * 60,
+    ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE,
+)
 @stuck_coro_debugger
 @optional_async_diskcache
 async def is_xpremia(token_address: AnyAddressType) -> bool:
     """Determine whether a token is xPREMIA.
 
-    Detection by address (symbol() reverts on this contract) plus
+    Detection by deployment address plus
     ``premia()`` method as a sanity check.
 
     Args:
@@ -256,9 +287,7 @@ async def is_xpremia(token_address: AnyAddressType) -> bool:
     if str(token_address) != _XPREMIA_ADDRESS:
         return False
 
-    return await has_methods(
-        token_address, ("premia()(address)",), all, sync=False
-    )
+    return await has_methods(token_address, ("premia()(address)",), all, sync=False)
 
 
 @stuck_coro_debugger
@@ -267,7 +296,7 @@ async def get_price_xpremia(
     token_address: AnyAddressType,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
-) -> UsdPrice | None:
+) -> PriceResult | None:
     """Get the USD price of xPREMIA.
 
     The PremiaStaking contract works like xSUSHI: the ratio of
@@ -276,7 +305,7 @@ async def get_price_xpremia(
 
     Price = PREMIA_price × (premia_balance / total_shares).
 
-    Falls back to 1:1 with PREMIA if the ratio cannot be computed.
+    Zero backing is worth zero. Missing RPC data or zero supply is unavailable.
 
     Args:
         token_address: The address of the xPREMIA token.
@@ -290,7 +319,8 @@ async def get_price_xpremia(
 
     token_address = await convert.to_address_async(token_address)
 
-    # Get the underlying PREMIA token address from the contract
+    if block is None:
+        block = await dank_mids.eth.block_number
     premia_address = await raw_call(
         token_address,
         "premia()",
@@ -300,40 +330,48 @@ async def get_price_xpremia(
         sync=False,
     )
     if not premia_address or premia_address == ZERO_ADDRESS:
-        premia_address = _PREMIA_ADDRESS
-
+        return None
+    premia_balance, total_supply = await gather_owned(
+        [
+            raw_call(
+                premia_address,
+                "balanceOf(address)",
+                inputs=token_address,
+                output="int",
+                block=block,
+                return_None_on_failure=True,
+                sync=False,
+            ),
+            raw_call(
+                token_address,
+                "totalSupply()",
+                output="int",
+                block=block,
+                return_None_on_failure=True,
+                sync=False,
+            ),
+        ]
+    )
+    if premia_balance is None or total_supply is None or total_supply == 0:
+        return None
+    source = f"xPREMIA {token_address} via PREMIA backing per share"
+    if premia_balance == 0:
+        return derive_price(token_address, 0, source)
+    try:
+        premia_scale, share_scale = await gather_owned(
+            [ERC20._get_scale_for(premia_address), ERC20._get_scale_for(token_address)]
+        )
+    except NonStandardERC20:
+        return None
+    ratio = Decimal(premia_balance) / premia_scale / (Decimal(total_supply) / share_scale)
     premia_price = await magic.get_price(
         premia_address, block=block, skip_cache=skip_cache, sync=False
     )
-    if not premia_price:
+    if premia_price is None:
         return None
-
-    # Compute ratio: premia.balanceOf(xPREMIA) / xPREMIA.totalSupply()
-    premia_balance = await raw_call(
-        premia_address,
-        "balanceOf(address)",
-        inputs=token_address,
-        output="int",
-        block=block,
-        return_None_on_failure=True,
-        sync=False,
+    return derive_price(
+        token_address, Decimal(str(float(premia_price))) * ratio, source, premia_price
     )
-    total_supply = await raw_call(
-        token_address,
-        "totalSupply()",
-        output="int",
-        block=block,
-        return_None_on_failure=True,
-        sync=False,
-    )
-
-    if not premia_balance or not total_supply:
-        # Fall back to 1:1 with PREMIA
-        logger.debug("xPREMIA ratio unavailable; treating as 1:1 with PREMIA")
-        return UsdPrice(float(premia_price))
-
-    ratio = Decimal(premia_balance) / Decimal(total_supply)
-    return UsdPrice(Decimal(str(float(premia_price))) * ratio)
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -341,7 +379,12 @@ async def get_price_xpremia(
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-@a_sync.a_sync(default="sync", cache_type="memory", ram_cache_ttl=5 * 60, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+@a_sync.a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=5 * 60,
+    ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE,
+)
 @stuck_coro_debugger
 @optional_async_diskcache
 async def is_xtarot(token_address: AnyAddressType) -> bool:
@@ -366,11 +409,19 @@ async def is_xtarot(token_address: AnyAddressType) -> bool:
     if symbol != "xTAROT":
         return False
 
-    return await has_methods(
-        token_address,
-        ("shareValuedAsUnderlying(uint256)(uint256)", "underlying()(address)"),
-        all,
-        sync=False,
+    if not await has_methods(token_address, ("underlying()(address)",), all, sync=False):
+        return False
+    # A decoded zero proves the method exists; a failed call returns None.
+    return (
+        await raw_call(
+            token_address,
+            "shareValuedAsUnderlying(uint256)",
+            inputs=10**18,
+            output="int",
+            return_None_on_failure=True,
+            sync=False,
+        )
+        is not None
     )
 
 
@@ -379,7 +430,12 @@ async def is_xtarot(token_address: AnyAddressType) -> bool:
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-@a_sync.a_sync(default="sync", cache_type="memory", ram_cache_ttl=5 * 60, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+@a_sync.a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=5 * 60,
+    ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE,
+)
 @stuck_coro_debugger
 @optional_async_diskcache
 async def is_tarot_supply_vault(token_address: AnyAddressType) -> bool:
@@ -424,7 +480,7 @@ async def get_price_tarot_vault(
     token_address: AnyAddressType,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
-) -> UsdPrice | None:
+) -> PriceResult | None:
     """Get the USD price of an xTAROT or Tarot SupplyVault token.
 
     Price = underlying_price × shareValuedAsUnderlying(1e18) / underlying_scale.
@@ -478,4 +534,9 @@ async def get_price_tarot_vault(
     if not underlying_price:
         return None
 
-    return UsdPrice(ratio * Decimal(str(float(underlying_price))))
+    return derive_price(
+        token_address,
+        ratio * Decimal(str(float(underlying_price))),
+        f"Tarot vault {token_address} via shareValuedAsUnderlying",
+        underlying_price,
+    )

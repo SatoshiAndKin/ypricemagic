@@ -4,13 +4,15 @@ from brownie.convert.datatypes import EthAddress
 from brownie.exceptions import ContractNotFound
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import CHAINID
 from y.contracts import Contract
-from y.datatypes import AnyAddressType
+from y.datatypes import AnyAddressType, PriceResult
 from y.exceptions import ContractNotVerified
 from y.networks import Network
 from y.prices import magic
+from y.prices._candidates import derive_price
 
 
 @a_sync.a_sync(default="sync")
@@ -49,11 +51,12 @@ async def is_solidex_deposit(token: AnyAddressType) -> bool:
 
 
 @a_sync.a_sync(default="sync")
+@stuck_coro_debugger
 async def get_price(
     token: AnyAddressType,
     block: int | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
-):
+) -> PriceResult | None:
     """
     Retrieve the price of a given token.
 
@@ -74,7 +77,10 @@ async def get_price(
         - :func:`y.prices.magic.get_price`
     """
     pool = await _get_pool(str(token))  # force to string for cache key
-    return await magic.get_price(pool, block, skip_cache=skip_cache, sync=False)
+    child = await magic.get_price(pool, block, skip_cache=skip_cache, sync=False)
+    if child is not None:
+        return derive_price(token, float(child), f"Solidex {token} via pool {pool}", child)
+    return None
 
 
 @cachebox.cached(cachebox.LRUCache(ENVS.DEFAULT_CACHE_MAXSIZE))

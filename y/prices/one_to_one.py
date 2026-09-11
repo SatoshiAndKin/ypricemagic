@@ -3,9 +3,11 @@ from brownie import chain
 from eth_typing import ChecksumAddress
 
 from y import ENVIRONMENT_VARIABLES as ENVS
-from y.datatypes import Block, UsdPrice
+from y._decorators import stuck_coro_debugger
+from y.datatypes import Block, PriceResult
 from y.networks import Network
 from y.prices import magic
+from y.prices._candidates import derive_price
 
 MAPPING = {
     Network.Mainnet: {
@@ -39,11 +41,12 @@ def is_one_to_one_token(token_address: ChecksumAddress) -> bool:
 
 
 @a_sync.a_sync(default="sync")
+@stuck_coro_debugger
 async def get_price(
     token_address: ChecksumAddress,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
-) -> UsdPrice:
+) -> PriceResult | None:
     """
     Get the USD price of a one-to-one token by mapping it to its corresponding token.
 
@@ -67,6 +70,11 @@ async def get_price(
     See Also:
         - :func:`y.prices.magic.get_price` for the underlying price fetching logic.
     """
-    return await magic.get_price(
+    child = await magic.get_price(
         MAPPING[token_address], block=block, skip_cache=skip_cache, sync=False
     )
+    if child is not None:
+        return derive_price(
+            token_address, float(child), f"1:1 peg with {MAPPING[token_address]}", child
+        )
+    return None

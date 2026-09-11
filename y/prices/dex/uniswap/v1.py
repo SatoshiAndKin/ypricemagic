@@ -3,7 +3,7 @@ from logging import DEBUG, getLogger
 from typing import Any
 
 import a_sync
-from a_sync import cgather
+import dank_mids
 from brownie import ZERO_ADDRESS, chain
 from dank_mids.exceptions import Revert
 
@@ -12,9 +12,14 @@ from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import usdc
 from y.contracts import Contract, contract_creation_block_async
-from y.datatypes import Address, Block, Pool, UsdPrice
-from y.exceptions import ContractNotVerified, UnsupportedNetwork, continue_if_call_reverted
+from y.datatypes import Address, Block, Pool, PriceResult
+from y.exceptions import (
+    ContractNotVerified,
+    UnsupportedNetwork,
+    continue_if_call_reverted,
+)
 from y.networks import Network
+from y.prices._candidates import derive_price, gather_owned, pool_is_ignored
 from y.utils.raw_calls import _decimals
 
 logger = getLogger(__name__)
@@ -79,16 +84,16 @@ class UniswapV1(a_sync.ASyncGenericBase):
         self,
         token_address: Address,
         block: Block | None,
-        ignore_pools: tuple[Pool, ...] = (),  # unused
+        ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,  # unused
-    ) -> UsdPrice | None:
+    ) -> PriceResult | None:
         """
         Get the price of a token in USD.
 
         Args:
             token_address: The address of the token to get the price for.
             block: The block number at which to get the price.
-            ignore_pools: Unused parameter.
+            ignore_pools: Exchange pools to exclude.
             skip_cache: Unused parameter.
 
         Returns:
@@ -103,12 +108,28 @@ class UniswapV1(a_sync.ASyncGenericBase):
         See Also:
             - :class:`~y.datatypes.UsdPrice`
         """
-        exchange, usdc_exchange, decimals = await cgather(
-            self.get_exchange(token_address, sync=False),
-            self.get_exchange(usdc, sync=False),
-            _decimals(token_address, block, sync=False),
+        if block is None:
+            block = await dank_mids.eth.block_number
+        exchange, usdc_exchange, decimals = await gather_owned(
+            [
+                self.get_exchange(token_address, sync=False),
+                self.get_exchange(usdc, sync=False),
+                _decimals(token_address, block, sync=False),
+            ]
         )
-        if exchange is None:
+        if exchange is None or usdc_exchange is None:
+            return None
+        if any(pool_is_ignored(pool, ignore_pools) for pool in (exchange, usdc_exchange)):
+            return None
+        if any(
+            block < created
+            for created in await gather_owned(
+                [
+                    contract_creation_block_async(exchange, True),
+                    contract_creation_block_async(usdc_exchange, True),
+                ]
+            )
+        ):
             return None
 
         try:
@@ -122,7 +143,11 @@ class UniswapV1(a_sync.ASyncGenericBase):
                 / 1e6
             )
             fees = 0.997**2
-            return UsdPrice(usdc_bought / fees)
+            return derive_price(
+                token_address,
+                usdc_bought / fees,
+                f"Uniswap V1 {exchange.address} via {usdc_exchange.address}",
+            )
         except ValueError as e:
             if "invalid jump destination" in str(e):
                 return None

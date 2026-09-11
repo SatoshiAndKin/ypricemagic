@@ -1,21 +1,23 @@
-from collections.abc import Callable, Iterable
+from collections.abc import Coroutine, Iterable
+from contextvars import ContextVar
+from dataclasses import dataclass
+from decimal import Decimal
 from functools import wraps
-from logging import DEBUG, Logger, getLogger
-from typing import Literal, TypeVar, overload
+from logging import Logger, getLogger
+from typing import Any, Literal, Protocol, TypeVar, overload
 
 import a_sync
 import dank_mids
-from a_sync import igather
 from brownie import ZERO_ADDRESS
 from brownie.exceptions import ContractNotFound
+from cachetools import TTLCache
 from eth_typing import BlockNumber, ChecksumAddress, HexAddress
-from typing_extensions import ParamSpec
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import constants, convert
 from y._decorators import stuck_coro_debugger
 from y.classes import ERC20
-from y.datatypes import AnyAddressType, Block, Pool, PriceResult, PriceStep, UsdPrice
+from y.datatypes import AnyAddressType, Block, Pool, PriceResult, UsdPrice
 from y.exceptions import NonStandardERC20, PriceError, yPriceMagicError
 from y.prices import (
     band,
@@ -32,6 +34,7 @@ from y.prices import (
     utils,
     yearn,
 )
+from y.prices._candidates import derive_price, pool_address, select_price, valid_price
 from y.prices.dex import *
 from y.prices.dex.uniswap import UniswapV2Pool, uniswap_multiplexer
 from y.prices.eth_derivs import *
@@ -41,13 +44,20 @@ from y.prices.stable_swap import *
 from y.prices.synthetix import synthetix
 from y.prices.tokenized_fund import *
 from y.utils.logging import get_price_logger
-from y.utils.raw_calls import raw_call
 
-_P = ParamSpec("_P")
-_T = TypeVar("_T")
 _TAddress = TypeVar("_TAddress", bound=AnyAddressType)
 
 cache_logger = getLogger(f"{__name__}.cache")
+
+
+@dataclass(frozen=True)
+class _PriceRequest:
+    dependencies: tuple[tuple[str, int], ...] = ()
+    ignore_pools: tuple[Pool, ...] = ()
+    skip_cache: bool = False
+
+
+_price_request: ContextVar[_PriceRequest] = ContextVar("price_request", default=_PriceRequest())
 
 
 def _shorten_address(address: str) -> str:
@@ -124,9 +134,31 @@ async def get_price(
     See Also:
         :func:`get_prices`
     """
-    block = int(block or await dank_mids.eth.block_number)
+    block = BlockNumber(int(await dank_mids.eth.block_number if block is None else block))
     token_address = await convert.to_address_async(token_address)
+    parent = _price_request.get()
+    # Recursive conversions inherit the exclusions of the lookup that owns them.
+    ignore_pools = tuple(
+        {pool_address(pool): pool for pool in (*parent.ignore_pools, *ignore_pools)}.values()
+    )
+    skip_cache = skip_cache or parent.skip_cache
+    dependency = (str(token_address), block)
+    request_token = _price_request.set(
+        _PriceRequest(
+            (*parent.dependencies, dependency),
+            ignore_pools,
+            skip_cache,
+        )
+    )
     try:
+        if dependency in parent.dependencies:
+            logger = get_price_logger(token_address, block, extra="cycle")
+            try:
+                logger.debug("cyclic price dependency: %s", parent.dependencies)
+                _fail_appropriately(logger, str(token_address), fail_to_None, True)
+                return None
+            finally:
+                logger.close()
         return await _get_price(
             token_address,
             block,
@@ -136,10 +168,16 @@ async def get_price(
             silent=silent,
         )
     except (ContractNotFound, NonStandardERC20, PriceError) as e:
-        symbol = await ERC20(token_address, asynchronous=True).symbol
         if not fail_to_None:
+            try:
+                symbol = await ERC20(token_address, asynchronous=True).symbol
+            except NonStandardERC20:
+                symbol = str(token_address)
             raise_from = None if isinstance(e, PriceError) else e
             raise yPriceMagicError(e, token_address, block, symbol) from raise_from
+        return None
+    finally:
+        _price_request.reset(request_token)
 
 
 @overload
@@ -199,7 +237,7 @@ async def get_prices(
     """
     return await map_prices(
         token_addresses,
-        block or await dank_mids.eth.block_number,
+        await dank_mids.eth.block_number if block is None else block,
         fail_to_None=fail_to_None,
         skip_cache=skip_cache,
         silent=silent,
@@ -269,7 +307,20 @@ def map_prices(
     )
 
 
-def __cache(get_price: Callable[_P, _T]) -> Callable[_P, _T]:
+class _PriceLookup(Protocol):
+    def __call__(
+        self,
+        token: ChecksumAddress,
+        block: BlockNumber,
+        *,
+        fail_to_None: bool = False,
+        skip_cache: bool = ENVS.SKIP_CACHE,
+        ignore_pools: tuple[Pool, ...] = (),
+        silent: bool = False,
+    ) -> Coroutine[Any, Any, PriceResult | None]: ...
+
+
+def __cache(get_price: _PriceLookup) -> _PriceLookup:
     """
     A decorator to cache the results of the get_price function.
 
@@ -284,6 +335,10 @@ def __cache(get_price: Callable[_P, _T]) -> Callable[_P, _T]:
         A wrapped version of the input function with caching functionality.
     """
 
+    prices: TTLCache[tuple[ChecksumAddress, BlockNumber], PriceResult] = TTLCache(
+        maxsize=int(ENVS.PRICE_CACHE_MAXSIZE), ttl=int(ENVS.CACHE_TTL)
+    )
+
     @wraps(get_price)
     async def cache_wrap(
         token: ChecksumAddress,
@@ -296,28 +351,35 @@ def __cache(get_price: Callable[_P, _T]) -> Callable[_P, _T]:
     ) -> PriceResult | None:
         from y._db.utils import price as db
 
-        if not skip_cache and (cached_price := await db.get_price(token, block)):
-            cache_logger.debug("disk cache -> %s", cached_price)
-            # DB stores only the numeric price; reconstruct PriceResult with empty path
-            return PriceResult(price=UsdPrice(cached_price), path=[])
+        use_cache = (
+            not skip_cache and not ignore_pools and len(_price_request.get().dependencies) <= 1
+        )
+        key = (token, block)
+        if use_cache:
+            if key in prices:
+                return prices[key]
+            cached_price = await db.get_price(token, block)
+            if cached_price is not None and valid_price(cached_price):
+                cache_logger.debug("disk cache -> %s", cached_price)
+                return PriceResult(price=UsdPrice(cached_price), path=[])
         result = await get_price(
             token,
             block=block,
             fail_to_None=fail_to_None,
             ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
             silent=silent,
         )
-        if result and not skip_cache:
+        if result is not None and valid_price(result) and use_cache:
+            prices[key] = result
             # Store only the numeric price in DB, not the derivation path
-            price_value = result.price if isinstance(result, PriceResult) else result
-            db.set_price(token, block, price_value)
+            db.set_price(token, block, Decimal(str(float(result.price))))
         return result
 
     return cache_wrap
 
 
 @stuck_coro_debugger
-@a_sync.a_sync(default="async", cache_type="memory", ram_cache_ttl=ENVS.CACHE_TTL, ram_cache_maxsize=ENVS.PRICE_CACHE_MAXSIZE)
 @__cache
 async def _get_price(
     token: ChecksumAddress,
@@ -368,7 +430,7 @@ async def _get_price(
 
         # Try API first
         api_price = await _get_price_from_api(token, block, logger)
-        if api_price is not None:
+        if valid_price(api_price):
             raw_price = api_price
             source = f"ypriceapi for {_shorten_address(token)}"
 
@@ -381,7 +443,7 @@ async def _get_price(
                 skip_cache=skip_cache,
                 logger=logger,
             )
-            if bucket_price is not None:
+            if valid_price(bucket_price):
                 raw_price = bucket_price
                 source = bucket_source
 
@@ -390,31 +452,32 @@ async def _get_price(
             dex_price, dex_source = await _get_price_from_dexes(
                 token, block, ignore_pools, skip_cache, logger
             )
-            if dex_price is not None:
+            if valid_price(dex_price):
                 raw_price = dex_price
                 source = dex_source
 
-        if raw_price:
+        if raw_price is not None and valid_price(raw_price):
             # Extract numeric price for sense_check (handles PriceResult from recursive calls)
             numeric_price = raw_price.price if isinstance(raw_price, PriceResult) else raw_price
-            await utils.sense_check(token, block, numeric_price)
+            await utils.sense_check(token, block, float(numeric_price))
         else:
             _fail_appropriately(logger, symbol, fail_to_None, silent)
         logger.debug("%s price: %s", symbol, raw_price)
-        if raw_price:  # checks for the erroneous 0 value we see once in a while
-            # If a bucket function returned a PriceResult (from a recursive get_price call),
-            # use it directly — it already has its own derivation path
-            if isinstance(raw_price, PriceResult):
+        if raw_price is not None and valid_price(raw_price):
+            if (
+                isinstance(raw_price, PriceResult)
+                and raw_price.path
+                and raw_price.path[0].token == str(token)
+            ):
                 return raw_price
-            # Wrap raw price into PriceResult with path
-            return PriceResult(
-                price=UsdPrice(raw_price),
-                path=[PriceStep(
-                    token=str(token),
-                    price=UsdPrice(raw_price),
-                    source=source or f"unknown pricing for {_shorten_address(token)}",
-                )],
+            return derive_price(
+                token,
+                float(raw_price),
+                source or f"unknown pricing for {_shorten_address(token)}",
+                raw_price,
             )
+        return None
+
     finally:
         logger.close()
 
@@ -426,7 +489,7 @@ async def _exit_early_for_known_tokens(
     logger: Logger,
     skip_cache: bool = ENVS.SKIP_CACHE,
     ignore_pools: tuple[Pool, ...] = (),
-) -> tuple[UsdPrice | PriceResult | None, str | None]:  # sourcery skip: low-code-quality
+) -> tuple[UsdPrice | PriceResult | Decimal | None, str | None]:  # sourcery skip: low-code-quality
     """
     Attempt to get the price for known token types without having to fully load everything.
 
@@ -445,9 +508,9 @@ async def _exit_early_for_known_tokens(
         or ``(None, None)`` otherwise.  The source string is a human-readable
         description used to construct the :class:`~y.datatypes.PriceStep`.
     """
-    bucket = await utils.check_bucket(token_address, sync=False)
+    bucket = await utils.check_bucket(token_address, block=block, sync=False)
 
-    price = None
+    price: UsdPrice | PriceResult | Decimal | None = None
     source = None
     addr_short = _shorten_address(token_address)
 
@@ -463,8 +526,8 @@ async def _exit_early_for_known_tokens(
             source = f"Aave v{version} {sym} underlying"
 
     elif bucket == "balancer pool":
-        price = await balancer_multiplexer.get_price(
-            token_address, block, skip_cache=skip_cache, sync=False
+        price = await balancer_multiplexer.get_pool_price(
+            token_address, block, skip_cache=skip_cache, ignore_pools=ignore_pools, sync=False
         )
         if price is not None:
             source = f"Balancer pool {addr_short}"
@@ -480,9 +543,9 @@ async def _exit_early_for_known_tokens(
             source = f"Belt LP pricing for {addr_short}"
 
     elif bucket == "chainlink and band":
-        price = await chainlink.get_price(token_address, block, sync=False) or await band.get_price(
-            token_address, block, sync=False
-        )
+        price = await chainlink.get_price(token_address, block, sync=False)
+        if not valid_price(price):
+            price = await band.get_price(token_address, block, sync=False)
         if price is not None:
             source = f"Chainlink/Band feed for {addr_short}"
 
@@ -505,8 +568,7 @@ async def _exit_early_for_known_tokens(
     elif bucket == "convex":
         raw = await convex.get_price(token_address, block, skip_cache=skip_cache, sync=False)
         if raw is not None:
-            # Unwrap PriceResult from recursive magic.get_price() call
-            price = raw.price if isinstance(raw, PriceResult) else raw
+            price = raw
             underlying = await convex.get_underlying_lp(token_address, sync=False)
             underlying_short = _shorten_address(str(underlying)) if underlying else addr_short
             source = f"Convex wrapping Curve LP {underlying_short}"
@@ -516,11 +578,8 @@ async def _exit_early_for_known_tokens(
             token_address, block=block, skip_cache=skip_cache, sync=False
         )
         if raw is not None:
-            # Unwrap PriceResult from recursive magic.get_price() call
-            price = raw.price if isinstance(raw, PriceResult) else raw
-            lp_addr = await curve_gauge._get_lp_token(
-                await convert.to_address_async(token_address)
-            )
+            price = raw
+            lp_addr = await curve_gauge._get_lp_token(await convert.to_address_async(token_address))
             lp_short = _shorten_address(lp_addr) if lp_addr else addr_short
             source = f"Curve gauge for LP {lp_short}"
 
@@ -543,19 +602,7 @@ async def _exit_early_for_known_tokens(
             token_address, block=block, skip_cache=skip_cache, sync=False
         )
         if price is not None:
-            try:
-                sym = await ERC20(token_address, asynchronous=True).symbol
-            except NonStandardERC20:
-                sym = addr_short
-            try:
-                asset_addr = await raw_call(
-                    token_address, "asset()", output="address",
-                    block=block, return_None_on_failure=True, sync=False
-                )
-                asset_sym = await ERC20(asset_addr, asynchronous=True).symbol if asset_addr else "unknown"
-            except Exception:
-                asset_sym = "unknown"
-            source = f"ERC4626 vault {sym} underlying {asset_sym} via previewRedeem"
+            source = price.path[0].source
 
     elif bucket == "ellipsis lp":
         price = await ellipsis.get_price(
@@ -755,7 +802,7 @@ async def _exit_early_for_known_tokens(
             token_address, block=block, skip_cache=skip_cache, sync=False
         )
         if price is not None:
-            source = f"xPREMIA {addr_short} via getXPremiaToPremiaRatio"
+            source = f"xPREMIA {addr_short} via PREMIA backing per share"
 
     elif bucket == "xtarot":
         price = await exotic_tokens.get_price_tarot_vault(
@@ -798,13 +845,14 @@ async def _get_price_from_api(
         return price
 
 
+@stuck_coro_debugger
 async def _get_price_from_dexes(
     token: ChecksumAddress,
     block: BlockNumber,
     ignore_pools,
     skip_cache: bool,
     logger: Logger,
-) -> tuple[UsdPrice | None, str | None]:
+) -> tuple[UsdPrice | PriceResult | None, str | None]:
     """
     Attempt to get the price from decentralized exchanges.
 
@@ -821,63 +869,30 @@ async def _get_price_from_dexes(
         A tuple of ``(price, source_string)`` if the price can be determined from DEXes,
         or ``(None, None)`` otherwise.
     """
-    # TODO We need better logic to determine whether to use uniswap, curve, balancer. For now this works for all known cases.
-    dexes = [uniswap_multiplexer]
+    candidates = [
+        (
+            f"Uniswap for {token}",
+            uniswap_multiplexer.get_price(
+                token, block, ignore_pools=ignore_pools, skip_cache=skip_cache, sync=False
+            ),
+        ),
+        (
+            f"Balancer for {token}",
+            balancer_multiplexer.get_price(
+                token, block, ignore_pools=ignore_pools, skip_cache=skip_cache, sync=False
+            ),
+        ),
+    ]
     if curve:
-        dexes.append(curve)
-
-    # TODO: make a DexABC, include balancer and future dexes
-    # TODO:  this would be so cool if a_sync.map could proxy abstractmethods correctly
-    # dexes_by_depth = dict(
-    #     await DexABC.check_liquidity.map(dexes, token=token, block=block, ignore_pools=ignore_pools).items(pop=True).sort(lambda k, v: v)
-    # )
-    liquidity = await igather(
-        dex.check_liquidity(token, block, ignore_pools=ignore_pools, sync=False) for dex in dexes
-    )
-    depth_to_dex: dict[int, object] = dict(zip(liquidity, dexes))
-    dexes_by_depth: dict[int, object] = {
-        depth: depth_to_dex[depth] for depth in sorted(depth_to_dex, reverse=True) if depth
-    }
-    if debug_logs_enabled := logger.isEnabledFor(DEBUG):
-        log_debug = lambda msg, *args: logger._log(DEBUG, msg, args)
-
-        log_debug("dexes by depth for %s at block %s: %s", token, block, dexes_by_depth)
-
-    addr_short = _shorten_address(token)
-
-    for dex in dexes_by_depth.values():
-        method = "get_price"
-        if hasattr(dex, "get_price_for_underlying"):
-            method += "_for_underlying"
-        if debug_logs_enabled:
-            log_debug("trying %s", dex)
-        price = await getattr(dex, method)(
-            token, block, ignore_pools=ignore_pools, skip_cache=skip_cache, sync=False
+        candidates.append(
+            (
+                f"Curve for {token}",
+                curve.get_price_for_underlying(
+                    token, block, ignore_pools=ignore_pools, skip_cache=skip_cache, sync=False
+                ),
+            )
         )
-        if debug_logs_enabled:
-            log_debug("%s -> %s", dex, price)
-        if price:
-            dex_name = getattr(dex, "__name__", type(dex).__name__)
-            source = f"DEX {dex_name} for {addr_short}"
-            return price, source
-
-    if debug_logs_enabled:
-        log_debug(
-            "no %s %s liquidity found on primary markets",
-            await ERC20(token, asynchronous=True).symbol,
-            token,
-        )
-
-    # If price is 0, we can at least try to see if balancer gives us a price. If not, its probably a shitcoin.
-    if price := await balancer_multiplexer.get_price(
-        token, block=block, skip_cache=skip_cache, ignore_pools=ignore_pools, sync=False
-    ):
-        if debug_logs_enabled:
-            log_debug("balancer -> %s", price)
-        source = f"Balancer pool {addr_short}"
-        return price, source
-
-    return None, None
+    return await select_price(candidates)
 
 
 def _fail_appropriately(

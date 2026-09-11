@@ -1,4 +1,9 @@
 import sys
+
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
 from pathlib import Path
 
 from setuptools import find_packages, setup
@@ -19,31 +24,10 @@ if SKIP_MYPYC:
 else:
     from mypyc.build import mypycify
 
-    mypyc_args = [
-        "y/_db/brownie.py",
-        "y/_db/config.py",
-        "y/_db/decorators.py",
-        "y/_db/utils/stringify.py",
-        "y/ENVIRONMENT_VARIABLES.py",
-        "y/convert.py",
-        "y/exceptions.py",
-        "y/networks.py",
-        "y/prices/utils/sense_check.py",
-        "y/utils/gather.py",
-        "--pretty",
-        "--install-types",
-        "--follow-imports=silent",
-        "--disable-error-code=import-not-found",
-        "--disable-error-code=no-untyped-def",
-        "--disable-error-code=no-untyped-call",
-    ]
-    if not sys.platform.startswith("linux") or sys.maxsize < 2**32:
-        # Some deps dont install properly at build time except on 64-bit Python on Linux
-        # That's okay for us, we only use the [unused-ignore] code for housekeeping
-        mypyc_args.append("--disable-error-code=unused-ignore")
-        
+    with (this_directory / "pyproject.toml").open("rb") as config_file:
+        mypyc_args = tomllib.load(config_file)["tool"]["mypyc"]["files"]
+
     ext_modules = mypycify(mypyc_args, group_name="ypricemagic")
-    
 
 
 setup(

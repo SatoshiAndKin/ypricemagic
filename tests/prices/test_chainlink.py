@@ -128,7 +128,11 @@ async def test_chainlink_get_feed(token):
     See Also:
         :func:`y.prices.chainlink.chainlink.get_feed`
     """
-    assert await chainlink.get_feed(token, sync=False) != ZERO_ADDRESS, "no feed available"
+    feed = await chainlink.get_feed(token, sync=False)
+    if feed is None:
+        assert await chainlink.get_price(token, sync=False) is None
+    else:
+        assert feed.address != ZERO_ADDRESS
 
 
 @pytest.mark.parametrize("token", FEEDS)
@@ -149,6 +153,8 @@ async def test_chainlink_latest(token):
     """
     if not await chainlink.get_price(token):
         feed = await chainlink.get_feed(token)
+        if feed is None:
+            return  # The registry removed this feed.
         latest_timestamp = await feed.latest_timestamp()
         if latest_timestamp and latest_timestamp + 24 * 60 * 60 < time.time():
             pytest.skip("feed is stale")
@@ -177,23 +183,15 @@ async def test_chainlink_before_registry(token):
         :func:`y.prices.chainlink.chainlink.get_price`
     """
     test_block = 12800000
-    assert chainlink.asynchronous is True
-    feed = await chainlink.get_feed(token, sync=False)
-    if await contract_creation_block_async(feed.address) > test_block:
-        pytest.skip("not applicable to feeds deployed after test block")
-    price = chainlink.get_price(token, block=test_block)
-    price = await price
-    if not price:
-        feed = await chainlink.get_feed(token)
-        latest_timestamp = await feed.latest_timestamp()
-        if latest_timestamp and latest_timestamp + 24 * 60 * 60 < time.time():
-            pytest.skip("feed is stale")
-        try:
-            assert (
-                await feed.contract.aggregator == ZERO_ADDRESS
-            ), f"{feed} no price available before registry"
-        except AttributeError as e:
-            raise AttributeError(*e.args, feed) from e
+    feed = await chainlink.get_feed(token, block=test_block, sync=False)
+    price = await chainlink.get_price(token, block=test_block, sync=False)
+    if feed is None:
+        assert price is None
+        return
+    assert await contract_creation_block_async(feed.address) <= test_block
+    # Compare the selected historical feed directly, at the same block.
+    expected = await feed.get_price(block=test_block)
+    assert price == expected
 
 
 @pytest.mark.asyncio_cooperative
