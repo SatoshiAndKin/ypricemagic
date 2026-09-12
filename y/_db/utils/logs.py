@@ -1,5 +1,6 @@
 import itertools
 import logging
+from typing import Any
 
 import cachebox
 from a_sync import a_sync, cgather, igather
@@ -216,7 +217,7 @@ page_size = 100
 class LogCache(DiskCache[Log, LogCacheInfo]):
     __slots__ = "addresses", "topics"
 
-    def __init__(self, addresses, topics):
+    def __init__(self, addresses: Any, topics: Any) -> None:
         self.addresses = addresses
         self.topics = topics
 
@@ -311,17 +312,19 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
     def _select(self, from_block: int, to_block: int) -> list[Log]:
         logger.info("executing select query for %s", self)
         try:
-            return [_decode_log(log.raw) for log in self._get_query(from_block, to_block)]
+            return [_decode_log(row[3]) for row in self._get_query(from_block, to_block)]
         except ValidationError:
             results = []
-            for log in self._get_query(from_block, to_block):
+            for row in self._get_query(from_block, to_block):
                 try:
-                    results.append(_decode_log(log.raw))
+                    results.append(_decode_log(row[3]))
                 except ValidationError as e:
-                    raise ValueError(e, json.decode(log.raw)) from e
+                    raise ValueError(e, json.decode(row[3])) from e
             return results
 
-    def _get_query(self, from_block: int, to_block: int) -> Query:
+    def _get_query(
+        self, from_block: int, to_block: int
+    ) -> "Query[tuple[int, str, int, bytes], tuple[int, str, int, bytes]]":
         from y._db.utils import utils as db
 
         generator = (
@@ -338,9 +341,11 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
             generator = self._wrap_query_with_topic(generator, topic)
 
         query = (
-            select(generator)
+            # Project the body with its ordering keys. Fetching Log entities would
+            # leave their lazy raw fields unloaded and issue one query per event.
+            select((log.block.number, log.tx.hash, log.log_index, log.raw) for log in generator)
             .without_distinct()
-            .order_by(lambda l: (l.block.number, l.tx.hash, l.log_index))
+            .order_by(1, 2, 3)
         )
         logger.debug(query.get_sql())
         return query
