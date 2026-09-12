@@ -1,0 +1,22 @@
+# PR 43 repair validation
+
+PR 43 remains draft. The six review repairs are in `643aadf4`; the local-only RPC test workflow and cache scanner repair are in `04baa5db`. The full-suite comparison and complete mainnet audit remain incomplete.
+
+- Python 3.12.12: **154 focused pricing, amount, audit, scaling, and cache tests passed** against the repaired native dependency. The checkout used an editable build, and the tests checked every configured mypyc extension suffix. The earlier six-repair run passed 133 tests.
+- Dependency source `fbf10607151aa9177910add1da32fe2f37f61548`, generated artifact commit `ee2079c0f452be7187fc93685070c3116e9717fb`: all 15 native platform builds and the aggregate artifact job passed. The local unit suite passed **115 tests**. All **30 changed executable statements** in the rate-limit repair have test coverage. See `dependency-local-validation.json` for individual results and the build record.
+- The original isolated live batching test needed 2,692 requests for its 12,500-call workload. It passed with 56 requests after the lock repair. The final complete integration run also passed its unchanged batching thresholds, with 48 requests.
+- Complete local dependency integration: **32 passed, 1 failed**. `test_json_batch` received RPC error `-32000`: historical state `b87706d349480b87e22320bb1c1a1badceaee00d1acd738a02593af703bd11b8` was unavailable at block **25,963,279**. This failure remains a validation gap.
+- A direct check of the block that failed in the previous integration run, **25,963,097**, later passed. Direct checks at **18,000,000** and **16,830,000** also passed. See `archive-state-probe.json`. These samples do not establish complete archive coverage.
+- The dependency pins evmspec repair `f0df0d9d8e4e7a7000580054ce2c0b6b6193a14c`. All 15 new transaction-schema tests pass. Its full compiled suite has 365 passes and two unchanged trace-enum failures, also present with published 0.5.2.
+- Native controlled HTTP tests cover hash/canonical grouping, shared block headers, cancellation, duplicate requests, direct-call exclusions, getCode, and gas fields. They use Brownie's Web3 setup and assert that the native controller loads.
+- The original raw EIP-1898 and production quote-reader checks passed at block 18,000,000. See `rpc-probe.json`. The header hash was `0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3` and USDC decimals were 6.
+- The configured dependency type check still reports 205 errors in 19 files. Its complete output is identical before and after the rate-limit repair. `mypy-comparison.json` separately records the earlier pricing comparison: no diagnostic was added by the six repairs, but the type check remains non-green.
+- Black and source whitespace checks pass. Local generated artifacts are excluded from source commits; remote generated-code commits are preserved.
+
+The original baseline full suite exited with `make: *** [test] Killed: 9`, without a final pytest summary. `baseline-suite.json` records the observed test outcomes and explicitly marks the run incomplete. The cause of the signal is not established. The changed full suite started after that exit and still has no exit result. This is not a completed baseline comparison.
+
+The original native quote check, full mainnet audit, and additional native redemption check still have no exit results. Their captured logs and output artifacts will be read only after their commands finish. The focused suite passed all **154 tests** on Python **3.11.14, 3.12.12, and 3.13.12**, including configured native extensions. Python 3.11 used compatible NumPy 2.4.6; 3.12 and 3.13 used NumPy 2.5.3. These focused checks do not replace the complete live suite. No successful complete audit, full suite, or readiness result is claimed.
+
+Real-node test jobs were removed from GitHub Actions. Archive validation runs locally. Build and static workflows remain. Documentation deployment workflows remain unchanged.
+
+Earlier interrupted results and the completed database reset remain under `../2026-09-11`. These repairs do not repeat the database reset.

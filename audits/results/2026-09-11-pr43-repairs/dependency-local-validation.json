@@ -1,0 +1,752 @@
+{
+  "source_commit": "fbf10607151aa9177910add1da32fe2f37f61548",
+  "python": "3.12.12",
+  "native_build": "repository build script; all wheel extension checks passed",
+  "units": {
+    "passed": 115,
+    "failed": 0
+  },
+  "integration": {
+    "passed": 32,
+    "failed": 1,
+    "failure": {
+      "test": "tests/integration/test_dank_mids.py::test_json_batch",
+      "rpc_code": -32000,
+      "block": 25963279,
+      "message": "historical state b87706d349480b87e22320bb1c1a1badceaee00d1acd738a02593af703bd11b8 is not available"
+    }
+  },
+  "rate_limit_coverage": {
+    "file": "dank_mids/helpers/_rate_limit.py",
+    "file_summary": {
+      "covered_lines": 65,
+      "num_statements": 84,
+      "percent_covered": 77.38095238095238,
+      "percent_covered_display": "77",
+      "missing_lines": 19,
+      "excluded_lines": 0,
+      "percent_statements_covered": 77.38095238095238,
+      "percent_statements_covered_display": "77"
+    },
+    "changed_statements": 30,
+    "changed_statements_hit": 30,
+    "changed_lines_missing": []
+  },
+  "mypy": {
+    "before_errors": 205,
+    "after_errors": 205,
+    "new_diagnostics": 0,
+    "complete_output_identical": true
+  },
+  "test_results": [
+    {
+      "suite": "unit",
+      "results": [
+        {
+          "test": "tests/unit/test_block_decoding.py::test_current_block_accepts_every_field_order[baseFeePerGas-eth_getBlockByNumber]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_current_block_accepts_every_field_order[baseFeePerGas-eth_getBlockByHash]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_current_block_accepts_every_field_order[difficulty-eth_getBlockByNumber]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_current_block_accepts_every_field_order[difficulty-eth_getBlockByHash]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_current_block_accepts_every_field_order[withdrawals-eth_getBlockByNumber]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_current_block_accepts_every_field_order[withdrawals-eth_getBlockByHash]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_current_block_accepts_every_field_order[requestsHash-eth_getBlockByNumber]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_current_block_accepts_every_field_order[requestsHash-eth_getBlockByHash]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_current_block_accepts_every_field_order[hash-eth_getBlockByNumber]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_current_block_accepts_every_field_order[hash-eth_getBlockByHash]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_successive_fork_eras_do_not_change_other_requests[pre-london]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_successive_fork_eras_do_not_change_other_requests[london]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_successive_fork_eras_do_not_change_other_requests[shanghai]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_minimal_block_schema_and_unknown_field_validation",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_decoding.py::test_missing_block_remains_null",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_hash_key_keeps_number_hash_and_canonical_requirement",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_selector_normalizes_hash_and_default_canonical_requirement",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_invalid_hash_selector_is_not_sent[selector0-ValueError]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_invalid_hash_selector_is_not_sent[selector1-ValueError]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_invalid_hash_selector_is_not_sent[selector2-ValueError]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_invalid_hash_selector_is_not_sent[selector3-ValueError]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_invalid_hash_selector_is_not_sent[selector4-TypeError]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_hash_identifiers_use_the_existing_admission_limit",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_missing_or_mismatched_header_is_never_cached[None-BlockNotFound]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_missing_or_mismatched_header_is_never_cached[header1-ValueError]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_shared_header_lookup_survives_one_cancelled_waiter",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_controller_keeps_hash_identity_for_unbatched_calls",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_existing_semaphore_identifiers_keep_working[123]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_existing_semaphore_identifiers_keep_working[0x123]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_existing_semaphore_identifiers_keep_working[\\x01#]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_existing_semaphore_identifiers_keep_working[None]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_existing_semaphore_identifiers_keep_working[latest]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_semaphore_rejects_unsupported_selector",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_block_identity.py::test_duplicate_rpc_keeps_the_hash_batch_key_and_wire_selector",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_brownie_patch_errors.py::test_getattr_raises_import_error_for_missing_brownie",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_brownie_patch_errors.py::test_getattr_raises_not_connected",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_brownie_patch_errors.py::test_getattr_raises_not_initialized_when_connected_after_import",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_brownie_patch_errors.py::test_getattr_raises_import_error_when_patch_import_fails",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_brownie_patch_errors.py::test_getattr_raises_import_error_for_missing_brownie_types",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_brownie_patch_errors.py::test_getattr_resolves_brownie_types",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_brownie_patch_errors.py::test_getattr_converts_state_type_error_to_public_exception",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_brownie_patch_errors.py::test_get_brownie_patch_status_coerces_state_identity_mismatch",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_brownie_patch_errors.py::test_getattr_foreign_initialized_state_raises_public_exception",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_brownie_patch_errors.py::test_compiled_import_path_normalizes_state_identity_mismatch[False]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_brownie_patch_errors.py::test_compiled_import_path_normalizes_state_identity_mismatch[True]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_create_batch_task_finishes_without_live_waiters",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_multicall_gc_sets_exception_for_active_waiters",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_multicall_gc_treats_no_waiters_as_abandoned_work",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_jsonrpc_batch_gc_logs_waiter_impacting_work",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_jsonrpc_batch_gc_treats_no_waiters_as_abandoned_work",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_rpc_request_gc_treats_no_waiters_as_abandoned_work",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_rpc_request_gc_sets_exception_for_waiters",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_debuggable_future_waiter_count_updates_on_completion",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_debuggable_future_waiter_count_updates_on_cancellation",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_jsonrpc_batch_post_bails_out_when_all_calls_are_collected",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_early_start_keeps_multicalls_alive_through_handoff_and_dispatches",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_early_start_dispatches_existing_rpc_calls_without_waiters",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_batch_full_gate_dispatches_without_waiters",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_multicall_bisect_retry_does_not_wait_pending_done_directly",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_multicall_bisect_retry_timeout_does_not_dispatch_duplicate_batch",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_dispatch_pending_rpc_batch_respects_capacity_gate_for_bisect_retries",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_request_gate_waits_for_one_loop_tick_before_dispatch",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_controller_has_pending_calls_ignores_stale_eth_entries",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_gc_batch_contract.py::test_request_gate_skips_execute_batch_for_stale_eth_entries",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_hash_rpc.py::test_native_batcher_preserves_hashes_and_canonical_requirement",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_helpers_attrdict_compat.py::test_add_sync_attrdict_middleware_uses_legacy_symbol",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_helpers_attrdict_compat.py::test_add_sync_attrdict_middleware_falls_back_to_v7_symbol",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_jsonrpc_batch_response.py::test_spoof_response_by_id_matches_and_skips_falsey",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_lazy_imports.py::test_import_applies_side_effects",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_lazy_imports.py::test_brownie_error_accessible",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_lazy_imports.py::test_helpers_import_applies_side_effects",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_lazy_imports.py::test_helpers_import_triggers_side_effects",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_lazy_imports.py::test_eth_alias_survives_submodule_import",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_native_wheel.py::test_wheel_rejects_missing_linked_module[None]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_native_wheel.py::test_wheel_rejects_missing_linked_module[dank_mids/helpers/_rate_limit] FAIL: native.whl: missing compiled artifact for dank_mids/helpers/_rate_limit.py",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_native_wheel.py::test_wheel_rejects_missing_linked_module[dank_mids/helpers/_requester] FAIL: native.whl: missing compiled artifact for dank_mids/helpers/_requester.py",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_native_wheel.py::test_wheel_rejects_missing_linked_module[dank_mids/_vendor/aiolimiter/src/aiolimiter/__init__] FAIL: native.whl: missing compiled artifact for dank_mids/_vendor/aiolimiter/src/aiolimiter/__init__.py",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_native_wheel.py::test_wheel_rejects_missing_linked_module[dank_mids/_vendor/aiolimiter/src/aiolimiter/leakybucket] FAIL: native.whl: missing compiled artifact for dank_mids/_vendor/aiolimiter/src/aiolimiter/leakybucket.py",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_native_wheel.py::test_wheel_rejects_missing_linked_module[native__mypyc] FAIL: native.whl: missing native mypyc group for .cpython-312-darwin.so",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_native_wheel.py::test_native_rate_limiter_can_serve_a_request",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rate_limit_admission.py::test_rate_limit_releases_callers_as_one_batch",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rate_limit_admission.py::test_cancelled_caller_does_not_cancel_other_waiters[None]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rate_limit_admission.py::test_cancelled_caller_does_not_cancel_other_waiters[failure1]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rate_limit_admission.py::test_inactive_queue_and_failed_requester",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rate_limit_admission.py::test_requester_shares_drain_completion_and_errors[None]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rate_limit_admission.py::test_requester_shares_drain_completion_and_errors[failure1]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_requester_shutdown.py::test_source_shutdown_closes_session_thread_and_loop[False]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_requester_shutdown.py::test_source_shutdown_closes_session_thread_and_loop[True]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_requester_shutdown.py::test_installed_requester_process_exits_cleanly[False]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_requester_shutdown.py::test_installed_requester_process_exits_cleanly[True]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_retry_mechanics.py::test_consume_retry_advances_attempt_until_budget_exhausted",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_retry_mechanics.py::test_consume_retry_with_jitter_uses_random_delay",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_retry_mechanics.py::test_choose_http_status_retry_uses_rate_limit_budget_for_429",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_retry_mechanics.py::test_choose_http_status_retry_retries_transient_status_with_delay",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_retry_mechanics.py::test_choose_http_status_retry_raises_for_non_retry_codes",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_retry_mechanics.py::test_use_warning_logger_defaults_to_attempt_three",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[None]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[0x1234]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data2]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data3]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data4]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[42]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[True]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_revert_with_structured_context_remains_a_revert",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_only_chainstack_rate_limits_parse_the_retry_duration[250ms-0.25]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_only_chainstack_rate_limits_parse_the_retry_duration[250\\xb5s-0.00025]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_malformed_rate_limit_retains_the_actual_error_context[data0]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_malformed_rate_limit_retains_the_actual_error_context[None]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_rpc_error_data.py::test_malformed_rate_limit_retains_the_actual_error_context[data2]",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_run_mypyc_build.py::test_build_install_command_uses_requirements_file",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_run_mypyc_build.py::test_build_mypyc_command_contains_targets_and_flags",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_run_mypyc_build.py::test_main_runs_install_then_compile",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_weaklist.py::test_append_iter_contains_and_len",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_weaklist.py::test_extend_and_remove",
+          "status": "passed"
+        },
+        {
+          "test": "tests/unit/test_weaklist.py::test_gc_cleans_refs",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "suite": "integration",
+      "results": [
+        {
+          "test": "tests/integration/test_dank_mids.py::test_string_block",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getTransactionCount_int_block",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getTransaction_1559",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getCode_no_block",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getBalance_no_block",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getBalance_latest",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_AttributeDict",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getCode_latest",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getBalance_hex_block",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getTransactionCount_hex_block",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getTransaction_2930",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getCode_int_block",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getBalance_int_block",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getTransaction_7702",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getTransactionCount_no_block",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getTransactionCount_latest",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_eth_getCode_hex_block",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_bad_hex_handling",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_brownie_patch.py::test_patch_call",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_brownie_patch.py::test_gather",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_other_methods",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_examples.py::test_dank_brownie_example",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_json_batch",
+          "status": "failed"
+        },
+        {
+          "test": "tests/integration/test_brownie_patch.py::test_dank_overloaded_method",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_brownie_patch.py::test_dank_contract_tx",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_brownie_patch.py::test_patch_contract_call",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_brownie_patch.py::test_patch_contract_tx",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_brownie_patch.py::test_dank_contract_call",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_dank_middleware",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_brownie_patch.py::test_call_setup_twice_on_same_web3",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_next_cid",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_next_mid",
+          "status": "passed"
+        },
+        {
+          "test": "tests/integration/test_dank_mids.py::test_next_bid",
+          "status": "passed"
+        }
+      ]
+    }
+  ],
+  "artifact_commit": "ee2079c0f452be7187fc93685070c3116e9717fb",
+  "ci": {
+    "run": 34714307549,
+    "source_commit": "fbf10607151aa9177910add1da32fe2f37f61548",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "build-matrix (ubuntu-latest, 3.14, 314)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.13, 313)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.12, 312)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.11, 311)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.12, 312)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.10, 310)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.14, 314)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.11, 311)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.13, 313)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.10, 310)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.11, 311)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.10, 310)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.12, 312)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.14, 314)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.13, 313)",
+        "conclusion": "success"
+      },
+      {
+        "name": "aggregate-build-files",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "pricing_regressions": {
+    "source_commit": "04baa5db",
+    "python": "3.12.12",
+    "passed": 154,
+    "failed": 0,
+    "dependency": "locally rebuilt native source fbf106071, identical Python sources to artifact commit ee2079c0f",
+    "compiled_extensions_checked": true
+  },
+  "pricing_regressions_by_python": [
+    {
+      "python": "3.11.14",
+      "passed": 154,
+      "failed": 0,
+      "numpy": "2.4.6",
+      "dependency_artifact_commit": "ee2079c0f452be7187fc93685070c3116e9717fb",
+      "configured_extensions_checked": true
+    },
+    {
+      "python": "3.12.12",
+      "passed": 154,
+      "failed": 0,
+      "numpy": "2.5.3",
+      "dependency_source_commit": "fbf10607151aa9177910add1da32fe2f37f61548",
+      "configured_extensions_checked": true
+    },
+    {
+      "python": "3.13.12",
+      "passed": 154,
+      "failed": 0,
+      "numpy": "2.5.3",
+      "dependency_artifact_commit": "ee2079c0f452be7187fc93685070c3116e9717fb",
+      "configured_extensions_checked": true
+    }
+  ],
+  "version_note": "NumPy 2.5.3 requires Python >=3.12. Python 3.11 uses the compatible 2.4.6 version. Baseline and changed Python 3.12 runs keep identical resolved dependencies."
+}
