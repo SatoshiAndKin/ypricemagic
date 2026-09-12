@@ -1,4 +1,23 @@
 
+## Local validation
+
+Run checks that require an Ethereum node locally. GitHub Actions has no RPC
+credentials or access to the private archive node. Price tests, native quote
+checks, and historical audits therefore run locally. Build and static checks can
+run in GitHub Actions without a node.
+
+Use Python 3.12 and the configured local archive network for the complete suite:
+
+```sh
+PYTEST_ADDOPTS="-p no:pytest_ethereum" BROWNIE_NETWORK=mainnet make test
+```
+
+`make test` first builds the checkout extensions with an editable installation.
+Use separate price databases for baseline and changed runs, with the same resolved
+dependencies. Run the suites sequentially and compare failures by test and error.
+RPC failures leave validation incomplete; a passing build does not replace these
+local checks.
+
 ## y.stuck? logger
 
 ypricemagic wraps many long-running async coroutines with `y._decorators.stuck_coro_debugger`, which is a thin wrapper around `a_sync.debugging.stuck_coro_debugger`. That wrapper uses a dedicated logger named `y.stuck?`.

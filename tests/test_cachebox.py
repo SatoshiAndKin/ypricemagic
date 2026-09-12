@@ -11,6 +11,7 @@ These tests verify:
 These tests do NOT require an RPC connection.
 """
 
+import ast
 import asyncio
 import os
 import re
@@ -202,8 +203,8 @@ class TestNoAlruCacheImports:
                         if re.search(r"\balru_cache\b|\basync_lru\b", line):
                             violations.append(f"{filepath}:{line_num}: {line.strip()}")
 
-        assert violations == [], (
-            f"Found alru_cache/async_lru references in y/:\n" + "\n".join(violations)
+        assert violations == [], f"Found alru_cache/async_lru references in y/:\n" + "\n".join(
+            violations
         )
 
 
@@ -240,19 +241,12 @@ class TestAllMemoryCachesBounded:
                 filepath = os.path.join(root, filename)
                 with open(filepath) as f:
                     content = f.read()
-                    lines = content.split("\n")
-                    for line_num, line in enumerate(lines, 1):
-                        stripped = line.strip()
-                        # Skip comments
-                        if stripped.startswith("#"):
-                            continue
-                        if 'cache_type="memory"' in stripped or "cache_type='memory'" in stripped:
-                            if "ram_cache_maxsize" not in stripped:
-                                violations.append(f"{filepath}:{line_num}: {stripped}")
+                    for line_num in _unbounded_memory_cache_lines(content):
+                        violations.append(f"{filepath}:{line_num}")
 
-        assert violations == [], (
-            f"Found cache_type='memory' without ram_cache_maxsize:\n" + "\n".join(violations)
-        )
+        assert (
+            violations == []
+        ), f"Found cache_type='memory' without ram_cache_maxsize:\n" + "\n".join(violations)
 
     def test_no_unbounded_ram_cache_maxsize(self):
         """Scan y/ for ram_cache_maxsize=None (explicitly unbounded)."""
@@ -277,6 +271,37 @@ class TestAllMemoryCachesBounded:
                         if "ram_cache_maxsize=None" in stripped:
                             violations.append(f"{filepath}:{line_num}: {stripped}")
 
-        assert violations == [], (
-            f"Found ram_cache_maxsize=None outside _db/:\n" + "\n".join(violations)
+        assert violations == [], f"Found ram_cache_maxsize=None outside _db/:\n" + "\n".join(
+            violations
         )
+
+
+def _unbounded_memory_cache_lines(source: str) -> list[int]:
+    violations = []
+    for node in ast.walk(ast.parse(source)):
+        if not isinstance(node, ast.Call):
+            continue
+        options = {keyword.arg: keyword.value for keyword in node.keywords}
+        cache_type = options.get("cache_type")
+        if (
+            isinstance(cache_type, ast.Constant)
+            and cache_type.value == "memory"
+            and "ram_cache_maxsize" not in options
+        ):
+            violations.append(node.lineno)
+    return violations
+
+
+@pytest.mark.parametrize(
+    "source, expected",
+    [
+        ('cache(cache_type="memory", ram_cache_maxsize=128)', []),
+        ('cache(\n    cache_type="memory",\n    ram_cache_maxsize=128,\n)', []),
+        ('cache(cache_type = "memory")', [1]),
+        ('cache(cache_type="memory")  # ram_cache_maxsize=128', [1]),
+        ('cache(cache_type="memory")\nother(ram_cache_maxsize=128)', [1]),
+        ('"cache_type=\\"memory\\""', []),
+    ],
+)
+def test_memory_cache_bound_scan_handles_complete_calls(source, expected):
+    assert _unbounded_memory_cache_lines(source) == expected
