@@ -3,7 +3,7 @@ import logging
 from typing import Any
 
 import cachebox
-from a_sync import a_sync, cgather, igather
+from a_sync import a_sync, cgather
 from a_sync.executor import AsyncExecutor
 from brownie.network.event import _EventItem
 from eth_typing import HexStr
@@ -78,36 +78,37 @@ def _decode_hook_unsafe(typ, obj):
 _decode_log = json.Decoder(type=Log, dec_hook=_decode_hook_unsafe).decode
 
 
-async def _prepare_log(log: Log) -> tuple:
+def _prepare_log(
+    log: Log, hash_dbids: dict[str, int], topic_dbids: dict[str, int]
+) -> tuple[Any, ...]:
     """
     Prepare a log for insertion into the database.
 
-    This function gathers database IDs for the transaction hash, address, and topics
-    of a given log. It then encodes the log as JSON using the `enc_hook` for special types.
+    Resolve references from the batch lookup maps, then encode the event as JSON.
 
     Args:
         log: The log entry to prepare.
+        hash_dbids: Database IDs for the batch's transaction hashes and addresses.
+        topic_dbids: Database IDs for the batch's topics.
 
     Returns:
         A tuple containing the prepared log parameters.
 
     Examples:
         >>> log = Log(transactionHash=HexBytes('0x1234'), address='0x...', topics=['0x...'], blockNumber=123, logIndex=0)
-        >>> prepared_log = await _prepare_log(log)
+        >>> prepared_log = _prepare_log(log, hash_dbids, topic_dbids)
         >>> print(prepared_log)
 
     See Also:
-        - :func:`get_hash_dbid`
-        - :func:`get_topic_dbid`
         - :func:`enc_hook`
     """
-    transaction_dbid, address_dbid, topic_dbids = await cgather(
-        get_hash_dbid(log.transactionHash.hex()),
-        get_hash_dbid(log.address),
-        igather(map(get_topic_dbid, log.topics)),
-    )
+    transaction_dbid = hash_dbids[_remove_0x_prefix(log.transactionHash.hex())]
+    assert log.address is not None
+    address_dbid = hash_dbids[_remove_0x_prefix(log.address)]
+    event_topic_dbids = [topic_dbids[_remove_0x_prefix(topic.strip())] for topic in log.topics]
     topics = {
-        f"topic{i}": topic_dbid for i, topic_dbid in itertools.zip_longest(range(4), topic_dbids)
+        f"topic{i}": topic_dbid
+        for i, topic_dbid in itertools.zip_longest(range(4), event_topic_dbids)
     }
     params = {
         "block_chain": CHAINID,
@@ -119,6 +120,30 @@ async def _prepare_log(log: Log) -> tuple:
         "raw": _encode_log(Log(**log)),
     }
     return tuple(params.values())
+
+
+def _get_dbids(entity: Any, attribute: str, values: tuple[str, ...]) -> dict[str, int]:
+    """Read reference IDs within the database provider's SQL parameter limit."""
+    remaining = iter(values)
+    result: dict[str, int] = {}
+    while batch := tuple(itertools.islice(remaining, entity._database_.provider.max_params_count)):
+        result.update(
+            select(
+                (getattr(row, attribute), row.dbid)
+                for row in entity
+                if getattr(row, attribute) in batch
+            )
+        )
+    return result
+
+
+def _prepare_logs(
+    logs: list[Log], hashes: tuple[tuple[str], ...], topics: tuple[tuple[str], ...]
+) -> list[tuple[Any, ...]]:
+    with db_session:
+        hash_dbids = _get_dbids(Hashes, "hash", tuple(row[0] for row in hashes))
+        topic_dbids = _get_dbids(LogTopic, "topic", tuple(row[0] for row in topics))
+    return [_prepare_log(log, hash_dbids, topic_dbids) for log in logs]
 
 
 _check_using_extended_db = lambda: "eth_portfolio" in _get_get_block().__module__
@@ -145,25 +170,25 @@ async def bulk_insert(logs: list[Log], executor: AsyncExecutor = default_filter_
     addresses = {log.address for log in logs}
     hashes = tuple((_remove_0x_prefix(hash),) for hash in itertools.chain(txhashes, addresses))
     hashes_fut = submit(_bulk_insert, Hashes, ("hash",), hashes, sync=True)
-    del txhashes, addresses, hashes
+    del txhashes, addresses
 
-    topics = set(concat(log.topics for log in logs))
+    topics = tuple(
+        (_remove_0x_prefix(topic.strip()),) for topic in set(concat(log.topics for log in logs))
+    )
     topics_fut = submit(
         _bulk_insert,
         LogTopic,
         ("topic",),
-        tuple((_remove_0x_prefix(topic.strip()),) for topic in topics),
+        topics,
         sync=True,
     )
-    del topics
-
     await cgather(blocks_fut, hashes_fut, topics_fut)
 
     await executor.run(
         _bulk_insert,
         DbLog,
         LOG_COLS,
-        await igather(map(_prepare_log, logs)),
+        await executor.run(_prepare_logs, logs, hashes, topics),
         sync=True,
     )
 

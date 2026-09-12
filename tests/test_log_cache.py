@@ -2,6 +2,8 @@
 
 import importlib.util
 import sys
+from collections.abc import Iterator
+from types import ModuleType
 from unittest.mock import Mock
 
 import pytest
@@ -14,6 +16,7 @@ from pony.orm import db_session
 
 from y._db.log import Log
 from y._db.utils import logs
+from y.constants import CHAINID
 
 
 @pytest.fixture
@@ -59,9 +62,9 @@ def test_invalid_cached_event_keeps_validation_error() -> None:
         logs._decode_log(b'["invalid topics"]')
 
 
-def test_event_cache_reads_bodies_in_one_query(event: Log, monkeypatch: pytest.MonkeyPatch) -> None:
+@pytest.fixture
+def event_database(monkeypatch: pytest.MonkeyPatch) -> Iterator[ModuleType]:
     from y._db import entities
-    from y._db.utils import utils
 
     # Use the real schema with an isolated SQLite database.
     spec = importlib.util.spec_from_file_location("event_cache_test_entities", entities.__file__)
@@ -72,6 +75,19 @@ def test_event_cache_reads_bodies_in_one_query(event: Log, monkeypatch: pytest.M
     database = isolated.db
     database.bind(provider="sqlite", filename=":memory:")
     database.generate_mapping(create_tables=True)
+    try:
+        yield isolated
+    finally:
+        database.disconnect()
+
+
+def test_event_cache_reads_bodies_in_one_query(
+    event: Log, event_database: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from y._db.utils import utils
+
+    isolated = event_database
+    database = isolated.db
     tx_low = TransactionHash("0x" + "11" * 32)
     tx_high = TransactionHash("0x" + "22" * 32)
     events = [
@@ -138,3 +154,73 @@ def test_event_cache_reads_bodies_in_one_query(event: Log, monkeypatch: pytest.M
         assert len(reads) == 1, reads
     finally:
         database.disconnect()
+
+
+def test_batch_reference_lookup_respects_sql_limit_and_preserves_rows(
+    event: Log, event_database: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    isolated = event_database
+    database = isolated.db
+    hashes = tuple((f"{index:064x}",) for index in range(database.provider.max_params_count + 2))
+    assert event.address is not None
+    address = event.address[2:]
+    event_topics = (
+        event.topics[0],
+        Topic("0x" + "00" * 32),
+        Topic("0x" + "00" * 31 + "01"),
+        Topic("0x" + "cd" * 32),
+    )
+    topics = tuple((logs._remove_0x_prefix(topic.strip()),) for topic in event_topics)
+    with db_session:
+        for index, (value,) in enumerate(hashes):
+            isolated.Hashes(dbid=1000 + index, hash=value)
+        isolated.Hashes(dbid=9000, hash=address)
+        for index, (value,) in enumerate(topics):
+            isolated.LogTopic(dbid=9010 + index, topic=value)
+    monkeypatch.setattr(logs, "Hashes", isolated.Hashes)
+    monkeypatch.setattr(logs, "LogTopic", isolated.LogTopic)
+    events = [
+        replace(event, transactionHash=TransactionHash("0x" + hashes[-1][0]), topics=event_topics),
+        replace(
+            event,
+            transactionHash=TransactionHash("0x" + hashes[0][0]),
+            topics=(),
+            logIndex=LogIndex(3),
+        ),
+    ]
+    statements: list[str] = []
+    with db_session:
+        connection = database.get_connection()
+        connection.set_trace_callback(statements.append)
+        try:
+            rows = logs._prepare_logs(events, hashes + ((address,),), topics)
+        finally:
+            connection.set_trace_callback(None)
+    assert rows == [
+        (
+            CHAINID,
+            event.blockNumber,
+            1000 + len(hashes) - 1,
+            event.logIndex,
+            9000,
+            9010,
+            9011,
+            9012,
+            9013,
+            logs._encode_log(events[0]),
+        ),
+        (
+            CHAINID,
+            event.blockNumber,
+            1000,
+            3,
+            9000,
+            None,
+            None,
+            None,
+            None,
+            logs._encode_log(events[1]),
+        ),
+    ]
+    reads = [sql for sql in statements if sql.lstrip().upper().startswith("SELECT")]
+    assert len(reads) == 3, reads
