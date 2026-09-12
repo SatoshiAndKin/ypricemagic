@@ -695,15 +695,21 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
         return obj._deploy_block
 
 
+class SlipstreamPool(UniswapV3Pool):
+    """A concentrated pool addressed by tick spacing instead of a fee tier."""
+
+    __slots__ = ()
+
+
 class SlipstreamPools(UniV3Pools):
     def _process_event(self, event: _EventItem) -> UniswapV3Pool:
         token0, token1, tick_spacing, pool = event.values()
-        return UniswapV3Pool(
+        return SlipstreamPool(
             pool,
             token0,
             token1,
-            # NOTE: fee arg is not actually used in the current implementation, so we can use 0 here
-            0,  # TODO: implement fee maths properly
+            # The native Slipstream quoter includes the pool's dynamic fee.
+            0,
             tick_spacing,
             event.block_number,
             asynchronous=self.asynchronous,

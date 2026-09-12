@@ -95,6 +95,7 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
         return PriceResult(UsdPrice(2000), []) if address == weth else None
 
     monkeypatch.setattr(_markets, "state", state)
+    monkeypatch.setattr(_markets, "deployed", AsyncMock(return_value=True))
     monkeypatch.setattr(_routing, "state", AsyncMock(return_value=18))
     monkeypatch.setattr(_routing, "swap", swap)
     monkeypatch.setattr(BlockRef, "verify", AsyncMock())

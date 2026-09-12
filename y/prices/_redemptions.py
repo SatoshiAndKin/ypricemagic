@@ -316,7 +316,12 @@ async def redeem(
         contract = await Contract.coroutine(pool_address)
         if not hasattr(contract, "calc_withdraw_one_coin"):
             return None
-        coins = tuple(address(t) for t in await curve_pool.__coins__)
+        from y.prices._markets import curve_pool_state
+
+        snapshot = await curve_pool_state(pool_address, block)
+        if snapshot is None:
+            return None
+        coins = snapshot.tokens
         supply = int(await read(token, "totalSupply()(uint256)", block))
         if shares >= supply:
             return None
@@ -324,7 +329,7 @@ async def redeem(
             try:
                 amount = int(
                     await contract.calc_withdraw_one_coin.coroutine(
-                        shares, coins.index(coin), block_identifier=block.number
+                        shares, coins.index(coin), block_identifier=block.identifier
                     )
                 )
             except Exception as exc:

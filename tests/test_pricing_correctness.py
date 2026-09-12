@@ -193,7 +193,16 @@ async def test_chainlink_replacements_removals_and_cache(monkeypatch: pytest.Mon
 
     chainlink._feeds = [SimpleNamespace(asset=TOKEN, address=CHILD, start_block=0)]
     chainlink._feeds_from_events = SimpleNamespace(objects=events)
-    monkeypatch.setattr(module, "contract_creation_block_async", AsyncMock(return_value=100))
+    chainlink.registry = None
+
+    async def resolve(number: int) -> Any:
+        return module.BlockRef(1, number, f"0x{number:064x}", number)
+
+    async def deployed(address: str, block: Any) -> bool:
+        return int(block.number) >= 100
+
+    monkeypatch.setattr(module.BlockRef, "resolve", resolve)
+    monkeypatch.setattr(module, "deployed", deployed)
     blocks = (99, 100, 199, 200, 201, 299, 300, 301)
     results = await asyncio.gather(
         *(chainlink.get_feed(TOKEN, block, sync=False) for block in blocks)

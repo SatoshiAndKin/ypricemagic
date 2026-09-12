@@ -1,6 +1,6 @@
 """Liquidity-based price estimation. This does not maximize route prices."""
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from decimal import Decimal, localcontext
 from functools import lru_cache
 from typing import Any
@@ -36,6 +36,17 @@ class _Node:
     steps: tuple[QuoteStep, ...]
     visited: frozenset[str]
     used: frozenset[str]
+    redemption: Estimate | None = None
+    examined: bool = False
+
+
+@dataclass
+class SearchContext:
+    """One request's failed transitions and exact native swap observations."""
+
+    rejected: set[tuple[str, str, str]] = field(default_factory=set)
+    rejected_redemptions: set[str] = field(default_factory=set)
+    swaps: dict[tuple[str, str, str, int], QuoteStep] = field(default_factory=dict)
 
 
 def priced_steps(steps: tuple[QuoteStep, ...], value: Decimal) -> tuple[PriceStep, ...]:
@@ -76,7 +87,7 @@ class QuoteService:
             if not oracle:
                 continue
             try:
-                price = await oracle.get_price(checksum, block.number, sync=False)
+                price = await oracle.get_price(checksum, block, sync=False)
             except Exception as exc:
                 if not unavailable(exc):
                     raise
@@ -103,7 +114,10 @@ class QuoteService:
         require_trade: bool = True,
         first_markets: tuple[str, ...] = (),
         swaps_left: int = 11,
+        search: SearchContext | None = None,
     ) -> Estimate | None:
+        if search is None:
+            search = SearchContext()
         if asset.token in ancestors:
             return None
         if not require_trade:
@@ -119,9 +133,11 @@ class QuoteService:
         # Alternative quotes have independent pool state. Only the selected
         # alternative's exclusions propagate to the next redemption output.
         direct = await self.route(
-            asset, block, ignored, ancestors, skip_cache, first_markets, swaps_left
+            asset, block, ignored, ancestors, skip_cache, first_markets, swaps_left, search
         )
-        redemption = await self.redeem(asset, block, ignored, ancestors, skip_cache, swaps_left)
+        redemption = await self.redeem(
+            asset, block, ignored, ancestors, skip_cache, swaps_left, search
+        )
         if redemption is not None and (direct is None or redemption.value > direct.value):
             return redemption
         return direct
@@ -135,18 +151,25 @@ class QuoteService:
         ancestors: frozenset[str],
         skip_cache: bool,
         swaps_left: int,
+        search: SearchContext,
     ) -> Estimate | None:
         from y.prices._redemptions import redeem
 
-        if asset.token in ignored or len(ancestors) >= 32:
+        if (
+            asset.token in ignored
+            or asset.token in search.rejected_redemptions
+            or len(ancestors) >= 32
+        ):
             return None
         try:
             redemption = await redeem(asset, block, ignored)
         except Exception as exc:
             if not unavailable(exc):
                 raise
+            search.rejected_redemptions.add(asset.token)
             return None
         if redemption is None:
+            search.rejected_redemptions.add(asset.token)
             return None
         step, changed_pools = redemption
         used = ignored | frozenset(changed_pools) | {step.contract}
@@ -158,6 +181,7 @@ class QuoteService:
                     output, amount=output.amount + (existing.amount if existing else 0)
                 )
         if not outputs:
+            search.rejected_redemptions.add(asset.token)
             return None
         total = Decimal(0)
         steps = [replace(step, outputs=tuple(outputs[t] for t in sorted(outputs)))]
@@ -172,8 +196,10 @@ class QuoteService:
                 skip_cache,
                 require_trade=False,
                 swaps_left=swaps_left,
+                search=search,
             )
             if child is None:
+                search.rejected_redemptions.add(asset.token)
                 return None
             total += child.value
             steps.extend(child.steps)
@@ -198,23 +224,34 @@ class QuoteService:
         skip_cache: bool,
         first_markets: tuple[str, ...],
         swaps_left: int,
+        search: SearchContext,
     ) -> Estimate | None:
-        # Each directed edge can be attempted once, across all prefixes. A dead
-        # end rejects its entering edge too. No path list or Cartesian product.
-        rejected: set[tuple[str, str, str]] = set()
+        # Local traversal state never resets the request's rejected transitions.
+        attempted: set[tuple[str, str, str]] = set()
         stack = [_Node(asset, (), ancestors | {asset.token}, ignored)]
+
+        def select(candidate: Estimate) -> Estimate:
+            # All candidates include the same input prefix. Each wrapper gets
+            # the better complete exit, with direct sale winning equal values.
+            for parent in reversed(stack):
+                if parent.redemption is not None and parent.redemption.value > candidate.value:
+                    candidate = parent.redemption
+            return candidate
+
         while stack:
             node = stack[-1]
-            if node.steps:
+            if node.steps and not node.examined:
                 price = await self.usd(node.asset.token, block)
                 if price is not None:
                     value = node.asset.readable * Decimal(str(float(price)))
-                    return Estimate(
-                        (node.asset,),
-                        value,
-                        node.steps,
-                        (*priced_steps(node.steps, value), *price.path),
-                        node.used,
+                    return select(
+                        Estimate(
+                            (node.asset,),
+                            value,
+                            node.steps,
+                            (*priced_steps(node.steps, value), *price.path),
+                            node.used,
+                        )
                     )
                 redemption = await self.redeem(
                     node.asset,
@@ -223,13 +260,16 @@ class QuoteService:
                     node.visited - {node.asset.token},
                     skip_cache,
                     swaps_left - len(node.steps),
+                    search,
                 )
                 if redemption is not None:
-                    return replace(
+                    redemption = replace(
                         redemption,
                         steps=(*node.steps, *redemption.steps),
                         prices=(*priced_steps(node.steps, redemption.value), *redemption.prices),
                     )
+                node = replace(node, redemption=redemption, examined=True)
+                stack[-1] = node
             selected = False
             if len(node.steps) < swaps_left:
                 markets = await self.markets(node.asset.token, block, skip_cache)
@@ -247,15 +287,10 @@ class QuoteService:
                         continue
                     for output in sorted(market.tokens):
                         key = (market.pool, node.asset.token, output)
-                        if output in node.visited or key in rejected:
+                        if output in node.visited or key in attempted or key in search.rejected:
                             continue
-                        rejected.add(key)
-                        try:
-                            step = await swap(market, node.asset, output, block)
-                        except Exception as exc:
-                            if not unavailable(exc):
-                                raise
-                            continue
+                        attempted.add(key)
+                        step = await self.swap(market, node.asset, output, block, search)
                         if step is None:
                             continue
                         stack.append(
@@ -271,8 +306,44 @@ class QuoteService:
                     if selected:
                         break
             if not selected:
+                if node.redemption is not None:
+                    return select(node.redemption)
                 stack.pop()
-        return await self.explicit(asset, block, ignored, ancestors, skip_cache, first_markets)
+                if node.steps:
+                    entering = node.steps[-1]
+                    search.rejected.add((entering.contract, entering.input.token, node.asset.token))
+        return await self.explicit(
+            asset, block, ignored, ancestors, skip_cache, first_markets, search
+        )
+
+    @stuck_coro_debugger
+    async def swap(
+        self,
+        market: Market,
+        asset: QuoteAsset,
+        output: str,
+        block: BlockRef,
+        search: SearchContext,
+    ) -> QuoteStep | None:
+        edge = (market.pool, asset.token, output)
+        key = (*edge, asset.amount)
+        # Explicit registered routes can reuse a validated prefix even when
+        # automatic traversal reached its swap ceiling. No native retry occurs.
+        if key in search.swaps:
+            return search.swaps[key]
+        if edge in search.rejected:
+            return None
+        try:
+            step = await swap(market, asset, output, block)
+        except Exception as exc:
+            if not unavailable(exc):
+                raise
+            step = None
+        if step is None:
+            search.rejected.add(edge)
+        else:
+            search.swaps[key] = step
+        return step
 
     async def explicit(
         self,
@@ -282,6 +353,7 @@ class QuoteService:
         ancestors: frozenset[str],
         skip_cache: bool,
         first_markets: tuple[str, ...],
+        search: SearchContext,
     ) -> Estimate | None:
         """Retain registered protocol routes without enumerating pool combinations."""
         from y.prices.dex.uniswap import uniswap_multiplexer
@@ -315,11 +387,7 @@ class QuoteService:
                         or output not in market.tokens
                     ):
                         continue
-                    try:
-                        step = await swap(market, current, output, block)
-                    except Exception as exc:
-                        if not unavailable(exc):
-                            raise
+                    step = await self.swap(market, current, output, block, search)
                     if step is not None:
                         used = used | {market.pool}
                         break
@@ -382,7 +450,6 @@ class QuoteService:
                     skip_cache,
                     first_markets=first_markets,
                 )
-                await block.verify()
                 if estimate is None:
                     return None
                 if not valid_price(estimate.value / asset.readable):
@@ -414,7 +481,9 @@ class QuoteService:
                 )
                 return PriceResult(price, paths, details)
 
-        return await self.result_cache.get(key, calculate, skip_cache=skip_cache)
+        result = await self.result_cache.get(key, calculate, skip_cache=skip_cache)
+        await block.verify()
+        return result
 
 
 def aggregate(assets: list[QuoteAsset]) -> tuple[QuoteAsset, ...]:

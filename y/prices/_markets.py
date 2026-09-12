@@ -10,7 +10,15 @@ from y._decorators import stuck_coro_debugger
 from y.constants import EEE_ADDRESS
 from y.datatypes import QuoteAsset, QuoteStep
 from y.prices._quote import bounded_map
-from y.prices._rpc import BlockRef, optional_read, read, state, unavailable
+from y.prices._rpc import (
+    BlockRef,
+    deployed,
+    optional_read,
+    read,
+    state,
+    state_cache,
+    unavailable,
+)
 
 
 @dataclass(frozen=True)
@@ -24,6 +32,7 @@ class Market:
     pool_id: bytes = b""
     stable: bool = False
     factory: str = ""
+    tick_spacing: int | None = None
 
     def depth(self, token: str) -> int:
         return self.balances[self.tokens.index(token)]
@@ -31,6 +40,44 @@ class Market:
 
 def address(value: Any) -> str:
     return str(getattr(value, "address", value)).lower()
+
+
+@stuck_coro_debugger
+async def curve_pool_state(pool: str, block: BlockRef) -> Market | None:
+    """Read the supported Curve getter versions once for this block hash."""
+
+    async def snapshot() -> Market | None:
+        coin_signature = balance_signature = ""
+        first_coin = first_balance = None
+        for index_type in ("uint256", "int128"):
+            signature = f"coins({index_type})(address)"
+            first_coin = await optional_read(pool, signature, block, 0)
+            if first_coin:
+                coin_signature = signature
+                break
+        if not coin_signature or address(first_coin) == address(ZERO_ADDRESS):
+            return None
+        for index_type in ("uint256", "int128"):
+            signature = f"balances({index_type})(uint256)"
+            first_balance = await optional_read(pool, signature, block, 0)
+            if first_balance is not None:
+                balance_signature = signature
+                break
+        if not balance_signature or first_balance is None:
+            return None
+        tokens, balances = [address(first_coin)], [int(first_balance)]
+        for index in range(1, 8):
+            coin = await optional_read(pool, coin_signature, block, index)
+            if not coin or address(coin) == address(ZERO_ADDRESS):
+                break
+            tokens.append(address(coin))
+            balances.append(int(await read(pool, balance_signature, block, index)))
+        return Market("Curve", pool, tuple(tokens), tuple(balances))
+
+    result: Market | None = await state_cache().get(
+        (block.chain, block.hash, pool, "curve pool"), snapshot
+    )
+    return result
 
 
 @stuck_coro_debugger
@@ -44,6 +91,7 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
     from y.prices.dex.balancer import balancer_multiplexer
     from y.prices.dex.solidly import SolidlyRouterBase
     from y.prices.dex.uniswap import uniswap_multiplexer
+    from y.prices.dex.uniswap.v3 import SlipstreamPool
     from y.prices.dex.velodrome import VelodromeRouterV2
     from y.prices.stable_swap.curve import curve
 
@@ -84,7 +132,7 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
         pools = await loaded(router.get_pools_for(checksum, block=block.number, sync=False), {})
 
         async def v2_snapshot(pool: Any) -> Market | None:
-            if await pool.deploy_block(when_no_history_return_0=True, sync=False) > block.number:
+            if not await deployed(address(pool), block):
                 return None
             tokens = tuple(address(t) for t in await pool.__tokens__)
             if token not in tokens:
@@ -114,6 +162,8 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
         pools = await loaded(collect(router.pools_for_token(checksum, block.number)), [])
 
         async def v3_snapshot(pool: Any) -> Market | None:
+            if not await deployed(address(pool), block):
+                return None
             tokens = (address(pool.token0), address(pool.token1))
             balances = tuple(
                 [
@@ -124,13 +174,14 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
             if not balances[tokens.index(token)]:
                 return None
             return Market(
-                "Uniswap V3",
+                "Slipstream" if isinstance(pool, SlipstreamPool) else "Uniswap V3",
                 address(pool),
                 tokens,
                 balances,
                 address(router._quoter),
                 int(pool.fee),
                 factory=address(router._factory),
+                tick_spacing=pool.tick_spacing if isinstance(pool, SlipstreamPool) else None,
             )
 
         markets.extend(m for m in await bounded_map(lambda p: safely(v3_snapshot, p), pools) if m)
@@ -139,21 +190,12 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
         pools = (await loaded(curve.__coin_to_pools__, {})).get(checksum, ())
 
         async def curve_snapshot(pool: Any) -> Market | None:
-            if await pool.deploy_block(when_no_history_return_0=True, sync=False) > block.number:
+            if not await deployed(address(pool), block):
                 return None
-            # Read coin addresses at the requested block, not a latest registry.
-            tokens, balances = [], []
-            for index in range(8):
-                coin = await optional_read(address(pool), "coins(uint256)(address)", block, index)
-                if not coin or address(coin) == address(ZERO_ADDRESS):
-                    break
-                tokens.append(address(coin))
-                balances.append(
-                    int(await state(address(pool), "balances(uint256)(uint256)", block, index))
-                )
-            if token not in tokens or not balances[tokens.index(token)]:
+            market = await curve_pool_state(address(pool), block)
+            if market is None or token not in market.tokens or not market.depth(token):
                 return None
-            return Market("Curve", address(pool), tuple(tokens), tuple(balances))
+            return market
 
         markets.extend(
             m for m in await bounded_map(lambda p: safely(curve_snapshot, p), pools) if m
@@ -162,11 +204,13 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
     balancer_v2 = await loaded(balancer_multiplexer.__v2__, None)
     if balancer_v2:
         for vault in balancer_v2.vaults:
-            if await vault.deploy_block(when_no_history_return_0=True, sync=False) > block.number:
+            if not await deployed(address(vault), block):
                 continue
             pools = await loaded(collect(vault.pools(block=block.number)), [])
 
             async def balancer_snapshot(pool: Any) -> Market | None:
+                if not await deployed(address(pool), block):
+                    return None
                 pool_id = bytes(await pool.__id__)
                 tokens, balances, _ = await state(
                     address(vault),
@@ -192,7 +236,6 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
 
     balancer_v1 = await loaded(balancer_multiplexer.__v1__, None)
     if balancer_v1 and balancer_v1.exchange_proxy:
-        from y.classes.common import ERC20
         from y.prices.dex.balancer.v1 import TOKENOUTS_TO_TRY
 
         pools = set()
@@ -200,7 +243,10 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
             if address(other) != token:
                 split = await loaded(
                     balancer_v1._get_split(
-                        checksum, other.address, await ERC20._get_scale_for(checksum), block.number
+                        checksum,
+                        other.address,
+                        10 ** int(await state(checksum, "decimals()(uint256)", block)),
+                        block.identifier,
                     ),
                     None,
                 )
@@ -260,17 +306,22 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
         result = int(
             (await read(market.router, method + "(uint256[])", block, amount, [route]))[-1]
         )
-    elif protocol == "Uniswap V3":
+    elif protocol in ("Uniswap V3", "Slipstream"):
         from eth_abi.packed import encode_packed
 
         from y.contracts import Contract
 
         method = "quoteExactInput(bytes,uint256)"
         quoter = await Contract.coroutine(market.router)
+        index_type, pool_key = (
+            ("int24", market.tick_spacing) if protocol == "Slipstream" else ("uint24", market.fee)
+        )
+        if pool_key is None:
+            raise ValueError(f"missing pool key for {protocol} {pool}")
         quoted = await quoter.quoteExactInput.coroutine(
-            encode_packed(["address", "uint24", "address"], [token, market.fee, output]),
+            encode_packed(["address", index_type, "address"], [token, pool_key, output]),
             amount,
-            block_identifier=block.number,
+            block_identifier=block.identifier,
         )
         result = int(quoted if isinstance(quoted, int) else quoted[0])
     elif protocol == "Curve":
@@ -283,7 +334,7 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
                 market.tokens.index(token),
                 market.tokens.index(output),
                 amount,
-                block_identifier=block.number,
+                block_identifier=block.identifier,
             )
         )
     elif protocol == "Balancer V2":

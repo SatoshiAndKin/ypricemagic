@@ -97,8 +97,10 @@ Immutable pool snapshots and amount-independent reads use separate bounded
 caches keyed by chain and block hash. ``skip_cache=True`` bypasses final price
 caches, while fixed-block pool discovery and state remain shared. Discovery
 and liquidity reads use at most 64 workers per request. No selection deadline
-is added. Existing contract APIs read by block number; the result checks the
-block hash again before it returns and rejects a changed block.
+is added. Quote state and native calls use EIP-1898 block-hash identifiers with
+``requireCanonical=True``. Batches retain that hash, and the result checks that
+the block remains canonical before it returns. A rejected call cannot cache
+another block's state under the requested hash.
 
 Enable ``logging.getLogger("y.stuck?").setLevel(logging.DEBUG)`` for
 ``still executing`` messages every five minutes. These messages are DEBUG-only.

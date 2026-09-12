@@ -10,6 +10,7 @@ from y.constants import CHAINID
 from y.datatypes import Address, AddressOrContract, Block
 from y.exceptions import UnsupportedNetwork
 from y.networks import Network
+from y.prices._rpc import BlockRef
 
 addresses = {
     # https://docs.fantom.foundation/tutorials/band-protocol-standard-dataset
@@ -104,7 +105,9 @@ class Band(a_sync.ASyncGenericSingleton):
 
     __oracle__: HiddenMethodDescriptor[Self, Contract]
 
-    async def get_price(self, asset: Address, block: Block | None = None) -> float | None:
+    async def get_price(
+        self, asset: Address, block: Block | BlockRef | None = None
+    ) -> float | None:
         """
         Get the price of an asset in terms of USDC using the Band Protocol oracle.
 
@@ -121,13 +124,14 @@ class Band(a_sync.ASyncGenericSingleton):
             >>> print(price)
             1.0
         """
+        resolved = await BlockRef.resolve(block)
         oracle, asset_symbol = await cgather(
             self.__oracle__,
             ERC20(asset, asynchronous=True).symbol,
         )
         try:
             reference_data = await oracle.getReferenceData.coroutine(
-                asset_symbol, "USDC", block_identifier=block
+                asset_symbol, "USDC", block_identifier=resolved.identifier
             )
             return reference_data[0] / 10**18
         except ValueError:

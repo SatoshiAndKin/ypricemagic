@@ -7,18 +7,17 @@ import cachebox
 import dank_mids
 from brownie import ZERO_ADDRESS
 from brownie.network.event import _EventItem
-from multicall import Call
-from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
-from y import convert, time
+from y import convert
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import CHAINID
-from y.contracts import Contract, contract_creation_block_async
+from y.contracts import Contract
 from y.datatypes import Address, AnyAddressType, Block, UsdPrice
 from y.exceptions import UnsupportedNetwork
 from y.networks import Network
+from y.prices._rpc import BlockRef, deployed, optional_read, read, unavailable
 from y.utils.events import ProcessedEvents
 
 logger = logging.getLogger(__name__)
@@ -204,8 +203,6 @@ class Feed:
     __slots__ = (
         "address",
         "asset",
-        "latest_answer",
-        "latest_timestamp",
         "start_block",
     )
 
@@ -220,9 +217,6 @@ class Feed:
         self.address = convert.to_address(address)
         self.asset = ERC20(asset, asynchronous=asynchronous)
         self.start_block = start_block
-        # we could make less calls by using latestRoundData but then we have to repeatedly decode a bunch of useless data
-        self.latest_answer = Call(self.address, "latestAnswer()(int256)").coroutine
-        self.latest_timestamp = Call(self.address, "latestTimestamp()(uint256)").coroutine
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} address={self.address} asset={self.asset}>"
@@ -231,60 +225,38 @@ class Feed:
     def contract(self) -> Contract:
         return Contract(self.address)
 
-    # @a_sync.future
-    async def decimals(self) -> int:
-        return await Call(self.address, "decimals()(uint)")
+    async def latest_timestamp(self, block_id: int | BlockRef | None = None) -> int:
+        return int(
+            await read(self.address, "latestTimestamp()(uint256)", await BlockRef.resolve(block_id))
+        )
 
-    # @a_sync.future(cache_type='memory')
+    async def latest_answer(self, block_id: int | BlockRef | None = None) -> int:
+        return int(
+            await read(self.address, "latestAnswer()(int256)", await BlockRef.resolve(block_id))
+        )
+
+    async def decimals(self, block: int | BlockRef | None = None) -> int:
+        return int(await read(self.address, "decimals()(uint256)", await BlockRef.resolve(block)))
+
     @cachebox.cached(cachebox.LRUCache(ENVS.DEFAULT_CACHE_MAXSIZE))
-    async def scale(self) -> int | None:
-        return await (10 ** a_sync.ASyncFuture(self.decimals()))
+    async def scale(self, block: int | BlockRef | None = None) -> int:
+        return 10 ** await self.decimals(block)
 
-    # @a_sync.future
     @stuck_coro_debugger
-    async def get_price(self, block: int) -> UsdPrice | None:
-        """Get the price of the asset at a specific block.
-
-        If the feed is stale, returns None.
-
-        Args:
-            block: The block number to get the price for.
-
-        Example:
-            >>> feed = Feed("0xFeedAddr", "0xAssetAddr")
-            >>> price = await feed.get_price(12345678)
-            >>> if price is not None:
-            ...     print(f"Price: {price}")
-            ... else:
-            ...     print("Feed is stale.")
-
-        See Also:
-            - :func:`~y.prices.chainlink.Chainlink.get_price`
-        """
+    async def get_price(self, block: int | BlockRef) -> UsdPrice | None:
+        """Read the feed and its decimals at one canonical block hash."""
+        resolved = await BlockRef.resolve(block)
         try:
-            updated_at = await self.latest_timestamp(block_id=block)
-        except ContractLogicError:
-            return None
-
-        if updated_at + ONE_DAY < await time.get_block_timestamp_async(block):
-            # if 24h have passed since last feed update, we can't trust it
-            # NOTE: is there a way to tell on chain if a feed is retired? I haven't yet seen one go stale and come back
-            logger.debug("%s is stale, must fetch price from elsewhere", self)
-            return None
-
-        latest_answer = await self.latest_answer(block_id=block)
-        logger.debug("latest_answer: %s", latest_answer)
-        # NOTE: just playing with smth here
-        scale = a_sync.ASyncFuture(self.scale())
-        price = latest_answer / scale
-        try:
-            price = UsdPrice(await price)
-        except ContractLogicError as e:
-            if "execution reverted" not in str(e):
+            updated_at = await self.latest_timestamp(resolved)
+            if updated_at + ONE_DAY < resolved.timestamp:
+                logger.debug("%s is stale, must fetch price from elsewhere", self)
+                return None
+            answer = await self.latest_answer(resolved)
+            return UsdPrice(answer / await self.scale(resolved))
+        except Exception as exc:
+            if not unavailable(exc):
                 raise
-            price = None
-        logger.debug("%s price at %s: %s", self, block, price)
-        return price
+            return None
 
 
 class FeedsFromEvents(ProcessedEvents[Feed]):
@@ -379,7 +351,7 @@ class Chainlink(a_sync.ASyncGenericBase):
                 yield feed
 
     @stuck_coro_debugger
-    async def get_feed(self, asset: Address, block: Block | None = None) -> Feed | None:
+    async def get_feed(self, asset: Address, block: Block | BlockRef | None = None) -> Feed | None:
         """Select the last USD feed active at a concrete block, including removals.
 
         Normalize the asset and resolve an omitted block before caching. Static
@@ -388,23 +360,39 @@ class Chainlink(a_sync.ASyncGenericBase):
         asset = await convert.to_address_async(asset)
         if block is None:
             block = await dank_mids.eth.block_number
-        return await self._get_feed(asset, int(block))
+        return await self._get_feed(asset, await BlockRef.resolve(block))
 
     @cachebox.cached(cachebox.TTLCache(1000, ttl=ENVS.CACHE_TTL))
     @stuck_coro_debugger
-    async def _get_feed(self, asset: Address, block: int) -> Feed | None:
+    async def _get_feed(self, asset: Address, block: BlockRef) -> Feed | None:
         selected: Feed | None = None
         if self._feeds_from_events:
             async for feed in cast(
-                AsyncIterator[Feed], self._feeds_from_events.objects(to_block=block)
+                AsyncIterator[Feed], self._feeds_from_events.objects(to_block=block.number)
             ):
-                if asset == feed.asset and feed.start_block <= block:
+                if asset == feed.asset and feed.start_block <= block.number:
                     selected = feed
         if selected is None:
             selected = next((feed for feed in self._feeds if asset == feed.asset), None)
+        # The registry is authoritative at this hash. Event metadata identifies
+        # removals and static-feed eligibility, but cannot supply another fork's
+        # currently active aggregator.
+        if self.registry is not None and await deployed(str(self.registry), block):
+            registered = await optional_read(
+                str(self.registry),
+                "getFeed(address,address)(address)",
+                block,
+                asset,
+                DENOMINATIONS["USD"],
+            )
+            if registered and str(registered).lower() != ZERO_ADDRESS.lower():
+                if selected is None or selected.address.lower() != str(registered).lower():
+                    selected = Feed(registered, asset, asynchronous=self.asynchronous)
+            elif selected is not None and selected.start_block:
+                return None
         if selected is None or selected.address == ZERO_ADDRESS:
             return None
-        if block < await contract_creation_block_async(selected.address, True):
+        if not await deployed(selected.address, block):
             return None
         return selected
 
@@ -428,7 +416,9 @@ class Chainlink(a_sync.ASyncGenericBase):
 
     # @a_sync.future
     @stuck_coro_debugger
-    async def get_price(self, asset: AnyAddressType, block: Block | None = None) -> UsdPrice | None:
+    async def get_price(
+        self, asset: AnyAddressType, block: Block | BlockRef | None = None
+    ) -> UsdPrice | None:
         """Get the price of an asset at a specific block.
 
         If the block is not specified, the latest block is used.
@@ -454,10 +444,10 @@ class Chainlink(a_sync.ASyncGenericBase):
         if block is None:
             block = await dank_mids.eth.block_number
         logger.debug("getting price for %s at %s", asset, block)
-        return await self._get_price(str(asset), block)  # force to string for cache key
+        return await self._get_price(str(asset), await BlockRef.resolve(block))
 
     @cachebox.cached(cachebox.TTLCache(1000, ttl=ENVS.CACHE_TTL))
-    async def _get_price(self, asset: Address, block: Block) -> UsdPrice | None:
+    async def _get_price(self, asset: Address, block: BlockRef) -> UsdPrice | None:
         asset = convert.to_address(asset)
         if asset == ZERO_ADDRESS:
             return None
@@ -466,8 +456,9 @@ class Chainlink(a_sync.ASyncGenericBase):
             return None
         try:
             return await feed.get_price(block=block)
-        except (TypeError, ValueError) as e:
-            logger.debug("error for feed %s: %s", feed, e)
+        except Exception as exc:
+            if not unavailable(exc):
+                raise
             return None
 
 
