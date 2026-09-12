@@ -1,6 +1,6 @@
 {
   "source_commit": "0d3c2b82c7ab42af918d7aa44be8c6b249769b98",
-  "recorded_at": "2026-09-12T21:45:45.146383+00:00",
+  "recorded_at": "2026-09-12T21:58:57.006497+00:00",
   "readiness": "incomplete",
   "repair": "Child RPC calls retain the enclosing batch as their owner, preventing a second standalone multicall dispatch.",
   "parent_native_artifact_commit": "a0e16dacbc7cdf910d442cbdbca9de8969e3ac32",
@@ -191,10 +191,10 @@
   },
   "formatting": "Black and git diff --check passed",
   "pending": [
-    "offline CI for the ownership repair",
     "complete mainnet audit",
     "original and additional native quote command exit results",
-    "complete sequential baseline and changed pricing suites"
+    "complete sequential baseline and changed pricing suites",
+    "GitHub approval for generated-commit checks"
   ],
   "coverage": {
     "changed_executable_statements": 3,
@@ -205,5 +205,244 @@
       901
     ],
     "method": "Complete 121-test run using native controller and batch modules; coverage measures the production Python request module."
+  },
+  "pinned_dependency_commit": "bc59c589ee631221b9aa4879fe1a0734afaaee04",
+  "native_artifact_commit": "bc59c589ee631221b9aa4879fe1a0734afaaee04",
+  "native_artifact_source_changes": false,
+  "artifact_units": [
+    {
+      "python": "3.11.14",
+      "passed": 121,
+      "failed": 0,
+      "seconds": 6.05,
+      "artifact_commit": "bc59c589ee631221b9aa4879fe1a0734afaaee04"
+    },
+    {
+      "python": "3.12.12",
+      "passed": 121,
+      "failed": 0,
+      "seconds": 6.18,
+      "artifact_commit": "bc59c589ee631221b9aa4879fe1a0734afaaee04"
+    },
+    {
+      "python": "3.13.12",
+      "passed": 121,
+      "failed": 0,
+      "seconds": 6.24,
+      "artifact_commit": "bc59c589ee631221b9aa4879fe1a0734afaaee04"
+    }
+  ],
+  "ci_units": {
+    "url": "https://github.com/SatoshiAndKin/dank_mids/actions/runs/34720798834",
+    "source_commit": "0d3c2b82c7ab42af918d7aa44be8c6b249769b98",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "unit (ubuntu-latest, 3.13)",
+        "conclusion": "success"
+      },
+      {
+        "name": "unit (windows-latest, 3.10)",
+        "conclusion": "success"
+      },
+      {
+        "name": "unit (ubuntu-latest, 3.11)",
+        "conclusion": "success"
+      },
+      {
+        "name": "unit (windows-latest, 3.11)",
+        "conclusion": "success"
+      },
+      {
+        "name": "unit (ubuntu-latest, 3.10)",
+        "conclusion": "success"
+      },
+      {
+        "name": "unit (macos-latest, 3.12)",
+        "conclusion": "success"
+      },
+      {
+        "name": "unit (ubuntu-latest, 3.12)",
+        "conclusion": "success"
+      },
+      {
+        "name": "unit (windows-latest, 3.13)",
+        "conclusion": "success"
+      },
+      {
+        "name": "unit (macos-latest, 3.11)",
+        "conclusion": "success"
+      },
+      {
+        "name": "unit (macos-latest, 3.10)",
+        "conclusion": "success"
+      },
+      {
+        "name": "unit (windows-latest, 3.12)",
+        "conclusion": "success"
+      },
+      {
+        "name": "unit (macos-latest, 3.13)",
+        "conclusion": "success"
+      }
+    ],
+    "test_counts": [
+      {
+        "job": "unit (ubuntu-latest, 3.13)",
+        "passed": 121,
+        "warnings": 2355,
+        "seconds": 9.59
+      },
+      {
+        "job": "unit (windows-latest, 3.10)",
+        "passed": 121,
+        "warnings": 6,
+        "seconds": 15.97
+      },
+      {
+        "job": "unit (ubuntu-latest, 3.11)",
+        "passed": 121,
+        "warnings": 6,
+        "seconds": 8.68
+      },
+      {
+        "job": "unit (windows-latest, 3.11)",
+        "passed": 121,
+        "warnings": 6,
+        "seconds": 17.4
+      },
+      {
+        "job": "unit (ubuntu-latest, 3.10)",
+        "passed": 121,
+        "warnings": 6,
+        "seconds": 10.1
+      },
+      {
+        "job": "unit (macos-latest, 3.12)",
+        "passed": 121,
+        "warnings": 2355,
+        "seconds": 44.62
+      },
+      {
+        "job": "unit (ubuntu-latest, 3.12)",
+        "passed": 121,
+        "warnings": 2355,
+        "seconds": 9.35
+      },
+      {
+        "job": "unit (windows-latest, 3.13)",
+        "passed": 121,
+        "warnings": 2355,
+        "seconds": 16.25
+      },
+      {
+        "job": "unit (macos-latest, 3.11)",
+        "passed": 121,
+        "warnings": 6,
+        "seconds": 43.86
+      },
+      {
+        "job": "unit (macos-latest, 3.10)",
+        "passed": 121,
+        "warnings": 6,
+        "seconds": 44.28
+      },
+      {
+        "job": "unit (windows-latest, 3.12)",
+        "passed": 121,
+        "warnings": 2355,
+        "seconds": 15.9
+      },
+      {
+        "job": "unit (macos-latest, 3.13)",
+        "passed": 121,
+        "warnings": 2355,
+        "seconds": 43.97
+      }
+    ]
+  },
+  "ci_native_build": {
+    "url": "https://github.com/SatoshiAndKin/dank_mids/actions/runs/34720798830",
+    "source_commit": "0d3c2b82c7ab42af918d7aa44be8c6b249769b98",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "build-matrix (ubuntu-latest, 3.14, 314)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.10, 310)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.14, 314)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.11, 311)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.10, 310)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.10, 310)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.13, 313)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.11, 311)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.12, 312)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.11, 311)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.13, 313)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.13, 313)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.14, 314)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.12, 312)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.12, 312)",
+        "conclusion": "success"
+      },
+      {
+        "name": "aggregate-build-files",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "ci_mypy": {
+    "url": "https://github.com/SatoshiAndKin/dank_mids/actions/runs/34720798828",
+    "conclusion": "failure",
+    "errors_per_job": 80,
+    "files_per_job": 11,
+    "jobs": 12,
+    "environment": "Build dependencies; differs from local full development environment."
+  },
+  "generated_commit_checks": {
+    "commit": "bc59c589ee631221b9aa4879fe1a0734afaaee04",
+    "conclusion": "action_required",
+    "note": "The source revision passed offline tests and native builds. Checks on the generated-code commit require GitHub approval."
   }
 }
