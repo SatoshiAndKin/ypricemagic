@@ -23,5 +23,5 @@
   },
   "blocking_rpc_error": "msgspec.ValidationError: Object missing required field try_again_in at $.error.data",
   "changed_rpc_error_occurrences": 426,
-  "conclusion": "Both full runs were interrupted after repeated dependency RPC failures. These partial runs do not prove the absence of new full-suite failures. Final focused regression suite: 116 passed."
+  "conclusion": "Both full runs were interrupted after repeated dependency RPC failures. These partial runs do not prove the absence of new full-suite failures. Final focused regression suite: 119 passed."
 }

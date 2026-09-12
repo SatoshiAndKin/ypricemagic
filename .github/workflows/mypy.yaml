@@ -48,7 +48,7 @@ jobs:
         pip install "mypy[mypyc]==1.19.1"
       
     - name: Install dependencies 
-      run: pip install -r requirements.txt
+      run: pip install -r requirements.txt types-cachetools types-python-dateutil types-requests
 
     - name: Run MyPy
       run: mypy

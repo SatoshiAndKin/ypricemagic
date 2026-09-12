@@ -2,7 +2,7 @@
 
 This change remains a draft. The focused tests pass, but RPC and explorer failures prevent complete live validation.
 
-- Python 3.12.12: **116 focused tests passed**. The final amount suite also passed all 44 tests, including three added numeric boundary cases. This includes all configured mypyc extension suffix checks. `make test` built the checkout with an editable installation before pytest started.
+- Python 3.12.12: **119 focused tests passed** with the centralized pytest settings and no `PYTEST_ADDOPTS` override. This includes all configured mypyc extension suffix checks. `make test` built the checkout with an editable installation before pytest started.
 - The cached production Sushi topology contains 4,771 pools. The scaling test used 75 input-token pools, reached 64 concurrent operations, reused all liquidity reads, and made three native quote calls across cold, warm, repeated-amount, and 64 concurrent requests. `scaling.json` measures the Python route/cache boundary with controlled RPC responses. It does not measure archive RPC latency.
 - Native `eth_call` comparisons passed at block 18,000,000, hash `0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3`: V2, V3, Curve swaps, sDAI preview redemption, Balancer V2 swap and LP exit, cDAI, aUSDC, wstETH, and Convex deposit receipt redemption. See `native.json` and `native-reviewed.json`. The `.py.txt` files preserve the executed check scripts.
 - The Curve gauge check failed with `InvalidAPIKeyError`. Curve LP registry loading repeatedly failed in the installed RPC dependency with `Object missing required field try_again_in` and required interruption. Controlled tests cover fee, idle-cash, backing, and exclusion boundaries; they do not replace these live checks.
@@ -14,3 +14,5 @@ This change remains a draft. The focused tests pass, but RPC and explorer failur
 - The controlled database reset backed up the main database, checked backup integrity, removed one chain-1 price row, and retained all other table counts. No writer held the database open. No process restart was needed. See `price-reset.json`.
 
 The installed `dank_mids` requester also hangs during interpreter shutdown. Completed focused runs required SIGINT in that shutdown handler. The failed full/native runs required process cleanup after interruption. No production dependency workaround was added.
+
+CI on `3eada1b3` passed lint. Windows Python 3.13 failed while cloning a nested `dank_mids` submodule (`Filename too long`). Linux Python 3.12 built the editable checkout, then failed because the unused `pytest_ethereum` plugin imports the removed `eth_typing.ContractName`. The follow-up keeps the required plugin exclusion in centralized pytest configuration. It also installs the declared cachetools/dateutil/requests type stubs in the mypy job. These changes do not resolve the remaining RPC or repository-wide type failures.

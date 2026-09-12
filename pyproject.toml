@@ -39,7 +39,7 @@ disable_error_code = ["import-not-found", "no-untyped-def", "no-untyped-call", "
 files = ["y/_db/brownie.py", "y/_db/config.py", "y/_db/decorators.py", "y/_db/utils/stringify.py", "y/ENVIRONMENT_VARIABLES.py", "y/convert.py", "y/exceptions.py", "y/networks.py", "y/prices/utils/sense_check.py", "y/utils/gather.py"]
 
 [tool.pytest.ini_options]
-addopts = "-W ignore -s"
+addopts = "-W ignore -s -p no:pytest_ethereum"
 testpaths = ["tests"]
 norecursedirs = ["env", "build", "cache", ".worktrees"]
 timeout = 600
