@@ -30,7 +30,7 @@ chain_specific_max_batch_sizes = {
     Network.Mainnet: 10_000,  # 1.58 days
     Network.Gnosis: 20_000,  # 1.15 days
     Network.Fantom: 100_000,  # 1.03 days
-    Network.Arbitrum: 20_000,  # 0.34 days
+    Network.Arbitrum: 800_000,  # About 2.3 days at 250 ms per block.
     Network.Optimism: 800_000,  # 10.02 days
 }
 

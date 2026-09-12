@@ -1,8 +1,20 @@
 from abc import ABCMeta, abstractmethod
-from asyncio import Task, TimeoutError, create_task, get_event_loop, shield, sleep, wait_for
+from asyncio import (
+    FIRST_COMPLETED,
+    Task,
+    TimeoutError,
+    create_task,
+    ensure_future,
+    gather,
+    get_event_loop,
+    shield,
+    sleep,
+    wait,
+    wait_for,
+)
 from collections.abc import AsyncIterator, Awaitable, Callable, Container
 from copy import copy
-from itertools import dropwhile, groupby
+from itertools import dropwhile, groupby, islice
 from logging import DEBUG, getLogger
 from typing import TYPE_CHECKING, Any, Generic, NoReturn, Optional, TypeVar, final
 
@@ -710,7 +722,7 @@ class Filter(_DiskCachedMixin[T, C]):
     @stuck_coro_debugger
     async def _fetch_range_wrapped(
         self, i: int, range_start: "Block", range_end: "Block", debug_logs: bool
-    ) -> list[T]:
+    ) -> tuple[int, "Block", list[T]]:
         """
         Wraps the _fetch_range call with concurrency control.
 
@@ -819,28 +831,60 @@ class Filter(_DiskCachedMixin[T, C]):
         """
         if debug_logs := logger.isEnabledFor(DEBUG):
             logger._log(DEBUG, "loading block range %s to %s", (from_block, to_block))
-        chunks_yielded = 0
+        ranges = enumerate(
+            islice(block_ranges(from_block, to_block, self._chunk_size), self._chunks_per_batch)
+        )
+        # Bound pending requests plus out-of-order results. Refill each consumed
+        # slot so network requests can overlap event processing without buffering
+        # the entire history behind an earlier missing range.
+        progress = None
+        if self._verbose:
+            from tqdm import tqdm
+
+            total = max(0, (to_block - from_block) // self._chunk_size + 1)
+            if self._chunks_per_batch is not None:
+                total = min(total, self._chunks_per_batch)
+            progress = tqdm(total=total)
+        pending = {
+            ensure_future(self._fetch_range_wrapped(i, start, end, debug_logs))
+            for i, (start, end) in islice(ranges, max(1, int(ENVS.GETLOGS_DOP)))
+        }
+        completed: set[Task[tuple[int, "Block", list[T]]]] = set()
+        next_index = 0
         done = {}
-        coros = [
-            self._fetch_range_wrapped(i, start, end, debug_logs)
-            for i, (start, end) in enumerate(block_ranges(from_block, to_block, self._chunk_size))
-            if self._chunks_per_batch is None or i < self._chunks_per_batch
-        ]
-        async for i, end, objs in a_sync.as_completed(coros, aiter=True, tqdm=self._verbose):
-            next_chunk_loaded = False
-            done[i] = end, objs
-            for i in range(chunks_yielded, len(coros)):
-                if i not in done:
-                    break
-                end, objs = done.pop(i)
-                self._insert_chunk(objs, from_block, end, debug_logs)
-                await self._extend(objs)
-                next_chunk_loaded = True
-                chunks_yielded += 1
-            if next_chunk_loaded:
-                await self._set_lock(end)
-                if debug_logs:
-                    logger._log(DEBUG, "%s loaded thru block %s", (self, end))
+        try:
+            while pending:
+                completed, pending = await wait(pending, return_when=FIRST_COMPLETED)
+                for task in completed:
+                    i, end, objs = task.result()
+                    done[i] = end, objs
+                if progress is not None:
+                    progress.update(len(completed))
+                completed.clear()
+                del task
+                progressed = False
+                while next_index in done:
+                    end, objs = done.pop(next_index)
+                    next_index += 1
+                    if next_range := next(ranges, None):
+                        i, (start, stop) = next_range
+                        pending.add(
+                            ensure_future(self._fetch_range_wrapped(i, start, stop, debug_logs))
+                        )
+                    self._insert_chunk(objs, from_block, end, debug_logs)
+                    await self._extend(objs)
+                    progressed = True
+                if progressed:
+                    await self._set_lock(end)
+                    if debug_logs:
+                        logger._log(DEBUG, "%s loaded thru block %s", (self, end))
+        finally:
+            for task in pending | completed:
+                if not task.done():
+                    task.cancel()
+            await gather(*pending, *completed, return_exceptions=True)
+            if progress is not None:
+                progress.close()
 
     @stuck_coro_debugger
     async def _set_lock(self, block: "Block") -> None:
