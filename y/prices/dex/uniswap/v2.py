@@ -428,6 +428,26 @@ class UniswapV2Pool(ERC20):
         self.__types_assumed = False
 
 
+async def _load_pool_tokens(pools: list[UniswapV2Pool]) -> set[ERC20 | str]:
+    """Read known event/cache metadata directly and fetch only unresolved tokens."""
+    tokens: set[ERC20 | str] = set()
+    unresolved = []
+    token0 = UniswapV2Pool.token0
+    token1 = UniswapV2Pool.token1
+    for i, pool in enumerate(pools):
+        try:
+            pair = token0.get_cache_value(pool), token1.get_cache_value(pool)
+        except KeyError:
+            unresolved.append(pool)
+        else:
+            tokens.update(pair)
+        if i % 10_000 == 0:
+            await sleep(0)
+    if unresolved:
+        tokens.update(concat(await UniswapV2Pool.tokens.map(unresolved).values(pop=True)))
+    return tokens
+
+
 class PoolsFromEvents(ProcessedEvents[UniswapV2Pool]):
     PairCreated = "0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9"
     __slots__ = "asynchronous", "label"
@@ -711,8 +731,7 @@ class UniswapRouterV2(ContractBase):
             ):
                 pools.append(UniswapV2Pool(address=pool_address, asynchronous=self.asynchronous))
 
-        # Resolve token0/token1 for all pools (already-cached ones return instantly)
-        tokens = set(concat(await UniswapV2Pool.tokens.map(pools).values(pop=True)))
+        tokens = await _load_pool_tokens(pools)
 
         logger.info(
             "Loaded %s pools (%s new) supporting %s tokens on %s",
