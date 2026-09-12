@@ -1,7 +1,6 @@
 [build-system]
 requires = [
   "setuptools",
-  "tomli; python_version < '3.11'",
   "wheel",
   "mypy[mypyc]==1.19.1",
   "pony-stubs==0.5.2",

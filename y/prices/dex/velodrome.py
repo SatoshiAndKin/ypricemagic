@@ -15,7 +15,7 @@ from y.contracts import Contract, contract_creation_block_async
 from y.datatypes import Address, AnyAddressType, Block
 from y.interfaces.uniswap.velov2 import VELO_V2_FACTORY_ABI
 from y.networks import Network
-from y.prices._candidates import gather_owned
+from y.prices._quote import bounded_map
 from y.prices.dex.solidly import SolidlyRouterBase
 from y.prices.dex.uniswap.v2 import UniswapV2Pool
 from y.utils import gather_methods
@@ -231,12 +231,11 @@ class VelodromeRouterV2(SolidlyRouterBase):
                 "Oh no! Looks like your node can't look back that far. Checking for the missing %s pools...",
                 all_pools_len - len(pools),
             )
-            pools.update(
-                await gather_owned(
-                    self._init_pool_from_poolid(poolid, block=to_block)
-                    for poolid in range(all_pools_len - len(pools))
-                )
-            )
+
+            async def missing_pool(poolid: int) -> VelodromePool:
+                return await self._init_pool_from_poolid(poolid, block=to_block)
+
+            pools.update(await bounded_map(missing_pool, range(all_pools_len - len(pools))))
 
         if len(pools) != all_pools_len:
             raise ValueError(f"Incomplete pool discovery for {self.factory} at {to_block}")

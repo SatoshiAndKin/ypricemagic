@@ -1,9 +1,11 @@
 
-.PHONY: docs
+.PHONY: docs test
+
+PYTHON ?= python
 
 test:
-	@rm -rf build/temp.* build/bdist.* build/lib.*
-	pytest
+	$(PYTHON) -m pip install --no-deps --no-build-isolation -e .
+	$(PYTHON) -m pytest
 
 test-lf:
 	pytest --lf

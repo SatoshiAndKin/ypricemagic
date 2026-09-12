@@ -104,45 +104,6 @@ async def test_price_block_is_a_plain_integer(
 
 
 @run_async_test
-async def test_all_dexes_start_and_wait_for_higher_curve(monkeypatch: pytest.MonkeyPatch) -> None:
-    started = {name: asyncio.Event() for name in ("uni", "curve", "balancer")}
-    release = asyncio.Event()
-
-    async def quote(name: str, value: float, *args: Any, **kwargs: Any) -> UsdPrice:
-        assert args[:2] == (TOKEN, BLOCK)
-        assert kwargs["ignore_pools"] == ("excluded",)
-        assert kwargs["skip_cache"] is True
-        started[name].set()
-        if name == "curve":
-            await release.wait()
-        return UsdPrice(value)
-
-    def dex(name: str, value: float, method: str) -> SimpleNamespace:
-        async def get_price(*args: Any, **kwargs: Any) -> UsdPrice:
-            return await quote(name, value, *args, **kwargs)
-
-        return SimpleNamespace(**{method: get_price, "check_liquidity": AsyncMock(return_value=1)})
-
-    monkeypatch.setattr(magic, "uniswap_multiplexer", dex("uni", 2, "get_price"))
-    monkeypatch.setattr(magic, "curve", dex("curve", 5, "get_price_for_underlying"))
-    monkeypatch.setattr(magic, "balancer_multiplexer", dex("balancer", 3, "get_price"))
-    task = asyncio.create_task(
-        magic._get_price_from_dexes(TOKEN, BLOCK, ("excluded",), True, logging.getLogger(__name__))
-    )
-    try:
-        await asyncio.wait_for(asyncio.gather(*(event.wait() for event in started.values())), 2)
-        assert not task.done()
-        release.set()
-        price, source = await task
-        assert price is not None and source is not None
-        assert float(price) == 5
-        assert "Curve" in source
-    finally:
-        task.cancel()
-        await asyncio.gather(task, return_exceptions=True)
-
-
-@run_async_test
 @pytest.mark.parametrize(
     "balance,supply,expected",
     [
@@ -199,33 +160,6 @@ async def test_cache_forwards_skip_and_does_not_reuse_unrestricted_price(
     read.assert_not_awaited()
 
 
-@run_async_test
-@pytest.mark.parametrize(
-    "values,expected",
-    [
-        ([2, 4, 8], 8),
-        ([2, 2, 2], 2),
-        ([0, -1, float("nan")], None),
-        ([float("inf"), 3, None], 3),
-        ([None, None, None], None),
-    ],
-)
-async def test_candidate_prices_and_ties(
-    values: list[float | None], expected: float | bool | None
-) -> None:
-    from y.prices._candidates import select_price
-
-    async def quote(value: float | None) -> float | None:
-        return value
-
-    price, source = await select_price(
-        (name, quote(value)) for name, value in zip(("Uniswap", "Curve", "Balancer"), values)
-    )
-    assert price == expected
-    if values == [2, 2, 2]:
-        assert source == "Balancer"
-
-
 @pytest.mark.parametrize(
     "value",
     [10**1000, Decimal("sNaN"), Decimal("Infinity"), True],
@@ -235,69 +169,6 @@ def test_invalid_price_conversion(value: object) -> None:
     from y.prices._candidates import valid_price
 
     assert valid_price(value) is False
-
-
-@run_async_test
-async def test_missing_contract_candidates_are_unavailable() -> None:
-    from brownie.exceptions import ContractNotFound
-
-    from y.exceptions import NonStandardERC20
-    from y.prices._candidates import select_price
-
-    async def failed(error: Exception) -> None:
-        raise error
-
-    assert await select_price(
-        [
-            ("missing", failed(ContractNotFound("missing"))),
-            ("unsupported", failed(NonStandardERC20("unsupported"))),
-        ]
-    ) == (None, None)
-
-
-@run_async_test
-@pytest.mark.parametrize("cancel", [False, True])
-async def test_candidate_cleanup(cancel: bool) -> None:
-    from y.prices._candidates import select_price
-
-    entered, cleaned, release = asyncio.Event(), asyncio.Event(), asyncio.Event()
-
-    async def delayed() -> int:
-        entered.set()
-        try:
-            await release.wait()
-            return 9
-        finally:
-            cleaned.set()
-
-    async def failed() -> None:
-        await entered.wait()
-        if cancel:
-            await release.wait()
-        raise RuntimeError("unexpected quote failure")
-
-    task = asyncio.create_task(select_price([("delayed", delayed()), ("failed", failed())]))
-    await entered.wait()
-    if cancel:
-        task.cancel()
-    with pytest.raises(asyncio.CancelledError if cancel else RuntimeError):
-        await task
-    assert cleaned.is_set()
-
-
-@run_async_test
-async def test_expected_reverted_candidate_is_unavailable() -> None:
-    from web3.exceptions import ContractLogicError
-
-    from y.prices._candidates import select_price
-
-    async def reverted() -> None:
-        raise ContractLogicError("execution reverted")
-
-    async def quote() -> int:
-        return 7
-
-    assert await select_price([("a", reverted()), ("b", quote())]) == (7, "b")
 
 
 @run_async_test
@@ -459,21 +330,6 @@ async def test_conversion_preserves_exact_child_path(monkeypatch: pytest.MonkeyP
 
 
 @run_async_test
-async def test_less_liquid_router_wins(monkeypatch: pytest.MonkeyPatch) -> None:
-    from y.prices.dex.uniswap.uniswap import UniswapMultiplexer
-
-    router = instance(UniswapMultiplexer)
-    first = SimpleNamespace(address=TOKEN, get_price=AsyncMock(return_value=2))
-    second = SimpleNamespace(address=CHILD, get_price=AsyncMock(return_value=8))
-    router.uniswaps = [first, second]
-    result = await router.get_price(TOKEN, BLOCK, skip_cache=True, sync=False)
-    assert float(result) == 8
-    assert CHILD in result.path[0].source
-    first.get_price.assert_awaited_once()
-    second.get_price.assert_awaited_once()
-
-
-@run_async_test
 async def test_bucket_priority_waits_for_every_check(monkeypatch: pytest.MonkeyPatch) -> None:
     from y._db.utils import token as db
     from y.prices.utils import buckets
@@ -521,132 +377,6 @@ async def test_bucket_priority_waits_for_every_check(monkeypatch: pytest.MonkeyP
     finally:
         task.cancel()
         await asyncio.gather(task, return_exceptions=True)
-
-
-@run_async_test
-async def test_v2_paths_include_less_liquid_pools_and_avoid_cycles(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    from y.constants import usdc
-    from y.prices.dex.uniswap.v2 import UniswapRouterV2
-
-    router = instance(UniswapRouterV2)
-    router.special_paths = {}
-
-    class Pool:
-        def __init__(self, address: str, first: str, second: str) -> None:
-            self.address, self.first, self.second = address, first, second
-
-        async def get_token_out(self, token: str, **kwargs: Any) -> str:
-            return self.second if token == self.first else self.first
-
-    direct = Pool("direct", TOKEN, usdc.address)
-    via = Pool("via", TOKEN, CHILD)
-    end = Pool("end", CHILD, usdc.address)
-
-    async def pools(
-        token: str, block: int, _ignore_pools: tuple[object, ...]
-    ) -> AsyncIterator[Pool]:
-        assert block == BLOCK
-        for pool in (direct, via, end):
-            if token in (pool.first, pool.second) and pool not in _ignore_pools:
-                yield pool
-
-    monkeypatch.setattr(router, "pools_for_token", pools)
-    paths = await router._price_paths(TOKEN, BLOCK, ())
-    assert {path for path, _ in paths} == {
-        (TOKEN, usdc.address),
-        (TOKEN, CHILD),
-        (TOKEN, CHILD, usdc.address),
-    }
-    assert all(len(set(path)) == len(path) for path, _ in paths)
-    assert {path for path, _ in await router._price_paths(TOKEN, BLOCK, (via,))} == {
-        (TOKEN, usdc.address)
-    }
-
-
-@run_async_test
-async def test_v3_compares_second_leg_fees_and_filters_exclusions(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    import importlib
-
-    module = importlib.import_module("y.prices.dex.uniswap.v3")
-    router = instance(module.UniswapV3)
-    router._factory = TOKEN
-    router.fee_tiers = (100, 500)
-    factory_call = AsyncMock(side_effect=lambda start, end, fee, **kw: f"0x{fee:040x}")
-    monkeypatch.setattr(
-        module.UniswapV3,
-        "__factory__",
-        property(
-            lambda self: Ready(SimpleNamespace(getPool=SimpleNamespace(coroutine=factory_call)))
-        ),
-    )
-    monkeypatch.setattr(module.UniswapV3, "__quoter__", property(lambda self: Ready("quoter")))
-    monkeypatch.setattr(module, "contract_creation_block_async", AsyncMock(return_value=1))
-    monkeypatch.setattr(module.ERC20, "_get_scale_for", AsyncMock(return_value=10**18))
-    seen = []
-
-    async def quote(path: list[str | int], amount: int, block: int) -> int:
-        seen.append(path)
-        assert (amount, block) == (10**18, BLOCK)
-        return 9 if len(path) == 5 and path[3] == 500 else 2
-
-    monkeypatch.setattr(router, "_quote_exact_input", quote)
-    assert float(await router.get_price(TOKEN, BLOCK, sync=False)) == 9
-    assert len(seen) == 6
-    seen.clear()
-    assert (
-        float(await router.get_price(TOKEN, BLOCK, ignore_pools=(f"0x{500:040x}",), sync=False))
-        == 2
-    )
-    assert all(500 not in path for path in seen)
-
-
-@run_async_test
-async def test_curve_compares_pools_without_changing_registry(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    import importlib
-
-    module = importlib.import_module("y.prices.stable_swap.curve")
-    registry = instance(module.CurveRegistry)
-    child = SimpleNamespace(
-        address=CHILD,
-        price=AsyncMock(
-            return_value=PriceResult(UsdPrice(2), [PriceStep(CHILD, UsdPrice(2), "oracle")])
-        ),
-    )
-
-    class Pool:
-        def __init__(self, address: str, amount: int) -> None:
-            self.address, self.amount = address, amount
-            self.__coins__ = Ready((TOKEN, CHILD))
-
-        async def deploy_block(self, **kwargs: Any) -> int:
-            return 1
-
-        async def get_coin_index(self, *args: Any, **kwargs: Any) -> int:
-            return 0
-
-        async def get_dy(self, first: int, second: int, **kwargs: Any) -> SimpleNamespace:
-            assert (first, second, kwargs["block"]) == (0, 1, BLOCK)
-            return SimpleNamespace(token=child, __readable__=Ready(Decimal(self.amount)))
-
-    pools = [Pool("deep", 1), Pool("shallow", 4)]
-    mapping = {TOKEN: pools}
-    monkeypatch.setattr(
-        module.CurveRegistry, "__coin_to_pools__", property(lambda self: Ready(mapping))
-    )
-    result = await registry.get_price_for_underlying(TOKEN, BLOCK, skip_cache=True, sync=False)
-    assert float(result) == 8
-    assert "shallow" in result.path[0].source
-    result = await registry.get_price_for_underlying(
-        TOKEN, BLOCK, ignore_pools=("SHALLOW",), skip_cache=True, sync=False
-    )
-    assert float(result) == 2
-    assert [pool.address for pool in mapping[TOKEN]] == ["deep", "shallow"]
 
 
 @run_async_test
@@ -749,7 +479,11 @@ async def test_valid_price_cache_writes_numeric_value(monkeypatch: pytest.Monkey
     lookup = AsyncMock(return_value=result)
     cached = magic.__cache(lookup)
     assert await cached(TOKEN, BLOCK) is result
-    assert await cached(TOKEN, BLOCK) is result
+    second = await cached(TOKEN, BLOCK)
+    assert second == result and second is not result
+    second.path[0].source = "caller edit"
+    third = await cached(TOKEN, BLOCK)
+    assert third is not None and third.path[0].source == "oracle"
     assert writes == [(TOKEN, BLOCK, Decimal("7.5"))]
     assert read.await_count == lookup.await_count == 1
 
@@ -799,15 +533,7 @@ async def test_v2_discovery_uses_one_block_and_drains_loader(
         def __hash__(self) -> int:
             return hash(self.address)
 
-    setattr(
-        Pool,
-        "tokens",
-        SimpleNamespace(
-            map=lambda pools: SimpleNamespace(
-                values=lambda **kwargs: Ready([(p.token0, p.token1) for p in pools])
-            )
-        ),
-    )
+    setattr(Pool, "__tokens__", property(lambda p: Ready((p.token0, p.token1))))
     monkeypatch.setattr(module, "UniswapV2Pool", Pool)
 
     async def count(factory: str, method: str, **kwargs: Any) -> int:
@@ -823,15 +549,17 @@ async def test_v2_discovery_uses_one_block_and_drains_loader(
     saved = []
     monkeypatch.setattr(module, "_save_pool_tuples", lambda factory, pools: saved.append(pools))
 
-    async def indexes(indexes: range, block_identifier: int | None) -> list[str]:
+    async def index(index: int, block_identifier: int | None) -> str:
         calls.append(("allPairs", block_identifier))
-        return ["first" if i == 0 else "second" for i in indexes]
+        return "first" if index == 0 else "second"
 
     monkeypatch.setattr(
         module,
         "Contract",
         SimpleNamespace(
-            coroutine=AsyncMock(return_value=SimpleNamespace(allPairs=SimpleNamespace(map=indexes)))
+            coroutine=AsyncMock(
+                return_value=SimpleNamespace(allPairs=SimpleNamespace(coroutine=index))
+            )
         ),
     )
 
@@ -909,87 +637,6 @@ def test_price_reset_preserves_other_chains_and_metadata(tmp_path: Path) -> None
 
 
 @run_async_test
-async def test_balancer_versions_and_pools_all_compared(monkeypatch: pytest.MonkeyPatch) -> None:
-    from y.prices.dex.balancer.balancer import BalancerMultiplexer
-    from y.prices.dex.balancer.v2 import BalancerV2
-
-    first = SimpleNamespace(address="first", get_token_price=AsyncMock(return_value=2))
-    second = SimpleNamespace(address="second", get_token_price=AsyncMock(return_value=9))
-    original = [first, second]
-
-    async def pools(token: str, block: int) -> AsyncIterator[SimpleNamespace]:
-        assert token == TOKEN and block == BLOCK
-        for pool in original:
-            yield pool
-
-    v2 = instance(BalancerV2)
-    v2.vaults = [SimpleNamespace(deploy_block=AsyncMock(return_value=1), pools_for_token=pools)]
-    v1 = SimpleNamespace(get_token_price=AsyncMock(return_value=4))
-    multiplexer = instance(BalancerMultiplexer)
-    monkeypatch.setattr(BalancerMultiplexer, "is_balancer_pool", AsyncMock(return_value=False))
-    monkeypatch.setattr(BalancerMultiplexer, "__versions__", property(lambda self: Ready([v1, v2])))
-    result = await multiplexer.get_price(TOKEN, BLOCK, skip_cache=True, sync=False)
-    assert float(result) == 9
-    assert all(pool.get_token_price.await_count == 1 for pool in original)
-    v1.get_token_price.assert_awaited_once()
-    result = await multiplexer.get_price(TOKEN, BLOCK, ignore_pools=("SECOND",), sync=False)
-    assert float(result) == 4
-    assert original == [first, second]
-    assert second.get_token_price.await_count == 1
-
-
-@run_async_test
-async def test_balancer_v1_quotes_all_sizes_and_forwards_exclusions(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    from y.prices.dex.balancer import v1 as module
-
-    output = SimpleNamespace(address=CHILD)
-    router = instance(module.BalancerV1)
-    split_call = AsyncMock(
-        return_value={"swaps": [{"pool": "deep"}, {"pool": "small"}], "totalOutput": 10}
-    )
-    router.exchange_proxy = SimpleNamespace(viewSplitExactIn=SimpleNamespace(coroutine=split_call))
-    monkeypatch.setattr(module, "TOKENOUTS_TO_TRY", [output])
-    monkeypatch.setattr(module, "contract_creation_block_async", AsyncMock(return_value=1))
-    monkeypatch.setattr(ERC20, "_get_scale_for", AsyncMock(return_value=1000))
-    quoted = []
-
-    def call(pool: str, method: str | list[Any], block_id: int) -> Ready[Any]:
-        assert block_id == BLOCK
-        signature = method[0] if isinstance(method, list) else method
-        if signature.startswith("calcOutGivenIn"):
-            quoted.append((pool, method[-2]))
-            return Ready(method[-2] * (4 if pool == "small" else 2))
-        if signature.startswith("getBalance"):
-            return Ready(100_000)
-        if signature.startswith("MAX_IN_RATIO"):
-            return Ready(5 * 10**17)
-        if signature.startswith("isPublicSwap"):
-            return Ready(True)
-        return Ready(10**17)
-
-    monkeypatch.setattr(module, "Call", call)
-    child = PriceResult(UsdPrice(2), [PriceStep(CHILD, UsdPrice(2), "oracle")])
-    child_call = AsyncMock(return_value=child)
-    monkeypatch.setattr(magic, "get_price", child_call)
-    result = await router.get_token_price(
-        TOKEN, BLOCK, ignore_pools=("deep",), skip_cache=True, sync=False
-    )
-    assert float(result) == 8
-    assert set(quoted) == {("small", 1000), ("small", 500), ("small", 100)}
-    assert split_call.await_count == 3
-    assert all(
-        call.args[-1] == 32 and call.kwargs["block_identifier"] == BLOCK
-        for call in split_call.await_args_list
-    )
-    for recorded in child_call.await_args_list:
-        assert recorded.kwargs["ignore_pools"] == ("deep", "small")
-        assert recorded.kwargs["skip_cache"] is True
-    assert result.path[0].token == TOKEN and result.path[1] == child.path[0]
-
-
-@run_async_test
 @pytest.mark.parametrize("missing", ["premia", "decimals"])
 async def test_xpremia_missing_required_data(monkeypatch: pytest.MonkeyPatch, missing: str) -> None:
     from y.exceptions import NonStandardERC20
@@ -1049,61 +696,6 @@ def test_selected_mypyc_modules_are_compiled() -> None:
         assert any(
             module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES
         ), module.__file__
-
-
-@run_async_test
-async def test_v2_compares_actual_route_prices(monkeypatch: pytest.MonkeyPatch) -> None:
-    from y.constants import usdc
-    from y.prices.dex.uniswap import v2 as module
-
-    router = instance(module.UniswapRouterV2)
-    router.address, router.factory = TOKEN, CHILD
-    router.special_paths = {}
-    paths = [((TOKEN, usdc.address), ("deep",)), ((TOKEN, CHILD, usdc.address), ("small", "end"))]
-    monkeypatch.setattr(module.UniswapRouterV2, "_price_paths", AsyncMock(return_value=paths))
-    monkeypatch.setattr(module, "contract_creation_block_async", AsyncMock(return_value=1))
-    monkeypatch.setattr(ERC20, "_get_scale_for", AsyncMock(return_value=10**6))
-    calls = []
-
-    async def quote(
-        amount_in: int, path: list[str], block: int, pools: tuple[object, ...], **kwargs: Any
-    ) -> list[int]:
-        assert amount_in == 10**6 and block == BLOCK
-        calls.append(pools)
-        return [amount_in, (2 if len(path) == 2 else 9) * 10**6]
-
-    monkeypatch.setattr(module.UniswapRouterV2, "get_quote", staticmethod(quote))
-    result = await router.get_price(TOKEN, BLOCK, sync=False)
-    assert float(result) == pytest.approx(9 / 0.997**2)
-    assert calls == [("deep",), ("small", "end")]
-    assert "small end" in result.path[0].source
-
-
-@run_async_test
-async def test_v2_preserves_eleven_swap_limit(monkeypatch: pytest.MonkeyPatch) -> None:
-    from y.constants import usdc
-    from y.prices.dex.uniswap.v2 import UniswapRouterV2
-
-    router = instance(UniswapRouterV2)
-    router.special_paths = {}
-    tokens = [TOKEN] + [f"0x{i:040x}" for i in range(1000, 1011)] + [usdc.address]
-
-    async def pools(
-        token: str, block: int, _ignore_pools: tuple[object, ...]
-    ) -> AsyncIterator[SimpleNamespace]:
-        index = tokens.index(token)
-        if index < len(tokens) - 1:
-            yield SimpleNamespace(
-                address=f"pool{index}", get_token_out=AsyncMock(return_value=tokens[index + 1])
-            )
-
-    monkeypatch.setattr(router, "pools_for_token", pools)
-    paths = await router._price_paths(TOKEN, BLOCK, ())
-    assert all(len(pools) <= 11 for _, pools in paths)
-    assert all(path[-1] != usdc.address for path, _ in paths)
-    tokens.pop(-2)  # The stable token is now exactly eleven swaps away.
-    paths = await router._price_paths(TOKEN, BLOCK, ())
-    assert any(path[-1] == usdc.address and len(pools) == 11 for path, pools in paths)
 
 
 @run_async_test
@@ -1219,6 +811,7 @@ async def test_erc4626_ratio_and_wrapped_gas_paths(
         return "wrapped gas coin" if str(token) == EEE_ADDRESS else "stable usd"
 
     monkeypatch.setattr(utils, "check_bucket", bucket)
+    monkeypatch.setattr(magic, "chainlink", SimpleNamespace(get_price=AsyncMock(return_value=1)))
     gas = await magic.get_price(EEE_ADDRESS, BLOCK, skip_cache=True, sync=False)
     assert [step.token for step in gas.path] == [EEE_ADDRESS, str(constants.WRAPPED_GAS_COIN)]
     assert [float(step.price) for step in gas.path] == [1, 1]
@@ -1405,15 +998,15 @@ async def test_balancer_invalid_lp_valuation_continues_to_pool_quotes(
     from y.prices.dex.balancer.balancer import BalancerMultiplexer
 
     adapter = instance(BalancerMultiplexer)
-    version = SimpleNamespace(get_token_price=AsyncMock(return_value=9))
+    from y.prices import _routing
+
+    route = AsyncMock(return_value=PriceResult(UsdPrice(9), []))
+    monkeypatch.setattr(_routing, "liquidity_price", route)
     monkeypatch.setattr(BalancerMultiplexer, "is_balancer_pool", AsyncMock(return_value=True))
     monkeypatch.setattr(BalancerMultiplexer, "get_pool_price", AsyncMock(return_value=lp_price))
-    monkeypatch.setattr(
-        BalancerMultiplexer, "__versions__", property(lambda self: Ready([version]))
-    )
     result = await adapter.get_price(TOKEN, BLOCK, sync=False)
     assert float(result) == (2 if lp_price else 9)
-    assert version.get_token_price.await_count == (0 if lp_price else 1)
+    assert route.await_count == (0 if lp_price else 1)
 
 
 @run_async_test

@@ -421,6 +421,8 @@ class ERC20(ContractBase):
         return_None_on_failure: bool = False,
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
+        *,
+        amount: int | Decimal | None = None,
     ) -> PriceResult | None:
         """
         Get the price of the token in USD.
@@ -430,6 +432,7 @@ class ERC20(ContractBase):
             return_None_on_failure: If True, return None instead of raising a :class:`~y.exceptions.yPriceMagicError` on failure.
             skip_cache: If True, skip using the cache while fetching price data.
             ignore_pools: An optional tuple of pools to ignore when calculating the price.
+            amount: Optional integer or Decimal amount in readable tokens for a native sale estimate.
 
         Returns:
             The price of the token in USD, or None if return_None_on_failure is True and the price cannot be retrieved.
@@ -450,6 +453,7 @@ class ERC20(ContractBase):
         return await get_price(
             self.address,
             block=block,
+            amount=amount,
             fail_to_None=return_None_on_failure,
             skip_cache=skip_cache,
             ignore_pools=ignore_pools,

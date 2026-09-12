@@ -139,12 +139,13 @@ Price selection and invalidation
 --------------------------------
 
 A positive, finite API or known-token valuation takes priority over DEX fallback.
-DEX fallback starts the supported Uniswap, Curve, and Balancer candidates
-concurrently and waits for them all. It selects the highest positive, finite USD
-price at one resolved block. Exact ties use protocol, address, and route order.
-The adapters retain their route limits and USD normalization. There is no price
-selection deadline. Caller cancellation drains owned tasks; shared registry
-loaders remain available to other lookups.
+DEX fallback uses liquidity-based price estimation across Uniswap, Curve, and
+Balancer. It tries the deepest eligible pool in input-token units, then falls
+back after quote failures or dead ends. Protocol and pool address resolve ties.
+It does not guarantee the highest possible route price. Bounded discovery
+workers share immutable block data. Caller cancellation drains owned tasks;
+shared registry loaders remain available to other lookups. No selection deadline
+is added. See :doc:`amount-quotes` for native amount quotes and redemption limits.
 
 ``skip_cache=True`` bypasses the final price caches. Recursive calls inherit this
 setting and pool exclusions. Restricted or dependent calculations do not read or
@@ -160,5 +161,5 @@ data. Restart the writers to clear their memory caches. Prices rebuild on demand
 
 Enable ``logging.getLogger("y.stuck?").setLevel(logging.DEBUG)`` to receive
 ``still executing`` messages every five minutes for long-running async calls.
-The messages are DEBUG-only. The ``y.prices._candidates`` DEBUG logger records
-candidate failures and the selected source.
+The messages are DEBUG-only. Structured amount quotes record the selected swap
+and redemption steps.

@@ -49,7 +49,6 @@ from y.datatypes import (
 from y.exceptions import (
     CantFindSwapPath,
     ContractNotVerified,
-    NonStandardERC20,
     NotAUniswapV2Pool,
     TokenNotFound,
     call_reverted,
@@ -58,15 +57,10 @@ from y.exceptions import (
 )
 from y.interfaces.uniswap.factoryv2 import UNIV2_FACTORY_ABI
 from y.networks import Network
-from y.prices import magic
 from y.prices._candidates import (
-    derive_price,
-    gather_owned,
-    pool_address,
     pool_is_ignored,
-    select_price,
-    valid_price,
 )
+from y.prices._quote import bounded_map
 from y.prices.dex.uniswap.v2_forks import (
     ROUTER_TO_FACTORY,
     ROUTER_TO_PROTOCOL,
@@ -400,7 +394,7 @@ class UniswapV2Pool(ERC20):
                 if token == balance.token:
                     liquidity = balance.balance
                     await log_liquidity(self, token, block, liquidity, debug_logs)
-                    return liquidity
+                    return int(liquidity)
             raise TokenNotFound(token, reserves)
         return 0
 
@@ -554,117 +548,16 @@ class UniswapRouterV2(ContractBase):
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
     ) -> PriceResult | None:
-        """Compare every supported simple path, retaining the eleven-swap limit.
+        """Estimate USD value using the deepest eligible pool, with fallback."""
+        from y.prices._routing import liquidity_price
 
-        Quotes sell one readable input token. Normalize output to USD and undo
-        the router's documented 0.3 percent fee per hop. Nonstable direct pairs
-        use recursive USD valuation with their pools excluded.
-        """
-        token_in = await convert.to_address_async(token_in)
-        if block is None:
-            block = await dank_mids.eth.block_number
-        if block < await contract_creation_block_async(self.factory, True):
-            return None
-        try:
-            amount_in = await ERC20._get_scale_for(token_in)
-        except NonStandardERC20:
-            return None
-        token_out = await convert.to_address_async(token_out)
-        if CHAINID == Network.BinanceSmartChain and token_out == usdc.address:
-            token_out = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"
-        explicit_path = tuple(
-            map(str, self._smol_brain_path_selector(token_in, token_out, paired_against))
+        return await liquidity_price(
+            str(token_in),
+            block,
+            ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
+            first_markets=(str(self.address).lower(),),
         )
-        paths = await self._price_paths(token_in, block, ignore_pools, (explicit_path,))
-
-        @stuck_coro_debugger
-        async def quote(path, pools):
-            amounts = await self.get_quote(
-                amount_in, list(path), block=block, pools=pools, sync=False
-            )
-            if amounts is None:
-                return None
-            amount_out = Decimal(amounts[-1]) / await ERC20._get_scale_for(path[-1])
-            amount_out /= Decimal("0.997") ** (len(path) - 1)
-            source = f"Uniswap V2 {self.address} pools {' '.join(map(pool_address, pools))} route {' -> '.join(path)}"
-            if path[-1] in STABLECOINS:
-                return derive_price(token_in, amount_out, source)
-            child = await magic.get_price(
-                path[-1],
-                block,
-                fail_to_None=True,
-                skip_cache=skip_cache,
-                ignore_pools=(*ignore_pools, *pools),
-                sync=False,
-            )
-            if valid_price(child):
-                return derive_price(
-                    token_in, amount_out * Decimal(str(float(child))), source, child
-                )
-
-        price, _ = await select_price(
-            (
-                f"{self.address} {' '.join(map(pool_address, pools))} {' '.join(path)}",
-                quote(path, pools),
-            )
-            for path, pools in paths
-        )
-        return price
-
-    @stuck_coro_debugger
-    async def _price_paths(
-        self,
-        token: Address,
-        block: Block,
-        ignore_pools: tuple[Pool, ...],
-        explicit_paths: tuple[tuple[str, ...], ...] = (),
-    ):
-        """Enumerate simple stable paths and direct conversion paths, without depth ranking."""
-
-        async def walk(path, used):
-            if len(used) >= 11:
-                return []
-            pools = [
-                pool
-                async for pool in self.pools_for_token(
-                    path[-1], block, _ignore_pools=(*ignore_pools, *used)
-                )
-            ]
-
-            async def extend(pool):
-                paired = str(await pool.get_token_out(path[-1], sync=False))
-                if paired in path:
-                    return []
-                next_path, next_used = (*path, paired), (*used, pool)
-                if paired in STABLECOINS:
-                    return [(next_path, next_used)]
-                # A direct paired-token conversion is a supported fallback shape.
-                direct = [(next_path, next_used)] if not used else []
-                return direct + await walk(next_path, next_used)
-
-            branches = await gather_owned(extend(pool) for pool in sorted(pools, key=pool_address))
-            return [route for branch in branches for route in branch]
-
-        paths = await walk((token,), ())
-        # Explicit protocol paths can exceed the normal path limit; keep their
-        # established route shapes and validate every pool at this block.
-        if token in self.special_paths:
-            explicit_paths = (*explicit_paths, tuple(map(str, self.special_paths[token])))
-        for special in explicit_paths:
-            if len(set(special)) == len(special):
-                choices: list[tuple[UniswapV2Pool, ...]] = [()]
-                for start, end in zip(special, special[1:]):
-                    pools = [
-                        pool
-                        async for pool in self.pools_for_token(
-                            start, block, _ignore_pools=ignore_pools
-                        )
-                        if str(await pool.get_token_out(start, sync=False)) == end
-                    ]
-                    choices = [(*prefix, pool) for prefix in choices for pool in pools]
-                paths.extend((special, pools) for pools in choices)
-        unique = {(path, tuple(map(pool_address, pools))): (path, pools) for path, pools in paths}
-        return list(unique.values())
 
     @continue_on_revert
     @stuck_coro_debugger
@@ -748,9 +641,13 @@ class UniswapRouterV2(ContractBase):
                     to_get,
                 )
                 factory_contract = await Contract.coroutine(self.factory)
-                for i, pool_address in enumerate(
-                    await factory_contract.allPairs.map(range(to_get), block_identifier=to_block)
-                ):
+
+                async def pair_at(index: int) -> str:
+                    return await factory_contract.allPairs.coroutine(
+                        index, block_identifier=to_block
+                    )
+
+                for i, pool_address in enumerate(await bounded_map(pair_at, range(to_get))):
                     pools.insert(
                         i, UniswapV2Pool(address=pool_address, asynchronous=self.asynchronous)
                     )
@@ -763,13 +660,20 @@ class UniswapRouterV2(ContractBase):
                 cached_len,
             )
             factory_contract = await Contract.coroutine(self.factory)
-            for pool_address in await factory_contract.allPairs.map(
-                range(cached_len, all_pairs_len), block_identifier=to_block
-            ):
+
+            async def new_pair_at(index: int) -> str:
+                return str(
+                    await factory_contract.allPairs.coroutine(index, block_identifier=to_block)
+                )
+
+            for pool_address in await bounded_map(new_pair_at, range(cached_len, all_pairs_len)):
                 pools.append(UniswapV2Pool(address=pool_address, asynchronous=self.asynchronous))
 
         # Resolve token0/token1 for all pools (already-cached ones return instantly)
-        tokens = set(concat(await UniswapV2Pool.tokens.map(pools).values(pop=True)))
+        async def pool_tokens(pool):
+            return await pool.__tokens__
+
+        tokens = set(concat(await bounded_map(pool_tokens, pools)))
 
         logger.info(
             "Loaded %s pools (%s new) supporting %s tokens on %s",
@@ -796,9 +700,9 @@ class UniswapRouterV2(ContractBase):
 
     @a_sync.aka.cached_property
     @stuck_coro_debugger
-    async def pools_by_token(self) -> dict[str, dict[UniswapV2Pool, Address]]:
+    async def pools_by_token(self) -> dict[str, dict[UniswapV2Pool, str]]:
         """Index the discovered pools once for all route traversals."""
-        index: dict[str, dict[UniswapV2Pool, Address]] = {}
+        index: dict[str, dict[UniswapV2Pool, str]] = {}
         for i, pool in enumerate(await self.__pools__):
             token0, token1 = await pool.__tokens__
             first, second = str(token0), str(token1)
@@ -808,7 +712,7 @@ class UniswapRouterV2(ContractBase):
                 await sleep(0)
         return index
 
-    __pools_by_token__: HiddenMethodDescriptor[Self, dict[str, dict[UniswapV2Pool, Address]]]
+    __pools_by_token__: HiddenMethodDescriptor[Self, dict[str, dict[UniswapV2Pool, str]]]
 
     @stuck_coro_debugger
     async def all_pools_for(self, token_in: Address) -> dict[UniswapV2Pool, Address]:
@@ -870,9 +774,10 @@ class UniswapRouterV2(ContractBase):
                 yield pool
             return
 
-        deployments = await gather_owned(
-            pool.deploy_block(when_no_history_return_0=True, sync=False) for pool in pools
-        )
+        async def deployed(pool):
+            return await pool.deploy_block(when_no_history_return_0=True, sync=False)
+
+        deployments = await bounded_map(deployed, pools)
         for pool, deploy_block in zip(pools, deployments):
             if deploy_block <= block:
                 yield pool
@@ -1045,7 +950,7 @@ class UniswapRouterV2(ContractBase):
                     token, block, ignore_pools=ignore_pools
                 )
                 await log_liquidity(self, token, block, liquidity, debug_logs)
-                return liquidity
+                return int(liquidity)
             except (Revert, ValueError, ContractLogicError) as e:
                 _log_factory_helper_failure(e, token, block, ignore_pools)
 
@@ -1057,7 +962,7 @@ class UniswapRouterV2(ContractBase):
         except a_sync.exceptions.EmptySequenceError:
             liquidity = 0
         await log_liquidity(self, token, block, liquidity, debug_logs)
-        return liquidity
+        return int(liquidity)
 
     @a_sync.a_sync(ram_cache_maxsize=100_000, ram_cache_ttl=60 * 60)
     @stuck_coro_debugger

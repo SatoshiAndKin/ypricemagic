@@ -10,7 +10,6 @@ from typing import SupportsFloat, TypeVar
 
 from brownie.exceptions import ContractNotFound
 
-from y._decorators import stuck_coro_debugger
 from y.datatypes import PriceResult, PriceStep, UsdPrice
 from y.exceptions import (
     CantFindSwapPath,
@@ -18,8 +17,6 @@ from y.exceptions import (
     NonStandardERC20,
     PriceError,
     TokenNotFound,
-    call_reverted,
-    yPriceMagicError,
 )
 
 logger = getLogger(__name__)
@@ -63,47 +60,6 @@ async def gather_owned(coros: Iterable[Awaitable[T]]) -> list[T]:
             if not task.done():
                 task.cancel()
         await asyncio.gather(*tasks, return_exceptions=True)
-
-
-@stuck_coro_debugger
-async def select_price(
-    candidates: Iterable[tuple[str, Awaitable[QuotedPrice | None]]],
-) -> tuple[QuotedPrice | None, str | None]:
-    """Await every candidate, then select the highest valid USD price.
-
-    Source keys encode protocol, address, and route. Lexical key order breaks
-    exact price ties. Expected missing or reverted quotes are unavailable.
-    """
-    ordered = sorted(candidates, key=lambda candidate: candidate[0])
-
-    async def quote(source: str, coro: Awaitable[QuotedPrice | None]) -> QuotedPrice | None:
-        try:
-            result = await coro
-        except yPriceMagicError as exc:
-            if not isinstance(exc.exception, _UNAVAILABLE):
-                raise
-            logger.debug("unavailable candidate %s: %s", source, exc)
-            return None
-        except _UNAVAILABLE as exc:
-            logger.debug("unavailable candidate %s: %s", source, exc)
-            return None
-        except Exception as exc:
-            if not call_reverted(exc):
-                logger.debug("failed candidate %s", source, exc_info=True)
-                raise
-            logger.debug("reverted candidate %s: %s", source, exc)
-            return None
-        logger.debug("candidate %s -> %s", source, result)
-        return result if valid_price(result) else None
-
-    results = await gather_owned(quote(source, coro) for source, coro in ordered)
-    best: QuotedPrice | None = None
-    selected: str | None = None
-    for (source, _), result in zip(ordered, results):
-        if result is not None and (best is None or float(result) > float(best)):
-            best, selected = result, source
-    logger.debug("selected candidate %s -> %s", selected, best)
-    return best, selected
 
 
 def derive_price(

@@ -1,5 +1,6 @@
 from collections.abc import Coroutine, Iterable
 from contextvars import ContextVar
+from copy import deepcopy
 from dataclasses import dataclass
 from decimal import Decimal
 from functools import wraps
@@ -34,9 +35,9 @@ from y.prices import (
     utils,
     yearn,
 )
-from y.prices._candidates import derive_price, pool_address, select_price, valid_price
+from y.prices._candidates import derive_price, pool_address, valid_price
 from y.prices.dex import *
-from y.prices.dex.uniswap import UniswapV2Pool, uniswap_multiplexer
+from y.prices.dex.uniswap import UniswapV2Pool
 from y.prices.eth_derivs import *
 from y.prices.gearbox import gearbox
 from y.prices.lending import *
@@ -73,6 +74,7 @@ async def get_price(
     token_address: AnyAddressType,
     block: Block | None = None,
     *,
+    amount: int | Decimal | None = None,
     fail_to_None: Literal[True],
     skip_cache: bool = ENVS.SKIP_CACHE,
     ignore_pools: tuple[Pool, ...] = (),
@@ -85,6 +87,7 @@ async def get_price(
     token_address: AnyAddressType,
     block: Block | None = None,
     *,
+    amount: int | Decimal | None = None,
     fail_to_None: bool = False,
     skip_cache: bool = ENVS.SKIP_CACHE,
     ignore_pools: tuple[Pool, ...] = (),
@@ -97,6 +100,7 @@ async def get_price(
     token_address: AnyAddressType,
     block: Block | None = None,
     *,
+    amount: int | Decimal | None = None,
     fail_to_None: bool = False,
     skip_cache: bool = ENVS.SKIP_CACHE,
     ignore_pools: tuple[Pool, ...] = (),
@@ -107,6 +111,7 @@ async def get_price(
 
     Args:
         token_address: The address of the token to price. The function accepts hexadecimal strings, Brownie Contract objects, and integers as shorthand for addresses.
+        amount: Optional exact readable amount as an integer or Decimal. Returns a native sale estimate with structured quote details.
         block (optional): The block number at which to get the price. If None, uses the latest block.
         fail_to_None (optional): If True, return None instead of raising a :class:`~yPriceMagicError` on failure. Defaults to False.
         skip_cache (optional): If True, bypass the cache and fetch the price directly. Defaults to :obj:`ENVS.SKIP_CACHE`.
@@ -134,6 +139,10 @@ async def get_price(
     See Also:
         :func:`get_prices`
     """
+    if amount is not None:
+        from y.prices._quote import validate_amount
+
+        validate_amount(amount)
     block = BlockNumber(int(await dank_mids.eth.block_number if block is None else block))
     token_address = await convert.to_address_async(token_address)
     parent = _price_request.get()
@@ -159,6 +168,23 @@ async def get_price(
                 return None
             finally:
                 logger.close()
+        if amount is not None:
+            from y.prices._routing import liquidity_price
+
+            result = await liquidity_price(
+                str(token_address),
+                block,
+                amount=amount,
+                ignore_pools=ignore_pools,
+                skip_cache=skip_cache,
+            )
+            if result is None and not fail_to_None:
+                logger = get_price_logger(token_address, block, extra="amount")
+                try:
+                    _fail_appropriately(logger, str(token_address), False, silent)
+                finally:
+                    logger.close()
+            return result
         return await _get_price(
             token_address,
             block,
@@ -185,6 +211,7 @@ async def get_prices(
     token_addresses: Iterable[AnyAddressType],
     block: Block | None = None,
     *,
+    amounts: Iterable[int | Decimal] | None = None,
     fail_to_None: Literal[True],
     skip_cache: bool = ENVS.SKIP_CACHE,
     silent: bool = False,
@@ -196,6 +223,7 @@ async def get_prices(
     token_addresses: Iterable[AnyAddressType],
     block: Block | None = None,
     *,
+    amounts: Iterable[int | Decimal] | None = None,
     fail_to_None: bool = False,
     skip_cache: bool = ENVS.SKIP_CACHE,
     silent: bool = False,
@@ -207,6 +235,7 @@ async def get_prices(
     token_addresses: Iterable[AnyAddressType],
     block: Block | None = None,
     *,
+    amounts: Iterable[int | Decimal] | None = None,
     fail_to_None: bool = False,
     skip_cache: bool = ENVS.SKIP_CACHE,
     silent: bool = False,
@@ -219,6 +248,7 @@ async def get_prices(
 
     Args:
         token_addresses: An iterable of token addresses to price.
+        amounts: Optional aligned integer or Decimal amounts in readable tokens. Duplicate tokens retain their own amounts and input order.
         block (optional): The block number at which to get the prices. If None, defaults to the latest block.
         fail_to_None (optional): If True, return None for tokens whose price couldn't be determined. Defaults to False.
         skip_cache (optional): If True, bypass the cache and fetch prices directly. Defaults to :obj:`ENVS.SKIP_CACHE`.
@@ -235,13 +265,35 @@ async def get_prices(
     See Also:
         :func:`get_price` and :func:`map_prices`
     """
-    return await map_prices(
-        token_addresses,
-        await dank_mids.eth.block_number if block is None else block,
-        fail_to_None=fail_to_None,
-        skip_cache=skip_cache,
-        silent=silent,
-    ).values(pop=True)
+    from y.prices._quote import bounded_map, validate_amount
+
+    tokens = list(token_addresses)
+    sizes: list[int | Decimal | None] = (
+        list(amounts) if amounts is not None else [None] * len(tokens)
+    )
+    if len(tokens) != len(sizes):
+        raise ValueError("amounts must have the same length as token_addresses")
+    if amounts is not None:
+        sizes = [validate_amount(size) for size in sizes]
+    if not tokens:
+        return []
+    resolved = int(await dank_mids.eth.block_number if block is None else block)
+
+    async def quote(item: tuple[Any, int | Decimal | None]) -> PriceResult | None:
+        token, size = item
+        lookup: Any = get_price
+        result: PriceResult | None = await lookup(
+            token,
+            resolved,
+            amount=size,
+            fail_to_None=fail_to_None,
+            skip_cache=skip_cache,
+            silent=silent,
+            sync=False,
+        )
+        return result
+
+    return await bounded_map(quote, zip(tokens, sizes))
 
 
 @overload
@@ -279,6 +331,7 @@ def map_prices(
 
     Args:
         token_addresses: An iterable of token addresses to price.
+        amounts: Optional aligned integer or Decimal amounts in readable tokens. Duplicate tokens retain their own amounts and input order.
         block (optional): The block number at which to get the prices.
         fail_to_None (optional): If True, map tokens whose price couldn't be determined to None. Defaults to False.
         skip_cache (optional): If True, bypass the cache and fetch prices directly. Defaults to :obj:`ENVS.SKIP_CACHE`.
@@ -357,7 +410,7 @@ def __cache(get_price: _PriceLookup) -> _PriceLookup:
         key = (token, block)
         if use_cache:
             if key in prices:
-                return prices[key]
+                return deepcopy(prices[key])
             cached_price = await db.get_price(token, block)
             if cached_price is not None and valid_price(cached_price):
                 cache_logger.debug("disk cache -> %s", cached_price)
@@ -371,7 +424,7 @@ def __cache(get_price: _PriceLookup) -> _PriceLookup:
             silent=silent,
         )
         if result is not None and valid_price(result) and use_cache:
-            prices[key] = result
+            prices[key] = deepcopy(result)
             # Store only the numeric price in DB, not the derivation path
             db.set_price(token, block, Decimal(str(float(result.price))))
         return result
@@ -712,8 +765,12 @@ async def _exit_early_for_known_tokens(
             source = f"Solidex pricing for {addr_short}"
 
     elif bucket == "stable usd":
-        price = UsdPrice(1)
-        source = "Stablecoin pegged 1:1 to USD"
+        # A classification can come from memory or disk. It never fixes a USD price.
+        if chainlink:
+            oracle: Any = chainlink
+            price = await oracle.get_price(token_address, block, sync=False)
+        if valid_price(price):
+            source = f"Chainlink historical stablecoin USD for {token_address}"
 
     elif bucket == "synthetix":
         price = await synthetix.get_price(token_address, block, sync=False)
@@ -869,30 +926,12 @@ async def _get_price_from_dexes(
         A tuple of ``(price, source_string)`` if the price can be determined from DEXes,
         or ``(None, None)`` otherwise.
     """
-    candidates = [
-        (
-            f"Uniswap for {token}",
-            uniswap_multiplexer.get_price(
-                token, block, ignore_pools=ignore_pools, skip_cache=skip_cache, sync=False
-            ),
-        ),
-        (
-            f"Balancer for {token}",
-            balancer_multiplexer.get_price(
-                token, block, ignore_pools=ignore_pools, skip_cache=skip_cache, sync=False
-            ),
-        ),
-    ]
-    if curve:
-        candidates.append(
-            (
-                f"Curve for {token}",
-                curve.get_price_for_underlying(
-                    token, block, ignore_pools=ignore_pools, skip_cache=skip_cache, sync=False
-                ),
-            )
-        )
-    return await select_price(candidates)
+    from y.prices._routing import liquidity_price
+
+    price = await liquidity_price(
+        str(token), block, ignore_pools=ignore_pools, skip_cache=skip_cache
+    )
+    return price, "Liquidity-based price estimation" if price is not None else None
 
 
 def _fail_appropriately(

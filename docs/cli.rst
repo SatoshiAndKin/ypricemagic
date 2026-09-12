@@ -101,3 +101,10 @@ Usage::
 
 The command uses ``YPRICEMAGIC_SQLITE_PATH`` when set, or the default database at
 ``~/.ypricemagic/ypricemagic.sqlite``. It does not stop or restart other processes.
+
+Historical price audit
+----------------------
+
+``ypricemagic audit-prices MANIFEST --json REPORT.json --csv REPORT.csv``
+compares historical public prices against DeFiLlama with a 5% spot tolerance.
+See :doc:`amount-quotes` for the manifest, coverage rules, and exit codes.

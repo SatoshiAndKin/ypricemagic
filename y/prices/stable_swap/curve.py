@@ -1,6 +1,5 @@
 from asyncio import CancelledError, Task, create_task, sleep
 from collections import defaultdict
-from decimal import Decimal
 from enum import IntEnum
 from functools import cached_property
 from itertools import filterfalse
@@ -9,7 +8,6 @@ from typing import Any, TypeVar
 
 import a_sync
 import brownie
-import dank_mids
 from a_sync import igather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import ZERO_ADDRESS
@@ -46,13 +44,6 @@ from y.exceptions import (
 )
 from y.interfaces.curve.CurveRegistry import CURVE_REGISTRY_ABI
 from y.networks import Network
-from y.prices._candidates import (
-    derive_price,
-    pool_address,
-    pool_is_ignored,
-    select_price,
-    valid_price,
-)
 from y.utils.events import ProcessedEvents
 from y.utils.multicall import multicall_same_func_same_contract_different_inputs
 from y.utils.raw_calls import raw_call
@@ -687,48 +678,16 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
         ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,
     ) -> PriceResult | None:
-        if block is None:
-            block = await dank_mids.eth.block_number
-        pools = [
-            pool
-            for pool in (await self.__coin_to_pools__).get(token_in, ())
-            if not pool_is_ignored(pool, ignore_pools)
-        ]
+        """Use native quotes from liquidity-ranked Curve pools."""
+        from y.prices._routing import liquidity_price
 
-        @stuck_coro_debugger
-        async def quote(pool):
-            if await pool.deploy_block(when_no_history_return_0=True, sync=False) > block:
-                return None
-            coins = await pool.__coins__
-            # Only two-coin underlying quotes are supported by this adapter.
-            if len(coins) != 2:
-                return None
-            index = await pool.get_coin_index(token_in, sync=False)
-            dy = await pool.get_dy(
-                index,
-                1 - index,
-                block=block,
-                ignore_pools=ignore_pools,
-                skip_cache=skip_cache,
-                sync=False,
-            )
-            if dy is None:
-                return None
-            child = await dy.token.price(
-                block=block, skip_cache=skip_cache, ignore_pools=(*ignore_pools, pool), sync=False
-            )
-            if valid_price(child):
-                return derive_price(
-                    token_in,
-                    (await dy.__readable__) * Decimal(str(float(child))),
-                    f"Curve pool {pool.address} via {dy.token.address}",
-                    child,
-                )
-
-        price, _ = await select_price(
-            (f"Curve {pool_address(pool)}", quote(pool)) for pool in pools
+        return await liquidity_price(
+            str(token_in),
+            block,
+            ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
+            first_markets=("Curve",),
         )
-        return price
 
     @a_sync.aka.cached_property
     async def coin_to_pools(self) -> dict[str, list[CurvePool]]:

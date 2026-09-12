@@ -10,7 +10,7 @@ from y import ENVIRONMENT_VARIABLES as ENVS
 from y import exceptions
 from y._decorators import stuck_coro_debugger
 from y.datatypes import AnyAddressType, Block, Pool, PriceResult, UsdPrice
-from y.prices._candidates import derive_price, gather_owned, select_price, valid_price
+from y.prices._candidates import derive_price, gather_owned, valid_price
 from y.prices.dex.balancer._abc import BalancerABC
 from y.prices.dex.balancer.v1 import BalancerV1
 from y.prices.dex.balancer.v2 import BalancerV2
@@ -190,26 +190,15 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
             if price is not None and valid_price(price):
                 return derive_price(token_address, price, f"Balancer pool {token_address}")
 
-        versions = await self.__versions__
-        price, source = await select_price(
-            (
-                f"Balancer {type(version).__name__}",
-                version.get_token_price(
-                    token_address,
-                    block,
-                    skip_cache=skip_cache,
-                    ignore_pools=ignore_pools,
-                    sync=False,
-                ),
-            )
-            for version in versions
+        from y.prices._routing import liquidity_price
+
+        return await liquidity_price(
+            str(token_address),
+            block,
+            ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
+            first_markets=("Balancer V1", "Balancer V2"),
         )
-        if price is not None:
-            return (
-                price
-                if isinstance(price, PriceResult)
-                else derive_price(token_address, float(price), source or "Balancer")
-            )
 
     # cached forever because not many items
     @a_sync.a_sync(

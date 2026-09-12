@@ -2,13 +2,11 @@ import logging
 from decimal import Decimal
 
 import a_sync
-import dank_mids
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import chain
 from brownie.convert.datatypes import EthAddress
 from brownie.exceptions import VirtualMachineError
 from eth_abi.exceptions import InvalidPointer
-from multicall import Call
 from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
@@ -16,7 +14,7 @@ from y import ENVIRONMENT_VARIABLES as ENVS
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import dai, usdc, wbtc, weth
-from y.contracts import Contract, contract_creation_block_async
+from y.contracts import Contract
 from y.datatypes import (
     Address,
     AddressOrContract,
@@ -32,7 +30,6 @@ from y.prices._candidates import (
     derive_price,
     gather_owned,
     pool_is_ignored,
-    select_price,
     valid_price,
 )
 from y.prices.dex.balancer._abc import BalancerABC, BalancerPool
@@ -281,133 +278,16 @@ class BalancerV1(BalancerABC[BalancerV1Pool]):
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
     ) -> PriceResult | None:
-        """Get the price of a token in the pool.
+        """Use one liquidity-ranked Balancer V1 pool for the full input."""
+        from y.prices._routing import liquidity_price
 
-        Args:
-            token_address: The token address or contract.
-            block: The block number to query.
-            skip_cache: Whether to skip the cache.
-
-        Returns:
-            The price of the token in USD, or None if it cannot be determined.
-
-        Examples:
-            >>> balancer = BalancerV1(asynchronous=True)
-            >>> await balancer.get_token_price("0xabcdefabcdefabcdefabcdefabcdefabcdef")
-            1.23
-
-        See Also:
-            - :class:`~y.datatypes.UsdPrice`
-        """
-        if self.exchange_proxy is None:
-            return None
-        if block is None:
-            block = await dank_mids.eth.block_number
-        if block < await contract_creation_block_async(self.exchange_proxy, True):
-            return None
-
-        @stuck_coro_debugger
-        async def quote(token_out, scale):
-            amount_in = int(
-                Decimal(await ERC20._get_scale_for(token_address)) * Decimal(str(scale))
-            )
-            split = await self._get_split(token_address, token_out, amount_in, block)
-            if split is None:
-                return None
-            pools = tuple(dict.fromkeys(str(swap["pool"]) for swap in split["swaps"]))
-
-            async def convert_output(amount_out, selected_pools, source):
-                return await _calc_out_value(
-                    token_address,
-                    token_out,
-                    amount_out,
-                    scale,
-                    block,
-                    skip_cache=skip_cache,
-                    ignore_pools=(*ignore_pools, *selected_pools),
-                    source=source,
-                )
-
-            @stuck_coro_debugger
-            async def quote_pool(pool):
-                balance_in, weight_in, balance_out, weight_out, fee, max_in_ratio, public_swap = (
-                    await gather_owned(
-                        [
-                            Call(
-                                pool,
-                                ["getBalance(address)(uint256)", str(token_address)],
-                                block_id=block,
-                            ),
-                            Call(
-                                pool,
-                                ["getDenormalizedWeight(address)(uint256)", str(token_address)],
-                                block_id=block,
-                            ),
-                            Call(
-                                pool,
-                                ["getBalance(address)(uint256)", str(token_out)],
-                                block_id=block,
-                            ),
-                            Call(
-                                pool,
-                                ["getDenormalizedWeight(address)(uint256)", str(token_out)],
-                                block_id=block,
-                            ),
-                            Call(pool, "getSwapFee()(uint256)", block_id=block),
-                            Call(pool, "MAX_IN_RATIO()(uint256)", block_id=block),
-                            Call(pool, "isPublicSwap()(bool)", block_id=block),
-                        ]
-                    )
-                )
-                # BPool.swapExactAmountIn uses fixed-point bmul with rounding.
-                if (
-                    not public_swap
-                    or amount_in > (balance_in * max_in_ratio + 5 * 10**17) // 10**18
-                ):
-                    return None
-                amount_out = await Call(
-                    pool,
-                    [
-                        "calcOutGivenIn(uint256,uint256,uint256,uint256,uint256,uint256)(uint256)",
-                        balance_in,
-                        weight_in,
-                        balance_out,
-                        weight_out,
-                        amount_in,
-                        fee,
-                    ],
-                    block_id=block,
-                )
-                return await convert_output(
-                    amount_out, (pool,), f"Balancer V1 pool {pool} via {token_out} size {scale}"
-                )
-
-            candidates = [
-                (f"Balancer V1 pool {pool} {token_out} {scale}", quote_pool(pool))
-                for pool in pools
-                if not pool_is_ignored(pool, ignore_pools)
-            ]
-            if not any(pool_is_ignored(pool, ignore_pools) for pool in pools):
-                candidates.append(
-                    (
-                        f"Balancer V1 split {token_out} {scale}",
-                        convert_output(
-                            split["totalOutput"],
-                            pools,
-                            f"Balancer V1 split {' '.join(pools)} via {token_out} size {scale}",
-                        ),
-                    )
-                )
-            price, _ = await select_price(candidates)
-            return price
-
-        price, _ = await select_price(
-            (f"Balancer V1 {token_out.address} {scale}", quote(token_out, scale))
-            for token_out in TOKENOUTS_TO_TRY
-            if token_out != token_address
-            for scale in SCALES_TO_TRY
+        return await liquidity_price(
+            str(token_address),
+            block,
+            ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
+            first_markets=("Balancer V1",),
         )
-        return price
 
     @stuck_coro_debugger
     async def _get_split(self, token_in, token_out, amount_in, block):

@@ -3,7 +3,6 @@ import threading
 from contextlib import suppress
 from typing import Union
 
-import dank_mids
 from a_sync import ASyncGenericSingleton, igather
 from brownie import ZERO_ADDRESS
 from web3.exceptions import ContractLogicError
@@ -15,7 +14,6 @@ from y.classes.common import ERC20
 from y.constants import CONNECTED_TO_MAINNET
 from y.datatypes import Address, AnyAddressType, Block, Pool, PriceResult
 from y.exceptions import NonStandardERC20, contract_not_verified
-from y.prices._candidates import derive_price, select_price
 from y.prices.dex.solidly import SolidlyRouter
 from y.prices.dex.uniswap import v3
 from y.prices.dex.uniswap.v1 import UniswapV1
@@ -130,44 +128,16 @@ class UniswapMultiplexer(ASyncGenericSingleton):
         ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,
     ) -> PriceResult | None:
-        """
-        Calculate a price based on Uniswap Router quote for selling one `token_in`.
-        Compare every supported router and select its highest valid USD quote.
+        """Use liquidity ranking across supported Uniswap pools."""
+        from y.prices._routing import liquidity_price
 
-        Args:
-            token_in: The address of the input token.
-            block: The block number to query. Defaults to the latest block.
-            ignore_pools: A tuple of Pool objects to ignore when checking liquidity.
-            skip_cache: If True, skip using the cache while fetching price data.
-
-        Examples:
-            >>> multiplexer = UniswapMultiplexer(asynchronous=True)
-            >>> price = await multiplexer.get_price("0xTokenAddress", block=12345678)
-            >>> print(price)
-
-        See Also:
-            - :meth:`~UniswapMultiplexer.routers_by_depth`
-        """
-        token_in = await convert.to_address_async(token_in)
-        if block is None:
-            block = await dank_mids.eth.block_number
-        price, source = await select_price(
-            (
-                f"Uniswap {type(router).__name__} {getattr(router, 'address', getattr(router, '_factory', 'v1'))}",
-                router.get_price(
-                    token_in,
-                    block=block,
-                    ignore_pools=ignore_pools,
-                    skip_cache=skip_cache,
-                    sync=False,
-                ),
-            )
-            for router in self.uniswaps
+        return await liquidity_price(
+            str(token_in),
+            block,
+            ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
+            first_markets=("Uniswap V1", "Uniswap V2", "Uniswap V3", "Solidly", "Velodrome V2"),
         )
-        if price is not None:
-            if isinstance(price, PriceResult):
-                return price
-            return derive_price(token_in, float(price), source or "Uniswap")
 
     @stuck_coro_debugger
     async def routers_by_depth(

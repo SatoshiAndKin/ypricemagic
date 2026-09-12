@@ -1,9 +1,5 @@
 import sys
-
-try:
-    import tomllib
-except ModuleNotFoundError:
-    import tomli as tomllib
+import tomllib
 from pathlib import Path
 
 from setuptools import find_packages, setup
@@ -46,12 +42,10 @@ setup(
     author_email="bobthebuidlerdefi@gmail.com",
     url="https://github.com/BobTheBuidler/ypricemagic",
     license="MIT",
-    python_requires=">=3.10,<3.14",
+    python_requires=">=3.11,<3.14",
     classifiers=[
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",

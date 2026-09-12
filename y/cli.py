@@ -231,6 +231,13 @@ def main() -> None:
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
+    audit_parser = subparsers.add_parser(
+        "audit-prices", help="Audit historical prices against DeFiLlama"
+    )
+    audit_parser.add_argument("manifest", type=Path)
+    audit_parser.add_argument("--json", type=Path, required=True, dest="json_report")
+    audit_parser.add_argument("--csv", type=Path, required=True, dest="csv_report")
+
     # db command parser
     db_parser = subparsers.add_parser(
         "db", help="Perform maintenance operations on ypricemagic's database"
@@ -309,7 +316,11 @@ def main() -> None:
     args = parser.parse_args()
 
     # Dispatch commands
-    if args.command == "db":
+    if args.command == "audit-prices":
+        from y.audit import run_manifest
+
+        sys.exit(run_manifest(args.manifest, args.json_report, args.csv_report))
+    elif args.command == "db":
         if args.db_command == "reset-prices":
             db_reset_prices(args.backup, args.chain)
         elif args.db_command == "nuke":
