@@ -1,6 +1,6 @@
 {
   "source_commit": "ee42ceb9493abf026c24b05ae0deefa3caee87dd",
-  "recorded_at": "2026-09-12T20:41:31.490470+00:00",
+  "recorded_at": "2026-09-12T21:06:44.550080+00:00",
   "readiness": "incomplete",
   "native_builds": [
     {
@@ -146,10 +146,10 @@
     "decision": "leave test workload and thresholds unchanged; interleaving did not improve batching"
   },
   "pending": [
-    "offline CI run with fresh checkout compilation",
     "complete mainnet audit",
     "original and additional native quote command exit results",
-    "complete sequential baseline and changed pricing suites"
+    "complete sequential baseline and changed pricing suites",
+    "GitHub approval for generated-commit checks"
   ],
   "native_artifact_commit": "aae3c92253e6e5865d695e97f50d7b98ee043c89",
   "pinned_dependency_commit": "6a437e9d4f8637660b6aef34885e3e9f6cb0ce9d",
@@ -233,7 +233,7 @@
       "retain offline-only unit tests, dependency caches and path filters"
     ],
     "actionlint": "1.7.12 passed",
-    "ci_status": "pending"
+    "ci_status": "success"
   },
   "native_artifact_units": [
     {
@@ -254,5 +254,183 @@
       "failed": 0,
       "artifact_commit": "aae3c92253e6e5865d695e97f50d7b98ee043c89"
     }
-  ]
+  ],
+  "ci_offline_units": {
+    "commit": "6a437e9d4f8637660b6aef34885e3e9f6cb0ce9d",
+    "url": "https://github.com/SatoshiAndKin/dank_mids/actions/runs/34718445036",
+    "conclusion": "success",
+    "fresh_checkout_native_builds": true,
+    "jobs": [
+      {
+        "job": "unit (macos-latest, 3.10)",
+        "passed": 121,
+        "failed": 0,
+        "warnings": 8,
+        "seconds": 48.27
+      },
+      {
+        "job": "unit (windows-latest, 3.13)",
+        "passed": 121,
+        "failed": 0,
+        "warnings": 2325,
+        "seconds": 17.57
+      },
+      {
+        "job": "unit (macos-latest, 3.12)",
+        "passed": 121,
+        "failed": 0,
+        "warnings": 2325,
+        "seconds": 54.39
+      },
+      {
+        "job": "unit (ubuntu-latest, 3.12)",
+        "passed": 121,
+        "failed": 0,
+        "warnings": 2325,
+        "seconds": 13.17
+      },
+      {
+        "job": "unit (ubuntu-latest, 3.10)",
+        "passed": 121,
+        "failed": 0,
+        "warnings": 8,
+        "seconds": 13.38
+      },
+      {
+        "job": "unit (ubuntu-latest, 3.11)",
+        "passed": 121,
+        "failed": 0,
+        "warnings": 8,
+        "seconds": 12.12
+      },
+      {
+        "job": "unit (macos-latest, 3.13)",
+        "passed": 121,
+        "failed": 0,
+        "warnings": 2325,
+        "seconds": 48.13
+      },
+      {
+        "job": "unit (macos-latest, 3.11)",
+        "passed": 121,
+        "failed": 0,
+        "warnings": 8,
+        "seconds": 46.01
+      },
+      {
+        "job": "unit (windows-latest, 3.10)",
+        "passed": 121,
+        "failed": 0,
+        "warnings": 8,
+        "seconds": 17.87
+      },
+      {
+        "job": "unit (ubuntu-latest, 3.13)",
+        "passed": 121,
+        "failed": 0,
+        "warnings": 2325,
+        "seconds": 13.22
+      },
+      {
+        "job": "unit (windows-latest, 3.12)",
+        "passed": 121,
+        "failed": 0,
+        "warnings": 2325,
+        "seconds": 17.01
+      },
+      {
+        "job": "unit (windows-latest, 3.11)",
+        "passed": 121,
+        "failed": 0,
+        "warnings": 8,
+        "seconds": 17.3
+      }
+    ]
+  },
+  "ci_workflow_native_build": {
+    "commit": "6a437e9d4f8637660b6aef34885e3e9f6cb0ce9d",
+    "url": "https://github.com/SatoshiAndKin/dank_mids/actions/runs/34718445029",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "build-matrix (macos-latest, 3.13, 313)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.13, 313)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.14, 314)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.11, 311)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.10, 310)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.12, 312)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.10, 310)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.14, 314)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.11, 311)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.12, 312)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.10, 310)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.11, 311)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.12, 312)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.14, 314)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.13, 313)",
+        "conclusion": "success"
+      },
+      {
+        "name": "aggregate-build-files",
+        "conclusion": "success"
+      }
+    ],
+    "artifact_commit": "a0e16dacbc7cdf910d442cbdbca9de8969e3ac32",
+    "python_and_configuration_changes": false
+  },
+  "ci_mypy": {
+    "url": "https://github.com/SatoshiAndKin/dank_mids/actions/runs/34718445037",
+    "conclusion": "failure",
+    "errors_per_job": 80,
+    "files_per_job": 11,
+    "jobs": 12,
+    "environment": "build dependencies; differs from local full development environment"
+  },
+  "generated_commit_checks": {
+    "commit": "a0e16dacbc7cdf910d442cbdbca9de8969e3ac32",
+    "conclusion": "action_required",
+    "note": "The parent source revision passed offline unit, native build and lint CI. Generated-commit checks require GitHub approval."
+  }
 }
