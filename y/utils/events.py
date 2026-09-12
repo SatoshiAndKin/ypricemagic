@@ -31,7 +31,7 @@ from web3.middleware.filter import block_ranges
 from web3.types import LogReceipt
 
 from y import ENVIRONMENT_VARIABLES as ENVS
-from y._db.common import Filter, _clean_addresses
+from y._db.common import Filter, _clean_addresses, make_executor
 from y.datatypes import Address, AnyAddressType, Block
 from y.exceptions import reraise_excs_with_extra_context
 from y.utils.cache import memory
@@ -44,6 +44,9 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 logger = getLogger(__name__)
+
+# Event decoding must not wait behind writes on a filter's database executor.
+_decode_threads = make_executor(1, 1, "ypricemagic event decoder")
 
 
 def decode_logs(logs: Iterable[LogReceipt] | Iterable[Log]) -> EventDict:
@@ -758,7 +761,7 @@ class Events(LogFilter):
             >>> await events._extend(logs)
         """
         if logs:
-            decoded = await self.executor.run(decode_logs, logs)
+            decoded = await _decode_threads.run(decode_logs, logs)
             # let the event loop run once since the previous and next lines are potentially blocking
             await sleep(0)
             self._objects.extend(decoded)
@@ -857,7 +860,7 @@ class ProcessedEvents(Events, a_sync.ASyncIterable[T]):
             >>> await processed_events._extend(logs)
         """
         if logs:
-            decoded = await self.executor.run(decode_logs, logs)
+            decoded = await _decode_threads.run(decode_logs, logs)
 
             # let the event loop run once since the previous and next blocks are potentially blocking
             await sleep(0)
