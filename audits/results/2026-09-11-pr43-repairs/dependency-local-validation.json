@@ -748,5 +748,53 @@
       "configured_extensions_checked": true
     }
   ],
-  "version_note": "NumPy 2.5.3 requires Python >=3.12. Python 3.11 uses the compatible 2.4.6 version. Baseline and changed Python 3.12 runs keep identical resolved dependencies."
+  "version_note": "NumPy 2.5.3 requires Python >=3.12. Python 3.11 uses the compatible 2.4.6 version. Baseline and changed Python 3.12 runs keep identical resolved dependencies.",
+  "offline_waiter_repair": {
+    "commit": "ad1ccc1cdd6517a047deb1679a5517ce966422f1",
+    "native_artifact_commit": "ee2079c0f452be7187fc93685070c3116e9717fb",
+    "production_source_unchanged": true,
+    "before": {
+      "python": "3.11.14",
+      "passed": 14,
+      "failed": 5,
+      "scope": "tests/unit/test_gc_batch_contract.py"
+    },
+    "reason": "The tests must directly await the Future as RPCRequest.get_response does. Python 3.11 wait_for observes a Future through callbacks without entering __await__.",
+    "after": [
+      {
+        "python": "3.11.14",
+        "passed": 115,
+        "failed": 0,
+        "compiled_modules": [
+          "dank_mids/controller.cpython-311-darwin.so",
+          "dank_mids/helpers/_rate_limit.cpython-311-darwin.so"
+        ]
+      },
+      {
+        "python": "3.12.12",
+        "passed": 115,
+        "failed": 0,
+        "compiled_modules": [
+          "dank_mids/controller.cpython-312-darwin.so",
+          "dank_mids/helpers/_rate_limit.cpython-312-darwin.so"
+        ]
+      },
+      {
+        "python": "3.13.12",
+        "passed": 115,
+        "failed": 0,
+        "compiled_modules": [
+          "dank_mids/controller.cpython-313-darwin.so",
+          "dank_mids/helpers/_rate_limit.cpython-313-darwin.so"
+        ]
+      }
+    ],
+    "ci_entry_point": {
+      "working_directory": "tests/unit",
+      "command": "pytest",
+      "passed": 115,
+      "failed": 0
+    },
+    "workflow_change": "Remove redundant setuptools reinstall. Poetry already locks setuptools 80.10.2. Keep offline tests, path filters, and caches."
+  }
 }
