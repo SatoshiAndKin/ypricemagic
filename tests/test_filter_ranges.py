@@ -107,3 +107,35 @@ async def test_explicit_chunk_limit_keeps_exact_scan_boundary() -> None:
         (17, 26),
     ]
     assert state._set_lock.await_args.args == (26,)
+
+
+@pytest.mark.asyncio_cooperative
+async def test_scan_refills_consumed_slots_before_the_whole_window_finishes() -> None:
+    window_size = int(ENVS.GETLOGS_DOP)
+    release = asyncio.Event()
+    refilled = asyncio.Event()
+    calls: list[int] = []
+
+    async def fetch(i: int, start: int, end: int, debug: bool) -> tuple[int, int, list[int]]:
+        calls.append(i)
+        if i == 1:
+            await release.wait()
+        if i == window_size:
+            refilled.set()
+        return i, end, [start]
+
+    state = scanner(AsyncMock(side_effect=fetch))
+    task = asyncio.ensure_future(Filter._load_range(state, 0, 999))
+    try:
+        await asyncio.wait_for(refilled.wait(), 1)
+        # Only index zero can be consumed while index one is pending. Finished
+        # later results still occupy their slots in the bounded scan window.
+        assert len(calls) == window_size + 1
+        assert state._extend.await_args_list[0].args == ([0],)
+    finally:
+        release.set()
+        await asyncio.wait_for(task, 1)
+    assert [call.args[0] for call in state._extend.await_args_list] == [
+        [start] for start in range(0, 1000, 10)
+    ]
+    assert state._set_lock.await_args.args == (999,)
