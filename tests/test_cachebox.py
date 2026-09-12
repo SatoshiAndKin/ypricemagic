@@ -303,5 +303,5 @@ def _unbounded_memory_cache_lines(source: str) -> list[int]:
         ('"cache_type=\\"memory\\""', []),
     ],
 )
-def test_memory_cache_bound_scan_handles_complete_calls(source, expected):
+def test_memory_cache_bound_scan_handles_complete_calls(source: str, expected: list[int]) -> None:
     assert _unbounded_memory_cache_lines(source) == expected
