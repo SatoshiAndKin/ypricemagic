@@ -1,0 +1,258 @@
+{
+  "source_commit": "ee42ceb9493abf026c24b05ae0deefa3caee87dd",
+  "recorded_at": "2026-09-12T20:41:31.490470+00:00",
+  "readiness": "incomplete",
+  "native_builds": [
+    {
+      "python": "3.11.14",
+      "status": "pass",
+      "method": "repository mypyc build script"
+    },
+    {
+      "python": "3.12.12",
+      "status": "pass",
+      "method": "repository mypyc build script"
+    },
+    {
+      "python": "3.13.12",
+      "status": "pass",
+      "method": "repository mypyc build script"
+    }
+  ],
+  "units": [
+    {
+      "python": "3.11.14",
+      "passed": 121,
+      "failed": 0,
+      "native_modules_checked": [
+        "controller.cpython-311-darwin.so",
+        "helpers/_rate_limit.cpython-311-darwin.so"
+      ]
+    },
+    {
+      "python": "3.12.12",
+      "passed": 121,
+      "failed": 0,
+      "native_modules_checked": [
+        "controller.cpython-312-darwin.so",
+        "helpers/_rate_limit.cpython-312-darwin.so"
+      ]
+    },
+    {
+      "python": "3.13.12",
+      "passed": 121,
+      "failed": 0,
+      "native_modules_checked": [
+        "controller.cpython-313-darwin.so",
+        "helpers/_rate_limit.cpython-313-darwin.so"
+      ]
+    }
+  ],
+  "pricing_regressions": [
+    {
+      "python": "3.11.14",
+      "passed": 154,
+      "failed": 0,
+      "configured_pricing_extensions_checked": true,
+      "dependency": "locally rebuilt native source ee42ceb949"
+    },
+    {
+      "python": "3.12.12",
+      "passed": 154,
+      "failed": 0,
+      "configured_pricing_extensions_checked": true,
+      "dependency": "locally rebuilt native source ee42ceb949"
+    },
+    {
+      "python": "3.13.12",
+      "passed": 154,
+      "failed": 0,
+      "configured_pricing_extensions_checked": true,
+      "dependency": "locally rebuilt native source ee42ceb949"
+    }
+  ],
+  "unit_baseline": {
+    "python": "3.12.12",
+    "dependency_source": "fbf10607151aa9177910add1da32fe2f37f61548",
+    "passed": 120,
+    "failed": 1,
+    "same_test_sources": true,
+    "same_runtime_environment": true,
+    "failures": [
+      {
+        "test": "tests/unit/test_gc_batch_contract.py::test_multicall_bisect_retry_timeout_does_not_dispatch_duplicate_batch",
+        "error": "CancelledError at the compiled controller wait_for call"
+      }
+    ]
+  },
+  "dispatch_coverage": {
+    "statements": 16,
+    "covered": 16,
+    "missing": [],
+    "method": "separate 121-test coverage run instruments the source dispatch method; native runs are listed separately"
+  },
+  "mypy": {
+    "before_errors": 205,
+    "after_errors": 205,
+    "added_diagnostics": 0,
+    "removed_diagnostics": 0,
+    "complete_diagnostic_records_compared": true
+  },
+  "wheel_checks": {
+    "python": "3.12.12",
+    "all_configured_modules_present": true,
+    "local_artifacts_restored_to_remote_generated_commit": "50038d53cabb5d511f24854759ea41b8190b29a9"
+  },
+  "integration": {
+    "python": "3.12.12",
+    "passed": 32,
+    "failed": 1,
+    "elapsed_seconds": 25.7,
+    "failures": [
+      {
+        "test": "tests/integration/test_dank_mids.py::test_dank_middleware",
+        "error": "Batched 62 multicalls into 62 requests. Performance underwhelming.",
+        "assertion": "multicalls / requests > 1",
+        "multicalls": 62,
+        "requests": 62
+      }
+    ],
+    "rpc_errors_observed": [
+      {
+        "code": -32000,
+        "message": "historical state bb29792f4903e6adba715bb351dce271f1e934281665b180795af0e778f5698c is not available"
+      }
+    ],
+    "note": "test_json_batch passed after the recorded RPC errors; the performance assertion remains a failure and is unchanged."
+  },
+  "batching_order_diagnostic": {
+    "samples": [
+      {
+        "order": "grouped",
+        "block": 25963747,
+        "calls": 12625,
+        "multicalls": 62,
+        "requests": 55
+      },
+      {
+        "order": "interleaved",
+        "block": 25963747,
+        "calls": 12641,
+        "multicalls": 93,
+        "requests": 140
+      }
+    ],
+    "boundary": "same local archive node and same two blocks; measurements are not a readiness pass",
+    "decision": "leave test workload and thresholds unchanged; interleaving did not improve batching"
+  },
+  "pending": [
+    "offline CI run with fresh checkout compilation",
+    "complete mainnet audit",
+    "original and additional native quote command exit results",
+    "complete sequential baseline and changed pricing suites"
+  ],
+  "native_artifact_commit": "aae3c92253e6e5865d695e97f50d7b98ee043c89",
+  "pinned_dependency_commit": "6a437e9d4f8637660b6aef34885e3e9f6cb0ce9d",
+  "ci_native_build": {
+    "source_commit": "ee42ceb9493abf026c24b05ae0deefa3caee87dd",
+    "url": "https://github.com/SatoshiAndKin/dank_mids/actions/runs/34717755481",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "build-matrix (ubuntu-latest, 3.12, 312)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.12, 312)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.14, 314)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.13, 313)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.11, 311)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.10, 310)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.10, 310)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.11, 311)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.10, 310)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (ubuntu-latest, 3.13, 313)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.11, 311)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (macos-latest, 3.14, 314)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.14, 314)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.13, 313)",
+        "conclusion": "success"
+      },
+      {
+        "name": "build-matrix (windows-latest, 3.12, 312)",
+        "conclusion": "success"
+      },
+      {
+        "name": "aggregate-build-files",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "workflow_repair": {
+    "commit": "6a437e9d4f8637660b6aef34885e3e9f6cb0ce9d",
+    "changes": [
+      "build native modules before unit tests; cache by source, Python version, OS and architecture",
+      "always configure cached Poetry and its PATH",
+      "use the cached project .venv",
+      "retain offline-only unit tests, dependency caches and path filters"
+    ],
+    "actionlint": "1.7.12 passed",
+    "ci_status": "pending"
+  },
+  "native_artifact_units": [
+    {
+      "python": "3.11.14",
+      "passed": 121,
+      "failed": 0,
+      "artifact_commit": "aae3c92253e6e5865d695e97f50d7b98ee043c89"
+    },
+    {
+      "python": "3.12.12",
+      "passed": 121,
+      "failed": 0,
+      "artifact_commit": "aae3c92253e6e5865d695e97f50d7b98ee043c89"
+    },
+    {
+      "python": "3.13.12",
+      "passed": 121,
+      "failed": 0,
+      "artifact_commit": "aae3c92253e6e5865d695e97f50d7b98ee043c89"
+    }
+  ]
+}
