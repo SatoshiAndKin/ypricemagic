@@ -4,7 +4,7 @@ bobs_lazy_logging==0.0.5
 cachebox>=5.2,<6
 cchecksum>=0.0.3,<1
 checksum_dict>=2.1.9,<3
-dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@6a437e9d4f8637660b6aef34885e3e9f6cb0ce9d
+dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@0d3c2b82c7ab42af918d7aa44be8c6b249769b98
 eth-brownie==1.22.0.dev2
 eth_retry>=0.2.1
 evmspec>=0.3.4

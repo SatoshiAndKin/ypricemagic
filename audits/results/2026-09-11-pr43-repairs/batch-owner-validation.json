@@ -1,0 +1,209 @@
+{
+  "source_commit": "0d3c2b82c7ab42af918d7aa44be8c6b249769b98",
+  "recorded_at": "2026-09-12T21:45:45.146383+00:00",
+  "readiness": "incomplete",
+  "repair": "Child RPC calls retain the enclosing batch as their owner, preventing a second standalone multicall dispatch.",
+  "parent_native_artifact_commit": "a0e16dacbc7cdf910d442cbdbca9de8969e3ac32",
+  "native_builds": [
+    {
+      "python": "3.11.14",
+      "status": "pass"
+    },
+    {
+      "python": "3.12.12",
+      "status": "pass"
+    },
+    {
+      "python": "3.13.12",
+      "status": "pass"
+    }
+  ],
+  "unit_regression_before": {
+    "test": "test_native_batcher_preserves_hashes_and_canonical_requirement",
+    "expected_multicalls": 3,
+    "observed_multicalls": 5,
+    "status": "failure"
+  },
+  "units": [
+    {
+      "python": "3.11.14",
+      "passed": 121,
+      "failed": 0,
+      "seconds": 5.62,
+      "native_extensions_checked": true
+    },
+    {
+      "python": "3.12.12",
+      "passed": 121,
+      "failed": 0,
+      "seconds": 5.74,
+      "native_extensions_checked": true
+    },
+    {
+      "python": "3.13.12",
+      "passed": 121,
+      "failed": 0,
+      "seconds": 5.8,
+      "native_extensions_checked": true
+    }
+  ],
+  "pricing_regressions": [
+    {
+      "python": "3.11.14",
+      "passed": 154,
+      "failed": 0,
+      "seconds": 0.47,
+      "native_extensions_checked": true,
+      "checkout_revision": "04baa5db3f22cb402f0a62efab480f3f4e4cb5d3"
+    },
+    {
+      "python": "3.12.12",
+      "passed": 154,
+      "failed": 0,
+      "seconds": 0.43,
+      "native_extensions_checked": true,
+      "checkout_revision": "04baa5db3f22cb402f0a62efab480f3f4e4cb5d3"
+    },
+    {
+      "python": "3.13.12",
+      "passed": 154,
+      "failed": 0,
+      "seconds": 0.4,
+      "native_extensions_checked": true,
+      "checkout_revision": "04baa5db3f22cb402f0a62efab480f3f4e4cb5d3"
+    }
+  ],
+  "cancellation_check": "Cancel one caller after its native HTTP request starts. Require the remaining callers to finish and every hash/canonical group to execute exactly once.",
+  "test_harness_repairs": [
+    "Disabled the unused Brownie/Ethereum project-runner plugins for local unit execution.",
+    "Run both controlled HTTP cases on one caller event loop, matching the shared native execution lock. The isolated cancellation case passed before the harness correction."
+  ],
+  "controlled_http": {
+    "workload_calls": 12500,
+    "before": [
+      {
+        "response_delay_seconds": 0,
+        "wire_requests_with_eth_call": 15,
+        "largest_wire_batch": 2,
+        "wire_multicalls": 16,
+        "elapsed_seconds": 0.7749137501232326,
+        "controller_counters": {
+          "calls": 12528,
+          "multicalls": 13,
+          "requests": 14
+        },
+        "wire_inner_calls": 13500
+      },
+      {
+        "response_delay_seconds": 0.01,
+        "wire_requests_with_eth_call": 27,
+        "largest_wire_batch": 2,
+        "wire_multicalls": 28,
+        "elapsed_seconds": 1.1339087919332087,
+        "controller_counters": {
+          "calls": 12552,
+          "multicalls": 25,
+          "requests": 26
+        },
+        "wire_inner_calls": 13500
+      },
+      {
+        "response_delay_seconds": 0.1,
+        "wire_requests_with_eth_call": 34,
+        "largest_wire_batch": 2,
+        "wire_multicalls": 28,
+        "elapsed_seconds": 2.174139583017677,
+        "controller_counters": {
+          "calls": 12566,
+          "multicalls": 32,
+          "requests": 26
+        },
+        "wire_inner_calls": 13494
+      }
+    ],
+    "after": [
+      {
+        "response_delay_seconds": 0,
+        "wire_requests_with_eth_call": 13,
+        "largest_wire_batch": 2,
+        "wire_multicalls": 14,
+        "elapsed_seconds": 0.8427395410835743,
+        "controller_counters": {
+          "calls": 12528,
+          "multicalls": 13,
+          "requests": 12
+        },
+        "wire_inner_calls": 12500
+      },
+      {
+        "response_delay_seconds": 0.01,
+        "wire_requests_with_eth_call": 13,
+        "largest_wire_batch": 2,
+        "wire_multicalls": 14,
+        "elapsed_seconds": 1.1280772918835282,
+        "controller_counters": {
+          "calls": 12528,
+          "multicalls": 13,
+          "requests": 12
+        },
+        "wire_inner_calls": 12500
+      },
+      {
+        "response_delay_seconds": 0.1,
+        "wire_requests_with_eth_call": 27,
+        "largest_wire_batch": 2,
+        "wire_multicalls": 24,
+        "elapsed_seconds": 2.307400790974498,
+        "controller_counters": {
+          "calls": 12556,
+          "multicalls": 27,
+          "requests": 22
+        },
+        "wire_inner_calls": 12500
+      }
+    ],
+    "boundary": "Controlled local HTTP responses; no archive-node timings. Controller UID counters and observed HTTP request counts are reported separately."
+  },
+  "integration": {
+    "passed": 33,
+    "failed": 0,
+    "elapsed_seconds": 3.75,
+    "controller_counters": {
+      "calls": 12592,
+      "multicalls": 45,
+      "requests": 37
+    },
+    "all_performance_thresholds_unchanged": true,
+    "rpc_errors_observed": [
+      {
+        "code": -32000,
+        "message": "historical state 14292417b302135e7a98b8eb04ff3af5de817993f82f15c10050e27d0a139e46 is not available",
+        "outcome": "The integration suite recovered and all tests passed; this does not establish complete archive coverage."
+      }
+    ]
+  },
+  "mypy": {
+    "before_errors": 205,
+    "after_errors": 205,
+    "added_diagnostics": 0,
+    "removed_diagnostics": 0,
+    "complete_normalized_diagnostic_records_compared": true
+  },
+  "formatting": "Black and git diff --check passed",
+  "pending": [
+    "offline CI for the ownership repair",
+    "complete mainnet audit",
+    "original and additional native quote command exit results",
+    "complete sequential baseline and changed pricing suites"
+  ],
+  "coverage": {
+    "changed_executable_statements": 3,
+    "covered": 3,
+    "lines": [
+      158,
+      322,
+      901
+    ],
+    "method": "Complete 121-test run using native controller and batch modules; coverage measures the production Python request module."
+  }
+}
