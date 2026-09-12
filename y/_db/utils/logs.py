@@ -10,7 +10,7 @@ from eth_utils.toolz import concat
 from evmspec.data import Address, HexBytes32, uint
 from evmspec.structs.log import Topic
 from hexbytes import HexBytes
-from msgspec import DecodeError, ValidationError, json, msgpack
+from msgspec import ValidationError, json
 from pony.orm import commit, db_session, select
 from pony.orm.core import Query
 
@@ -73,23 +73,8 @@ def _decode_hook_unsafe(typ, obj):
     raise NotImplementedError(typ, obj)
 
 
-_json_decode_log = json.Decoder(type=Log, dec_hook=_decode_hook_unsafe).decode
-_msgpack_decode_log = msgpack.Decoder(type=Log, dec_hook=_decode_hook_unsafe).decode
-
-
-def _decode_log(data: bytes) -> Log:
-    try:
-        # more recent versions of ypm store the logs in messagepack format
-        return _msgpack_decode_log(data)
-    except DecodeError:
-        # but ypm can still work with logs stored in the legacy json format
-        log = _json_decode_log(data)
-        # we just update them to the new format silently
-        tx_hash_dbid = _get_hash(hash=log.transactionHash.hex()[2:]).dbid
-        DbLog[CHAINID, log.blockNumber, tx_hash_dbid, log.logIndex].raw = _encode_log(log)
-        commit()
-        # and you're good to go
-        return log
+# Match the JSON writer. Decoding cached data must not query or modify the database.
+_decode_log = json.Decoder(type=Log, dec_hook=_decode_hook_unsafe).decode
 
 
 async def _prepare_log(log: Log) -> tuple:
