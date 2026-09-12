@@ -248,7 +248,6 @@ class Factory(_Loader):
             for pool in pool_list
             if pool not in curve.factories[self.address]
         )
-        self._loaded.set()
         if debug_logs:
             _startup_logger_log_debug("loaded %s pools for %s", len(pool_list), self)
 
@@ -259,6 +258,10 @@ class Factory(_Loader):
             lp_token = await factory.get_token.coroutine(pool)
         elif hasattr(factory, "get_lp_token"):
             lp_token = await factory.get_lp_token.coroutine(pool)
+        elif hasattr(factory, "is_meta") and hasattr(factory, "get_implementation_address"):
+            # Stable factories mint their LP token at the pool address. Address
+            # providers can also list these factories under crypto identifiers.
+            lp_token = pool
         else:
             raise NotImplementedError(
                 f"New factory {factory.address} is not yet supported. Please notify a ypricemagic maintainer."

@@ -6,7 +6,7 @@
 
 int CPyGlobalsInit(void);
 
-extern PyObject *CPyStatics[674];
+extern PyObject *CPyStatics[680];
 extern const char * const CPyLit_Str[];
 extern const char * const CPyLit_Bytes[];
 extern const char * const CPyLit_Int[];
@@ -284,6 +284,10 @@ extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___CONTRACT_CACHE_TTL;
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___GETLOGS_BATCH_SIZE;
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___GETLOGS_DOP;
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___CHECKSUM_CACHE_MAXSIZE;
+extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___DEFAULT_CACHE_MAXSIZE;
+extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___BLOCK_CACHE_MAXSIZE;
+extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___CONTRACT_CACHE_MAXSIZE;
+extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___PRICE_CACHE_MAXSIZE;
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___DB_PROVIDER;
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___SQLITE_PATH;
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES___DB_HOST;

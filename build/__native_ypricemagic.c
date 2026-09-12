@@ -17761,6 +17761,14 @@ int CPyExec_y___ENVIRONMENT_VARIABLES(PyObject *module)
     CPyStatic_ENVIRONMENT_VARIABLES___GETLOGS_DOP = NULL;
     CPy_XDECREF(CPyStatic_ENVIRONMENT_VARIABLES___CHECKSUM_CACHE_MAXSIZE);
     CPyStatic_ENVIRONMENT_VARIABLES___CHECKSUM_CACHE_MAXSIZE = NULL;
+    CPy_XDECREF(CPyStatic_ENVIRONMENT_VARIABLES___DEFAULT_CACHE_MAXSIZE);
+    CPyStatic_ENVIRONMENT_VARIABLES___DEFAULT_CACHE_MAXSIZE = NULL;
+    CPy_XDECREF(CPyStatic_ENVIRONMENT_VARIABLES___BLOCK_CACHE_MAXSIZE);
+    CPyStatic_ENVIRONMENT_VARIABLES___BLOCK_CACHE_MAXSIZE = NULL;
+    CPy_XDECREF(CPyStatic_ENVIRONMENT_VARIABLES___CONTRACT_CACHE_MAXSIZE);
+    CPyStatic_ENVIRONMENT_VARIABLES___CONTRACT_CACHE_MAXSIZE = NULL;
+    CPy_XDECREF(CPyStatic_ENVIRONMENT_VARIABLES___PRICE_CACHE_MAXSIZE);
+    CPyStatic_ENVIRONMENT_VARIABLES___PRICE_CACHE_MAXSIZE = NULL;
     CPy_XDECREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_PROVIDER);
     CPyStatic_ENVIRONMENT_VARIABLES___DB_PROVIDER = NULL;
     CPy_XDECREF(CPyStatic_ENVIRONMENT_VARIABLES___SQLITE_PATH);
@@ -17927,67 +17935,67 @@ char CPyDef_ENVIRONMENT_VARIABLES_____top_level__(void) {
     PyObject *cpy_r_r122;
     PyObject *cpy_r_r123;
     PyObject *cpy_r_r124;
-    PyObject *cpy_r_r125;
-    PyObject *cpy_r_r126;
+    PyObject **cpy_r_r126;
     PyObject *cpy_r_r127;
-    PyObject **cpy_r_r129;
+    PyObject *cpy_r_r128;
+    PyObject *cpy_r_r129;
     PyObject *cpy_r_r130;
-    PyObject *cpy_r_r131;
-    PyObject *cpy_r_r132;
+    int32_t cpy_r_r131;
+    char cpy_r_r132;
     PyObject *cpy_r_r133;
-    PyObject *cpy_r_r134;
+    char cpy_r_r134;
     PyObject *cpy_r_r135;
-    PyObject **cpy_r_r137;
+    PyObject *cpy_r_r136;
+    PyObject *cpy_r_r137;
     PyObject *cpy_r_r138;
     PyObject *cpy_r_r139;
-    PyObject *cpy_r_r140;
-    PyObject *cpy_r_r141;
-    int32_t cpy_r_r142;
-    char cpy_r_r143;
+    PyObject **cpy_r_r141;
+    PyObject *cpy_r_r142;
+    PyObject *cpy_r_r143;
     PyObject *cpy_r_r144;
-    char cpy_r_r145;
-    PyObject *cpy_r_r146;
-    PyObject *cpy_r_r147;
+    PyObject *cpy_r_r145;
+    int32_t cpy_r_r146;
+    char cpy_r_r147;
     PyObject *cpy_r_r148;
-    PyObject *cpy_r_r149;
+    char cpy_r_r149;
     PyObject *cpy_r_r150;
-    PyObject **cpy_r_r152;
+    PyObject *cpy_r_r151;
+    PyObject *cpy_r_r152;
     PyObject *cpy_r_r153;
     PyObject *cpy_r_r154;
-    PyObject *cpy_r_r155;
-    PyObject *cpy_r_r156;
-    int32_t cpy_r_r157;
-    char cpy_r_r158;
+    PyObject **cpy_r_r156;
+    PyObject *cpy_r_r157;
+    PyObject *cpy_r_r158;
     PyObject *cpy_r_r159;
-    char cpy_r_r160;
-    PyObject *cpy_r_r161;
-    PyObject *cpy_r_r162;
+    PyObject *cpy_r_r160;
+    int32_t cpy_r_r161;
+    char cpy_r_r162;
     PyObject *cpy_r_r163;
-    PyObject *cpy_r_r164;
+    char cpy_r_r164;
     PyObject *cpy_r_r165;
-    PyObject **cpy_r_r167;
+    PyObject *cpy_r_r166;
+    PyObject *cpy_r_r167;
     PyObject *cpy_r_r168;
     PyObject *cpy_r_r169;
-    PyObject *cpy_r_r170;
-    PyObject *cpy_r_r171;
-    int32_t cpy_r_r172;
-    char cpy_r_r173;
+    PyObject **cpy_r_r171;
+    PyObject *cpy_r_r172;
+    PyObject *cpy_r_r173;
     PyObject *cpy_r_r174;
-    char cpy_r_r175;
-    PyObject *cpy_r_r176;
-    PyObject *cpy_r_r177;
+    PyObject *cpy_r_r175;
+    int32_t cpy_r_r176;
+    char cpy_r_r177;
     PyObject *cpy_r_r178;
-    PyObject *cpy_r_r179;
+    char cpy_r_r179;
     PyObject *cpy_r_r180;
-    PyObject **cpy_r_r182;
+    PyObject *cpy_r_r181;
+    PyObject *cpy_r_r182;
     PyObject *cpy_r_r183;
     PyObject *cpy_r_r184;
     PyObject *cpy_r_r185;
     PyObject *cpy_r_r186;
-    int32_t cpy_r_r187;
-    char cpy_r_r188;
-    PyObject *cpy_r_r189;
-    char cpy_r_r190;
+    PyObject *cpy_r_r187;
+    PyObject **cpy_r_r189;
+    PyObject *cpy_r_r190;
     PyObject *cpy_r_r191;
     PyObject *cpy_r_r192;
     PyObject *cpy_r_r193;
@@ -18029,7 +18037,7 @@ char CPyDef_ENVIRONMENT_VARIABLES_____top_level__(void) {
     int32_t cpy_r_r232;
     char cpy_r_r233;
     PyObject *cpy_r_r234;
-    PyObject *cpy_r_r235;
+    char cpy_r_r235;
     PyObject *cpy_r_r236;
     PyObject *cpy_r_r237;
     PyObject *cpy_r_r238;
@@ -18056,7 +18064,63 @@ char CPyDef_ENVIRONMENT_VARIABLES_____top_level__(void) {
     PyObject *cpy_r_r261;
     int32_t cpy_r_r262;
     char cpy_r_r263;
-    char cpy_r_r264;
+    PyObject *cpy_r_r264;
+    char cpy_r_r265;
+    PyObject *cpy_r_r266;
+    PyObject *cpy_r_r267;
+    PyObject *cpy_r_r268;
+    PyObject *cpy_r_r269;
+    PyObject *cpy_r_r270;
+    PyObject **cpy_r_r272;
+    PyObject *cpy_r_r273;
+    PyObject *cpy_r_r274;
+    PyObject *cpy_r_r275;
+    PyObject *cpy_r_r276;
+    int32_t cpy_r_r277;
+    char cpy_r_r278;
+    PyObject *cpy_r_r279;
+    char cpy_r_r280;
+    PyObject *cpy_r_r281;
+    PyObject *cpy_r_r282;
+    PyObject *cpy_r_r283;
+    PyObject *cpy_r_r284;
+    PyObject *cpy_r_r285;
+    PyObject **cpy_r_r287;
+    PyObject *cpy_r_r288;
+    PyObject *cpy_r_r289;
+    PyObject *cpy_r_r290;
+    PyObject *cpy_r_r291;
+    int32_t cpy_r_r292;
+    char cpy_r_r293;
+    PyObject *cpy_r_r294;
+    PyObject *cpy_r_r295;
+    PyObject *cpy_r_r296;
+    PyObject *cpy_r_r297;
+    PyObject *cpy_r_r298;
+    PyObject *cpy_r_r299;
+    PyObject *cpy_r_r300;
+    PyObject **cpy_r_r302;
+    PyObject *cpy_r_r303;
+    PyObject *cpy_r_r304;
+    PyObject *cpy_r_r305;
+    PyObject *cpy_r_r306;
+    int32_t cpy_r_r307;
+    char cpy_r_r308;
+    PyObject *cpy_r_r309;
+    char cpy_r_r310;
+    PyObject *cpy_r_r311;
+    PyObject *cpy_r_r312;
+    PyObject *cpy_r_r313;
+    PyObject *cpy_r_r314;
+    PyObject *cpy_r_r315;
+    PyObject **cpy_r_r317;
+    PyObject *cpy_r_r318;
+    PyObject *cpy_r_r319;
+    PyObject *cpy_r_r320;
+    PyObject *cpy_r_r321;
+    int32_t cpy_r_r322;
+    char cpy_r_r323;
+    char cpy_r_r324;
     cpy_r_r0 = CPyModule_builtins;
     cpy_r_r1 = (PyObject *)&_Py_NoneStruct;
     cpy_r_r2 = cpy_r_r0 != cpy_r_r1;
@@ -18065,7 +18129,7 @@ char CPyDef_ENVIRONMENT_VARIABLES_____top_level__(void) {
     cpy_r_r4 = PyImport_Import(cpy_r_r3);
     if (unlikely(cpy_r_r4 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", -1, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPyModule_builtins = cpy_r_r4;
     CPy_INCREF(CPyModule_builtins);
@@ -18077,7 +18141,7 @@ CPyL3: ;
     cpy_r_r8 = CPyImport_ImportFromMany(cpy_r_r6, cpy_r_r5, cpy_r_r5, cpy_r_r7);
     if (unlikely(cpy_r_r8 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPyModule_os = cpy_r_r8;
     CPy_INCREF(CPyModule_os);
@@ -18088,7 +18152,7 @@ CPyL3: ;
     cpy_r_r12 = CPyImport_ImportFromMany(cpy_r_r10, cpy_r_r9, cpy_r_r9, cpy_r_r11);
     if (unlikely(cpy_r_r12 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPyModule_typing = cpy_r_r12;
     CPy_INCREF(CPyModule_typing);
@@ -18099,7 +18163,7 @@ CPyL3: ;
     cpy_r_r16 = CPyImport_ImportFromMany(cpy_r_r14, cpy_r_r13, cpy_r_r13, cpy_r_r15);
     if (unlikely(cpy_r_r16 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPyModule_typed_envs = cpy_r_r16;
     CPy_INCREF(CPyModule_typed_envs);
@@ -18110,7 +18174,7 @@ CPyL3: ;
     cpy_r_r20 = CPyDict_GetItem(cpy_r_r18, cpy_r_r19);
     if (unlikely(cpy_r_r20 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     PyObject *cpy_r_r21[1] = {cpy_r_r17};
     cpy_r_r22 = (PyObject **)&cpy_r_r21;
@@ -18118,7 +18182,7 @@ CPyL3: ;
     CPy_DECREF(cpy_r_r20);
     if (unlikely(cpy_r_r23 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPyStatic_ENVIRONMENT_VARIABLES____envs = cpy_r_r23;
     CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES____envs);
@@ -18129,7 +18193,7 @@ CPyL3: ;
     cpy_r_r27 = cpy_r_r26 >= 0;
     if (unlikely(!cpy_r_r27)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     cpy_r_r28 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
     if (likely(cpy_r_r28 != NULL)) goto CPyL12;
@@ -18137,7 +18201,7 @@ CPyL3: ;
     cpy_r_r29 = 0;
     if (unlikely(!cpy_r_r29)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL12: ;
@@ -18152,7 +18216,7 @@ CPyL12: ;
     cpy_r_r38 = PyObject_VectorcallMethod(cpy_r_r32, cpy_r_r36, 9223372036854775811ULL, cpy_r_r37);
     if (unlikely(cpy_r_r38 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPyStatic_ENVIRONMENT_VARIABLES___CACHE_TTL = cpy_r_r38;
     CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___CACHE_TTL);
@@ -18163,7 +18227,7 @@ CPyL12: ;
     cpy_r_r42 = cpy_r_r41 >= 0;
     if (unlikely(!cpy_r_r42)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     cpy_r_r43 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
     if (likely(cpy_r_r43 != NULL)) goto CPyL17;
@@ -18171,7 +18235,7 @@ CPyL12: ;
     cpy_r_r44 = 0;
     if (unlikely(!cpy_r_r44)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL17: ;
@@ -18183,7 +18247,7 @@ CPyL17: ;
     cpy_r_r48 = 0;
     if (unlikely(!cpy_r_r48)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL20: ;
@@ -18195,7 +18259,7 @@ CPyL20: ;
     cpy_r_r54 = PyObject_VectorcallMethod(cpy_r_r49, cpy_r_r52, 9223372036854775811ULL, cpy_r_r53);
     if (unlikely(cpy_r_r54 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPyStatic_ENVIRONMENT_VARIABLES___CONTRACT_CACHE_TTL = cpy_r_r54;
     CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___CONTRACT_CACHE_TTL);
@@ -18206,7 +18270,7 @@ CPyL20: ;
     cpy_r_r58 = cpy_r_r57 >= 0;
     if (unlikely(!cpy_r_r58)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     cpy_r_r59 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
     if (likely(cpy_r_r59 != NULL)) goto CPyL25;
@@ -18214,7 +18278,7 @@ CPyL20: ;
     cpy_r_r60 = 0;
     if (unlikely(!cpy_r_r60)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL25: ;
@@ -18228,7 +18292,7 @@ CPyL25: ;
     cpy_r_r68 = PyObject_VectorcallMethod(cpy_r_r63, cpy_r_r66, 9223372036854775811ULL, cpy_r_r67);
     if (unlikely(cpy_r_r68 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPyStatic_ENVIRONMENT_VARIABLES___GETLOGS_BATCH_SIZE = cpy_r_r68;
     CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___GETLOGS_BATCH_SIZE);
@@ -18239,7 +18303,7 @@ CPyL25: ;
     cpy_r_r72 = cpy_r_r71 >= 0;
     if (unlikely(!cpy_r_r72)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     cpy_r_r73 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
     if (likely(cpy_r_r73 != NULL)) goto CPyL30;
@@ -18247,7 +18311,7 @@ CPyL25: ;
     cpy_r_r74 = 0;
     if (unlikely(!cpy_r_r74)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL30: ;
@@ -18262,7 +18326,7 @@ CPyL30: ;
     cpy_r_r83 = PyObject_VectorcallMethod(cpy_r_r77, cpy_r_r81, 9223372036854775811ULL, cpy_r_r82);
     if (unlikely(cpy_r_r83 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPyStatic_ENVIRONMENT_VARIABLES___GETLOGS_DOP = cpy_r_r83;
     CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___GETLOGS_DOP);
@@ -18273,7 +18337,7 @@ CPyL30: ;
     cpy_r_r87 = cpy_r_r86 >= 0;
     if (unlikely(!cpy_r_r87)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     cpy_r_r88 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
     if (likely(cpy_r_r88 != NULL)) goto CPyL35;
@@ -18281,7 +18345,7 @@ CPyL30: ;
     cpy_r_r89 = 0;
     if (unlikely(!cpy_r_r89)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL35: ;
@@ -18296,7 +18360,7 @@ CPyL35: ;
     cpy_r_r98 = PyObject_VectorcallMethod(cpy_r_r92, cpy_r_r96, 9223372036854775811ULL, cpy_r_r97);
     if (unlikely(cpy_r_r98 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPyStatic_ENVIRONMENT_VARIABLES___CHECKSUM_CACHE_MAXSIZE = cpy_r_r98;
     CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___CHECKSUM_CACHE_MAXSIZE);
@@ -18307,7 +18371,7 @@ CPyL35: ;
     cpy_r_r102 = cpy_r_r101 >= 0;
     if (unlikely(!cpy_r_r102)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     cpy_r_r103 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
     if (likely(cpy_r_r103 != NULL)) goto CPyL40;
@@ -18315,33 +18379,33 @@ CPyL35: ;
     cpy_r_r104 = 0;
     if (unlikely(!cpy_r_r104)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL40: ;
-    cpy_r_r105 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_PROVIDER' */
-    cpy_r_r106 = (PyObject *)&PyUnicode_Type;
-    cpy_r_r107 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'sqlite' */
-    cpy_r_r108 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
+    cpy_r_r105 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DEFAULT_CACHE_MAXSIZE' */
+    cpy_r_r106 = (PyObject *)&PyLong_Type;
+    cpy_r_r107 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
+    cpy_r_r108 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 50000 */
     cpy_r_r109 = 0 ? Py_True : Py_False;
-    PyObject *cpy_r_r110[5] = {cpy_r_r103, cpy_r_r105, cpy_r_r106, cpy_r_r107, cpy_r_r109};
+    PyObject *cpy_r_r110[5] = {cpy_r_r103, cpy_r_r105, cpy_r_r106, cpy_r_r108, cpy_r_r109};
     cpy_r_r111 = (PyObject **)&cpy_r_r110;
     cpy_r_r112 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
-    cpy_r_r113 = PyObject_VectorcallMethod(cpy_r_r108, cpy_r_r111, 9223372036854775811ULL, cpy_r_r112);
+    cpy_r_r113 = PyObject_VectorcallMethod(cpy_r_r107, cpy_r_r111, 9223372036854775811ULL, cpy_r_r112);
     if (unlikely(cpy_r_r113 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    CPyStatic_ENVIRONMENT_VARIABLES___DB_PROVIDER = cpy_r_r113;
-    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_PROVIDER);
+    CPyStatic_ENVIRONMENT_VARIABLES___DEFAULT_CACHE_MAXSIZE = cpy_r_r113;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DEFAULT_CACHE_MAXSIZE);
     cpy_r_r114 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
-    cpy_r_r115 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_PROVIDER' */
+    cpy_r_r115 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DEFAULT_CACHE_MAXSIZE' */
     cpy_r_r116 = CPyDict_SetItem(cpy_r_r114, cpy_r_r115, cpy_r_r113);
     CPy_DECREF(cpy_r_r113);
     cpy_r_r117 = cpy_r_r116 >= 0;
     if (unlikely(!cpy_r_r117)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     cpy_r_r118 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
     if (likely(cpy_r_r118 != NULL)) goto CPyL45;
@@ -18349,205 +18413,205 @@ CPyL40: ;
     cpy_r_r119 = 0;
     if (unlikely(!cpy_r_r119)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL45: ;
-    cpy_r_r120 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SQLITE_PATH' */
-    cpy_r_r121 = (PyObject *)&PyUnicode_Type;
-    cpy_r_r122 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '~' */
-    cpy_r_r123 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
-    cpy_r_r124 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'path' */
-    cpy_r_r125 = CPyDict_GetItem(cpy_r_r123, cpy_r_r124);
-    if (unlikely(cpy_r_r125 == NULL)) {
+    cpy_r_r120 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'BLOCK_CACHE_MAXSIZE' */
+    cpy_r_r121 = (PyObject *)&PyLong_Type;
+    cpy_r_r122 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
+    cpy_r_r123 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 500000 */
+    cpy_r_r124 = 0 ? Py_True : Py_False;
+    PyObject *cpy_r_r125[5] = {cpy_r_r118, cpy_r_r120, cpy_r_r121, cpy_r_r123, cpy_r_r124};
+    cpy_r_r126 = (PyObject **)&cpy_r_r125;
+    cpy_r_r127 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
+    cpy_r_r128 = PyObject_VectorcallMethod(cpy_r_r122, cpy_r_r126, 9223372036854775811ULL, cpy_r_r127);
+    if (unlikely(cpy_r_r128 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    cpy_r_r126 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'expanduser' */
-    cpy_r_r127 = CPyObject_GetAttr(cpy_r_r125, cpy_r_r126);
-    CPy_DECREF(cpy_r_r125);
-    if (unlikely(cpy_r_r127 == NULL)) {
+    CPyStatic_ENVIRONMENT_VARIABLES___BLOCK_CACHE_MAXSIZE = cpy_r_r128;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___BLOCK_CACHE_MAXSIZE);
+    cpy_r_r129 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
+    cpy_r_r130 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'BLOCK_CACHE_MAXSIZE' */
+    cpy_r_r131 = CPyDict_SetItem(cpy_r_r129, cpy_r_r130, cpy_r_r128);
+    CPy_DECREF(cpy_r_r128);
+    cpy_r_r132 = cpy_r_r131 >= 0;
+    if (unlikely(!cpy_r_r132)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    PyObject *cpy_r_r128[1] = {cpy_r_r122};
-    cpy_r_r129 = (PyObject **)&cpy_r_r128;
-    cpy_r_r130 = PyObject_Vectorcall(cpy_r_r127, cpy_r_r129, 1, 0);
-    CPy_DECREF(cpy_r_r127);
-    if (unlikely(cpy_r_r130 == NULL)) {
-        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
-    }
-    if (likely(PyUnicode_Check(cpy_r_r130)))
-        cpy_r_r131 = cpy_r_r130;
-    else {
-        CPy_TypeErrorTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", 33, CPyStatic_ENVIRONMENT_VARIABLES___globals, "str", cpy_r_r130);
-        goto CPyL91;
-    }
-    cpy_r_r132 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '/.ypricemagic/ypricemagic.sqlite' */
-    cpy_r_r133 = CPyStr_Build(2, cpy_r_r131, cpy_r_r132);
-    CPy_DECREF(cpy_r_r131);
-    if (unlikely(cpy_r_r133 == NULL)) {
-        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
-    }
-    cpy_r_r134 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
-    cpy_r_r135 = 0 ? Py_True : Py_False;
-    PyObject *cpy_r_r136[5] = {cpy_r_r118, cpy_r_r120, cpy_r_r121, cpy_r_r133, cpy_r_r135};
-    cpy_r_r137 = (PyObject **)&cpy_r_r136;
-    cpy_r_r138 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
-    cpy_r_r139 = PyObject_VectorcallMethod(cpy_r_r134, cpy_r_r137, 9223372036854775811ULL, cpy_r_r138);
-    if (unlikely(cpy_r_r139 == NULL)) {
-        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL92;
-    }
-    CPy_DECREF(cpy_r_r133);
-    CPyStatic_ENVIRONMENT_VARIABLES___SQLITE_PATH = cpy_r_r139;
-    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___SQLITE_PATH);
-    cpy_r_r140 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
-    cpy_r_r141 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SQLITE_PATH' */
-    cpy_r_r142 = CPyDict_SetItem(cpy_r_r140, cpy_r_r141, cpy_r_r139);
-    CPy_DECREF(cpy_r_r139);
-    cpy_r_r143 = cpy_r_r142 >= 0;
-    if (unlikely(!cpy_r_r143)) {
-        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
-    }
-    cpy_r_r144 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
-    if (likely(cpy_r_r144 != NULL)) goto CPyL55;
+    cpy_r_r133 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
+    if (likely(cpy_r_r133 != NULL)) goto CPyL50;
     PyErr_SetString(PyExc_NameError, "value for final name \"_envs\" was not set");
-    cpy_r_r145 = 0;
-    if (unlikely(!cpy_r_r145)) {
+    cpy_r_r134 = 0;
+    if (unlikely(!cpy_r_r134)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
+    }
+    CPy_Unreachable();
+CPyL50: ;
+    cpy_r_r135 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'CONTRACT_CACHE_MAXSIZE' */
+    cpy_r_r136 = (PyObject *)&PyLong_Type;
+    cpy_r_r137 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
+    cpy_r_r138 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 50000 */
+    cpy_r_r139 = 0 ? Py_True : Py_False;
+    PyObject *cpy_r_r140[5] = {cpy_r_r133, cpy_r_r135, cpy_r_r136, cpy_r_r138, cpy_r_r139};
+    cpy_r_r141 = (PyObject **)&cpy_r_r140;
+    cpy_r_r142 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
+    cpy_r_r143 = PyObject_VectorcallMethod(cpy_r_r137, cpy_r_r141, 9223372036854775811ULL, cpy_r_r142);
+    if (unlikely(cpy_r_r143 == NULL)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    CPyStatic_ENVIRONMENT_VARIABLES___CONTRACT_CACHE_MAXSIZE = cpy_r_r143;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___CONTRACT_CACHE_MAXSIZE);
+    cpy_r_r144 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
+    cpy_r_r145 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'CONTRACT_CACHE_MAXSIZE' */
+    cpy_r_r146 = CPyDict_SetItem(cpy_r_r144, cpy_r_r145, cpy_r_r143);
+    CPy_DECREF(cpy_r_r143);
+    cpy_r_r147 = cpy_r_r146 >= 0;
+    if (unlikely(!cpy_r_r147)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    cpy_r_r148 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
+    if (likely(cpy_r_r148 != NULL)) goto CPyL55;
+    PyErr_SetString(PyExc_NameError, "value for final name \"_envs\" was not set");
+    cpy_r_r149 = 0;
+    if (unlikely(!cpy_r_r149)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL55: ;
-    cpy_r_r146 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_HOST' */
-    cpy_r_r147 = (PyObject *)&PyUnicode_Type;
-    cpy_r_r148 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '' */
-    cpy_r_r149 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
-    cpy_r_r150 = 0 ? Py_True : Py_False;
-    PyObject *cpy_r_r151[5] = {cpy_r_r144, cpy_r_r146, cpy_r_r147, cpy_r_r148, cpy_r_r150};
-    cpy_r_r152 = (PyObject **)&cpy_r_r151;
-    cpy_r_r153 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
-    cpy_r_r154 = PyObject_VectorcallMethod(cpy_r_r149, cpy_r_r152, 9223372036854775811ULL, cpy_r_r153);
-    if (unlikely(cpy_r_r154 == NULL)) {
+    cpy_r_r150 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'PRICE_CACHE_MAXSIZE' */
+    cpy_r_r151 = (PyObject *)&PyLong_Type;
+    cpy_r_r152 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
+    cpy_r_r153 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 100000 */
+    cpy_r_r154 = 0 ? Py_True : Py_False;
+    PyObject *cpy_r_r155[5] = {cpy_r_r148, cpy_r_r150, cpy_r_r151, cpy_r_r153, cpy_r_r154};
+    cpy_r_r156 = (PyObject **)&cpy_r_r155;
+    cpy_r_r157 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
+    cpy_r_r158 = PyObject_VectorcallMethod(cpy_r_r152, cpy_r_r156, 9223372036854775811ULL, cpy_r_r157);
+    if (unlikely(cpy_r_r158 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    CPyStatic_ENVIRONMENT_VARIABLES___DB_HOST = cpy_r_r154;
-    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_HOST);
-    cpy_r_r155 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
-    cpy_r_r156 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_HOST' */
-    cpy_r_r157 = CPyDict_SetItem(cpy_r_r155, cpy_r_r156, cpy_r_r154);
-    CPy_DECREF(cpy_r_r154);
-    cpy_r_r158 = cpy_r_r157 >= 0;
-    if (unlikely(!cpy_r_r158)) {
+    CPyStatic_ENVIRONMENT_VARIABLES___PRICE_CACHE_MAXSIZE = cpy_r_r158;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___PRICE_CACHE_MAXSIZE);
+    cpy_r_r159 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
+    cpy_r_r160 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'PRICE_CACHE_MAXSIZE' */
+    cpy_r_r161 = CPyDict_SetItem(cpy_r_r159, cpy_r_r160, cpy_r_r158);
+    CPy_DECREF(cpy_r_r158);
+    cpy_r_r162 = cpy_r_r161 >= 0;
+    if (unlikely(!cpy_r_r162)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    cpy_r_r159 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
-    if (likely(cpy_r_r159 != NULL)) goto CPyL60;
+    cpy_r_r163 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
+    if (likely(cpy_r_r163 != NULL)) goto CPyL60;
     PyErr_SetString(PyExc_NameError, "value for final name \"_envs\" was not set");
-    cpy_r_r160 = 0;
-    if (unlikely(!cpy_r_r160)) {
+    cpy_r_r164 = 0;
+    if (unlikely(!cpy_r_r164)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL60: ;
-    cpy_r_r161 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_PORT' */
-    cpy_r_r162 = (PyObject *)&PyUnicode_Type;
-    cpy_r_r163 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '' */
-    cpy_r_r164 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
-    cpy_r_r165 = 0 ? Py_True : Py_False;
-    PyObject *cpy_r_r166[5] = {cpy_r_r159, cpy_r_r161, cpy_r_r162, cpy_r_r163, cpy_r_r165};
-    cpy_r_r167 = (PyObject **)&cpy_r_r166;
-    cpy_r_r168 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
-    cpy_r_r169 = PyObject_VectorcallMethod(cpy_r_r164, cpy_r_r167, 9223372036854775811ULL, cpy_r_r168);
-    if (unlikely(cpy_r_r169 == NULL)) {
+    cpy_r_r165 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_PROVIDER' */
+    cpy_r_r166 = (PyObject *)&PyUnicode_Type;
+    cpy_r_r167 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'sqlite' */
+    cpy_r_r168 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
+    cpy_r_r169 = 0 ? Py_True : Py_False;
+    PyObject *cpy_r_r170[5] = {cpy_r_r163, cpy_r_r165, cpy_r_r166, cpy_r_r167, cpy_r_r169};
+    cpy_r_r171 = (PyObject **)&cpy_r_r170;
+    cpy_r_r172 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
+    cpy_r_r173 = PyObject_VectorcallMethod(cpy_r_r168, cpy_r_r171, 9223372036854775811ULL, cpy_r_r172);
+    if (unlikely(cpy_r_r173 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    CPyStatic_ENVIRONMENT_VARIABLES___DB_PORT = cpy_r_r169;
-    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_PORT);
-    cpy_r_r170 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
-    cpy_r_r171 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_PORT' */
-    cpy_r_r172 = CPyDict_SetItem(cpy_r_r170, cpy_r_r171, cpy_r_r169);
-    CPy_DECREF(cpy_r_r169);
-    cpy_r_r173 = cpy_r_r172 >= 0;
-    if (unlikely(!cpy_r_r173)) {
+    CPyStatic_ENVIRONMENT_VARIABLES___DB_PROVIDER = cpy_r_r173;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_PROVIDER);
+    cpy_r_r174 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
+    cpy_r_r175 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_PROVIDER' */
+    cpy_r_r176 = CPyDict_SetItem(cpy_r_r174, cpy_r_r175, cpy_r_r173);
+    CPy_DECREF(cpy_r_r173);
+    cpy_r_r177 = cpy_r_r176 >= 0;
+    if (unlikely(!cpy_r_r177)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    cpy_r_r174 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
-    if (likely(cpy_r_r174 != NULL)) goto CPyL65;
+    cpy_r_r178 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
+    if (likely(cpy_r_r178 != NULL)) goto CPyL65;
     PyErr_SetString(PyExc_NameError, "value for final name \"_envs\" was not set");
-    cpy_r_r175 = 0;
-    if (unlikely(!cpy_r_r175)) {
+    cpy_r_r179 = 0;
+    if (unlikely(!cpy_r_r179)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL65: ;
-    cpy_r_r176 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_USER' */
-    cpy_r_r177 = (PyObject *)&PyUnicode_Type;
-    cpy_r_r178 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '' */
-    cpy_r_r179 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
-    cpy_r_r180 = 0 ? Py_True : Py_False;
-    PyObject *cpy_r_r181[5] = {cpy_r_r174, cpy_r_r176, cpy_r_r177, cpy_r_r178, cpy_r_r180};
-    cpy_r_r182 = (PyObject **)&cpy_r_r181;
-    cpy_r_r183 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
-    cpy_r_r184 = PyObject_VectorcallMethod(cpy_r_r179, cpy_r_r182, 9223372036854775811ULL, cpy_r_r183);
-    if (unlikely(cpy_r_r184 == NULL)) {
+    cpy_r_r180 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SQLITE_PATH' */
+    cpy_r_r181 = (PyObject *)&PyUnicode_Type;
+    cpy_r_r182 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '~' */
+    cpy_r_r183 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
+    cpy_r_r184 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'path' */
+    cpy_r_r185 = CPyDict_GetItem(cpy_r_r183, cpy_r_r184);
+    if (unlikely(cpy_r_r185 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    CPyStatic_ENVIRONMENT_VARIABLES___DB_USER = cpy_r_r184;
-    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_USER);
-    cpy_r_r185 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
-    cpy_r_r186 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_USER' */
-    cpy_r_r187 = CPyDict_SetItem(cpy_r_r185, cpy_r_r186, cpy_r_r184);
-    CPy_DECREF(cpy_r_r184);
-    cpy_r_r188 = cpy_r_r187 >= 0;
-    if (unlikely(!cpy_r_r188)) {
+    cpy_r_r186 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'expanduser' */
+    cpy_r_r187 = CPyObject_GetAttr(cpy_r_r185, cpy_r_r186);
+    CPy_DECREF(cpy_r_r185);
+    if (unlikely(cpy_r_r187 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    cpy_r_r189 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
-    if (likely(cpy_r_r189 != NULL)) goto CPyL70;
-    PyErr_SetString(PyExc_NameError, "value for final name \"_envs\" was not set");
-    cpy_r_r190 = 0;
-    if (unlikely(!cpy_r_r190)) {
+    PyObject *cpy_r_r188[1] = {cpy_r_r182};
+    cpy_r_r189 = (PyObject **)&cpy_r_r188;
+    cpy_r_r190 = PyObject_Vectorcall(cpy_r_r187, cpy_r_r189, 1, 0);
+    CPy_DECREF(cpy_r_r187);
+    if (unlikely(cpy_r_r190 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    CPy_Unreachable();
-CPyL70: ;
-    cpy_r_r191 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_PASSWORD' */
-    cpy_r_r192 = (PyObject *)&PyUnicode_Type;
-    cpy_r_r193 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '' */
+    if (likely(PyUnicode_Check(cpy_r_r190)))
+        cpy_r_r191 = cpy_r_r190;
+    else {
+        CPy_TypeErrorTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", 53, CPyStatic_ENVIRONMENT_VARIABLES___globals, "str", cpy_r_r190);
+        goto CPyL111;
+    }
+    cpy_r_r192 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '/.ypricemagic/ypricemagic.sqlite' */
+    cpy_r_r193 = CPyStr_Build(2, cpy_r_r191, cpy_r_r192);
+    CPy_DECREF(cpy_r_r191);
+    if (unlikely(cpy_r_r193 == NULL)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
     cpy_r_r194 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
     cpy_r_r195 = 0 ? Py_True : Py_False;
-    PyObject *cpy_r_r196[5] = {cpy_r_r189, cpy_r_r191, cpy_r_r192, cpy_r_r193, cpy_r_r195};
+    PyObject *cpy_r_r196[5] = {cpy_r_r178, cpy_r_r180, cpy_r_r181, cpy_r_r193, cpy_r_r195};
     cpy_r_r197 = (PyObject **)&cpy_r_r196;
     cpy_r_r198 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
     cpy_r_r199 = PyObject_VectorcallMethod(cpy_r_r194, cpy_r_r197, 9223372036854775811ULL, cpy_r_r198);
     if (unlikely(cpy_r_r199 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL112;
     }
-    CPyStatic_ENVIRONMENT_VARIABLES___DB_PASSWORD = cpy_r_r199;
-    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_PASSWORD);
+    CPy_DECREF(cpy_r_r193);
+    CPyStatic_ENVIRONMENT_VARIABLES___SQLITE_PATH = cpy_r_r199;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___SQLITE_PATH);
     cpy_r_r200 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
-    cpy_r_r201 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_PASSWORD' */
+    cpy_r_r201 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SQLITE_PATH' */
     cpy_r_r202 = CPyDict_SetItem(cpy_r_r200, cpy_r_r201, cpy_r_r199);
     CPy_DECREF(cpy_r_r199);
     cpy_r_r203 = cpy_r_r202 >= 0;
     if (unlikely(!cpy_r_r203)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     cpy_r_r204 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
     if (likely(cpy_r_r204 != NULL)) goto CPyL75;
@@ -18555,13 +18619,13 @@ CPyL70: ;
     cpy_r_r205 = 0;
     if (unlikely(!cpy_r_r205)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL75: ;
-    cpy_r_r206 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_DATABASE' */
+    cpy_r_r206 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_HOST' */
     cpy_r_r207 = (PyObject *)&PyUnicode_Type;
-    cpy_r_r208 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'ypricemagic' */
+    cpy_r_r208 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '' */
     cpy_r_r209 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
     cpy_r_r210 = 0 ? Py_True : Py_False;
     PyObject *cpy_r_r211[5] = {cpy_r_r204, cpy_r_r206, cpy_r_r207, cpy_r_r208, cpy_r_r210};
@@ -18570,18 +18634,18 @@ CPyL75: ;
     cpy_r_r214 = PyObject_VectorcallMethod(cpy_r_r209, cpy_r_r212, 9223372036854775811ULL, cpy_r_r213);
     if (unlikely(cpy_r_r214 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    CPyStatic_ENVIRONMENT_VARIABLES___DB_DATABASE = cpy_r_r214;
-    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_DATABASE);
+    CPyStatic_ENVIRONMENT_VARIABLES___DB_HOST = cpy_r_r214;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_HOST);
     cpy_r_r215 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
-    cpy_r_r216 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_DATABASE' */
+    cpy_r_r216 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_HOST' */
     cpy_r_r217 = CPyDict_SetItem(cpy_r_r215, cpy_r_r216, cpy_r_r214);
     CPy_DECREF(cpy_r_r214);
     cpy_r_r218 = cpy_r_r217 >= 0;
     if (unlikely(!cpy_r_r218)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     cpy_r_r219 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
     if (likely(cpy_r_r219 != NULL)) goto CPyL80;
@@ -18589,76 +18653,79 @@ CPyL75: ;
     cpy_r_r220 = 0;
     if (unlikely(!cpy_r_r220)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
 CPyL80: ;
-    cpy_r_r221 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SKIP_CACHE' */
-    cpy_r_r222 = (PyObject *)&PyBool_Type;
-    cpy_r_r223 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
-    cpy_r_r224 = 0 ? Py_True : Py_False;
+    cpy_r_r221 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_PORT' */
+    cpy_r_r222 = (PyObject *)&PyUnicode_Type;
+    cpy_r_r223 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '' */
+    cpy_r_r224 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
     cpy_r_r225 = 0 ? Py_True : Py_False;
-    PyObject *cpy_r_r226[5] = {cpy_r_r219, cpy_r_r221, cpy_r_r222, cpy_r_r224, cpy_r_r225};
+    PyObject *cpy_r_r226[5] = {cpy_r_r219, cpy_r_r221, cpy_r_r222, cpy_r_r223, cpy_r_r225};
     cpy_r_r227 = (PyObject **)&cpy_r_r226;
     cpy_r_r228 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
-    cpy_r_r229 = PyObject_VectorcallMethod(cpy_r_r223, cpy_r_r227, 9223372036854775811ULL, cpy_r_r228);
+    cpy_r_r229 = PyObject_VectorcallMethod(cpy_r_r224, cpy_r_r227, 9223372036854775811ULL, cpy_r_r228);
     if (unlikely(cpy_r_r229 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    CPyStatic_ENVIRONMENT_VARIABLES___SKIP_CACHE = cpy_r_r229;
-    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___SKIP_CACHE);
+    CPyStatic_ENVIRONMENT_VARIABLES___DB_PORT = cpy_r_r229;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_PORT);
     cpy_r_r230 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
-    cpy_r_r231 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SKIP_CACHE' */
+    cpy_r_r231 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_PORT' */
     cpy_r_r232 = CPyDict_SetItem(cpy_r_r230, cpy_r_r231, cpy_r_r229);
     CPy_DECREF(cpy_r_r229);
     cpy_r_r233 = cpy_r_r232 >= 0;
     if (unlikely(!cpy_r_r233)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    cpy_r_r234 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SKIP_YPRICEAPI' */
-    cpy_r_r235 = (PyObject *)&PyBool_Type;
-    cpy_r_r236 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
-    cpy_r_r237 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
-    cpy_r_r238 = CPyDict_GetItem(cpy_r_r236, cpy_r_r237);
-    if (unlikely(cpy_r_r238 == NULL)) {
+    cpy_r_r234 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
+    if (likely(cpy_r_r234 != NULL)) goto CPyL85;
+    PyErr_SetString(PyExc_NameError, "value for final name \"_envs\" was not set");
+    cpy_r_r235 = 0;
+    if (unlikely(!cpy_r_r235)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    cpy_r_r239 = 0 ? Py_True : Py_False;
+    CPy_Unreachable();
+CPyL85: ;
+    cpy_r_r236 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_USER' */
+    cpy_r_r237 = (PyObject *)&PyUnicode_Type;
+    cpy_r_r238 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '' */
+    cpy_r_r239 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
     cpy_r_r240 = 0 ? Py_True : Py_False;
-    PyObject *cpy_r_r241[4] = {cpy_r_r234, cpy_r_r235, cpy_r_r239, cpy_r_r240};
+    PyObject *cpy_r_r241[5] = {cpy_r_r234, cpy_r_r236, cpy_r_r237, cpy_r_r238, cpy_r_r240};
     cpy_r_r242 = (PyObject **)&cpy_r_r241;
     cpy_r_r243 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
-    cpy_r_r244 = PyObject_Vectorcall(cpy_r_r238, cpy_r_r242, 2, cpy_r_r243);
-    CPy_DECREF(cpy_r_r238);
+    cpy_r_r244 = PyObject_VectorcallMethod(cpy_r_r239, cpy_r_r242, 9223372036854775811ULL, cpy_r_r243);
     if (unlikely(cpy_r_r244 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    CPyStatic_ENVIRONMENT_VARIABLES___SKIP_YPRICEAPI = cpy_r_r244;
-    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___SKIP_YPRICEAPI);
+    CPyStatic_ENVIRONMENT_VARIABLES___DB_USER = cpy_r_r244;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_USER);
     cpy_r_r245 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
-    cpy_r_r246 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SKIP_YPRICEAPI' */
+    cpy_r_r246 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_USER' */
     cpy_r_r247 = CPyDict_SetItem(cpy_r_r245, cpy_r_r246, cpy_r_r244);
     CPy_DECREF(cpy_r_r244);
     cpy_r_r248 = cpy_r_r247 >= 0;
     if (unlikely(!cpy_r_r248)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     cpy_r_r249 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
-    if (likely(cpy_r_r249 != NULL)) goto CPyL88;
+    if (likely(cpy_r_r249 != NULL)) goto CPyL90;
     PyErr_SetString(PyExc_NameError, "value for final name \"_envs\" was not set");
     cpy_r_r250 = 0;
     if (unlikely(!cpy_r_r250)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
     CPy_Unreachable();
-CPyL88: ;
-    cpy_r_r251 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SENSE_CHECK_FILE' */
+CPyL90: ;
+    cpy_r_r251 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_PASSWORD' */
     cpy_r_r252 = (PyObject *)&PyUnicode_Type;
     cpy_r_r253 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '' */
     cpy_r_r254 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
@@ -18669,26 +18736,159 @@ CPyL88: ;
     cpy_r_r259 = PyObject_VectorcallMethod(cpy_r_r254, cpy_r_r257, 9223372036854775811ULL, cpy_r_r258);
     if (unlikely(cpy_r_r259 == NULL)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
     }
-    CPyStatic_ENVIRONMENT_VARIABLES___SENSE_CHECK_FILE = cpy_r_r259;
-    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___SENSE_CHECK_FILE);
+    CPyStatic_ENVIRONMENT_VARIABLES___DB_PASSWORD = cpy_r_r259;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_PASSWORD);
     cpy_r_r260 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
-    cpy_r_r261 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SENSE_CHECK_FILE' */
+    cpy_r_r261 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_PASSWORD' */
     cpy_r_r262 = CPyDict_SetItem(cpy_r_r260, cpy_r_r261, cpy_r_r259);
     CPy_DECREF(cpy_r_r259);
     cpy_r_r263 = cpy_r_r262 >= 0;
     if (unlikely(!cpy_r_r263)) {
         CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
-        goto CPyL91;
+        goto CPyL111;
+    }
+    cpy_r_r264 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
+    if (likely(cpy_r_r264 != NULL)) goto CPyL95;
+    PyErr_SetString(PyExc_NameError, "value for final name \"_envs\" was not set");
+    cpy_r_r265 = 0;
+    if (unlikely(!cpy_r_r265)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    CPy_Unreachable();
+CPyL95: ;
+    cpy_r_r266 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_DATABASE' */
+    cpy_r_r267 = (PyObject *)&PyUnicode_Type;
+    cpy_r_r268 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'ypricemagic' */
+    cpy_r_r269 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
+    cpy_r_r270 = 0 ? Py_True : Py_False;
+    PyObject *cpy_r_r271[5] = {cpy_r_r264, cpy_r_r266, cpy_r_r267, cpy_r_r268, cpy_r_r270};
+    cpy_r_r272 = (PyObject **)&cpy_r_r271;
+    cpy_r_r273 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
+    cpy_r_r274 = PyObject_VectorcallMethod(cpy_r_r269, cpy_r_r272, 9223372036854775811ULL, cpy_r_r273);
+    if (unlikely(cpy_r_r274 == NULL)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    CPyStatic_ENVIRONMENT_VARIABLES___DB_DATABASE = cpy_r_r274;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___DB_DATABASE);
+    cpy_r_r275 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
+    cpy_r_r276 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'DB_DATABASE' */
+    cpy_r_r277 = CPyDict_SetItem(cpy_r_r275, cpy_r_r276, cpy_r_r274);
+    CPy_DECREF(cpy_r_r274);
+    cpy_r_r278 = cpy_r_r277 >= 0;
+    if (unlikely(!cpy_r_r278)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    cpy_r_r279 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
+    if (likely(cpy_r_r279 != NULL)) goto CPyL100;
+    PyErr_SetString(PyExc_NameError, "value for final name \"_envs\" was not set");
+    cpy_r_r280 = 0;
+    if (unlikely(!cpy_r_r280)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    CPy_Unreachable();
+CPyL100: ;
+    cpy_r_r281 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SKIP_CACHE' */
+    cpy_r_r282 = (PyObject *)&PyBool_Type;
+    cpy_r_r283 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
+    cpy_r_r284 = 0 ? Py_True : Py_False;
+    cpy_r_r285 = 0 ? Py_True : Py_False;
+    PyObject *cpy_r_r286[5] = {cpy_r_r279, cpy_r_r281, cpy_r_r282, cpy_r_r284, cpy_r_r285};
+    cpy_r_r287 = (PyObject **)&cpy_r_r286;
+    cpy_r_r288 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
+    cpy_r_r289 = PyObject_VectorcallMethod(cpy_r_r283, cpy_r_r287, 9223372036854775811ULL, cpy_r_r288);
+    if (unlikely(cpy_r_r289 == NULL)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    CPyStatic_ENVIRONMENT_VARIABLES___SKIP_CACHE = cpy_r_r289;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___SKIP_CACHE);
+    cpy_r_r290 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
+    cpy_r_r291 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SKIP_CACHE' */
+    cpy_r_r292 = CPyDict_SetItem(cpy_r_r290, cpy_r_r291, cpy_r_r289);
+    CPy_DECREF(cpy_r_r289);
+    cpy_r_r293 = cpy_r_r292 >= 0;
+    if (unlikely(!cpy_r_r293)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    cpy_r_r294 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SKIP_YPRICEAPI' */
+    cpy_r_r295 = (PyObject *)&PyBool_Type;
+    cpy_r_r296 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
+    cpy_r_r297 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
+    cpy_r_r298 = CPyDict_GetItem(cpy_r_r296, cpy_r_r297);
+    if (unlikely(cpy_r_r298 == NULL)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    cpy_r_r299 = 0 ? Py_True : Py_False;
+    cpy_r_r300 = 0 ? Py_True : Py_False;
+    PyObject *cpy_r_r301[4] = {cpy_r_r294, cpy_r_r295, cpy_r_r299, cpy_r_r300};
+    cpy_r_r302 = (PyObject **)&cpy_r_r301;
+    cpy_r_r303 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
+    cpy_r_r304 = PyObject_Vectorcall(cpy_r_r298, cpy_r_r302, 2, cpy_r_r303);
+    CPy_DECREF(cpy_r_r298);
+    if (unlikely(cpy_r_r304 == NULL)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    CPyStatic_ENVIRONMENT_VARIABLES___SKIP_YPRICEAPI = cpy_r_r304;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___SKIP_YPRICEAPI);
+    cpy_r_r305 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
+    cpy_r_r306 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SKIP_YPRICEAPI' */
+    cpy_r_r307 = CPyDict_SetItem(cpy_r_r305, cpy_r_r306, cpy_r_r304);
+    CPy_DECREF(cpy_r_r304);
+    cpy_r_r308 = cpy_r_r307 >= 0;
+    if (unlikely(!cpy_r_r308)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    cpy_r_r309 = CPyStatic_ENVIRONMENT_VARIABLES____envs;
+    if (likely(cpy_r_r309 != NULL)) goto CPyL108;
+    PyErr_SetString(PyExc_NameError, "value for final name \"_envs\" was not set");
+    cpy_r_r310 = 0;
+    if (unlikely(!cpy_r_r310)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    CPy_Unreachable();
+CPyL108: ;
+    cpy_r_r311 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SENSE_CHECK_FILE' */
+    cpy_r_r312 = (PyObject *)&PyUnicode_Type;
+    cpy_r_r313 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* '' */
+    cpy_r_r314 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'create_env' */
+    cpy_r_r315 = 0 ? Py_True : Py_False;
+    PyObject *cpy_r_r316[5] = {cpy_r_r309, cpy_r_r311, cpy_r_r312, cpy_r_r313, cpy_r_r315};
+    cpy_r_r317 = (PyObject **)&cpy_r_r316;
+    cpy_r_r318 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* ('default', 'verbose') */
+    cpy_r_r319 = PyObject_VectorcallMethod(cpy_r_r314, cpy_r_r317, 9223372036854775811ULL, cpy_r_r318);
+    if (unlikely(cpy_r_r319 == NULL)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
+    }
+    CPyStatic_ENVIRONMENT_VARIABLES___SENSE_CHECK_FILE = cpy_r_r319;
+    CPy_INCREF(CPyStatic_ENVIRONMENT_VARIABLES___SENSE_CHECK_FILE);
+    cpy_r_r320 = CPyStatic_ENVIRONMENT_VARIABLES___globals;
+    cpy_r_r321 = CPyStatics[DIFFCHECK_PLACEHOLDER]; /* 'SENSE_CHECK_FILE' */
+    cpy_r_r322 = CPyDict_SetItem(cpy_r_r320, cpy_r_r321, cpy_r_r319);
+    CPy_DECREF(cpy_r_r319);
+    cpy_r_r323 = cpy_r_r322 >= 0;
+    if (unlikely(!cpy_r_r323)) {
+        CPy_AddTraceback("y/ENVIRONMENT_VARIABLES.py", "<module>", DIFFCHECK_PLACEHOLDER, CPyStatic_ENVIRONMENT_VARIABLES___globals);
+        goto CPyL111;
     }
     return 1;
-CPyL91: ;
-    cpy_r_r264 = 2;
-    return cpy_r_r264;
-CPyL92: ;
-    CPy_DecRef(cpy_r_r133);
-    goto CPyL91;
+CPyL111: ;
+    cpy_r_r324 = 2;
+    return cpy_r_r324;
+CPyL112: ;
+    CPy_DecRef(cpy_r_r193);
+    goto CPyL111;
 }
 
 static PyAsyncMethods convert___to_address_async_gen_as_async = {
@@ -41890,18 +42090,20 @@ const char * const CPyLit_Str[] = {
     "\006\t) values \finsert into \027 on conflict do nothing\btimezone\adecimal\003utc",
     "\006\003UTC\nastimezone\tisoformat\rEnvVarFactory\ncreate_env\ntyped_envs",
     "\005\vYPRICEMAGIC\005_envs\tCACHE_TTL\averbose\022CONTRACT_CACHE_TTL",
-    "\004\022GETLOGS_BATCH_SIZE\vGETLOGS_DOP\026CHECKSUM_CACHE_MAXSIZE\vDB_PROVIDER",
-    "\006\vSQLITE_PATH /.ypricemagic/ypricemagic.sqlite\aDB_HOST\000\aDB_PORT\aDB_USER",
-    "\005\vDB_PASSWORD\vDB_DATABASE\vypricemagic\nSKIP_CACHE\016SKIP_YPRICEAPI",
-    "\005\020SENSE_CHECK_FILE\033 is not a valid ETH address\bchecksum\003run\nissubclass",
-    "\a\bHexBytes\0010\0020x\tcchecksum\bhexbytes\fy/convert.py\nAnyAddress",
-    "\005\017ChecksumAddress\nHexAddress\neth_typing\016AnyAddressType\vy.datatypes",
-    "\003\023to_checksum_address\022ThreadPoolExecutor\020_checksum_thread",
-    "\006\017_is_checksummed\023_is_not_checksummed\005token\005block\texception\t__class__",
-    "\006\aNetwork\005super\b__init__\020 while fetching \tprintable\n at block ",
-    "\005\023No price found for \n is not a \004_msg\017BrownieContract\rfrom_explorer",
-    "\003\rCompilerError\tException*invalid literal for int() with base 16: \'\'",
-    "\002\027list index out of range\027pop from an empty deque",
+    "\003\022GETLOGS_BATCH_SIZE\vGETLOGS_DOP\026CHECKSUM_CACHE_MAXSIZE",
+    "\003\025DEFAULT_CACHE_MAXSIZE\023BLOCK_CACHE_MAXSIZE\026CONTRACT_CACHE_MAXSIZE",
+    "\003\023PRICE_CACHE_MAXSIZE\vDB_PROVIDER\vSQLITE_PATH",
+    "\006 /.ypricemagic/ypricemagic.sqlite\aDB_HOST\000\aDB_PORT\aDB_USER\vDB_PASSWORD",
+    "\005\vDB_DATABASE\vypricemagic\nSKIP_CACHE\016SKIP_YPRICEAPI\020SENSE_CHECK_FILE",
+    "\a\033 is not a valid ETH address\bchecksum\003run\nissubclass\bHexBytes\0010\0020x",
+    "\006\tcchecksum\bhexbytes\fy/convert.py\nAnyAddress\017ChecksumAddress\nHexAddress",
+    "\004\neth_typing\016AnyAddressType\vy.datatypes\023to_checksum_address",
+    "\003\022ThreadPoolExecutor\020_checksum_thread\017_is_checksummed",
+    "\a\023_is_not_checksummed\005token\005block\texception\t__class__\aNetwork\005super",
+    "\005\b__init__\020 while fetching \tprintable\n at block \023No price found for ",
+    "\006\n is not a \004_msg\017BrownieContract\rfrom_explorer\rCompilerError\tException",
+    "\002*invalid literal for int() with base 16: \'\'\027list index out of range",
+    "\001\027pop from an empty deque",
     "\0016\'UsingForDirective\' object has no attribute \'typeName\'",
     "\003!Contract source code not verified\025has not been verified\rUniswapV2Pool",
     "\002\027y.prices.dex.uniswap.v2&_ChecksumASyncSingletonMeta__instances",
@@ -42074,27 +42276,27 @@ const char * const CPyLit_Bytes[] = {
     "",
 };
 const char * const CPyLit_Int[] = {
-    "\0221\00032\00010\0003600\0000\000100000\00025\00056\00066\000100\000128\000137\000250\0001285\0008453\00042161\00043114\0001666600000",
-    "\0061313161554\000747474\00080094\0001000\0004\00030",
+    "\0231\00032\00010\0003600\0000\000100000\00050000\000500000\00025\00056\00066\000100\000128\000137\000250\0001285\0008453\00042161\00043114",
+    "\a1666600000\0001313161554\000747474\00080094\0001000\0004\00030",
     "",
 };
 const double CPyLit_Float[] = {0};
 const double CPyLit_Complex[] = {0};
 const int CPyLit_Tuple[] = {
-    85, 1, 8, 3, 38, 38, 38, 3, 39, 39, 39, 2, 590, 591, 1, 42, 2, 44,
-    45, 1, 47, 1, 49, 1, 30, 5, 52, 53, 54, 55, 56, 3, 58, 58, 58, 1, 599,
+    85, 1, 8, 3, 38, 38, 38, 3, 39, 39, 39, 2, 596, 597, 1, 42, 2, 44,
+    45, 1, 47, 1, 49, 1, 30, 5, 52, 53, 54, 55, 56, 3, 58, 58, 58, 1, 605,
     1, 59, 1, 61, 2, 17, 63, 1, 22, 1, 25, 1, 101, 1, 102, 3, 103, 103,
-    103, 1, 608, 2, 105, 106, 1, 53, 1, 108, 1, 109, 2, 144, 145, 3, 149,
-    149, 149, 3, 150, 150, 150, 2, 615, 616, 3, 44, 152, 153, 2, 47, 140,
+    103, 1, 614, 2, 105, 106, 1, 53, 1, 108, 1, 109, 2, 144, 145, 3, 149,
+    149, 149, 3, 150, 150, 150, 2, 621, 622, 3, 44, 152, 153, 2, 47, 140,
     2, 53, 154, 2, 155, 60, 1, 156, 1, 158, 6, 131, 30, 138, 132, 130,
     142, 1, 161, 1, 165, 1, 152, 2, 195, 204, 1, 194, 2, 52, 53, 1, 106,
-    2, 210, 211, 2, 144, 216, 1, 144, 2, 53, 55, 3, 60, 60, 60, 3, 241,
-    241, 241, 3, 242, 242, 242, 3, 636, 637, 638, 3, 244, 245, 246, 1,
-    248, 1, 259, 1, 278, 1, 615, 1, 292, 4, 294, 52, 53, 56, 1, 295, 1,
-    268, 1, 270, 2, 296, 245, 1, 282, 1, 357, 2, 53, 56, 1, 374, 1, 383,
-    2, 194, 372, 1, 636, 1, 373, 4, 359, 370, 404, 405, 1, 303, 1, 393, 1,
-    396, 1, 387, 1, 382, 1, 401, 2, 416, 417, 2, 256, 555, 1, 557, 1, 555,
-    1, 558, 3, 559, 559, 559, 2, 636, 671, 1, 561
+    2, 210, 211, 2, 144, 216, 1, 144, 2, 53, 55, 3, 60, 60, 60, 3, 245,
+    245, 245, 3, 246, 246, 246, 3, 642, 643, 644, 3, 248, 249, 250, 1,
+    252, 1, 263, 1, 282, 1, 621, 1, 296, 4, 298, 52, 53, 56, 1, 299, 1,
+    272, 1, 274, 2, 300, 249, 1, 286, 1, 361, 2, 53, 56, 1, 378, 1, 387,
+    2, 194, 376, 1, 642, 1, 377, 4, 363, 374, 408, 409, 1, 307, 1, 397, 1,
+    400, 1, 391, 1, 386, 1, 405, 2, 420, 421, 2, 260, 559, 1, 561, 1, 559,
+    1, 562, 3, 563, 563, 563, 2, 642, 677, 1, 565
 };
 const int CPyLit_FrozenSet[] = {0};
 CPyModule *CPyModule_y____db___brownie__internal = NULL;
@@ -42367,6 +42569,10 @@ PyObject *CPyStatic_ENVIRONMENT_VARIABLES___CONTRACT_CACHE_TTL = NULL;
 PyObject *CPyStatic_ENVIRONMENT_VARIABLES___GETLOGS_BATCH_SIZE = NULL;
 PyObject *CPyStatic_ENVIRONMENT_VARIABLES___GETLOGS_DOP = NULL;
 PyObject *CPyStatic_ENVIRONMENT_VARIABLES___CHECKSUM_CACHE_MAXSIZE = NULL;
+PyObject *CPyStatic_ENVIRONMENT_VARIABLES___DEFAULT_CACHE_MAXSIZE = NULL;
+PyObject *CPyStatic_ENVIRONMENT_VARIABLES___BLOCK_CACHE_MAXSIZE = NULL;
+PyObject *CPyStatic_ENVIRONMENT_VARIABLES___CONTRACT_CACHE_MAXSIZE = NULL;
+PyObject *CPyStatic_ENVIRONMENT_VARIABLES___PRICE_CACHE_MAXSIZE = NULL;
 PyObject *CPyStatic_ENVIRONMENT_VARIABLES___DB_PROVIDER = NULL;
 PyObject *CPyStatic_ENVIRONMENT_VARIABLES___SQLITE_PATH = NULL;
 PyObject *CPyStatic_ENVIRONMENT_VARIABLES___DB_HOST = NULL;

@@ -1,10 +1,10 @@
 from abc import abstractmethod
-from asyncio import Task, create_task, ensure_future, get_event_loop
+from asyncio import Future, ensure_future, get_event_loop, shield
 from collections.abc import Awaitable, Generator
 from decimal import Decimal
 from functools import cached_property
 from logging import getLogger
-from typing import TYPE_CHECKING, Any, Final, Literal, NoReturn, Union, final
+from typing import TYPE_CHECKING, Any, Final, Literal, Union, final
 
 import a_sync
 from a_sync import cgather
@@ -910,6 +910,7 @@ class WeiBalance(a_sync.ASyncGenericBase):
         )
         # magic.get_price returns PriceResult; extract .price for Decimal()
         from y.datatypes import PriceResult as _PriceResult
+
         if isinstance(raw_price, _PriceResult):
             raw_price = raw_price.price
         price = Decimal(raw_price)
@@ -963,160 +964,49 @@ class WeiBalance(a_sync.ASyncGenericBase):
 
 
 class _Loader(ContractBase):
-    """Used for use cases where you need to load data thru present time before proceeding, and then continue loading data in the background."""
+    """Share one initial loading task, including its result, failure, or cancellation."""
 
-    __slots__ = (
-        "_loaded",
-        "_init_block",
-        "__exc",
-        "__task",
-    )
+    __slots__ = ("_init_block", "__task")
 
-    def __init__(self, address: Address, *, asynchronous: bool = False):
+    def __init__(self, address: str, *, asynchronous: bool = False) -> None:
         super().__init__(address, asynchronous=asynchronous)
         self._init_block = auto_retry(web3.eth.get_block_number)()
-        self._loaded = None
-        self.__exc = None
-        self.__task = None
+        self.__task: Future[Literal[True]] | None = None
 
     def __await__(self) -> Generator[Any, None, Literal[True]]:
-        """
-        Returns `True` once the `_Loader` has loaded all relevant data thru the current block.
-
-        Returns:
-            A generator that yields `True` once the `_Loader` has loaded all relevant data thru the current block.
-
-        Examples:
-            >>> loader = _Loader("0x1234567890abcdef1234567890abcdef12345678")
-            >>> await loader
-            True
-        """
         return self.loaded.__await__()
 
     @abstractmethod
-    async def _load(self) -> NoReturn:
-        """
-        `self._load` is the coro that will run in the daemon task associated with this _Loader.
-        Your implementation MUST set Event `self._loaded` once data has been loaded thru the current block, or it will hang indefinitely.
-        """
+    async def _load(self) -> None:
+        """Return once all initial data has loaded, or raise its loading error."""
 
     @property
     def loaded(self) -> Awaitable[Literal[True]]:
-        """
-        Returns `True` once the `_Loader` has loaded all relevant data thru the current block.
-
-        Returns:
-            An awaitable that resolves to `True` once the `_Loader` has loaded all relevant data thru the current block.
-
-        Examples:
-            >>> loader = _Loader("0x1234567890abcdef1234567890abcdef12345678")
-            >>> await loader.loaded
-            True
-        """
-        self._task  # ensure task is running and not errd
-        if self._loaded is None:
-            self._loaded = a_sync.Event(name=str(self))
-        return self._loaded.wait()
+        # One caller's cancellation must not cancel loading for the other callers.
+        return shield(self._task)
 
     @property
-    def _task(self) -> "Task[NoReturn]":
-        """
-        The task that runs `self._load()` for this `_Loader`.
-
-        Returns:
-            The task that runs `self._load()` for this `_Loader`.
-
-        Raises:
-            Exception: If the _Loader has any exception, it is raised.
-
-        Examples:
-            >>> loader = _Loader("0x1234567890abcdef1234567890abcdef12345678")
-            >>> task = loader._task
-        """
-        if self.__exc:
-            # create a new duplicate exc instead of building a massive traceback on the original
-            raise type(self.__exc)(*self.__exc.args).with_traceback(self.__tb)
+    def _task(self) -> "Future[Literal[True]]":
         if self.__task is None:
             logger.debug("creating loader task for %s", self)
-            self.__task = create_task(coro=self.__load(), name=f"{self}.__load()")
-            self.__task.add_done_callback(self._done_callback)
+            self.__task = ensure_future(self.__load())
         return self.__task
 
-    def _done_callback(self, task: "Task[Any]") -> None:
-        """
-        Called on `self._task` when it completes, if applicable.
-
-        Args:
-            task: The completed task.
-
-        Examples:
-            >>> loader = _Loader("0x1234567890abcdef1234567890abcdef12345678")
-            >>> loader._done_callback(task)
-        """
-        if e := task.exception():
-            logger.error("exception while loading %s: %s", self, e)
-            logger.exception(e)
-            self.__task = None
-
-    async def __load(self) -> NoReturn:
-        """
-        Loads the loader and catches any exceptions.
-
-        Examples:
-            >>> loader = _Loader("0x1234567890abcdef1234567890abcdef12345678")
-            >>> await loader.__load()
-        """
-        try:
-            await self._load()
-        except Exception as e:
-            import traceback
-
-            self.__exc = e
-            self.__tb = e.__traceback__
-            # no need to hold vars in memory
-            traceback.clear_frames(self.__tb)
-            raise
+    @stuck_coro_debugger
+    async def __load(self) -> Literal[True]:
+        await self._load()
+        return True
 
 
 class _EventsLoader(_Loader):
-    """
-    Used for use cases where you need to load event data thru present time before proceeding,
-    and then continue loading data in the background.
-    """
+    """Load and process events through the block captured at construction."""
 
     @property
     @abstractmethod
     def _events(self) -> "Events":
-        """
-        The Events object associated with this _EventsLoader.
-        """
+        """The event stream to load."""
 
-    @property
-    def loaded(self) -> Awaitable[Literal[True]]:
-        """
-        Returns `True` once the `_Loader` has loaded all relevant data thru the current block.
-
-        Returns:
-            An awaitable that resolves to `True` once the `_Loader` has loaded all relevant data thru the current block.
-
-        Examples:
-            >>> loader = _EventsLoader("0x1234567890abcdef1234567890abcdef12345678")
-            >>> await loader.loaded
-            True
-        """
-        self._task  # ensure task is running and not err'd
-        if self._loaded is None:
-            self._loaded = ensure_future(self._events._lock.wait_for(self._init_block))
-        return self._loaded
-
-    async def _load(self) -> NoReturn:
-        """
-        Load the event data in the background.
-
-        Examples:
-            >>> loader = _EventsLoader("0x1234567890abcdef1234567890abcdef12345678")
-            >>> await loader._load()
-        """
-        # TODO: extend this for constant loading
+    async def _load(self) -> None:
         async for _ in self._events.events(self._init_block):
             pass
+        await self._events._lock.wait_for(self._init_block)
