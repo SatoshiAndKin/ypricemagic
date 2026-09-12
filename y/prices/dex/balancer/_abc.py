@@ -7,7 +7,14 @@ import y.ENVIRONMENT_VARIABLES as ENVS
 from y import contracts
 from y._decorators import stuck_coro_debugger
 from y.classes._abc import LiquidityPool
-from y.datatypes import AddressOrContract, AnyAddressType, Block, Pool, UsdPrice
+from y.datatypes import (
+    AddressOrContract,
+    AnyAddressType,
+    Block,
+    Pool,
+    PriceResult,
+    UsdPrice,
+)
 
 
 class BalancerPool(LiquidityPool):
@@ -102,7 +109,7 @@ class BalancerABC(a_sync.ASyncGenericBase, Generic[_B]):
             100.0
         """
         return await self._pool_type(pool_address, asynchronous=True).get_pool_price(
-            block=block, skip_cache=skip_cache
+            block=block, skip_cache=skip_cache, ignore_pools=ignore_pools
         )
 
     @property
@@ -137,7 +144,8 @@ class BalancerABC(a_sync.ASyncGenericBase, Generic[_B]):
         token_address: AddressOrContract,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice | None:
+        ignore_pools: tuple[Pool, ...] = (),
+    ) -> PriceResult | None:
         """
         Get the price of a token in a Balancer pool.
 

@@ -1,12 +1,12 @@
 from asyncio import Task, create_task
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import suppress
+from decimal import Decimal
 from enum import IntEnum
 from logging import DEBUG, getLogger
-from typing import Any, NewType, TypeVar
+from typing import Any, NewType, TypeVar, cast
 
 import a_sync
-from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import ZERO_ADDRESS
 from brownie.convert.datatypes import EthAddress
@@ -18,14 +18,20 @@ from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
-from y import constants, contracts
+from y import contracts
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20, ContractBase, WeiBalance
 from y.constants import CHAINID, CONNECTED_TO_MAINNET
 from y.contracts import Contract
-from y.datatypes import Address, AnyAddressType, Block, Pool, UsdPrice, UsdValue
+from y.datatypes import Address, AnyAddressType, Block, Pool, PriceResult, UsdValue
 from y.exceptions import ContractNotVerified, TokenNotFound
 from y.networks import Network
+from y.prices._candidates import (
+    derive_price,
+    gather_owned,
+    valid_price,
+)
+from y.prices._quote import bounded_map
 from y.prices.dex.balancer._abc import BalancerABC, BalancerPool
 from y.utils.cache import a_sync_ttl_cache
 from y.utils.events import ProcessedEvents
@@ -152,24 +158,15 @@ class BalancerV2Vault(ContractBase):
             >>> async for pool in vault.pools_for_token("0xTokenAddress"):
             ...     print(pool)
         """
-        tasks = a_sync.map(BalancerV2Pool.tokens, block=block)
-        debug_logs = logger.isEnabledFor(DEBUG)
-        async for pool in self.pools(block=block):
-            if tokens := pool._tokens:
-                if token in tokens:
-                    if debug_logs:
-                        logger._log(DEBUG, "%s contains %s", (pool, token))
-                    yield pool
-            else:
-                # start the task now, we can await it later
-                tasks[pool]
+        pools = [pool async for pool in self.pools(block=block)]
 
-        if tasks:
-            async for pool, tokens in tasks.map(pop=True):
-                if token in tokens:
-                    if debug_logs:
-                        logger._log(DEBUG, "%s contains %s", (pool, token))
-                    yield pool
+        async def pool_tokens(pool: Any) -> Any:
+            return await pool.tokens(block=block, sync=False)
+
+        tokens_by_pool = await bounded_map(pool_tokens, pools)
+        for pool, tokens in zip(pools, tokens_by_pool):
+            if token in tokens:
+                yield pool
 
     @a_sync_ttl_cache
     @stuck_coro_debugger
@@ -484,7 +481,10 @@ class BalancerV2Pool(BalancerPool):
 
     @stuck_coro_debugger
     async def get_tvl(
-        self, block: Block | None = None, skip_cache: bool = ENVS.SKIP_CACHE
+        self,
+        block: Block | None = None,
+        skip_cache: bool = ENVS.SKIP_CACHE,
+        ignore_pools: tuple[Pool, ...] = (),
     ) -> UsdValue | None:
         """
         Get the total value locked (TVL) in the pool in USD.
@@ -499,7 +499,9 @@ class BalancerV2Pool(BalancerPool):
         Examples:
             >>> tvl = await pool.get_tvl()
         """
-        if balances := await self.get_balances(block=block, skip_cache=skip_cache, sync=False):
+        if balances := await self.get_balances(
+            block=block, skip_cache=skip_cache, ignore_pools=(*ignore_pools, self), sync=False
+        ):
             # overwrite ref to big obj with ref to little obj
             balances = iter(tuple(balances.values()))
             return UsdValue(await WeiBalance.value_usd.sum(balances, sync=False))
@@ -573,7 +575,7 @@ class BalancerV2Pool(BalancerPool):
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
-    ) -> UsdPrice | None:
+    ) -> PriceResult | None:
         """
         Get the price of a specific token in the pool in USD.
 
@@ -596,36 +598,46 @@ class BalancerV2Pool(BalancerPool):
             token_balances = await get_balances_coro
             weights = self.__weights
         else:
-            token_balances, weights = await cgather(
-                get_balances_coro, self.weights(block=block, sync=False)
+            token_balances, weights = await gather_owned(
+                [get_balances_coro, self.weights(block=block, sync=False)]
             )
         pool_token_info = list(zip(token_balances.keys(), token_balances.values(), weights))
-        for pool_token, token_balance, token_weight in pool_token_info:
-            if pool_token == token_address:
-                break
-
-        paired_token_balance: WeiBalance | None = None
-        for pool_token, balance, weight in pool_token_info:
-            if pool_token in constants.STABLECOINS:
-                paired_token_balance, paired_token_weight = balance, weight
-                break
-            elif pool_token == constants.WRAPPED_GAS_COIN:
-                paired_token_balance, paired_token_weight = balance, weight
-                break
-            elif len(pool_token_info) == 2 and pool_token != token_address:
-                paired_token_balance, paired_token_weight = balance, weight
-                break
-
-        if paired_token_balance is None:
+        token_info = next((item for item in pool_token_info if item[0] == token_address), None)
+        if token_info is None:
+            return None
+        _, token_balance, token_weight = token_info
+        token_balance_readable = await token_balance.__readable__
+        if not token_balance_readable or token_weight <= 0:
             return None
 
-        token_value_in_pool, token_balance_readable = await cgather(
-            paired_token_balance.__value_usd__, token_balance.__readable__
-        )
-        token_value_in_pool /= paired_token_weight * token_weight
-        return UsdPrice(token_value_in_pool / token_balance_readable)
+        @stuck_coro_debugger
+        async def quote(paired, balance, weight):
+            if weight <= 0:
+                return None
+            child = await paired.price(
+                block=block, skip_cache=skip_cache, ignore_pools=(*ignore_pools, self), sync=False
+            )
+            if valid_price(child):
+                # Balancer whitepaper Eq. 2: balances normalized by weights.
+                value = (await balance.__readable__) * Decimal(str(float(child)))
+                value = value * Decimal(token_weight) / Decimal(weight) / token_balance_readable
+                return derive_price(
+                    token_address,
+                    value,
+                    f"Balancer V2 pool {self.address} via {paired.address}",
+                    child,
+                )
 
-    # NOTE: We can't cache this as a cached property because some balancer pool tokens can change. Womp
+        for paired, balance, weight in sorted(
+            pool_token_info, key=lambda item: str(item[0]).lower()
+        ):
+            if paired == token_address:
+                continue
+            result = await quote(paired, balance, weight)
+            if result is not None:
+                return result
+        return None
+
     @a_sync_ttl_cache
     @stuck_coro_debugger
     async def tokens(
@@ -712,27 +724,17 @@ class BalancerV2(BalancerABC[BalancerV2Pool]):
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
-    ) -> UsdPrice:
-        """
-        Get the price of a specific token in USD.
+    ) -> PriceResult | None:
+        """Use native Vault quotes from liquidity-ranked Balancer V2 pools."""
+        from y.prices._routing import liquidity_price
 
-        Args:
-            token_address: The address of the token.
-            block: The block number to query. Defaults to the latest block.
-            skip_cache: Whether to skip the cache.
-
-        Returns:
-            The price of the specified token in USD.
-
-        Examples:
-            >>> price = await balancer.get_token_price("0xTokenAddress")
-        """
-        if deepest_pool := await self.deepest_pool_for(
-            token_address, block=block, ignore_pools=ignore_pools, sync=False
-        ):
-            return await deepest_pool.get_token_price(
-                token_address, block, skip_cache=skip_cache, ignore_pools=ignore_pools, sync=False
-            )
+        return await liquidity_price(
+            str(token_address),
+            block,
+            ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
+            first_markets=("Balancer V2",),
+        )
 
     @stuck_coro_debugger
     async def deepest_pool_for(
@@ -773,7 +775,7 @@ class BalancerV2(BalancerABC[BalancerV2Pool]):
                 .keys(pop=True)
                 .aiterbyvalues(reverse=True)
             ):
-                return pool
+                return cast(BalancerV2Pool, pool)
 
         # TODO: afilter
         # deepest_pools = BalancerV2Vault.deepest_pool_for.map(self.vaults, **kwargs).values(pop=True).afilter()

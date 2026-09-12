@@ -1,14 +1,16 @@
 from decimal import Decimal
 
 import cachebox
-from a_sync import a_sync, cgather
+from a_sync import a_sync
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.contracts import Contract, has_method, is_contract
-from y.datatypes import Address, Block
+from y.datatypes import Address, Block, PriceResult
 from y.exceptions import ContractNotVerified
+from y.prices._candidates import derive_price, gather_owned
 
 try:
     oracle = "0x9a9Fa8338dd5E5B2188006f1Cd2Ef26d921650C2"
@@ -72,9 +74,10 @@ async def get_tokens(lp_token: Address) -> tuple[str, str, str]:
 
 
 @a_sync("sync")
+@stuck_coro_debugger
 async def get_lp_price(
     token: Address, block: Block = None, skip_cache: bool = ENVS.SKIP_CACHE
-) -> Decimal | None:
+) -> PriceResult | None:
     """
     Calculates the price of a Pendle LP token.
 
@@ -111,15 +114,20 @@ async def get_lp_price(
     #    rate = await PENDLE_ORACLE.getLpToAssetRate.coroutine(token, twap_duration, block_identifier=block)
     sy_token, p_token, y_token = tokens
     try:
-        sy, rate = await cgather(
-            Contract.coroutine(sy_token),
-            PENDLE_ORACLE.getLpToAssetRate.coroutine(token, TWAP_DURATION, block_identifier=block),
+        sy, rate = await gather_owned(
+            [
+                Contract.coroutine(sy_token),
+                PENDLE_ORACLE.getLpToAssetRate.coroutine(
+                    token, TWAP_DURATION, block_identifier=block
+                ),
+            ]
         )
     except ContractLogicError:
         return None
 
     _, asset, decimals = await sy.assetInfo
     rate /= Decimal(10**decimals)
-    return rate * Decimal(
-        await ERC20(asset, asynchronous=True).price(block=block, skip_cache=skip_cache)
-    )
+    child = await ERC20(asset, asynchronous=True).price(block=block, skip_cache=skip_cache)
+    if child is None:
+        return None
+    return derive_price(token, rate * Decimal(float(child)), f"Pendle {token} via {asset}", child)

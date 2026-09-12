@@ -1,20 +1,13 @@
-import math
 from collections import defaultdict
-from collections.abc import AsyncIterator, Iterable
-from decimal import Decimal
+from collections.abc import AsyncIterator
 from functools import cached_property, lru_cache
-from itertools import cycle, islice
 from logging import DEBUG, getLogger
-from typing import DefaultDict, Final, Literal, Union
+from typing import DefaultDict, Final
 
 import a_sync
-import eth_retry
-from a_sync import igather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie.network.event import _EventItem
-from eth_abi.exceptions import InvalidPointer
 from eth_typing import BlockNumber, HexAddress
-from faster_eth_abi.packed import encode_packed
 from typing_extensions import Self
 
 from y import ENVIRONMENT_VARIABLES as ENVS
@@ -23,8 +16,12 @@ from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20, ContractBase
 from y.constants import CHAINID, CONNECTED_TO_MAINNET, usdc, weth
 from y.contracts import Contract, contract_creation_block_async
-from y.datatypes import Address, AnyAddressType, Block, Pool, UsdPrice
-from y.exceptions import ContractNotVerified, NonStandardERC20, TokenNotFound, call_reverted
+from y.datatypes import Address, AnyAddressType, Block, Pool, PriceResult
+from y.exceptions import (
+    ContractNotVerified,
+    NonStandardERC20,
+    TokenNotFound,
+)
 from y.interfaces.uniswap.quoterv3 import UNIV3_QUOTER_ABI
 from y.networks import Network
 from y.utils.events import ProcessedEvents
@@ -34,8 +31,6 @@ UNISWAP_V3_FACTORY: Final = "0x1F98431c8aD98523631AE4a59f267346ea31F984"
 UNISWAP_V3_QUOTER: Final = "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6"
 
 logger: Final = getLogger(__name__)
-
-Path = Iterable[Union[Address, int]]
 
 # same addresses on all networks
 addresses: Final = {
@@ -94,13 +89,6 @@ forked_deployments: Final = {
             "fee_tiers": (3000, 500, 10_000, 100),
         },
     ],
-}
-
-_FEE_DENOMINATOR: Final = Decimal(1_000_000)
-
-_PATH_TYPE_STRINGS: Final[dict[int, tuple[Literal["address", "uint24"], ...]]] = {
-    3: tuple(islice(cycle(("address", "uint24")), 3)),
-    5: tuple(islice(cycle(("address", "uint24")), 5)),
 }
 
 
@@ -504,57 +492,23 @@ class UniswapV3(a_sync.ASyncGenericBase):
             cache[most_recent_deploy_block]
 
     @stuck_coro_debugger
-    @a_sync.a_sync(cache_type="memory", ram_cache_ttl=ENVS.CACHE_TTL, ram_cache_maxsize=ENVS.PRICE_CACHE_MAXSIZE)
     async def get_price(
         self,
         token: Address,
         block: Block | None = None,
-        ignore_pools: tuple[Pool, ...] = (),  # unused
+        ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,  # unused
-    ) -> UsdPrice | None:
-        """
-        Get the price of a token in USD.
+    ) -> PriceResult | None:
+        """Use native quotes from liquidity-ranked pools at the requested block."""
+        from y.prices._routing import liquidity_price
 
-        Args:
-            token: The address of the token.
-            block: The block number to get the price at.
-            ignore_pools: Pools to ignore (unused).
-            skip_cache: Whether to skip cache (unused).
-
-        Returns:
-            The price of the token in USD, or None if not available.
-
-        Examples:
-            >>> uniswap_v3 = UniswapV3(...)
-            >>> price = await uniswap_v3.get_price("0xTokenAddress", 1234567)
-
-        See Also:
-            :func:`y.prices.magic.get_price`
-        """
-        quoter = await self.__quoter__
-        if block and block < await contract_creation_block_async(quoter, True):
-            return None
-
-        paths: list[Path] = [(token, fee, usdc.address) for fee in self.fee_tiers]
-        if token != weth:
-            paths += [
-                (token, fee, weth.address, self.fee_tiers[0], usdc.address)
-                for fee in self.fee_tiers
-            ]
-
-        if debug_logs_enabled := logger.isEnabledFor(DEBUG):
-            logger._log(DEBUG, "paths: %s", (paths,))
-
-        amount_in = await ERC20._get_scale_for(token)
-        results = await igather(self._quote_exact_input(path, amount_in, block) for path in paths)
-
-        if debug_logs_enabled:
-            logger._log(DEBUG, "results: %s", (results,))
-
-        outputs = list(filter(None, results))
-        if debug_logs_enabled:
-            logger._log(DEBUG, "outputs: %s", (outputs,))
-        return UsdPrice(max(outputs)) if outputs else None
+        return await liquidity_price(
+            str(token),
+            block,
+            ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
+            first_markets=(str(self._factory).lower(),),
+        )
 
     @stuck_coro_debugger
     @a_sync.a_sync(ram_cache_maxsize=100_000, ram_cache_ttl=60 * 60)
@@ -664,93 +618,6 @@ class UniswapV3(a_sync.ASyncGenericBase):
         if debug_logs_enabled:
             await log_liquidity(self, token, block, liquidity)
         return liquidity
-
-    @stuck_coro_debugger
-    @eth_retry.auto_retry
-    async def _quote_exact_input(
-        self, path: Path, amount_in: int, block: BlockNumber
-    ) -> Decimal | None:
-        """
-        Quote the exact input for a given path and amount.
-
-        Args:
-            path: The path for the swap.
-            amount_in: The input amount.
-            block: The block number to quote at.
-
-        Returns:
-            The quoted output amount.
-
-        Examples:
-            >>> uniswap_v3 = UniswapV3(...)
-            >>> output_amount = await uniswap_v3._quote_exact_input(path, 1000, 1234567)
-
-        See Also:
-            :func:`_undo_fees`
-        """
-        quoter = await self.__quoter__
-        try:
-            amount = await quoter.quoteExactInput.coroutine(
-                _encode_path(path), amount_in, block_identifier=block
-            )
-        except InvalidPointer:
-            # TODO: debug why this happens and handle it somewhere more appropriate
-            return None
-        except Exception as e:
-            if call_reverted(e):
-                return None
-            raise
-
-        scaled = (
-            # Quoter v2 uses this weird return struct, we must unpack it to get amount out.
-            (amount if isinstance(amount, int) else amount[0])
-            / _undo_fees(path)
-            / _FEE_DENOMINATOR
-        )
-        if scaled > 100_000_000:
-            # this is a totally arbitrary value used as a sense check,
-            # we were getting crazy prices from some pools on occasion
-            # but not sure why
-            return None
-        return round(scaled, 18)
-
-
-def _encode_path(path: Path) -> bytes:
-    """
-    Encode a path for Uniswap V3.
-
-    Args:
-        path: The path to encode.
-
-    Returns:
-        The encoded path.
-
-    Examples:
-        >>> path = ["0xToken0Address", 3000, "0xToken1Address"]
-        >>> encoded_path = _encode_path(path)
-
-    See Also:
-        :func:`encode_packed`
-    """
-    return encode_packed(_PATH_TYPE_STRINGS[len(path)], path)
-
-
-def _undo_fees(path: Path) -> Decimal:
-    """
-    Undo the fees for a given path.
-
-    Args:
-        path: The path to undo fees for.
-
-    Returns:
-        The fee multiplier.
-
-    Examples:
-        >>> path = ["0xToken0Address", 3000, "0xToken1Address"]
-        >>> fee_multiplier = _undo_fees(path)
-    """
-    fees = (1 - fee / _FEE_DENOMINATOR for fee in islice(path, 1, None, 2))
-    return math.prod(fees)
 
 
 class UniV3Pools(ProcessedEvents[UniswapV3Pool]):

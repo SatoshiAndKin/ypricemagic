@@ -2,7 +2,7 @@
 
 This module contains asynchronous tests for verifying price retrieval via the Uniswap multiplexer
 across different Uniswap versions (V1, V2, and V3). In particular, note that for Uniswap V2 the test now uses
-the primary router determined via liquidity depth via :meth:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer.routers_by_depth`.
+the highest valid price across all supported routers at one block.
 
 See Also:
     :class:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer`
@@ -85,10 +85,8 @@ async def test_uniswap_v1(token, async_uni_v1):
 async def test_uniswap_v2(token):
     """Test Uniswap V2 price fetching.
 
-    This test retrieves the list of routers sorted by liquidity depth for the provided token by calling
-    :meth:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer.routers_by_depth`, and then concurrently fetches
-    price data from the selected router and from the generic :func:`~y.prices.magic.get_price` function.
-    The test verifies that the prices obtained are consistent within a 5% relative tolerance.
+    This test compares all router quotes with the multiplexer result at one
+    concrete block. A shallower router can provide the highest USD quote.
 
     Args:
         token: The token address to query.
@@ -96,13 +94,20 @@ async def test_uniswap_v2(token):
     See Also:
         :meth:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer.routers_by_depth`
     """
-    deepest_router = await uniswap_multiplexer.deepest_router(token, sync=False)
-    price, alt_price = await cgather(
-        deepest_router.get_price(token, skip_cache=True, sync=False),
-        magic.get_price(token, skip_cache=True, sync=False),
+    import dank_mids
+
+    from y.prices._candidates import valid_price
+
+    block = await dank_mids.eth.block_number
+    candidates = await cgather(
+        *(
+            router.get_price(token, block, skip_cache=True, sync=False)
+            for router in uniswap_multiplexer.uniswaps
+        )
     )
-    print(token, price, alt_price)
-    assert price == pytest.approx(alt_price, rel=5e-2)
+    expected = max((float(price) for price in candidates if valid_price(price)), default=None)
+    result = await uniswap_multiplexer.get_price(token, block, skip_cache=True, sync=False)
+    assert (float(result) if result is not None else None) == expected
 
 
 @pytest.mark.parametrize("token", V2_TOKENS)

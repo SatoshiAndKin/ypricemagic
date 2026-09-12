@@ -44,6 +44,7 @@ To learn about the rest of ypricemagic's capabilities, navigate the library stru
    source/modules.rst
    environment
    caching
+   amount-quotes
    cli
 
 Indices and tables

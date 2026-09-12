@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import Optional, cast
 
 import a_sync
 from a_sync import PruningThreadPoolExecutor, cgather
@@ -10,12 +10,14 @@ from multicall import Call
 from typing_extensions import Self
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20, ContractBase
 from y.constants import EEE_ADDRESS
 from y.contracts import Contract, has_methods
-from y.datatypes import AddressOrContract, AnyAddressType, Block, UsdPrice
+from y.datatypes import AddressOrContract, AnyAddressType, Block, PriceResult
 from y.exceptions import ContractNotVerified, call_reverted
 from y.networks import Network
+from y.prices._candidates import derive_price, gather_owned
 from y.utils.logging import _gh_issue_request
 from y.utils.raw_calls import raw_call
 
@@ -89,9 +91,10 @@ class CToken(ERC20):
         super().__init__(address, asynchronous=asynchronous)
         self.exchange_rate_current = Call(self.address, "exchangeRateCurrent()(uint)").coroutine
 
+    @stuck_coro_debugger
     async def get_price(
         self, block: Block | None = None, skip_cache: bool = ENVS.SKIP_CACHE
-    ) -> UsdPrice:
+    ) -> PriceResult | None:
         """
         Get the price of the CToken in USD.
 
@@ -105,20 +108,39 @@ class CToken(ERC20):
         """
         if self.troller:
             # We can use the protocol's oracle which will be quick (if it works)
-            underlying_per_ctoken, underlying_price = await cgather(
-                self.underlying_per_ctoken(block=block, asynchronous=True),
-                self.get_underlying_price(block=block, asynchronous=True),
+            underlying_per_ctoken, underlying_price = await gather_owned(
+                [
+                    self.underlying_per_ctoken(block=block, asynchronous=True),
+                    self.get_underlying_price(block=block, asynchronous=True),
+                ]
             )
-            if underlying_price:
-                return UsdPrice(underlying_per_ctoken * underlying_price)
+            if underlying_price and underlying_per_ctoken is not None:
+                return derive_price(
+                    self.address,
+                    float(underlying_per_ctoken) * float(underlying_price),
+                    f"Compound {self.address} underlying",
+                    underlying_price,
+                )
 
         # Or we can just price the underlying token ourselves
         underlying = await self.__underlying__
-        underlying_per_ctoken, underlying_price = await cgather(
-            self.underlying_per_ctoken(block=block, asynchronous=True),
-            underlying.price(block=block, skip_cache=skip_cache, asynchronous=True),
+        underlying_per_ctoken, child_price = cast(
+            tuple[float | None, PriceResult | None],
+            await gather_owned(
+                [
+                    self.underlying_per_ctoken(block=block, asynchronous=True),
+                    underlying.price(block=block, skip_cache=skip_cache, asynchronous=True),
+                ]
+            ),
         )
-        return UsdPrice(underlying_per_ctoken * underlying_price)
+        if underlying_per_ctoken is None or child_price is None:
+            return None
+        return derive_price(
+            self.address,
+            float(underlying_per_ctoken) * float(child_price),
+            f"Compound {self.address} underlying",
+            child_price,
+        )
 
     @a_sync.aka.cached_property
     async def underlying(self) -> ERC20:
@@ -216,8 +238,8 @@ class CToken(ERC20):
         oracle: Contract
         underlying: ERC20
         # always query the oracle in case it was changed
-        oracle, underlying = await cgather(
-            self.troller.oracle(block, asynchronous=True), self.__underlying__
+        oracle, underlying = await gather_owned(
+            [self.troller.oracle(block, asynchronous=True), self.__underlying__]
         )
         price, underlying_decimals = await cgather(
             oracle.getUnderlyingPrice.coroutine(self.address, block_identifier=block),
@@ -433,12 +455,13 @@ class Compound(a_sync.ASyncGenericSingleton):
             await self.__notify_if_unknown_comptroller(token_address)
         return result
 
+    @stuck_coro_debugger
     async def get_price(
         self,
         token_address: AnyAddressType,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice | None:
+    ) -> PriceResult | None:
         """
         Get the price of a token in USD.
 

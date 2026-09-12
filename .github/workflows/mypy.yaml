@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
-        pyversion: [ "3.10", "3.11", "3.12" ]
+        pyversion: [ "3.11", "3.12", "3.13" ]
 
     steps:
     - uses: actions/checkout@v6
@@ -31,24 +31,22 @@ jobs:
       uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.pyversion }}
+        cache: pip
+        cache-dependency-path: |
+          requirements.txt
+          pyproject.toml
 
     - name: Cache .mypy_cache
       uses: actions/cache@v5
       with:
         path: .mypy_cache
-        key: mypy-cache-${{ runner.os }}-${{ hashFiles('**/*.py', 'pyproject.toml') }}
+        key: mypy-cache-${{ runner.os }}-${{ matrix.pyversion }}-${{ hashFiles('**/*.py', 'pyproject.toml') }}
 
     - name: Install MyPy
       run: |
         python -m pip install --upgrade pip
-        pip install mypy
+        pip install "mypy[mypyc]==1.19.1"
       
-    - name: Install pyyaml on python <= 3.9
-      if: ${{ matrix.pyversion == '3.8' || matrix.pyversion == '3.9' }}
-      run: |
-        pip install wheel
-        pip install --no-build-isolation "Cython<3" "pyyaml==5.4.1"
-        
     - name: Install dependencies 
       run: pip install -r requirements.txt
 

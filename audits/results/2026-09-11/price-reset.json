@@ -1,0 +1,38 @@
+{
+  "chain": 1,
+  "before": 1,
+  "deleted": 1,
+  "other_chain_rows": 0,
+  "database": "/Users/bryan/.ypricemagic/ypricemagic.sqlite",
+  "backup": "/Users/bryan/.ypricemagic/ypricemagic.before-liquidity-quotes-20260912T002950Z.sqlite",
+  "before_tables": {
+    "BlockAtTimestamp": 3,
+    "Chain": 1,
+    "Block": 588916,
+    "Address": 1809,
+    "Hashes": 601891,
+    "sqlite_sequence": 2,
+    "LogCacheInfo": 9,
+    "LogTopic": 573483,
+    "Log": 603001,
+    "Price": 1,
+    "Trace": 0,
+    "TraceCacheInfo": 0
+  },
+  "after_tables": {
+    "BlockAtTimestamp": 3,
+    "Chain": 1,
+    "Block": 588916,
+    "Address": 1809,
+    "Hashes": 601891,
+    "sqlite_sequence": 2,
+    "LogCacheInfo": 9,
+    "LogTopic": 573483,
+    "Log": 603001,
+    "Price": 0,
+    "Trace": 0,
+    "TraceCacheInfo": 0
+  },
+  "writers": "none open; no process restart required",
+  "integrity": "ok"
+}

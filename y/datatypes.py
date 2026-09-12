@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from decimal import Decimal
 from typing import TYPE_CHECKING, Union
 
 import evmspec.data
@@ -54,7 +55,7 @@ Examples:
     >>> any_address_int = 12345678
 """
 
-Pool = Union["UniswapV2Pool", "CurvePool", "BalancerV2Pool"]
+Pool = Union[AddressOrContract, "UniswapV2Pool", "CurvePool", "BalancerV2Pool"]
 """
 A union of types representing liquidity pools.
 
@@ -128,14 +129,48 @@ class PriceStep:
     def __repr__(self) -> str:
         """Return a concise string representation of the price step."""
         # Truncate long addresses for readability
-        tok = (
-            self.token[:6] + "..." + self.token[-4:]
-            if len(self.token) > 12
-            else self.token
-        )
-        return (
-            f"PriceStep(token='{tok}', price={self.price}, source='{self.source}')"
-        )
+        tok = self.token[:6] + "..." + self.token[-4:] if len(self.token) > 12 else self.token
+        return f"PriceStep(token='{tok}', price={self.price}, source='{self.source}')"
+
+
+@dataclass(frozen=True)
+class QuoteAsset:
+    """An exact token quantity. Amounts use token base units."""
+
+    token: str
+    amount: int
+    decimals: int
+
+    @property
+    def readable(self) -> Decimal:
+        return Decimal((0, tuple(map(int, str(self.amount))), -self.decimals))
+
+
+@dataclass(frozen=True)
+class QuoteStep:
+    """One native swap quote or supported redemption, including its limits."""
+
+    kind: str
+    protocol: str
+    contract: str
+    input: QuoteAsset
+    outputs: tuple[QuoteAsset, ...]
+    method: str
+    fees: str
+    limits: str
+
+
+@dataclass(frozen=True)
+class QuoteDetails:
+    """Wallet-independent sale estimate; holder eligibility is unverified."""
+
+    input: QuoteAsset
+    outputs: tuple[QuoteAsset, ...]
+    total_usd: Decimal
+    block_number: int
+    block_hash: str
+    steps: tuple[QuoteStep, ...]
+    holder_eligibility: str = "unverified"
 
 
 @dataclass(eq=False)
@@ -168,6 +203,7 @@ class PriceResult:
 
     price: UsdPrice
     path: list[PriceStep]
+    quote: QuoteDetails | None = None
 
     # ------------------------------------------------------------------
     # float backward-compatibility

@@ -1,8 +1,8 @@
 from asyncio import iscoroutinefunction
-from collections.abc import Awaitable, Callable
+from collections.abc import AsyncIterator, Awaitable, Callable, Coroutine
 from functools import partial, wraps
 from logging import getLogger
-from typing import Final, TypeAlias, TypeVar
+from typing import Any, Final, Protocol, TypeVar, cast, overload
 
 from a_sync import debugging
 from typing_extensions import ParamSpec
@@ -10,12 +10,18 @@ from typing_extensions import ParamSpec
 P = ParamSpec("P")
 T = TypeVar("T")
 
-CoroFn: TypeAlias = Callable[P, Awaitable[T]]
+
+class _StuckDebugger(Protocol):
+    @overload
+    def __call__(self, fn: Callable[P, AsyncIterator[T]]) -> Callable[P, AsyncIterator[T]]: ...
+
+    @overload
+    def __call__(self, fn: Callable[P, Awaitable[T]]) -> Callable[P, Coroutine[Any, Any, T]]: ...
 
 
 stuck_coro_logger: Final = getLogger("y.stuck?")
-stuck_coro_debugger: Final[Callable[[CoroFn[P, T]], CoroFn[P, T]]] = partial(
-    debugging.stuck_coro_debugger, logger=stuck_coro_logger
+stuck_coro_debugger: Final = cast(
+    _StuckDebugger, partial(debugging.stuck_coro_debugger, logger=stuck_coro_logger)
 )
 
 

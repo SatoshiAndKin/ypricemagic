@@ -2,15 +2,15 @@ import logging
 from typing import Final, final
 
 import a_sync
+import dank_mids
 from a_sync.a_sync.property import HiddenMethodDescriptor
 from typing_extensions import Self
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import exceptions
 from y._decorators import stuck_coro_debugger
-from y.constants import CHAINID, CONNECTED_TO_MAINNET
-from y.datatypes import AnyAddressType, Block, Pool, UsdPrice
-from y.networks import Network
+from y.datatypes import AnyAddressType, Block, Pool, PriceResult, UsdPrice
+from y.prices._candidates import derive_price, gather_owned, valid_price
 from y.prices.dex.balancer._abc import BalancerABC
 from y.prices.dex.balancer.v1 import BalancerV1
 from y.prices.dex.balancer.v2 import BalancerV2
@@ -65,7 +65,7 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
         Examples:
             >>> versions = await multiplexer.versions
         """
-        return [v async for v in a_sync.as_completed([self.__v1__, self.__v2__], aiter=True) if v]
+        return [v for v in await gather_owned([self.__v1__, self.__v2__]) if v]
 
     __versions__: HiddenMethodDescriptor[Self, list[BalancerV1 | BalancerV2]]
 
@@ -156,14 +156,13 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
         return None if price is None else UsdPrice(price)
 
     @stuck_coro_debugger
-    @a_sync.a_sync(ram_cache_ttl=ENVS.CACHE_TTL, ram_cache_maxsize=ENVS.PRICE_CACHE_MAXSIZE)
     async def get_price(
         self,
         token_address: AnyAddressType,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
-    ) -> UsdPrice | None:
+    ) -> PriceResult | None:
         """
         Get the price of a token using Balancer pools.
 
@@ -178,39 +177,33 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
         Examples:
             >>> price = await multiplexer.get_price(token_address, block=12345678)
         """
+        if block is None:
+            block = await dank_mids.eth.block_number
         if await self.is_balancer_pool(token_address, sync=False):
-            return await self.get_pool_price(
+            price = await self.get_pool_price(
                 token_address,
                 block=block,
                 skip_cache=skip_cache,
                 ignore_pools=ignore_pools,
                 sync=False,
             )
+            if price is not None and valid_price(price):
+                return derive_price(token_address, price, f"Balancer pool {token_address}")
 
-        price = None
+        from y.prices._routing import liquidity_price
 
-        if (  # NOTE: Only query v2 if block queried > v2 deploy block plus some extra blocks to build up liquidity
-            CONNECTED_TO_MAINNET and (not block or block > 12272146 + 100000)
-        ) or (
-            CHAINID == Network.Fantom and (not block or block > 16896080)
-        ):  # TODO: refactor this out
-            v2 = await self.__v2__
-            if price := await v2.get_token_price(
-                token_address, block, skip_cache=skip_cache, ignore_pools=ignore_pools, sync=False
-            ):
-                logger.debug("balancer v2 -> $%s", price)
-                return price
-
-        if not price and CONNECTED_TO_MAINNET:
-            v1 = await self.__v1__
-            if price := await v1.get_token_price(
-                token_address, block, skip_cache=skip_cache, sync=False
-            ):
-                logger.debug("balancer v1 -> $%s", price)
-                return price
+        return await liquidity_price(
+            str(token_address),
+            block,
+            ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
+            first_markets=("Balancer V1", "Balancer V2"),
+        )
 
     # cached forever because not many items
-    @a_sync.a_sync(cache_type="memory", ram_cache_ttl=None, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+    @a_sync.a_sync(
+        cache_type="memory", ram_cache_ttl=None, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE
+    )
     async def get_version(self, token_address: AnyAddressType) -> BalancerABC:
         """
         Determine the Balancer version for a given token address.

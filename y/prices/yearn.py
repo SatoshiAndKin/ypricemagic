@@ -1,5 +1,6 @@
 from decimal import Decimal
 from logging import DEBUG, getLogger
+from typing import cast
 
 import a_sync
 from a_sync import ASyncCachedPropertyDescriptor, cgather
@@ -15,7 +16,7 @@ from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import CHAINID, CONNECTED_TO_MAINNET, weth
 from y.contracts import Contract, has_method, has_methods, probe
-from y.datatypes import AnyAddressType, Block, Pool, UsdPrice
+from y.datatypes import AnyAddressType, Block, Pool, PriceResult
 from y.exceptions import (
     CantFetchParam,
     ContractNotVerified,
@@ -23,6 +24,7 @@ from y.exceptions import (
     PriceError,
     yPriceMagicError,
 )
+from y.prices._candidates import derive_price, gather_owned
 from y.utils.cache import optional_async_diskcache
 from y.utils.logging import get_price_logger
 from y.utils.raw_calls import raw_call
@@ -69,7 +71,12 @@ force_false = {
 }
 
 
-@a_sync.a_sync(default="sync", cache_type="memory", ram_cache_ttl=30 * 60, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+@a_sync.a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=30 * 60,
+    ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE,
+)
 @stuck_coro_debugger
 @optional_async_diskcache
 async def is_yearn_vault(token: AnyAddressType) -> bool:
@@ -118,7 +125,7 @@ async def get_price(
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
     ignore_pools: tuple[Pool, ...] = (),
-) -> UsdPrice:
+) -> PriceResult | None:
     return await YearnInspiredVault(token).price(
         block=block, skip_cache=skip_cache, ignore_pools=ignore_pools, sync=False
     )
@@ -320,12 +327,13 @@ class YearnInspiredVault(ERC20):
 
     a_sync.a_sync(cache_type="memory", ram_cache_maxsize=1000)
 
+    @stuck_coro_debugger
     async def price(
         self,
         block: Block | None = None,
         ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice:
+    ) -> PriceResult | None:
         """
         Calculates the USD price of the vault token.
 
@@ -346,8 +354,11 @@ class YearnInspiredVault(ERC20):
         logger = get_price_logger(self.address, block=None, extra="yearn")
         underlying: ERC20
         try:
-            share_price, underlying = await cgather(
-                self.share_price(block=block, sync=False), self.__underlying__
+            share_price, underlying = cast(
+                tuple[Decimal | None, ERC20],
+                await gather_owned(
+                    [self.share_price(block=block, sync=False), self.__underlying__]
+                ),
             )
         except CantFetchParam:
             return None
@@ -361,11 +372,14 @@ class YearnInspiredVault(ERC20):
                 skip_cache=skip_cache,
                 sync=False,
             )
-            # Extract numeric price from PriceResult if needed
-            from y.datatypes import PriceResult as _PriceResult
-            if isinstance(underlying_price, _PriceResult):
-                underlying_price = underlying_price.price
-            price = UsdPrice(share_price * Decimal(underlying_price))
+            if underlying_price is None:
+                return None
+            price = derive_price(
+                self.address,
+                share_price * Decimal(float(underlying_price)),
+                f"Yearn {self.address} vault share price",
+                underlying_price,
+            )
         except yPriceMagicError as e:
             if not isinstance(e.exception, PriceError):
                 raise

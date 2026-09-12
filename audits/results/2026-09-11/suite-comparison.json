@@ -1,0 +1,27 @@
+{
+  "command": "PYTEST_ADDOPTS=\"-p no:pytest_ethereum\" BROWNIE_NETWORK=mainnet make test",
+  "python": "3.12.12",
+  "baseline_revision": "476af288",
+  "baseline": {
+    "failed": 191,
+    "passed": 248,
+    "skipped": 5,
+    "errors": 3,
+    "complete": false
+  },
+  "changed": {
+    "failed": 1,
+    "passed": 19,
+    "skipped": 5,
+    "complete": false
+  },
+  "same_failure": {
+    "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3-5761012]",
+    "exception": "y.exceptions.NonStandardERC20",
+    "message": "Unable to fetch totalSupply for 0x57Ab1E02fEE23774580C119740129eAC7081e9D3 on Mainnet",
+    "block": 5761012
+  },
+  "blocking_rpc_error": "msgspec.ValidationError: Object missing required field try_again_in at $.error.data",
+  "changed_rpc_error_occurrences": 426,
+  "conclusion": "Both full runs were interrupted after repeated dependency RPC failures. These partial runs do not prove the absence of new full-suite failures. Final focused regression suite: 116 passed."
+}

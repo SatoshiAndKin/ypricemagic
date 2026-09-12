@@ -1,15 +1,31 @@
-from asyncio import as_completed, ensure_future, iscoroutine
+from asyncio import iscoroutine
 from collections.abc import Awaitable, Callable
 from logging import DEBUG, getLogger
+from typing import Any
 
 import a_sync
+from brownie.exceptions import ContractNotFound
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import STABLECOINS
 from y.datatypes import Address, AnyAddressType
-from y.prices import convex, curve_gauge, erc4626, exotic_tokens, one_to_one, pendle, popsicle, rkp3r, solidex, yearn
+from y.exceptions import ContractNotVerified, NonStandardERC20, call_reverted
+from y.prices import (
+    convex,
+    curve_gauge,
+    erc4626,
+    exotic_tokens,
+    one_to_one,
+    pendle,
+    popsicle,
+    rkp3r,
+    solidex,
+    yearn,
+)
+from y.prices._candidates import gather_owned
 from y.prices.band import band
 from y.prices.chainlink import chainlink
 from y.prices.dex import mooniswap
@@ -21,7 +37,14 @@ from y.prices.gearbox import gearbox
 from y.prices.lending import ib
 from y.prices.lending.aave import aave
 from y.prices.lending.compound import compound
-from y.prices.stable_swap import belt, ellipsis, froyo, mstablefeederpool, saddle, stargate
+from y.prices.stable_swap import (
+    belt,
+    ellipsis,
+    froyo,
+    mstablefeederpool,
+    saddle,
+    stargate,
+)
 from y.prices.stable_swap.curve import curve
 from y.prices.synthetix import synthetix
 from y.prices.tokenized_fund import basketdao, gelato, piedao, reserve, tokensets
@@ -31,28 +54,14 @@ logger = getLogger(__name__)
 
 
 @a_sync.a_sync(default="sync", cache_type="memory", ram_cache_maxsize=ENVS.CONTRACT_CACHE_MAXSIZE)
-async def check_bucket(token: AnyAddressType) -> str:
+@stuck_coro_debugger
+async def check_bucket(token: AnyAddressType, block: int | None = None) -> str | None:
     """Determine and return the category or "bucket" of a given token.
 
-    This function classifies a token by performing a set of tests in the following order:
-
-    1. It first attempts to retrieve a cached bucket from the database via
-       :func:`y._db.utils.token.get_bucket`.
-    2. Next, it applies simple string-based comparisons defined in the ``string_matchers``
-       dictionary.
-    3. If no bucket is determined, it concurrently executes a set of asynchronous "calls-only"
-       tests for further classification. The function will return immediately once any of these
-       tests confirms the token’s membership in a bucket.
-    4. If none of the concurrent tests succeed, it falls back to a series of sequential asynchronous
-       checks that involve both contract initializations and blockchain calls.
-
-    .. note::
-       The fallback sequential tests are executed in order. However, the first two fallback checks
-       (for "solidex" and "uni or uni-like lp") are evaluated independently; as a result, if both
-       conditions return true, the latter bucket ("uni or uni-like lp") will overwrite the earlier
-       assignment from "solidex".
-
-    The final determined bucket is stored in the database using :func:`db.set_bucket`.
+    Calls-only checks and heavy checks each run concurrently and finish before
+    classification. The declared check order fixes priority. The Uniswap LP
+    check has priority over Solidex. Cancellation and fatal failures drain all
+    owned check tasks. Historical oracle eligibility uses the requested block.
 
     Args:
         token: The token address to classify.
@@ -85,7 +94,7 @@ async def check_bucket(token: AnyAddressType) -> str:
     import y._db.utils.token as db
 
     bucket = await db.get_bucket(token_address)
-    if bucket:
+    if bucket and bucket not in ("chainlink feed", "chainlink and band"):
         logger.debug("returning bucket %s from ydb", bucket)
         return bucket
 
@@ -93,7 +102,7 @@ async def check_bucket(token: AnyAddressType) -> str:
 
     # these require neither calls to the chain nor contract initialization, just string comparisons (pretty sure)
     for bucket, check in string_matchers.items():
-        if check(token):
+        if check(token_address):
             if debug_logs_enabled:
                 await __log_bucket(token_address, bucket)
             db.set_bucket(token_address, bucket)
@@ -101,32 +110,17 @@ async def check_bucket(token: AnyAddressType) -> str:
         elif debug_logs_enabled:
             await __log_not_bucket(token_address, bucket)
 
-    # Check these first, these tests involve asynchronous eth_calls and are launched concurrently.
-    futs = [
-        ensure_future(_check_bucket_helper(bucket, check, token_address))
-        for bucket, check in calls_only.items()
-    ]
-    for fut in as_completed(futs):
-        try:
-            bucket, is_member = await fut
-        except TypeError:
-            raise
-        except Exception as e:
-            logger.warning("%s when checking %s. This will probably not impact your run.", e, fut)
-            logger.warning(e, exc_info=True)
-            continue
-
+    # Dictionary order defines priority, independently of completion order.
+    results = await gather_owned(
+        _safe_check_bucket(name, _check_bucket_helper(name, check, token_address), paired=True)
+        for name, check in calls_only.items()
+    )
+    for bucket, is_member in results:
         if is_member:
             if debug_logs_enabled:
                 await __log_bucket(token_address, bucket)
-            for fut in futs:
-                fut.cancel()
             db.set_bucket(token_address, bucket)
             return bucket
-        else:
-            if debug_logs_enabled:
-                await __log_not_bucket(token_address, bucket)
-            bucket = None
 
     # These require both calls and contract initializations.
     # All checks run concurrently; the first match by priority wins.
@@ -138,48 +132,46 @@ async def check_bucket(token: AnyAddressType) -> str:
     ]
     if gearbox:
         heavy_checks.append(("gearbox", gearbox.is_diesel_token(token_address, sync=False)))
-    heavy_checks.extend([
-        ("wrapped atoken v2", aave.is_wrapped_atoken_v2(token_address, sync=False)),
-        ("wrapped atoken v3", aave.is_wrapped_atoken_v3(token_address, sync=False)),
-        ("generic amm", is_generic_amm(token_address)),
-        ("mooniswap lp", mooniswap.is_mooniswap_pool(token_address, sync=False)),
-        ("compound", compound.is_compound_market(token_address, sync=False)),
-        ("chainlink and band", _chainlink_and_band(token_address)),
-    ])
+    heavy_checks.extend(
+        [
+            ("wrapped atoken v2", aave.is_wrapped_atoken_v2(token_address, sync=False)),
+            ("wrapped atoken v3", aave.is_wrapped_atoken_v3(token_address, sync=False)),
+            ("generic amm", is_generic_amm(token_address)),
+            ("mooniswap lp", mooniswap.is_mooniswap_pool(token_address, sync=False)),
+            ("compound", compound.is_compound_market(token_address, sync=False)),
+            ("chainlink and band", _chainlink_and_band(token_address, block)),
+        ]
+    )
     if chainlink:
-        heavy_checks.append(("chainlink feed", chainlink.has_feed(token_address, sync=False)))
+        heavy_checks.append(
+            ("chainlink feed", chainlink.has_feed(token_address, block=block, sync=False))
+        )
     if synthetix:
         heavy_checks.append(("synthetix", synthetix.is_synth(token_address, sync=False)))
     heavy_checks.append(("yearn or yearn-like", yearn.is_yearn_vault(token_address, sync=False)))
     if curve:
         heavy_checks.append(("curve lp", curve.get_pool(token_address, sync=False)))
 
-    parallel_futs = [
-        ensure_future(_safe_check_bucket(name, coro))
-        for name, coro in heavy_checks
-    ]
-
-    results: dict[str, bool] = {}
-    for fut in as_completed(parallel_futs):
-        name, is_member = await fut
-        results[name] = is_member
+    heavy_results = dict(
+        await gather_owned(_safe_check_bucket(name, coro) for name, coro in heavy_checks)
+    )
 
     # Pick the highest-priority match.
     # Special case: "uni or uni-like lp" overwrites "solidex" (original behavior).
     bucket = None
-    if results.get("solidex"):
+    if heavy_results.get("solidex"):
         bucket = "solidex"
-    if results.get("uni or uni-like lp"):
+    if heavy_results.get("uni or uni-like lp"):
         bucket = "uni or uni-like lp"
     if bucket is None:
         for name, _coro in heavy_checks[2:]:
-            if results.get(name):
+            if heavy_results.get(name):
                 bucket = name
                 break
 
     if debug_logs_enabled:
         await __log_bucket(token_address, bucket)
-    if bucket:
+    if bucket and bucket not in ("chainlink feed", "chainlink and band"):
         db.set_bucket(token_address, bucket)
     return bucket
 
@@ -223,20 +215,24 @@ calls_only = {
 }
 
 
-async def _safe_check_bucket(name: str, coro: Awaitable[bool]) -> tuple[str, bool]:
-    """Run a bucket check, catching exceptions so one failure doesn't block the rest."""
+async def _safe_check_bucket(
+    name: str, coro: Awaitable[Any], paired: bool = False
+) -> tuple[str, bool]:
+    """Treat unavailable contracts as nonmembers; propagate unexpected errors."""
     try:
         result = await coro
-        return name, bool(result)
-    except TypeError:
-        raise
+        return (str(result[0]), bool(result[1])) if paired else (name, bool(result))
     except Exception as e:
+        if not isinstance(
+            e, (ContractNotFound, ContractNotVerified, NonStandardERC20)
+        ) and not call_reverted(e):
+            raise
         logger.warning("%s when checking %s. This will probably not impact your run.", e, name)
         logger.warning(e, exc_info=True)
         return name, False
 
 
-async def _chainlink_and_band(token_address) -> bool:
+async def _chainlink_and_band(token_address, block) -> bool:
     """
     Check if a token is supported by both Chainlink and Band oracles.
 
@@ -255,7 +251,9 @@ async def _chainlink_and_band(token_address) -> bool:
         - :func:`y.prices.chainlink.has_feed`
     """
     return (
-        chainlink and await chainlink.has_feed(token_address, sync=False) and token_address in band
+        bool(chainlink)
+        and await chainlink.has_feed(token_address, block=block, sync=False)
+        and token_address in band
     )
 
 

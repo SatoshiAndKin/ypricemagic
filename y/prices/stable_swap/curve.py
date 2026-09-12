@@ -21,10 +21,19 @@ from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20, WeiBalance, _EventsLoader, _Loader
 from y.constants import CHAINID, CONNECTED_TO_MAINNET
 from y.contracts import Contract, contract_creation_block_async
-from y.datatypes import Address, AddressOrContract, AnyAddressType, Block, Pool, UsdPrice, UsdValue
+from y.datatypes import (
+    Address,
+    AddressOrContract,
+    AnyAddressType,
+    Block,
+    Pool,
+    PriceResult,
+    UsdValue,
+)
 from y.exceptions import (
     ContractNotVerified,
     MessedUpBrownieContract,
@@ -35,7 +44,6 @@ from y.exceptions import (
 )
 from y.interfaces.curve.CurveRegistry import CURVE_REGISTRY_ABI
 from y.networks import Network
-from y.utils import a_sync_ttl_cache
 from y.utils.events import ProcessedEvents
 from y.utils.multicall import multicall_same_func_same_contract_different_inputs
 from y.utils.raw_calls import raw_call
@@ -438,6 +446,7 @@ class CurvePool(ERC20):
     __get_underlying_coins__: HiddenMethodDescriptor[Self, list[ERC20]]
 
     @a_sync.a_sync(ram_cache_maxsize=5000)
+    @stuck_coro_debugger
     async def get_balances(
         self, block: Block | None = None, skip_cache: bool = ENVS.SKIP_CACHE
     ) -> list[WeiBalance]:
@@ -621,7 +630,7 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
         except StopIteration:
             return None
 
-    @a_sync_ttl_cache
+    @stuck_coro_debugger
     async def get_price(
         self,
         token: Address,
@@ -661,87 +670,24 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
         if token in self.token_to_pool and token != ZERO_ADDRESS:
             return CurvePool(self.token_to_pool[token], asynchronous=self.asynchronous)
 
-    @a_sync.a_sync(cache_type="memory", ram_cache_maxsize=ENVS.PRICE_CACHE_MAXSIZE)
+    @stuck_coro_debugger
     async def get_price_for_underlying(
         self,
         token_in: Address,
         block: Block | None = None,
         ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice | None:
-        try:
-            pools = (await self.__coin_to_pools__)[token_in]
-        except KeyError:
-            return None
+    ) -> PriceResult | None:
+        """Use native quotes from liquidity-ranked Curve pools."""
+        from y.prices._routing import liquidity_price
 
-        for pool in ignore_pools:
-            try:
-                pools.remove(pool)
-            except ValueError:
-                continue
-
-        if pools and block is not None:
-            pools = [
-                pool
-                async for pool, deploy_block in CurvePool.deploy_block.map(
-                    pools, when_no_history_return_0=True
-                )
-                if deploy_block <= block
-            ]
-
-        if not pools:
-            return None
-        # Choose a pool to use for pricing `token_in`.
-        elif len(pools) == 1:
-            pool = pools[0]
-        else:
-            # Use the pool with deepest liquidity.
-            deepest_pool, deepest_bal = None, 0
-            async for pool, depth in CurvePool.check_liquidity.map(
-                pools, token=token_in, block=block
-            ).map():
-                if depth > deepest_bal:
-                    deepest_pool = pool
-                    deepest_bal = depth
-            pool = deepest_pool
-
-        if pool is None:
-            return None
-
-        if len(await pool.__coins__) != 2:
-            # TODO: handle this sitch if necessary
-            return
-
-        # Get the price for `token_in` using the selected pool.
-        # this works for most typical metapools
-
-        token_in_ix = await pool.get_coin_index(token_in, sync=False)
-        token_out_ix = 0 if token_in_ix == 1 else 1 if token_in_ix == 0 else None
-        dy: WeiBalance | None = await pool.get_dy(
-            token_in_ix,
-            token_out_ix,
-            block=block,
+        return await liquidity_price(
+            str(token_in),
+            block,
             ignore_pools=ignore_pools,
             skip_cache=skip_cache,
-            sync=False,
+            first_markets=("Curve",),
         )
-        if dy is None:
-            return None
-
-        try:
-            return await dy.__value_usd__
-        except yPriceMagicError as e:
-            logger.debug("%s for %s at block %s", type(e.exception).__name__, token_in, block)
-            if not isinstance(e.exception, PriceError):
-                raise
-
-            # try to get price from a different pool
-            return await self.get_price_for_underlying(
-                token_in,
-                block,
-                ignore_pools=(*ignore_pools, pool),
-                skip_cache=skip_cache,
-            )
 
     @a_sync.aka.cached_property
     async def coin_to_pools(self) -> dict[str, list[CurvePool]]:

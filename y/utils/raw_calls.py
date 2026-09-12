@@ -14,6 +14,7 @@ from dank_mids.helpers import lru_cache_lite_nonull
 from faster_eth_utils import function_signature_to_4byte_selector
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._decorators import stuck_coro_debugger
 from y.contracts import Contract, proxy_implementation
 from y.convert import to_address, to_address_async
 from y.datatypes import Address, AddressOrContract, Block
@@ -351,6 +352,7 @@ async def _balanceOfReadable(
 
 
 @a_sync.a_sync(default="sync")
+@stuck_coro_debugger
 async def raw_call(
     contract_address: AddressOrContract,
     method: str,
@@ -401,10 +403,15 @@ async def raw_call(
 
     try:
         response = await dank_mids.eth.call(data, block_identifier=block)
-    except ValueError as e:
+    except Exception as e:
         if return_None_on_failure and (call_reverted(e) or "invalid opcode" in str(e)):
             return None
         raise
+
+    if return_None_on_failure and output is not None and not response:
+        # Empty return data cannot establish that a method exists. A full
+        # ABI word containing zero remains a successful decoded response.
+        return None
 
     try:
         if output is None:
@@ -483,11 +490,9 @@ def prepare_data(
     ]:
         return method + prepare_input(inputs)
 
-    raise CalldataPreparationError(
-        f"""
+    raise CalldataPreparationError(f"""
         Supported types are: Union[None, bytes, int, str, Address, EthAddress, brownie.Contract, y.Contract]
-        You passed {type(inputs)} {inputs}"""
-    )
+        You passed {type(inputs)} {inputs}""")
 
     # these don't work yet, wip
     """
@@ -563,11 +568,9 @@ def prepare_input(
     if input_type in [str, Address, EthAddress, brownie.Contract, Contract]:
         return f"000000000000000000000000{to_address(input)[2:]}"
 
-    raise CalldataPreparationError(
-        f"""
+    raise CalldataPreparationError(f"""
         Supported input types are
         uint: int, 
         address: Union[str, Address, brownie.Contract, y.Contract]
         you passed input: {input!r} type: {input_type}
-        """
-    )
+        """)
