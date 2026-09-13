@@ -53,6 +53,7 @@ line-length = 100
 memory_tests = ["tests/prices/test_popsicle.py"]
 focused_tests = [
   "tests/prices/test_gearbox.py",
+  "tests/prices/test_magic.py::test_bulk_fixture_releases_mapped_requests",
   "tests/test_memory_release.py",
   "tests/test_dank_import_guard.py",
   "tests/test_pricing_correctness.py",

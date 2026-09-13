@@ -1,0 +1,37 @@
+[
+  {
+    "file": "console.log",
+    "archive": "console.log.gz",
+    "bytes": 104857600,
+    "sha256": "5b05b298e974f3b9e40f0a1a8188f50984a4f18fb329e050324296632d3d9dfc",
+    "compressed_bytes": 457599
+  },
+  {
+    "file": "console.log.1",
+    "archive": "console.log.1.gz",
+    "bytes": 104857600,
+    "sha256": "5b05b298e974f3b9e40f0a1a8188f50984a4f18fb329e050324296632d3d9dfc",
+    "compressed_bytes": 457601
+  },
+  {
+    "file": "console.log.2",
+    "archive": "console.log.2.gz",
+    "bytes": 104857600,
+    "sha256": "5b05b298e974f3b9e40f0a1a8188f50984a4f18fb329e050324296632d3d9dfc",
+    "compressed_bytes": 457601
+  },
+  {
+    "file": "console.log.3",
+    "archive": "console.log.3.gz",
+    "bytes": 104857600,
+    "sha256": "5b05b298e974f3b9e40f0a1a8188f50984a4f18fb329e050324296632d3d9dfc",
+    "compressed_bytes": 457601
+  },
+  {
+    "file": "console.log.4",
+    "archive": "console.log.4.gz",
+    "bytes": 104857600,
+    "sha256": "5b05b298e974f3b9e40f0a1a8188f50984a4f18fb329e050324296632d3d9dfc",
+    "compressed_bytes": 457601
+  }
+]
