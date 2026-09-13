@@ -3,6 +3,11 @@
 Validation is incomplete. This directory records the transition and will receive
 completed Docker comparison results before PR #43 can leave draft state.
 
+The [requested archive retry](archive-retry/README.md) still fails. With a
+90-second client timeout, the same endpoint returns HTTP 408 after 60 seconds
+for historical state. The same request fails from Docker and the Mac, while
+USDC decimals at `latest` returns 6 from both. No archive-dependent gate passed.
+
 The original PR baseline is `476af288a520a30052668a8b3ad7e3e682cd101f`.
 The pre-optimization revision is `61be7b520aba7f771a0bf96b326315e68767fae4`.
 Each Docker report records the tested revision or worktree archive hash.
