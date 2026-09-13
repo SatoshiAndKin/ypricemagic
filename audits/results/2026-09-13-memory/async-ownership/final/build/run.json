@@ -1,0 +1,24 @@
+{
+  "complete": true,
+  "purpose": "Rebuild the exact Brownie 1.22.0.dev2 source with the published mypyc bytes ownership repair",
+  "base_image": "sha256:4ccb5b8063f29ecbd755ac2760da6364ee81d9f630af1a1f855ecfb83e34ae1b",
+  "compiler": "mypy==1.19.1+bytesrefcount1",
+  "started_unix": 1789328650.059816,
+  "brownie_source": {
+    "source_sha": "c986066ddd9ae10906a470008d786faab2355cc5",
+    "source_revision": "worktree",
+    "source_archive_sha256": "3cfa1f41907a67e2307cb1ddd7ff049b74192b5a124e294887cd6152c20f7804"
+  },
+  "compiler_source": {
+    "source_sha": "18a37e099bba69872e38adaee3319c125c97048e",
+    "source_revision": "worktree",
+    "source_archive_sha256": "1921d7328921733da7f0efa98fd567aaf7498b2d6a547005328bfb61bcf2b232"
+  },
+  "async_source": {
+    "source_sha": "221f5e62e4ab53ee7ce0333700d471b22fa23757",
+    "source_revision": "worktree",
+    "source_archive_sha256": "097f9b9f856ee2dfd756a58588af7f1a263840242867d1367ed558c46c666007"
+  },
+  "image": "sha256:a6fd7b59979ae836deb0763f7994161cb72b8ea533f95df8cc3ed2ca48bcea24",
+  "elapsed_seconds": 87.0172951221466
+}

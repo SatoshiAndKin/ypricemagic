@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import gc,json,os,resource,time,tracemalloc,weakref\nfrom pathlib import Path\nfrom a_sync.task import _unwrap\n\nrefs=[]\nstarted=time.perf_counter()\nallocations=os.environ.get('PROFILE_ALLOCATIONS')=='1'\nif allocations:\n    tracemalloc.start()\nfor index in range(1000):\n    payload=bytes([index%256])*65536\n    async def operation(key,payload=payload):\n        return key,len(payload)\n    refs.append(weakref.ref(operation))\n    assert _unwrap(operation) is operation\n    del operation,payload\nelapsed=time.perf_counter()-started\nreport={'complete':True,'functions':1000,'bytes_per_function':65536,'retained_functions':sum(ref() is not None for ref in refs),'python_current_bytes':tracemalloc.get_traced_memory()[0] if allocations else None,'python_peak_bytes':tracemalloc.get_traced_memory()[1] if allocations else None,'rss_peak_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,'elapsed_seconds':elapsed}\nPath(os.environ['VALIDATION_REPORT'],'async-owner-allocation.json').write_text(json.dumps(report,indent=2)+'\\n')\nprint(json.dumps(report))\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789328197.624809,
+  "source_sha": "850d7506d554209738cc2c471f82fbb951845d29",
+  "source_revision": "850d7506d554209738cc2c471f82fbb951845d29",
+  "source_archive_sha256": "fc7bdc0c1d5a1a15277664d9efcd1c89a5200c6abe47f05d8a6da202ab86298c",
+  "image": "sha256:6238403fcab8d9c102d811e608c362ddbc1899cde581d12e8dd51fa1f5563458",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 2.752286911010742
+}

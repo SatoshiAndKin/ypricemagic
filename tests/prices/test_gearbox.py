@@ -17,4 +17,10 @@ async def test_is_dtoken():
 @mainnet_only
 @pytest.mark.asyncio_cooperative
 async def test_get_price():
-    assert await gearbox.get_price(ddai, 16980000) == Decimal("1.007850150784062913")
+    # At this block, Chainlink's DAI/USD feed (round 17128) reports 99970000
+    # with eight decimals. The USD value includes this historical feed price.
+    dai_per_share = Decimal("1.007850150784062913")
+    dai_usd = Decimal("0.9997")
+    result = await gearbox.get_price(ddai, 16980000)
+    assert result == dai_per_share * dai_usd
+    assert result.path[-1].price == float(dai_usd)

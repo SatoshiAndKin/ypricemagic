@@ -10,9 +10,18 @@ proxy still returns HTTP 408. Validation resumes against NUC Reth. The
 [earlier proxy retries](archive-retry/README.md) and the expected
 [non-archive Geth control](direct-backend/README.md) remain separate records.
 
-The [final focused matrix](final-focused/README.md) passes all 244 tests on
-Python 3.11–3.13 with the final dependency pins and all ten compiled modules
-loaded. Full-suite and real-node pricing comparisons remain in progress.
+The [repaired dependency integration](repaired-owner-focused/README.md) passes all
+246 focused cases on native Linux ARM64 Python 3.12, including the corrected
+historical Gearbox expectation. The owning
+[compiler/Brownie backport](compiler-backport/README.md) and
+[task binding, cancellation, and release repair](async-ownership/README.md) have
+separate native checks and matched memory evidence. Their final three-version
+builds, complete pricing suites, and real-node gates remain in progress.
+
+The [earlier focused matrix](final-focused/README.md) passes all 244 tests on
+Python 3.11–3.13 with the dependency pins that preceded the compiler, Brownie,
+and ez-a-sync repairs. All ten compiled modules loaded. Its results do not
+validate the newer dependency pins.
 
 Both full suites hit the 8 GiB limit with the same locked dependency image.
 The [original run](full-original-final-oom/README.md) and
@@ -20,7 +29,8 @@ The [original run](full-original-final-oom/README.md) and
 neither produced a final pytest summary. These runs remain incomplete.
 The [Popsicle allocation probe](popsicle-allocations/README.md) and
 [native bytecode regression](brownie-bytecode-before/README.md) identify an
-additional compiler ownership defect. Owning dependency repairs are in progress.
+additional compiler ownership defect. The owning repairs now have separate
+passing native checks; the complete application comparison remains in progress.
 
 The [controlled Sushi comparison](scaling-final/README.md) completed three
 unprofiled samples per revision with identical dependencies and workload hashes.

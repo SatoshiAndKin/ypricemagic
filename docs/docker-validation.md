@@ -53,8 +53,10 @@ of archive access, not proof that all historical state is available.
 The first run builds a reusable image from the checked-in interpreter-specific
 dependency constraints. Python 3.11 uses NumPy 2.4.6; 3.12 and 3.13 use 2.5.3. Use the exact
 `image` ID in its `run.json` as `--image` for baseline and changed runs. The image
-contains `dependencies.txt`, which each report copies. The runner also records the final freeze to detect
-command-time dependency changes. Do not compare results
+contains a build manifest, which each report copies to
+`image-build-dependencies.txt`. The container records its actual installed packages
+in `dependencies.txt` before the command, and a final freeze detects command-time
+dependency changes. Do not compare results
 from different dependency images without identifying that difference. Python
 3.11 and 3.13 checks use separate images selected with `--python`.
 
@@ -188,3 +190,17 @@ separately from RSS; normal cyclic collection can release more objects later.
 A failed archive probe records its stage, block number, and exception type without
 storing the private endpoint. Focused code checks can run independently, but full
 suites and local-node comparisons require a successful probe.
+
+The pinned [compiler backport](https://github.com/SatoshiAndKin/mypy/pull/1)
+repairs byte concatenation reference counts in mypyc 1.19.1. The pinned
+[Brownie source build](https://github.com/SatoshiAndKin/brownie/pull/3) uses this
+compiler, so its native bytecode scanner releases intermediate buffers. Both
+retain the current Web3 6 dependency contract. The pinned
+[ez-a-sync repair](https://github.com/SatoshiAndKin/ez-a-sync/pull/1) binds constant
+arguments before mapped keys, releases unwrapped callables, and preserves child
+and caller cancellation. These repairs live in their owning repositories.
+
+`profile_pytest.py` profiles the targets in `[tool.validation].memory_tests`.
+It records allocation and task samples every 30 seconds while the ordinary
+pytest reporter records collection, setup, calls, and teardown. Keep this run
+separate from unprofiled performance measurements.

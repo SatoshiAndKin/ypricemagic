@@ -1,0 +1,33 @@
+{
+  "command": [
+    "env",
+    "PROFILE_ALLOCATIONS=1",
+    "python",
+    "-c",
+    "import gc,json,os,resource,time,tracemalloc,weakref\nfrom pathlib import Path\nfrom a_sync.task import _unwrap\n\nrefs=[]\nstarted=time.perf_counter()\nallocations=os.environ.get('PROFILE_ALLOCATIONS')=='1'\nif allocations:\n    tracemalloc.start()\nfor index in range(1000):\n    payload=bytes([index%256])*65536\n    async def operation(key,payload=payload):\n        return key,len(payload)\n    refs.append(weakref.ref(operation))\n    assert _unwrap(operation) is operation\n    del operation,payload\nelapsed=time.perf_counter()-started\nreport={'complete':True,'functions':1000,'bytes_per_function':65536,'retained_functions':sum(ref() is not None for ref in refs),'python_current_bytes':tracemalloc.get_traced_memory()[0] if allocations else None,'python_peak_bytes':tracemalloc.get_traced_memory()[1] if allocations else None,'rss_peak_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,'elapsed_seconds':elapsed}\nPath(os.environ['VALIDATION_REPORT'],'async-owner-allocation.json').write_text(json.dumps(report,indent=2)+'\\n')\nprint(json.dumps(report))\n"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 1.6997355800049263,
+  "peak_sampled_process_rss_bytes": 14852096,
+  "cgroup_before": {
+    "memory.current": "8753152",
+    "memory.peak": "8855552",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "12836864",
+    "memory.peak": "140013568",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

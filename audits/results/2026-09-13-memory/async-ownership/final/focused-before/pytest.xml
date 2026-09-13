@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="16" skipped="0" tests="88" time="2.237" timestamp="2026-09-13T19:22:08.502300" hostname="0db1f62f319a"><testcase classname="tests.task.test_task" name="test_task_mapping_concurrency" time="0.000" /><testcase classname="tests.task.test_task" name="test_task_mapping_init" time="0.000" /><testcase classname="tests.task.test_task" name="test_pruning" time="0.003" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[True-None-True]" time="0.007"><failure message="TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'">self = &lt;TaskMapping for &lt;function test_map_binds_constant_prefix.&lt;locals&gt;.quote at 0xff86d08f9300&gt; kwargs={'token': 'token', 'market': 'pool', 'amount': 3} tasks=0 at 0xff86d09dc440&gt;
+item = 10
+
+    def __getitem__(self, item: K) -&gt; Task[V]:
+        try:
+&gt;           return dict.__getitem__(self, item)
+E           KeyError: 10
+
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:240: KeyError
+
+During handling of the above exception, another exception occurred:
+
+wrapped = True, concurrency = None, manual = True
+
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.parametrize("wrapped", [False, True])
+    @pytest.mark.parametrize("concurrency", [None, 2])
+    @pytest.mark.parametrize("manual", [False, True])
+    async def test_map_binds_constant_prefix(wrapped, concurrency, manual):
+        calls = []
+    
+        async def quote(token, market, block, *, amount):
+            calls.append((token, market, block, amount))
+            await asyncio.sleep(0)
+            return block * amount
+    
+        function = a_sync("async")(quote) if wrapped else quote
+        mapping = TaskMapping(
+            function,
+            *(() if manual else ([10, 20],)),
+            token="token",
+            market="pool",
+            amount=3,
+            concurrency=concurrency,
+        )
+        if manual:
+&gt;           mapping[10]
+
+tests/task/test_task.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:242: in __getitem__
+    return self.__start_task(item)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;TaskMapping for &lt;function test_map_binds_constant_prefix.&lt;locals&gt;.quote at 0xff86d08f9300&gt; kwargs={'token': 'token', 'market': 'pool', 'amount': 3} tasks=0 at 0xff86d09dc440&gt;
+item = 10
+
+    def __start_task(self, item: K) -&gt; "Future[V]":
+        if self.concurrency:
+            # NOTE: we use a queue instead of a Semaphore to reduce memory use for use cases involving many many tasks
+            fut = self._queue.put_nowait(item)
+        else:
+            fut = create_task(
+&gt;               coro=self._wrapped_func(item, **self._wrapped_func_kwargs),
+                name=f"{item}" if self._name is None else f"{self._name}[{item}]",
+            )
+E           TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'
+
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:674: TypeError</failure></testcase><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_return_exceptions" time="0.007" /><testcase classname="tests.asyncio.test_gather" name="test_cgather_with_return_exceptions" time="0.005" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_async[TaskMappingItems]" time="0.007" /><testcase classname="tests.asyncio.test_gather" name="test_igather_with_exceptions" time="0.005" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_return_exceptions_aiter" time="0.007" /><testcase classname="tests.asyncio.test_gather" name="test_igather_with_return_exceptions" time="0.005" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_async[TaskMappingKeys]" time="0.007" /><testcase classname="tests.task.test_task" name="test_create_task" time="0.007" /><testcase classname="tests.asyncio.test_gather" name="test_gather_with_exceptions" time="0.005" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_async[TaskMappingValues]" time="0.007" /><testcase classname="tests.task.test_task" name="test_task_mapping_empty_iterable" time="0.007" /><testcase classname="tests.asyncio.test_gather" name="test_gather_with_return_exceptions" time="0.005" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[True-None-False]" time="0.007"><failure message="TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'">self = &lt;TaskMapping for &lt;function test_map_binds_constant_prefix.&lt;locals&gt;.quote at 0xff86d08f8ea0&gt; kwargs={'token': 'token', 'market': 'pool', 'amount': 3} tasks=0 at 0xff86d09dcfa0&gt;
+item = 10
+
+    def __getitem__(self, item: K) -&gt; Task[V]:
+        try:
+&gt;           return dict.__getitem__(self, item)
+E           KeyError: 10
+
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:240: KeyError
+
+During handling of the above exception, another exception occurred:
+
+wrapped = False, concurrency = None, manual = True
+
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.parametrize("wrapped", [False, True])
+    @pytest.mark.parametrize("concurrency", [None, 2])
+    @pytest.mark.parametrize("manual", [False, True])
+    async def test_map_binds_constant_prefix(wrapped, concurrency, manual):
+        calls = []
+    
+        async def quote(token, market, block, *, amount):
+            calls.append((token, market, block, amount))
+            await asyncio.sleep(0)
+            return block * amount
+    
+        function = a_sync("async")(quote) if wrapped else quote
+        mapping = TaskMapping(
+            function,
+            *(() if manual else ([10, 20],)),
+            token="token",
+            market="pool",
+            amount=3,
+            concurrency=concurrency,
+        )
+        if manual:
+&gt;           mapping[10]
+
+tests/task/test_task.py:609: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:242: in __getitem__
+    return self.__start_task(item)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;TaskMapping for &lt;function test_map_binds_constant_prefix.&lt;locals&gt;.quote at 0xff86d08f8ea0&gt; kwargs={'token': 'token', 'market': 'pool', 'amount': 3} tasks=0 at 0xff86d09dcfa0&gt;
+item = 10
+
+    def __start_task(self, item: K) -&gt; "Future[V]":
+        if self.concurrency:
+            # NOTE: we use a queue instead of a Semaphore to reduce memory use for use cases involving many many tasks
+            fut = self._queue.put_nowait(item)
+        else:
+            fut = create_task(
+&gt;               coro=self._wrapped_func(item, **self._wrapped_func_kwargs),
+                name=f"{item}" if self._name is None else f"{self._name}[{item}]",
+            )
+E           TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'
+
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:674: TypeError</failure></testcase><testcase classname="tests.asyncio.test_gather" name="test_gather_with_return_exceptions_and_tqdm" time="0.005" /><testcase classname="tests.asyncio.test_gather" name="test_cgather_with_exceptions" time="0.005" /><testcase classname="tests.asyncio.test_as_completed" name="test_return_exceptions_preserves_cancelled_child_and_other_results[True-False]" time="0.043"><failure message="asyncio.exceptions.CancelledError">mapping = False, aiter = True
+
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.parametrize("mapping", [False, True])
+    @pytest.mark.parametrize("aiter", [False, True])
+    async def test_return_exceptions_preserves_cancelled_child_and_other_results(mapping, aiter):
+        loop = asyncio.get_running_loop()
+        cancelled = loop.create_future()
+        cancelled.cancel()
+        completed = loop.create_future()
+        completed.set_result(42)
+        inputs = {"cancelled": cancelled, "completed": completed} if mapping else [cancelled, completed]
+        iterator = a_sync.as_completed(inputs, return_exceptions=True, aiter=aiter)
+        results = (
+&gt;           [result async for result in iterator] if aiter else [await result for result in iterator]
+        )
+
+tests/asyncio/test_as_completed.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a_sync/asyncio/as_completed.pyx:239: in __yield_as_completed
+    ???
+/usr/local/lib/python3.12/asyncio/tasks.py:631: in _wait_for_one
+    return f.result()  # May raise f.exception().
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+&gt;   ???
+E   asyncio.exceptions.CancelledError
+
+a_sync/asyncio/as_completed.pyx:210: CancelledError</failure></testcase><testcase classname="tests.task.test_task" name="test_map_binds_prefix_of_bound_async_method" time="0.043"><failure message="TypeError: test_map_binds_prefix_of_bound_async_method.&lt;locals&gt;.Quotes.quote() got multiple values for argument 'token'">@pytest.mark.asyncio_cooperative
+    async def test_map_binds_prefix_of_bound_async_method():
+        class Quotes(ASyncGenericBase):
+            def __init__(self):
+                self.sync = False
+                super().__init__()
+    
+            async def quote(self, token, block, *, amount):
+                return token, block, amount
+    
+        quotes = Quotes()
+        mapping = TaskMapping(quotes.quote, [10, 20], token="token", amount=3)
+&gt;       assert await mapping == {10: ("token", 10, 3), 20: ("token", 20, 3)}
+
+tests/task/test_task.py:628: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:500: in gather
+    return await gather(
+a_sync/asyncio/gather.pyx:131: in gather
+    ???
+a_sync/asyncio/gather.pyx:183: in gather_mapping
+    ???
+a_sync/asyncio/as_completed.pyx:239: in __yield_as_completed
+    ???
+/usr/local/lib/python3.12/asyncio/tasks.py:631: in _wait_for_one
+    return f.result()  # May raise f.exception().
+a_sync/asyncio/as_completed.pyx:268: in __mapping_wrap
+    ???
+a_sync/asyncio/as_completed.pyx:264: in a_sync.asyncio.as_completed.__mapping_wrap
+    ???
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:171: in _wrapped_set_next
+    return await wrapped_func(*args, **kwargs)
+a_sync/a_sync/method.pyx:1006: in a_sync.a_sync.method.ASyncBoundMethodAsyncDefault.__call__
+    ???
+a_sync/a_sync/method.pyx:641: in a_sync.a_sync.method._ASyncBoundMethod.__call__
+    ???
+a_sync/a_sync/function.pyx:302: in a_sync.a_sync.function._ASyncFunction.__call__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+&gt;   ???
+E   TypeError: test_map_binds_prefix_of_bound_async_method.&lt;locals&gt;.Quotes.quote() got multiple values for argument 'token'
+
+a_sync/a_sync/function.pyx:773: TypeError</failure></testcase><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_broken_mapping_async[TaskMappingItems]" time="0.043" /><testcase classname="tests.asyncio.test_as_completed" name="test_exception_wrapper_propagates_its_own_cancellation[True]" time="0.043" /><testcase classname="tests.task.test_task_mapping_views" name="test_taskmapping_views_async[TaskMappingKeys-expected0]" time="0.043" /><testcase classname="tests.asyncio.test_as_completed" name="test_return_exceptions_preserves_cancelled_child_and_other_results[False-False]" time="0.043"><failure message="asyncio.exceptions.CancelledError">mapping = False, aiter = False
+
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.parametrize("mapping", [False, True])
+    @pytest.mark.parametrize("aiter", [False, True])
+    async def test_return_exceptions_preserves_cancelled_child_and_other_results(mapping, aiter):
+        loop = asyncio.get_running_loop()
+        cancelled = loop.create_future()
+        cancelled.cancel()
+        completed = loop.create_future()
+        completed.set_result(42)
+        inputs = {"cancelled": cancelled, "completed": completed} if mapping else [cancelled, completed]
+        iterator = a_sync.as_completed(inputs, return_exceptions=True, aiter=aiter)
+        results = (
+&gt;           [result async for result in iterator] if aiter else [await result for result in iterator]
+        )
+
+tests/asyncio/test_as_completed.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/tasks.py:631: in _wait_for_one
+    return f.result()  # May raise f.exception().
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+&gt;   ???
+E   asyncio.exceptions.CancelledError
+
+a_sync/asyncio/as_completed.pyx:210: CancelledError</failure></testcase><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[True-2-False]" time="0.044"><failure message="TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'">wrapped = False, concurrency = 2, manual = True
+
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.parametrize("wrapped", [False, True])
+    @pytest.mark.parametrize("concurrency", [None, 2])
+    @pytest.mark.parametrize("manual", [False, True])
+    async def test_map_binds_constant_prefix(wrapped, concurrency, manual):
+        calls = []
+    
+        async def quote(token, market, block, *, amount):
+            calls.append((token, market, block, amount))
+            await asyncio.sleep(0)
+            return block * amount
+    
+        function = a_sync("async")(quote) if wrapped else quote
+        mapping = TaskMapping(
+            function,
+            *(() if manual else ([10, 20],)),
+            token="token",
+            market="pool",
+            amount=3,
+            concurrency=concurrency,
+        )
+        if manual:
+            mapping[10]
+            mapping[20]
+&gt;       assert await mapping == {10: 30, 20: 60}
+
+tests/task/test_task.py:611: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:500: in gather
+    return await gather(
+a_sync/asyncio/gather.pyx:131: in gather
+    ???
+a_sync/asyncio/gather.pyx:183: in gather_mapping
+    ???
+a_sync/asyncio/as_completed.pyx:239: in __yield_as_completed
+    ???
+/usr/local/lib/python3.12/asyncio/tasks.py:631: in _wait_for_one
+    return f.result()  # May raise f.exception().
+a_sync/asyncio/as_completed.pyx:268: in __mapping_wrap
+    ???
+a_sync/asyncio/as_completed.pyx:264: in a_sync.asyncio.as_completed.__mapping_wrap
+    ???
+/usr/local/lib/python3.12/site-packages/a_sync/primitives/queue.py:482: in _worker_coro
+    result = await func(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+arg = 10
+
+&gt;   fn = lambda arg: self._wrapped_func(arg, **self._wrapped_func_kwargs)
+E   TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'
+
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:573: TypeError</failure></testcase><testcase classname="tests.asyncio.test_as_completed" name="test_exception_wrapper_propagates_its_own_cancellation[False]" time="0.043" /><testcase classname="tests.task.test_task" name="test_task_mapping_error_handling" time="0.044" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_broken_mapping_async[TaskMappingKeys]" time="0.043" /><testcase classname="tests.asyncio.test_as_completed" name="test_return_exceptions_preserves_cancelled_child_and_other_results[True-True]" time="0.043"><failure message="asyncio.exceptions.CancelledError">mapping = True, aiter = True
+
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.parametrize("mapping", [False, True])
+    @pytest.mark.parametrize("aiter", [False, True])
+    async def test_return_exceptions_preserves_cancelled_child_and_other_results(mapping, aiter):
+        loop = asyncio.get_running_loop()
+        cancelled = loop.create_future()
+        cancelled.cancel()
+        completed = loop.create_future()
+        completed.set_result(42)
+        inputs = {"cancelled": cancelled, "completed": completed} if mapping else [cancelled, completed]
+        iterator = a_sync.as_completed(inputs, return_exceptions=True, aiter=aiter)
+        results = (
+&gt;           [result async for result in iterator] if aiter else [await result for result in iterator]
+        )
+
+tests/asyncio/test_as_completed.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+a_sync/asyncio/as_completed.pyx:239: in __yield_as_completed
+    ???
+/usr/local/lib/python3.12/asyncio/tasks.py:631: in _wait_for_one
+    return f.result()  # May raise f.exception().
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+&gt;   ???
+E   asyncio.exceptions.CancelledError
+
+a_sync/asyncio/as_completed.pyx:264: CancelledError</failure></testcase><testcase classname="tests.task.test_task" name="test_map_does_not_retry_type_errors_from_callable_body" time="0.043"><failure message="assert TypeError(&quot;test_map_does_not_retry_type_errors_from_callable_body.&lt;locals&gt;.quote() got multiple values for argument 'token'&quot;) is TypeError(&quot;quote() got multiple values for argument 'token'&quot;)&#10; +  where TypeError(&quot;test_map_does_not_retry_type_errors_from_callable_body.&lt;locals&gt;.quote() got multiple values for argument 'token'&quot;) = &lt;ExceptionInfo TypeError(&quot;test_map_does_not_retry_type_errors_from_callable_body.&lt;locals&gt;.quote() got multiple values for argument 'token'&quot;) tblen=9&gt;.value">@pytest.mark.asyncio_cooperative
+    async def test_map_does_not_retry_type_errors_from_callable_body():
+        calls = []
+        error = TypeError("quote() got multiple values for argument 'token'")
+    
+        async def quote(token, block):
+            calls.append((token, block))
+            raise error
+    
+        mapping = TaskMapping(a_sync("async")(quote), [10], token="token")
+        with pytest.raises(TypeError) as raised:
+            await mapping
+&gt;       assert raised.value is error
+E       assert TypeError("test_map_does_not_retry_type_errors_from_callable_body.&lt;locals&gt;.quote() got multiple values for argument 'token'") is TypeError("quote() got multiple values for argument 'token'")
+E        +  where TypeError("test_map_does_not_retry_type_errors_from_callable_body.&lt;locals&gt;.quote() got multiple values for argument 'token'") = &lt;ExceptionInfo TypeError("test_map_does_not_retry_type_errors_from_callable_body.&lt;locals&gt;.quote() got multiple values for argument 'token'") tblen=9&gt;.value
+
+tests/task/test_task.py:644: AssertionError</failure></testcase><testcase classname="tests.task.test_task_mapping_views" name="test_single_item_taskmapping_views_async[TaskMappingKeys-expected0]" time="0.043" /><testcase classname="tests.asyncio.test_as_completed" name="test_return_exceptions_preserves_cancelled_child_and_other_results[False-True]" time="0.043"><failure message="asyncio.exceptions.CancelledError">mapping = True, aiter = False
+
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.parametrize("mapping", [False, True])
+    @pytest.mark.parametrize("aiter", [False, True])
+    async def test_return_exceptions_preserves_cancelled_child_and_other_results(mapping, aiter):
+        loop = asyncio.get_running_loop()
+        cancelled = loop.create_future()
+        cancelled.cancel()
+        completed = loop.create_future()
+        completed.set_result(42)
+        inputs = {"cancelled": cancelled, "completed": completed} if mapping else [cancelled, completed]
+        iterator = a_sync.as_completed(inputs, return_exceptions=True, aiter=aiter)
+        results = (
+&gt;           [result async for result in iterator] if aiter else [await result for result in iterator]
+        )
+
+tests/asyncio/test_as_completed.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/tasks.py:631: in _wait_for_one
+    return f.result()  # May raise f.exception().
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+&gt;   ???
+E   asyncio.exceptions.CancelledError
+
+a_sync/asyncio/as_completed.pyx:264: CancelledError</failure></testcase><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[True-2-True]" time="0.044"><failure message="TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'">wrapped = True, concurrency = 2, manual = True
+
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.parametrize("wrapped", [False, True])
+    @pytest.mark.parametrize("concurrency", [None, 2])
+    @pytest.mark.parametrize("manual", [False, True])
+    async def test_map_binds_constant_prefix(wrapped, concurrency, manual):
+        calls = []
+    
+        async def quote(token, market, block, *, amount):
+            calls.append((token, market, block, amount))
+            await asyncio.sleep(0)
+            return block * amount
+    
+        function = a_sync("async")(quote) if wrapped else quote
+        mapping = TaskMapping(
+            function,
+            *(() if manual else ([10, 20],)),
+            token="token",
+            market="pool",
+            amount=3,
+            concurrency=concurrency,
+        )
+        if manual:
+            mapping[10]
+            mapping[20]
+&gt;       assert await mapping == {10: 30, 20: 60}
+
+tests/task/test_task.py:611: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:500: in gather
+    return await gather(
+a_sync/asyncio/gather.pyx:131: in gather
+    ???
+a_sync/asyncio/gather.pyx:183: in gather_mapping
+    ???
+a_sync/asyncio/as_completed.pyx:239: in __yield_as_completed
+    ???
+/usr/local/lib/python3.12/asyncio/tasks.py:631: in _wait_for_one
+    return f.result()  # May raise f.exception().
+a_sync/asyncio/as_completed.pyx:268: in __mapping_wrap
+    ???
+a_sync/asyncio/as_completed.pyx:264: in a_sync.asyncio.as_completed.__mapping_wrap
+    ???
+/usr/local/lib/python3.12/site-packages/a_sync/primitives/queue.py:482: in _worker_coro
+    result = await func(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+arg = 10
+
+&gt;   fn = lambda arg: self._wrapped_func(arg, **self._wrapped_func_kwargs)
+E   TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'
+
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:573: TypeError</failure></testcase><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_broken_mapping_async[TaskMappingValues]" time="0.043" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_tqdm_disabled_aiter" time="0.118" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[False-None-False]" time="0.118"><failure message="TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'">wrapped = False, concurrency = None, manual = False
+
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.parametrize("wrapped", [False, True])
+    @pytest.mark.parametrize("concurrency", [None, 2])
+    @pytest.mark.parametrize("manual", [False, True])
+    async def test_map_binds_constant_prefix(wrapped, concurrency, manual):
+        calls = []
+    
+        async def quote(token, market, block, *, amount):
+            calls.append((token, market, block, amount))
+            await asyncio.sleep(0)
+            return block * amount
+    
+        function = a_sync("async")(quote) if wrapped else quote
+        mapping = TaskMapping(
+            function,
+            *(() if manual else ([10, 20],)),
+            token="token",
+            market="pool",
+            amount=3,
+            concurrency=concurrency,
+        )
+        if manual:
+            mapping[10]
+            mapping[20]
+&gt;       assert await mapping == {10: 30, 20: 60}
+
+tests/task/test_task.py:611: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:500: in gather
+    return await gather(
+a_sync/asyncio/gather.pyx:131: in gather
+    ???
+a_sync/asyncio/gather.pyx:183: in gather_mapping
+    ???
+a_sync/asyncio/as_completed.pyx:239: in __yield_as_completed
+    ???
+/usr/local/lib/python3.12/asyncio/tasks.py:631: in _wait_for_one
+    return f.result()  # May raise f.exception().
+a_sync/asyncio/as_completed.pyx:268: in __mapping_wrap
+    ???
+a_sync/asyncio/as_completed.pyx:264: in a_sync.asyncio.as_completed.__mapping_wrap
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+_TaskMapping__a_sync_recursion = 0, args = (10,)
+kwargs = {'amount': 3, 'market': 'pool', 'token': 'token'}
+
+    @wraps(wrapped_func)
+    async def _wrapped_set_next(
+        *args: P.args, __a_sync_recursion: int = 0, **kwargs: P.kwargs
+    ) -&gt; V:
+        try:
+&gt;           return await wrapped_func(*args, **kwargs)
+E           TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'
+
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:171: TypeError</failure></testcase><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_awaitables_aiter" time="0.118" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_timeout" time="0.118" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[False-2-True]" time="0.118"><failure message="TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'">wrapped = True, concurrency = 2, manual = False
+
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.parametrize("wrapped", [False, True])
+    @pytest.mark.parametrize("concurrency", [None, 2])
+    @pytest.mark.parametrize("manual", [False, True])
+    async def test_map_binds_constant_prefix(wrapped, concurrency, manual):
+        calls = []
+    
+        async def quote(token, market, block, *, amount):
+            calls.append((token, market, block, amount))
+            await asyncio.sleep(0)
+            return block * amount
+    
+        function = a_sync("async")(quote) if wrapped else quote
+        mapping = TaskMapping(
+            function,
+            *(() if manual else ([10, 20],)),
+            token="token",
+            market="pool",
+            amount=3,
+            concurrency=concurrency,
+        )
+        if manual:
+            mapping[10]
+            mapping[20]
+&gt;       assert await mapping == {10: 30, 20: 60}
+
+tests/task/test_task.py:611: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:500: in gather
+    return await gather(
+a_sync/asyncio/gather.pyx:131: in gather
+    ???
+a_sync/asyncio/gather.pyx:183: in gather_mapping
+    ???
+a_sync/asyncio/as_completed.pyx:239: in __yield_as_completed
+    ???
+/usr/local/lib/python3.12/asyncio/tasks.py:631: in _wait_for_one
+    return f.result()  # May raise f.exception().
+a_sync/asyncio/as_completed.pyx:268: in __mapping_wrap
+    ???
+a_sync/asyncio/as_completed.pyx:264: in a_sync.asyncio.as_completed.__mapping_wrap
+    ???
+/usr/local/lib/python3.12/site-packages/a_sync/primitives/queue.py:482: in _worker_coro
+    result = await func(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+_TaskMapping__a_sync_recursion = 0, args = (20,)
+kwargs = {'amount': 3, 'market': 'pool', 'token': 'token'}
+
+    @wraps(wrapped_func)
+    async def _wrapped_set_next(
+        *args: P.args, __a_sync_recursion: int = 0, **kwargs: P.kwargs
+    ) -&gt; V:
+        try:
+&gt;           return await wrapped_func(*args, **kwargs)
+E           TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'
+
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:171: TypeError</failure></testcase><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_mapping_aiter" time="0.118" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_mapping_and_return_exceptions_aiter" time="0.118" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[False-None-True]" time="0.118"><failure message="TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'">wrapped = True, concurrency = None, manual = False
+
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.parametrize("wrapped", [False, True])
+    @pytest.mark.parametrize("concurrency", [None, 2])
+    @pytest.mark.parametrize("manual", [False, True])
+    async def test_map_binds_constant_prefix(wrapped, concurrency, manual):
+        calls = []
+    
+        async def quote(token, market, block, *, amount):
+            calls.append((token, market, block, amount))
+            await asyncio.sleep(0)
+            return block * amount
+    
+        function = a_sync("async")(quote) if wrapped else quote
+        mapping = TaskMapping(
+            function,
+            *(() if manual else ([10, 20],)),
+            token="token",
+            market="pool",
+            amount=3,
+            concurrency=concurrency,
+        )
+        if manual:
+            mapping[10]
+            mapping[20]
+&gt;       assert await mapping == {10: 30, 20: 60}
+
+tests/task/test_task.py:611: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:500: in gather
+    return await gather(
+a_sync/asyncio/gather.pyx:131: in gather
+    ???
+a_sync/asyncio/gather.pyx:183: in gather_mapping
+    ???
+a_sync/asyncio/as_completed.pyx:239: in __yield_as_completed
+    ???
+/usr/local/lib/python3.12/asyncio/tasks.py:631: in _wait_for_one
+    return f.result()  # May raise f.exception().
+a_sync/asyncio/as_completed.pyx:268: in __mapping_wrap
+    ???
+a_sync/asyncio/as_completed.pyx:264: in a_sync.asyncio.as_completed.__mapping_wrap
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+_TaskMapping__a_sync_recursion = 0, args = (10,)
+kwargs = {'amount': 3, 'market': 'pool', 'token': 'token'}
+
+    @wraps(wrapped_func)
+    async def _wrapped_set_next(
+        *args: P.args, __a_sync_recursion: int = 0, **kwargs: P.kwargs
+    ) -&gt; V:
+        try:
+&gt;           return await wrapped_func(*args, **kwargs)
+E           TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'
+
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:171: TypeError</failure></testcase><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_mapping_and_return_exceptions" time="0.118" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_mapping" time="0.118" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_awaitables" time="0.118" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_timeout_aiter" time="0.118" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_tqdm_disabled" time="0.118" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[False-2-False]" time="0.118"><failure message="TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'">wrapped = False, concurrency = 2, manual = False
+
+    @pytest.mark.asyncio_cooperative
+    @pytest.mark.parametrize("wrapped", [False, True])
+    @pytest.mark.parametrize("concurrency", [None, 2])
+    @pytest.mark.parametrize("manual", [False, True])
+    async def test_map_binds_constant_prefix(wrapped, concurrency, manual):
+        calls = []
+    
+        async def quote(token, market, block, *, amount):
+            calls.append((token, market, block, amount))
+            await asyncio.sleep(0)
+            return block * amount
+    
+        function = a_sync("async")(quote) if wrapped else quote
+        mapping = TaskMapping(
+            function,
+            *(() if manual else ([10, 20],)),
+            token="token",
+            market="pool",
+            amount=3,
+            concurrency=concurrency,
+        )
+        if manual:
+            mapping[10]
+            mapping[20]
+&gt;       assert await mapping == {10: 30, 20: 60}
+
+tests/task/test_task.py:611: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:500: in gather
+    return await gather(
+a_sync/asyncio/gather.pyx:131: in gather
+    ???
+a_sync/asyncio/gather.pyx:183: in gather_mapping
+    ???
+a_sync/asyncio/as_completed.pyx:239: in __yield_as_completed
+    ???
+/usr/local/lib/python3.12/asyncio/tasks.py:631: in _wait_for_one
+    return f.result()  # May raise f.exception().
+a_sync/asyncio/as_completed.pyx:268: in __mapping_wrap
+    ???
+a_sync/asyncio/as_completed.pyx:264: in a_sync.asyncio.as_completed.__mapping_wrap
+    ???
+/usr/local/lib/python3.12/site-packages/a_sync/primitives/queue.py:482: in _worker_coro
+    result = await func(*args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+_TaskMapping__a_sync_recursion = 0, args = (10,)
+kwargs = {'amount': 3, 'market': 'pool', 'token': 'token'}
+
+    @wraps(wrapped_func)
+    async def _wrapped_set_next(
+        *args: P.args, __a_sync_recursion: int = 0, **kwargs: P.kwargs
+    ) -&gt; V:
+        try:
+&gt;           return await wrapped_func(*args, **kwargs)
+E           TypeError: test_map_binds_constant_prefix.&lt;locals&gt;.quote() got multiple values for argument 'token'
+
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:171: TypeError</failure></testcase><testcase classname="tests.task.test_task" name="test_task_mapping_single_item" time="0.182" /><testcase classname="tests.asyncio.test_gather" name="test_cgather_with_awaitables" time="0.181" /><testcase classname="tests.asyncio.test_gather" name="test_gather_with_mapping_and_tqdm" time="0.180" /><testcase classname="tests.asyncio.test_gather" name="test_igather_with_awaitables" time="0.181" /><testcase classname="tests.asyncio.test_gather" name="test_gather_with_awaitables" time="0.181" /><testcase classname="tests.asyncio.test_gather" name="test_gather_with_awaitables_and_tqdm" time="0.181" /><testcase classname="tests.task.test_task_mapping_views" name="test_taskmapping_views_async[TaskMappingItems-expected2]" time="0.184" /><testcase classname="tests.task.test_task_mapping_views" name="test_taskmapping_views_async[TaskMappingValues-expected1]" time="0.184" /><testcase classname="tests.task.test_task_mapping_views" name="test_single_item_taskmapping_views_async[TaskMappingValues-expected1]" time="0.184" /><testcase classname="tests.task.test_task_mapping_views" name="test_single_item_taskmapping_views_async[TaskMappingItems-expected2]" time="0.184" /><testcase classname="tests.task.test_task" name="test_task_mapping" time="0.290" /><testcase classname="tests.task.test_task" name="test_task_mapping_map_with_sync_iter" time="0.290" /><testcase classname="tests.task.test_task" name="test_task_mapping_map_with_async_iter" time="0.291" /><testcase classname="tests.task.test_task" name="test_persistent_task" time="2.007" /><testcase classname="tests.task.test_task" name="test_map_bound_prefix_preserves_other_keywords_and_cancellation" time="2.007"><failure message="TimeoutError">fut = &lt;coroutine object Event.wait at 0xff86d088bbc0&gt;, timeout = 2
+
+    async def wait_for(fut, timeout):
+        """Wait for the single Future or coroutine to complete, with timeout.
+    
+        Coroutine will be wrapped in Task.
+    
+        Returns result of the Future or coroutine.  When a timeout occurs,
+        it cancels the task and raises TimeoutError.  To avoid the task
+        cancellation, wrap it in shield().
+    
+        If the wait is cancelled, the task is also cancelled.
+    
+        If the task suppresses the cancellation and returns a value instead,
+        that value is returned.
+    
+        This function is a coroutine.
+        """
+        # The special case for timeout &lt;= 0 is for the following case:
+        #
+        # async def test_waitfor():
+        #     func_started = False
+        #
+        #     async def func():
+        #         nonlocal func_started
+        #         func_started = True
+        #
+        #     try:
+        #         await asyncio.wait_for(func(), 0)
+        #     except asyncio.TimeoutError:
+        #         assert not func_started
+        #     else:
+        #         assert False
+        #
+        # asyncio.run(test_waitfor())
+    
+    
+        if timeout is not None and timeout &lt;= 0:
+            fut = ensure_future(fut)
+    
+            if fut.done():
+                return fut.result()
+    
+            await _cancel_and_wait(fut)
+            try:
+                return fut.result()
+            except exceptions.CancelledError as exc:
+                raise TimeoutError from exc
+    
+        async with timeouts.timeout(timeout):
+&gt;           return await fut
+
+/usr/local/lib/python3.12/asyncio/tasks.py:520: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;asyncio.locks.Event object at 0xff86d088f050 [unset]&gt;
+
+    async def wait(self):
+        """Block until the internal flag is true.
+    
+        If the internal flag is true on entry, return True
+        immediately.  Otherwise, block until another coroutine calls
+        set() to set the flag to true, then return True.
+        """
+        if self._value:
+            return True
+    
+        fut = self._get_loop().create_future()
+        self._waiters.append(fut)
+        try:
+&gt;           await fut
+E           asyncio.exceptions.CancelledError
+
+/usr/local/lib/python3.12/asyncio/locks.py:212: CancelledError
+
+The above exception was the direct cause of the following exception:
+
+    @pytest.mark.asyncio_cooperative
+    async def test_map_bound_prefix_preserves_other_keywords_and_cancellation():
+        started = asyncio.Event()
+        release = asyncio.Event()
+        cancelled = []
+    
+        async def quote(token, block, **kwargs):
+            assert kwargs == {"__a_sync_recursion": "caller value"}
+            started.set()
+            try:
+                await release.wait()
+            except asyncio.CancelledError:
+                cancelled.append(block)
+                raise
+            return token, block
+    
+        mapping = TaskMapping(quote, [10, 20], token="token", __a_sync_recursion="caller value")
+&gt;       await asyncio.wait_for(started.wait(), 2)
+
+tests/task/test_task.py:666: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/tasks.py:519: in wait_for
+    async with timeouts.timeout(timeout):
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;Timeout [expired]&gt;
+exc_type = &lt;class 'asyncio.exceptions.CancelledError'&gt;
+exc_val = CancelledError(), exc_tb = &lt;traceback object at 0xff86d18c48c0&gt;
+
+    async def __aexit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -&gt; Optional[bool]:
+        assert self._state in (_State.ENTERED, _State.EXPIRING)
+    
+        if self._timeout_handler is not None:
+            self._timeout_handler.cancel()
+            self._timeout_handler = None
+    
+        if self._state is _State.EXPIRING:
+            self._state = _State.EXPIRED
+    
+            if self._task.uncancel() &lt;= self._cancelling and exc_type is exceptions.CancelledError:
+                # Since there are no new cancel requests, we're
+                # handling this.
+&gt;               raise TimeoutError from exc_val
+E               TimeoutError
+
+/usr/local/lib/python3.12/asyncio/timeouts.py:115: TimeoutError</failure></testcase><testcase classname="tests.task.test_task" name="test_taskmapping_views_sync" time="0.104" /><testcase classname="tests.task.test_task" name="test_unwrap_basic" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_function_sync_def" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_function_async_def" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_function_sync_def_sync_default" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_function_async_def_sync_default" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_function_sync_def_async_default" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_function_async_def_async_default" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_method_sync_def" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_method_async_def" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_method_sync_def_sync_defult" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_method_async_def_sync_defult" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_method_sync_def_async_default" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_method_async_def_async_default" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_does_not_retain_callable_or_its_captured_state" time="0.000"><failure message="AssertionError: assert &lt;function test_unwrap_does_not_retain_callable_or_its_captured_state.&lt;locals&gt;.operation at 0xff86cff853a0&gt; is None&#10; +  where &lt;function test_unwrap_does_not_retain_callable_or_its_captured_state.&lt;locals&gt;.operation at 0xff86cff853a0&gt; = &lt;weakref at 0xff86cff2df80; to 'function' at 0xff86cff853a0 (operation)&gt;()">def test_unwrap_does_not_retain_callable_or_its_captured_state():
+        from weakref import ref
+    
+        class State:
+            pass
+    
+        state = State()
+        state_ref = ref(state)
+    
+        async def operation(key, captured=state):
+            return key, captured
+    
+        operation_ref = ref(operation)
+        assert _unwrap(operation) is operation
+        del operation, state
+&gt;       assert operation_ref() is None
+E       AssertionError: assert &lt;function test_unwrap_does_not_retain_callable_or_its_captured_state.&lt;locals&gt;.operation at 0xff86cff853a0&gt; is None
+E        +  where &lt;function test_unwrap_does_not_retain_callable_or_its_captured_state.&lt;locals&gt;.operation at 0xff86cff853a0&gt; = &lt;weakref at 0xff86cff2df80; to 'function' at 0xff86cff853a0 (operation)&gt;()
+
+tests/task/test_task.py:691: AssertionError</failure></testcase><testcase classname="tests.task.test_task_mapping_views" name="test_taskmapping_views_sync[TaskMappingKeys-expected0]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_taskmapping_views_sync[TaskMappingValues-expected1]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_taskmapping_views_sync[TaskMappingItems-expected2]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_sync[TaskMappingKeys]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_sync[TaskMappingValues]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_sync[TaskMappingItems]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_single_item_taskmapping_views_sync[TaskMappingKeys-expected0]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_single_item_taskmapping_views_sync[TaskMappingValues-expected1]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_single_item_taskmapping_views_sync[TaskMappingItems-expected2]" time="0.000" /></testsuite></testsuites>

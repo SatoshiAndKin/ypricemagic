@@ -380,7 +380,7 @@ def main() -> int:
             docker(
                 "cp",
                 CONTAINER + ":/opt/validation/dependencies.txt",
-                str(report / "dependencies.txt"),
+                str(report / "image-build-dependencies.txt"),
             )
             # /data belongs to this container and is never reused by another revision.
             # Create it in the isolated source before upload, through a copied directory.

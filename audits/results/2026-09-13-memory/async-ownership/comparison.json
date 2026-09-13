@@ -1,0 +1,30 @@
+{
+  "complete": true,
+  "boundary": "Call-wrapper ownership only; native a-sync functions retain their own cached wrappers",
+  "functions": 1000,
+  "captured_bytes_each": 65536,
+  "samples": 3,
+  "forced_gc": false,
+  "workloads": {
+    "before": {
+      "median_peak_rss_bytes": 98754560,
+      "median_seconds": 0.00842890400235774,
+      "retained_functions": [
+        1000,
+        1000,
+        1000
+      ],
+      "python_current_bytes": 65982172
+    },
+    "after": {
+      "median_peak_rss_bytes": 32763904,
+      "median_seconds": 0.0011940460026380606,
+      "retained_functions": [
+        0,
+        0,
+        0
+      ],
+      "python_current_bytes": 89600
+    }
+  }
+}

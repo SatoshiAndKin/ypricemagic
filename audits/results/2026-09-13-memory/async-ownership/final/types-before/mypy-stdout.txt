@@ -1,0 +1,11 @@
+Warning: Unpack is already enabled by default
+Installing missing stub packages:
+/usr/local/bin/python -m pip install types-docutils
+
+Collecting types-docutils
+  Downloading types_docutils-0.23.0.20260911-py3-none-any.whl.metadata (1.8 kB)
+Downloading types_docutils-0.23.0.20260911-py3-none-any.whl (92 kB)
+Installing collected packages: types-docutils
+Successfully installed types-docutils-0.23.0.20260911
+
+Found 307 errors in 20 files (checked 54 source files)

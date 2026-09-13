@@ -66,6 +66,10 @@ def main() -> int:
     ):
         raise RuntimeError(f"Unexpected effective limits: {before}")
     started = time.monotonic()
+    # Reused images can add packages after writing their build manifest. Record
+    # the installed environment before the command, including failed startup.
+    with (args.report / "dependencies.txt").open("w") as stream:
+        subprocess.run(["python", "-m", "pip", "freeze", "--all"], stdout=stream, check=True)
     subprocess.run(["python", "/runner/configure.py"], check=True)
     child = subprocess.Popen(command, start_new_session=True)
     interrupted = False

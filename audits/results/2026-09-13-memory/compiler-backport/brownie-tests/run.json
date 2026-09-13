@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import importlib.machinery,json,shutil,subprocess,sys\nfrom pathlib import Path\nfrom brownie.network.middlewares import caching\nassert any(caching.__file__.endswith(suffix) for suffix in importlib.machinery.EXTENSION_SUFFIXES),caching.__file__\nbase=Path('/reports/brownie-owner-tests')\nbase.mkdir()\nsource=Path('/opt/validation/brownie-source')\nshutil.copytree(source/'tests',base/'tests')\nfor name in ['pyproject.toml','setup.cfg','pytest_patched.py']:\n    shutil.copyfile(source/name,base/name)\nconfig=base/'pytest.ini'\nconfig.write_text('[pytest]\\ntestpaths = tests/network/rpc/test_bytecode_memory.py\\naddopts = -p no:pytest_ethereum -p no:pytest-brownie --junitxml=/reports/pytest.xml\\n')\nPath('/reports/brownie-compiled.json').write_text(json.dumps({'caching':caching.__file__})+'\\n')\nresult=subprocess.run([sys.executable,'pytest_patched.py'],cwd=base)\nraise SystemExit(result.returncode)\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789326879.3913789,
+  "source_sha": "850d7506d554209738cc2c471f82fbb951845d29",
+  "source_revision": "850d7506d554209738cc2c471f82fbb951845d29",
+  "source_archive_sha256": "fc7bdc0c1d5a1a15277664d9efcd1c89a5200c6abe47f05d8a6da202ab86298c",
+  "image": "sha256:349e9f294edece1e959c68c44ec3d7cea4b95a97c0695d857c6d6cf1d4dcddcb",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 3.473897933959961
+}

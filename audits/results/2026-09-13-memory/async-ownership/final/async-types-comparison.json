@@ -1,0 +1,16 @@
+{
+  "before_report": "async-configured-types-before",
+  "after_report": "async-configured-types-callables",
+  "before_errors": 307,
+  "after_errors": 300,
+  "added_diagnostics": [],
+  "removed_diagnostics": [
+    "a_sync/task.py: Argument 1 to \"__call__\" of \"_Wrapper\" has incompatible type \"def _wrapped_set_next(*args: Any, int = ..., **kwargs: Any) -> Coroutine[Any, Any, V]\"; expected \"def (*args: Any, int = ..., **kwargs: Any) -> Coroutine[Any, Any, V]\" [arg-type]",
+    "a_sync/task.py: Arguments not allowed after ParamSpec.args [valid-type]",
+    "a_sync/task.py: Item \"ASyncMethodDescriptor[Any, Any, Any]\" of \"ASyncMethodDescriptor[Any, Any, Any] | Callable[[K, **P], Awaitable[V]]\" has no attribute \"__name__\" [union-attr]",
+    "a_sync/task.py: Too few arguments [call-arg]",
+    "a_sync/task.py: Too few arguments [call-arg]",
+    "a_sync/task.py: \"ASyncMethodDescriptor\" expects 3 type arguments, but 2 given [type-arg]",
+    "a_sync/task.py: Incompatible return value type (got \"ASyncBoundMethod[Any, Any, Any] | ASyncMethodDescriptor[Any, Any, Any] | Callable[[I, type[I] | None], Coroutine[Any, Any, T]] | Any | Callable[P, Awaitable[T]] | Callable[P, T]\", expected \"Callable[P, Awaitable[T]]\") [return-value]"
+  ]
+}
