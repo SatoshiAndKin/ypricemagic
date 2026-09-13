@@ -114,6 +114,12 @@ source. The workload preserves 4,771 pools, 64 concurrent requests, exact amount
 and quotes have exact counters. Pytest's logical RPC counters follow the existing
 audit counters; they count generated calls and batches, not HTTP wire requests.
 
+Allocation censuses also record stored historical log/checkpoint counts and
+queue sizes for database writes. They read existing storage slots and queues;
+they do not load lazy caches or drain pending work. Queue counts describe waiting
+operations, not work already executing in a thread. Keep these censuses out of
+timing measurements.
+
 Use `python /runner/native.py` and `python /runner/native_reviewed.py` after an
 isolated editable build for the fixed-block native checks. Require `native.json`
 for the first script. Require both `native-reviewed.json` and
