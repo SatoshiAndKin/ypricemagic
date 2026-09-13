@@ -10,6 +10,10 @@ proxy still returns HTTP 408. Validation resumes against NUC Reth. The
 [earlier proxy retries](archive-retry/README.md) and the expected
 [non-archive Geth control](direct-backend/README.md) remain separate records.
 
+The [final focused matrix](final-focused/README.md) passes all 244 tests on
+Python 3.11–3.13 with the final dependency pins and all ten compiled modules
+loaded. Full-suite and real-node pricing comparisons remain in progress.
+
 The original PR baseline is `476af288a520a30052668a8b3ad7e3e682cd101f`.
 The pre-optimization revision is `61be7b520aba7f771a0bf96b326315e68767fae4`.
 Each Docker report records the tested revision or worktree archive hash.
