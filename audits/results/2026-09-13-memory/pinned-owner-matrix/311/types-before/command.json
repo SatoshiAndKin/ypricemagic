@@ -1,0 +1,31 @@
+{
+  "command": [
+    "python",
+    "-m",
+    "mypy"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 23.988782118001836,
+  "peak_sampled_process_rss_bytes": 431828992,
+  "cgroup_before": {
+    "memory.current": "8695808",
+    "memory.peak": "8798208",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "131923968",
+    "memory.peak": "540073984",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

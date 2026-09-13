@@ -1,0 +1,52 @@
+{
+  "311": {
+    "complete": true,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 246,
+        "call:passed": 246,
+        "teardown:passed": 246
+      },
+      "collected": 246
+    },
+    "image": "sha256:38f6e4cd7d2a9df84610e38783ff92bc8967e40b41ce5cda86581519c271a939",
+    "compiled_modules": 10,
+    "build_peak_bytes": 3451871232,
+    "test_peak_bytes": 1148137472,
+    "mypy_summaries": {
+      "before": [
+        "Found 1959 errors in 116 files (checked 169 source files)"
+      ],
+      "after": [
+        "Found 1940 errors in 116 files (checked 192 source files)"
+      ]
+    },
+    "no_added_rendered_diagnostics": true
+  },
+  "313": {
+    "complete": true,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 246,
+        "call:passed": 246,
+        "teardown:passed": 246
+      },
+      "collected": 246
+    },
+    "image": "sha256:24530dc2ccbee2734410f6507d181baa1172343f32d6bc3111f0fdcece817661",
+    "compiled_modules": 10,
+    "build_peak_bytes": 2203672576,
+    "test_peak_bytes": 1210519552,
+    "mypy_summaries": {
+      "before": [
+        "Found 1959 errors in 116 files (checked 169 source files)"
+      ],
+      "after": [
+        "Found 1940 errors in 116 files (checked 192 source files)"
+      ]
+    },
+    "no_added_rendered_diagnostics": true
+  }
+}

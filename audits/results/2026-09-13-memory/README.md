@@ -10,6 +10,12 @@ proxy still returns HTTP 408. Validation resumes against NUC Reth. The
 [earlier proxy retries](archive-retry/README.md) and the expected
 [non-archive Geth control](direct-backend/README.md) remain separate records.
 
+The [published dependency matrix](pinned-owner-matrix/README.md) now passes all
+246 focused cases on Python 3.11–3.13, with all ten compiled modules. Configured
+type checks retain 1,940 existing errors and add no rendered diagnostic on each
+version. All build/test peaks stay below 7 GiB. The later logging-handler failure
+regression remains separate from these frozen runs.
+
 The [final Python 3.12 focused run](pinned-owner-312-focused-final/README.md)
 passes all 246 cases after the Gearbox type assertion and historical task cleanup.
 All ten native extensions load, with no OOM event.
