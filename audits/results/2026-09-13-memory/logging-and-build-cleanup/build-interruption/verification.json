@@ -1,0 +1,16 @@
+{
+  "complete": true,
+  "fixture_exit_code": 130,
+  "interrupted_build_complete": false,
+  "builder_stopped": true,
+  "evidence_persisted": true,
+  "peak_bytes": 105734144,
+  "elapsed_seconds": 3.851654791738838,
+  "limits": {
+    "Memory": 8589934592,
+    "MemorySwap": 8589934592,
+    "CpuPeriod": 100000,
+    "CpuQuota": 400000,
+    "PidsLimit": 512
+  }
+}

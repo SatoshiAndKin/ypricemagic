@@ -479,8 +479,8 @@ async def _get_price(
         symbol = None
 
     logger = get_price_logger(token, block, symbol=symbol, extra="magic", start_task=True)
-    logger.debug("fetching price for %s", symbol)
     try:
+        logger.debug("fetching price for %s", symbol)
         raw_price = None
         source = None
 

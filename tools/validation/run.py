@@ -158,13 +158,16 @@ def build(
         ["docker", "inspect", builder_container], capture_output=True, text=True
     )
     if existing.returncode == 0:
-        state = json.loads(existing.stdout)[0]["State"]
-        if state["Running"]:
+        existing_state = json.loads(existing.stdout)[0]["State"]
+        if existing_state["Running"]:
             raise RuntimeError("BuildKit is already running. Inspect its owner before starting.")
         # Keep BuildKit's named cache volume, but give each build fresh cgroup counters.
         docker("rm", builder_container)
-    docker("buildx", "inspect", BUILDER, "--bootstrap")
+    status: int | None = None
+    metrics: dict[str, Any] | None = None
+    state: dict[str, Any] | None = None
     try:
+        docker("buildx", "inspect", BUILDER, "--bootstrap")
         docker(
             "update",
             "--memory=8g",
@@ -204,24 +207,38 @@ def build(
             report,
             "build",
         )
-        metrics = builder_memory(builder_container)
-        write_json(
-            report / "build-status.json",
-            {
-                "exit_code": status,
-                "state": json.loads(docker("inspect", builder_container))[0]["State"],
-                "cgroup": metrics,
-            },
-        )
-        if status:
-            raise RuntimeError(f"Dependency build failed ({status}); see {report}/build.log")
-        if any(int(metrics["events"][name]) for name in ("oom", "oom_kill")):
-            raise RuntimeError(f"Dependency build had an OOM event; see {report}/build-status.json")
     finally:
-        state = json.loads(docker("inspect", builder_container))[0]["State"]
-        if state["Paused"]:
-            docker("unpause", builder_container)
-        docker("buildx", "stop", BUILDER)
+        record: dict[str, Any] = {"exit_code": status, "state": None, "cgroup": None}
+        try:
+            try:
+                final_state: dict[str, Any] = json.loads(docker("inspect", builder_container))[0][
+                    "State"
+                ]
+            except subprocess.CalledProcessError as exc:
+                record["state_error"] = str(exc)
+            else:
+                state = final_state
+                record["state"] = state
+                if final_state["Paused"]:
+                    docker("unpause", builder_container)
+                try:
+                    metrics = builder_memory(builder_container)
+                    record["cgroup"] = metrics
+                except subprocess.CalledProcessError as exc:
+                    # A daemon OOM can remove its cgroup before we can read it.
+                    # Preserve Docker's final state and disclose the missing data.
+                    record["cgroup_error"] = str(exc)
+            write_json(report / "build-status.json", record)
+        finally:
+            docker("buildx", "stop", BUILDER)
+    if (state is not None and state["OOMKilled"]) or (
+        metrics is not None and any(int(metrics["events"][name]) for name in ("oom", "oom_kill"))
+    ):
+        raise RuntimeError(f"Dependency build had an OOM event; see {report}/build-status.json")
+    if status:
+        raise RuntimeError(f"Dependency build failed ({status}); see {report}/build.log")
+    if metrics is None:
+        raise RuntimeError(f"Missing build cgroup metrics; see {report}/build-status.json")
     return docker("image", "inspect", image, "--format", "{{.Id}}")
 
 

@@ -67,48 +67,107 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(hashes, {"probe.py": hashlib.sha256(original).hexdigest()})
             self.assertFalse((frozen / "later.py").exists())
 
-    def test_successful_build_with_worker_oom_stops_before_image_use(self) -> None:
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            source, report = root / "source", root / "report"
-            source.mkdir()
-            report.mkdir()
-            for name in ("requirements.txt", "requirements-dev.txt"):
-                (source / name).write_text("")
-            (source / "pyproject.toml").write_text("[build-system]\nrequires=[]\n")
-            inspection = json.dumps(
-                [
-                    {
-                        "State": {"Paused": False, "OOMKilled": False},
-                        "HostConfig": {
-                            "Memory": 8 * 1024**3,
-                            "MemorySwap": 8 * 1024**3,
-                            "CpuPeriod": 100000,
-                            "CpuQuota": 400000,
-                            "PidsLimit": 512,
+    def test_build_failures_preserve_evidence_and_stop_before_image_use(self) -> None:
+        for scenario in (
+            "worker_oom",
+            "interrupted_build",
+            "interrupted_bootstrap",
+            "interrupted_bootstrap_absent",
+            "daemon_oom",
+            "missing_metrics",
+        ):
+            with self.subTest(scenario=scenario), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                source, report = root / "source", root / "report"
+                source.mkdir()
+                report.mkdir()
+                for name in ("requirements.txt", "requirements-dev.txt"):
+                    (source / name).write_text("")
+                (source / "pyproject.toml").write_text("[build-system]\nrequires=[]\n")
+                inspection = json.dumps(
+                    [
+                        {
+                            "State": {"Paused": False, "OOMKilled": scenario == "daemon_oom"},
+                            "HostConfig": {
+                                "Memory": 8 * 1024**3,
+                                "MemorySwap": 8 * 1024**3,
+                                "CpuPeriod": 100000,
+                                "CpuQuota": 400000,
+                                "PidsLimit": 512,
+                            },
+                        }
+                    ]
+                )
+
+                def inspect(*command: str, scenario: str = scenario) -> str:
+                    if (
+                        scenario.startswith("interrupted_bootstrap")
+                        and command[-1] == "--bootstrap"
+                    ):
+                        raise KeyboardInterrupt
+                    if scenario == "interrupted_bootstrap_absent" and command[0] == "inspect":
+                        raise subprocess.CalledProcessError(1, ["docker", *command])
+                    return inspection
+
+                unreadable = scenario in ("daemon_oom", "missing_metrics")
+                status = 1 if scenario == "daemon_oom" else 0
+                with (
+                    patch.object(
+                        subprocess, "run", return_value=subprocess.CompletedProcess([], 1)
+                    ),
+                    patch.object(run, "docker", side_effect=inspect) as docker,
+                    patch.object(
+                        run,
+                        "logged",
+                        return_value=status,
+                        side_effect=KeyboardInterrupt if scenario == "interrupted_build" else None,
+                    ),
+                    patch.object(
+                        run,
+                        "builder_memory",
+                        side_effect=(
+                            subprocess.CalledProcessError(1, ["docker", "exec"])
+                            if unreadable
+                            else None
+                        ),
+                        return_value={
+                            "peak_bytes": 8 * 1024**3,
+                            "events": {
+                                "oom": str(int(scenario == "worker_oom")),
+                                "oom_kill": str(int(scenario == "worker_oom")),
+                            },
                         },
-                    }
-                ]
-            )
-            with (
-                patch.object(subprocess, "run", return_value=subprocess.CompletedProcess([], 1)),
-                patch.object(run, "docker", return_value=inspection) as docker,
-                patch.object(run, "logged", return_value=0),
-                patch.object(
-                    run,
-                    "builder_memory",
-                    return_value={
-                        "peak_bytes": 8 * 1024**3,
-                        "events": {"oom": "1", "oom_kill": "1"},
-                    },
-                ),
-            ):
-                with self.assertRaisesRegex(RuntimeError, "OOM event"):
-                    run.build(source, report, "3.12", Path(run.__file__).parent)
-                docker.assert_any_call("buildx", "stop", run.BUILDER)
-            recorded = json.loads((report / "build-status.json").read_text())
-            self.assertEqual(recorded["exit_code"], 0)
-            self.assertEqual(recorded["cgroup"]["events"]["oom_kill"], "1")
+                    ),
+                ):
+                    expected = (
+                        KeyboardInterrupt if scenario.startswith("interrupted") else RuntimeError
+                    )
+                    with self.assertRaises(expected) as raised:
+                        run.build(source, report, "3.12", Path(run.__file__).parent)
+                    docker.assert_any_call("buildx", "stop", run.BUILDER)
+                recorded = json.loads((report / "build-status.json").read_text())
+                self.assertEqual(
+                    recorded["exit_code"], None if scenario.startswith("interrupted") else status
+                )
+                if scenario == "interrupted_bootstrap_absent":
+                    self.assertIsNone(recorded["state"])
+                    self.assertIsNone(recorded["cgroup"])
+                    self.assertIn("state_error", recorded)
+                else:
+                    self.assertEqual(recorded["state"]["OOMKilled"], scenario == "daemon_oom")
+                    if unreadable:
+                        self.assertIsNone(recorded["cgroup"])
+                        self.assertIn("cgroup_error", recorded)
+                    else:
+                        self.assertEqual(recorded["cgroup"]["peak_bytes"], 8 * 1024**3)
+                        self.assertEqual(
+                            recorded["cgroup"]["events"]["oom_kill"],
+                            str(int(scenario == "worker_oom")),
+                        )
+                if scenario.endswith("oom"):
+                    self.assertIn("OOM event", str(raised.exception))
+                elif scenario == "missing_metrics":
+                    self.assertIn("Missing build cgroup metrics", str(raised.exception))
 
 
 class ComparisonTests(unittest.TestCase):

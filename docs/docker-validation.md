@@ -69,7 +69,11 @@ The target peak is below 7 GiB. Resource settings follow the Docker
 and [BuildKit driver controls](https://docs.docker.com/build/builders/drivers/docker-container/).
 
 Use Ctrl-C to stop a job. The runner stops its container, saves final state, and
-marks the run incomplete. After a host crash, inspect
+marks the run incomplete. If dependency building stops, `build-status.json`
+preserves the available BuildKit state and cgroup counters before the runner
+stops the builder. It records missing state or counters as errors. An interrupted
+build has no command exit code and cannot qualify as completed validation.
+After a host crash, inspect
 `ypricemagic-validation-job`, `ypricemagic-validation-lock`, and
 the BuildKit container named in `run.json` before removing a stale lock. Never
 remove a live lock or start a second heavy job in the same profile.
