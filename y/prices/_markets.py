@@ -2,10 +2,12 @@
 
 from collections.abc import AsyncIterator, Awaitable, Callable
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import Any
 
 from brownie import ZERO_ADDRESS
 
+from y import ENVIRONMENT_VARIABLES as ENVS
 from y._decorators import stuck_coro_debugger
 from y.constants import EEE_ADDRESS
 from y.datatypes import QuoteAsset, QuoteStep
@@ -21,7 +23,7 @@ from y.prices._rpc import (
 )
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class Market:
     protocol: str
     pool: str
@@ -39,7 +41,14 @@ class Market:
 
 
 def address(value: Any) -> str:
-    return str(getattr(value, "address", value)).lower()
+    # Cache strings, never Contract/Token instances. Historical snapshots can
+    # share immutable addresses without keeping their discovery owners alive.
+    return _lower_address(str(getattr(value, "address", value)))
+
+
+@lru_cache(maxsize=int(ENVS.CHECKSUM_CACHE_MAXSIZE))
+def _lower_address(value: str) -> str:
+    return value.lower()
 
 
 @stuck_coro_debugger

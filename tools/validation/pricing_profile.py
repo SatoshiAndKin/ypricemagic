@@ -4,10 +4,12 @@ import argparse
 import asyncio
 from dataclasses import asdict
 import gc
+import faulthandler
 import json
 import os
 from pathlib import Path
 import resource
+import signal
 from time import perf_counter
 import tracemalloc
 from typing import Any
@@ -102,6 +104,7 @@ async def main(allocations: bool) -> None:
 
 
 if __name__ == "__main__":
+    faulthandler.register(signal.SIGUSR1, all_threads=True)
     parser = argparse.ArgumentParser()
     parser.add_argument("--allocations", action="store_true")
     asyncio.get_event_loop().run_until_complete(main(parser.parse_args().allocations))

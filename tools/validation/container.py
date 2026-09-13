@@ -3,8 +3,11 @@
 import argparse
 import os
 from pathlib import Path
+import platform
 import signal
 import subprocess
+import sys
+import sysconfig
 import time
 
 from common import write_json
@@ -45,6 +48,15 @@ def main() -> int:
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
     command = args.command[1:] if args.command[:1] == ["--"] else args.command
+    write_json(
+        args.report / "environment.json",
+        {
+            "python": sys.version,
+            "platform": platform.platform(),
+            "machine": platform.machine(),
+            "soabi": sysconfig.get_config_var("SOABI"),
+        },
+    )
     before = cgroup()
     if (
         before["memory.max"] != str(8 * 1024**3)

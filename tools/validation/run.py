@@ -181,16 +181,19 @@ def build(source: Path, report: Path, version: str) -> str:
             report,
             "build",
         )
+        metrics = builder_memory(builder_container)
         write_json(
             report / "build-status.json",
             {
                 "exit_code": status,
                 "state": json.loads(docker("inspect", builder_container))[0]["State"],
-                "cgroup": builder_memory(builder_container),
+                "cgroup": metrics,
             },
         )
         if status:
             raise RuntimeError(f"Dependency build failed ({status}); see {report}/build.log")
+        if any(int(metrics["events"][name]) for name in ("oom", "oom_kill")):
+            raise RuntimeError(f"Dependency build had an OOM event; see {report}/build-status.json")
     finally:
         state = json.loads(docker("inspect", builder_container))[0]["State"]
         if state["Paused"]:
@@ -200,7 +203,13 @@ def build(source: Path, report: Path, version: str) -> str:
 
 
 def main() -> int:
+    global BUILDER
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--docker-context",
+        default="colima-ypricemagic",
+        help="Explicit Docker context for this task",
+    )
     parser.add_argument(
         "--revision",
         default="HEAD",
@@ -216,6 +225,12 @@ def main() -> int:
     parser.add_argument("--require-report", action="append", default=[])
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
+    # This affects only this supervisor and its children, never the user's
+    # active Docker context or another task's Colima profile.
+    os.environ["DOCKER_CONTEXT"] = args.docker_context
+    BUILDER = (
+        "ypricemagic-validation-" + hashlib.sha256(args.docker_context.encode()).hexdigest()[:12]
+    )
     command = args.command[1:] if args.command[:1] == ["--"] else args.command
     if not command:
         command = ["make", "test"]
@@ -223,7 +238,13 @@ def main() -> int:
         args.require_report += ["pytest-summary.json", "compiled-modules.json"]
     report = args.report.resolve()
     report.mkdir(parents=True, exist_ok=False)
-    metadata: dict[str, Any] = {"command": command, "complete": False, "started_unix": time.time()}
+    metadata: dict[str, Any] = {
+        "command": command,
+        "docker_context": args.docker_context,
+        "builder": BUILDER,
+        "complete": False,
+        "started_unix": time.time(),
+    }
     harness = ROOT / "tools/validation"
     write_json(
         report / "runner-files.json",

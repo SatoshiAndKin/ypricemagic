@@ -22,7 +22,7 @@ GETLOGS_DOP: Final = _envs.create_env("GETLOGS_DOP", int, default=32, verbose=Fa
 CHECKSUM_CACHE_MAXSIZE: Final = _envs.create_env(
     "CHECKSUM_CACHE_MAXSIZE", int, default=100_000, verbose=False
 )
-"""The maximum number of lru-cached keys kept in the checksum cache."""
+"""The maximum number of keys in each checksum or lowercase-address cache."""
 
 DEFAULT_CACHE_MAXSIZE: Final = _envs.create_env(
     "DEFAULT_CACHE_MAXSIZE", int, default=50_000, verbose=False

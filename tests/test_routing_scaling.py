@@ -8,11 +8,11 @@ import asyncio
 import importlib
 import json
 import os
+import tracemalloc
 from pathlib import Path
 from time import perf_counter
 from types import SimpleNamespace
 from typing import Any
-from unittest.mock import AsyncMock
 
 from tests.test_amount_quotes import BLOCK
 from tests.test_pricing_correctness import Ready, instance, run_async_test
@@ -95,14 +95,25 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
     async def usd(address: Any, block: Any) -> Any:
         return PriceResult(UsdPrice(2000), []) if address == weth else None
 
+    async def deployed(*args: Any, **kwargs: Any) -> bool:
+        return True
+
+    async def decimals(*args: Any, **kwargs: Any) -> int:
+        return 18
+
+    async def unavailable(*args: Any, **kwargs: Any) -> None:
+        return None
+
     monkeypatch.setattr(_markets, "state", state)
-    monkeypatch.setattr(_markets, "deployed", AsyncMock(return_value=True))
-    monkeypatch.setattr(_routing, "state", AsyncMock(return_value=18))
+    # Exact counters live at the state/quote boundary above. Mock call histories
+    # would retain hundreds of thousands of arguments without adding coverage.
+    monkeypatch.setattr(_markets, "deployed", deployed)
+    monkeypatch.setattr(_routing, "state", decimals)
     monkeypatch.setattr(_routing, "swap", swap)
-    monkeypatch.setattr(BlockRef, "verify", AsyncMock())
+    monkeypatch.setattr(BlockRef, "verify", unavailable)
     service = QuoteService()
     monkeypatch.setattr(service, "usd", usd)
-    monkeypatch.setattr(service, "redeem", AsyncMock(return_value=None))
+    monkeypatch.setattr(service, "redeem", unavailable)
     durations = {}
     started = perf_counter()
     first = await service.price(token, BLOCK, 1)
@@ -129,7 +140,7 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
         assert result.quote.total_usd == 5982
     assert reads == count and quotes == 3
     assert not service.result_cache.flights
-    report = dict(
+    report: dict[str, Any] = dict(
         durations,
         pools=len(pools),
         input_pools=count,
@@ -168,6 +179,13 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
         total_liquidity_reads=reads,
         total_quote_calls=quotes,
     )
+    if normalize := getattr(_markets, "_lower_address", None):
+        report["address_cache"] = normalize.cache_info()._asdict()
+    if tracemalloc.is_tracing():
+        report["allocation_hotspots"] = [
+            {"source": str(item.traceback), "bytes": item.size, "count": item.count}
+            for item in tracemalloc.take_snapshot().statistics("filename")[:20]
+        ]
     report_dir = Path(os.environ.get("VALIDATION_REPORT", str(tmp_path)))
     (report_dir / "scaling.json").write_text(json.dumps(report, indent=2))
     print(json.dumps(report))

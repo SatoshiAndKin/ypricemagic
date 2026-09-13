@@ -1,10 +1,12 @@
 """Stream scalar pytest outcomes and phase measurements without retaining Items."""
 
 import asyncio
+import faulthandler
 import json
 import os
 from pathlib import Path
 import resource
+import signal
 import sys
 import time
 import tracemalloc
@@ -25,6 +27,7 @@ class Report:
     def pytest_sessionstart(self, session: Any) -> None:
         import tomllib
 
+        faulthandler.register(signal.SIGUSR1, all_threads=True)
         config = tomllib.loads(Path("pyproject.toml").read_text())
         if "mypyc" in config.get("tool", {}):
             from check_compiled import main

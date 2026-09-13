@@ -1,0 +1,131 @@
+{
+  "cold_seconds": 0.01957781100009015,
+  "warm_seconds": 0.0004461309999896912,
+  "repeated_amount_seconds": 0.0002066689994535409,
+  "concurrent_seconds": 0.013662020999618107,
+  "pools": 4771,
+  "input_pools": 75,
+  "peak_operations": 64,
+  "liquidity_reads": 75,
+  "quote_calls": 3,
+  "boundary": "controlled native RPC; cached production Sushi topology",
+  "historical_blocks": 4128,
+  "historical_seconds": 12.469990524000423,
+  "final_market_entries": 4096,
+  "final_result_entries": 2048,
+  "total_liquidity_reads": 309675,
+  "total_quote_calls": 4131,
+  "address_cache": {
+    "hits": 2180089,
+    "misses": 155,
+    "maxsize": 100000,
+    "currsize": 155
+  },
+  "allocation_hotspots": [
+    {
+      "source": "/work/y/prices/_markets.py:0",
+      "bytes": 71563221,
+      "count": 927833
+    },
+    {
+      "source": "/runner/workloads/test_routing_scaling.py:0",
+      "bytes": 3780039,
+      "count": 61452
+    },
+    {
+      "source": "/work/y/prices/_routing.py:0",
+      "bytes": 2412144,
+      "count": 38954
+    },
+    {
+      "source": "/usr/local/lib/python3.12/json/decoder.py:0",
+      "bytes": 1783695,
+      "count": 28634
+    },
+    {
+      "source": "/work/y/prices/dex/uniswap/v2.py:0",
+      "bytes": 1220602,
+      "count": 8232
+    },
+    {
+      "source": "/usr/local/lib/python3.12/copy.py:0",
+      "bytes": 1032552,
+      "count": 15623
+    },
+    {
+      "source": "/usr/local/lib/python3.12/site-packages/cachetools/__init__.py:0",
+      "bytes": 918048,
+      "count": 6156
+    },
+    {
+      "source": "/work/y/datatypes.py:0",
+      "bytes": 206816,
+      "count": 1090
+    },
+    {
+      "source": "/usr/local/lib/python3.12/dataclasses.py:0",
+      "bytes": 180944,
+      "count": 4102
+    },
+    {
+      "source": "/usr/local/lib/python3.12/asyncio/events.py:0",
+      "bytes": 115171,
+      "count": 2406
+    },
+    {
+      "source": "/work/y/prices/_quote.py:0",
+      "bytes": 83324,
+      "count": 2374
+    },
+    {
+      "source": "/usr/local/lib/python3.12/copyreg.py:0",
+      "bytes": 29904,
+      "count": 600
+    },
+    {
+      "source": "<string>:0",
+      "bytes": 14312,
+      "count": 255
+    },
+    {
+      "source": "/usr/local/lib/python3.12/logging/__init__.py:0",
+      "bytes": 7824,
+      "count": 15
+    },
+    {
+      "source": "/usr/local/lib/python3.12/asyncio/base_events.py:0",
+      "bytes": 7016,
+      "count": 88
+    },
+    {
+      "source": "/usr/local/lib/python3.12/asyncio/tasks.py:0",
+      "bytes": 5824,
+      "count": 85
+    },
+    {
+      "source": "/usr/local/lib/python3.12/tempfile.py:0",
+      "bytes": 3391,
+      "count": 10
+    },
+    {
+      "source": "/usr/local/lib/python3.12/threading.py:0",
+      "bytes": 2464,
+      "count": 25
+    },
+    {
+      "source": "<frozen abc>:0",
+      "bytes": 2261,
+      "count": 23
+    },
+    {
+      "source": "/usr/local/lib/python3.12/_weakrefset.py:0",
+      "bytes": 2208,
+      "count": 3
+    }
+  ],
+  "elapsed_seconds": 14.39121550300024,
+  "rss_peak_bytes": 620441600,
+  "python_retained_bytes": 4595237,
+  "python_peak_bytes": 83517283,
+  "profiler": "tracemalloc; exclude timings"
+}

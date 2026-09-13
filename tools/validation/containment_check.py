@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 from pathlib import Path
 import subprocess
 
@@ -11,9 +12,11 @@ from run import CONTAINER, LOCK, docker
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--docker-context", default="colima-ypricemagic")
     parser.add_argument("--image", required=True)
     parser.add_argument("--report", type=Path, required=True)
     args = parser.parse_args()
+    os.environ["DOCKER_CONTEXT"] = args.docker_context
     args.report.mkdir(parents=True, exist_ok=False)
     docker("create", "--name", LOCK, "busybox:latest", "true")
     try:
@@ -21,7 +24,7 @@ def main() -> None:
             ["docker", "create", "--name", LOCK, "busybox:latest", "true"], capture_output=True
         )
         assert duplicate.returncode != 0 and b"already in use" in duplicate.stderr
-        record = {"duplicate_prevented": True}
+        record = {"duplicate_prevented": True, "docker_context": args.docker_context}
         for label, program in (
             ("oom", "value = bytearray(128 * 1024**2)"),
             ("cancel", "import time; time.sleep(3600)"),

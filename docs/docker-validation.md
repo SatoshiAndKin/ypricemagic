@@ -5,8 +5,21 @@ It needs Docker with Linux ARM64 support and a host Python 3.12 interpreter. The
 host interpreter runs only the standard-library supervisor. Project imports,
 dependency installation, compilation, and expensive checks run inside Docker.
 
-Start the existing Colima profile with `colima start --cpu 5 --memory 12`. This
-preserves its disk. Do not increase these limits to make a failed check pass.
+The approved parallel budget uses two named Colima profiles: `ypricemagic` and
+`rpc-tune`. Each VM has 10 GiB and 5 CPUs; together they use at most 20 GiB of VM
+memory. The Mac has 36 GiB. Keep the previous default profile stopped and preserve
+its data disk. Do not raise limits to make a failed check pass.
+
+```sh
+colima start ypricemagic --cpu 5 --memory 10 --activate=false
+colima start rpc-tune --cpu 5 --memory 10 --activate=false
+```
+
+The runner defaults to Docker context `colima-ypricemagic`. Use
+`--docker-context` to select another explicit context. It never changes the
+user's active Docker context. The RPC benchmark must use `colima-rpc-tune` and
+its own 8 GiB/no-swap, 4-CPU, 512-process/thread container limits. Run at most one
+heavy job per profile. A benchmark and pricing validation can then run in parallel.
 
 ```sh
 make test-docker PYTHON=env/bin/python REVISION=HEAD \
@@ -45,8 +58,9 @@ from different dependency images without identifying that difference. Python
 3.11 and 3.13 checks use separate images selected with `--python`.
 
 The builder and test container have an 8 GiB memory limit, no swap, four CPUs,
-and a 512-process/thread limit. A Docker name reservation excludes other jobs
-across all checkouts. The runner stops BuildKit before it starts a test command.
+and a 512-process/thread limit. A Docker name reservation excludes other validation
+jobs across all checkouts using the same profile. The runner stops BuildKit before
+it starts a test command. Build OOM events also make validation incomplete.
 The target peak is below 7 GiB. Resource settings follow the Docker
 [container limits](https://docs.docker.com/engine/containers/resource_constraints/)
 and [BuildKit driver controls](https://docs.docker.com/build/builders/drivers/docker-container/).
@@ -54,8 +68,8 @@ and [BuildKit driver controls](https://docs.docker.com/build/builders/drivers/do
 Use Ctrl-C to stop a job. The runner stops its container, saves final state, and
 marks the run incomplete. After a host crash, inspect
 `ypricemagic-validation-job`, `ypricemagic-validation-lock`, and
-`buildx_buildkit_ypricemagic-validation0` before removing a stale lock. Never
-remove a live lock or start a second heavy job.
+the BuildKit container named in `run.json` before removing a stale lock. Never
+remove a live lock or start a second heavy job in the same profile.
 
 Reports contain source identity, command, dependency versions, elapsed time,
 exit status, cgroup memory peak and OOM events, sampled process RSS, effective
@@ -106,3 +120,12 @@ cancellation, duplicate exclusion, and 600 MiB of console output. The rotation
 check retains five 100 MiB files and reports 100 MiB of expired test output.
 `containment_check.py` uses a deliberate 64 MiB OOM fixture to prove Docker
 containment without approaching the Mac's memory limit.
+
+The runner records Python, ABI, architecture, and platform in `environment.json`.
+The pytest and native check processes accept `SIGUSR1` for a thread-stack dump to
+the bounded console log. Use this only on those registered processes when a
+concrete failure needs diagnosis. The signal does not stop the check.
+
+The lowercase-address cache uses `YPRICEMAGIC_CHECKSUM_CACHE_MAXSIZE`, the existing
+address-cache setting. It holds strings only. Immutable pool snapshots use slots;
+block-specific balances, fees, exclusions, and hash keys remain unchanged.

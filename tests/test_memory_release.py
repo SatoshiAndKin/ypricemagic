@@ -1,6 +1,7 @@
 """Request diagnostics and cached results have bounded ownership."""
 
 import asyncio
+from dataclasses import dataclass
 import gc
 import logging
 from typing import Any
@@ -10,6 +11,26 @@ import pytest
 
 from tests.test_pricing_correctness import BLOCK, TOKEN, run_async_test
 from y.utils.logging import get_price_logger
+
+
+def test_normalized_addresses_share_strings_without_retaining_discovery_owners() -> None:
+    from y.prices._markets import address
+
+    @dataclass
+    class Owner:
+        address: str
+
+    first_owner = Owner("0xAbCd000000000000000000000000000000001234")
+    second_owner = Owner(first_owner.address.encode().decode())
+    references = ref(first_owner), ref(second_owner)
+    normalized = address(first_owner)
+    assert normalized == "0xabcd000000000000000000000000000000001234"
+    assert address(second_owner) is normalized
+    second_owner.address = "0xBcDe000000000000000000000000000000005678"
+    assert address(second_owner) == "0xbcde000000000000000000000000000000005678"
+    del first_owner, second_owner
+    gc.collect()
+    assert all(reference() is None for reference in references)
 
 
 @run_async_test

@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/scaling_profile.py --allocations"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 95.30534440700012,
+  "peak_sampled_process_rss_bytes": 3054030848,
+  "cgroup_before": {
+    "memory.current": "8626176",
+    "memory.peak": "8626176",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "140771328",
+    "memory.peak": "3255398400",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

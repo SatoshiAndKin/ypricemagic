@@ -6,8 +6,10 @@ import tempfile
 import unittest
 import subprocess
 import sys
+from unittest.mock import patch
 
 from common import ConsoleLog
+import run
 
 
 class LogTests(unittest.TestCase):
@@ -44,6 +46,53 @@ class LogTests(unittest.TestCase):
             )
             with self.assertRaises(ValueError):
                 ConsoleLog(path, limit=0)
+
+
+class BuildTests(unittest.TestCase):
+    def test_successful_build_with_worker_oom_stops_before_image_use(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source, report = root / "source", root / "report"
+            source.mkdir()
+            report.mkdir()
+            for name in ("requirements.txt", "requirements-dev.txt"):
+                (source / name).write_text("")
+            (source / "pyproject.toml").write_text("[build-system]\nrequires=[]\n")
+            inspection = json.dumps(
+                [
+                    {
+                        "State": {"Paused": False, "OOMKilled": False},
+                        "HostConfig": {
+                            "Memory": 8 * 1024**3,
+                            "MemorySwap": 8 * 1024**3,
+                            "CpuPeriod": 100000,
+                            "CpuQuota": 400000,
+                            "PidsLimit": 512,
+                        },
+                    }
+                ]
+            )
+            with (
+                patch.object(
+                    run.subprocess, "run", return_value=subprocess.CompletedProcess([], 1)
+                ),
+                patch.object(run, "docker", return_value=inspection) as docker,
+                patch.object(run, "logged", return_value=0),
+                patch.object(
+                    run,
+                    "builder_memory",
+                    return_value={
+                        "peak_bytes": 8 * 1024**3,
+                        "events": {"oom": "1", "oom_kill": "1"},
+                    },
+                ),
+            ):
+                with self.assertRaisesRegex(RuntimeError, "OOM event"):
+                    run.build(source, report, "3.12")
+                docker.assert_any_call("buildx", "stop", run.BUILDER)
+            recorded = json.loads((report / "build-status.json").read_text())
+            self.assertEqual(recorded["exit_code"], 0)
+            self.assertEqual(recorded["cgroup"]["events"]["oom_kill"], "1")
 
 
 class ComparisonTests(unittest.TestCase):

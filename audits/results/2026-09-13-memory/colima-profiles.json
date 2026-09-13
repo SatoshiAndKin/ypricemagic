@@ -1,0 +1,94 @@
+{
+  "profiles": [
+    {
+      "name": "default",
+      "status": "Stopped",
+      "arch": "aarch64",
+      "cpus": 5,
+      "memory": 12884901888,
+      "disk": 107374182400,
+      "runtime": "docker"
+    },
+    {
+      "name": "rpc-tune",
+      "status": "Running",
+      "arch": "aarch64",
+      "cpus": 5,
+      "memory": 10737418240,
+      "disk": 107374182400,
+      "runtime": "docker"
+    },
+    {
+      "name": "ypricemagic",
+      "status": "Running",
+      "arch": "aarch64",
+      "cpus": 5,
+      "memory": 10737418240,
+      "disk": 107374182400,
+      "runtime": "docker"
+    }
+  ],
+  "contexts": [
+    {
+      "Name": "colima-ypricemagic",
+      "Metadata": {
+        "Description": "colima [profile=ypricemagic]"
+      },
+      "Endpoints": {
+        "docker": {
+          "Host": "unix:///Users/bryan/.colima/ypricemagic/docker.sock",
+          "SkipTLSVerify": false
+        }
+      },
+      "TLSMaterial": {},
+      "Storage": {
+        "MetadataPath": "/Users/bryan/.docker/contexts/meta/55871f24db8cd607d413760ae169f14a1f0a526a7343956aae6561a265484da2",
+        "TLSPath": "/Users/bryan/.docker/contexts/tls/55871f24db8cd607d413760ae169f14a1f0a526a7343956aae6561a265484da2"
+      }
+    },
+    {
+      "Name": "colima-rpc-tune",
+      "Metadata": {
+        "Description": "colima [profile=rpc-tune]"
+      },
+      "Endpoints": {
+        "docker": {
+          "Host": "unix:///Users/bryan/.colima/rpc-tune/docker.sock",
+          "SkipTLSVerify": false
+        }
+      },
+      "TLSMaterial": {},
+      "Storage": {
+        "MetadataPath": "/Users/bryan/.docker/contexts/meta/4168ea425aa6ea9205eab4d51ef53f5af195e6293a086f5fa8921abe893939c5",
+        "TLSPath": "/Users/bryan/.docker/contexts/tls/4168ea425aa6ea9205eab4d51ef53f5af195e6293a086f5fa8921abe893939c5"
+      }
+    }
+  ],
+  "mac_memory_bytes": 38654705664,
+  "approved_running_vm_memory_bytes": 21474836480,
+  "container_memory_bytes": 8589934592,
+  "container_swap_bytes": 0,
+  "container_cpus": 4,
+  "container_pids": 512,
+  "heavy_jobs_per_profile": 1,
+  "preserved_image": "sha256:2fe46c86dd882f4aa70f6bd44fd8f812d65ca8e4c98e4061fc3819938b48c97e",
+  "active_docker_context": "default",
+  "engines": {
+    "colima-ypricemagic": {
+      "ID": "15741c87-75e2-469b-98fe-5e6eaab6e247",
+      "Name": "colima-ypricemagic",
+      "NCPU": 5,
+      "MemTotal": 10404020224,
+      "ContainersRunning": 1,
+      "DockerRootDir": "/var/lib/docker"
+    },
+    "colima-rpc-tune": {
+      "ID": "344e73dd-85d1-4194-82ed-61feb8ac2587",
+      "Name": "colima-rpc-tune",
+      "NCPU": 5,
+      "MemTotal": 10404020224,
+      "ContainersRunning": 0,
+      "DockerRootDir": "/var/lib/docker"
+    }
+  }
+}

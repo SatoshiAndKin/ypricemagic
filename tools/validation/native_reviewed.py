@@ -1,6 +1,8 @@
 """Fixed-block native checks retained from PR 43 validation."""
 
 import os
+import faulthandler
+import signal
 from typing import Any
 import asyncio
 import json
@@ -145,4 +147,5 @@ async def main() -> int:
     return int(any(row["status"] != "pass" for row in rows))
 
 
+faulthandler.register(signal.SIGUSR1, all_threads=True)
 raise SystemExit(asyncio.get_event_loop().run_until_complete(main()))

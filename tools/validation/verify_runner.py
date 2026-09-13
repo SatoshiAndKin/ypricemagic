@@ -13,12 +13,22 @@ from common import write_json
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--docker-context", default="colima-ypricemagic")
     parser.add_argument("--image", required=True)
     parser.add_argument("--report", type=Path, required=True)
     args = parser.parse_args()
     args.report.mkdir(parents=True, exist_ok=False)
     runner = Path(__file__).with_name("run.py")
-    command = [sys.executable, str(runner), "--revision", "worktree", "--image", args.image]
+    command = [
+        sys.executable,
+        str(runner),
+        "--docker-context",
+        args.docker_context,
+        "--revision",
+        "worktree",
+        "--image",
+        args.image,
+    ]
     cancelled = args.report / "cancelled"
     child = subprocess.Popen(
         [
