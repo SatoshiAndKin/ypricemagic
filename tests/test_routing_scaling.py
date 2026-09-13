@@ -7,6 +7,7 @@ and cache reuse, not archive-node or production latency.
 import asyncio
 import importlib
 import json
+import os
 from pathlib import Path
 from time import perf_counter
 from types import SimpleNamespace
@@ -137,5 +138,36 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
         quote_calls=quotes,
         boundary="controlled native RPC; cached production Sushi topology",
     )
-    (tmp_path / "scaling.json").write_text(json.dumps(report, indent=2))
+    # Turn over both caches with distinct canonical historical blocks. Never
+    # clear a cache or restart the process to achieve bounded retained state.
+    started = perf_counter()
+    blocks = int(service.market_cache.values.maxsize) + 32
+    for index in range(blocks):
+        historical = BlockRef(
+            BLOCK.chain,
+            BLOCK.number - index - 1,
+            f"0x{index + 1:064x}",
+            BLOCK.timestamp - 12 * (index + 1),
+        )
+        result = await service.price(token, historical, 1)
+        assert result is not None and result.quote is not None
+        assert result.quote.total_usd == 1994
+        assert result.quote.block_hash == historical.hash
+        assert result.quote.steps[0].outputs[0].amount == 997 * 10**15
+        assert len(service.market_cache.values) <= service.market_cache.values.maxsize
+        assert len(service.result_cache.values) <= service.result_cache.values.maxsize
+        assert not service.market_cache.flights and not service.result_cache.flights
+    assert reads == count * (blocks + 1)
+    assert quotes == blocks + 3
+    assert peak <= 64 and active == 0
+    report.update(
+        historical_blocks=blocks,
+        historical_seconds=perf_counter() - started,
+        final_market_entries=len(service.market_cache.values),
+        final_result_entries=len(service.result_cache.values),
+        total_liquidity_reads=reads,
+        total_quote_calls=quotes,
+    )
+    report_dir = Path(os.environ.get("VALIDATION_REPORT", str(tmp_path)))
+    (report_dir / "scaling.json").write_text(json.dumps(report, indent=2))
     print(json.dumps(report))

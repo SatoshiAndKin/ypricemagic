@@ -7,6 +7,7 @@ requires = [
   "types-python-dateutil",
   "types-cachetools",
   "types-requests",
+  "types-PyYAML==6.0.12.20260906",
   "aiosqlite==0.22.1",
   "bobs_lazy_logging==0.0.5",
   "dank-mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@bc59c589ee631221b9aa4879fe1a0734afaaee04 ; platform_system == 'MacOS' or (platform_system == 'Linux' and platform_machine != 'i686')",
@@ -22,7 +23,7 @@ requires = [
 
 [tool.mypy]
 plugins = ["typed_envs.mypy_plugin", "a_sync_mypy_plugin"]
-files = ["y", "tests"]
+files = ["y", "tests", "tools/validation"]
 exclude = ["^build/", "^cache/", "^env/", "^[.]worktrees/"]
 strict = true
 pretty = true
@@ -47,3 +48,16 @@ asyncio_task_timeout = 600
 
 [tool.black]
 line-length = 100
+
+[tool.validation]
+focused_tests = [
+  "tests/test_memory_release.py",
+  "tests/test_pricing_correctness.py",
+  "tests/test_amount_quotes.py",
+  "tests/test_quote_regressions.py",
+  "tests/test_price_result.py",
+  "tests/test_trade_path_sources.py",
+  "tests/test_audit_prices.py",
+  "tests/test_routing_scaling.py",
+  "tests/test_cachebox.py",
+]

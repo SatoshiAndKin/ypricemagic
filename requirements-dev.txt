@@ -1,8 +1,8 @@
 -r requirements.txt
 
 wheel
+types-PyYAML==6.0.12.20260906
 pytest
 numpy
-# ypricemagic uses a global event loop which is not compatable with pytest-asyncio-cooperative
-# so we use this patched version for testing instead
-git+https://github.com/BobTheBuidler/pytest-asyncio-cooperative@patch-1
+# Retain the shared event loop and release completed test state.
+pytest-asyncio-cooperative @ git+https://github.com/SatoshiAndKin/pytest-asyncio-cooperative@3089b3ddd393a45655b5231e6a67b54dd5529196

@@ -1,7 +1,12 @@
 
-.PHONY: docs test
+.PHONY: docs test test-docker
 
 PYTHON ?= python
+REVISION ?= HEAD
+
+test-docker:
+	@test -n "$(REPORT)" || (echo 'Set REPORT to a new report directory'; exit 2)
+	$(PYTHON) tools/validation/run.py --revision "$(REVISION)" --report "$(REPORT)" $(DOCKER_ARGS) -- make test
 
 test:
 	$(PYTHON) -m pip install --no-deps --no-build-isolation -e .

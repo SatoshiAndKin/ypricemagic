@@ -1,13 +1,10 @@
 from asyncio import Task, sleep
 from logging import DEBUG, Logger, StreamHandler, _lock, getLogger
-from types import MethodType
-from typing import Final, NoReturn, Optional, TypeVar, final
-from weakref import WeakValueDictionary
+from typing import Final, TypeVar, final
 from weakref import ref as weak_ref
 
 import a_sync
 from brownie import chain
-from eth_typing import BlockNumber, ChecksumAddress
 from lazy_logging import LazyLoggerFactory  # type: ignore [import-untyped]
 from typing_extensions import ParamSpec
 
@@ -41,37 +38,54 @@ def enable_debug_logging(logger: str = "y") -> None:
         logger.addHandler(StreamHandler())
 
 
-_pop_logger: Final = Logger.manager.loggerDict.pop
-
-
 @final
 class PriceLogger(Logger):
-    enabled: bool
-    address: ChecksumAddress
-    block: BlockNumber
-    key: tuple[AnyAddressType, Block, str | None, str]
-    debug_task: Optional["Task[None]"]
+    """One request owns its logger and diagnostic task."""
+
+    def __init__(self, name: str, address: str, block: Block | None) -> None:
+        super().__init__(name)
+        # Register only the stable category. Per-token and per-block logger
+        # names would leave permanent placeholders in logging's registry.
+        self.parent = getLogger("y.prices")
+        parent_name = name
+        with _lock:
+            while parent_name:
+                parent = self.manager.loggerDict.get(parent_name)
+                if isinstance(parent, Logger):
+                    self.parent = parent
+                    break
+                parent_name = parent_name.rpartition(".")[0]
+        self.address = address
+        self.block = block
+        self.enabled = self.isEnabledFor(DEBUG)
+        self.debug_task: Task[None] | None = None
+
+    def isEnabledFor(self, level: int) -> bool:
+        # Unregistered loggers do not participate in Manager._clear_cache().
+        # Read the current level so changes to parent logging still take effect.
+        return (
+            not self.disabled and self.manager.disable < level and level >= self.getEffectiveLevel()
+        )
 
     def close(self) -> None:
-        # since we make a lot of these we don't want logging module to cache them
-        self.debug("closing %s", logger)
-        with _lock:
-            _pop_logger(self.name, None)
+        task, self.debug_task = self.debug_task, None
+        if task is not None:
+            task.cancel()
 
 
 def get_price_logger(
     token_address: AnyAddressType,
-    block: Block,
+    block: Block | None,
     *,
-    symbol: str = None,
+    symbol: str | None = None,
     extra: str = "",
     start_task: bool = False,
 ) -> PriceLogger:
     """
-    Create or retrieve a `PriceLogger` instance for a given token address and block.
+    Create a request-owned `PriceLogger` for a token address and block.
 
-    This function manages a cache of loggers to ensure they have the proper members for ypricemagic.
-    If a logger is enabled for DEBUG, it will start a debug task if specified.
+    Concurrent requests have independent diagnostic tasks. Call ``close()`` in
+    the request's ``finally`` block. DEBUG logging must be enabled to start a task.
 
     Args:
         token_address: The address of the token.
@@ -92,40 +106,19 @@ def get_price_logger(
     if extra:
         name += f".{extra}"
 
-    # the built-in logging module caches loggers but we need to make sure they have the proper members for ypm
-    if cached_logger := _all_price_loggers.get(name, None):
-        return cached_logger
-
-    logger = getLogger(name)
-    logger.address = address
-    logger.block = block
-    logger.enabled = logger.isEnabledFor(DEBUG)
-
-    if logger.enabled:
-        logger.debug = lambda msg, *args, **kwargs: logger._log(DEBUG, msg, args, **kwargs)
-
-        if start_task:
-            # will kill itself when this logger is garbage collected
-            logger.debug_task = a_sync.create_task(
-                coro=_debug_tsk(symbol, weak_ref(logger)),
-                name=f"_debug_tsk({symbol}, {logger})",
-                log_destroy_pending=False,
-            )
-
-    else:
-        logger.debug = _noop
-
-    logger.close = MethodType(PriceLogger.close, logger)
-
-    _all_price_loggers[name] = logger
+    logger = PriceLogger(name, address, block)
+    if logger.enabled and start_task:
+        logger.debug_task = a_sync.create_task(
+            coro=_debug_tsk(symbol, weak_ref(logger)),
+            name=f"_debug_tsk({symbol}, {logger})",
+            log_destroy_pending=False,
+        )
     return logger
 
 
-def _noop(*_a, **_k): ...
-
-
-async def _debug_tsk(symbol: str | None, logger_ref: "weak_ref[Logger]") -> NoReturn:
+async def _debug_tsk(symbol: str | None, logger_ref: "weak_ref[Logger]") -> None:
     """Prints a log every 1 minute until the creating coro returns."""
+    args: tuple[str, ...]
     if symbol:
         args = "price still fetching for %s", symbol
     else:
@@ -136,9 +129,8 @@ async def _debug_tsk(symbol: str | None, logger_ref: "weak_ref[Logger]") -> NoRe
         if logger is None:
             return
         logger.debug(*args)
-
-
-_all_price_loggers: Final["WeakValueDictionary[str, PriceLogger]"] = WeakValueDictionary()
+        # Do not hold the owner across the next sleep.
+        del logger
 
 
 NETWORK_DESCRIPTOR_FOR_ISSUE_REQ: Final = (

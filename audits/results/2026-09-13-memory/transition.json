@@ -1,0 +1,44 @@
+{
+  "at": "2026-09-13T05:05:10.908278+00:00",
+  "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+  "jobs": [
+    {
+      "job": "native",
+      "status": "incomplete",
+      "reason": "interrupted for approved Docker transition",
+      "original_log": "/private/tmp/yprice-pr43-repairs/native.log",
+      "log_bytes": 2294,
+      "original_preserved": true
+    },
+    {
+      "job": "native-reviewed",
+      "status": "incomplete",
+      "reason": "interrupted for approved Docker transition",
+      "original_log": "/private/tmp/yprice-pr43-repairs/native-reviewed.log",
+      "log_bytes": 12748,
+      "original_preserved": true
+    },
+    {
+      "job": "changed-suite",
+      "status": "incomplete",
+      "reason": "interrupted for approved Docker transition",
+      "original_log": "/private/tmp/yprice-pr43-repairs/changed-suite.log",
+      "log_bytes": 230389,
+      "original_preserved": true
+    },
+    {
+      "job": "audit-mainnet",
+      "status": "incomplete",
+      "reason": "interrupted for approved Docker transition",
+      "original_log": "/private/tmp/yprice-pr43-repairs/audit-mainnet.log",
+      "log_bytes": 16919668646,
+      "original_preserved": true
+    }
+  ],
+  "stopped_process_groups": [
+    21844,
+    24159,
+    55387,
+    94768
+  ]
+}
