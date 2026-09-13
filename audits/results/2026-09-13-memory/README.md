@@ -10,6 +10,17 @@ proxy still returns HTTP 408. Validation resumes against NUC Reth. The
 [earlier proxy retries](archive-retry/README.md) and the expected
 [non-archive Geth control](direct-backend/README.md) remain separate records.
 
+The [final Python 3.12 focused run](pinned-owner-312-focused-final/README.md)
+passes all 246 cases after the Gearbox type assertion and historical task cleanup.
+All ten native extensions load, with no OOM event.
+
+The [published source-pin build](pinned-owner-312-focused/README.md) now passes
+all 246 focused cases at `9d32c001` on native Linux ARM64 Python 3.12. BuildKit
+peaks at 3,309,588,480 bytes and stops before the test container, which peaks at
+1,167,736,832 bytes. Both have no OOM event. The installed manifest records the
+exact compiler, Brownie, and a-sync commits. The other validation gates remain
+in progress.
+
 The [repaired dependency integration](repaired-owner-focused/README.md) passes all
 246 focused cases on native Linux ARM64 Python 3.12, including the corrected
 historical Gearbox expectation. The owning
@@ -17,6 +28,19 @@ historical Gearbox expectation. The owning
 [task binding, cancellation, and release repair](async-ownership/README.md) have
 separate native checks and matched memory evidence. Their final three-version
 builds, complete pricing suites, and real-node gates remain in progress.
+
+The [historical test cleanup](popsicle-owned-cleanup/README.md) releases all
+425 previously pending test-owned mapped tasks. It preserves the same two passes
+and 17 configured timeouts, with a 1,212,628,992-byte container peak and no OOM.
+The [configured Python 3.12 type comparison](pinned-owner-312-types/README.md)
+reports 1,940 existing errors versus 1,959 before optimization, with no added
+rendered diagnostic under the same published dependency image.
+
+The [repaired historical allocation run](popsicle-repaired-allocations/README.md)
+completes all 19 outcomes and teardown below 1.5 GB of container memory. Two
+cases pass and 17 reach the existing 600-second pricing timeout. It has no OOM
+event, but does not pass the pricing gate. Its different completed work and
+profiler overhead prevent a controlled performance comparison.
 
 The [earlier focused matrix](final-focused/README.md) passes all 244 tests on
 Python 3.11–3.13 with the dependency pins that preceded the compiler, Brownie,
