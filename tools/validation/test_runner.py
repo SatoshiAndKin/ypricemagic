@@ -182,6 +182,7 @@ class ComparisonTests(unittest.TestCase):
             report = json.loads((root / "result.json").read_text())
             self.assertFalse(report["comparable"])
             self.assertEqual(report["missing_reports"], [str(root / "after/pytest-events.jsonl")])
+            self.assertTrue(report["dependencies_equal"])
 
 
 if __name__ == "__main__":

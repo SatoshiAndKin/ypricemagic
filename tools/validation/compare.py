@@ -73,8 +73,10 @@ def main() -> None:
         for name in required
         if not (path / name).is_file()
     ]
-    dependencies_equal = not missing and all(
-        (args.baseline / name).read_text() == (args.changed / name).read_text()
+    dependencies_equal = all(
+        (args.baseline / name).is_file()
+        and (args.changed / name).is_file()
+        and (args.baseline / name).read_text() == (args.changed / name).read_text()
         for name in required
         if name.endswith("dependencies.txt") or name == "dependencies-after.txt"
     )

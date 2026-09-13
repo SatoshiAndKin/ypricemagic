@@ -1,0 +1,15 @@
+{
+  "elapsed_seconds": 1476.4085004929948,
+  "sampled_process_rss_bytes": 8597495808,
+  "peak_sampled_process_rss_bytes": 8597495808,
+  "cgroup": {
+    "memory.current": "8577126400",
+    "memory.peak": "8589950976",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 763\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "48"
+  }
+}

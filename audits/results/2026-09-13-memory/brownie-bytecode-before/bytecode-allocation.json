@@ -1,0 +1,121 @@
+{
+  "complete": true,
+  "module_file": "/usr/local/lib/python3.12/site-packages/brownie/network/middlewares/caching.cpython-312-aarch64-linux-gnu.so",
+  "input_bytes": 17408,
+  "samples": [
+    {
+      "iteration": 1,
+      "python_current_bytes": 279046,
+      "python_peak_bytes": 280135,
+      "rss_peak_bytes": 149110784
+    },
+    {
+      "iteration": 2,
+      "python_current_bytes": 558180,
+      "python_peak_bytes": 559269,
+      "rss_peak_bytes": 149110784
+    },
+    {
+      "iteration": 3,
+      "python_current_bytes": 837282,
+      "python_peak_bytes": 838371,
+      "rss_peak_bytes": 149110784
+    },
+    {
+      "iteration": 4,
+      "python_current_bytes": 1116384,
+      "python_peak_bytes": 1117473,
+      "rss_peak_bytes": 149110784
+    },
+    {
+      "iteration": 5,
+      "python_current_bytes": 1395486,
+      "python_peak_bytes": 1396575,
+      "rss_peak_bytes": 149110784
+    },
+    {
+      "iteration": 6,
+      "python_current_bytes": 1674620,
+      "python_peak_bytes": 1675709,
+      "rss_peak_bytes": 149110784
+    },
+    {
+      "iteration": 7,
+      "python_current_bytes": 1953842,
+      "python_peak_bytes": 1954931,
+      "rss_peak_bytes": 149110784
+    },
+    {
+      "iteration": 8,
+      "python_current_bytes": 2233064,
+      "python_peak_bytes": 2234153,
+      "rss_peak_bytes": 149110784
+    },
+    {
+      "iteration": 9,
+      "python_current_bytes": 2512286,
+      "python_peak_bytes": 2513375,
+      "rss_peak_bytes": 149110784
+    },
+    {
+      "iteration": 10,
+      "python_current_bytes": 2791572,
+      "python_peak_bytes": 2792661,
+      "rss_peak_bytes": 149110784
+    },
+    {
+      "iteration": 11,
+      "python_current_bytes": 3070794,
+      "python_peak_bytes": 3071883,
+      "rss_peak_bytes": 149110784
+    },
+    {
+      "iteration": 12,
+      "python_current_bytes": 3350016,
+      "python_peak_bytes": 3351105,
+      "rss_peak_bytes": 149307392
+    },
+    {
+      "iteration": 13,
+      "python_current_bytes": 3629238,
+      "python_peak_bytes": 3630327,
+      "rss_peak_bytes": 149700608
+    },
+    {
+      "iteration": 14,
+      "python_current_bytes": 3908460,
+      "python_peak_bytes": 3909549,
+      "rss_peak_bytes": 149962752
+    },
+    {
+      "iteration": 15,
+      "python_current_bytes": 4187682,
+      "python_peak_bytes": 4188771,
+      "rss_peak_bytes": 150355968
+    },
+    {
+      "iteration": 16,
+      "python_current_bytes": 4466904,
+      "python_peak_bytes": 4467993,
+      "rss_peak_bytes": 150880256
+    }
+  ],
+  "current_after_collection_bytes": 4467732,
+  "top_allocations": [
+    {
+      "source": "<string>:14",
+      "bytes": 4464096,
+      "count": 8176
+    },
+    {
+      "source": "<string>:16",
+      "bytes": 1960,
+      "count": 28
+    },
+    {
+      "source": "<string>:15",
+      "bytes": 1024,
+      "count": 32
+    }
+  ]
+}

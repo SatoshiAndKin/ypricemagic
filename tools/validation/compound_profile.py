@@ -12,17 +12,7 @@ import tracemalloc
 from typing import Any
 
 from common import write_json
-from profile_state import capture
-
-
-def sample(directory: Path, stop: threading.Event) -> None:
-    index = 0
-    while not stop.wait(30):
-        try:
-            capture(directory, f"pending-{index}")
-        except Exception as error:
-            write_json(directory / f"sample-error-{index}.json", {"error": repr(error)})
-        index += 1
+from profile_state import capture, sample
 
 
 def main(blocks: list[int] | None) -> None:

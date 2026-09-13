@@ -23,6 +23,6 @@ One thread-stack diagnostic ran during the initial pricing wait. This run is
 not a controlled timing or allocation sample. It does not replace the separate
 three-sample fixed-workload comparisons.
 
-The changed full suite follows with the same image, endpoint, limits, and a
-separate database. No memory limit, concurrency setting, or required check was
+The [changed full suite](../full-optimized-final-oom/README.md) also hit the limit
+with the same image, endpoint, limits, and a separate database. No memory limit, concurrency setting, or required check was
 relaxed.

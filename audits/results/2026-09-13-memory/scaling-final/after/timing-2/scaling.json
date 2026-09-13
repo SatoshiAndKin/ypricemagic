@@ -1,0 +1,29 @@
+{
+  "cold_seconds": 0.0033542270030011423,
+  "warm_seconds": 9.662499360274523e-05,
+  "repeated_amount_seconds": 3.258399374317378e-05,
+  "concurrent_seconds": 0.0021339289960451424,
+  "pools": 4771,
+  "input_pools": 75,
+  "peak_operations": 64,
+  "liquidity_reads": 75,
+  "quote_calls": 3,
+  "boundary": "controlled native RPC; cached production Sushi topology",
+  "historical_blocks": 4128,
+  "historical_seconds": 2.5333576280027046,
+  "final_market_entries": 4096,
+  "final_result_entries": 2048,
+  "total_liquidity_reads": 309675,
+  "total_quote_calls": 4131,
+  "address_cache": {
+    "hits": 2180089,
+    "misses": 155,
+    "maxsize": 100000,
+    "currsize": 155
+  },
+  "elapsed_seconds": 2.652514708999661,
+  "rss_peak_bytes": 294723584,
+  "python_retained_bytes": null,
+  "python_peak_bytes": null,
+  "profiler": null
+}

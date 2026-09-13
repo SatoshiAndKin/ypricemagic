@@ -106,7 +106,13 @@ def freeze_files(source: Path, target: Path, names: Iterable[str]) -> dict[str, 
     return hashes
 
 
-def build(source: Path, report: Path, version: str, harness: Path) -> str:
+def build(
+    source: Path,
+    report: Path,
+    version: str,
+    harness: Path,
+    extra_inputs: dict[str, Path] | None = None,
+) -> str:
     context = report / "build-input"
     context.mkdir()
     for name in ("requirements.txt", "requirements-dev.txt"):
@@ -117,6 +123,8 @@ def build(source: Path, report: Path, version: str, harness: Path) -> str:
     requirements = config["build-system"]["requires"] + ["setuptools<81", "setuptools-scm", "black"]
     (context / "requirements-build.txt").write_text("\n".join(requirements) + "\n")
     shutil.copyfile(harness / "Dockerfile", context / "Dockerfile")
+    for name, path in (extra_inputs or {}).items():
+        shutil.copyfile(path, context / name)
     digest = hashlib.sha256(
         version.encode() + b"".join(p.read_bytes() for p in sorted(context.iterdir()))
     ).hexdigest()[:20]
