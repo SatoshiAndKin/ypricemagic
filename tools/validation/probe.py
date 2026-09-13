@@ -24,13 +24,15 @@ def main() -> None:
             raise RuntimeError(result["error"])
         return cast(object, result["result"])
 
-    report: dict[str, object] = {"complete": False}
+    report: dict[str, object] = {"complete": False, "stage": "chain_id"}
     try:
         assert rpc("eth_chainId", []) == "0x1"
-        blocks = []
+        blocks: list[dict[str, object]] = []
         for number in (16_830_000, 18_000_000):
+            report.update(stage="historical_header", number=number, blocks=blocks)
             header = rpc("eth_getBlockByNumber", [hex(number), False])
             assert isinstance(header, dict)
+            report.update(stage="historical_call", block_hash=header["hash"])
             value = rpc(
                 "eth_call",
                 [
@@ -40,7 +42,11 @@ def main() -> None:
             )
             assert isinstance(value, str) and int(value, 16) == 6
             blocks.append({"number": number, "hash": header["hash"], "usdc_decimals": 6})
-        report.update(complete=True, blocks=blocks)
+        report.update(complete=True, stage="complete", blocks=blocks)
+    except Exception as error:
+        # Preserve the failing operation without recording the private endpoint.
+        report["error_type"] = type(error).__name__
+        raise
     finally:
         write_json(Path(os.environ["VALIDATION_REPORT"]) / "rpc-probe.json", report)
 

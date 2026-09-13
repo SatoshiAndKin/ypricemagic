@@ -6,7 +6,9 @@ REVISION ?= HEAD
 
 test-docker:
 	@test -n "$(REPORT)" || (echo 'Set REPORT to a new report directory'; exit 2)
-	$(PYTHON) tools/validation/run.py --revision "$(REVISION)" --report "$(REPORT)" $(DOCKER_ARGS) -- make test
+	$(PYTHON) tools/validation/run.py --revision "$(REVISION)" --report "$(REPORT)" $(DOCKER_ARGS) \
+		--require-report rpc-probe.json --require-report pytest-summary.json \
+		--require-report compiled-modules.json -- sh /runner/full_suite.sh
 
 test:
 	$(PYTHON) -m pip install --no-deps --no-build-isolation -e .

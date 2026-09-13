@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m venv /unit && /unit/bin/python -m pip install pytest==7.4.4 hypothesis==6.27.3 -r requirements.txt . && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && /unit/bin/python /runner/focused.py"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789300820.542579,
+  "source_sha": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+  "source_revision": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+  "source_archive_sha256": "a0c44743dcf52805ec28e347afdbd8fb57c668f30ab1ea0a04b0fa391c368ba9",
+  "image": "sha256:62791c7240a042923012b5e6f2d610822bd00d227a145c4f852568768f43b064",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 6.646136045455933
+}

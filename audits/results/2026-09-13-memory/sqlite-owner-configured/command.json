@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m venv /unit && /unit/bin/python -m pip install -e \".[dev]\" && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && PATH=/unit/bin:$PATH make test lint && /unit/bin/python -m build --sdist --wheel --outdir /reports/dist && /unit/bin/python -c 'import json,pathlib; pathlib.Path(\"/reports/owner-validation.json\").write_text(json.dumps({\"configured_test_coverage_types_lint_build_passed\":True}))'"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 9.207490079001218,
+  "peak_sampled_process_rss_bytes": 121319424,
+  "cgroup_before": {
+    "memory.current": "8925184",
+    "memory.peak": "8925184",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "228978688",
+    "memory.peak": "429432832",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

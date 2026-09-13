@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m venv /unit && /unit/bin/python -m pip install -e \".[dev]\" && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && PATH=/unit/bin:$PATH make test lint && /unit/bin/python -m build --sdist --wheel --outdir /reports/dist && /unit/bin/python -c 'import json,pathlib; pathlib.Path(\"/reports/owner-validation.json\").write_text(json.dumps({\"configured_test_coverage_types_lint_build_passed\":True}))'"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789295707.0268428,
+  "source_sha": "b3a45631a8161f222dca9a685b469a2914f68b04",
+  "source_revision": "worktree",
+  "source_archive_sha256": "88d708f8b5709be8434dc87f4cf99d822c1f60f11a65d74d53dcda506fa2af2c",
+  "image": "sha256:915f84eec40d2c4460f4e4896b996878b73a0b6eb688039df86b71daa622badc",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 10.082646131515503
+}

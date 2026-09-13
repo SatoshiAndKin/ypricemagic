@@ -1,0 +1,114 @@
+{
+  "before_failed": [
+    "test_block_identity.py::test_controller_keeps_hash_identity_for_unbatched_calls",
+    "test_block_identity.py::test_duplicate_rpc_keeps_the_hash_batch_key_and_wire_selector",
+    "test_gc_batch_contract.py::test_batch_full_gate_dispatches_without_waiters",
+    "test_gc_batch_contract.py::test_controller_has_pending_calls_ignores_stale_eth_entries",
+    "test_gc_batch_contract.py::test_dispatch_cancellation_preserves_in_flight_batch[False]",
+    "test_gc_batch_contract.py::test_dispatch_cancellation_preserves_in_flight_batch[True]",
+    "test_gc_batch_contract.py::test_dispatch_pending_rpc_batch_respects_capacity_gate_for_bisect_retries",
+    "test_gc_batch_contract.py::test_dispatch_reports_batch_failure[False]",
+    "test_gc_batch_contract.py::test_dispatch_reports_batch_failure[True]",
+    "test_gc_batch_contract.py::test_dispatch_reports_failure_to_append_calls",
+    "test_gc_batch_contract.py::test_dispatch_with_no_pending_work_completes_without_a_task",
+    "test_gc_batch_contract.py::test_early_start_dispatches_existing_rpc_calls_without_waiters",
+    "test_gc_batch_contract.py::test_early_start_keeps_multicalls_alive_through_handoff_and_dispatches",
+    "test_gc_batch_contract.py::test_multicall_bisect_retry_does_not_wait_pending_done_directly",
+    "test_gc_batch_contract.py::test_multicall_bisect_retry_timeout_does_not_dispatch_duplicate_batch",
+    "test_gc_batch_contract.py::test_request_gate_skips_execute_batch_for_stale_eth_entries",
+    "test_gc_batch_contract.py::test_request_gate_waits_for_one_loop_tick_before_dispatch",
+    "test_gc_batch_contract.py::test_rpc_request_gc_sets_exception_for_waiters",
+    "test_gc_batch_contract.py::test_rpc_request_gc_treats_no_waiters_as_abandoned_work",
+    "test_hash_rpc.py::test_native_batcher_preserves_hashes_and_canonical_requirement",
+    "test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[False]",
+    "test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[True]",
+    "test_native_wheel.py::test_native_rate_limiter_can_serve_a_request",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[0x1234]",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[42]",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[None]",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[True]",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data2]",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data3]",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data4]",
+    "test_rpc_error_data.py::test_only_chainstack_rate_limits_parse_the_retry_duration[250\\xb5s-0.00025]",
+    "test_rpc_error_data.py::test_only_chainstack_rate_limits_parse_the_retry_duration[250ms-0.25]",
+    "test_rpc_error_data.py::test_revert_with_structured_context_remains_a_revert"
+  ],
+  "after_failed": [
+    "test_block_identity.py::test_controller_keeps_hash_identity_for_unbatched_calls",
+    "test_block_identity.py::test_duplicate_rpc_keeps_the_hash_batch_key_and_wire_selector",
+    "test_gc_batch_contract.py::test_batch_full_gate_dispatches_without_waiters",
+    "test_gc_batch_contract.py::test_controller_has_pending_calls_ignores_stale_eth_entries",
+    "test_gc_batch_contract.py::test_dispatch_cancellation_preserves_in_flight_batch[False]",
+    "test_gc_batch_contract.py::test_dispatch_cancellation_preserves_in_flight_batch[True]",
+    "test_gc_batch_contract.py::test_dispatch_pending_rpc_batch_respects_capacity_gate_for_bisect_retries",
+    "test_gc_batch_contract.py::test_dispatch_reports_batch_failure[False]",
+    "test_gc_batch_contract.py::test_dispatch_reports_batch_failure[True]",
+    "test_gc_batch_contract.py::test_dispatch_reports_failure_to_append_calls",
+    "test_gc_batch_contract.py::test_dispatch_with_no_pending_work_completes_without_a_task",
+    "test_gc_batch_contract.py::test_early_start_dispatches_existing_rpc_calls_without_waiters",
+    "test_gc_batch_contract.py::test_early_start_keeps_multicalls_alive_through_handoff_and_dispatches",
+    "test_gc_batch_contract.py::test_multicall_bisect_retry_does_not_wait_pending_done_directly",
+    "test_gc_batch_contract.py::test_multicall_bisect_retry_timeout_does_not_dispatch_duplicate_batch",
+    "test_gc_batch_contract.py::test_request_gate_skips_execute_batch_for_stale_eth_entries",
+    "test_gc_batch_contract.py::test_request_gate_waits_for_one_loop_tick_before_dispatch",
+    "test_gc_batch_contract.py::test_rpc_request_gc_sets_exception_for_waiters",
+    "test_gc_batch_contract.py::test_rpc_request_gc_treats_no_waiters_as_abandoned_work",
+    "test_hash_rpc.py::test_native_batcher_preserves_hashes_and_canonical_requirement",
+    "test_native_wheel.py::test_native_rate_limiter_can_serve_a_request",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[0x1234]",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[42]",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[None]",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[True]",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data2]",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data3]",
+    "test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data4]",
+    "test_rpc_error_data.py::test_only_chainstack_rate_limits_parse_the_retry_duration[250\\xb5s-0.00025]",
+    "test_rpc_error_data.py::test_only_chainstack_rate_limits_parse_the_retry_duration[250ms-0.25]",
+    "test_rpc_error_data.py::test_revert_with_structured_context_remains_a_revert"
+  ],
+  "new_failures": [],
+  "fixed_failures": [
+    "test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[False]",
+    "test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[True]"
+  ],
+  "mypy_diagnostics_identical_except_line_numbers": true,
+  "before": {
+    "samples": 3,
+    "median_pending_rss_bytes": 295972864,
+    "median_elapsed_seconds": 0.02902096999969217,
+    "median_cpu_seconds": 0.029020498999999977,
+    "attempts": [
+      1088,
+      1088,
+      1088
+    ],
+    "retained_payloads": [
+      1024,
+      1024,
+      1024
+    ]
+  },
+  "after": {
+    "samples": 3,
+    "median_pending_rss_bytes": 227442688,
+    "median_elapsed_seconds": 0.020908057000269764,
+    "median_cpu_seconds": 0.020906917000000025,
+    "attempts": [
+      1088,
+      1088,
+      1088
+    ],
+    "retained_payloads": [
+      194,
+      258,
+      258
+    ]
+  },
+  "new_method_coverage": {
+    "statements": 25,
+    "covered_statements": 25,
+    "branches": 4,
+    "covered_branches": 4
+  }
+}

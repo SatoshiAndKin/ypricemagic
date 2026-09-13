@@ -1,0 +1,75 @@
+Thread 0x0000e2c17244f180 (most recent call first):
+  File "/usr/local/lib/python3.12/selectors.py", line 468 in select
+  File "/usr/local/lib/python3.12/asyncio/base_events.py", line 1961 in _run_once
+  File "/usr/local/lib/python3.12/asyncio/base_events.py", line 645 in run_forever
+  File "/usr/local/lib/python3.12/site-packages/dank_mids/helpers/_requester.py", line 32 in run
+  File "/usr/local/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "/usr/local/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Current thread 0x0000e2c17d286020 (most recent call first):
+  File "/usr/local/lib/python3.12/site-packages/eth_retry/eth_retry.py", line 187 in auto_retry_wrap
+  File "/usr/local/lib/python3.12/site-packages/joblib/memory.py", line 841 in _call
+  File "/usr/local/lib/python3.12/site-packages/joblib/memory.py", line 571 in _cached_call
+  File "/usr/local/lib/python3.12/site-packages/joblib/memory.py", line 616 in __call__
+  File "/work/y/contracts.py", line 164 in contract_creation_block
+  File "/usr/local/lib/python3.12/site-packages/eth_retry/eth_retry.py", line 173 in auto_retry_wrap
+  File "/usr/local/lib/python3.12/site-packages/joblib/memory.py", line 841 in _call
+  File "/usr/local/lib/python3.12/site-packages/joblib/memory.py", line 571 in _cached_call
+  File "/usr/local/lib/python3.12/site-packages/joblib/memory.py", line 616 in __call__
+  File "/work/y/utils/multicall.py", line 54 in <module>
+  File "<frozen importlib._bootstrap>", line 488 in _call_with_frames_removed
+  File "<frozen importlib._bootstrap_external>", line 999 in exec_module
+  File "<frozen importlib._bootstrap>", line 935 in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 1331 in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 1360 in _find_and_load
+  File "/work/y/utils/_erc20.py", line 12 in <module>
+  File "<frozen importlib._bootstrap>", line 488 in _call_with_frames_removed
+  File "<frozen importlib._bootstrap_external>", line 999 in exec_module
+  File "<frozen importlib._bootstrap>", line 935 in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 1331 in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 1360 in _find_and_load
+  File "<frozen importlib._bootstrap>", line 488 in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1415 in _handle_fromlist
+  File "/work/y/classes/common.py", line 36 in <module>
+  File "<frozen importlib._bootstrap>", line 488 in _call_with_frames_removed
+  File "<frozen importlib._bootstrap_external>", line 999 in exec_module
+  File "<frozen importlib._bootstrap>", line 935 in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 1331 in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 1360 in _find_and_load
+  File "/work/y/classes/__init__.py", line 1 in <module>
+  File "<frozen importlib._bootstrap>", line 488 in _call_with_frames_removed
+  File "<frozen importlib._bootstrap_external>", line 999 in exec_module
+  File "<frozen importlib._bootstrap>", line 935 in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 1331 in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 1360 in _find_and_load
+  File "<frozen importlib._bootstrap>", line 488 in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1310 in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 1360 in _find_and_load
+  File "/work/y/__init__.py", line 37 in <module>
+  File "<frozen importlib._bootstrap>", line 488 in _call_with_frames_removed
+  File "<frozen importlib._bootstrap_external>", line 999 in exec_module
+  File "<frozen importlib._bootstrap>", line 935 in _load_unlocked
+  File "<frozen importlib._bootstrap>", line 1331 in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 1360 in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1387 in _gcd_import
+  File "<frozen importlib._bootstrap>", line 488 in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1310 in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 1360 in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1387 in _gcd_import
+  File "<frozen importlib._bootstrap>", line 488 in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1310 in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 1360 in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1387 in _gcd_import
+  File "/usr/local/lib/python3.12/importlib/__init__.py", line 90 in import_module
+  File "/runner/check_compiled.py", line 17 in main
+  File "/runner/pytest_report.py", line 35 in pytest_sessionstart
+  File "/usr/local/lib/python3.12/site-packages/pluggy/_callers.py", line 121 in _multicall
+  File "/usr/local/lib/python3.12/site-packages/pluggy/_manager.py", line 120 in _hookexec
+  File "/usr/local/lib/python3.12/site-packages/pluggy/_hooks.py", line 512 in __call__
+  File "/usr/local/lib/python3.12/site-packages/_pytest/main.py", line 267 in wrap_session
+  File "/usr/local/lib/python3.12/site-packages/_pytest/main.py", line 316 in pytest_cmdline_main
+  File "/usr/local/lib/python3.12/site-packages/pluggy/_callers.py", line 121 in _multicall
+  File "/usr/local/lib/python3.12/site-packages/pluggy/_manager.py", line 120 in _hookexec
+  File "/usr/local/lib/python3.12/site-packages/pluggy/_hooks.py", line 512 in __call__
+  File "/usr/local/lib/python3.12/site-packages/_pytest/config/__init__.py", line 162 in main
+  File "/runner/focused.py", line 10 in <module>

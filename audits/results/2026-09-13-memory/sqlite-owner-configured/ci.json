@@ -1,0 +1,1601 @@
+{
+  "conclusion": "success",
+  "headSha": "b8265cce6f09bcc8015ea09036f5e05c4546d740",
+  "jobs": [
+    {
+      "completedAt": "2026-09-13T10:37:39Z",
+      "conclusion": "success",
+      "databaseId": 103710798974,
+      "name": "test (3.9, macOS-latest)",
+      "startedAt": "2026-09-13T10:37:01Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:37:03Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:37:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:04Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:37:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:26Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.9",
+          "number": 3,
+          "startedAt": "2026-09-13T10:37:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:26Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:29Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:32Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:34Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:32Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:35Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:34Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:35Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.9",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:35Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:36Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:35Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:36Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:36Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710798974"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:31Z",
+      "conclusion": "success",
+      "databaseId": 103710799029,
+      "name": "test (3.10, windows-latest)",
+      "startedAt": "2026-09-13T10:36:56Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:36:58Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:36:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:03Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:36:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:03Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.10",
+          "number": 3,
+          "startedAt": "2026-09-13T10:37:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:07Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:14Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:23Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:14Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:27Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:27Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:28Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.10",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:30Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:30Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:30Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799029"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:15Z",
+      "conclusion": "success",
+      "databaseId": 103710799041,
+      "name": "test (3.10, ubuntu-latest)",
+      "startedAt": "2026-09-13T10:36:58Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:37:00Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:36:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:01Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:37:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:01Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.10",
+          "number": 3,
+          "startedAt": "2026-09-13T10:37:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:04Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:05Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:10Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:12Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:10Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:12Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:13Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.10",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:13Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:13Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:13Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799041"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:34Z",
+      "conclusion": "success",
+      "databaseId": 103710799045,
+      "name": "test (3.11, windows-latest)",
+      "startedAt": "2026-09-13T10:36:57Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:36:58Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:36:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:02Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:36:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:02Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.11",
+          "number": 3,
+          "startedAt": "2026-09-13T10:37:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:06Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:11Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:16Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:29Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:16Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:29Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:30Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.11",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:32Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:33Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:32Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799045"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:18Z",
+      "conclusion": "success",
+      "databaseId": 103710799054,
+      "name": "test (3.13, macOS-latest)",
+      "startedAt": "2026-09-13T10:37:01Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:37:03Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:37:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:05Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:37:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:05Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.13",
+          "number": 3,
+          "startedAt": "2026-09-13T10:37:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:07Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:09Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:12Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:14Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:14Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:14Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:14Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.13",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:14Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:15Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:14Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:15Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:15Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799054"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:23Z",
+      "conclusion": "success",
+      "databaseId": 103710799068,
+      "name": "test (3.9, ubuntu-latest)",
+      "startedAt": "2026-09-13T10:36:57Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:36:59Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:36:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:36:59Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:36:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:07Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.9",
+          "number": 3,
+          "startedAt": "2026-09-13T10:36:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:08Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:11Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:17Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:18Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:20Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:20Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.9",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:20Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:20Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:20Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:20Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:20Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799068"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:29Z",
+      "conclusion": "success",
+      "databaseId": 103710799069,
+      "name": "test (3.10, macOS-latest)",
+      "startedAt": "2026-09-13T10:36:59Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:37:01Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:36:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:03Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:37:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:20Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.10",
+          "number": 3,
+          "startedAt": "2026-09-13T10:37:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:21Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:20Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:22Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:21Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:25Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:26Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:26Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:27Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.10",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:27Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:27Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:27Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799069"
+    },
+    {
+      "completedAt": "2026-09-13T10:38:14Z",
+      "conclusion": "success",
+      "databaseId": 103710799073,
+      "name": "test (3.9, windows-latest)",
+      "startedAt": "2026-09-13T10:36:56Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:36:58Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:36:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:03Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:36:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:50Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.9",
+          "number": 3,
+          "startedAt": "2026-09-13T10:37:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:52Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:58Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:52Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:06Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:09Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:38:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:11Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:38:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:11Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.9",
+          "number": 13,
+          "startedAt": "2026-09-13T10:38:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:13Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:38:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:13Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:38:13Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799073"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:34Z",
+      "conclusion": "success",
+      "databaseId": 103710799075,
+      "name": "test (3.13, windows-latest)",
+      "startedAt": "2026-09-13T10:36:57Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:36:59Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:36:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:04Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:36:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:05Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.13",
+          "number": 3,
+          "startedAt": "2026-09-13T10:37:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:08Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:17Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:25Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:29Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:25Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:30Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:30Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.13",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:32Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:32Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:32Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799075"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:09Z",
+      "conclusion": "success",
+      "databaseId": 103710799086,
+      "name": "test (3.12, ubuntu-latest)",
+      "startedAt": "2026-09-13T10:36:56Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:36:58Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:36:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:36:59Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:36:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:36:59Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.12",
+          "number": 3,
+          "startedAt": "2026-09-13T10:36:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:00Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:36:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:01Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:05Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:07Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:07Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:07Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.12",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:08Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:08Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:08Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799086"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:08Z",
+      "conclusion": "success",
+      "databaseId": 103710799102,
+      "name": "test (3.11, ubuntu-latest)",
+      "startedAt": "2026-09-13T10:36:57Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:36:58Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:36:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:36:59Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:36:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:36:59Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.11",
+          "number": 3,
+          "startedAt": "2026-09-13T10:36:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:00Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:36:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:01Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:04Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:06Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:06Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:07Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.11",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:06Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:07Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:07Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:07Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799102"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:30Z",
+      "conclusion": "success",
+      "databaseId": 103710799109,
+      "name": "test (3.12, windows-latest)",
+      "startedAt": "2026-09-13T10:36:57Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:36:59Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:36:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:04Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:36:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:04Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.12",
+          "number": 3,
+          "startedAt": "2026-09-13T10:37:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:08Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:15Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:22Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:15Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:26Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:26Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:26Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.12",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:29Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:29Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:29Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799109"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:18Z",
+      "conclusion": "success",
+      "databaseId": 103710799123,
+      "name": "test (3.12, macOS-latest)",
+      "startedAt": "2026-09-13T10:37:01Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:37:03Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:37:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:05Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:37:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:05Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.12",
+          "number": 3,
+          "startedAt": "2026-09-13T10:37:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:07Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:09Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:12Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:14Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:14Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:14Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:14Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.12",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:14Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:14Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:14Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:15Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:14Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799123"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:12Z",
+      "conclusion": "success",
+      "databaseId": 103710799131,
+      "name": "test (3.13, ubuntu-latest)",
+      "startedAt": "2026-09-13T10:36:57Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:36:59Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:36:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:00Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:36:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:00Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.13",
+          "number": 3,
+          "startedAt": "2026-09-13T10:37:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:02Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:03Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:07Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:09Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:09Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:09Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.13",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:09Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:09Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:09Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799131"
+    },
+    {
+      "completedAt": "2026-09-13T10:37:15Z",
+      "conclusion": "success",
+      "databaseId": 103710799156,
+      "name": "test (3.11, macOS-latest)",
+      "startedAt": "2026-09-13T10:37:00Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:37:02Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:37:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:03Z",
+          "conclusion": "success",
+          "name": "Checkout",
+          "number": 2,
+          "startedAt": "2026-09-13T10:37:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:03Z",
+          "conclusion": "success",
+          "name": "Set Up Python 3.11",
+          "number": 3,
+          "startedAt": "2026-09-13T10:37:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:05Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:37:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:07Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:37:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:09Z",
+          "conclusion": "success",
+          "name": "Test",
+          "number": 6,
+          "startedAt": "2026-09-13T10:37:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:11Z",
+          "conclusion": "success",
+          "name": "Lint",
+          "number": 7,
+          "startedAt": "2026-09-13T10:37:09Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:11Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:37:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:11Z",
+          "conclusion": "success",
+          "name": "Post Set Up Python 3.11",
+          "number": 13,
+          "startedAt": "2026-09-13T10:37:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:12Z",
+          "conclusion": "success",
+          "name": "Post Checkout",
+          "number": 14,
+          "startedAt": "2026-09-13T10:37:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:37:12Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:37:12Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710799156"
+    },
+    {
+      "completedAt": "2026-09-13T10:38:30Z",
+      "conclusion": "success",
+      "databaseId": 103710946256,
+      "name": "build",
+      "startedAt": "2026-09-13T10:38:17Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-09-13T10:38:19Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-09-13T10:38:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:19Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v6",
+          "number": 2,
+          "startedAt": "2026-09-13T10:38:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:19Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v6",
+          "number": 3,
+          "startedAt": "2026-09-13T10:38:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:22Z",
+          "conclusion": "success",
+          "name": "Run astral-sh/setup-uv@v7",
+          "number": 4,
+          "startedAt": "2026-09-13T10:38:19Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:23Z",
+          "conclusion": "success",
+          "name": "Install",
+          "number": 5,
+          "startedAt": "2026-09-13T10:38:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:24Z",
+          "conclusion": "success",
+          "name": "Build",
+          "number": 6,
+          "startedAt": "2026-09-13T10:38:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:26Z",
+          "conclusion": "success",
+          "name": "Upload",
+          "number": 7,
+          "startedAt": "2026-09-13T10:38:24Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:27Z",
+          "conclusion": "success",
+          "name": "Post Run astral-sh/setup-uv@v7",
+          "number": 12,
+          "startedAt": "2026-09-13T10:38:26Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:27Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v6",
+          "number": 13,
+          "startedAt": "2026-09-13T10:38:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:28Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v6",
+          "number": 14,
+          "startedAt": "2026-09-13T10:38:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-09-13T10:38:28Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-09-13T10:38:28Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710946256"
+    },
+    {
+      "completedAt": "2026-09-13T10:38:31Z",
+      "conclusion": "skipped",
+      "databaseId": 103710976602,
+      "name": "publish",
+      "startedAt": "2026-09-13T10:38:31Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/SatoshiAndKin/aiosqlite/actions/runs/34752313866/job/103710976602"
+    }
+  ],
+  "status": "completed"
+}

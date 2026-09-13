@@ -1,10 +1,10 @@
-aiosqlite==0.22.1
+aiosqlite @ git+https://github.com/SatoshiAndKin/aiosqlite.git@b8265cce6f09bcc8015ea09036f5e05c4546d740
 asyncpg>=0.31,<0.32
 bobs_lazy_logging==0.0.5
 cachebox>=5.2,<6
 cchecksum>=0.0.3,<1
 checksum_dict>=2.1.9,<3
-dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@bc59c589ee631221b9aa4879fe1a0734afaaee04
+dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@c4f8ad7fc62152f0017ee6a6b206e31b4fe03579
 eth-brownie==1.22.0.dev2
 eth_retry>=0.2.1
 evmspec>=0.3.4

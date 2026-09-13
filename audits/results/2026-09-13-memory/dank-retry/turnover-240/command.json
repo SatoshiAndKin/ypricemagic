@@ -1,0 +1,31 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import asyncio,gc; from pathlib import Path; from common import write_json; from dank_retry_profile import measure\nasync def run():\n    rows=[]\n    for index in range(240):\n        row=await measure(64,16,128*1024,False)\n        row.update(round=index+1,gc_counts=gc.get_count(),gc_stats=gc.get_stats())\n        rows.append(row)\n    assert all(row[\"attempts\"]==1088 and row[\"pending_tasks\"]==129 for row in rows)\n    write_json(Path(\"/reports/turnover.json\"),{\"same_process\":True,\"forced_collection\":False,\"timings_are_diagnostic\":True,\"rows\":rows})\nasyncio.run(run())"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 6.219576701998449,
+  "peak_sampled_process_rss_bytes": 317952000,
+  "cgroup_before": {
+    "memory.current": "8757248",
+    "memory.peak": "8859648",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "14385152",
+    "memory.peak": "290844672",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

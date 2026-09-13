@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m venv /unit && /unit/bin/python -m pip install pytest==7.4.4 hypothesis==6.27.3 -r requirements.txt . && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && /unit/bin/python /runner/focused.py"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 6.160330059999978,
+  "peak_sampled_process_rss_bytes": 77344768,
+  "cgroup_before": {
+    "memory.current": "8720384",
+    "memory.peak": "8720384",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "45719552",
+    "memory.peak": "114761728",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

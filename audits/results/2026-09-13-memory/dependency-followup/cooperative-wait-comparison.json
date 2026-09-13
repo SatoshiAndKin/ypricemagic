@@ -1,0 +1,54 @@
+{
+  "before": [
+    {
+      "calls": 25848,
+      "negative_timeouts": 25848,
+      "elapsed_seconds": 0.20691073600028176,
+      "cpu_seconds": 0.206899375,
+      "exit_code": 0,
+      "peak_rss_bytes": 36806656
+    },
+    {
+      "calls": 25603,
+      "negative_timeouts": 25603,
+      "elapsed_seconds": 0.20650235900029656,
+      "cpu_seconds": 0.20648737399999997,
+      "exit_code": 0,
+      "peak_rss_bytes": 36044800
+    },
+    {
+      "calls": 26559,
+      "negative_timeouts": 26559,
+      "elapsed_seconds": 0.2060275220010226,
+      "cpu_seconds": 0.20602345699999997,
+      "exit_code": 0,
+      "peak_rss_bytes": 36044800
+    }
+  ],
+  "after": [
+    {
+      "calls": 1,
+      "negative_timeouts": 0,
+      "elapsed_seconds": 0.20703877699997975,
+      "cpu_seconds": 0.006278458000000001,
+      "exit_code": 0,
+      "peak_rss_bytes": 36044800
+    },
+    {
+      "calls": 1,
+      "negative_timeouts": 0,
+      "elapsed_seconds": 0.20742032099951757,
+      "cpu_seconds": 0.006612790999999993,
+      "exit_code": 0,
+      "peak_rss_bytes": 36044800
+    },
+    {
+      "calls": 1,
+      "negative_timeouts": 0,
+      "elapsed_seconds": 0.207044610999219,
+      "cpu_seconds": 0.006614000000000009,
+      "exit_code": 0,
+      "peak_rss_bytes": 36098048
+    }
+  ]
+}

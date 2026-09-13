@@ -1,0 +1,21 @@
+{
+  "source_sha": "c4f8ad7fc62152f0017ee6a6b206e31b4fe03579",
+  "generated_artifact_sha": "cc66b8e5754def5ea8cb2a214ce949049977a006",
+  "run_url": "https://github.com/SatoshiAndKin/dank_mids/actions/runs/34754487605",
+  "jobs": 12,
+  "passed_per_job": 131,
+  "summary_lines": [
+    "unit (macos-latest, 3.13)\tRun unit tests\t2026-09-13T11:31:43.9468180Z ===================== 131 passed, 2544 warnings in 52.26s ======================",
+    "unit (ubuntu-latest, 3.11)\tRun unit tests\t2026-09-13T11:29:01.6025921Z ======================= 131 passed, 6 warnings in 11.29s =======================",
+    "unit (ubuntu-latest, 3.13)\tRun unit tests\t2026-09-13T11:29:07.2644354Z ===================== 131 passed, 2544 warnings in 11.93s ======================",
+    "unit (macos-latest, 3.10)\tRun unit tests\t2026-09-13T11:29:31.5124190Z ======================= 131 passed, 6 warnings in 44.81s =======================",
+    "unit (macos-latest, 3.12)\tRun unit tests\t2026-09-13T11:29:07.9563550Z ===================== 131 passed, 2544 warnings in 44.11s ======================",
+    "unit (ubuntu-latest, 3.10)\tRun unit tests\t2026-09-13T11:29:04.2671526Z ======================= 131 passed, 6 warnings in 12.01s =======================",
+    "unit (ubuntu-latest, 3.12)\tRun unit tests\t2026-09-13T11:28:51.7721906Z ====================== 131 passed, 2544 warnings in 9.77s ======================",
+    "unit (windows-latest, 3.12)\tRun unit tests\t2026-09-13T11:29:27.2552280Z ===================== 131 passed, 2544 warnings in 17.32s =====================",
+    "unit (windows-latest, 3.11)\tRun unit tests\t2026-09-13T11:29:43.8973589Z ====================== 131 passed, 6 warnings in 14.19s =======================",
+    "unit (windows-latest, 3.10)\tRun unit tests\t2026-09-13T11:29:21.0191616Z ====================== 131 passed, 6 warnings in 16.17s =======================",
+    "unit (windows-latest, 3.13)\tRun unit tests\t2026-09-13T11:29:35.9879734Z ===================== 131 passed, 2544 warnings in 17.22s =====================",
+    "unit (macos-latest, 3.11)\tRun unit tests\t2026-09-13T11:32:45.8796230Z ======================= 131 passed, 6 warnings in 46.49s ======================="
+  ]
+}

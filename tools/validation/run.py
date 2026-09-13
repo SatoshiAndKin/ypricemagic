@@ -2,6 +2,7 @@
 """Build and run isolated Linux validation. No project imports run on the host."""
 
 import argparse
+from collections.abc import Iterable
 import hashlib
 import json
 import os
@@ -91,7 +92,21 @@ def logged(command: list[str], report: Path, name: str) -> int:
         log.close()
 
 
-def build(source: Path, report: Path, version: str) -> str:
+def freeze_files(source: Path, target: Path, names: Iterable[str]) -> dict[str, str]:
+    """Record and execute one immutable copy even if the checkout changes later."""
+    target.mkdir()
+    hashes = {}
+    for name in names:
+        content = (source / name).read_bytes()
+        destination = target / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(content)
+        shutil.copymode(source / name, destination)
+        hashes[name] = hashlib.sha256(content).hexdigest()
+    return hashes
+
+
+def build(source: Path, report: Path, version: str, harness: Path) -> str:
     context = report / "build-input"
     context.mkdir()
     for name in ("requirements.txt", "requirements-dev.txt"):
@@ -101,7 +116,7 @@ def build(source: Path, report: Path, version: str) -> str:
     config = tomllib.loads((source / "pyproject.toml").read_text())
     requirements = config["build-system"]["requires"] + ["setuptools<81", "setuptools-scm", "black"]
     (context / "requirements-build.txt").write_text("\n".join(requirements) + "\n")
-    shutil.copyfile(ROOT / "tools/validation/Dockerfile", context / "Dockerfile")
+    shutil.copyfile(harness / "Dockerfile", context / "Dockerfile")
     digest = hashlib.sha256(
         version.encode() + b"".join(p.read_bytes() for p in sorted(context.iterdir()))
     ).hexdigest()[:20]
@@ -246,14 +261,6 @@ def main() -> int:
         "started_unix": time.time(),
     }
     harness = ROOT / "tools/validation"
-    write_json(
-        report / "runner-files.json",
-        {
-            str(path.relative_to(harness)): hashlib.sha256(path.read_bytes()).hexdigest()
-            for path in sorted(harness.iterdir())
-            if path.is_file()
-        },
-    )
     write_json(report / "run.json", metadata)
     # Docker's atomic name reservation covers all checkouts and both build/test phases.
     try:
@@ -285,11 +292,29 @@ def main() -> int:
     try:
         with tempfile.TemporaryDirectory(prefix="yprice-validation-") as scratch:
             work = Path(scratch)
+            frozen_harness = work / "runner"
+            write_json(
+                report / "runner-files.json",
+                freeze_files(
+                    harness,
+                    frozen_harness,
+                    [path.name for path in sorted(harness.iterdir()) if path.is_file()],
+                ),
+            )
+            workload = work / "workloads"
+            write_json(
+                report / "workload-files.json",
+                freeze_files(
+                    ROOT / "tests",
+                    workload,
+                    ("test_routing_scaling.py", "data/sushi-mainnet-topology.json"),
+                ),
+            )
             metadata.update(snapshot(args.source.resolve(), args.revision, work))
             metadata["image"] = (
                 docker("image", "inspect", args.image, "--format", "{{.Id}}")
                 if args.image
-                else build(work / "source", report, args.python)
+                else build(work / "source", report, args.python, frozen_harness)
             )
             write_json(report / "run.json", metadata)
             # Also stop a cached builder before tests. One heavy job at a time.
@@ -340,17 +365,9 @@ def main() -> int:
             docker(*create)
             created = True
             docker("cp", str(work / "source") + "/.", CONTAINER + ":/work")
-            docker("cp", str(ROOT / "tools/validation"), CONTAINER + ":/runner")
+            docker("cp", str(frozen_harness), CONTAINER + ":/runner")
             # Use one recorded test workload against both pricing revisions.
             # Production source and each revision's tests remain unchanged.
-            workload = work / "workloads"
-            (workload / "data").mkdir(parents=True)
-            workload_hashes = {}
-            for name in ("test_routing_scaling.py", "data/sushi-mainnet-topology.json"):
-                source = ROOT / "tests" / name
-                shutil.copyfile(source, workload / name)
-                workload_hashes[name] = hashlib.sha256(source.read_bytes()).hexdigest()
-            write_json(report / "workload-files.json", workload_hashes)
             docker("cp", str(workload), CONTAINER + ":/runner/workloads")
             docker(
                 "cp",

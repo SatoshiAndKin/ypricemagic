@@ -1,0 +1,27 @@
+{
+  "locked-final-313-build-types": {
+    "exit_code": 1,
+    "complete": true,
+    "image": "sha256:62791c7240a042923012b5e6f2d610822bd00d227a145c4f852568768f43b064"
+  },
+  "cooperative-release-final-311": {
+    "exit_code": 0,
+    "complete": true,
+    "image": "sha256:4b31ed032261dfed0725fbb2b24d22081d4454dcd34d77ec2dacace144b97491"
+  },
+  "sqlite-release-final-311": {
+    "exit_code": 0,
+    "complete": true,
+    "image": "sha256:4b31ed032261dfed0725fbb2b24d22081d4454dcd34d77ec2dacace144b97491"
+  },
+  "cooperative-release-final-313": {
+    "exit_code": 0,
+    "complete": true,
+    "image": "sha256:62791c7240a042923012b5e6f2d610822bd00d227a145c4f852568768f43b064"
+  },
+  "sqlite-release-final-313": {
+    "exit_code": 0,
+    "complete": true,
+    "image": "sha256:62791c7240a042923012b5e6f2d610822bd00d227a145c4f852568768f43b064"
+  }
+}

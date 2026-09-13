@@ -1,0 +1,21 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; export PYTEST_PLUGINS= PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 MYPYC_STRICT_DUNDER_TYPING=1; python -m pip install --no-deps coverage==7.10.7; python -m pip install --no-build-isolation -r requirements-build.txt; python -c \"from scripts.run_mypyc_build import build_mypyc_command, run_checked; run_checked(build_mypyc_command())\"; cd tests/unit; set +e; python -m coverage run --branch --source=dank_mids -m pytest; status=$?; python -m coverage json -o /reports/unit-coverage.json; exit \"$status\""
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": false,
+  "started_unix": 1789298584.8849568,
+  "source_sha": "bc59c589ee631221b9aa4879fe1a0734afaaee04",
+  "source_revision": "worktree",
+  "source_archive_sha256": "03df9ec1d292e90e9a3995aaa6049fa7c31211891dcfebba28a7534c168dbcb9",
+  "image": "sha256:915f84eec40d2c4460f4e4896b996878b73a0b6eb688039df86b71daa622badc",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [
+    "unit-coverage.json"
+  ],
+  "elapsed_seconds": 28.494304180145264
+}

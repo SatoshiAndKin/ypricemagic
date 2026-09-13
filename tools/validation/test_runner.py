@@ -1,5 +1,6 @@
 """Small runner checks use the standard library and need no RPC or project imports."""
 
+import hashlib
 import json
 from pathlib import Path
 import tempfile
@@ -49,6 +50,23 @@ class LogTests(unittest.TestCase):
 
 
 class BuildTests(unittest.TestCase):
+    def test_frozen_helpers_execute_recorded_content_after_checkout_edits(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source, frozen = root / "source", root / "frozen"
+            source.mkdir()
+            original = b"print('original')\n"
+            (source / "probe.py").write_bytes(original)
+            hashes = run.freeze_files(source, frozen, ["probe.py"])
+            (source / "probe.py").write_text("raise RuntimeError('checkout changed')\n")
+            (source / "later.py").write_text("raise RuntimeError('added during build')\n")
+            self.assertEqual(
+                subprocess.check_output([sys.executable, str(frozen / "probe.py")], text=True),
+                "original\n",
+            )
+            self.assertEqual(hashes, {"probe.py": hashlib.sha256(original).hexdigest()})
+            self.assertFalse((frozen / "later.py").exists())
+
     def test_successful_build_with_worker_oom_stops_before_image_use(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -86,7 +104,7 @@ class BuildTests(unittest.TestCase):
                 ),
             ):
                 with self.assertRaisesRegex(RuntimeError, "OOM event"):
-                    run.build(source, report, "3.12")
+                    run.build(source, report, "3.12", Path(run.__file__).parent)
                 docker.assert_any_call("buildx", "stop", run.BUILDER)
             recorded = json.loads((report / "build-status.json").read_text())
             self.assertEqual(recorded["exit_code"], 0)
@@ -131,6 +149,20 @@ class ComparisonTests(unittest.TestCase):
             (root / "after/dependencies-after.txt").write_text("dependency==before\n")
             subprocess.run(command, check=True)
             self.assertTrue(json.loads((root / "result.json").read_text())["comparable"])
+            events = root / "after/pytest-events.jsonl"
+            original = events.read_text()
+            events.write_text(original.replace('"second"', '"third"'))
+            subprocess.run(command, check=True)
+            report = json.loads((root / "result.json").read_text())
+            self.assertEqual(report["added_test_cases"], ["third"])
+            self.assertEqual(report["removed_test_cases"], ["second"])
+            self.assertFalse(report["coverage_preserved"])
+            events.write_text(original.replace('"second"', '"first"'))
+            subprocess.run(command, check=True)
+            self.assertFalse(
+                json.loads((root / "result.json").read_text())["test_reports_complete"]
+            )
+            events.write_text(original)
             # A process can hang after all tests report. Its test outcomes stay
             # comparable, but that must never turn incomplete execution green.
             (root / "before/run.json").write_text(json.dumps({"complete": False, "image": "same"}))

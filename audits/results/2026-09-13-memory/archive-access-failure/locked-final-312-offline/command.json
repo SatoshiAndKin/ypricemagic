@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m pip install --no-deps --no-build-isolation -e . && python /runner/focused.py && python -m mypy"
+  ],
+  "exit_code": -15,
+  "interrupted": true,
+  "elapsed_seconds": 684.5318348380024,
+  "peak_sampled_process_rss_bytes": 1140350976,
+  "cgroup_before": {
+    "memory.current": "8957952",
+    "memory.peak": "8957952",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "312258560",
+    "memory.peak": "1234403328",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "8"
+  }
+}

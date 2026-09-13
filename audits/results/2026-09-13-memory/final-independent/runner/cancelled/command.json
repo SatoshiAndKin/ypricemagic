@@ -1,0 +1,31 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import time; print('ready', flush=True); time.sleep(3600)"
+  ],
+  "exit_code": -15,
+  "interrupted": true,
+  "elapsed_seconds": 1.1657818909989146,
+  "peak_sampled_process_rss_bytes": 17510400,
+  "cgroup_before": {
+    "memory.current": "8765440",
+    "memory.peak": "8871936",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "8978432",
+    "memory.peak": "13950976",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

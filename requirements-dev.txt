@@ -5,4 +5,4 @@ types-PyYAML==6.0.12.20260906
 pytest
 numpy
 # Retain the shared event loop and release completed test state.
-pytest-asyncio-cooperative @ git+https://github.com/SatoshiAndKin/pytest-asyncio-cooperative@3089b3ddd393a45655b5231e6a67b54dd5529196
+pytest-asyncio-cooperative @ git+https://github.com/SatoshiAndKin/pytest-asyncio-cooperative@4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1

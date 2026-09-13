@@ -1,0 +1,10 @@
+{
+  "committed_source": "b8265cce6f09bcc8015ea09036f5e05c4546d740",
+  "tested_worktree_source": "b3a45631a8161f222dca9a685b469a2914f68b04 plus the two-line retention-test correction",
+  "unit_tests_passed": 36,
+  "coverage_percent": 83.6,
+  "mypy_errors": 0,
+  "mypy_files": 11,
+  "lint_passed": true,
+  "wheel_and_sdist_built": true
+}

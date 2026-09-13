@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import asyncio,gc; from pathlib import Path; from common import write_json; from dank_retry_profile import measure\nasync def run():\n    rows=[]\n    for index in range(240):\n        row=await measure(64,16,128*1024,False)\n        row.update(round=index+1,gc_counts=gc.get_count(),gc_stats=gc.get_stats())\n        rows.append(row)\n    assert all(row[\"attempts\"]==1088 and row[\"pending_tasks\"]==129 for row in rows)\n    write_json(Path(\"/reports/turnover.json\"),{\"same_process\":True,\"forced_collection\":False,\"timings_are_diagnostic\":True,\"rows\":rows})\nasyncio.run(run())"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789301363.902315,
+  "source_sha": "fbe5a919ad4e75f58f722953ac721e83c69a8751",
+  "source_revision": "worktree",
+  "source_archive_sha256": "3aed8e5ec848e2dfd40073bd9f83182271863a4bef583d7aa7051725178d09bc",
+  "image": "sha256:4ccb5b8063f29ecbd755ac2760da6364ee81d9f630af1a1f855ecfb83e34ae1b",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 7.069090127944946
+}

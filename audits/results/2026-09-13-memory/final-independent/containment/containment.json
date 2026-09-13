@@ -1,0 +1,30 @@
+{
+  "duplicate_prevented": true,
+  "docker_context": "colima-ypricemagic",
+  "oom": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": true,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 137,
+    "Error": "",
+    "StartedAt": "2026-09-13T11:45:31.405212632Z",
+    "FinishedAt": "2026-09-13T11:45:31.463442828Z"
+  },
+  "cancel": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 137,
+    "Error": "",
+    "StartedAt": "2026-09-13T11:45:31.581920393Z",
+    "FinishedAt": "2026-09-13T11:45:33.66280133Z"
+  }
+}

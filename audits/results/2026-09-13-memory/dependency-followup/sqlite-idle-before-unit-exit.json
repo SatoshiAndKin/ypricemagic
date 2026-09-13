@@ -1,0 +1,17 @@
+{
+  "exit_code": 1,
+  "command": [
+    "docker",
+    "--context",
+    "colima-ypricemagic",
+    "exec",
+    "-w",
+    "/reports/sqlite-idle-before",
+    "-e",
+    "PYTHONPATH=/reports/sqlite-idle-before",
+    "ypricemagic-validation-job",
+    "python",
+    "-m",
+    "aiosqlite.tests"
+  ]
+}

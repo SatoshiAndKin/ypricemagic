@@ -82,12 +82,14 @@ def main() -> int:
     signal.signal(signal.SIGINT, stop)
     peak_rss = 0
     while child.poll() is None:
-        peak_rss = max(peak_rss, rss())
+        sampled_rss = rss()
+        peak_rss = max(peak_rss, sampled_rss)
         write_json(
             args.report / "progress.json",
             {
                 "elapsed_seconds": time.monotonic() - started,
-                "process_rss_bytes": peak_rss,
+                "sampled_process_rss_bytes": sampled_rss,
+                "peak_sampled_process_rss_bytes": peak_rss,
                 "cgroup": cgroup(),
             },
         )

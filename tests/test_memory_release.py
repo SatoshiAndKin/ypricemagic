@@ -15,8 +15,8 @@ from tests.test_pricing_correctness import BLOCK, TOKEN, run_async_test
 from y.utils.logging import get_price_logger
 
 
-@pytest.mark.parametrize("close_loop", [False, True])
-def test_database_worker_reuses_connection_and_allows_process_exit(close_loop: bool) -> None:
+@pytest.mark.parametrize("loop_mode", ["open", "asyncio_run", "closed_default"])
+def test_database_worker_reuses_connection_and_allows_process_exit(loop_mode: str) -> None:
     program = """
 import asyncio
 import importlib
@@ -32,14 +32,17 @@ async def query():
     assert await database.cur.fetchone('SELECT 2') == (2,)
     assert database.cur._db is connection
 
-if sys.argv[1] == 'True':
+if sys.argv[1] == 'asyncio_run':
     asyncio.run(query())
 else:
-    asyncio.get_event_loop().run_until_complete(query())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(query())
+    if sys.argv[1] == 'closed_default':
+        loop.close()
 print('query_complete', flush=True)
 """
     result = subprocess.run(
-        [sys.executable, "-c", program, str(close_loop)],
+        [sys.executable, "-c", program, loop_mode],
         capture_output=True,
         text=True,
         timeout=15,

@@ -46,7 +46,8 @@ env/bin/python tools/validation/run.py --revision HEAD \
 ```
 
 A successful probe checks chain ID, historical state, and canonical block-hash
-calls at blocks 16,830,000 and 18,000,000. Run it before full tests. It is a sample
+calls at blocks 16,830,000 and 18,000,000. `make test-docker` runs this probe before
+the required `make test` command and requires its report. It is a sample
 of archive access, not proof that all historical state is available.
 
 The first run builds a reusable image from the checked-in interpreter-specific
@@ -79,6 +80,9 @@ module's extension path. Set `VALIDATION_ALLOCATIONS=1` in the private env file
 for a separate tracemalloc run. Do not use profiler timings as performance
 measurements. RSS includes native memory; tracemalloc measures Python
 allocations and some extension allocations, not all native memory.
+The progress report separates current sampled process RSS from its cumulative
+peak. Summed process RSS can count shared pages more than once; use the cgroup
+measurements for the container's total memory limit and peak.
 
 Console output rotates at 100 MiB per file, with five files retained. The
 retention report discloses expired byte counts. Docker uses the same limits for
@@ -91,7 +95,8 @@ status and compare failures by test and error.
 `compare.py` checks that both pytest summaries and event streams account for
 every collected test. It can compare complete test outcomes after a later
 process-exit failure, while keeping overall execution marked incomparable.
-Partial test reports never qualify for that comparison.
+Partial test reports and duplicate terminal outcomes never qualify for that
+comparison. Added and removed test IDs remain visible in its coverage fields.
 
 Price diagnostics and the `y.stuck?` logger serve separate purposes. Enable
 `logging.getLogger("y.stuck?").setLevel(logging.DEBUG)` for "still executing"
@@ -105,11 +110,18 @@ implementations fail their object-release assertions after writing measurements.
 Process boundaries separate independent repetitions; they do not provide the
 object-release result within a repetition.
 
+The pinned cooperative scheduler also waits for the next active test deadline.
+It does not repeatedly poll while tests wait for I/O or finish cancellation
+cleanup. The default 600-second timeout and configured concurrency remain
+unchanged.
+
 The `repeat_scaling.sh` command runs three timing measurements and one separate
 allocation profile of the cached Sushi topology. The runner copies and hashes
 the same current workload and topology into `/runner/workloads` for each source
 revision; `workload-files.json` records this test input separately from production
-source. The workload preserves 4,771 pools, 64 concurrent requests, exact amounts,
+source. It freezes these inputs and its helper files before building, so checkout
+edits during a build cannot change the recorded run. The workload preserves 4,771
+pools, 64 concurrent requests, exact amounts,
 4,128 distinct historical blocks, and normal cache eviction. Controlled reads
 and quotes have exact counters. Pytest's logical RPC counters follow the existing
 audit counters; they count generated calls and batches, not HTTP wire requests.
@@ -119,6 +131,14 @@ queue sizes for database writes. They read existing storage slots and queues;
 they do not load lazy caches or drain pending work. Queue counts describe waiting
 operations, not work already executing in a thread. Keep these censuses out of
 timing measurements.
+
+`compound_profile.py` repeats the synchronous Compound case active during the
+original suite's OOM. It uses that test's five-block selection and records the
+exact blocks in `compound-input.json`. Pass those values with `--blocks` for a
+comparison. It samples Python allocations and retained
+objects every 30 seconds, including while a request is pending. This diagnostic
+includes profiler overhead; use the separate controlled workloads for timing
+comparisons. An OOM still makes its execution incomplete.
 
 Use `python /runner/native.py` and `python /runner/native_reviewed.py` after an
 isolated editable build for the fixed-block native checks. Require `native.json`
@@ -146,5 +166,25 @@ block-specific balances, fees, exclusions, and hash keys remain unchanged.
 Ypricemagic owns one shared Brownie SQLite connection per process. It queues
 connection closure before Python joins background threads. This preserves
 connection reuse and drains queued SQLite work during process shutdown. The
-compiled regression checks cover both an open default event loop and a loop
-closed by `asyncio.run`.
+compiled regression checks cover an open default event loop, a loop closed by
+`asyncio.run`, and an explicitly closed default loop. The pinned
+[aiosqlite repair](https://github.com/SatoshiAndKin/aiosqlite/pull/1) keeps the worker
+processing queued SQL and connection closure when its result-delivery loop
+closes. The dependency tests cover successful and failed queued operations and
+loop-closure races. Normal SQLite transaction rules still apply.
+The worker releases its reference to a delivered result or exception before
+waiting for its next operation. Dependency checks verify this release while
+the same connection remains open and usable.
+
+The pinned [dank_mids repair](https://github.com/SatoshiAndKin/dank_mids/pull/9)
+releases earlier HTTP 408 attempts before the next retry waits. It retains the
+same request ID, retry count, observer events, and local-timeout race behavior.
+`dank_retry_profile.py --output /reports/retries.json` measures 64 concurrent
+requests, 16 HTTP 408 responses per request, and 128 KiB diagnostic payloads.
+Run three independent timing samples and a separate `--allocations` sample
+against each revision with the same dependency image. The benchmark does not
+force collection or change concurrency. It measures pending retained payloads
+separately from RSS; normal cyclic collection can release more objects later.
+A failed archive probe records its stage, block number, and exception type without
+storing the private endpoint. Focused code checks can run independently, but full
+suites and local-node comparisons require a successful probe.

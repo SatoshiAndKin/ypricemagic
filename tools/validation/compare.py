@@ -18,6 +18,16 @@ def failures(directory: Path) -> dict[str, Any]:
     return rows
 
 
+def test_cases(directory: Path) -> set[str]:
+    cases: set[str] = set()
+    with (directory / "pytest-events.jsonl").open() as stream:
+        for line in stream:
+            row = json.loads(line)
+            if row.get("phase") in ("setup", "call", "teardown"):
+                cases.add(row["test"])
+    return cases
+
+
 def complete_test_report(directory: Path) -> bool:
     summary = json.loads((directory / "pytest-summary.json").read_text())
     counts = summary.get("counts", {})
@@ -25,7 +35,7 @@ def complete_test_report(directory: Path) -> bool:
         counts.get(key, 0)
         for key in ("call:passed", "call:failed", "call:skipped", "setup:failed", "setup:skipped")
     )
-    reported = 0
+    reported: list[str] = []
     last: dict[str, Any] = {}
     with (directory / "pytest-events.jsonl").open() as stream:
         for line in stream:
@@ -35,12 +45,12 @@ def complete_test_report(directory: Path) -> bool:
                 "failed",
                 "skipped",
             ):
-                reported += 1
+                reported.append(last["test"])
             elif last.get("phase") == "setup" and last.get("outcome") in ("failed", "skipped"):
-                reported += 1
+                reported.append(last["test"])
     return bool(
         summary.get("exit_code") in (0, 1)
-        and completed == reported == summary.get("collected")
+        and completed == len(reported) == len(set(reported)) == summary.get("collected")
         and last.get("phase") == "sessionfinish"
         and last.get("exit_code") == summary["exit_code"]
     )
@@ -87,7 +97,12 @@ def main() -> None:
     # its test/error comparison while still marking execution incomparable.
     if failures_comparable:
         old, new = failures(args.baseline), failures(args.changed)
+        old_cases, new_cases = test_cases(args.baseline), test_cases(args.changed)
         comparison.update(
+            common_test_cases=len(old_cases & new_cases),
+            added_test_cases=sorted(new_cases - old_cases),
+            removed_test_cases=sorted(old_cases - new_cases),
+            coverage_preserved=old_cases <= new_cases,
             unchanged={key: value for key, value in new.items() if old.get(key) == value},
             changed_errors={
                 key: {"baseline": old[key], "changed": new[key]}

@@ -1,0 +1,37 @@
+{
+  "execution_context": "Separate source and unit environments inside the capped original full-suite container; application packages unchanged",
+  "cooperative_before": "3089b3ddd393a45655b5231e6a67b54dd5529196",
+  "cooperative_after": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+  "cooperative_focused_passed": 7,
+  "cooperative_full_before": {
+    "passed": 80,
+    "failed": 4,
+    "skipped": 16
+  },
+  "cooperative_full_after": {
+    "passed": 82,
+    "failed": 2,
+    "skipped": 16
+  },
+  "cooperative_remaining_failures": [
+    "example/hypothesis_test.py::test_a",
+    "tests/test_fixture.py::test_tmp_path"
+  ],
+  "sqlite_before": "232d8cdd4fb6323ab647dfaeecdcda00de9524ea",
+  "sqlite_after": "b3a45631a8161f222dca9a685b469a2914f68b04",
+  "sqlite_unit_passed": {
+    "3.9.25": 36,
+    "3.12.14": 36
+  },
+  "sqlite_prior_worker_idle_outcome_failures": 2,
+  "sqlite_retained_while_idle": {
+    "before": true,
+    "after": false
+  },
+  "sqlite_configured_mypy": {
+    "version": "1.19.1",
+    "files": 11,
+    "errors": 0
+  },
+  "application_integration_complete": false
+}
