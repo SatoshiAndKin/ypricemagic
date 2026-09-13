@@ -1,0 +1,30 @@
+{
+  "command": [
+    "python",
+    "/runner/probe.py"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 1.7679087500000605,
+  "peak_sampled_process_rss_bytes": 18501632,
+  "cgroup_before": {
+    "memory.current": "8740864",
+    "memory.peak": "8851456",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "12967936",
+    "memory.peak": "140996608",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

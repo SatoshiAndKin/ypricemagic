@@ -1,0 +1,42 @@
+{
+  "head_block_num": "0x18c453a",
+  "version": "ski_web3_proxy/v2.0.0",
+  "backends": [
+    {
+      "name": "lambo_reth",
+      "display_name": "Lambo Reth",
+      "healthy": true,
+      "web3_clientVersion": "reth/v2.5.1-6dec1b9/x86_64-unknown-linux-gnu",
+      "block_data_limit": null,
+      "log_data_limit": null,
+      "tier": 1,
+      "active_requests": 0,
+      "total_requests": 38318207,
+      "backend_batch_requests": 409747
+    },
+    {
+      "name": "lambo_geth",
+      "display_name": "Lambo Geth",
+      "healthy": true,
+      "web3_clientVersion": "Geth/v1.17.5-stable-9621c6ad/linux-amd64/go1.26.5",
+      "block_data_limit": 128,
+      "log_data_limit": 128,
+      "tier": 1,
+      "active_requests": 0,
+      "total_requests": 1812595,
+      "backend_batch_requests": 42677
+    },
+    {
+      "name": "nuc_reth",
+      "display_name": "NUC Reth",
+      "healthy": true,
+      "web3_clientVersion": "reth/v2.5.1-6dec1b9/x86_64-unknown-linux-gnu",
+      "block_data_limit": null,
+      "log_data_limit": null,
+      "tier": 2,
+      "active_requests": 0,
+      "total_requests": 10191578,
+      "backend_batch_requests": 237421
+    }
+  ]
+}
