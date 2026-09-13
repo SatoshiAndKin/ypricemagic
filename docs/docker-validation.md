@@ -88,6 +88,11 @@ artifact. Missing reports, OOM events, and interrupted commands make validation
 incomplete. A completed command can still have test failures; inspect its exit
 status and compare failures by test and error.
 
+`compare.py` checks that both pytest summaries and event streams account for
+every collected test. It can compare complete test outcomes after a later
+process-exit failure, while keeping overall execution marked incomparable.
+Partial test reports never qualify for that comparison.
+
 Price diagnostics and the `y.stuck?` logger serve separate purposes. Enable
 `logging.getLogger("y.stuck?").setLevel(logging.DEBUG)` for "still executing"
 messages every five minutes. These messages remain DEBUG-only.
@@ -111,7 +116,9 @@ audit counters; they count generated calls and batches, not HTTP wire requests.
 
 Use `python /runner/native.py` and `python /runner/native_reviewed.py` after an
 isolated editable build for the fixed-block native checks. Require `native.json`
-and `native-reviewed.json`, respectively. Run the mainnet audit with
+for the first script. Require both `native-reviewed.json` and
+`native-reviewed-summary.json` for the second; the summary confirms its final
+canonical-block check finished. Run the mainnet audit with
 `ypricemagic audit-prices audits/mainnet.json --json /reports/audit.json --csv /reports/audit.csv`
 and require both report files. These real-node checks remain local.
 
@@ -129,3 +136,9 @@ concrete failure needs diagnosis. The signal does not stop the check.
 The lowercase-address cache uses `YPRICEMAGIC_CHECKSUM_CACHE_MAXSIZE`, the existing
 address-cache setting. It holds strings only. Immutable pool snapshots use slots;
 block-specific balances, fees, exclusions, and hash keys remain unchanged.
+
+Ypricemagic owns one shared Brownie SQLite connection per process. It queues
+connection closure before Python joins background threads. This preserves
+connection reuse and drains queued SQLite work during process shutdown. The
+compiled regression checks cover both an open default event loop and a loop
+closed by `asyncio.run`.

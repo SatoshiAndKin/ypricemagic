@@ -68,3 +68,26 @@ reports, dependency drift, and an OOM in a build worker despite a successful
 build exit. The last check also verifies BuildKit cleanup. The RPC profile's
 independent cgroup probe confirms 8 GiB, no swap, four CPUs, and 512 tasks; it
 does not run or claim a benchmark result.
+
+The first contained original full suite collected 1,752 tests and produced 1,154
+completed outcomes before the validation reporter failed. An import-guard fixture
+replaced `dank_mids` with a stub that had no `instances` attribute. This was a
+reporter defect. The run has no final pytest summary and remains incomplete in
+`full-original-reporter-failure`. Its peak container memory was 1,552,637,952 bytes,
+with no OOM event. The corrected reporter omits unavailable counters during that
+fixture. A new original full-suite run uses the same image and a fresh database.
+
+A separate child in that container completed a SQLite query but could not exit.
+Its stack showed Python waiting for an idle, non-daemon aiosqlite worker. The
+process-owned Brownie cursor now queues connection closure before Python joins
+threads. It preserves connection reuse and queued SQL work. All 243 focused tests
+pass on Python 3.11, 3.12, and 3.13, including compiled child-process checks with
+open and closed event loops and both import-guard cases. All ten configured
+extensions load in each run. See `shutdown-*-validation`.
+
+The first shutdown matrix exposed one new type error in a supervisor test.
+The test now patches the standard-library module directly. The final separate
+type checks again report 1,940 existing errors on each Python version, with no
+added rendered diagnostic against the baseline. See `shutdown-*-mypy-final` and
+`shutdown-mypy-comparison.json`. Four supervisor tests, Black, and whitespace
+checks pass. Complete full suites and real-node comparisons remain outstanding.

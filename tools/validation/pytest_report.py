@@ -62,8 +62,9 @@ class Report:
             caches["state_cache"] = {"values": len(cache.values), "flights": len(cache.flights)}
         record["cache_occupancy"] = caches
         dank = sys.modules.get("dank_mids")
-        if dank is not None:
-            controllers = [controller for group in dank.instances.values() for controller in group]
+        instances = getattr(dank, "instances", None)
+        if instances is not None:
+            controllers = [controller for group in instances.values() for controller in group]
             # Match AuditClient.counts: IDs start at -1. These are logical calls
             # and generated batches, not a measurement of HTTP wire requests.
             record["logical_rpc_counts"] = {

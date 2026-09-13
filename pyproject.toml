@@ -52,6 +52,7 @@ line-length = 100
 [tool.validation]
 focused_tests = [
   "tests/test_memory_release.py",
+  "tests/test_dank_import_guard.py",
   "tests/test_pricing_correctness.py",
   "tests/test_amount_quotes.py",
   "tests/test_quote_regressions.py",

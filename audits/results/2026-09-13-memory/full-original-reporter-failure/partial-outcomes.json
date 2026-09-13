@@ -1,0 +1,12 @@
+{
+  "collected": 1752,
+  "counts": {
+    "setup:passed": 1152,
+    "call:passed": 475,
+    "teardown:passed": 1154,
+    "call:skipped": 11,
+    "call:failed": 665,
+    "setup:failed": 3
+  },
+  "complete": false
+}

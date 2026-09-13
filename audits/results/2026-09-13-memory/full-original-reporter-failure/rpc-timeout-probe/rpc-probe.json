@@ -1,0 +1,15 @@
+{
+  "complete": true,
+  "blocks": [
+    {
+      "number": 16830000,
+      "hash": "0x6e65cf41a9208837f764d22dd0358f7d67f57cd71ec5ee975d98674e292322bd",
+      "usdc_decimals": 6
+    },
+    {
+      "number": 18000000,
+      "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+      "usdc_decimals": 6
+    }
+  ]
+}

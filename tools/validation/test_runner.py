@@ -73,9 +73,7 @@ class BuildTests(unittest.TestCase):
                 ]
             )
             with (
-                patch.object(
-                    run.subprocess, "run", return_value=subprocess.CompletedProcess([], 1)
-                ),
+                patch.object(subprocess, "run", return_value=subprocess.CompletedProcess([], 1)),
                 patch.object(run, "docker", return_value=inspection) as docker,
                 patch.object(run, "logged", return_value=0),
                 patch.object(
@@ -104,8 +102,20 @@ class ComparisonTests(unittest.TestCase):
                 path.mkdir()
                 (path / "run.json").write_text(json.dumps({"complete": True, "image": "same"}))
                 (path / "dependencies-after.txt").write_text(f"dependency=={name}\n")
-                (path / "pytest-events.jsonl").write_text("")
-                (path / "pytest-summary.json").write_text("{}")
+                (path / "pytest-events.jsonl").write_text(
+                    "\n".join(
+                        json.dumps(row)
+                        for row in (
+                            {"phase": "call", "outcome": "passed", "test": "first"},
+                            {"phase": "call", "outcome": "passed", "test": "second"},
+                            {"phase": "sessionfinish", "exit_code": 0},
+                        )
+                    )
+                    + "\n"
+                )
+                (path / "pytest-summary.json").write_text(
+                    json.dumps({"exit_code": 0, "collected": 2, "counts": {"call:passed": 2}})
+                )
             command = [
                 sys.executable,
                 str(Path(__file__).with_name("compare.py")),
@@ -121,6 +131,20 @@ class ComparisonTests(unittest.TestCase):
             (root / "after/dependencies-after.txt").write_text("dependency==before\n")
             subprocess.run(command, check=True)
             self.assertTrue(json.loads((root / "result.json").read_text())["comparable"])
+            # A process can hang after all tests report. Its test outcomes stay
+            # comparable, but that must never turn incomplete execution green.
+            (root / "before/run.json").write_text(json.dumps({"complete": False, "image": "same"}))
+            subprocess.run(command, check=True)
+            report = json.loads((root / "result.json").read_text())
+            self.assertTrue(report["failures_comparable"])
+            self.assertFalse(report["comparable"])
+            (root / "after/pytest-summary.json").write_text(
+                json.dumps({"exit_code": 1, "collected": 2, "counts": {"call:passed": 1}})
+            )
+            subprocess.run(command, check=True)
+            report = json.loads((root / "result.json").read_text())
+            self.assertFalse(report["failures_comparable"])
+            self.assertFalse(report["test_reports_complete"])
             (root / "after/pytest-events.jsonl").unlink()
             subprocess.run(command, check=True)
             report = json.loads((root / "result.json").read_text())

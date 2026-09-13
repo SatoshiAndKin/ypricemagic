@@ -4,6 +4,8 @@ import asyncio
 from dataclasses import dataclass
 import gc
 import logging
+import subprocess
+import sys
 from typing import Any
 from weakref import ref
 
@@ -11,6 +13,40 @@ import pytest
 
 from tests.test_pricing_correctness import BLOCK, TOKEN, run_async_test
 from y.utils.logging import get_price_logger
+
+
+@pytest.mark.parametrize("close_loop", [False, True])
+def test_database_worker_reuses_connection_and_allows_process_exit(close_loop: bool) -> None:
+    program = """
+import asyncio
+import importlib
+from importlib.machinery import EXTENSION_SUFFIXES
+import sys
+
+database = importlib.import_module('y._db.brownie')
+assert any(database.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+
+async def query():
+    assert await database.cur.fetchone('SELECT 1') == (1,)
+    connection = database.cur._db
+    assert await database.cur.fetchone('SELECT 2') == (2,)
+    assert database.cur._db is connection
+
+if sys.argv[1] == 'True':
+    asyncio.run(query())
+else:
+    asyncio.get_event_loop().run_until_complete(query())
+print('query_complete', flush=True)
+"""
+    result = subprocess.run(
+        [sys.executable, "-c", program, str(close_loop)],
+        capture_output=True,
+        text=True,
+        timeout=15,
+    )
+    assert result.returncode == 0, result.stderr
+    assert "query_complete" in result.stdout
+    assert "Exception in thread" not in result.stderr
 
 
 def test_normalized_addresses_share_strings_without_retaining_discovery_owners() -> None:

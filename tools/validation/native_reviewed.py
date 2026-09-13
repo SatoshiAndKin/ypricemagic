@@ -9,6 +9,7 @@ import json
 from dataclasses import asdict
 from math import isqrt
 from pathlib import Path
+from common import write_json
 from eth_abi.abi import encode, decode
 from eth_utils.crypto import keccak
 from eth_utils.address import to_checksum_address
@@ -144,7 +145,12 @@ async def main() -> int:
             expected = {"0x6c3f90f043a72fa612cbac8115ee7e52bde6e490": shares}
         await check(name, asset, expected, lambda: redeem(asset, block, frozenset()))
     await block.verify()
-    return int(any(row["status"] != "pass" for row in rows))
+    status = int(any(row["status"] != "pass" for row in rows))
+    write_json(
+        Path(os.environ["VALIDATION_REPORT"], "native-reviewed-summary.json"),
+        {"complete": True, "cases": len(rows), "block_hash": block.hash, "exit_code": status},
+    )
+    return status
 
 
 faulthandler.register(signal.SIGUSR1, all_threads=True)

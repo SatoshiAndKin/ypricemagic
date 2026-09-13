@@ -5,6 +5,7 @@ from collections.abc import Callable, Container
 from functools import lru_cache
 from pathlib import Path
 from sqlite3 import OperationalError
+from threading import _register_atexit  # type: ignore [attr-defined]
 from typing import Any, Final, Literal, cast, final
 
 import aiosqlite
@@ -103,6 +104,16 @@ class AsyncCursor:
             self._db = await aiosqlite.connect(self._filename, isolation_level=None)
             self._execute = self._db.execute
 
+    def _close_at_shutdown(self) -> None:
+        """Drain and close the process-owned connection before Python joins its worker."""
+        db, self._db = self._db, None
+        self._execute = None
+        if db is not None:
+            # stop() queues connection closure after existing SQLite work. The
+            # threading shutdown hook then joins the non-daemon worker. Normal
+            # atexit callbacks run after that join and cannot release this owner.
+            db.stop()
+
     async def insert(self, table: str, *values: Any) -> None:
         raise NotImplementedError
         if self._db is None:
@@ -133,6 +144,7 @@ class AsyncCursor:
 
 
 cur: Final = AsyncCursor(_get_data_folder().joinpath("deployments.db"))
+_register_atexit(cur._close_at_shutdown)
 fetchone: Final = SmartProcessingQueue(cur.fetchone, num_workers=32)
 
 
