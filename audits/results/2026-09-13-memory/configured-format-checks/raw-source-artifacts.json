@@ -1,0 +1,44 @@
+[
+  {
+    "recorded_path": "archive-retry/retry-archive-host.py",
+    "published_text_path": "archive-retry/retry-archive-host.py.txt",
+    "sha256": "8adb4c0d7889547a7615a12c27abd9b8ef87cdab1921ffc8d26688f6f66b5ad2",
+    "bytes": 1652
+  },
+  {
+    "recorded_path": "dank-retry/measured-workload.py",
+    "published_text_path": "dank-retry/measured-workload.py.txt",
+    "sha256": "155bd08eabb8c68942f6100b86d139523ed5eb964fb579d7ce194480ea4befe0",
+    "bytes": 4720
+  },
+  {
+    "recorded_path": "logging-and-build-cleanup/311-focused/memory-release-tests.py",
+    "published_text_path": "logging-and-build-cleanup/311-focused/memory-release-tests.py.txt",
+    "sha256": "b3f216ec71f3caf8ae0d5abc01e7be89378bae10c9145d43fe0fc67bc2bd3d60",
+    "bytes": 11899
+  },
+  {
+    "recorded_path": "logging-and-build-cleanup/312-focused/memory-release-tests.py",
+    "published_text_path": "logging-and-build-cleanup/312-focused/memory-release-tests.py.txt",
+    "sha256": "b3f216ec71f3caf8ae0d5abc01e7be89378bae10c9145d43fe0fc67bc2bd3d60",
+    "bytes": 11899
+  },
+  {
+    "recorded_path": "logging-and-build-cleanup/313-focused/memory-release-tests.py",
+    "published_text_path": "logging-and-build-cleanup/313-focused/memory-release-tests.py.txt",
+    "sha256": "b3f216ec71f3caf8ae0d5abc01e7be89378bae10c9145d43fe0fc67bc2bd3d60",
+    "bytes": 11899
+  },
+  {
+    "recorded_path": "logging-and-build-cleanup/before/memory-release-tests.py",
+    "published_text_path": "logging-and-build-cleanup/before/memory-release-tests.py.txt",
+    "sha256": "b3f216ec71f3caf8ae0d5abc01e7be89378bae10c9145d43fe0fc67bc2bd3d60",
+    "bytes": 11899
+  },
+  {
+    "recorded_path": "logging-and-build-cleanup/build-interruption/fixture.py",
+    "published_text_path": "logging-and-build-cleanup/build-interruption/fixture.py.txt",
+    "sha256": "b518a0c49924de2d623443016f01fa18ebab69ae5582ad4394e924be0f1caa10",
+    "bytes": 3451
+  }
+]

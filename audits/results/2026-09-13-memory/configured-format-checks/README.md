@@ -5,3 +5,5 @@ Black, isort 7.0.0, and autoflake 2.2.1 pass for the Python source files changed
 The cleanup sorts imports and removes only the unused os, pytest, and math.isqrt imports from validation helpers. The AST comparison confirms that all non-import code is unchanged. No pricing production file changes. Raw recorded source and tool output remain unformatted evidence.
 
 The active full suite continues from its frozen committed source and helpers. Later checks record their helper hashes independently.
+
+Recorded source artifacts use `.py.txt` filenames. Their bytes stay unchanged; `raw-source-artifacts.json` maps their original report paths to the published text files and records content hashes. This keeps source formatters from rewriting validation evidence.
