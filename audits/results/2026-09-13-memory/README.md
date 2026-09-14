@@ -31,13 +31,16 @@ All three baseline public-pricing timing repetitions and the separate allocation
 profile reach 8 GiB before returning the cold price. All four record OOM, zero
 completed calls, and missing final pricing summaries. They cannot provide a
 99-call timing median. The allocation profile retains its initial snapshot but
-has no snapshot after pricing. The first two optimized timing repetitions each
-complete all 99 requests and exit normally. All price, amount, block, and path
-rows match exactly. Their container peaks are 3,222,843,392 and 3,111,694,336
-bytes, with no OOM. Pricing takes 1,252.33 and 1,253.86 seconds; workload peak RSS
-is 2,087,518,208 and 2,078,216,192 bytes. The last timing repetition, allocation
-profile, and two audits continue in the existing queue. The timing median needs
-three complete repetitions.
+has no snapshot after pricing. All three optimized timing repetitions complete
+all 99 requests and exit normally. All price, amount, block, and path rows match
+exactly across the three runs. Their highest container peak is 3,222,843,392
+bytes (3.00 GiB), with no OOM. Median pricing time is 1,253.86 seconds; median
+workload peak process RSS is 2,087,518,208 bytes (1.94 GiB). Final samples each
+contain 53 live tasks and 33/35/16,384 market/result/state cache entries. Logical
+RPC medians and individual counters remain in the linked summaries. These
+completed optimized runs cannot establish price equality or a timing ratio
+against baselines that return no prices. The separate allocation profile and
+two audits continue in the existing queue.
 
 ## Latest pool ownership repair
 
