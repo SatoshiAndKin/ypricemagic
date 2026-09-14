@@ -52,6 +52,7 @@ line-length = 100
 [tool.validation]
 memory_tests = ["tests/prices/dex/test_uniswap.py"]
 topic_tests = ["tests/test_topic_memory.py"]
+fixture_tests = ["tests/prices/dex/test_uniswap.py::test_uniswap_v1"]
 focused_tests = [
   "tests/test_topic_memory.py",
   "tests/test_pool_memory.py",

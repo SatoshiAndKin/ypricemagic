@@ -5,6 +5,8 @@ import brownie
 brownie.network.connect(os.environ["BROWNIE_NETWORK"])
 brownie._config.CONFIG.settings["autofetch_sources"] = False
 
+pytest_plugins = ["tests.fixtures"]
+
 
 # Monkeypatch brownie's _get_ast_hash to skip compiled .so/.pyd files.
 # Without this, brownie's test runner crashes with UnicodeDecodeError when

@@ -3,7 +3,6 @@
 import argparse
 import asyncio
 import faulthandler
-import gc
 import json
 import os
 import resource
@@ -29,11 +28,10 @@ async def main(allocations: bool) -> None:
     block = 18_000_000
     report = Path(os.environ["VALIDATION_REPORT"])
     client = AuditClient()
-    gc.collect()
     if allocations:
         tracemalloc.start()
+        capture(report, "before")
     started = perf_counter()
-    capture(report, "before")
     complete = False
     calls = 0
     with (report / "public-prices.jsonl").open("w") as stream:
@@ -78,17 +76,19 @@ async def main(allocations: bool) -> None:
                 await price("historical", block - index - 1, 1)
             complete = True
         finally:
-            gc.collect()
-            capture(report, "after")
+            elapsed = perf_counter() - started
+            rss_peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024
             current, peak = tracemalloc.get_traced_memory()
+            if allocations:
+                capture(report, "after")
             service = quote_service()
             write_json(
                 report / "public-summary.json",
                 {
                     "complete": complete,
                     "calls": calls,
-                    "elapsed_seconds": perf_counter() - started,
-                    "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+                    "elapsed_seconds": elapsed,
+                    "rss_peak_bytes": rss_peak,
                     "live_tasks": len(asyncio.all_tasks()),
                     "logical_rpc_counts": client.counts(),
                     "cache_entries": {

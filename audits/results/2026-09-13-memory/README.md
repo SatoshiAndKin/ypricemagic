@@ -1,5 +1,20 @@
 # Contained memory validation
 
+## Latest historical profile
+
+The committed shared-topic repair still reaches the 8 GiB limit in the
+historical Uniswap allocation profile. It records 130 terminal outcomes from
+171 collected cases, then ends with OOM after 1,915.68 seconds. All ten native
+modules and the archive probe pass. The final pytest summary is missing.
+[Exact errors and retained-state samples](topic-historical/README.md) preserve
+the incomplete run and the unresolved final memory increase. The controlled
+40% topic-lookup RSS reduction does not establish a full pricing memory result.
+
+[Fixture and timing-helper checks](validation-harness/README.md) register the
+existing V1 fixture and remove profiling work from the public timing helper.
+All three V1 cases now execute; their pricing calls still reach the configured
+timeout. The type check adds no diagnostics.
+
 Validation is incomplete. PR #43 remains draft. Earlier full suites reach the
 unchanged 8 GiB limit. Event loading now bounds historical chunks and pending
 writes. The [storage repair](storage-retention/README.md) removes retained
