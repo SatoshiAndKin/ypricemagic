@@ -1,0 +1,5 @@
+{
+  "version": "5.2.3",
+  "core": "/tmp/cache-tests-env/lib/python3.12/site-packages/cachebox/_core.cpython-312-aarch64-linux-gnu.so",
+  "core_sha256": "eb14ef33e7b1e7160b70d83519de543d8eb2c30988d7c7f38992288e53efb2c8"
+}

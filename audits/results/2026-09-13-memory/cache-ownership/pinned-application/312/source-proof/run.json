@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import hashlib,importlib.machinery,importlib.metadata,json\nfrom pathlib import Path\nimport cachebox\nimport cachebox._core\ncore=Path(cachebox._core.__file__)\nassert any(str(core).endswith(s) for s in importlib.machinery.EXTENSION_SUFFIXES)\nsource=json.loads(importlib.metadata.distribution('cachebox').read_text('direct_url.json'))\nassert source['vcs_info']['commit_id']=='10be25afe46afb32c8135db4d1b8e2d94431b9c1',source\nPath('/reports/cache-pin.json').write_text(json.dumps({'source':source,'version':cachebox.__version__,'core':str(core),'core_sha256':hashlib.sha256(core.read_bytes()).hexdigest(),'python_sources':{str(p.relative_to(core.parent)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(core.parent.rglob('*.py'))}},indent=2)+'\\n')\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789378630.264169,
+  "source_sha": "baa140ec7fa50ce416b82981d77f6d96b6904361",
+  "source_revision": "worktree",
+  "source_archive_sha256": "32240549d52f5b7141e5c8e865ce6200d7d9d13f1cbcddcc93f37ede7002f18a",
+  "image": "sha256:90c9e64a153fd4543033071de3e031cec8d704c24be2f991bee1273fb04a08b0",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 2.51918888092041
+}

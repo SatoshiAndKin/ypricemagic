@@ -1,0 +1,31 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "from pathlib import Path; import shutil; shutil.copyfile('/opt/validation/cachebox-source/Cargo.lock','/reports/Cargo.lock'); shutil.copyfile('/opt/validation/cachebox-metadata.json','/reports/cargo-metadata.json')"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 1.2995006599958288,
+  "peak_sampled_process_rss_bytes": 18059264,
+  "cgroup_before": {
+    "memory.current": "8761344",
+    "memory.peak": "8867840",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "10268672",
+    "memory.peak": "37003264",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

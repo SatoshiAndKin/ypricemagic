@@ -1,0 +1,12 @@
+{
+  "complete": true,
+  "started_unix": 1789377103.158676,
+  "shared_cargo_lock_sha256": "2211bf256ba892c2687c7315fae32c844957f6e2c36912c5c9e04992655f1fec",
+  "cachebox_source": {
+    "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+    "source_revision": "worktree",
+    "source_archive_sha256": "c24c6133260d2ddf15b1fc0d2002b082b8a8150c881a38593de6950b28aa80bb"
+  },
+  "image": "sha256:fe3f877f2c0b6873c70b3cf4250b692761e50f41bc222f4f459e69fdde0edcde",
+  "elapsed_seconds": 33.737874031066895
+}

@@ -1,0 +1,30 @@
+{
+  "command": [
+    "python",
+    "/runner/cache_dependency_tests.py"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 1.2775608499941882,
+  "peak_sampled_process_rss_bytes": 19324928,
+  "cgroup_before": {
+    "memory.current": "8740864",
+    "memory.peak": "8847360",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "11223040",
+    "memory.peak": "36728832",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

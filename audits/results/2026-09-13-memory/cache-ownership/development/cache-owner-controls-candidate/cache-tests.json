@@ -1,0 +1,170 @@
+[
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00014437499339692295,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.0003080419992329553,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 4.795799031853676e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 3.966700751334429e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "call",
+    "outcome": "skipped",
+    "seconds": 7.441701018251479e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 4.583399277180433e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 3.4042008337564766e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.003156677004881203,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 4.558300133794546e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 3.391699283383787e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "call",
+    "outcome": "skipped",
+    "seconds": 5.816698831040412e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 3.691700112540275e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 6.162500358186662e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "call",
+    "outcome": "skipped",
+    "seconds": 5.820799560751766e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 3.912499232683331e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 8.095799421425909e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "call",
+    "outcome": "skipped",
+    "seconds": 0.00013179199595469981,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.416599742602557e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 3.3499993151053786e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "call",
+    "outcome": "skipped",
+    "seconds": 5.458400119096041e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 3.604199446272105e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 2.9207993065938354e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "call",
+    "outcome": "skipped",
+    "seconds": 4.9000009312294424e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 3.91670037060976e-05,
+    "error": null
+  }
+]

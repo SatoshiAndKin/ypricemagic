@@ -1,0 +1,71 @@
+{
+  "before": {
+    "report": "cache-turnover-before",
+    "identity": {
+      "capacity_per_cache": 64,
+      "payload_bytes_per_key": 4096,
+      "batches": 128,
+      "batch_size": 256,
+      "sync_computations": 32768,
+      "async_computations": 32768,
+      "cache_hits_per_function": 32768,
+      "rpc_calls": 0,
+      "results_sha256": "bb7e9477d87b41ac5e562f1cb5f4e838133612eabd95cf808d6faee130b9fcf6"
+    },
+    "median_rss_peak_bytes": 318275584,
+    "median_elapsed_seconds": 0.2741740290366579,
+    "python_peak_bytes": 291998371,
+    "python_retained_bytes": 291992277
+  },
+  "wrapper": {
+    "report": "cache-turnover-after",
+    "identity": {
+      "capacity_per_cache": 64,
+      "payload_bytes_per_key": 4096,
+      "batches": 128,
+      "batch_size": 256,
+      "sync_computations": 32768,
+      "async_computations": 32768,
+      "cache_hits_per_function": 32768,
+      "rpc_calls": 0,
+      "results_sha256": "bb7e9477d87b41ac5e562f1cb5f4e838133612eabd95cf808d6faee130b9fcf6"
+    },
+    "median_rss_peak_bytes": 24641536,
+    "median_elapsed_seconds": 0.21319095297076274,
+    "python_peak_bytes": 709728,
+    "python_retained_bytes": 703634
+  },
+  "final": {
+    "report": "cache-gc-turnover-after",
+    "identity": {
+      "capacity_per_cache": 64,
+      "payload_bytes_per_key": 4096,
+      "batches": 128,
+      "batch_size": 256,
+      "sync_computations": 32768,
+      "async_computations": 32768,
+      "cache_hits_per_function": 32768,
+      "rpc_calls": 0,
+      "results_sha256": "bb7e9477d87b41ac5e562f1cb5f4e838133612eabd95cf808d6faee130b9fcf6"
+    },
+    "median_rss_peak_bytes": 24641536,
+    "median_elapsed_seconds": 0.21532455601845868,
+    "python_peak_bytes": 709728,
+    "python_retained_bytes": 703634
+  },
+  "runner-files.json": {
+    "differences": {}
+  },
+  "workload-files.json": {
+    "differences": {}
+  },
+  "dependencies": {
+    "added": [
+      "cachebox @ file:///opt/validation/cachebox-wheels/cachebox-5.2.3-cp312-cp312-manylinux_2_34_aarch64.whl#sha256=c2b70506c87af8fa1c3dcb058d045ad991a178e5b858452998f2a42c8e91621f"
+    ],
+    "removed": [
+      "cachebox @ file:///opt/validation/cachebox-wheels/cachebox-5.2.3-cp312-cp312-manylinux_2_34_aarch64.whl#sha256=85de0954ab30cd216e860315f988e77cec832cb2d7c7532373e383f4db82ae5e"
+    ],
+    "note": "Final combined repair changes the native core as well as Python utils. Maturin is a recorded build tool and is not imported by the workload."
+  }
+}

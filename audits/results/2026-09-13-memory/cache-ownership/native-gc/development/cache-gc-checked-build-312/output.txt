@@ -1,0 +1,127 @@
+#0 building with "ypricemagic-validation-55871f24db8c" instance using docker-container driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.38kB done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.5s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32
+#3 resolve docker.io/docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32 done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.12-slim-bookworm
+#4 DONE 0.3s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [stage-0  1/19] FROM docker.io/library/python:3.12-slim-bookworm@sha256:782412e85d0f0984994c290652577d4018aff08145c85b262bb63dc0c7522254
+#6 resolve docker.io/library/python:3.12-slim-bookworm@sha256:782412e85d0f0984994c290652577d4018aff08145c85b262bb63dc0c7522254 done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 505.14kB done
+#7 DONE 0.0s
+
+#8 [stage-0  8/19] RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/rustup.sh && sh /tmp/rustup.sh -y --profile minimal --default-toolchain 1.98.1 --no-modify-path
+#8 CACHED
+
+#9 [stage-0 10/19] COPY cache-build-dependencies.lock /opt/validation/cache-build-dependencies.lock
+#9 CACHED
+
+#10 [stage-0  2/19] RUN --mount=type=cache,target=/var/cache/apt,sharing=locked     --mount=type=cache,target=/var/lib/apt,sharing=locked     apt-get update && apt-get install -y --no-install-recommends build-essential git libgmp-dev
+#10 CACHED
+
+#11 [stage-0  4/19] COPY requirements.txt requirements-dev.txt requirements-build.txt constraints.txt ./
+#11 CACHED
+
+#12 [stage-0  7/19] RUN --mount=type=cache,target=/var/cache/apt,sharing=locked apt-get update && apt-get install -y --no-install-recommends curl ca-certificates
+#12 CACHED
+
+#13 [stage-0  6/19] WORKDIR /work
+#13 CACHED
+
+#14 [stage-0  9/19] RUN . /root/.cargo/env && rustup component add rustfmt clippy --toolchain 1.98.1
+#14 CACHED
+
+#15 [stage-0  3/19] WORKDIR /opt/validation
+#15 CACHED
+
+#16 [stage-0  5/19] RUN --mount=type=cache,target=/root/.cache/pip     python -m pip install -c constraints.txt -r requirements-build.txt -r requirements-dev.txt &&     python -m pip freeze --all > dependencies.txt && python -m pip check
+#16 CACHED
+
+#17 [stage-0 11/19] RUN python -m pip install --no-deps -r /opt/validation/cache-build-dependencies.lock
+#17 CACHED
+
+#18 [stage-0 12/19] COPY cachebox-source.tar /opt/validation/cachebox-source.tar
+#18 DONE 0.0s
+
+#19 [stage-0 13/19] RUN mkdir /opt/validation/cachebox-source && tar -xf /opt/validation/cachebox-source.tar -C /opt/validation/cachebox-source
+#19 DONE 0.0s
+
+#20 [stage-0 14/19] COPY cachebox-Cargo.lock /opt/validation/cachebox-source/Cargo.lock
+#20 DONE 0.0s
+
+#21 [stage-0 15/19] WORKDIR /opt/validation/cachebox-source
+#21 DONE 0.0s
+
+#22 [stage-0 16/19] RUN --mount=type=cache,target=/root/.cargo/registry,sharing=locked --mount=type=cache,target=/opt/validation/cachebox-target,sharing=locked . /root/.cargo/env && CARGO_TARGET_DIR=/opt/validation/cachebox-target CARGO_BUILD_JOBS=4 python -m maturin build --release --locked --interpreter python --out /opt/validation/cachebox-wheels
+#22 0.061 📦 Including license file `LICENSE`
+#22 0.061 🍹 Building a mixed python/rust project
+#22 0.093 🐍 Found CPython 3.12 at /usr/local/bin/python
+#22 0.093 🔗 Found pyo3 bindings
+#22 0.093 📡 Using build options features from pyproject.toml
+#22 0.111    Compiling cachebox v5.2.3 (/opt/validation/cachebox-source)
+#22 0.361 error[E0596]: cannot borrow `cache` as mutable, as it is not declared as mutable
+#22 0.361    --> src/bridge/lfucache.rs:338:21
+#22 0.361     |
+#22 0.361 338 |         for node in cache.iter() {
+#22 0.361     |                     ^^^^^ cannot borrow as mutable
+#22 0.361     |
+#22 0.361 help: consider changing this to be mutable
+#22 0.361     |
+#22 0.361 335 |         let Some(mut cache) = self.raw.try_lock() else {
+#22 0.361     |                  +++
+#22 0.361
+#22 0.399 warning: variable does not need to be mutable
+#22 0.399    --> src/bridge/ttlcache.rs:332:18
+#22 0.399     |
+#22 0.399 332 |         let Some(mut cache) = self.raw.try_lock() else {
+#22 0.399     |                  ----^^^^^
+#22 0.399     |                  |
+#22 0.399     |                  help: remove this `mut`
+#22 0.399     |
+#22 0.399     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+#22 0.399
+#22 0.461 For more information about this error, try `rustc --explain E0596`.
+#22 0.465 warning: `cachebox` (lib) generated 1 warning
+#22 0.465 error: could not compile `cachebox` (lib) due to 1 previous error; 1 warning emitted
+#22 0.467 💥 maturin failed
+#22 0.467   Caused by: Failed to build a native library through cargo
+#22 0.467   Caused by: Cargo build finished with "exit status: 101": `env -u CARGO PYO3_BUILD_EXTENSION_MODULE="1" PYO3_ENVIRONMENT_SIGNATURE="cpython-3.12-64bit" PYO3_PYTHON="/usr/local/bin/python" PYTHON_SYS_EXECUTABLE="/usr/local/bin/python" "cargo" "rustc" "--profile" "release" "--features" "pyo3/extension-module" "--message-format" "json-render-diagnostics" "--locked" "--manifest-path" "/opt/validation/cachebox-source/Cargo.toml" "--lib"`
+#22 ERROR: process "/bin/sh -c . /root/.cargo/env && CARGO_TARGET_DIR=/opt/validation/cachebox-target CARGO_BUILD_JOBS=4 python -m maturin build --release --locked --interpreter python --out /opt/validation/cachebox-wheels" did not complete successfully: exit code: 1
+------
+ > [stage-0 16/19] RUN --mount=type=cache,target=/root/.cargo/registry,sharing=locked --mount=type=cache,target=/opt/validation/cachebox-target,sharing=locked . /root/.cargo/env && CARGO_TARGET_DIR=/opt/validation/cachebox-target CARGO_BUILD_JOBS=4 python -m maturin build --release --locked --interpreter python --out /opt/validation/cachebox-wheels:
+0.399     |                  help: remove this `mut`
+0.399     |
+0.399     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+0.399
+0.461 For more information about this error, try `rustc --explain E0596`.
+0.465 warning: `cachebox` (lib) generated 1 warning
+0.465 error: could not compile `cachebox` (lib) due to 1 previous error; 1 warning emitted
+0.467 💥 maturin failed
+0.467   Caused by: Failed to build a native library through cargo
+0.467   Caused by: Cargo build finished with "exit status: 101": `env -u CARGO PYO3_BUILD_EXTENSION_MODULE="1" PYO3_ENVIRONMENT_SIGNATURE="cpython-3.12-64bit" PYO3_PYTHON="/usr/local/bin/python" PYTHON_SYS_EXECUTABLE="/usr/local/bin/python" "cargo" "rustc" "--profile" "release" "--features" "pyo3/extension-module" "--message-format" "json-render-diagnostics" "--locked" "--manifest-path" "/opt/validation/cachebox-source/Cargo.toml" "--lib"`
+------
+Dockerfile:23
+--------------------
+  21 |     COPY cachebox-Cargo.lock /opt/validation/cachebox-source/Cargo.lock
+  22 |     WORKDIR /opt/validation/cachebox-source
+  23 | >>> RUN --mount=type=cache,target=/root/.cargo/registry,sharing=locked --mount=type=cache,target=/opt/validation/cachebox-target,sharing=locked . /root/.cargo/env && CARGO_TARGET_DIR=/opt/validation/cachebox-target CARGO_BUILD_JOBS=4 python -m maturin build --release --locked --interpreter python --out /opt/validation/cachebox-wheels
+  24 |     RUN --mount=type=cache,target=/root/.cargo/registry,sharing=locked --mount=type=cache,target=/opt/validation/cachebox-target,sharing=locked . /root/.cargo/env && export CARGO_TARGET_DIR=/opt/validation/cachebox-target CARGO_BUILD_JOBS=4 && cargo fmt --all -- --check && cargo check --locked && make test-rs
+  25 |     RUN python -m pip install --no-deps --force-reinstall /opt/validation/cachebox-wheels/*.whl && python -m pip check && python -m pip freeze --all > /opt/validation/dependencies.txt
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c . /root/.cargo/env && CARGO_TARGET_DIR=/opt/validation/cachebox-target CARGO_BUILD_JOBS=4 python -m maturin build --release --locked --interpreter python --out /opt/validation/cachebox-wheels" did not complete successfully: exit code: 1

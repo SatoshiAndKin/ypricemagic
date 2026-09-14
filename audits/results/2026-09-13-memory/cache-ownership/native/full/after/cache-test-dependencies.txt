@@ -1,0 +1,9 @@
+cachebox @ file:///opt/validation/cachebox-wheels/cachebox-5.2.3-cp312-cp312-manylinux_2_34_aarch64.whl#sha256=d2a9631536e52ffaf05375595fc775d0d6d2ac63d76817aaa431f006d74895ab
+iniconfig==2.3.0
+packaging==23.2
+pip==25.0.1
+pluggy==1.6.0
+Pygments==2.19.2
+pytest==9.1.1
+pytest-asyncio==1.4.0
+typing_extensions==4.15.0

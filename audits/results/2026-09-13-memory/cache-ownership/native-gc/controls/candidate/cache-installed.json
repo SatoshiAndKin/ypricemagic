@@ -1,0 +1,11 @@
+{
+  "version": "6.2.7",
+  "core": "/tmp/cache-tests-env/lib/python3.12/site-packages/cachebox/_core.cpython-312-aarch64-linux-gnu.so",
+  "core_sha256": "6289a5469332243c7265e34b85c30afc4d20d08f7ff46f8387b245ae3b0abba4",
+  "python_sources": {
+    "__init__.py": "af84acaa20c145f6167feaa513e2859cd59fe68f189e68197b29165b3f68fd9a",
+    "_cachebox.py": "cadae20c74f5fc9e2521ac8abd46e6d829f032f59bb8b008ac1306f7a8eda178",
+    "_wrappers.py": "1e461009776f54862c13ead160fabe8789b07906a46816a7c349708d3bd76be9",
+    "utils.py": "0bd0353dcb67e628be29d6a403c4b5a46c99d7d2c33e8455079ed171b53337d4"
+  }
+}

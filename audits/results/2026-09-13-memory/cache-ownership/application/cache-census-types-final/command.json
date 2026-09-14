@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python -m mypy > /reports/mypy.txt 2>&1"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 145.52073929998733,
+  "peak_sampled_process_rss_bytes": 1054167040,
+  "cgroup_before": {
+    "memory.current": "8740864",
+    "memory.peak": "8851456",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "176926720",
+    "memory.peak": "1176596480",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

@@ -1,0 +1,79 @@
+Processing /opt/validation/cachebox-wheels/cachebox-5.2.3-cp311-cp311-manylinux_2_34_aarch64.whl
+Collecting pytest==9.1.1 (from -r /runner/cache-test-dependencies.lock (line 2))
+  Downloading pytest-9.1.1-py3-none-any.whl.metadata (7.6 kB)
+Collecting pytest-asyncio==1.4.0 (from -r /runner/cache-test-dependencies.lock (line 3))
+  Downloading pytest_asyncio-1.4.0-py3-none-any.whl.metadata (4.1 kB)
+Collecting iniconfig==2.3.0 (from -r /runner/cache-test-dependencies.lock (line 4))
+  Downloading iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting packaging==23.2 (from -r /runner/cache-test-dependencies.lock (line 5))
+  Downloading packaging-23.2-py3-none-any.whl.metadata (3.2 kB)
+Collecting pluggy==1.6.0 (from -r /runner/cache-test-dependencies.lock (line 6))
+  Downloading pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Collecting Pygments==2.19.2 (from -r /runner/cache-test-dependencies.lock (line 7))
+  Downloading pygments-2.19.2-py3-none-any.whl.metadata (2.5 kB)
+Collecting typing_extensions==4.15.0 (from -r /runner/cache-test-dependencies.lock (line 8))
+  Downloading typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Downloading pytest-9.1.1-py3-none-any.whl (386 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 386.5/386.5 kB 15.3 MB/s eta 0:00:00
+Downloading pytest_asyncio-1.4.0-py3-none-any.whl (16 kB)
+Downloading iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+Downloading packaging-23.2-py3-none-any.whl (53 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 53.0/53.0 kB 41.5 MB/s eta 0:00:00
+Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+Downloading pygments-2.19.2-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 56.2 MB/s eta 0:00:00
+Downloading typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 44.6/44.6 kB 30.9 MB/s eta 0:00:00
+Installing collected packages: typing_extensions, pytest-asyncio, pytest, Pygments, pluggy, packaging, iniconfig, cachebox
+Successfully installed Pygments-2.19.2 cachebox-5.2.3 iniconfig-2.3.0 packaging-23.2 pluggy-1.6.0 pytest-9.1.1 pytest-asyncio-1.4.0 typing_extensions-4.15.0
+
+[notice] A new release of pip is available: 24.0 -> 26.2.1
+[notice] To update, run: python -m pip install --upgrade pip
+No broken requirements found.
+============================= test session starts ==============================
+platform linux -- Python 3.11.16, pytest-9.1.1, pluggy-1.6.0
+rootdir: /reports/cachebox-tests
+configfile: pyproject.toml
+testpaths: python/tests
+plugins: asyncio-1.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collected 282 items
+
+python/tests/test_caches.py .................Fatal Python error: Aborted
+
+Current thread 0x0000f06d32ec3020 (most recent call first):
+  Garbage-collecting
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/cachebox/_cachebox.py", line 144 in insert
+  File "/reports/cachebox-tests/python/tests/mixin.py", line 371 in test_eq_implemetation
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/python.py", line 167 in pytest_pyfunc_call
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_callers.py", line 121 in _multicall
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_manager.py", line 120 in _hookexec
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_hooks.py", line 512 in __call__
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/python.py", line 1707 in runtest
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/runner.py", line 184 in pytest_runtest_call
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_callers.py", line 121 in _multicall
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_manager.py", line 120 in _hookexec
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_hooks.py", line 512 in __call__
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/runner.py", line 250 in <lambda>
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/runner.py", line 361 in from_call
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/runner.py", line 249 in call_and_report
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/runner.py", line 139 in runtestprotocol
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/runner.py", line 118 in pytest_runtest_protocol
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_callers.py", line 121 in _multicall
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_manager.py", line 120 in _hookexec
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_hooks.py", line 512 in __call__
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/main.py", line 408 in pytest_runtestloop
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_callers.py", line 121 in _multicall
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_manager.py", line 120 in _hookexec
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_hooks.py", line 512 in __call__
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/main.py", line 384 in _main
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/main.py", line 330 in wrap_session
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/main.py", line 377 in pytest_cmdline_main
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_callers.py", line 121 in _multicall
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_manager.py", line 120 in _hookexec
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/pluggy/_hooks.py", line 512 in __call__
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/config/__init__.py", line 229 in _main
+  File "/tmp/cache-tests-env/lib/python3.11/site-packages/_pytest/config/__init__.py", line 201 in main
+  File "/runner/cache_dependency_tests.py", line 72 in main
+  File "/runner/cache_dependency_tests.py", line 78 in <module>
+Aborted

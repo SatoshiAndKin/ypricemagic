@@ -1,0 +1,1210 @@
+{
+  "objects": {
+    "evmspec.structs.log.Topic": 405346,
+    "evmspec.data._main.BlockNumber": 392756,
+    "a_sync.async_property.cached.AsyncCachedPropertyInstanceState": 382990,
+    "y.prices.dex.uniswap.v2.UniswapV2Pool": 382472,
+    "_asyncio.Task": 377676,
+    "evmspec.data._main.TransactionHash": 10409,
+    "evmspec.data._ids.LogIndex": 10409,
+    "evmspec.structs.log.Log": 10305,
+    "evmspec.data._ids.TransactionIndex": 10305,
+    "evmspec.structs.log.Data": 10305,
+    "_asyncio.Future": 3196,
+    "dank_mids.semaphores._BlockSemaphoreContextManager": 2460,
+    "_asyncio.TaskStepMethWrapper": 1863,
+    "a_sync.asyncio.igather.__pyx_scope_struct____pyx_f_6a_sync_7asyncio_7igather_cigather": 740,
+    "a_sync.a_sync.modifiers.manager.ModifierManager": 595,
+    "_asyncio.FutureIter": 508,
+    "a_sync.primitives.locks.counter.CounterLock": 500,
+    "y.utils.events.Events": 494,
+    "y.prices.chainlink.Feed": 388,
+    "y.classes.common.ERC20": 373,
+    "a_sync._smart.WeakSet": 317,
+    "a_sync.debugging.__pyx_scope_struct_2_stuck_coro_wrap": 269,
+    "a_sync.a_sync.modifiers.manager.__pyx_scope_struct_1_apply_sync_modifiers": 251,
+    "a_sync.a_sync.function.__pyx_scope_struct_10___get__": 236,
+    "y.prices.lending.compound.CToken": 199,
+    "a_sync.debugging.__pyx_scope_struct__stuck_coro_debugger": 172,
+    "a_sync.a_sync.method.ASyncBoundMethodAsyncDefault": 163,
+    "logging.Logger": 144,
+    "a_sync.a_sync.method.ASyncMethodDescriptor": 132,
+    "y.prices._rpc.BlockRef": 95,
+    "a_sync._smart.SmartFuture": 90,
+    "a_sync.a_sync.function.ASyncFunctionSyncDefault": 79,
+    "a_sync.primitives.locks.event.CythonEvent": 75,
+    "a_sync.a_sync.function.ASyncFunctionAsyncDefault": 71,
+    "a_sync.task.TaskMapping": 71,
+    "a_sync.primitives.queue.Queue": 71,
+    "dank_mids.helpers._session.HTTPStatusExtended": 67,
+    "dank_mids.helpers.hashing.AttributeDict": 67,
+    "y.contracts.Contract": 60,
+    "y._db.decorators.retry_locked_wrap_retry_locked_obj": 56,
+    "y._db.decorators.retry_locked_env": 56,
+    "logging.PlaceHolder": 55,
+    "a_sync.a_sync.property.HiddenMethodDescriptor": 52,
+    "y.datatypes.UsdPrice": 52,
+    "a_sync.a_sync.property.ASyncCachedPropertyDescriptor": 44,
+    "y.datatypes.QuoteAsset": 44,
+    "y.prices._routing.SearchContext": 44,
+    "y.prices._routing._Node": 44,
+    "y.prices.magic._PriceRequest": 40,
+    "y.classes.singleton.ChecksumASyncSingletonMeta": 34,
+    "dank_mids.brownie_patch.types.DankContractCall": 33,
+    "a_sync.a_sync.property.HiddenMethod": 32,
+    "a_sync.iter.ASyncGeneratorFunction": 31,
+    "pytest_asyncio_cooperative.fixtures.CachedFunction": 29,
+    "a_sync.a_sync.property.__pyx_scope_struct__get": 25,
+    "a_sync.a_sync.property.__pyx_scope_struct_2_loader": 25,
+    "y.prices._quote._Flight": 24,
+    "dank_mids.brownie_patch._abi.FunctionABI": 23,
+    "dank_mids.logging.CLogger": 21,
+    "dank_mids._web3.method.MethodNoFormat": 19,
+    "a_sync.functools.cached_property_unsafe": 18,
+    "a_sync.a_sync._meta.ASyncMeta": 18,
+    "a_sync.a_sync.property.__pyx_scope_struct_1_get_loader": 18,
+    "y.networks.Network": 17,
+    "y.prices.gearbox.DieselPool": 17,
+    "a_sync.executor.PruningThreadPoolExecutor": 16,
+    "y.datatypes.PriceResult": 16,
+    "y.datatypes.PriceStep": 16,
+    "evmspec.data._main.Address": 15,
+    "a_sync.a_sync._helpers.__pyx_scope_struct____pyx_f_6a_sync_6a_sync_8_helpers__asyncify_with_a_sync_executor": 15,
+    "a_sync.a_sync.function.__pyx_scope_struct_11___get__": 15,
+    "dank_mids._web3.abi.Formatter": 13,
+    "y.prices.stable_swap.curve.Ids": 13,
+    "y.utils.logging.PriceLogger": 13,
+    "a_sync.a_sync.property.ASyncPropertyDescriptor": 8,
+    "logging.StreamHandler": 7,
+    "a_sync.a_sync._meta.ASyncSingletonMeta": 7,
+    "y.prices.lending.compound.Comptroller": 7,
+    "y._db.decorators.result_count_wrap_log_result_count_result_count_deco_obj": 7,
+    "y._db.decorators.result_count_deco_log_result_count_env": 7,
+    "y._db.decorators.log_result_count_env": 7,
+    "y.prices.stable_swap.curve.Factory": 7,
+    "a_sync.a_sync.method.ASyncMethodDescriptorSyncDefault": 6,
+    "a_sync.executor.AsyncThreadPoolExecutor": 6,
+    "dank_mids.lock.AlertingRLock": 6,
+    "dank_mids._block.HashBlock": 6,
+    "logging.Formatter": 5,
+    "logging.PercentStyle": 5,
+    "dank_mids.helpers._retry_mechanics.RetryAction": 5,
+    "dank_mids.helpers._session._HTTPStatusExtension": 5,
+    "a_sync.primitives.queue.ProcessingQueue": 5,
+    "a_sync.a_sync.method.ASyncBoundMethodSyncDefault": 5,
+    "y._db.utils.logs.LogCache": 5,
+    "dank_mids._web3.abi.map_to_typed_data": 4,
+    "y.prices.dex.balancer.v2.PoolSpecialization": 4,
+    "dank_mids._uid.UIDGenerator": 4,
+    "a_sync.asyncio.create_task.__pyx_scope_struct____await": 4,
+    "logging.NullHandler": 3,
+    "a_sync.a_sync.property.__pyx_defaults": 3,
+    "evmspec.structs.trace.call.Type": 3,
+    "dank_mids.semaphores.EnvironmentVariable[BlockSemaphore]": 3,
+    "dank_mids.semaphores.BlockSemaphore": 3,
+    "y.prices.dex.uniswap.v2.UniswapRouterV2": 3,
+    "y.classes.common.ContractBase": 3,
+    "y.prices._quote.SharedCache": 3,
+    "y.prices.lending.aave.AaveMarketV2": 3,
+    "dank_mids.types.Request": 3,
+    "dank_mids.helpers._retry_mechanics.RetryBudget": 3,
+    "_pytest.logging.ColoredLevelFormatter": 2,
+    "_pytest.logging.LogCaptureHandler": 2,
+    "_pytest.logging.PercentStyleMultiline": 2,
+    "a_sync.async_property.proxy._ObjectProxyMetaType": 2,
+    "evmspec.data._enum.StringToIntEnumMeta": 2,
+    "evmspec.structs.receipt.Status": 2,
+    "evmspec.structs.trace.reward.Type": 2,
+    "a_sync.executor.EnvironmentVariable[AsyncProcessPoolExecutor]": 2,
+    "dank_mids.helpers._weaklist.WeakList": 2,
+    "a_sync.primitives.queue.SmartProcessingQueue": 2,
+    "y.prices.dex.balancer.v2.BalancerV2": 2,
+    "y.prices.dex.uniswap.v3.UniswapV3": 2,
+    "dank_mids.helpers._multicall.MulticallContract": 2,
+    "a_sync._smart.__pyx_scope_struct_3___pyx_f_6a_sync_6_smart__get_done_callbacks": 2,
+    "a_sync._smart.__pyx_scope_struct_1___await__": 2,
+    "y.prices.stable_swap.curve.Registry": 2,
+    "y.prices.stable_swap.curve.RegistryEvents": 2,
+    "dank_mids.helpers.future.DebuggableFuture": 2,
+    "logging._StderrHandler": 1,
+    "logging.RootLogger": 1,
+    "logging.Manager": 1,
+    "_pytest.logging.LoggingPlugin": 1,
+    "dank_mids._install_alias_guard.<locals>._DankModule": 1,
+    "a_sync.async_property.cached.AsyncCachedPropertyDescriptor": 1,
+    "a_sync.primitives.locks.semaphore.DummySemaphore": 1,
+    "a_sync.debugging.__pyx_defaults": 1,
+    "evmspec.structs.receipt._HexStringToIntEnumMeta": 1,
+    "dank_mids._mode.EnvironmentVariable[OperationMode]": 1,
+    "dank_mids.stats._StatsLogger": 1,
+    "dank_mids.stats._Collector": 1,
+    "dank_mids.stats._SentryExporter": 1,
+    "dank_mids.brownie_patch._BrowniePatchState": 1,
+    "dank_mids._demo_mode.DummyLogger": 1,
+    "dank_mids.helpers._retry_mechanics.RetryDecision": 1,
+    "dank_mids.helpers._requester.HTTPRequesterThread": 1,
+    "dank_mids.lock.Lock": 1,
+    "dank_mids.eth.DankEth": 1,
+    "y.networks.label_Network_obj": 1,
+    "y.networks.name_Network_obj": 1,
+    "y.networks.printable_Network_obj": 1,
+    "a_sync.a_sync.function.ASyncDecorator": 1,
+    "y._db.brownie.AsyncCursor": 1,
+    "y._db.decorators.__mypyc_lambda__0_obj": 1,
+    "y._db.decorators.__mypyc_lambda__1_obj": 1,
+    "y._db.decorators.__mypyc_lambda__2_obj": 1,
+    "a_sync.primitives.locks.semaphore.ThreadsafeSemaphore": 1,
+    "y.prices.chainlink.Chainlink": 1,
+    "y.prices.chainlink.FeedsFromEvents": 1,
+    "y.prices.dex.balancer.v2.BalancerV2Vault": 1,
+    "y.prices.dex.balancer.v2.BalancerEvents": 1,
+    "y.prices.dex.balancer.balancer.BalancerMultiplexer": 1,
+    "y.prices.dex.genericamm.GenericAmm": 1,
+    "y.prices.dex.uniswap.uniswap.UniswapMultiplexer": 1,
+    "y.prices.dex.uniswap.v1.UniswapV1": 1,
+    "y.prices.eth_derivs.wsteth.wstEth": 1,
+    "y.prices.gearbox.Gearbox": 1,
+    "y.prices.lending.aave.AaveRegistry": 1,
+    "y.prices.lending.compound.Compound": 1,
+    "y.prices.stable_swap.curve.CurveRegistry": 1,
+    "y.prices.stable_swap.curve.AddressProviderEvents": 1,
+    "y.prices.synthetix.Synthetix": 1,
+    "_pytest.logging._FileHandler": 1,
+    "_pytest.logging._LiveLoggingNullHandler": 1,
+    "dank_mids._vendor.aiolimiter.src.aiolimiter.leakybucket.AsyncLimiter": 1,
+    "dank_mids.helpers._session.DankClientSession": 1,
+    "dank_mids.controller.DankMiddlewareController": 1,
+    "y.prices._routing.QuoteService": 1,
+    "y.prices.dex.balancer.v1.BalancerV1": 1,
+    "y.prices.lending.aave.AaveMarketV1": 1,
+    "y.prices.lending.aave.AaveMarketV3": 1,
+    "y.prices.dex.uniswap.v2.PoolsFromEvents": 1,
+    "a_sync.iter.ASyncIterator": 1,
+    "y.prices.stable_swap.stargate.StargateFactory": 1,
+    "y.prices.stable_swap.curve.AddressProvider": 1,
+    "dank_mids.brownie_patch.types.DankOverloadedMethod": 1,
+    "pytest_asyncio_cooperative.plugin._TestResult": 1,
+    "dank_mids._requests.JSONRPCBatch": 1,
+    "dank_mids._requests._RequestEvent": 1,
+    "a_sync.primitives.locks.counter.__pyx_scope_struct__wait_for": 1,
+    "a_sync.primitives.locks.event.__pyx_scope_struct_1__CythonEvent__wait": 1,
+    "dank_mids._requests.RPCRequest": 1
+  },
+  "tasks_by_coroutine": {
+    "None:done": 374606,
+    "_LRUCacheWrapper.__call__:done": 1056,
+    "get_hash_dbid:done": 704,
+    "_prepare_log:done": 454,
+    "has_methods:done": 136,
+    "_ASyncPropertyDescriptorBase.get:done": 91,
+    "AaveMarketBase.get_reserve_data:done": 89,
+    "has_method:done": 67,
+    "AaveMarketV2.get_reserve_data:done": 65,
+    "stuck_coro_debugger.<locals>.stuck_coro_wrap:pending": 56,
+    "SmartProcessingQueue._worker_coro:pending": 40,
+    "test_wrapper:pending": 28,
+    "resolve_block_number:done": 26,
+    "get_price:done": 19,
+    "DieselPool.contract:done": 17,
+    "StargateFactory._pool_at:done": 13,
+    "is_pie:done": 12,
+    "get_pool:done": 12,
+    "Synthetix.get_currency_key:done": 12,
+    "CurveRegistry.get_pool:done": 12,
+    "_decimals:done": 12,
+    "AaveRegistry.is_atoken:done": 12,
+    "get_price:pending": 12,
+    "Factory.read_pools:done": 11,
+    "_safe_check_bucket:done": 9,
+    "Filter.__fetch:pending": 5,
+    "_Loader.__load:done": 5,
+    "Filter.__insert_chunk:done": 5,
+    "is_ib_token:done": 5,
+    "is_gelato_pool:done": 5,
+    "is_token_set:done": 5,
+    "is_eps_rewards_pool:done": 5,
+    "is_mstable_feeder_pool:done": 5,
+    "is_saddle_lp:done": 5,
+    "is_popsicle_lp:done": 5,
+    "is_stargate_lp:done": 5,
+    "is_curve_gauge:done": 5,
+    "is_erc4626_vault:done": 5,
+    "get_underlying_lp:done": 5,
+    "is_mooniswap_pool:done": 5,
+    "Compound.is_compound_market:done": 5,
+    "__await:pending": 4,
+    "ProcessingQueue._worker_coro:pending": 4,
+    "Registry:done": 4,
+    "Factory:done": 4,
+    "run_tests:pending": 1,
+    "StargateFactory.pools:done": 1,
+    "Gearbox.registry:done": 1,
+    "CurveRegistry._load_all:pending": 1,
+    "Gearbox.pools:done": 1,
+    "test_wrapper:done": 1,
+    "Synthetix.get_address:done": 1,
+    "DankMiddlewareController.make_request:done": 1,
+    "HTTPRequesterThread.post.<locals>.request:done": 1
+  },
+  "historical_buffer_entries": {
+    "y.prices.dex.uniswap.v2.PoolsFromEvents._objects": 454,
+    "y.prices.chainlink.FeedsFromEvents._objects": 357,
+    "y.prices.stable_swap.curve.RegistryEvents._objects": 67,
+    "y.prices.stable_swap.curve.AddressProviderEvents._objects": 37,
+    "y.utils.events.Events._objects": 0,
+    "y.utils.events.Events._checkpoints": 0,
+    "y.prices.chainlink.FeedsFromEvents._checkpoints": 0,
+    "y.prices.dex.balancer.v2.BalancerEvents._objects": 0,
+    "y.prices.dex.balancer.v2.BalancerEvents._checkpoints": 0,
+    "y.prices.stable_swap.curve.AddressProviderEvents._checkpoints": 0,
+    "y.prices.dex.uniswap.v2.PoolsFromEvents._checkpoints": 0,
+    "y.prices.stable_swap.curve.RegistryEvents._checkpoints": 0
+  },
+  "queued_database_operations": {
+    "y._db.utils.price.set_price": 0,
+    "y._db.utils.token.set_bucket": 0,
+    "y._db.utils.contract.set_deploy_block": 0,
+    "y._db.decorators.ydb_write_threads": 0,
+    "y._db.utils.contract._deploy_block_write_executor": 0
+  },
+  "logging": {
+    "capture_handlers": 2,
+    "captured_records": 0,
+    "captured_characters": 0
+  },
+  "cached_property_state": {
+    "instances": 382990,
+    "cache_entries": 764963,
+    "locks_entries": 2,
+    "tasks_entries": 2,
+    "tasks_completed_tasks": 0,
+    "tasks_pending_tasks": 2
+  },
+  "async_caches": [
+    {
+      "function": "pony.utils.utils._improved_decorator.<locals>.pony_wrapper",
+      "hits": 775212,
+      "misses": 374879,
+      "maxsize": null,
+      "entries": 374879,
+      "tasks": {
+        "done": 374879
+      },
+      "result_types": {
+        "builtins.int": 374879
+      }
+    },
+    {
+      "function": "y.contracts.has_methods",
+      "hits": 19,
+      "misses": 220,
+      "maxsize": 50000,
+      "entries": 136,
+      "tasks": {
+        "done": 136
+      },
+      "result_types": {
+        "builtins.bool": 136
+      }
+    },
+    {
+      "function": "y.contracts.has_method",
+      "hits": 50,
+      "misses": 71,
+      "maxsize": 50000,
+      "entries": 67,
+      "tasks": {
+        "done": 67
+      },
+      "result_types": {
+        "builtins.bool": 60,
+        "builtins.tuple": 7
+      }
+    },
+    {
+      "function": "y.prices.utils.buckets.check_bucket",
+      "hits": 19,
+      "misses": 33,
+      "maxsize": 50000,
+      "entries": 31,
+      "tasks": {
+        "done": 31
+      },
+      "result_types": {
+        "builtins.str": 20,
+        "builtins.NoneType": 11
+      }
+    },
+    {
+      "function": "dank_mids._block.resolve_block_number",
+      "hits": 114,
+      "misses": 26,
+      "maxsize": 1024,
+      "entries": 26,
+      "tasks": {
+        "done": 26
+      },
+      "result_types": {
+        "builtins.int": 26
+      }
+    },
+    {
+      "function": "y.prices.lending.aave.AaveRegistry.is_atoken",
+      "hits": 20,
+      "misses": 12,
+      "maxsize": 50000,
+      "entries": 12,
+      "tasks": {
+        "done": 12
+      },
+      "result_types": {
+        "builtins.bool": 12
+      }
+    },
+    {
+      "function": "y.prices.tokenized_fund.piedao.is_pie",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 12,
+      "tasks": {
+        "done": 12
+      },
+      "result_types": {
+        "builtins.bool": 12
+      }
+    },
+    {
+      "function": "y.prices.stable_swap.saddle.get_pool",
+      "hits": 0,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 12,
+      "tasks": {
+        "done": 12
+      },
+      "result_types": {
+        "builtins.NoneType": 12
+      }
+    },
+    {
+      "function": "y.prices.yearn.is_yearn_vault",
+      "hits": 18,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 12,
+      "tasks": {
+        "done": 12
+      },
+      "result_types": {
+        "builtins.bool": 12
+      }
+    },
+    {
+      "function": "y.prices.stable_swap.curve.CurveRegistry.get_pool",
+      "hits": 19,
+      "misses": 12,
+      "maxsize": 50000,
+      "entries": 12,
+      "tasks": {
+        "done": 12
+      },
+      "result_types": {
+        "builtins.NoneType": 12
+      }
+    },
+    {
+      "function": "y.prices.synthetix.Synthetix.get_currency_key",
+      "hits": 18,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 12,
+      "tasks": {
+        "done": 12
+      },
+      "result_types": {
+        "builtins.NoneType": 12
+      }
+    },
+    {
+      "function": "y.utils.raw_calls._decimals",
+      "hits": 0,
+      "misses": 12,
+      "maxsize": 50000,
+      "entries": 12,
+      "tasks": {
+        "done": 12
+      },
+      "result_types": {
+        "brownie.convert.datatypes.Wei": 12
+      }
+    },
+    {
+      "function": "y.prices.convex.is_convex_lp",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.lending.ib.is_ib_token",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.tokenized_fund.gelato.is_gelato_pool",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.tokenized_fund.tokensets.is_token_set",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.stable_swap.ellipsis.is_eps_rewards_pool",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.stable_swap.mstablefeederpool.is_mstable_feeder_pool",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.stable_swap.saddle.is_saddle_lp",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.popsicle.is_popsicle_lp",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.stable_swap.stargate.is_stargate_lp",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.curve_gauge.is_curve_gauge",
+      "hits": 20,
+      "misses": 12,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.erc4626.is_erc4626_vault",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.exotic_tokens.is_pickle_pslp",
+      "hits": 20,
+      "misses": 12,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.exotic_tokens.is_pool_together_v4_ticket",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.exotic_tokens.is_xpremia",
+      "hits": 20,
+      "misses": 12,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.exotic_tokens.is_xtarot",
+      "hits": 20,
+      "misses": 12,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.exotic_tokens.is_tarot_supply_vault",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.convex.get_underlying_lp",
+      "hits": 0,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.NoneType": 5
+      }
+    },
+    {
+      "function": "y.prices.dex.balancer._abc.BalancerABC.is_pool",
+      "hits": 19,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.contracts.contract_creation_block_async",
+      "hits": 0,
+      "misses": 5,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.int": 5
+      }
+    },
+    {
+      "function": "y.prices.dex.balancer._abc.BalancerABC.is_pool",
+      "hits": 19,
+      "misses": 12,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.dex.mooniswap.is_mooniswap_pool",
+      "hits": 19,
+      "misses": 12,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.lending.compound.Compound.is_compound_market",
+      "hits": 18,
+      "misses": 13,
+      "maxsize": 50000,
+      "entries": 5,
+      "tasks": {
+        "done": 5
+      },
+      "result_types": {
+        "builtins.bool": 5
+      }
+    },
+    {
+      "function": "y.prices.stable_swap.stargate.StargateFactory.pools",
+      "hits": 0,
+      "misses": 1,
+      "maxsize": 50000,
+      "entries": 1,
+      "tasks": {
+        "done": 1
+      },
+      "result_types": {
+        "builtins.set": 1
+      }
+    },
+    {
+      "function": "y.prices.gearbox.Gearbox.pools",
+      "hits": 30,
+      "misses": 1,
+      "maxsize": 50000,
+      "entries": 1,
+      "tasks": {
+        "done": 1
+      },
+      "result_types": {
+        "builtins.list": 1
+      }
+    },
+    {
+      "function": "y.prices.synthetix.Synthetix.get_address",
+      "hits": 0,
+      "misses": 1,
+      "maxsize": 512,
+      "entries": 1,
+      "tasks": {
+        "done": 1
+      },
+      "result_types": {
+        "y.contracts.Contract": 1
+      }
+    },
+    {
+      "function": "dank_mids.eth.DankEth.block_number",
+      "hits": 113,
+      "misses": 83,
+      "maxsize": null,
+      "entries": 0,
+      "tasks": {},
+      "result_types": {}
+    },
+    {
+      "function": "dank_mids._debugging._base._CSVWriter._ensure_headers",
+      "hits": 0,
+      "misses": 0,
+      "maxsize": null,
+      "entries": 0,
+      "tasks": {},
+      "result_types": {}
+    },
+    {
+      "function": "y.prices.dex.balancer.balancer.BalancerMultiplexer.get_version",
+      "hits": 0,
+      "misses": 32,
+      "maxsize": 50000,
+      "entries": 0,
+      "tasks": {},
+      "result_types": {}
+    },
+    {
+      "function": "pony.utils.utils._improved_decorator.<locals>.pony_wrapper",
+      "hits": 0,
+      "misses": 0,
+      "maxsize": null,
+      "entries": 0,
+      "tasks": {},
+      "result_types": {}
+    }
+  ],
+  "cachebox_caches": [
+    {
+      "function": "y._db.utils.logs.get_hash_dbid",
+      "hits": 383726,
+      "misses": 382235,
+      "entries": 10000,
+      "locks": 382597,
+      "idle_locks": 382188,
+      "exceptions": 0
+    },
+    {
+      "function": "y.contracts._extract_abi_data_async",
+      "hits": 0,
+      "misses": 40,
+      "entries": 7,
+      "locks": 40,
+      "idle_locks": 40,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.chainlink.Chainlink._get_feed",
+      "hits": 49,
+      "misses": 31,
+      "entries": 31,
+      "locks": 31,
+      "idle_locks": 30,
+      "exceptions": 0
+    },
+    {
+      "function": "y.contracts._extract_abi_data",
+      "hits": 0,
+      "misses": 25,
+      "entries": 25,
+      "locks": 25,
+      "idle_locks": 25,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.chainlink.Feed.scale",
+      "hits": 0,
+      "misses": 20,
+      "entries": 20,
+      "locks": 20,
+      "idle_locks": 20,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.chainlink.Chainlink._get_price",
+      "hits": 12,
+      "misses": 20,
+      "entries": 20,
+      "locks": 20,
+      "idle_locks": 20,
+      "exceptions": 0
+    },
+    {
+      "function": "y.time.check_node",
+      "hits": 0,
+      "misses": 1,
+      "entries": 0,
+      "locks": 1,
+      "idle_locks": 1,
+      "exceptions": 0
+    },
+    {
+      "function": "y.time.check_node_async",
+      "hits": 4,
+      "misses": 1,
+      "entries": 0,
+      "locks": 1,
+      "idle_locks": 1,
+      "exceptions": 0
+    },
+    {
+      "function": "y.contracts._get_explorer_api_key",
+      "hits": 48,
+      "misses": 1,
+      "entries": 1,
+      "locks": 1,
+      "idle_locks": 1,
+      "exceptions": 0
+    },
+    {
+      "function": "y.utils.client.get_ethereum_client",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.utils.client.get_ethereum_client_async",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.pendle.get_tokens",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.solidex._get_pool",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.utils.ypriceapi.get_session",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.utils.ypriceapi.get_chains",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.utils.ypriceapi.chain_supported",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    }
+  ],
+  "pony_adapted_sql_cache": {
+    "entries": 0,
+    "query_characters": 0,
+    "adapted_query_characters": 0
+  },
+  "python_current_bytes": 1195796256,
+  "python_peak_bytes": 1261862753,
+  "rss_peak_bytes": 5549314048,
+  "top_allocations": [
+    {
+      "traceback": "/work/y/prices/dex/uniswap/v2.py:164",
+      "bytes": 137363184,
+      "count": 1834719
+    },
+    {
+      "traceback": "/work/y/classes/singleton.py:126",
+      "bytes": 122743530,
+      "count": 1150747
+    },
+    {
+      "traceback": "/work/y/utils/events.py:87",
+      "bytes": 109206348,
+      "count": 1556018
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/asyncio/base_events.py:457",
+      "bytes": 106790884,
+      "count": 1128059
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:254",
+      "bytes": 57163296,
+      "count": 375844
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/_weakrefset.py:88",
+      "bytes": 46901648,
+      "count": 376490
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/evmspec/data/_main.py:336",
+      "bytes": 44506792,
+      "count": 424907
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:259",
+      "bytes": 41420720,
+      "count": 375912
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/evmspec/data/_main.py:427",
+      "bytes": 40987741,
+      "count": 383063
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/concurrent/futures/thread.py:59",
+      "bytes": 39011411,
+      "count": 375572
+    },
+    {
+      "traceback": "/work/y/classes/singleton.py:118",
+      "bytes": 37895754,
+      "count": 192278
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:258",
+      "bytes": 33074800,
+      "count": 751668
+    },
+    {
+      "traceback": "/work/y/classes/singleton.py:114",
+      "bytes": 31832077,
+      "count": 383519
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:180",
+      "bytes": 30656936,
+      "count": 766418
+    },
+    {
+      "traceback": "<frozen importlib._bootstrap_external>:757",
+      "bytes": 26607405,
+      "count": 243731
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/evmspec/data/_main.py:195",
+      "bytes": 26441792,
+      "count": 413153
+    },
+    {
+      "traceback": "/work/y/classes/common.py:87",
+      "bytes": 24572720,
+      "count": 383940
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/functools.py:480",
+      "bytes": 24045120,
+      "count": 375705
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:412",
+      "bytes": 20974768,
+      "count": 7
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/ens/_normalization.py:152",
+      "bytes": 18414176,
+      "count": 313
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:382",
+      "bytes": 18394656,
+      "count": 383194
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/json/decoder.py:354",
+      "bytes": 18249979,
+      "count": 497704
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/functools.py:446",
+      "bytes": 13338152,
+      "count": 375705
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/pony/orm/core.py:6357",
+      "bytes": 12323712,
+      "count": 385116
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/functools.py:445",
+      "bytes": 12034400,
+      "count": 375705
+    },
+    {
+      "traceback": "<frozen importlib._bootstrap>:488",
+      "bytes": 9942677,
+      "count": 71254
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/ens/_normalization.py:159",
+      "bytes": 8388608,
+      "count": 1
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/faster_eth_abi/codec.py:2805",
+      "bytes": 4764672,
+      "count": 39707
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/ens/_normalization.py:148",
+      "bytes": 3678944,
+      "count": 1
+    },
+    {
+      "traceback": "/work/y/prices/dex/uniswap/v2.py:636",
+      "bytes": 3292776,
+      "count": 4
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/dank_mids/semaphores.py:78",
+      "bytes": 3071616,
+      "count": 12267
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:356",
+      "bytes": 2811488,
+      "count": 21317
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/eth_hash/backends/pycryptodome.py:37",
+      "bytes": 2298960,
+      "count": 19158
+    },
+    {
+      "traceback": "/work/y/contracts.py:1111",
+      "bytes": 2058081,
+      "count": 33308
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/dank_mids/eth.py:361",
+      "bytes": 1945403,
+      "count": 21754
+    },
+    {
+      "traceback": "<frozen abc>:106",
+      "bytes": 1606573,
+      "count": 5596
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/brownie/network/contract.py:720",
+      "bytes": 1266769,
+      "count": 61
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/faster_eth_abi/encoding.py:176",
+      "bytes": 1098734,
+      "count": 11328
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/pyunormalize/_unicode_data.py:7849",
+      "bytes": 1060632,
+      "count": 16756
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/pyunormalize/_unicode_data.py:7130",
+      "bytes": 942744,
+      "count": 13072
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:295",
+      "bytes": 941285,
+      "count": 6174
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/dank_mids/brownie_patch/call.py:401",
+      "bytes": 856136,
+      "count": 10588
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/enum.py:277",
+      "bytes": 756672,
+      "count": 4504
+    },
+    {
+      "traceback": "/work/y/contracts.py:982",
+      "bytes": 750201,
+      "count": 12489
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/ast.py:52",
+      "bytes": 735855,
+      "count": 7910
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/linecache.py:142",
+      "bytes": 672716,
+      "count": 7386
+    },
+    {
+      "traceback": "<frozen abc>:123",
+      "bytes": 635151,
+      "count": 6148
+    },
+    {
+      "traceback": "<frozen importlib._bootstrap_external>:774",
+      "bytes": 609839,
+      "count": 4294
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/ens/_normalization.py:208",
+      "bytes": 503176,
+      "count": 1511
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/asyncio/base_events.py:448",
+      "bytes": 476400,
+      "count": 3332
+    }
+  ]
+}

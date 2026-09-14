@@ -1,0 +1,10 @@
+{
+  "version": "5.2.3",
+  "core": "/tmp/cache-tests-env/lib/python3.12/site-packages/cachebox/_core.cpython-312-aarch64-linux-gnu.so",
+  "core_sha256": "47e5f08c987fa348ae8afd80f49f02e358ceb67afb9f2c9e39b0a27eaf74b0ff",
+  "python_sources": {
+    "__init__.py": "23ddf2fa12d0297b0422599dd0a019e8255f0ea2aa71616fca225d0ec31472f2",
+    "_cachebox.py": "e9c4551e9049e76a3806b100a18eaff04396cf10e876e4d8e1b79e272d5e6fda",
+    "utils.py": "2178f896b979e528b9c1f5c0e265c8d702fe13f58b8497a3663c41405e01c63c"
+  }
+}

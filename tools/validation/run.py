@@ -123,6 +123,9 @@ def build(
     requirements = config["build-system"]["requires"] + ["setuptools<81", "setuptools-scm", "black"]
     (context / "requirements-build.txt").write_text("\n".join(requirements) + "\n")
     shutil.copyfile(harness / "Dockerfile", context / "Dockerfile")
+    shutil.copyfile(
+        harness / "cache-build-dependencies.lock", context / "cache-build-dependencies.lock"
+    )
     for name, path in (extra_inputs or {}).items():
         shutil.copyfile(path, context / name)
     digest = hashlib.sha256(

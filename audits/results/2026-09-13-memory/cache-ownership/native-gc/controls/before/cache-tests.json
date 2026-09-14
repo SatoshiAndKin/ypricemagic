@@ -1,0 +1,653 @@
+[
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00020270900859031826,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.0005382100061979145,
+    "error": "def test_sync_eviction_releases_keys_and_keeps_cached_values():\n        calls = 0\n        cache = LRUCache(4)\n    \n        @cached(cache)\n        def value(key):\n            nonlocal calls\n            calls += 1\n            return {\"number\": key.number}\n    \n        refs = []\n        for number in range(128):\n            key = Key(number)\n            refs.append(weakref.ref(key))\n            result = value(key)\n            assert result == {\"number\": number}\n            result[\"number\"] = -1\n            assert value(key) == {\"number\": number}\n            del key\n        assert calls == 128\n        assert len(cache) == 4\n>       assert [ref().number for ref in refs if ref() is not None] == [124, 125, 126, 127]\nE       assert [0, 1, 2, 3, 4, 5, ...] == [124, 125, 126, 127]\nE         \nE         At index 0 diff: 0 != 124\nE         Left contains 124 more items, first extra item: 4\nE         Use -v to get more diff\n\npython/tests/test_ownership.py:37: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.683400377165526e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00024166700313799083,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.0006152520072646439,
+    "error": "@pytest.mark.asyncio\n    async def test_async_eviction_releases_keys_and_keeps_cached_values():\n        calls = 0\n        cache = LRUCache(4)\n    \n        @cached(cache)\n        async def value(key):\n            nonlocal calls\n            calls += 1\n            return {\"number\": key.number}\n    \n        refs = []\n        for number in range(128):\n            key = Key(number)\n            refs.append(weakref.ref(key))\n            result = await value(key)\n            assert result == {\"number\": number}\n            result[\"number\"] = -1\n            assert await value(key) == {\"number\": number}\n            del key\n        assert calls == 128\n        assert len(cache) == 4\n>       assert [ref().number for ref in refs if ref() is not None] == [124, 125, 126, 127]\nE       assert [0, 1, 2, 3, 4, 5, ...] == [124, 125, 126, 127]\nE         \nE         At index 0 diff: 0 != 124\nE         Left contains 124 more items, first extra item: 4\nE         Use -v to get more diff\n\npython/tests/test_ownership.py:62: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00017866700363811105,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 4.233299114275724e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.0035987209994345903,
+    "error": "def test_sync_failed_call_releases_key_and_can_retry():\n        calls = 0\n    \n        @cached(LRUCache(4))\n        def value(key):\n            nonlocal calls\n            calls += 1\n            raise ValueError(str(key.number))\n    \n        def failed():\n            key = Key(42)\n            ref = weakref.ref(key)\n            for _ in range(2):\n                with pytest.raises(ValueError, match=\"^42$\"):\n                    value(key)\n            return ref\n    \n        ref = failed()\n        gc.collect()\n        assert calls == 2\n>       assert ref() is None\nE       AssertionError: assert <tests.test_ownership.Key object at 0xece178d5b320> is None\nE        +  where <tests.test_ownership.Key object at 0xece178d5b320> = <weakref at 0xece178917d80; to 'Key' at 0xece178d5b320>()\n\npython/tests/test_ownership.py:85: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.9416997828520834e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00020395900355651975,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.003079677000641823,
+    "error": "@pytest.mark.asyncio\n    async def test_async_failed_call_releases_key_and_can_retry():\n        calls = 0\n    \n        @cached(LRUCache(4))\n        async def value(key):\n            nonlocal calls\n            calls += 1\n            raise ValueError(str(key.number))\n    \n        async def failed():\n            key = Key(42)\n            ref = weakref.ref(key)\n            for _ in range(2):\n                with pytest.raises(ValueError, match=\"^42$\"):\n                    await value(key)\n            return ref\n    \n        ref = await failed()\n        gc.collect()\n        assert calls == 2\n>       assert ref() is None\nE       AssertionError: assert <tests.test_ownership.Key object at 0xece178b66ea0> is None\nE        +  where <tests.test_ownership.Key object at 0xece178b66ea0> = <weakref at 0xece17888d670; to 'Key' at 0xece178b66ea0>()\n\npython/tests/test_ownership.py:109: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00012929199147038162,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00015212499420158565,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.0024893000081647187,
+    "error": "fail = False\n\n    @pytest.mark.asyncio\n    @pytest.mark.parametrize(\"fail\", [False, True])\n    async def test_cancelled_waiter_releases_state_after_owner_finishes(fail):\n        entered = asyncio.Event()\n        release = asyncio.Event()\n        cache = LRUCache(1)\n        calls = 0\n    \n        @cached(cache)\n        async def value(key):\n            nonlocal calls\n            calls += 1\n            entered.set()\n            await release.wait()\n            if fail:\n                raise ValueError(str(key.number))\n            return key.number\n    \n        async def requests():\n            key = Key(42)\n            ref = weakref.ref(key)\n            owner = asyncio.create_task(value(key))\n            await entered.wait()\n            waiter = asyncio.create_task(value(key))\n            await asyncio.sleep(0)\n            waiter.cancel()\n            with pytest.raises(asyncio.CancelledError):\n                await waiter\n            release.set()\n            if fail:\n                with pytest.raises(ValueError, match=\"^42$\"):\n                    await owner\n            else:\n                assert await owner == 42\n            return ref\n    \n        ref = await requests()\n        assert calls == 1\n        if not fail:\n            assert await value(Key(43)) == 43\n        await asyncio.sleep(0)\n        gc.collect()\n>       assert ref() is None\nE       AssertionError: assert <tests.test_ownership.Key object at 0xece178b66120> is None\nE        +  where <tests.test_ownership.Key object at 0xece178b66120> = <weakref at 0xece17888c2c0; to 'Key' at 0xece178b66120>()\n\npython/tests/test_ownership.py:154: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00010070799908135086,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00015141699986997992,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.0026130500045837834,
+    "error": "fail = True\n\n    @pytest.mark.asyncio\n    @pytest.mark.parametrize(\"fail\", [False, True])\n    async def test_cancelled_waiter_releases_state_after_owner_finishes(fail):\n        entered = asyncio.Event()\n        release = asyncio.Event()\n        cache = LRUCache(1)\n        calls = 0\n    \n        @cached(cache)\n        async def value(key):\n            nonlocal calls\n            calls += 1\n            entered.set()\n            await release.wait()\n            if fail:\n                raise ValueError(str(key.number))\n            return key.number\n    \n        async def requests():\n            key = Key(42)\n            ref = weakref.ref(key)\n            owner = asyncio.create_task(value(key))\n            await entered.wait()\n            waiter = asyncio.create_task(value(key))\n            await asyncio.sleep(0)\n            waiter.cancel()\n            with pytest.raises(asyncio.CancelledError):\n                await waiter\n            release.set()\n            if fail:\n                with pytest.raises(ValueError, match=\"^42$\"):\n                    await owner\n            else:\n                assert await owner == 42\n            return ref\n    \n        ref = await requests()\n        assert calls == 1\n        if not fail:\n            assert await value(Key(43)) == 43\n        await asyncio.sleep(0)\n        gc.collect()\n>       assert ref() is None\nE       AssertionError: assert <tests.test_ownership.Key object at 0xece178b66cc0> is None\nE        +  where <tests.test_ownership.Key object at 0xece178b66cc0> = <weakref at 0xece17888c310; to 'Key' at 0xece178b66cc0>()\n\npython/tests/test_ownership.py:154: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00012570898979902267,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00014141699648462236,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.003063176991418004,
+    "error": "@pytest.mark.asyncio\n    async def test_shared_failure_releases_key_after_all_waiters_report():\n        entered = asyncio.Event()\n        release = asyncio.Event()\n        calls = 0\n    \n        @cached(LRUCache(4))\n        async def value(key):\n            nonlocal calls\n            calls += 1\n            entered.set()\n            await release.wait()\n            raise ValueError(str(key.number))\n    \n        async def requests():\n            key = Key(42)\n            ref = weakref.ref(key)\n            owner = asyncio.create_task(value(key))\n            await entered.wait()\n            waiter = asyncio.create_task(value(key))\n            await asyncio.sleep(0)\n            release.set()\n            outcomes = await asyncio.gather(owner, waiter, return_exceptions=True)\n            assert [type(error) for error in outcomes] == [ValueError, ValueError]\n            assert [str(error) for error in outcomes] == [\"42\", \"42\"]\n            assert outcomes[0] is outcomes[1]\n            return ref\n    \n        ref = await requests()\n        await asyncio.sleep(0)\n        gc.collect()\n        assert calls == 1\n>       assert ref() is None\nE       AssertionError: assert <tests.test_ownership.Key object at 0xece178b65d90> is None\nE        +  where <tests.test_ownership.Key object at 0xece178b65d90> = <weakref at 0xece17888db20; to 'Key' at 0xece178b65d90>()\n\npython/tests/test_ownership.py:189: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00010462600039318204,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00012837500253226608,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.0001477510086260736,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 8.508400060236454e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_threaded_callers_share_results_and_release_evicted_keys",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 3.89580090995878e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_threaded_callers_share_results_and_release_evicted_keys",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.01293075100693386,
+    "error": "def test_threaded_callers_share_results_and_release_evicted_keys():\n        cache = LRUCache(4)\n        calls = 0\n    \n        @cached(cache)\n        def value(key):\n            nonlocal calls\n            calls += 1\n            return {\"number\": key.number}\n    \n        def request(key, barrier):\n            barrier.wait(timeout=10)\n            return value(key)\n    \n        refs = []\n        with ThreadPoolExecutor(max_workers=8) as executor:\n            for number in range(32):\n                key = Key(number)\n                refs.append(weakref.ref(key))\n                barrier = threading.Barrier(9)\n                futures = [executor.submit(request, key, barrier) for _ in range(8)]\n                barrier.wait(timeout=10)\n                results = [future.result(timeout=10) for future in futures]\n                assert results == [{\"number\": number}] * 8\n                assert len({id(result) for result in results}) == 8\n                del key\n        assert calls == 32\n>       assert [ref().number for ref in refs if ref() is not None] == [28, 29, 30, 31]\nE       assert [0, 1, 2, 3, 4, 5, ...] == [28, 29, 30, 31]\nE         \nE         At index 0 diff: 0 != 28\nE         Left contains 28 more items, first extra item: 4\nE         Use -v to get more diff\n\npython/tests/test_ownership.py:248: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_threaded_callers_share_results_and_release_evicted_keys",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.975000385660678e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cleared_old_call_cannot_remove_the_new_pending_owner",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00017279198800679296,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cleared_old_call_cannot_remove_the_new_pending_owner",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.00017633401148486882,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cleared_old_call_cannot_remove_the_new_pending_owner",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.970800601877272e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-Cache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00011633399117272347,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-Cache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.016632453989587,
+    "error": "kind = 'Cache', callback = 'size'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93693.420344228, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'Cache', 'size']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-Cache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.908400534186512e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-FIFOCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00013412500265985727,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-FIFOCache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.01299937699514,
+    "error": "kind = 'FIFOCache', callback = 'size'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93703.464115686, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'FIFOCache', 'size']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-FIFOCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00010795900016091764,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-LFUCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00018008399638347328,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-LFUCache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.011498057996505,
+    "error": "kind = 'LFUCache', callback = 'size'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93713.512664888, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'LFUCache', 'size']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-LFUCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.645899990573525e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-LRUCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00015945899940561503,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-LRUCache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.012592454004334,
+    "error": "kind = 'LRUCache', callback = 'size'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93723.55570084, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'LRUCache', 'size']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-LRUCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.0001016249880194664,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-TTLCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001641669950913638,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-TTLCache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.0227435889974,
+    "error": "kind = 'TTLCache', callback = 'size'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93733.605431623, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'TTLCache', 'size']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-TTLCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 8.891700417734683e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-RRCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001248339976882562,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-RRCache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.021567353003775,
+    "error": "kind = 'RRCache', callback = 'size'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93743.653793629, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'RRCache', 'size']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-RRCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00010083400411531329,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-VTTLCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00014191700029186904,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-VTTLCache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.016300477000186,
+    "error": "kind = 'VTTLCache', callback = 'size'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93753.70219536, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'VTTLCache', 'size']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-VTTLCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.35420102905482e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-Cache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001611669867997989,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-Cache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.013064149999991,
+    "error": "kind = 'Cache', callback = 'equality'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93763.755986251, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'Cache', 'equality']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-Cache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 8.937499660532922e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-FIFOCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00016237499949056655,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-FIFOCache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.011627912012045,
+    "error": "kind = 'FIFOCache', callback = 'equality'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93773.802762928, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'FIFOCache', 'equality']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-FIFOCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 8.383400563616306e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-LFUCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00013616700016427785,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-LFUCache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.015853774995776,
+    "error": "kind = 'LFUCache', callback = 'equality'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93783.837761291, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'LFUCache', 'equality']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-LFUCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.495900303591043e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-LRUCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00015916800475679338,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-LRUCache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.012983824010007,
+    "error": "kind = 'LRUCache', callback = 'equality'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93793.89032052, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'LRUCache', 'equality']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-LRUCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 8.937499660532922e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-TTLCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00014220899902284145,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-TTLCache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.012462462007534,
+    "error": "kind = 'TTLCache', callback = 'equality'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93803.932225229, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'TTLCache', 'equality']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-TTLCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.86259983619675e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-RRCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00016379199223592877,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-RRCache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.01162593299523,
+    "error": "kind = 'RRCache', callback = 'equality'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93813.97985839, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'RRCache', 'equality']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-RRCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00010487499821465462,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-VTTLCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00014516699593514204,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-VTTLCache]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 10.020147725997958,
+    "error": "kind = 'VTTLCache', callback = 'equality'\n\n    @pytest.mark.parametrize(\n        \"kind\", [\"Cache\", \"FIFOCache\", \"LFUCache\", \"LRUCache\", \"TTLCache\", \"RRCache\", \"VTTLCache\"]\n    )\n    @pytest.mark.parametrize(\"callback\", [\"size\", \"equality\", \"cycle\"])\n    def test_collection_during_native_operations_and_after_cycle_release(kind, callback):\n        # A native mutex deadlock cannot be cancelled by a Python test timeout.\n        # The child shares the container's limits and imports the installed core.\n>       result = subprocess.run(\n            [sys.executable, \"-c\", PROGRAM, kind, callback],\n            capture_output=True,\n            text=True,\n            timeout=10,\n            check=True,\n        )\n\npython/tests/test_gc_memory.py:70: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/subprocess.py:550: in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:1209: in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n/usr/local/lib/python3.12/subprocess.py:2116: in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <Popen: returncode: -9 args: ['/tmp/cache-tests-env/bin/python', '-c', '\\nim...>\nendtime = 93824.019802207, orig_timeout = 10, stdout_seq = [], stderr_seq = []\nskip_check_and_raise = False\n\n    def _check_timeout(self, endtime, orig_timeout, stdout_seq, stderr_seq,\n                       skip_check_and_raise=False):\n        \"\"\"Convenience for checking if a timeout has expired.\"\"\"\n        if endtime is None:\n            return\n        if skip_check_and_raise or _time() > endtime:\n>           raise TimeoutExpired(\n                    self.args, orig_timeout,\n                    output=b''.join(stdout_seq) if stdout_seq else None,\n                    stderr=b''.join(stderr_seq) if stderr_seq else None)\nE           subprocess.TimeoutExpired: Command '['/tmp/cache-tests-env/bin/python', '-c', '\\nimport gc\\nimport json\\nimport sys\\nimport weakref\\n\\nimport cachebox\\n\\nkind, callback = sys.argv[1:]\\ncls = getattr(cachebox, kind)\\noptions = {\"ttl\": 600} if kind in {\"TTLCache\", \"VTTLCache\"} else {}\\ncache = cls(4, **options)\\ncollections = 0\\n\\nclass Key:\\n    def __hash__(self):\\n        return 42\\n\\n    def __eq__(self, other):\\n        global collections\\n        if callback == \"equality\":\\n            gc.collect()\\n            collections += 1\\n        return isinstance(other, Key)\\n\\n    def __sizeof__(self):\\n        global collections\\n        if callback == \"size\":\\n            gc.collect()\\n            collections += 1\\n        return object.__sizeof__(self)\\n\\nif callback == \"cycle\":\\n    class Value:\\n        pass\\n    value = Value()\\n    value.cache = cache\\n    reference = weakref.ref(value)\\n    cache[\"value\"] = value\\n    assert cache[\"value\"] is value\\n    del value, cache\\n    gc.collect()\\n    assert reference() is None\\n    print(json.dumps({\"collected_cycle\": True}))\\nelse:\\n    key = Key()\\n    cache[key] = {\"value\": 42}\\n    assert cache[Key()] == {\"value\": 42}\\n    assert cache[key] == {\"value\": 42}\\n    assert collections > 0\\n    print(json.dumps({\"value\": 42, \"collections\": collections}))\\n', 'VTTLCache', 'equality']' timed out after 10 seconds\n\n/usr/local/lib/python3.12/subprocess.py:1253: TimeoutExpired"
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-VTTLCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00010337600542698056,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-Cache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00014195800758898258,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-Cache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.03241552200051956,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-Cache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.650000720284879e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-FIFOCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00014033299521543086,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-FIFOCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.029103387001669034,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-FIFOCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 7.2750000981614e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-LFUCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00011995900422334671,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-LFUCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.029452097005560063,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-LFUCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 7.887498941272497e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-LRUCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001229590125149116,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-LRUCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.028479842992965132,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-LRUCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 7.720899884589016e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-TTLCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00013079200289212167,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-TTLCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.028739511006278917,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-TTLCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.608400144614279e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-RRCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001077920023817569,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-RRCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.028679426992312074,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-RRCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.662499799858779e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-VTTLCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00016566699196118861,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-VTTLCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.028729261000989936,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-VTTLCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.458400018047541e-05,
+    "error": null
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "shared_cargo_lock_sha256": "2211bf256ba892c2687c7315fae32c844957f6e2c36912c5c9e04992655f1fec",
+  "complete": true,
+  "purpose": "Build matched native cachebox cores for an owning Python cache-state repair",
+  "started_unix": 1789375096.483775,
+  "cachebox_source": {
+    "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+    "source_revision": "9f775132786c267aa99849a5778e6e975adbfda6",
+    "source_archive_sha256": "7b0c04c5b67e78a6470fab0ec319b7919405863f1f34fd948da68056ccaf7db2"
+  },
+  "image": "sha256:64f83eee2f58777c21ffd35dfb23c630e832e94dfae68d581096a97f46c84b13",
+  "elapsed_seconds": 14.635276079177856
+}

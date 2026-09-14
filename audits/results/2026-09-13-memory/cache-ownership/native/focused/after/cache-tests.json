@@ -1,0 +1,212 @@
+[
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00020729200332425535,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.0008393770112888888,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.325000140350312e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00022012600675225258,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.0006216269975993782,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00021545900381170213,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 5.7249999372288585e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.003273341993917711,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.137500167824328e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001408749958500266,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.002699549004319124,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.0001339590089628473,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001705839968053624,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.0024225480010500178,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00011495799117255956,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00014179199934005737,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.002476339999702759,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00012466699990909547,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00013200099056120962,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.002652548995683901,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00011079199612140656,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00014962500426918268,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.00014650099910795689,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 8.412500028498471e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_threaded_callers_share_results_and_release_evicted_keys",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 3.675000334624201e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_threaded_callers_share_results_and_release_evicted_keys",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.012173823997727595,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_threaded_callers_share_results_and_release_evicted_keys",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.750000127591193e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cleared_old_call_cannot_remove_the_new_pending_owner",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001535840128781274,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cleared_old_call_cannot_remove_the_new_pending_owner",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.0001746680063661188,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cleared_old_call_cannot_remove_the_new_pending_owner",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00011720899783540517,
+    "error": null
+  }
+]

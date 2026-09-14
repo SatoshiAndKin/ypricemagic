@@ -1,0 +1,7 @@
+{
+  "complete": true,
+  "started_unix": 1789374994.400068,
+  "purpose": "Correct the stale root package version in the owning Cargo.lock without changing dependency versions",
+  "image": "sha256:a958771e5fe2315dbdbc855b3bb44ca42573f7635870f838a40a9d8fd9a28d88",
+  "elapsed_seconds": 14.922066926956177
+}

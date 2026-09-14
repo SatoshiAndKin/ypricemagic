@@ -1,0 +1,19 @@
+{
+  "command": [
+    "sh",
+    "/runner/repeat_cache.sh"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789376874.756625,
+  "source_sha": "baa140ec7fa50ce416b82981d77f6d96b6904361",
+  "source_revision": "worktree",
+  "source_archive_sha256": "7b9ba7345c6e48f0226fc1ad497cc8f7a7300464eb614bde3728b87e895c24a4",
+  "image": "sha256:395d57b7f07e7e842104171a48018f8101ba3ffc91495f120b2e0effcc1ae729",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 4.6358160972595215
+}

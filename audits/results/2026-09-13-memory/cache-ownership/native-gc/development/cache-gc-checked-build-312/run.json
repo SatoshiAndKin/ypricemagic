@@ -1,0 +1,12 @@
+{
+  "complete": false,
+  "started_unix": 1789376584.157551,
+  "shared_cargo_lock_sha256": "2211bf256ba892c2687c7315fae32c844957f6e2c36912c5c9e04992655f1fec",
+  "cachebox_source": {
+    "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+    "source_revision": "worktree",
+    "source_archive_sha256": "bb3bedfd107e359c37752938bb146839099565f39ec58f71f4b7a7037de8130f"
+  },
+  "error": "Dependency build failed (1); see /private/tmp/yprice-memory/cache-gc-checked-build-312/build.log",
+  "elapsed_seconds": 3.4639360904693604
+}

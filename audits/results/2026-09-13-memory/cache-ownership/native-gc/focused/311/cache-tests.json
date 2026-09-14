@@ -1,0 +1,653 @@
+[
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00020020900410600007,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.00048766800318844616,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 4.879200423602015e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0002488340105628595,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.0006948369991732761,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00018483400344848633,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 5.34169957973063e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.0039160580054158345,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 4.924999666400254e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00020670999947469682,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.002732761000515893,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00011770900164265186,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00017895900236908346,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.0025167599960695952,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00011266701039858162,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00017029199807439,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.002707470004679635,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00011725100921466947,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00014754199946764857,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.0024482599983457476,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00010375099373050034,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001408340031048283,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.000152374996105209,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.4292001449503e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_threaded_callers_share_results_and_release_evicted_keys",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 4.449998959898949e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_threaded_callers_share_results_and_release_evicted_keys",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.009765707000042312,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_threaded_callers_share_results_and_release_evicted_keys",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.9457990573719144e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cleared_old_call_cannot_remove_the_new_pending_owner",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00018891699437517673,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cleared_old_call_cannot_remove_the_new_pending_owner",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.00015983400226105005,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cleared_old_call_cannot_remove_the_new_pending_owner",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00010370800737291574,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-Cache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00011516700033098459,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-Cache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.02951849599776324,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-Cache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.554200081154704e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-FIFOCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00011370900028850883,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-FIFOCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.028453742008423433,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-FIFOCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.454199319705367e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-LFUCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00010237601236440241,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-LFUCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.02855807500600349,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-LFUCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 7.529198774136603e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-LRUCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00012687500566244125,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-LRUCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.02868336800020188,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-LRUCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 7.445899245794863e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-TTLCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001363339979434386,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-TTLCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.029139536010916345,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-TTLCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.937599391676486e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-RRCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00012724999396596104,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-RRCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.02805507299490273,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-RRCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.645800021942705e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-VTTLCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00012295899796299636,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-VTTLCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.02840536698931828,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[size-VTTLCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.945800512563437e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-Cache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001212920033140108,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-Cache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.028782617999240756,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-Cache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.36670010862872e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-FIFOCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00012070900993421674,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-FIFOCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.028517867001937702,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-FIFOCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.183399818837643e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-LFUCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00010699999984353781,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-LFUCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.028347157989628613,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-LFUCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.620900239795446e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-LRUCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00011837499914690852,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-LRUCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.0283334069972625,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-LRUCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 7.016699237283319e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-TTLCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00011508300667628646,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-TTLCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.02848170000652317,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-TTLCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.6625998695380986e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-RRCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00010287598706781864,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-RRCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.028302114995312877,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-RRCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.658400186803192e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-VTTLCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00011100000119768083,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-VTTLCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.029240869989735074,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[equality-VTTLCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 7.266699685715139e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-Cache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00013408399536274374,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-Cache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.02987312299956102,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-Cache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.86249986756593e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-FIFOCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.000130126005387865,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-FIFOCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.028743700997438282,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-FIFOCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.200000643730164e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-LFUCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00012304200208745897,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-LFUCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.02961503798724152,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-LFUCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.204199886880815e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-LRUCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00012016799882985651,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-LRUCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.029820622003171593,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-LRUCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.579200271517038e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-TTLCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00013191699690651149,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-TTLCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.028429575002519414,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-TTLCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.34169957973063e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-RRCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00010195799404755235,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-RRCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.027901196997845545,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-RRCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.354199674911797e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-VTTLCache]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00010945899703074247,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-VTTLCache]",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.02803832301287912,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_gc_memory.py::test_collection_during_native_operations_and_after_cycle_release[cycle-VTTLCache]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 8.754199370741844e-05,
+    "error": null
+  }
+]

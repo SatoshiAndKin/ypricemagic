@@ -1,0 +1,75 @@
+{
+  "normalization": "Remove trailing line whitespace and extra blank lines at end of copied text reports. Preserve private original reports and record hashes of scrubbed text before and after normalization. Diagnostic content and source references do not change.",
+  "files": [
+    {
+      "file": "pinned-application/312/mypy.txt",
+      "scrubbed_output_sha256": "5850bf405bda9afb4b560b63a0d4fe681a273a1175eac2a7ff29d74a7f3c925e",
+      "normalized_output_sha256": "57e59cbf4769b8b19a82953d1541c0e8fb06b7e21dc479d3dff7b88d628c2fa0"
+    },
+    {
+      "file": "pinned-application/313/mypy.txt",
+      "scrubbed_output_sha256": "ad462595a602db5a62fa8a8e5936cf98b86cf2e07029ee8a7cbae097a78febc7",
+      "normalized_output_sha256": "0c680b55aa15eb1bb755425f36771764fb68cbecbf986a559e3a9c6d3ac51bad"
+    },
+    {
+      "file": "pinned-application/311/mypy.txt",
+      "scrubbed_output_sha256": "43456cd1e2bde8252e45742d759dbfd92b8ad3eecdfbaea12896530ba650bcd6",
+      "normalized_output_sha256": "586122110ebc414ca768c65bc708c29226f6ce32e243762c160c9dfedcee1935"
+    },
+    {
+      "file": "development/cache-census-focused/mypy.txt",
+      "scrubbed_output_sha256": "62075b978d983318707274a6f3bc45fd78947a471b29e365866b2947d0f10644",
+      "normalized_output_sha256": "5515110138050559c3ecde02ba3786cb87c411781f139fee43e2d664a8d7106f"
+    },
+    {
+      "file": "native-gc/development/cache-gc-build-312/output.txt",
+      "scrubbed_output_sha256": "2d228e85ad084c7b80d71e88ccf58ae5bc228af181c78fac7f2d31859474777d",
+      "normalized_output_sha256": "9dc847d0b731b57a1f6852d9a186a996f91413a6391732dbc3055f1d1a93d800"
+    },
+    {
+      "file": "native-gc/development/cache-gc-checked-build-312/output.txt",
+      "scrubbed_output_sha256": "795880e94b8a7c1935464a1d3752973baf64387e39238f39bd304c1d0abb518e",
+      "normalized_output_sha256": "6e59ed2de8956a71af89a5ccbdc3a5ba59256342364cd5b9175a75f6962b0966"
+    },
+    {
+      "file": "native-gc/application/312/mypy.txt",
+      "scrubbed_output_sha256": "5850bf405bda9afb4b560b63a0d4fe681a273a1175eac2a7ff29d74a7f3c925e",
+      "normalized_output_sha256": "57e59cbf4769b8b19a82953d1541c0e8fb06b7e21dc479d3dff7b88d628c2fa0"
+    },
+    {
+      "file": "native-gc/application/313/mypy.txt",
+      "scrubbed_output_sha256": "ad462595a602db5a62fa8a8e5936cf98b86cf2e07029ee8a7cbae097a78febc7",
+      "normalized_output_sha256": "0c680b55aa15eb1bb755425f36771764fb68cbecbf986a559e3a9c6d3ac51bad"
+    },
+    {
+      "file": "native-gc/application/311/mypy.txt",
+      "scrubbed_output_sha256": "43456cd1e2bde8252e45742d759dbfd92b8ad3eecdfbaea12896530ba650bcd6",
+      "normalized_output_sha256": "586122110ebc414ca768c65bc708c29226f6ce32e243762c160c9dfedcee1935"
+    },
+    {
+      "file": "native-gc/build/312/output.txt",
+      "scrubbed_output_sha256": "925328a444ddb0b44c13cc9a3b17241021b0c6ba007ff91a55c0ca2a73a8341b",
+      "normalized_output_sha256": "575d72cc2823ad7572415deb5dfd9584bfeead16f76d97e66c94b082cb2e49c1"
+    },
+    {
+      "file": "native-gc/build/313/output.txt",
+      "scrubbed_output_sha256": "aa733e5e167e2989c68de9adb24d6b47ff793b62610b35ee967c86b2f1e7f12a",
+      "normalized_output_sha256": "4099d48fc80d5db376d79ca8c2127691a7b1a7bed9605727f9617c2bafc242bc"
+    },
+    {
+      "file": "native-gc/build/311/output.txt",
+      "scrubbed_output_sha256": "075be26636df5bd2b4cfa5044ffd80e59a9ca27d2153ef6458b1ad8c456fa62d",
+      "normalized_output_sha256": "e9fb79ac82e58d9d8f6907e72487ccabe75c1511651aec7da00cdd8c2547db7b"
+    },
+    {
+      "file": "application/cache-census-types-final/mypy.txt",
+      "scrubbed_output_sha256": "5850bf405bda9afb4b560b63a0d4fe681a273a1175eac2a7ff29d74a7f3c925e",
+      "normalized_output_sha256": "57e59cbf4769b8b19a82953d1541c0e8fb06b7e21dc479d3dff7b88d628c2fa0"
+    },
+    {
+      "file": "application/cache-application-focused/mypy.txt",
+      "scrubbed_output_sha256": "5850bf405bda9afb4b560b63a0d4fe681a273a1175eac2a7ff29d74a7f3c925e",
+      "normalized_output_sha256": "57e59cbf4769b8b19a82953d1541c0e8fb06b7e21dc479d3dff7b88d628c2fa0"
+    }
+  ]
+}

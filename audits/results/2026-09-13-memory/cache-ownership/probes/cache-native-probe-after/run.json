@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python",
+    "/runner/cache_owner_probe.py"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789375169.953578,
+  "source_sha": "baa140ec7fa50ce416b82981d77f6d96b6904361",
+  "source_revision": "worktree",
+  "source_archive_sha256": "7b9ba7345c6e48f0226fc1ad497cc8f7a7300464eb614bde3728b87e895c24a4",
+  "image": "sha256:df85736e29cab62c9bb220e6ac00291b1b6527aac82f0ef03b82a11f88203688",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 2.4018728733062744
+}

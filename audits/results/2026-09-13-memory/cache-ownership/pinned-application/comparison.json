@@ -1,0 +1,200 @@
+{
+  "312": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/focused.py && python -m mypy > /reports/mypy.txt 2>&1"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789377885.013168,
+      "source_sha": "baa140ec7fa50ce416b82981d77f6d96b6904361",
+      "source_revision": "worktree",
+      "source_archive_sha256": "32240549d52f5b7141e5c8e865ce6200d7d9d13f1cbcddcc93f37ede7002f18a",
+      "image": "sha256:90c9e64a153fd4543033071de3e031cec8d704c24be2f991bee1273fb04a08b0",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 228.6390368938446
+    },
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 270,
+        "call:passed": 270,
+        "teardown:passed": 270
+      },
+      "collected": 270
+    },
+    "types": {
+      "before_rendered_errors": 1917,
+      "after_rendered_errors": 1917,
+      "raw_added": [],
+      "raw_removed": [],
+      "semantic_added": [],
+      "semantic_removed": []
+    },
+    "dependency_changes": {
+      "added": [
+        "cachebox @ git+https://github.com/SatoshiAndKin/cachebox.git@10be25afe46afb32c8135db4d1b8e2d94431b9c1"
+      ],
+      "removed": [
+        "cachebox==5.2.3"
+      ]
+    },
+    "source_proof": {
+      "source": {
+        "url": "https://github.com/SatoshiAndKin/cachebox.git",
+        "vcs_info": {
+          "commit_id": "10be25afe46afb32c8135db4d1b8e2d94431b9c1",
+          "requested_revision": "10be25afe46afb32c8135db4d1b8e2d94431b9c1",
+          "vcs": "git"
+        }
+      },
+      "version": "5.2.3",
+      "core": "/usr/local/lib/python3.12/site-packages/cachebox/_core.cpython-312-aarch64-linux-gnu.so",
+      "core_sha256": "47e5f08c987fa348ae8afd80f49f02e358ceb67afb9f2c9e39b0a27eaf74b0ff",
+      "python_sources": {
+        "__init__.py": "23ddf2fa12d0297b0422599dd0a019e8255f0ea2aa71616fca225d0ec31472f2",
+        "_cachebox.py": "e9c4551e9049e76a3806b100a18eaff04396cf10e876e4d8e1b79e272d5e6fda",
+        "utils.py": "2178f896b979e528b9c1f5c0e265c8d702fe13f58b8497a3663c41405e01c63c"
+      }
+    },
+    "peak_bytes": 1176743936
+  },
+  "311": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/focused.py && python -m mypy > /reports/mypy.txt 2>&1"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789378113.706843,
+      "source_sha": "baa140ec7fa50ce416b82981d77f6d96b6904361",
+      "source_revision": "worktree",
+      "source_archive_sha256": "32240549d52f5b7141e5c8e865ce6200d7d9d13f1cbcddcc93f37ede7002f18a",
+      "image": "sha256:822612ab4817cd020717f6771a3d78898b91c287c21b5ae8563c31dd60dcdd16",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 250.57731008529663
+    },
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 270,
+        "call:passed": 270,
+        "teardown:passed": 270
+      },
+      "collected": 270
+    },
+    "types": {
+      "before_rendered_errors": 1917,
+      "after_rendered_errors": 1917,
+      "raw_added": [],
+      "raw_removed": [],
+      "semantic_added": [],
+      "semantic_removed": []
+    },
+    "dependency_changes": {
+      "added": [
+        "cachebox @ git+https://github.com/SatoshiAndKin/cachebox.git@10be25afe46afb32c8135db4d1b8e2d94431b9c1"
+      ],
+      "removed": [
+        "cachebox==5.2.3"
+      ]
+    },
+    "source_proof": {
+      "source": {
+        "url": "https://github.com/SatoshiAndKin/cachebox.git",
+        "vcs_info": {
+          "commit_id": "10be25afe46afb32c8135db4d1b8e2d94431b9c1",
+          "requested_revision": "10be25afe46afb32c8135db4d1b8e2d94431b9c1",
+          "vcs": "git"
+        }
+      },
+      "version": "5.2.3",
+      "core": "/usr/local/lib/python3.11/site-packages/cachebox/_core.cpython-311-aarch64-linux-gnu.so",
+      "core_sha256": "e5b69f4fdef357bfe3427c53a91e47889a9db7255f82e96857335df1196386ca",
+      "python_sources": {
+        "__init__.py": "23ddf2fa12d0297b0422599dd0a019e8255f0ea2aa71616fca225d0ec31472f2",
+        "_cachebox.py": "e9c4551e9049e76a3806b100a18eaff04396cf10e876e4d8e1b79e272d5e6fda",
+        "utils.py": "2178f896b979e528b9c1f5c0e265c8d702fe13f58b8497a3663c41405e01c63c"
+      }
+    },
+    "peak_bytes": 1127157760
+  },
+  "313": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/focused.py && python -m mypy > /reports/mypy.txt 2>&1"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789378364.339329,
+      "source_sha": "baa140ec7fa50ce416b82981d77f6d96b6904361",
+      "source_revision": "worktree",
+      "source_archive_sha256": "32240549d52f5b7141e5c8e865ce6200d7d9d13f1cbcddcc93f37ede7002f18a",
+      "image": "sha256:8c2e692f5ce727d2b54ddc25cff02c407e2cab0255dae5f23319b5cb761653e3",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 237.98511600494385
+    },
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 270,
+        "call:passed": 270,
+        "teardown:passed": 270
+      },
+      "collected": 270
+    },
+    "types": {
+      "before_rendered_errors": 1917,
+      "after_rendered_errors": 1917,
+      "raw_added": [],
+      "raw_removed": [],
+      "semantic_added": [],
+      "semantic_removed": []
+    },
+    "dependency_changes": {
+      "added": [
+        "cachebox @ git+https://github.com/SatoshiAndKin/cachebox.git@10be25afe46afb32c8135db4d1b8e2d94431b9c1"
+      ],
+      "removed": [
+        "cachebox==5.2.3"
+      ]
+    },
+    "source_proof": {
+      "source": {
+        "url": "https://github.com/SatoshiAndKin/cachebox.git",
+        "vcs_info": {
+          "commit_id": "10be25afe46afb32c8135db4d1b8e2d94431b9c1",
+          "requested_revision": "10be25afe46afb32c8135db4d1b8e2d94431b9c1",
+          "vcs": "git"
+        }
+      },
+      "version": "5.2.3",
+      "core": "/usr/local/lib/python3.13/site-packages/cachebox/_core.cpython-313-aarch64-linux-gnu.so",
+      "core_sha256": "4d366e9537f07795164b8438f131fed9e13dc8a5a4bab7a99bcfda305b84fbd1",
+      "python_sources": {
+        "__init__.py": "23ddf2fa12d0297b0422599dd0a019e8255f0ea2aa71616fca225d0ec31472f2",
+        "_cachebox.py": "e9c4551e9049e76a3806b100a18eaff04396cf10e876e4d8e1b79e272d5e6fda",
+        "utils.py": "2178f896b979e528b9c1f5c0e265c8d702fe13f58b8497a3663c41405e01c63c"
+      }
+    },
+    "peak_bytes": 1170767872
+  }
+}

@@ -1,0 +1,353 @@
+{
+  "312": {
+    "build": {
+      "complete": true,
+      "started_unix": 1789376652.670028,
+      "shared_cargo_lock_sha256": "2211bf256ba892c2687c7315fae32c844957f6e2c36912c5c9e04992655f1fec",
+      "cachebox_source": {
+        "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+        "source_revision": "worktree",
+        "source_archive_sha256": "c24c6133260d2ddf15b1fc0d2002b082b8a8150c881a38593de6950b28aa80bb"
+      },
+      "image": "sha256:395d57b7f07e7e842104171a48018f8101ba3ffc91495f120b2e0effcc1ae729",
+      "elapsed_seconds": 18.037055015563965
+    },
+    "focused": {
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "python -m venv /tmp/cache-tests-env && /tmp/cache-tests-env/bin/python -m pip install --no-deps -r /runner/cache-test-dependencies.lock /opt/validation/cachebox-wheels/*.whl && /tmp/cache-tests-env/bin/python /runner/cache_dependency_tests.py"
+        ],
+        "docker_context": "colima-ypricemagic",
+        "builder": "ypricemagic-validation-55871f24db8c",
+        "complete": true,
+        "started_unix": 1789376670.7613592,
+        "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+        "source_revision": "worktree",
+        "source_archive_sha256": "c24c6133260d2ddf15b1fc0d2002b082b8a8150c881a38593de6950b28aa80bb",
+        "image": "sha256:395d57b7f07e7e842104171a48018f8101ba3ffc91495f120b2e0effcc1ae729",
+        "exit_code": 0,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 4.8607118129730225
+      },
+      "summary": {
+        "collected": 31,
+        "exit_code": 0
+      },
+      "installed": {
+        "version": "5.2.3",
+        "core": "/tmp/cache-tests-env/lib/python3.12/site-packages/cachebox/_core.cpython-312-aarch64-linux-gnu.so",
+        "core_sha256": "47e5f08c987fa348ae8afd80f49f02e358ceb67afb9f2c9e39b0a27eaf74b0ff",
+        "python_sources": {
+          "__init__.py": "23ddf2fa12d0297b0422599dd0a019e8255f0ea2aa71616fca225d0ec31472f2",
+          "_cachebox.py": "e9c4551e9049e76a3806b100a18eaff04396cf10e876e4d8e1b79e272d5e6fda",
+          "utils.py": "2178f896b979e528b9c1f5c0e265c8d702fe13f58b8497a3663c41405e01c63c"
+        }
+      }
+    },
+    "full": {
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "python -m venv /tmp/cache-tests-env && /tmp/cache-tests-env/bin/python -m pip install --no-deps -r /runner/cache-test-dependencies.lock /opt/validation/cachebox-wheels/*.whl && /tmp/cache-tests-env/bin/python /runner/cache_dependency_tests.py --full"
+        ],
+        "docker_context": "colima-ypricemagic",
+        "builder": "ypricemagic-validation-55871f24db8c",
+        "complete": true,
+        "started_unix": 1789376675.668204,
+        "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+        "source_revision": "worktree",
+        "source_archive_sha256": "c24c6133260d2ddf15b1fc0d2002b082b8a8150c881a38593de6950b28aa80bb",
+        "image": "sha256:395d57b7f07e7e842104171a48018f8101ba3ffc91495f120b2e0effcc1ae729",
+        "exit_code": 0,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 19.854960918426514
+      },
+      "summary": {
+        "collected": 303,
+        "exit_code": 0
+      },
+      "installed": {
+        "version": "5.2.3",
+        "core": "/tmp/cache-tests-env/lib/python3.12/site-packages/cachebox/_core.cpython-312-aarch64-linux-gnu.so",
+        "core_sha256": "47e5f08c987fa348ae8afd80f49f02e358ceb67afb9f2c9e39b0a27eaf74b0ff",
+        "python_sources": {
+          "__init__.py": "23ddf2fa12d0297b0422599dd0a019e8255f0ea2aa71616fca225d0ec31472f2",
+          "_cachebox.py": "e9c4551e9049e76a3806b100a18eaff04396cf10e876e4d8e1b79e272d5e6fda",
+          "utils.py": "2178f896b979e528b9c1f5c0e265c8d702fe13f58b8497a3663c41405e01c63c"
+        }
+      }
+    },
+    "application": {
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/focused.py && python -m mypy > /reports/mypy.txt 2>&1"
+        ],
+        "docker_context": "colima-ypricemagic",
+        "builder": "ypricemagic-validation-55871f24db8c",
+        "complete": true,
+        "started_unix": 1789376695.569261,
+        "source_sha": "baa140ec7fa50ce416b82981d77f6d96b6904361",
+        "source_revision": "worktree",
+        "source_archive_sha256": "7b9ba7345c6e48f0226fc1ad497cc8f7a7300464eb614bde3728b87e895c24a4",
+        "image": "sha256:395d57b7f07e7e842104171a48018f8101ba3ffc91495f120b2e0effcc1ae729",
+        "exit_code": 1,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 179.11604404449463
+      },
+      "summary": {
+        "exit_code": 0,
+        "counts": {
+          "setup:passed": 270,
+          "call:passed": 270,
+          "teardown:passed": 270
+        },
+        "collected": 270
+      }
+    }
+  },
+  "311": {
+    "build": {
+      "complete": true,
+      "started_unix": 1789376879.472944,
+      "shared_cargo_lock_sha256": "2211bf256ba892c2687c7315fae32c844957f6e2c36912c5c9e04992655f1fec",
+      "cachebox_source": {
+        "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+        "source_revision": "worktree",
+        "source_archive_sha256": "c24c6133260d2ddf15b1fc0d2002b082b8a8150c881a38593de6950b28aa80bb"
+      },
+      "image": "sha256:670e1c8d61dd3baa8dea1e13fbe61a162edaa3e4aa7430babf20c9750c547fa4",
+      "elapsed_seconds": 17.260436058044434
+    },
+    "focused": {
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "python -m venv /tmp/cache-tests-env && /tmp/cache-tests-env/bin/python -m pip install --no-deps -r /runner/cache-test-dependencies.lock /opt/validation/cachebox-wheels/*.whl && /tmp/cache-tests-env/bin/python /runner/cache_dependency_tests.py"
+        ],
+        "docker_context": "colima-ypricemagic",
+        "builder": "ypricemagic-validation-55871f24db8c",
+        "complete": true,
+        "started_unix": 1789376896.7884748,
+        "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+        "source_revision": "worktree",
+        "source_archive_sha256": "c24c6133260d2ddf15b1fc0d2002b082b8a8150c881a38593de6950b28aa80bb",
+        "image": "sha256:670e1c8d61dd3baa8dea1e13fbe61a162edaa3e4aa7430babf20c9750c547fa4",
+        "exit_code": 0,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 4.945995092391968
+      },
+      "summary": {
+        "collected": 31,
+        "exit_code": 0
+      },
+      "installed": {
+        "version": "5.2.3",
+        "core": "/tmp/cache-tests-env/lib/python3.11/site-packages/cachebox/_core.cpython-311-aarch64-linux-gnu.so",
+        "core_sha256": "e5b69f4fdef357bfe3427c53a91e47889a9db7255f82e96857335df1196386ca",
+        "python_sources": {
+          "__init__.py": "23ddf2fa12d0297b0422599dd0a019e8255f0ea2aa71616fca225d0ec31472f2",
+          "_cachebox.py": "e9c4551e9049e76a3806b100a18eaff04396cf10e876e4d8e1b79e272d5e6fda",
+          "utils.py": "2178f896b979e528b9c1f5c0e265c8d702fe13f58b8497a3663c41405e01c63c"
+        }
+      }
+    },
+    "full": {
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "python -m venv /tmp/cache-tests-env && /tmp/cache-tests-env/bin/python -m pip install --no-deps -r /runner/cache-test-dependencies.lock /opt/validation/cachebox-wheels/*.whl && /tmp/cache-tests-env/bin/python /runner/cache_dependency_tests.py --full"
+        ],
+        "docker_context": "colima-ypricemagic",
+        "builder": "ypricemagic-validation-55871f24db8c",
+        "complete": true,
+        "started_unix": 1789376901.782026,
+        "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+        "source_revision": "worktree",
+        "source_archive_sha256": "c24c6133260d2ddf15b1fc0d2002b082b8a8150c881a38593de6950b28aa80bb",
+        "image": "sha256:670e1c8d61dd3baa8dea1e13fbe61a162edaa3e4aa7430babf20c9750c547fa4",
+        "exit_code": 0,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 20.97012495994568
+      },
+      "summary": {
+        "collected": 303,
+        "exit_code": 0
+      },
+      "installed": {
+        "version": "5.2.3",
+        "core": "/tmp/cache-tests-env/lib/python3.11/site-packages/cachebox/_core.cpython-311-aarch64-linux-gnu.so",
+        "core_sha256": "e5b69f4fdef357bfe3427c53a91e47889a9db7255f82e96857335df1196386ca",
+        "python_sources": {
+          "__init__.py": "23ddf2fa12d0297b0422599dd0a019e8255f0ea2aa71616fca225d0ec31472f2",
+          "_cachebox.py": "e9c4551e9049e76a3806b100a18eaff04396cf10e876e4d8e1b79e272d5e6fda",
+          "utils.py": "2178f896b979e528b9c1f5c0e265c8d702fe13f58b8497a3663c41405e01c63c"
+        }
+      }
+    },
+    "application": {
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/focused.py && python -m mypy > /reports/mypy.txt 2>&1"
+        ],
+        "docker_context": "colima-ypricemagic",
+        "builder": "ypricemagic-validation-55871f24db8c",
+        "complete": true,
+        "started_unix": 1789376922.7996402,
+        "source_sha": "baa140ec7fa50ce416b82981d77f6d96b6904361",
+        "source_revision": "worktree",
+        "source_archive_sha256": "7b9ba7345c6e48f0226fc1ad497cc8f7a7300464eb614bde3728b87e895c24a4",
+        "image": "sha256:670e1c8d61dd3baa8dea1e13fbe61a162edaa3e4aa7430babf20c9750c547fa4",
+        "exit_code": 1,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 180.2888307571411
+      },
+      "summary": {
+        "exit_code": 0,
+        "counts": {
+          "setup:passed": 270,
+          "call:passed": 270,
+          "teardown:passed": 270
+        },
+        "collected": 270
+      }
+    }
+  },
+  "313": {
+    "build": {
+      "complete": true,
+      "started_unix": 1789377103.158676,
+      "shared_cargo_lock_sha256": "2211bf256ba892c2687c7315fae32c844957f6e2c36912c5c9e04992655f1fec",
+      "cachebox_source": {
+        "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+        "source_revision": "worktree",
+        "source_archive_sha256": "c24c6133260d2ddf15b1fc0d2002b082b8a8150c881a38593de6950b28aa80bb"
+      },
+      "image": "sha256:fe3f877f2c0b6873c70b3cf4250b692761e50f41bc222f4f459e69fdde0edcde",
+      "elapsed_seconds": 33.737874031066895
+    },
+    "focused": {
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "python -m venv /tmp/cache-tests-env && /tmp/cache-tests-env/bin/python -m pip install --no-deps -r /runner/cache-test-dependencies.lock /opt/validation/cachebox-wheels/*.whl && /tmp/cache-tests-env/bin/python /runner/cache_dependency_tests.py"
+        ],
+        "docker_context": "colima-ypricemagic",
+        "builder": "ypricemagic-validation-55871f24db8c",
+        "complete": true,
+        "started_unix": 1789377136.970243,
+        "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+        "source_revision": "worktree",
+        "source_archive_sha256": "c24c6133260d2ddf15b1fc0d2002b082b8a8150c881a38593de6950b28aa80bb",
+        "image": "sha256:fe3f877f2c0b6873c70b3cf4250b692761e50f41bc222f4f459e69fdde0edcde",
+        "exit_code": 0,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 4.909780025482178
+      },
+      "summary": {
+        "collected": 31,
+        "exit_code": 0
+      },
+      "installed": {
+        "version": "5.2.3",
+        "core": "/tmp/cache-tests-env/lib/python3.13/site-packages/cachebox/_core.cpython-313-aarch64-linux-gnu.so",
+        "core_sha256": "4d366e9537f07795164b8438f131fed9e13dc8a5a4bab7a99bcfda305b84fbd1",
+        "python_sources": {
+          "__init__.py": "23ddf2fa12d0297b0422599dd0a019e8255f0ea2aa71616fca225d0ec31472f2",
+          "_cachebox.py": "e9c4551e9049e76a3806b100a18eaff04396cf10e876e4d8e1b79e272d5e6fda",
+          "utils.py": "2178f896b979e528b9c1f5c0e265c8d702fe13f58b8497a3663c41405e01c63c"
+        }
+      }
+    },
+    "full": {
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "python -m venv /tmp/cache-tests-env && /tmp/cache-tests-env/bin/python -m pip install --no-deps -r /runner/cache-test-dependencies.lock /opt/validation/cachebox-wheels/*.whl && /tmp/cache-tests-env/bin/python /runner/cache_dependency_tests.py --full"
+        ],
+        "docker_context": "colima-ypricemagic",
+        "builder": "ypricemagic-validation-55871f24db8c",
+        "complete": true,
+        "started_unix": 1789377141.927135,
+        "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+        "source_revision": "worktree",
+        "source_archive_sha256": "c24c6133260d2ddf15b1fc0d2002b082b8a8150c881a38593de6950b28aa80bb",
+        "image": "sha256:fe3f877f2c0b6873c70b3cf4250b692761e50f41bc222f4f459e69fdde0edcde",
+        "exit_code": 0,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 19.852225065231323
+      },
+      "summary": {
+        "collected": 303,
+        "exit_code": 0
+      },
+      "installed": {
+        "version": "5.2.3",
+        "core": "/tmp/cache-tests-env/lib/python3.13/site-packages/cachebox/_core.cpython-313-aarch64-linux-gnu.so",
+        "core_sha256": "4d366e9537f07795164b8438f131fed9e13dc8a5a4bab7a99bcfda305b84fbd1",
+        "python_sources": {
+          "__init__.py": "23ddf2fa12d0297b0422599dd0a019e8255f0ea2aa71616fca225d0ec31472f2",
+          "_cachebox.py": "e9c4551e9049e76a3806b100a18eaff04396cf10e876e4d8e1b79e272d5e6fda",
+          "utils.py": "2178f896b979e528b9c1f5c0e265c8d702fe13f58b8497a3663c41405e01c63c"
+        }
+      }
+    },
+    "application": {
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/focused.py && python -m mypy > /reports/mypy.txt 2>&1"
+        ],
+        "docker_context": "colima-ypricemagic",
+        "builder": "ypricemagic-validation-55871f24db8c",
+        "complete": true,
+        "started_unix": 1789377161.825419,
+        "source_sha": "baa140ec7fa50ce416b82981d77f6d96b6904361",
+        "source_revision": "worktree",
+        "source_archive_sha256": "7b9ba7345c6e48f0226fc1ad497cc8f7a7300464eb614bde3728b87e895c24a4",
+        "image": "sha256:fe3f877f2c0b6873c70b3cf4250b692761e50f41bc222f4f459e69fdde0edcde",
+        "exit_code": 1,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 195.26693105697632
+      },
+      "summary": {
+        "exit_code": 0,
+        "counts": {
+          "setup:passed": 270,
+          "call:passed": 270,
+          "teardown:passed": 270
+        },
+        "collected": 270
+      }
+    }
+  }
+}

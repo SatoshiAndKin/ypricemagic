@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m venv /tmp/cache-tests-env && /tmp/cache-tests-env/bin/python -m pip install --no-deps -r /runner/cache-test-dependencies.lock -r /runner/cache-baseline-dependencies.lock && /tmp/cache-tests-env/bin/python /runner/cache_dependency_tests.py"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789372204.8251488,
+  "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+  "source_revision": "worktree",
+  "source_archive_sha256": "e605e150ab623c2b0b4064805740171b8f7d7aa646b4c1e7b09c44225f8fd947",
+  "image": "sha256:0fb5880df36df7c1c86b5772a5cb426fca4770df349007a069bea09bd4b8529d",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 3.93463134765625
+}

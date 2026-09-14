@@ -1,0 +1,153 @@
+#0 building with "ypricemagic-validation-55871f24db8c" instance using docker-container driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.38kB done
+#1 DONE 0.0s
+
+#2 resolve image config for docker-image://docker.io/docker/dockerfile:1
+#2 DONE 0.5s
+
+#3 docker-image://docker.io/docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32
+#3 resolve docker.io/docker/dockerfile:1@sha256:ecfaec9ed6d810b56388c508f4121597bfbba70d41a6dfeee4d8cad5f295fc32 done
+#3 CACHED
+
+#4 [internal] load metadata for docker.io/library/python:3.11-slim-bookworm
+#4 DONE 0.3s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [stage-0  1/19] FROM docker.io/library/python:3.11-slim-bookworm@sha256:528257d48c1da0dcecc2e725d1ae34498d60c965f1241e39cd6a85a8859bdf84
+#6 resolve docker.io/library/python:3.11-slim-bookworm@sha256:528257d48c1da0dcecc2e725d1ae34498d60c965f1241e39cd6a85a8859bdf84 done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 505.14kB done
+#7 DONE 0.0s
+
+#8 [stage-0  4/19] COPY requirements.txt requirements-dev.txt requirements-build.txt constraints.txt ./
+#8 CACHED
+
+#9 [stage-0  5/19] RUN --mount=type=cache,target=/root/.cache/pip     python -m pip install -c constraints.txt -r requirements-build.txt -r requirements-dev.txt &&     python -m pip freeze --all > dependencies.txt && python -m pip check
+#9 CACHED
+
+#10 [stage-0  6/19] WORKDIR /work
+#10 CACHED
+
+#11 [stage-0  3/19] WORKDIR /opt/validation
+#11 CACHED
+
+#12 [stage-0  7/19] RUN --mount=type=cache,target=/var/cache/apt,sharing=locked apt-get update && apt-get install -y --no-install-recommends curl ca-certificates
+#12 CACHED
+
+#13 [stage-0  2/19] RUN --mount=type=cache,target=/var/cache/apt,sharing=locked     --mount=type=cache,target=/var/lib/apt,sharing=locked     apt-get update && apt-get install -y --no-install-recommends build-essential git libgmp-dev
+#13 CACHED
+
+#14 [stage-0  8/19] RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/rustup.sh && sh /tmp/rustup.sh -y --profile minimal --default-toolchain 1.98.1 --no-modify-path
+#14 CACHED
+
+#15 [stage-0  9/19] RUN . /root/.cargo/env && rustup component add rustfmt clippy --toolchain 1.98.1
+#15 0.059 info: downloading 2 components
+#15 DONE 0.7s
+
+#16 [stage-0 10/19] COPY cache-build-dependencies.lock /opt/validation/cache-build-dependencies.lock
+#16 DONE 0.0s
+
+#17 [stage-0 11/19] RUN python -m pip install --no-deps -r /opt/validation/cache-build-dependencies.lock
+#17 0.312 Collecting maturin==1.15.0 (from -r /opt/validation/cache-build-dependencies.lock (line 2))
+#17 0.360   Downloading maturin-1.15.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.musllinux_1_1_aarch64.whl.metadata (17 kB)
+#17 0.372 Downloading maturin-1.15.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.musllinux_1_1_aarch64.whl (10.1 MB)
+#17 0.516    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.1/10.1 MB 72.1 MB/s eta 0:00:00
+#17 0.522 Installing collected packages: maturin
+#17 0.598 Successfully installed maturin-1.15.0
+#17 0.599 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#17 0.663
+#17 0.663 [notice] A new release of pip is available: 24.0 -> 26.2.1
+#17 0.663 [notice] To update, run: pip install --upgrade pip
+#17 DONE 0.7s
+
+#18 [stage-0 12/19] COPY cachebox-source.tar /opt/validation/cachebox-source.tar
+#18 DONE 0.0s
+
+#19 [stage-0 13/19] RUN mkdir /opt/validation/cachebox-source && tar -xf /opt/validation/cachebox-source.tar -C /opt/validation/cachebox-source
+#19 DONE 0.0s
+
+#20 [stage-0 14/19] COPY cachebox-Cargo.lock /opt/validation/cachebox-source/Cargo.lock
+#20 DONE 0.0s
+
+#21 [stage-0 15/19] WORKDIR /opt/validation/cachebox-source
+#21 DONE 0.0s
+
+#22 [stage-0 16/19] RUN --mount=type=cache,target=/root/.cargo/registry,sharing=locked --mount=type=cache,target=/opt/validation/cachebox-target,sharing=locked . /root/.cargo/env && CARGO_TARGET_DIR=/opt/validation/cachebox-target CARGO_BUILD_JOBS=4 python -m maturin build --release --locked --interpreter python --out /opt/validation/cachebox-wheels
+#22 0.071 📦 Including license file `LICENSE`
+#22 0.071 🍹 Building a mixed python/rust project
+#22 0.096 🐍 Found CPython 3.11 at /usr/local/bin/python
+#22 0.096 🔗 Found pyo3 bindings
+#22 0.096 📡 Using build options features from pyproject.toml
+#22 0.114    Compiling pyo3-build-config v0.27.1
+#22 0.288    Compiling pyo3-ffi v0.27.1
+#22 0.288    Compiling pyo3-macros-backend v0.27.1
+#22 0.288    Compiling pyo3 v0.27.1
+#22 0.288    Compiling cachebox v5.2.3 (/opt/validation/cachebox-source)
+#22 1.153    Compiling pyo3-macros v0.27.1
+#22 7.570     Finished `release` profile [optimized] target(s) in 7.46s
+#22 7.771 📦 Built wheel for CPython 3.11 to /opt/validation/cachebox-wheels/cachebox-5.2.3-cp311-cp311-manylinux_2_34_aarch64.whl
+#22 DONE 7.8s
+
+#23 [stage-0 17/19] RUN --mount=type=cache,target=/root/.cargo/registry,sharing=locked --mount=type=cache,target=/opt/validation/cachebox-target,sharing=locked . /root/.cargo/env && export CARGO_TARGET_DIR=/opt/validation/cachebox-target CARGO_BUILD_JOBS=4 && cargo fmt --all -- --check && cargo check --locked && make test-rs
+#23 0.089    Compiling cachebox v5.2.3 (/opt/validation/cachebox-source)
+#23 0.221     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+#23 0.225 cargo clippy
+#23 0.259    Compiling cachebox v5.2.3 (/opt/validation/cachebox-source)
+#23 0.348 warning: statics have by default a `'static` lifetime
+#23 0.348    --> src/common.rs:185:33
+#23 0.348     |
+#23 0.348 185 |     static SIZEOF_METHOD_NAME: &'static std::ffi::CStr = c"__sizeof__";
+#23 0.348     |                                -^^^^^^^--------------- help: consider removing `'static`: `&std::ffi::CStr`
+#23 0.348     |
+#23 0.348     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_static_lifetimes
+#23 0.348     = note: `#[warn(clippy::redundant_static_lifetimes)]` on by default
+#23 0.348
+#23 0.450 warning: `cachebox` (lib) generated 1 warning (run `cargo clippy --fix --lib -p cachebox -- ` to apply 1 suggestion)
+#23 0.450     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.21s
+#23 0.453 cargo test -- --nocapture
+#23 0.481    Compiling cachebox v5.2.3 (/opt/validation/cachebox-source)
+#23 0.908     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.45s
+#23 0.909      Running unittests src/lib.rs (/opt/validation/cachebox-target/debug/deps/cachebox-15f2795ca210eb65)
+#23 0.909
+#23 0.909 running 0 tests
+#23 0.909
+#23 0.909 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+#23 0.909
+#23 DONE 0.9s
+
+#24 [stage-0 18/19] RUN python -m pip install --no-deps --force-reinstall /opt/validation/cachebox-wheels/*.whl && python -m pip check && python -m pip freeze --all > /opt/validation/dependencies.txt
+#24 0.177 Processing /opt/validation/cachebox-wheels/cachebox-5.2.3-cp311-cp311-manylinux_2_34_aarch64.whl
+#24 0.179 Installing collected packages: cachebox
+#24 0.179   Attempting uninstall: cachebox
+#24 0.186     Found existing installation: cachebox 5.2.3
+#24 0.187     Uninstalling cachebox-5.2.3:
+#24 0.196       Successfully uninstalled cachebox-5.2.3
+#24 0.208 Successfully installed cachebox-5.2.3
+#24 0.209 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+#24 0.213
+#24 0.213 [notice] A new release of pip is available: 24.0 -> 26.2.1
+#24 0.213 [notice] To update, run: pip install --upgrade pip
+#24 0.568 No broken requirements found.
+#24 DONE 0.8s
+
+#25 [stage-0 19/19] WORKDIR /work
+#25 DONE 0.0s
+
+#26 exporting to oci image format
+#26 exporting layers
+#26 exporting layers 0.5s done
+#26 exporting manifest sha256:670e1c8d61dd3baa8dea1e13fbe61a162edaa3e4aa7430babf20c9750c547fa4 done
+#26 exporting config sha256:4c2a45a7072819698ee467de19d88fa069edec6b4a76830e7798d74cf6601cde done
+#26 sending tarball
+#26 sending tarball 2.8s done
+#26 DONE 3.4s
+
+#27 importing to docker
+#27 DONE 0.0s

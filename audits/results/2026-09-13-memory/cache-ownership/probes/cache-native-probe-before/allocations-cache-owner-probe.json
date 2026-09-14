@@ -1,0 +1,317 @@
+{
+  "objects": {
+    "_asyncio.Task": 513,
+    "logging.Logger": 2,
+    "_asyncio.Future": 1,
+    "logging.Formatter": 1,
+    "logging.PercentStyle": 1,
+    "logging._StderrHandler": 1,
+    "logging.RootLogger": 1,
+    "logging.Manager": 1,
+    "logging.PlaceHolder": 1
+  },
+  "tasks_by_coroutine": {
+    "main.<locals>.cached_integer:done": 512,
+    "main:pending": 1
+  },
+  "historical_buffer_entries": {},
+  "queued_database_operations": {},
+  "logging": {},
+  "cached_property_state": {},
+  "async_caches": [
+    {
+      "function": "__main__.main.<locals>.cached_integer",
+      "original_function": "__main__.main.<locals>.cached_integer",
+      "hits": 512,
+      "misses": 512,
+      "maxsize": null,
+      "entries": 512,
+      "tasks": {
+        "done": 512
+      },
+      "result_types": {
+        "builtins.int": 512
+      }
+    }
+  ],
+  "cachebox_caches": [
+    {
+      "function": "__main__.main.<locals>.sync_value",
+      "hits": 512,
+      "misses": 512,
+      "entries": 32,
+      "locks": 512,
+      "idle_locks": 512,
+      "exceptions": 0
+    },
+    {
+      "function": "__main__.main.<locals>.async_value",
+      "hits": 512,
+      "misses": 512,
+      "entries": 32,
+      "locks": 512,
+      "idle_locks": 512,
+      "exceptions": 0
+    }
+  ],
+  "pony_adapted_sql_cache": {
+    "entries": 0,
+    "query_characters": 0,
+    "adapted_query_characters": 0
+  },
+  "python_current_bytes": 17665535,
+  "python_peak_bytes": 17888593,
+  "rss_peak_bytes": 44433408,
+  "top_allocations": [
+    {
+      "traceback": "/runner/cache_owner_probe.py:18",
+      "bytes": 16811008,
+      "count": 1024
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/asyncio/base_events.py:457",
+      "bytes": 138268,
+      "count": 1281
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:254",
+      "bytes": 94208,
+      "count": 512
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:180",
+      "bytes": 89184,
+      "count": 2048
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/_weakrefset.py:88",
+      "bytes": 73728,
+      "count": 513
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:258",
+      "bytes": 48016,
+      "count": 1024
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:53",
+      "bytes": 45120,
+      "count": 513
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:50",
+      "bytes": 45120,
+      "count": 513
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:259",
+      "bytes": 43024,
+      "count": 514
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:316",
+      "bytes": 43024,
+      "count": 513
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:49",
+      "bytes": 42608,
+      "count": 1024
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:52",
+      "bytes": 42480,
+      "count": 1024
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:382",
+      "bytes": 24736,
+      "count": 513
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:54",
+      "bytes": 24000,
+      "count": 500
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:51",
+      "bytes": 23904,
+      "count": 498
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/_cachebox.py:941",
+      "bytes": 22593,
+      "count": 443
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:412",
+      "bytes": 18448,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:42",
+      "bytes": 15840,
+      "count": 495
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:48",
+      "bytes": 8160,
+      "count": 255
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:38",
+      "bytes": 1024,
+      "count": 32
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:32",
+      "bytes": 1024,
+      "count": 32
+    },
+    {
+      "traceback": "/runner/profile_state.py:86",
+      "bytes": 577,
+      "count": 10
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/asyncio/base_events.py:822",
+      "bytes": 528,
+      "count": 1
+    },
+    {
+      "traceback": "<frozen abc>:123",
+      "bytes": 448,
+      "count": 4
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:529",
+      "bytes": 440,
+      "count": 11
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:525",
+      "bytes": 440,
+      "count": 11
+    },
+    {
+      "traceback": "/runner/profile_state.py:140",
+      "bytes": 416,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/asyncio/events.py:88",
+      "bytes": 400,
+      "count": 5
+    },
+    {
+      "traceback": "/runner/profile_state.py:134",
+      "bytes": 304,
+      "count": 4
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/_cachebox.py:885",
+      "bytes": 256,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:452",
+      "bytes": 248,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:354",
+      "bytes": 248,
+      "count": 2
+    },
+    {
+      "traceback": "/runner/profile_state.py:87",
+      "bytes": 240,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:124",
+      "bytes": 208,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:133",
+      "bytes": 208,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:113",
+      "bytes": 208,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:59",
+      "bytes": 192,
+      "count": 6
+    },
+    {
+      "traceback": "/runner/profile_state.py:122",
+      "bytes": 184,
+      "count": 2
+    },
+    {
+      "traceback": "/runner/profile_state.py:121",
+      "bytes": 184,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:444",
+      "bytes": 160,
+      "count": 1
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:386",
+      "bytes": 160,
+      "count": 1
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:346",
+      "bytes": 160,
+      "count": 1
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:292",
+      "bytes": 160,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:41",
+      "bytes": 160,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:35",
+      "bytes": 160,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/cache_owner_probe.py:29",
+      "bytes": 160,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:97",
+      "bytes": 159,
+      "count": 3
+    },
+    {
+      "traceback": "<string>:1",
+      "bytes": 152,
+      "count": 2
+    },
+    {
+      "traceback": "/runner/profile_state.py:141",
+      "bytes": 149,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/asyncio/base_events.py:448",
+      "bytes": 144,
+      "count": 1
+    }
+  ]
+}

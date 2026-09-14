@@ -2,13 +2,20 @@
 
 Validation is incomplete. PR #43 remains draft. Earlier full suites reach the
 unchanged 8 GiB limit. Event loading now bounds historical chunks and pending
-writes. The [latest storage repair](storage-retention/README.md) removes retained
+writes. The [storage repair](storage-retention/README.md) removes retained
 SQL payload strings and defers unused reserve-call handles. Controlled memory
 checks, the 270-case Python matrix, and PostgreSQL persistence checks pass.
 The [repaired full suite](storage-full-suite/README.md) records 1,240 of 1,857
 cases before another OOM. Remaining real-node checks still need completion.
 
 ## Current evidence
+
+The [cache ownership repair](cache-ownership/README.md) releases idle per-key
+locks and prevents a native garbage-collection deadlock. The controlled cache
+workload reduces median peak RSS from 318,275,584 to 24,641,536 bytes with exact
+results and unchanged cache hits. All 303 owning tests pass on Python 3.11–3.13.
+The application pins that repair; the separate topic-result cache still needs
+work. The cache-only reduction does not establish a full pricing memory result.
 
 The [storage comparison](storage-retention/README.md) reduces median process peak
 RSS from 528,093,184 to 190,730,240 bytes for identical bulk writes, and from

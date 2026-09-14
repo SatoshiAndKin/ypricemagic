@@ -1,0 +1,22 @@
+setuptools
+wheel
+mypy[mypyc] @ git+https://github.com/SatoshiAndKin/mypy.git@18a37e099bba69872e38adaee3319c125c97048e
+pony-stubs==0.5.2
+types-python-dateutil
+types-cachetools
+types-requests
+types-PyYAML==6.0.12.20260906
+aiosqlite @ git+https://github.com/SatoshiAndKin/aiosqlite.git@b8265cce6f09bcc8015ea09036f5e05c4546d740
+bobs_lazy_logging==0.0.5
+dank-mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@9a58cd91b4a652ac10d41cc5862c7b2770727632 ; platform_system == 'MacOS' or (platform_system == 'Linux' and platform_machine != 'i686')
+eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@c986066ddd9ae10906a470008d786faab2355cc5 ; platform_system == 'Linux' and platform_machine != 'i686'
+eth-retry==0.3.7
+eth-typing==5.2.1
+ez-a-sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@000e4f24466ddc01abc6bb1a12cc429cbeea5813
+faster-eth-abi>=5.2.12,<6
+faster-hexbytes==1.3.4
+typed-envs==0.2.4
+cachebox @ git+https://github.com/SatoshiAndKin/cachebox.git@10be25afe46afb32c8135db4d1b8e2d94431b9c1
+setuptools<81
+setuptools-scm
+black
