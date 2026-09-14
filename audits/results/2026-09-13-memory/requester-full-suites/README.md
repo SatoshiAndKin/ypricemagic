@@ -16,7 +16,7 @@ PYTEST_ADDOPTS="-p no:pytest_ethereum" BROWNIE_NETWORK=mainnet make test
 | --- | --- | ---: | ---: | ---: |
 | original | OOM; incomplete | 415 / 1752 | 8,589,934,592 | 1521.86 |
 | preoptimization | OOM; incomplete | 416 / 1816 | 8,590,004,224 | 1510.30 |
-| optimized | Pending | Pending | Pending | Pending |
+| optimized | OOM; incomplete | 416 / 1838 | 8,589,987,840 | 1525.53 |
 
 Execution completion is separate from test success. OOM, interruption, and
 missing final reports remain incomplete. Partial test records do not establish
@@ -46,6 +46,13 @@ records 8,590,004,224 peak bytes against the unchanged 8,589,934,592-byte limit.
 Its maximum sampled descriptor count is 121. The complete installed dependency
 records match the original run byte for byte. Neither baseline has a final
 pytest summary.
+
+The optimized revision also reaches the unchanged limit after 1,525.53 seconds.
+It records 299 passed calls, 108 failed calls, and nine skips out of 1,838 cases.
+Docker reports OOMKilled and the cgroup records one OOM kill. It has no final
+pytest summary. Its last Magic call fails with the recorded Reth InvalidFEOpcode
+error; the following passing teardown does not make that call a pass. The final
+process RSS sample totals 8,578,166,784 bytes. Allocation diagnosis continues.
 
 Earlier OOM and descriptor failures use separate reports and dependency images.
 They are not relabeled as runs of the new requester repair.

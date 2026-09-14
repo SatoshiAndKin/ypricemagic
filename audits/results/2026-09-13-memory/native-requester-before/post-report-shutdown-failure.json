@@ -1,0 +1,9 @@
+{
+  "complete": false,
+  "workload_marker": "native.json",
+  "cause": "Interpreter shutdown waits for the idle aiosqlite worker after all six native quote checks pass",
+  "diagnostic_pids": [
+    156
+  ],
+  "action": "Signal the contained supervisor so it records interruption and terminates its blocked child group"
+}

@@ -1,0 +1,32 @@
+{
+  "pids": [
+    156
+  ],
+  "cases": [
+    {
+      "case": "V2",
+      "status": "pass"
+    },
+    {
+      "case": "V3",
+      "status": "pass"
+    },
+    {
+      "case": "Curve",
+      "status": "pass"
+    },
+    {
+      "case": "ERC4626 sDAI",
+      "status": "pass"
+    },
+    {
+      "case": "Curve int128 getter",
+      "status": "pass"
+    },
+    {
+      "case": "Curve int128 getter",
+      "status": "pass"
+    }
+  ],
+  "sqlite_exit_wait": true
+}

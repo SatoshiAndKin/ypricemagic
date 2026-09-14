@@ -4,8 +4,9 @@ Validation is incomplete. PR #43 remains draft. The changed full suite ended
 after file-descriptor exhaustion. The owning dependency now releases cancelled
 HTTP requests and completed batch tasks. Its native tests pass on all supported
 CI test platforms. Direct Lambo Reth archive access has recovered. The pricing
-matrix passes with the repaired dependency. Both baseline full suites reach
-the unchanged 8 GiB limit. The optimized full suite is now running.
+matrix passes with the repaired dependency. All three full suites reach
+the unchanged 8 GiB limit. The optimized full suite remains incomplete.
+Allocation profiles now trace historical event and pool discovery growth.
 
 ## Current evidence
 
@@ -53,9 +54,10 @@ The [new full-suite sequence](requester-full-suites/README.md) uses the repaired
 requester image and direct Lambo Reth. The original revision records 415 terminal
 outcomes out of 1,752 cases, then reaches 8 GiB after 1,521.86 seconds. The
 pre-optimization revision records 416 outcomes out of 1,816 cases and reaches
-the same limit after 1,510.30 seconds. Both record one cgroup OOM kill and Docker
-`OOMKilled=true`. Neither has a final pytest summary. The optimized revision now
-uses the same image, source runner, and a separate database.
+the same limit after 1,510.30 seconds. The optimized revision records 416 outcomes
+out of 1,838 cases and reaches the limit after 1,525.53 seconds. All three record
+one cgroup OOM kill and Docker `OOMKilled=true`. None has a final pytest summary.
+They use the same image, source runner, and separate databases.
 
 The following reports precede the HTTP cancellation repair:
 
@@ -76,10 +78,10 @@ The [changed full run](full-optimized-descriptor-failure/README.md) records
 with no OOM, but has no final pytest summary. Its early exit prevents a full
 memory or failure comparison. [Later archive probes](archive-after-full-failure/README.md)
 time out on the required USDC call through direct NUC Reth. A subsequent
-[direct Lambo Reth probe](archive-lambo-restored/README.md) passes. The native,
-public pricing, and audit checks still need the newly repaired dependency image.
+[direct Lambo Reth probe](archive-lambo-restored/README.md) passes. The remaining native,
+public pricing, and audit checks still need completion with the repaired image.
 
-All three suite commands select image
+Those three earlier suite commands select image
 `sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b`,
 separate databases, and the required command:
 
@@ -103,19 +105,30 @@ Different rows use different dependency builds.
 
 | Workload | Before RSS bytes | After RSS bytes | Preserved work and result |
 | --- | ---: | ---: | --- |
-| [Cached Sushi topology](scaling-final/README.md) | 443,097,088 | 294,731,776 | 309,675 reads; 4,131 quotes; 4,128 historical blocks; 64-operation bound |
+| [Cached Sushi topology, current requester](scaling-requester/README.md) | 424,853,504 | 276,234,240 | 309,675 reads; 4,131 quotes; 4,128 historical blocks; 64-operation bound |
 | [Request diagnostics](logger-comparison.json) | 215,588,864 | 183,836,672 | 10,000 requests; retained loggers and tasks fall from 10,000 to zero |
 | [Callable ownership](async-ownership/README.md) | 98,758,656 | 32,768,000 | 1,000 callables; all captured owners released |
 | [HTTP retry ownership](dank-retry/comparison.json) | 295,972,864 | 227,442,688 | 64 concurrent requests; 1,088 attempts; unchanged request IDs and retry rules |
 | [HTTP cancellation ownership](http-request-ownership/comparison.json) | 203,718,656 | 169,242,624 | 64 concurrent requests; 256 identical HTTP bodies; connections and requester tasks fall to zero |
 
-The Sushi comparison uses the older locked dependency image. Its median elapsed
-time changes from 2.761 to 2.653 seconds, with identical amounts and quote outputs.
-A repeat with the final dependency image stopped during archive-dependent
-startup and has no workload result. Sushi and logger workloads
-collect garbage at the same measurement boundaries on both sides. They do not
-clear caches or restart a process to produce the within-workload release result.
-The callable and retry workloads use normal cyclic collection only.
+The new Sushi comparison uses the current dependency image. Its median elapsed
+time changes from 2.63824 to 2.63928 seconds. Exact amount, quote output, and
+independent-path assertions pass. The older [Sushi comparison](scaling-final/README.md)
+remains separate. Sushi and logger workloads collect garbage at matching
+measurement boundaries. They do not clear caches or restart the process within
+a workload. The callable and retry workloads use normal cyclic collection only.
+
+The [historical discovery profile](discovery-allocations/README.md) identifies
+large raw log buffers, processed Uniswap pool state, and pending database insert
+coroutines. The 19-case run finishes with 10 passes and nine failures at a
+6,399,762,432-byte container peak. Allocation overhead remains separate from
+performance results. The combined Magic/Popsicle profile and backlog regression
+will test the next repair.
+
+The [native quote control](native-requester-before/README.md) records six passing
+cases. Its process exit remains incomplete because the old application waits
+for an idle SQLite worker after reporting. The saved stacks establish the exit
+failure before the supervisor stops the process.
 
 The [compiler and Brownie check](compiler-backport/README.md) returns identical
 opcodes from sixteen native bytecode scans. Retained Python allocations after

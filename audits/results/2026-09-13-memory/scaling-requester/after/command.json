@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /runner/probe.py && sh /runner/repeat_scaling.sh"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 122.65245413700177,
+  "peak_sampled_process_rss_bytes": 1071104000,
+  "cgroup_before": {
+    "memory.current": "9281536",
+    "memory.peak": "9281536",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "142008320",
+    "memory.peak": "1173745664",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}
