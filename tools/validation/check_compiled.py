@@ -1,10 +1,10 @@
 """Verify every configured module, and save its extension path."""
 
 import importlib
-from importlib.machinery import EXTENSION_SUFFIXES
 import os
-from pathlib import Path
 import tomllib
+from importlib.machinery import EXTENSION_SUFFIXES
+from pathlib import Path
 
 from common import write_json
 

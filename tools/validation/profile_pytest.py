@@ -1,13 +1,12 @@
 """Capture periodic allocations for the centrally selected memory workload."""
 
 import os
-from pathlib import Path
 import threading
 import tomllib
 import tracemalloc
+from pathlib import Path
 
 import pytest
-
 from profile_state import sample
 
 

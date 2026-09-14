@@ -1,7 +1,7 @@
 """Run centrally declared focused pytest targets without changing full-suite settings."""
 
-from pathlib import Path
 import tomllib
+from pathlib import Path
 
 import pytest
 

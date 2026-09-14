@@ -4,11 +4,11 @@ import argparse
 import faulthandler
 import gc
 import os
-from pathlib import Path
 import signal
 import threading
 import time
 import tracemalloc
+from pathlib import Path
 from typing import Any
 
 from common import write_json

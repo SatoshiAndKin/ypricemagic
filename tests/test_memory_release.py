@@ -1,11 +1,11 @@
 """Request diagnostics and cached results have bounded ownership."""
 
 import asyncio
-from dataclasses import dataclass
 import gc
 import logging
 import subprocess
 import sys
+from dataclasses import dataclass
 from typing import Any
 from weakref import ref
 
@@ -285,6 +285,7 @@ async def test_zero_address_request_closes_diagnostic(
     monkeypatch: pytest.MonkeyPatch, fail_to_none: bool
 ) -> None:
     from brownie import ZERO_ADDRESS
+
     from y.prices import magic
 
     # ez-a-sync supplies the sync keyword at runtime.

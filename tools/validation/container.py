@@ -2,13 +2,13 @@
 
 import argparse
 import os
-from pathlib import Path
 import platform
 import signal
 import subprocess
 import sys
 import sysconfig
 import time
+from pathlib import Path
 
 from common import write_json
 

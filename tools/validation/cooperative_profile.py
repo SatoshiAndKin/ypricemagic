@@ -1,9 +1,8 @@
 """Measure retained function fixtures at unchanged cooperative concurrency."""
 
-import os
-from pathlib import Path
 import subprocess
 import sys
+from pathlib import Path
 
 
 def main() -> int:

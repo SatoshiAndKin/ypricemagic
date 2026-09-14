@@ -4,15 +4,13 @@ import asyncio
 import faulthandler
 import json
 import os
-from pathlib import Path
 import resource
 import signal
 import sys
 import time
 import tracemalloc
+from pathlib import Path
 from typing import Any
-
-import pytest
 
 
 class Report:

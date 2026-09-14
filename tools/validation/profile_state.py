@@ -1,13 +1,13 @@
 """Optional allocation census; never run in unprofiled timing comparisons."""
 
-from asyncio import Task
-from collections import Counter
 import gc
-from pathlib import Path
 import resource
 import sys
-from threading import Event
 import tracemalloc
+from asyncio import Task
+from collections import Counter
+from pathlib import Path
+from threading import Event
 
 from common import write_json
 

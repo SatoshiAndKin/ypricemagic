@@ -1,23 +1,24 @@
 """Fixed-block native checks retained from PR 43 validation."""
 
-import os
-import faulthandler
-import signal
-from typing import Any
 import asyncio
+import faulthandler
 import json
+import os
+import signal
 from dataclasses import asdict
-from math import isqrt
 from pathlib import Path
-from common import write_json
-from eth_abi.abi import encode, decode
-from eth_utils.crypto import keccak
-from eth_utils.address import to_checksum_address
+from typing import Any
+
 from brownie import web3
-from y.prices._rpc import BlockRef
+from common import write_json
+from eth_abi.abi import decode, encode
+from eth_utils.address import to_checksum_address
+from eth_utils.crypto import keccak
+
+from y.datatypes import QuoteAsset
 from y.prices._markets import Market, swap
 from y.prices._redemptions import redeem
-from y.datatypes import QuoteAsset
+from y.prices._rpc import BlockRef
 
 ZERO = "0x0000000000000000000000000000000000000000"
 WETH = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"

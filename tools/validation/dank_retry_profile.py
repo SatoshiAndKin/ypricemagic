@@ -6,23 +6,22 @@ tracemalloc overhead cannot affect the final timing comparison.
 
 import argparse
 import asyncio
-from collections import Counter
 import json
 import logging
-from pathlib import Path
-from threading import RLock
 import time
 import tracemalloc
-from types import SimpleNamespace
 import weakref
+from collections import Counter
+from pathlib import Path
+from threading import RLock
+from types import SimpleNamespace
 from typing import Any
 
 from aiohttp import ClientResponseError
-from web3.types import RPCEndpoint
-
 from dank_mids import _requests
 from dank_mids._requests import RPCRequest
 from dank_mids.helpers._codec import decode_raw
+from web3.types import RPCEndpoint
 
 
 class Payload:

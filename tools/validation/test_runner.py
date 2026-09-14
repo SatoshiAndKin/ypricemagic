@@ -2,15 +2,15 @@
 
 import hashlib
 import json
-from pathlib import Path
-import tempfile
-import unittest
 import subprocess
 import sys
+import tempfile
+import unittest
+from pathlib import Path
 from unittest.mock import patch
 
-from common import ConsoleLog
 import run
+from common import ConsoleLog
 
 
 class LogTests(unittest.TestCase):

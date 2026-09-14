@@ -2,16 +2,16 @@
 
 import argparse
 import asyncio
-from dataclasses import asdict
-import gc
 import faulthandler
+import gc
 import json
 import os
-from pathlib import Path
 import resource
 import signal
-from time import perf_counter
 import tracemalloc
+from dataclasses import asdict
+from pathlib import Path
+from time import perf_counter
 from typing import Any
 
 from common import write_json
@@ -20,9 +20,9 @@ from profile_state import capture
 
 async def main(allocations: bool) -> None:
     from y.audit import AuditClient
-    from y.prices.magic import get_price
     from y.prices._routing import quote_service
     from y.prices._rpc import state_cache
+    from y.prices.magic import get_price
 
     lookup: Any = get_price
     token = "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"

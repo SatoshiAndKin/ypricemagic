@@ -2,11 +2,9 @@
 """Build and run isolated Linux validation. No project imports run on the host."""
 
 import argparse
-from collections.abc import Iterable
 import hashlib
 import json
 import os
-from pathlib import Path
 import shutil
 import signal
 import subprocess
@@ -14,6 +12,8 @@ import tarfile
 import tempfile
 import time
 import tomllib
+from collections.abc import Iterable
+from pathlib import Path
 from typing import Any
 
 from common import ConsoleLog, write_json

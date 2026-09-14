@@ -2,8 +2,8 @@
 
 import json
 import os
-from pathlib import Path
 import urllib.request
+from pathlib import Path
 from typing import cast
 
 from common import write_json

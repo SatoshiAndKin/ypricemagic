@@ -1,0 +1,143 @@
+[
+  {
+    "file": "tests/test_memory_release.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/check_compiled.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/compound_profile.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/container.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/containment_check.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/cooperative_profile.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [
+      [
+        null,
+        "os",
+        null,
+        1
+      ]
+    ],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/dank_retry_profile.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/focused.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/logger_profile.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/native.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/native_reviewed.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [
+      [
+        "math",
+        "isqrt",
+        null,
+        1
+      ]
+    ],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/pricing_profile.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/probe.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/profile_pytest.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/profile_state.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/pytest_report.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [
+      [
+        null,
+        "pytest",
+        null,
+        1
+      ]
+    ],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/run.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/scaling_profile.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/test_runner.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  },
+  {
+    "file": "tools/validation/verify_runner.py",
+    "non_import_ast_equal": true,
+    "removed_imports": [],
+    "added_imports": []
+  }
+]

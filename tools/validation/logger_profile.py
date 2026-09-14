@@ -6,9 +6,9 @@ import gc
 import json
 import logging
 import os
-from pathlib import Path
 import resource
 import tracemalloc
+from pathlib import Path
 from time import perf_counter
 from weakref import ref
 

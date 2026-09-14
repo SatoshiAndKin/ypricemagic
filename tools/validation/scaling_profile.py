@@ -5,10 +5,10 @@ import gc
 import importlib.util
 import json
 import os
-from pathlib import Path
 import resource
 import tempfile
 import tracemalloc
+from pathlib import Path
 from time import perf_counter
 
 from pytest import MonkeyPatch
