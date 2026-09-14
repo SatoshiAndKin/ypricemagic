@@ -335,6 +335,8 @@ def main() -> int:
                     (
                         "test_routing_scaling.py",
                         "test_event_memory.py",
+                        "test_bulk_memory.py",
+                        "test_pool_memory.py",
                         "data/sushi-mainnet-topology.json",
                     ),
                 ),

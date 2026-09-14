@@ -1,14 +1,20 @@
 # Contained memory validation
 
-Validation is incomplete. PR #43 remains draft. Three full suites before the
-event-loader repair reach the unchanged 8 GiB limit. The repair now bounds raw
-historical chunks and pending writes by the existing fetch capacity. Controlled
-memory checks and the 264-case Python matrix pass. The committed repair
-completes historical profiling, but the [next full suite](event-full-suite/README.md)
-also reaches 8 GiB. Uniswap allocation diagnosis and remaining real-node checks
-still need completion.
+Validation is incomplete. PR #43 remains draft. Earlier full suites reach the
+unchanged 8 GiB limit. Event loading now bounds historical chunks and pending
+writes. The [latest storage repair](storage-retention/README.md) removes retained
+SQL payload strings and defers unused reserve-call handles. Controlled memory
+checks, the 270-case Python matrix, and PostgreSQL persistence checks pass.
+The repaired full suite and remaining real-node checks still need completion.
 
 ## Current evidence
+
+The [storage comparison](storage-retention/README.md) reduces median process peak
+RSS from 528,093,184 to 190,730,240 bytes for identical bulk writes, and from
+366,612,480 to 330,182,656 bytes for identical unused pool construction. Both
+workloads also run faster. All 270 focused checks pass on Python 3.11–3.13;
+all ten compiled extensions load. Type errors stay at 1,922 with no added
+semantic diagnostics. The exact SQLite data and pool metadata digests match.
 
 The [HTTP ownership repair](http-request-ownership/README.md) reduces median
 process peak RSS from 203,718,656 to 169,242,624 bytes in the identical 256-call
@@ -18,7 +24,7 @@ every round. All 150 dependency tests pass in each of 12 native CI jobs; all 15
 native builds pass. The application now pins their generated artifacts. The
 local source comparison fixes 20 failures with no added failed test IDs.
 
-The [current event-loader matrix](event-backlog/README.md) passes all 264
+The [earlier event-loader matrix](event-backlog/README.md) passes all 264
 focused tests on Linux ARM64 Python 3.11, 3.12, and 3.13. Every run loads all ten
 configured compiled extensions and passes the historical archive probe. No OOM
 occurs. Type checks report 1,922 errors per version, compared with 1,935 before
@@ -106,6 +112,8 @@ Different rows use different dependency builds.
 
 | Workload | Before RSS bytes | After RSS bytes | Preserved work and result |
 | --- | ---: | ---: | --- |
+| [Bulk persistence](storage-retention/README.md) | 528,093,184 | 190,730,240 | 4,096 rows; 64 MiB of exact ordered data; 128 batches |
+| [Unused pool construction](storage-retention/README.md) | 366,612,480 | 330,182,656 | 131,072 identical pools; unused reserve handles 131,072 to zero |
 | [Historical event chunks](event-backlog/README.md) | 319,193,088 | 195,379,200 | 512 identical chunks; 32 concurrent fetches; every ordered write and checkpoint |
 | [Cached Sushi topology, current requester](scaling-requester/README.md) | 424,853,504 | 276,234,240 | 309,675 reads; 4,131 quotes; 4,128 historical blocks; 64-operation bound |
 | [Request diagnostics](logger-comparison.json) | 215,588,864 | 183,836,672 | 10,000 requests; retained loggers and tasks fall from 10,000 to zero |

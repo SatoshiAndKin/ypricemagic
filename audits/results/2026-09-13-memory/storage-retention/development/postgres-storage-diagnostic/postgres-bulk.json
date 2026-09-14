@@ -1,0 +1,26 @@
+[
+  {
+    "case": "test_bulk_writes_do_not_retain_each_payload_in_sql_cache",
+    "status": "failed",
+    "error": "Traceback (most recent call last):\n  File \"/runner/postgres_bulk.py\", line 33, in main\n    case(database)\n  File \"/work/tests/test_bulk_memory.py\", line 70, in test_bulk_writes_do_not_retain_each_payload_in_sql_cache\n    assert rows(database) == expected\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+    "first_row": "[{'type': 'int', 'value': '0'}, {'type': 'memoryview', 'value': '<memory at 0xfc685b432f80>', 'format': 'c', 'bytes_equal': 'False', 'data_hex': '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'}, {'type': 'str', 'value': \"'payload'\"}, {'type': 'Decimal', 'value': \"Decimal('1')\"}, {'type': 'NoneType', 'value': 'None'}, {'type': 'int', 'value': '1'}]"
+  },
+  {
+    "case": "test_bulk_preserves_values_and_ignores_duplicate_keys",
+    "status": "failed",
+    "error": "Traceback (most recent call last):\n  File \"/runner/postgres_bulk.py\", line 33, in main\n    case(database)\n  File \"/work/tests/test_bulk_memory.py\", line 79, in test_bulk_preserves_values_and_ignores_duplicate_keys\n    assert rows(database) == [\n           ^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+    "first_row": "[{'type': 'int', 'value': '-9223372036854775808'}, {'type': 'memoryview', 'value': '<memory at 0xfc685b4331c0>', 'format': 'c', 'bytes_equal': 'False', 'data_hex': '00ff275c'}, {'type': 'str', 'value': '\"it\\'s $quoted; \u03bb\"'}, {'type': 'Decimal', 'value': \"Decimal('1.25')\"}, {'type': 'str', 'value': \"'2023-03-11T06:30:00+00:00'\"}, {'type': 'int', 'value': '1'}]"
+  },
+  {
+    "case": "test_failed_bulk_rolls_back_all_rows_and_allows_reuse",
+    "status": "failed",
+    "error": "Traceback (most recent call last):\n  File \"/runner/postgres_bulk.py\", line 33, in main\n    case(database)\n  File \"/work/tests/test_bulk_memory.py\", line 91, in test_failed_bulk_rolls_back_all_rows_and_allows_reuse\n    assert rows(database) == [valid]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+    "first_row": "[{'type': 'int', 'value': '3'}, {'type': 'memoryview', 'value': '<memory at 0xfc685b432f80>', 'format': 'c', 'bytes_equal': 'False', 'data_hex': '6166746572206661696c757265'}, {'type': 'str', 'value': \"'third'\"}, {'type': 'Decimal', 'value': \"Decimal('3')\"}, {'type': 'NoneType', 'value': 'None'}, {'type': 'int', 'value': '1'}]"
+  },
+  {
+    "case": "test_empty_bulk_preserves_existing_rows",
+    "status": "failed",
+    "error": "Traceback (most recent call last):\n  File \"/runner/postgres_bulk.py\", line 33, in main\n    case(database)\n  File \"/work/tests/test_bulk_memory.py\", line 98, in test_empty_bulk_preserves_existing_rows\n    assert rows(database) == [valid]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+    "first_row": "[{'type': 'int', 'value': '1'}, {'type': 'memoryview', 'value': '<memory at 0xfc685b433280>', 'format': 'c', 'bytes_equal': 'False', 'data_hex': '6578697374696e67'}, {'type': 'str', 'value': \"'first'\"}, {'type': 'Decimal', 'value': \"Decimal('1')\"}, {'type': 'NoneType', 'value': 'None'}, {'type': 'int', 'value': '1'}]"
+  }
+]

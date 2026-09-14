@@ -27,15 +27,16 @@ class SQLError(ValueError):
 
 
 @retry_locked
-def execute(sql: str, *, db: Database = entities.db) -> None:
+def execute(sql: str, parameters: list[tuple[Any, ...]], *, db: Database = entities.db) -> None:
     """
-    Execute a SQL statement with retry logic for locked databases.
+    Execute a parameterized SQL batch with retry logic for locked databases.
 
     This function attempts to execute the given SQL statement and commit the changes.
     If the database is locked, the operation will be retried based on the :func:`~y._db.decorators.retry_locked` decorator.
 
     Args:
         sql: The SQL statement to execute.
+        parameters: The rows to bind to the statement.
         db: The database to execute the statement on. Defaults to :attr:`~y._db.entities.db`.
 
     Raises:
@@ -46,14 +47,13 @@ def execute(sql: str, *, db: Database = entities.db) -> None:
         - If a "database is locked" error occurs, it's re-raised to trigger the retry mechanism.
         - For all other :class:`~pony.orm.core.DatabaseError`, it logs a warning and raises a :class:`SQLError` with the original error and SQL statement.
 
-    Examples:
-        >>> execute("INSERT INTO my_table (column1, column2) VALUES ('value1', 'value2')")
-        >>> execute("DELETE FROM my_table WHERE column1 = 'value1'")
     """
     try:
         _logger_debug("EXECUTING SQL")
         _logger_debug(sql)
-        db.execute(sql)
+        # Use Pony's batch executor to keep its transaction and reconnect handling.
+        # Its public stubs omit this method; a list of rows selects executemany.
+        getattr(db, "_exec_sql")(sql, parameters, start_transaction=True)
         commit()
     except DatabaseError as e:
         if str(e) == "database is locked":
@@ -97,7 +97,9 @@ def insert(
     See Also:
         - :func:`execute`
     """
+    if not items:
+        return
     entity_name = entity_type.__name__.lower()
-    sql = build_query(db.provider_name, entity_name, columns, items)
-    execute(sql, db=db)
+    sql, parameters = build_query(db.provider_name, entity_name, columns, items)
+    execute(sql, parameters, db=db)
     _logger_debug("inserted %s %ss to ydb", len(items), entity_name)

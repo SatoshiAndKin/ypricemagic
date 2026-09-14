@@ -32,6 +32,7 @@ def capture(directory: Path, phase: str) -> None:
     buffers: Counter[str] = Counter()
     tasks: Counter[str] = Counter()
     log_records: Counter[str] = Counter()
+    property_state: Counter[str] = Counter()
     disk_cache_type = getattr(sys.modules.get("y._db.common"), "_DiskCachedMixin", ())
     # Count classes of interest without retaining the objects in the report.
     for value in gc.get_objects():
@@ -61,6 +62,18 @@ def capture(directory: Path, phase: str) -> None:
             coro = value.get_coro()
             name = getattr(coro, "__qualname__", type(coro).__qualname__)
             tasks[f"{name}:{'done' if value.done() else 'pending'}"] += 1
+        if (
+            module == "a_sync.async_property.cached"
+            and cls.__name__ == "AsyncCachedPropertyInstanceState"
+        ):
+            property_state["instances"] += 1
+            for attribute in ("cache", "locks", "tasks"):
+                entries = getattr(value, attribute)
+                property_state[attribute + "_entries"] += len(entries)
+                for entry in entries.values():
+                    if isinstance(entry, Task):
+                        property_state[attribute + "_completed_tasks"] += entry.done()
+                        property_state[attribute + "_pending_tasks"] += not entry.done()
         if isinstance(value, logging.LogRecord):
             log_records["records"] += 1
             log_records["with_exception_info"] += value.exc_info is not None
@@ -85,6 +98,13 @@ def capture(directory: Path, phase: str) -> None:
         queue = getattr(owner, "_work_queue", owner)
         if queue is not None:
             queued[f"{module_name}.{attribute}"] = queue.qsize()
+    pony = sys.modules.get("pony.orm.core")
+    sql_cache = getattr(pony, "adapted_sql_cache", {})
+    sql_cache_state = {
+        "entries": len(sql_cache),
+        "query_characters": sum(len(key[0]) for key in sql_cache),
+        "adapted_query_characters": sum(len(value[0]) for value in sql_cache.values()),
+    }
     current, peak = tracemalloc.get_traced_memory()
     snapshot = tracemalloc.take_snapshot()
     write_json(
@@ -95,6 +115,8 @@ def capture(directory: Path, phase: str) -> None:
             "historical_buffer_entries": dict(buffers.most_common()),
             "queued_database_operations": queued,
             "logging": dict(log_records),
+            "cached_property_state": dict(property_state),
+            "pony_adapted_sql_cache": sql_cache_state,
             "python_current_bytes": current,
             "python_peak_bytes": peak,
             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,

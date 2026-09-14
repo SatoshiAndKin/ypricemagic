@@ -1,0 +1,11 @@
+{
+  "rss_peak_bytes": 480030720,
+  "python_current_bytes": 128192898,
+  "python_peak_bytes": 128197307,
+  "profiler": "tracemalloc; exclude timings",
+  "elapsed_seconds": 8.248288554008468,
+  "pools": 131072,
+  "reserve_call_handles_created": 0,
+  "metadata_sha256": "65fd7180d8667fba9cf382c179ddc43d2a139eaa38cbd9595b28fbfa118d70a4",
+  "boundary": "unused pool construction only; no reserve RPC is invoked"
+}

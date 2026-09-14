@@ -1,0 +1,7 @@
+{
+  "test_routing_scaling.py": "e83fcb59d65d5ab9793baf74f37bc275f19d8090535477a27863716418d4316a",
+  "test_event_memory.py": "49e4ae8d8e94ae9a4c923f85016c3ea10c82699d6868e9eb43b3c421b0e2435d",
+  "test_bulk_memory.py": "0290179954cf851255e5be4c60dd66f63ae6e656992e018b299b2002b79f2b7f",
+  "test_pool_memory.py": "65be011e9ff94027a55b3e74a30729312f5b6b992d71ea3774d4b30f51e17a9c",
+  "data/sushi-mainnet-topology.json": "f2a55c9034d3cecb6b8e7ea4edc989a4306db90017c824aca2187761bb55a4dd"
+}

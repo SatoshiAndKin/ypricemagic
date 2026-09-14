@@ -2,9 +2,10 @@ import json
 import os
 import tempfile
 from asyncio import gather, sleep
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import suppress
 from decimal import Decimal
+from functools import cached_property
 from itertools import islice
 from logging import DEBUG, getLogger
 from typing import Any
@@ -146,7 +147,7 @@ class UniswapV2Pool(ERC20):
     __types_assumed = True
     "True if we're assuming types based on normal univ2 abi, False if we checked via block explorer."
 
-    __slots__ = ("get_reserves",)
+    __slots__ = ()
 
     def __init__(
         self,
@@ -155,15 +156,19 @@ class UniswapV2Pool(ERC20):
         token1: Address | None = None,
         deploy_block: int | None = None,
         asynchronous: bool = False,
-    ):
+    ) -> None:
         super().__init__(address, asynchronous=asynchronous)
-        self.get_reserves = Call(self.address, "getReserves()((uint112,uint112,uint32))").coroutine
         if deploy_block:
             self._deploy_block = deploy_block
         if token0:
             self.token0 = token0
         if token1:
             self.token1 = token1
+
+    @cached_property
+    def get_reserves(self) -> Callable[..., Awaitable[Any]]:
+        """Create and reuse the reserve handle when a request first needs it."""
+        return Call(self.address, "getReserves()((uint112,uint112,uint32))").coroutine
 
     @a_sync.aka.cached_property
     async def factory(self) -> Address:

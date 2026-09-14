@@ -1,0 +1,672 @@
+{
+  "run": {
+    "command": [
+      "sh",
+      "-c",
+      "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/profile_pytest.py"
+    ],
+    "docker_context": "colima-ypricemagic",
+    "builder": "ypricemagic-validation-55871f24db8c",
+    "complete": false,
+    "started_unix": 1789363253.962951,
+    "source_sha": "adba3f5408186042436423ccab84f382d28e23fc",
+    "source_revision": "worktree",
+    "source_archive_sha256": "0eca0763e3a8f921b9744ff41a76a7da02cc8f4c699300237ff3c073266b35c8",
+    "image": "sha256:0fb5880df36df7c1c86b5772a5cb426fca4770df349007a069bea09bd4b8529d",
+    "exit_code": 137,
+    "oom_killed": true,
+    "missing_reports": [
+      "pytest-summary.json",
+      "allocations-sessionfinish.json"
+    ],
+    "elapsed_seconds": 1887.9470598697662
+  },
+  "phase_counts": {
+    "sessionstart:": 1,
+    "collection:": 1,
+    "setup:failed": 3,
+    "teardown:passed": 124,
+    "setup:passed": 121,
+    "call:failed": 121
+  },
+  "cgroup": {
+    "memory.current": "13455360",
+    "memory.peak": "8589950976",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 521\noom 1\noom_kill 1\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "failures": [
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v1[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2]",
+      "phase": "setup",
+      "error": "file /work/tests/prices/dex/test_uniswap.py, line 58\n  @pytest.mark.parametrize(\"token\", V1_TOKENS)\n  @pytest.mark.asyncio_cooperative\n  async def test_uniswap_v1(token, async_uni_v1):\n      \"\"\"Test Uniswap V1 price fetching.\n\n      This test concurrently retrieves the price using an asynchronous Uniswap V1 caller and the generic\n      :func:`~y.prices.magic.get_price` function. It verifies that the prices obtained from both methods are\n      consistent within a 5% relative tolerance.\n\n      Args:\n          token: The token address to query.\n          async_uni_v1: Fixture providing an asynchronous Uniswap V1 instance.\n\n      See Also:\n          :meth:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer.get_price`\n      \"\"\"\n      price, alt_price = await cgather(\n          async_uni_v1.get_price(token, None),\n          magic.get_price(token, skip_cache=True, sync=False),\n      )\n      print(token, price, alt_price)\n      # check if price is within 5% range\n      assert price == pytest.approx(alt_price, rel=5e-2)\nE       fixture 'async_uni_v1' not found\n>       available fixtures: Contract, a, accounts, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, chain, doctest_namespace, fn_isolation, history, interface, module_isolation, monkeypatch, no_call_coverage, pm, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, rpc, skip_coverage, state_machine, testrun_uid, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, web3, worker_id\n>       use 'pytest --fixtures [testpath]' for help on them.\n\n/work/tests/prices/dex/test_uniswap.py:58"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v1[0x6B175474E89094C44Da98b954EedeAC495271d0F]",
+      "phase": "setup",
+      "error": "file /work/tests/prices/dex/test_uniswap.py, line 58\n  @pytest.mark.parametrize(\"token\", V1_TOKENS)\n  @pytest.mark.asyncio_cooperative\n  async def test_uniswap_v1(token, async_uni_v1):\n      \"\"\"Test Uniswap V1 price fetching.\n\n      This test concurrently retrieves the price using an asynchronous Uniswap V1 caller and the generic\n      :func:`~y.prices.magic.get_price` function. It verifies that the prices obtained from both methods are\n      consistent within a 5% relative tolerance.\n\n      Args:\n          token: The token address to query.\n          async_uni_v1: Fixture providing an asynchronous Uniswap V1 instance.\n\n      See Also:\n          :meth:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer.get_price`\n      \"\"\"\n      price, alt_price = await cgather(\n          async_uni_v1.get_price(token, None),\n          magic.get_price(token, skip_cache=True, sync=False),\n      )\n      print(token, price, alt_price)\n      # check if price is within 5% range\n      assert price == pytest.approx(alt_price, rel=5e-2)\nE       fixture 'async_uni_v1' not found\n>       available fixtures: Contract, a, accounts, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, chain, doctest_namespace, fn_isolation, history, interface, module_isolation, monkeypatch, no_call_coverage, pm, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, rpc, skip_coverage, state_machine, testrun_uid, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, web3, worker_id\n>       use 'pytest --fixtures [testpath]' for help on them.\n\n/work/tests/prices/dex/test_uniswap.py:58"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v1[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2]",
+      "phase": "setup",
+      "error": "file /work/tests/prices/dex/test_uniswap.py, line 58\n  @pytest.mark.parametrize(\"token\", V1_TOKENS)\n  @pytest.mark.asyncio_cooperative\n  async def test_uniswap_v1(token, async_uni_v1):\n      \"\"\"Test Uniswap V1 price fetching.\n\n      This test concurrently retrieves the price using an asynchronous Uniswap V1 caller and the generic\n      :func:`~y.prices.magic.get_price` function. It verifies that the prices obtained from both methods are\n      consistent within a 5% relative tolerance.\n\n      Args:\n          token: The token address to query.\n          async_uni_v1: Fixture providing an asynchronous Uniswap V1 instance.\n\n      See Also:\n          :meth:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer.get_price`\n      \"\"\"\n      price, alt_price = await cgather(\n          async_uni_v1.get_price(token, None),\n          magic.get_price(token, skip_cache=True, sync=False),\n      )\n      print(token, price, alt_price)\n      # check if price is within 5% range\n      assert price == pytest.approx(alt_price, rel=5e-2)\nE       fixture 'async_uni_v1' not found\n>       available fixtures: Contract, a, accounts, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, chain, doctest_namespace, fn_isolation, history, interface, module_isolation, monkeypatch, no_call_coverage, pm, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, rpc, skip_coverage, state_machine, testrun_uid, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, web3, worker_id\n>       use 'pytest --fixtures [testpath]' for help on them.\n\n/work/tests/prices/dex/test_uniswap.py:58"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xec67005c4e498ec7f55e092bd1d35cbc47c91892]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xE41d2489571d322189246DaFA5ebDe1F4699F4981]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xEC67005C4E498EC7F55E092BD1D35CBC47C91892]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE90]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xec67005c4E498Ec7f55E092bd1d35cbC47C918920]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xba11d00c5f74255f56a5e366f4f77f5a186d7f55]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7FC66500C84A76AD7E9C93437BFC5AC33E2DDAE9]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xec67005c4E498Ec7f55E092bd1d35cbC47C918921]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE90]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x4fe83213d56308330ec302a8bd641f1d0113a4cc]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE91]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xBA11D00C5F74255F56A5E366F4F77F5A186D7F55]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x4FE83213D56308330EC302A8BD641F1D0113A4CC]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x7FC66500C84A76AD7E9C93437BFC5AC33E2DDAE9]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xba11d00c5f74255f56a5e366f4f77f5a186d7f55]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x4fE83213D56308330EC302a8BD641f1d0113A4Cc0]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xBA11D00C5F74255F56A5E366F4F77F5A186D7F55]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x4fE83213D56308330EC302a8BD641f1d0113A4Cc1]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE91]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f550]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f550]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f551]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC011A73EE8576FB46F5E1C5751CA3B9FE0AF2A6F]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f551]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc00e94cb662c3520282e6f5717214004a7f26888]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F0]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc00e94cb662c3520282e6f5717214004a7f26888]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC00E94CB662C3520282E6F5717214004A7F26888]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F1]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC00E94CB662C3520282E6F5717214004A7F26888]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc00e94Cb662C3520282E6f5717214004A7f268880]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x04fa0d235c4abf4bcf4787af4cf447de572ef828]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc00e94Cb662C3520282E6f5717214004A7f268880]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc00e94Cb662C3520282E6f5717214004A7f268881]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x04FA0D235C4ABF4BCF4787AF4CF447DE572EF828]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc00e94Cb662C3520282E6f5717214004A7f268881]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xd533a949740bb3306d119cc777fa900ba034cd52]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF8280]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xd533a949740bb3306d119cc777fa900ba034cd52]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF8281]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xD533A949740BB3306D119CC777FA900BA034CD52]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x1f9840a85d5af5bf1d1762f925bdaddc4201f984]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xD533a949740bb3306d119CC777fa900bA034cd520]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x1F9840A85D5AF5BF1D1762F925BDADDC4201F984]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xD533a949740bb3306d119CC777fa900bA034cd521]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x1f9840a85d5aF5bf1D1762F925BDADdC4201F9840]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x6b175474e89094c44da98b954eedeac495271d0f]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x1f9840a85d5aF5bf1D1762F925BDADdC4201F9841]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x6B175474E89094C44DA98B954EEDEAC495271D0F]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x6B175474E89094C44Da98b954EedeAC495271d0F0]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x6B175474E89094C44Da98b954EedeAC495271d0F1]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB480]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x6810e776880c02933d47db1b9fc05908e5386b96]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB481]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x6810E776880C02933D47DB1B9FC05908E5386B96]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xdac17f958d2ee523a2206206994597c13d831ec7]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x6810e776880C02933D47DB1b9fc05908e5386b960]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xDAC17F958D2EE523A2206206994597C13D831EC7]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x6810e776880C02933D47DB1b9fc05908e5386b961]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xdAC17F958D2ee523a2206206994597C13D831ec70]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc944e90c64b2c07662a292be6244bdf05cda44a7]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xdAC17F958D2ee523a2206206994597C13D831ec71]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC944E90C64B2C07662A292BE6244BDF05CDA44A7]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x2260fac5e5542a773aa44fbcfedf7c193bc2c599]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc944E90C64B2c07662A292be6244BDf05Cda44a70]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x2260FAC5E5542A773AA44FBCFEDF7C193BC2C599]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc944E90C64B2c07662A292be6244BDf05Cda44a71]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C5990]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x514910771af9ca656af840dff83e8264ecf986ca]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C5991]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x514910771AF9CA656AF840DFF83E8264ECF986CA]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x514910771AF9Ca656af840dff83E8264EcF986CA0]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC02AAA39B223FE8D0A0E5C4F27EAD9083C756CC2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x514910771AF9Ca656af840dff83E8264EcF986CA1]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc20]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x0f5d2fb29fb7d3cfee444a200298f468908cc942]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc21]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x0F5D2FB29FB7D3CFEE444A200298F468908CC942]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x0F5D2fB29fb7d3CFeE444a200298f468908cC9420]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x0BC529C00C6401AEF6D220BE8C6EA1667F6AD93E]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x0F5D2fB29fb7d3CFeE444a200298f468908cC9421]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e0]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e1]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x9F8F72AA9304C8B593D555F12EF6589CC3A579A2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xe41d2489571d322189246dafa5ebde1f4699f498]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A20]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xE41D2489571D322189246DAFA5EBDE1F4699F498]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A21]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xE41d2489571d322189246DaFA5ebDe1F4699F4980]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xD533a949740bb3306d119CC777fa900bA034cd521]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (607.50 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xD533a949740bb3306d119CC777fa900bA034cd520]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (637.50 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xD533A949740BB3306D119CC777FA900BA034CD52]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (667.50 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880c02933d47db1b9fc05908e5386b96]",
+      "phase": "call",
+      "error": "ValueError: {'code': -32003, 'message': 'EVM error: InvalidFEOpcode', 'dankmids_added_context': Request(method='eth_call', id=15548, params=({'to': '0x6810e776880C02933D47DB1b9fc05908e5386b96', 'data': '0xdbd06c85'}, 'latest'))}"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0f5d2fb29fb7d3cfee444a200298f468908cc942]",
+      "phase": "call",
+      "error": "ValueError: {'code': -32003, 'message': 'EVM error: InvalidFEOpcode', 'dankmids_added_context': Request(method='eth_call', id=18296, params=({'to': '0x0F5D2fB29fb7d3CFeE444a200298f468908cC942', 'data': '0xdbd06c85'}, 'latest'))}"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6b175474e89094c44da98b954eedeac495271d0f]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.01 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6B175474E89094C44DA98B954EEDEAC495271D0F]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (601.36 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6B175474E89094C44Da98b954EedeAC495271d0F0]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.03 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6B175474E89094C44Da98b954EedeAC495271d0F1]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.02 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810E776880C02933D47DB1B9FC05908E5386B96]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880C02933D47DB1b9fc05908e5386b960]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.02 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880C02933D47DB1b9fc05908e5386b961]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.01 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc944e90c64b2c07662a292be6244bdf05cda44a7]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC944E90C64B2C07662A292BE6244BDF05CDA44A7]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.01 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc944E90C64B2c07662A292be6244BDf05Cda44a70]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.42 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc944E90C64B2c07662A292be6244BDf05Cda44a71]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x514910771af9ca656af840dff83e8264ecf986ca]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x514910771AF9CA656AF840DFF83E8264ECF986CA]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.01 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x514910771AF9Ca656af840dff83E8264EcF986CA0]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x514910771AF9Ca656af840dff83E8264EcF986CA1]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0F5D2FB29FB7D3CFEE444A200298F468908CC942]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0F5D2fB29fb7d3CFeE444a200298f468908cC9420]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0F5D2fB29fb7d3CFeE444a200298f468908cC9421]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (602.57 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.02 s)"
+    }
+  ],
+  "sample_count": 28,
+  "sample_errors": [],
+  "maximum_observed": {
+    "pools": 501581,
+    "tasks": 498404,
+    "sql_query_characters": 508711575,
+    "python_peak_bytes": 2190827631
+  }
+}
