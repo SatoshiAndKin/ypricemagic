@@ -21,13 +21,13 @@
   "persisted": [
     "full-deadline-original",
     "full-deadline-preoptimization",
-    "full-deadline-optimized"
-  ],
-  "pending": [
+    "full-deadline-optimized",
     "native-deadline-before",
     "native-reviewed-deadline-before",
     "native-deadline-after",
-    "native-reviewed-deadline-after",
+    "native-reviewed-deadline-after"
+  ],
+  "pending": [
     "public-deadline-before-timing-1",
     "public-deadline-before-timing-2",
     "public-deadline-before-timing-3",

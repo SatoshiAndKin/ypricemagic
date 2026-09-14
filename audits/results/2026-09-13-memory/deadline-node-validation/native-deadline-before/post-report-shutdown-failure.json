@@ -1,0 +1,7 @@
+{
+  "complete": false,
+  "workload_marker": "native.json",
+  "cause": "Interpreter shutdown waits for an idle aiosqlite worker after the final workload report",
+  "diagnostic_pids": "[172]",
+  "action": "Stop this owned supervisor and preserve execution as incomplete"
+}

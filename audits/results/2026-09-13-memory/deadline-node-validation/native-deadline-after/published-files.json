@@ -1,0 +1,86 @@
+[
+  {
+    "file": "command.json",
+    "private_original_sha256": "40bccc50b5c2cde28361d5081879bf0f4b342f568a4814c2d08e2604b32c8387",
+    "published_sha256": "40bccc50b5c2cde28361d5081879bf0f4b342f568a4814c2d08e2604b32c8387",
+    "private_values_removed": false
+  },
+  {
+    "file": "compiled-modules.json",
+    "private_original_sha256": "f7c8033a81021cf5121a9f6f3a025fdb0d1c7d49a38813efb2d30f529dfd33f2",
+    "published_sha256": "f7c8033a81021cf5121a9f6f3a025fdb0d1c7d49a38813efb2d30f529dfd33f2",
+    "private_values_removed": false
+  },
+  {
+    "file": "console.retention.json",
+    "private_original_sha256": "c435868799d0dcd3c1366dcf9e497c4c4972507844403f09121fb006a9587c30",
+    "published_sha256": "c435868799d0dcd3c1366dcf9e497c4c4972507844403f09121fb006a9587c30",
+    "private_values_removed": false
+  },
+  {
+    "file": "container-state.json",
+    "private_original_sha256": "090377db3d20ff9d12249253fbe7bbd87c12e0e3f1ec8548e011c043ecf6a21f",
+    "published_sha256": "090377db3d20ff9d12249253fbe7bbd87c12e0e3f1ec8548e011c043ecf6a21f",
+    "private_values_removed": false
+  },
+  {
+    "file": "dependencies-after.txt",
+    "private_original_sha256": "d3fbced3d1d477edd5999705ff25101297a71c5a51808afe772394de110aad95",
+    "published_sha256": "d3fbced3d1d477edd5999705ff25101297a71c5a51808afe772394de110aad95",
+    "private_values_removed": false
+  },
+  {
+    "file": "dependencies.txt",
+    "private_original_sha256": "36efe52a7e3ce9e8cbf3c6fef3dc1cddd3fe6bbb4a965aab2e7d47c38df72657",
+    "published_sha256": "36efe52a7e3ce9e8cbf3c6fef3dc1cddd3fe6bbb4a965aab2e7d47c38df72657",
+    "private_values_removed": false
+  },
+  {
+    "file": "environment.json",
+    "private_original_sha256": "c481a104899d561f17a1d567a67280eccf00fe98fa7d522643ddc081d1d31c65",
+    "published_sha256": "c481a104899d561f17a1d567a67280eccf00fe98fa7d522643ddc081d1d31c65",
+    "private_values_removed": false
+  },
+  {
+    "file": "image-build-dependencies.txt",
+    "private_original_sha256": "36efe52a7e3ce9e8cbf3c6fef3dc1cddd3fe6bbb4a965aab2e7d47c38df72657",
+    "published_sha256": "36efe52a7e3ce9e8cbf3c6fef3dc1cddd3fe6bbb4a965aab2e7d47c38df72657",
+    "private_values_removed": false
+  },
+  {
+    "file": "native.json",
+    "private_original_sha256": "a85378f48b4a6da9c66fdcc00b6868880b466c4255de009447cc2eb96235e7a6",
+    "published_sha256": "a85378f48b4a6da9c66fdcc00b6868880b466c4255de009447cc2eb96235e7a6",
+    "private_values_removed": false
+  },
+  {
+    "file": "progress.json",
+    "private_original_sha256": "2baeb1480793fff3f67e560b7d895052ac7ad9ea6639d26874ce4cef250cd819",
+    "published_sha256": "2baeb1480793fff3f67e560b7d895052ac7ad9ea6639d26874ce4cef250cd819",
+    "private_values_removed": false
+  },
+  {
+    "file": "rpc-probe.json",
+    "private_original_sha256": "0ab2b6c45701183c5d3d6b6039c73985cb78ba05d53bea3274c7b9632565137c",
+    "published_sha256": "0ab2b6c45701183c5d3d6b6039c73985cb78ba05d53bea3274c7b9632565137c",
+    "private_values_removed": false
+  },
+  {
+    "file": "run.json",
+    "private_original_sha256": "285fd90c8ee70ddc3462256e93653603124128d669c639ef77d3a65320606551",
+    "published_sha256": "285fd90c8ee70ddc3462256e93653603124128d669c639ef77d3a65320606551",
+    "private_values_removed": false
+  },
+  {
+    "file": "runner-files.json",
+    "private_original_sha256": "bbf9030d5bcdf4801648efe08fc3bedbbfcfbf9b01a526ec0d5f545a437b7008",
+    "published_sha256": "bbf9030d5bcdf4801648efe08fc3bedbbfcfbf9b01a526ec0d5f545a437b7008",
+    "private_values_removed": false
+  },
+  {
+    "file": "workload-files.json",
+    "private_original_sha256": "6d73219c5dc9f8577890db2b04d08b85e249fffe475c732b79063768277b0a00",
+    "published_sha256": "6d73219c5dc9f8577890db2b04d08b85e249fffe475c732b79063768277b0a00",
+    "private_values_removed": false
+  }
+]

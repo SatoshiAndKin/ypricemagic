@@ -198,5 +198,175 @@
       },
       "peak_observed_live_tasks": 93215
     }
+  },
+  "native-deadline-before": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/native.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789415446.713888,
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_revision": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_archive_sha256": "46250ae5f72bd79819c3a88db91469bbf8c89f412ba0da16f28065a74aac49b9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "interrupted": true,
+      "exit_code": 130,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 242.83935499191284
+    },
+    "container_peak_bytes": 1171931136,
+    "peak_sampled_process_rss_bytes": 1068290048,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 10705,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "native-reviewed-deadline-before": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/native_reviewed.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789415689.619252,
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_revision": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_archive_sha256": "46250ae5f72bd79819c3a88db91469bbf8c89f412ba0da16f28065a74aac49b9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "interrupted": true,
+      "exit_code": 130,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 363.2885010242462
+    },
+    "container_peak_bytes": 1165611008,
+    "peak_sampled_process_rss_bytes": 1068032000,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 22585,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "native-deadline-after": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/native.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789416052.982843,
+      "source_sha": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_revision": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_archive_sha256": "3a1a9d464dfaf6a7a80da469ebd53b427fccefbd88bca0cba44bd0577b5d7aa9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 119.56420612335205
+    },
+    "container_peak_bytes": 1165357056,
+    "peak_sampled_process_rss_bytes": 1063788544,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 9436,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "native-reviewed-deadline-after": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/native_reviewed.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789416172.6384509,
+      "source_sha": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_revision": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_archive_sha256": "3a1a9d464dfaf6a7a80da469ebd53b427fccefbd88bca0cba44bd0577b5d7aa9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 333.07990193367004
+    },
+    "container_peak_bytes": 1164902400,
+    "peak_sampled_process_rss_bytes": 1057828864,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 21295,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
   }
 }

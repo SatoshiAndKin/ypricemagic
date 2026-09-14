@@ -1,0 +1,16 @@
+Thread 0x0000e9d075cdf180 (most recent call first):
+  File "/usr/local/lib/python3.12/site-packages/aiosqlite/core.py", line 73 in _connection_worker_thread
+  File "/usr/local/lib/python3.12/threading.py", line 1012 in run
+  File "/usr/local/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "/usr/local/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Thread 0x0000e9d08b3df180 (most recent call first):
+  File "/usr/local/lib/python3.12/selectors.py", line 468 in select
+  File "/usr/local/lib/python3.12/asyncio/base_events.py", line 1961 in _run_once
+  File "/usr/local/lib/python3.12/asyncio/base_events.py", line 645 in run_forever
+  File "/usr/local/lib/python3.12/site-packages/dank_mids/helpers/_requester.py", line 26 in run
+  File "/usr/local/lib/python3.12/threading.py", line 1075 in _bootstrap_inner
+  File "/usr/local/lib/python3.12/threading.py", line 1032 in _bootstrap
+
+Current thread 0x0000e9d0946e1020 (most recent call first):
+  File "/usr/local/lib/python3.12/threading.py", line 1624 in _shutdown

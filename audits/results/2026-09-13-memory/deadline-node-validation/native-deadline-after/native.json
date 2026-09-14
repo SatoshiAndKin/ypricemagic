@@ -1,0 +1,50 @@
+[
+  {
+    "case": "V2",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "amount_in": 1000000000,
+    "amount_out": 604341080120514628,
+    "status": "pass"
+  },
+  {
+    "case": "V3",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "amount_in": 1000000000,
+    "amount_out": 605704440938728572,
+    "status": "pass"
+  },
+  {
+    "case": "Curve",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "amount_in": 1000000000,
+    "amount_out": 999867774427437404698,
+    "status": "pass"
+  },
+  {
+    "case": "ERC4626 sDAI",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "shares": 1000000000000000000000,
+    "assets": 1031762943605008098272,
+    "status": "pass"
+  },
+  {
+    "case": "Curve int128 getter",
+    "pool": "0xa2b47e3d5c44877cca798226b7b8118f9bfb7a56",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "first_coin": "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643",
+    "status": "pass"
+  },
+  {
+    "case": "Curve int128 getter",
+    "pool": "0x45f783cce6b7ff23b2ab2d70e416cdb7d6055f51",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "first_coin": "0x16de59092dae5ccf4a1e6439d611fd0653f0bd01",
+    "status": "pass"
+  }
+]

@@ -101,6 +101,34 @@
     "failures_comparable": false,
     "comparable": false
   },
+  "native-deadline": {
+    "missing_reports": [],
+    "exactly_equal": true,
+    "unchanged_rows": 6,
+    "before_only": [],
+    "after_only": [],
+    "expected_cases": 6,
+    "case_counts": [
+      6,
+      6
+    ],
+    "all_cases_pass": true,
+    "execution_complete_both": false
+  },
+  "native-reviewed-deadline": {
+    "missing_reports": [],
+    "exactly_equal": true,
+    "unchanged_rows": 8,
+    "before_only": [],
+    "after_only": [],
+    "expected_cases": 8,
+    "case_counts": [
+      8,
+      8
+    ],
+    "all_cases_pass": false,
+    "execution_complete_both": false
+  },
   "public": {
     "before": [],
     "after": [],

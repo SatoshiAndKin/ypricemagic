@@ -19,8 +19,15 @@ final summaries keep validation incomplete. The optimized run records 1,467 of
 after a synchronous case emits its timeout but does not report a result after
 2,114.65 seconds. A native sample shows the original pending request at block
 7,720,755, not the new cancellation cleanup. The cause remains unresolved.
-All three full runs remain incomplete. The native quote, public pricing, and
-audit stages continue in the existing queue.
+All three full runs remain incomplete. The partial observed comparison records
+23 pass-to-timeout changes and 25 fail-to-pass changes across 429 common IDs
+against the pre-optimization run. It cannot establish unchanged full failures.
+
+All 14 native case rows match exactly between revisions: 13 passes and the same
+unavailable Curve gauge result. Both optimized native processes exit normally;
+both baseline processes need intervention after their final reports because an
+idle SQLite worker blocks exit. These baseline executions remain incomplete.
+The public pricing and audit stages continue in the existing queue.
 
 ## Latest pool ownership repair
 

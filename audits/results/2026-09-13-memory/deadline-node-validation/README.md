@@ -22,6 +22,10 @@ Dependency image: `sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1
 | [full-deadline-original](full-deadline-original/run.json) | `476af288a520a30052668a8b3ad7e3e682cd101f` | 412 / 1752 | 1203.63 | 8589934592 | no | 2 |
 | [full-deadline-preoptimization](full-deadline-preoptimization/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | 486 / 1816 | 1525.52 | 8589996032 | no | 2 |
 | [full-deadline-optimized](full-deadline-optimized/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | 1467 / 1865 | 6465.46 | 4401676288 | no | 130 |
+| [native-deadline-before](native-deadline-before/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 242.84 | 1171931136 | no | 130 |
+| [native-reviewed-deadline-before](native-reviewed-deadline-before/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 363.29 | 1165611008 | no | 130 |
+| [native-deadline-after](native-deadline-after/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 119.56 | 1165357056 | yes | 0 |
+| [native-reviewed-deadline-after](native-reviewed-deadline-after/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 333.08 | 1164902400 | yes | 1 |
 
 `full-deadline-original` records 291 passed calls, 109 failed calls, 9 skipped calls, 3 setup failures, and 0 setup skips. Its final pytest summary is missing.
 It records 1 cgroup OOM kills and Docker `OOMKilled=true`. It loads 10 compiled modules; the archive probe passes. Expired console bytes: 0.
@@ -56,12 +60,53 @@ A reported peak can include a small cgroup accounting overshoot. The effective m
 
 Installed dependency lists for the persisted runs are byte-identical.
 
-Pending final reports: 14 of 17.
+### Partial full-suite observations
 
-- `native-deadline-before`
-- `native-reviewed-deadline-before`
-- `native-deadline-after`
-- `native-reviewed-deadline-after`
+These are exact-ID observations from incomplete runs. They do not establish
+full coverage or attribute a changed result to an implementation change.
+Some test bodies also use dynamic historical samples when their IDs match.
+Missing tests remain unmatched and never become passes.
+
+| Baseline | Common observed terminal IDs | Pass to fail | Fail to pass | Both pass | Both fail | Both skip |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| [original](partial-full-observations/original.json) | 364 | 28 | 27 | 263 | 40 | 6 |
+| [preoptimization](partial-full-observations/preoptimization.json) | 429 | 23 | 25 | 282 | 93 | 6 |
+
+All 23 pass-to-fail changes against the pre-optimization run are cooperative
+Chainlink feed timeouts. The comparison against the original PR baseline also
+includes ten `int(None)` errors in latest-feed cases. Exact errors, unmatched
+IDs, source and dependency hashes, and the analysis helper remain in the linked
+reports. The final full-suite comparison stays incomplete.
+
+
+### native-deadline
+
+| Revision | Cases | Passed | Failed | Complete execution | Exit |
+| --- | ---: | ---: | ---: | --- | ---: |
+| [before](native-deadline-before/native.json) | 6 | 6 | 0 | no | 130 |
+| [after](native-deadline-after/native.json) | 6 | 6 | 0 | yes | 0 |
+
+All recorded case rows match exactly, including fixed block identity, output amounts, quote steps where recorded, and errors.
+
+The `before` process needs intervention after its final workload report because an idle SQLite worker blocks interpreter exit. Its run stays incomplete. [Shutdown evidence](native-deadline-before/post-report-shutdown-failure.json).
+
+Run elapsed time and container peaks include extension preparation and process shutdown; they do not measure native quote latency alone.
+
+### native-reviewed-deadline
+
+| Revision | Cases | Passed | Failed | Complete execution | Exit |
+| --- | ---: | ---: | ---: | --- | ---: |
+| [before](native-reviewed-deadline-before/native-reviewed.json) | 8 | 7 | 1 | no | 130 |
+| [after](native-reviewed-deadline-after/native-reviewed.json) | 8 | 7 | 1 | yes | 1 |
+
+All recorded case rows match exactly, including fixed block identity, output amounts, quote steps where recorded, and errors.
+
+The `before` process needs intervention after its final workload report because an idle SQLite worker blocks interpreter exit. Its run stays incomplete. [Shutdown evidence](native-reviewed-deadline-before/post-report-shutdown-failure.json).
+
+Run elapsed time and container peaks include extension preparation and process shutdown; they do not measure native quote latency alone.
+
+Pending final reports: 10 of 17.
+
 - `public-deadline-before-timing-1`
 - `public-deadline-before-timing-2`
 - `public-deadline-before-timing-3`
