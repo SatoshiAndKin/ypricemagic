@@ -1,0 +1,87 @@
+{
+  "original": {
+    "finished": true,
+    "execution_complete": false,
+    "source_sha": "476af288a520a30052668a8b3ad7e3e682cd101f",
+    "image": "sha256:0fb5880df36df7c1c86b5772a5cb426fca4770df349007a069bea09bd4b8529d",
+    "exit_code": 2,
+    "elapsed_seconds": 1521.85928606987,
+    "oom_killed": true,
+    "missing_reports": [
+      "pytest-summary.json"
+    ],
+    "collected": 1752,
+    "phase_counts": {
+      "sessionstart:": 1,
+      "collection:": 1,
+      "setup:passed": 415,
+      "call:skipped": 9,
+      "teardown:passed": 415,
+      "call:passed": 305,
+      "call:failed": 101
+    },
+    "terminal_outcomes": 415,
+    "last_event": {
+      "phase": "teardown",
+      "test": "tests/prices/test_gearbox.py::test_get_price",
+      "outcome": "passed",
+      "live_tasks": 6906,
+      "rss_peak_bytes": 854888448,
+      "logical_rpc_counts": {
+        "call_uid": 96103,
+        "multicall_uid": 907,
+        "request_uid": 26298,
+        "jsonrpc_batch_uid": 1681
+      }
+    },
+    "cgroup": {
+      "memory.current": "13365248",
+      "memory.peak": "8589934592",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 39\noom 1\noom_kill 1\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "descriptor_samples": 12,
+    "last_descriptor_sample": {
+      "unix_time": 1789351133.0451298,
+      "processes": [
+        {
+          "pid": 7,
+          "role": "python",
+          "fd_total": 3,
+          "fd_types": {
+            "file": 1,
+            "pipe": 2
+          },
+          "tcp_states": {},
+          "open_files_limit": "Max open files            1024                 524288               files     "
+        },
+        {
+          "pid": 99,
+          "role": "python",
+          "fd_total": 83,
+          "fd_types": {
+            "file": 38,
+            "pipe": 15,
+            "socket": 28,
+            "anonymous": 2
+          },
+          "tcp_states": {
+            "01": 24
+          },
+          "open_files_limit": "Max open files            1024                 524288               files     "
+        }
+      ]
+    },
+    "maximum_sampled_process_descriptors": 116
+  },
+  "preoptimization": {
+    "finished": false
+  },
+  "optimized": {
+    "finished": false
+  }
+}

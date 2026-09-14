@@ -4,7 +4,8 @@ Validation is incomplete. PR #43 remains draft. The changed full suite ended
 after file-descriptor exhaustion. The owning dependency now releases cancelled
 HTTP requests and completed batch tasks. Its native tests pass on all supported
 CI test platforms. Direct Lambo Reth archive access has recovered. The pricing
-matrix passes with the repaired dependency. New full suites will use that image.
+matrix passes with the repaired dependency. The new original full suite reaches
+the unchanged 8 GiB limit. The pre-optimization suite is now running.
 
 ## Current evidence
 
@@ -47,6 +48,14 @@ isort, and autoflake for the changed Python files. Recorded source fixtures use
 and original names remain recorded.
 
 ## Full suites and source identity
+
+The [new full-suite sequence](requester-full-suites/README.md) uses the repaired
+requester image and direct Lambo Reth. The original revision records 415 terminal
+outcomes out of 1,752 cases, then reaches 8 GiB after 1,521.86 seconds. Docker and
+the cgroup confirm one OOM kill. It has no final pytest summary. The other two
+revisions will use the same image, source runner, and separate databases.
+
+The following reports precede the HTTP cancellation repair:
 
 | Source | Revision | Status before the HTTP ownership repair |
 | --- | --- | --- |
