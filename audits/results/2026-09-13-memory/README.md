@@ -1,260 +1,126 @@
 # Contained memory validation
 
-Validation is incomplete. This directory records the transition and will receive
-completed Docker comparison results before PR #43 can leave draft state.
+Validation is incomplete. PR #43 remains draft. The full test comparison and
+the final native quotes, public pricing workloads, and mainnet audits are still
+in progress. A passing focused test run does not complete these gates.
 
-The [direct Reth comparison](reth-backends/README.md) identifies a working
-archive path through NUC Reth. Both required historical blocks return USDC
-decimals 6 by number and canonical hash. Lambo Reth calls time out, and the
-proxy still returns HTTP 408. Validation resumes against NUC Reth. The
-[earlier proxy retries](archive-retry/README.md) and the expected
-[non-archive Geth control](direct-backend/README.md) remain separate records.
+## Current evidence
 
-The [published dependency matrix](pinned-owner-matrix/README.md) now passes all
-246 focused cases on Python 3.11–3.13, with all ten compiled modules. Configured
-type checks retain 1,940 existing errors and add no rendered diagnostic on each
-version. All build/test peaks stay below 7 GiB. The later logging-handler failure
-regression remains separate from these frozen runs.
+The [bulk fixture checks](bulk-fixture-ownership/README.md) pass all 251 focused
+tests on Linux ARM64 Python 3.11, 3.12, and 3.13. Every run loads all ten configured
+compiled extensions and passes the historical archive probe. No OOM occurs.
+The final type checks report 1,935 errors on each version, compared with 1,959
+before optimization under the same dependencies. No rendered diagnostic was
+added; 24 were removed. These type checks still fail.
 
-The [final Python 3.12 focused run](pinned-owner-312-focused-final/README.md)
-passes all 246 cases after the Gearbox type assertion and historical task cleanup.
-All ten native extensions load, with no OOM event.
+| Python | Focused passes | Container peak bytes | Run elapsed seconds |
+| --- | ---: | ---: | ---: |
+| 3.11 | 251 | 1,127,145,472 | 257.59 |
+| 3.12 | 251 | 1,162,887,168 | 255.77 |
+| 3.13 | 251 | 1,166,450,688 | 290.16 |
 
-The [published source-pin build](pinned-owner-312-focused/README.md) now passes
-all 246 focused cases at `9d32c001` on native Linux ARM64 Python 3.12. BuildKit
-peaks at 3,309,588,480 bytes and stops before the test container, which peaks at
-1,167,736,832 bytes. Both have no OOM event. The installed manifest records the
-exact compiler, Brownie, and a-sync commits. The other validation gates remain
-in progress.
+The same four fixture release checks fail before cleanup and pass afterward.
+They cover child failure and caller cancellation during price and deployment
+mapping. The fixtures retain their token lists, historical blocks, assertions,
+600-second deadline, and existing concurrency.
 
-The [repaired dependency integration](repaired-owner-focused/README.md) passes all
-246 focused cases on native Linux ARM64 Python 3.12, including the corrected
-historical Gearbox expectation. The owning
-[compiler/Brownie backport](compiler-backport/README.md) and
-[task binding, cancellation, and release repair](async-ownership/README.md) have
-separate native checks and matched memory evidence. Their final three-version
-builds, complete pricing suites, and real-node gates remain in progress.
+The [logger and builder checks](logging-and-build-cleanup/README.md) also cover
+a logging handler that raises before pricing starts. The request still closes
+its diagnostic task. A real interrupted BuildKit job preserves its final state
+and memory counters, then stops. Five standard-library supervisor tests pass,
+including build OOM and interruption cases.
 
-The [historical test cleanup](popsicle-owned-cleanup/README.md) releases all
-425 previously pending test-owned mapped tasks. It preserves the same two passes
-and 17 configured timeouts, with a 1,212,628,992-byte container peak and no OOM.
-The [configured Python 3.12 type comparison](pinned-owner-312-types/README.md)
-reports 1,940 existing errors versus 1,959 before optimization, with no added
-rendered diagnostic under the same published dependency image.
+[Configured source checks](configured-format-checks/README.md) pass Black,
+isort, and autoflake for the changed Python files. Recorded source fixtures use
+`.py.txt` names so formatters cannot change historical evidence; their hashes
+and original names remain recorded.
 
-The [repaired historical allocation run](popsicle-repaired-allocations/README.md)
-completes all 19 outcomes and teardown below 1.5 GB of container memory. Two
-cases pass and 17 reach the existing 600-second pricing timeout. It has no OOM
-event, but does not pass the pricing gate. Its different completed work and
-profiler overhead prevent a controlled performance comparison.
+## Full suites and source identity
 
-The [earlier focused matrix](final-focused/README.md) passes all 244 tests on
-Python 3.11–3.13 with the dependency pins that preceded the compiler, Brownie,
-and ez-a-sync repairs. All ten compiled modules loaded. Its results do not
-validate the newer dependency pins.
+| Source | Revision | Status with final Python 3.12 dependency image |
+| --- | --- | --- |
+| Original PR baseline | `476af288a520a30052668a8b3ad7e3e682cd101f` | OOM; incomplete |
+| Before memory changes | `61be7b520aba7f771a0bf96b326315e68767fae4` | Queued after changed full suite |
+| Optimized behavior | `368a6e79fa7226cb0f7f92be27a90c80d5a649b7` | Full suite running |
 
-Both full suites hit the 8 GiB limit with the same locked dependency image.
-The [original run](full-original-final-oom/README.md) and
-[changed run](full-optimized-final-oom/README.md) each recorded 422 outcomes;
-neither produced a final pytest summary. These runs remain incomplete.
-The [Popsicle allocation probe](popsicle-allocations/README.md) and
-[native bytecode regression](brownie-bytecode-before/README.md) identify an
-additional compiler ownership defect. The owning repairs now have separate
-passing native checks; the complete application comparison remains in progress.
+The [original full run](full-original-owner-pinned-oom/README.md) collected
+1,752 cases and recorded 438 terminal outcomes before reaching the 8 GiB limit.
+Docker records `OOMKilled=true` and the cgroup records one OOM kill. It has no
+final pytest summary. Its partial outcomes cannot establish failure equivalence
+or preserved full coverage.
 
-The [controlled Sushi comparison](scaling-final/README.md) completed three
-unprofiled samples per revision with identical dependencies and workload hashes.
-Median process RSS fell 33.48%, with unchanged state reads, quote counts, amounts,
-and the 64-operation bound. This result does not resolve the full-suite OOM.
+All three full runs use image
+`sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b`,
+separate databases, and the required command:
 
-The original PR baseline is `476af288a520a30052668a8b3ad7e3e682cd101f`.
-The pre-optimization revision is `61be7b520aba7f771a0bf96b326315e68767fae4`.
-Each Docker report records the tested revision or worktree archive hash.
-Implementation and validation reports use separate commits as checks finish.
+```sh
+PYTEST_ADDOPTS="-p no:pytest_ethereum" BROWNIE_NETWORK=mainnet make test
+```
 
-The four existing host checks were stopped after evidence capture. They ignored
-SIGTERM and required SIGKILL. Treat all four executions as incomplete, including
-any native case results written before the processes exited. `transition.json`
-records original log paths and sizes. The original files remain in
-`/private/tmp/yprice-pr43-repairs/`. The audit console log exceeded 16 GB. No
-successful full-suite, native-run, or audit completion is inferred from partial
-output.
+Each report records the source archive hash, helper and workload hashes,
+installed dependencies, command, exit status, elapsed time, and resource data.
+The focused development runs record their exact worktree archive. The full
+suite uses committed source. Later import formatting changes preserve the
+behavior recorded at `368a6e79`; their AST comparison is recorded separately.
 
-The prior generated C diff remains saved at
-`/private/tmp/yprice-memory-host-generated-c.patch`. It is separate from the
-Python source changes. Colima's existing data disk remains intact; its profile
-was first resized to 12 GiB of memory and 5 CPUs. After approval of parallel limits,
-that idle default profile was stopped with its disk preserved. New `ypricemagic`
-and `rpc-tune` profiles each have 10 GiB and 5 CPUs: 20 GiB combined on this
-36 GiB Mac. Each profile permits one heavy job with the unchanged 8 GiB, no-swap,
-4-CPU, 512-process/thread container limits. See `colima-profiles.json`.
+## Controlled memory measurements
 
-The initial dependency ownership repair was validated at
-`3089b3ddd393a45655b5231e6a67b54dd5529196` in
-[SatoshiAndKin/pytest-asyncio-cooperative PR 1](https://github.com/SatoshiAndKin/pytest-asyncio-cooperative/pull/1).
-Its full Python 3.12 suite has 80 passes, 16 skips, and the same two failures as
-the unchanged revision (75 passes). Five new ownership checks pass. Three
-controlled runs at concurrency 100 reduce median peak RSS from 716,128,256 to
-186,753,024 bytes, with zero completed fixtures retained instead of 4,000.
+These workloads isolate specific repairs. They do not replace a complete
+application run or prove real-node pricing latency. Each RSS figure is the
+median of three unprofiled samples per revision; allocation profiles remain
+separate. Each before/after pair preserves its own dependencies and workload.
+Different rows use different dependency builds.
 
-All 239 focused application tests pass on Linux ARM64 Python 3.11.16, 3.12.14,
-and 3.13.15 with all ten configured compiled extensions. The scaling check preserves 64 operations,
-4,771 cached pools, 4,128 historical blocks, 309,675 state reads, and 4,131 quotes.
-The type check remains non-green: 1,940 errors versus 1,959 on the unchanged
-revision with the same dependency image. No rendered diagnostic was added.
+| Workload | Before RSS bytes | After RSS bytes | Preserved work and result |
+| --- | ---: | ---: | --- |
+| [Cached Sushi topology](scaling-final/README.md) | 443,097,088 | 294,731,776 | 309,675 reads; 4,131 quotes; 4,128 historical blocks; 64-operation bound |
+| [Request diagnostics](logger-comparison.json) | 215,588,864 | 183,836,672 | 10,000 requests; retained loggers and tasks fall from 10,000 to zero |
+| [Callable ownership](async-ownership/README.md) | 98,758,656 | 32,768,000 | 1,000 callables; all captured owners released |
+| [HTTP retry ownership](dank-retry/comparison.json) | 295,972,864 | 227,442,688 | 64 concurrent requests; 1,088 attempts; unchanged request IDs and retry rules |
 
-Docker containment, real runner cancellation, atomic duplicate prevention, and
-report persistence pass. A deliberate 64 MiB OOM exits 137 with `OOMKilled=true`.
-The log test writes 600 MiB, retains five 100 MiB files, and reports 100 MiB of
-expired output. The locked Python 3.12 BuildKit run peaks at 1,053,081,600 bytes
-with no OOM event, then stops before the archive probe. Both archive probe blocks
-pass. The new profile's 3.11 and 3.13 builds peak at 4,089,753,600 and
-3,693,395,968 bytes, with no OOM events. All three application runs stay below
-the 7 GiB target. Complete application suites, audits, public pricing comparisons,
-and the dependency's 3.11/3.13 ownership checks remain pending. PR 43 remains draft.
+The Sushi comparison uses the older locked dependency image. Its median elapsed
+time changes from 2.761 to 2.653 seconds, with identical amounts and quote outputs.
+A repeat with the final dependency image is queued. Sushi and logger workloads
+collect garbage at the same measurement boundaries on both sides. They do not
+clear caches or restart a process to produce the within-workload release result.
+The callable and retry workloads use normal cyclic collection only.
 
-Snapshot and fixture allocation follow-up: the allocator census found
-490,162,455 bytes in unused mock call histories. The historical fixture now uses
-small async functions while preserving all requests and exact counters. With
-production unchanged, median process RSS falls from 968,015,872 to 425,013,248
-bytes. Immutable slotted snapshots and shared lowercase address strings then
-reduce it to 276,500,480 bytes on the same historical workload. The new string
-cache holds 155 keys, with 2,180,089 hits and 155 misses; it uses the existing
-address-cache size setting and retains no discovery objects. All 239 focused
-tests pass. Historical median time changes from 2.581 to 2.628 seconds, with
-unchanged read and quote counts. These exploratory comparisons used the same
-12 GiB default VM before the approved profile split. Their workload hashes differ
-because the latter adds address-cache statistics. A final comparison with the
-identical recorded workload will run in the new 10 GiB profile.
+The [compiler and Brownie check](compiler-backport/README.md) returns identical
+opcodes from sixteen native bytecode scans. Retained Python allocations after
+collection fall from 4,467,732 to 3,540 bytes. All 64 compiler reference-count
+checks and 33 native scanner checks pass. The fix resides in the compiler's
+owning repository; Brownie pins that repair.
 
-Four small supervisor tests pass. They check bounded log retention, missing
-reports, dependency drift, and an OOM in a build worker despite a successful
-build exit. The last check also verifies BuildKit cleanup. The RPC profile's
-independent cgroup probe confirms 8 GiB, no swap, four CPUs, and 512 tasks; it
-does not run or claim a benchmark result.
+The [historical fixture profile](popsicle-owned-cleanup/README.md) releases all
+425 previously pending mapped tasks. Its two passes and 17 existing timeouts
+remain unchanged. This profile includes allocation overhead and does not serve
+as a timing comparison.
 
-The first contained original full suite collected 1,752 tests and produced 1,154
-completed outcomes before the validation reporter failed. An import-guard fixture
-replaced `dank_mids` with a stub that had no `instances` attribute. This was a
-reporter defect. The run has no final pytest summary and remains incomplete in
-`full-original-reporter-failure`. Its peak container memory was 1,552,637,952 bytes,
-with no OOM event. The corrected reporter omits unavailable counters during that
-fixture. A new original full-suite run uses the same image and a fresh database.
+## Containment and archive access
 
-A separate child in that container completed a SQLite query but could not exit.
-Its stack showed Python waiting for an idle, non-daemon aiosqlite worker. The
-process-owned Brownie cursor now queues connection closure before Python joins
-threads. It preserves connection reuse and queued SQL work. All 243 focused tests
-pass on Python 3.11, 3.12, and 3.13, including compiled child-process checks with
-open and closed event loops and both import-guard cases. All ten configured
-extensions load in each run. See `shutdown-*-validation`.
+The approved `ypricemagic` and `rpc-tune` Colima profiles each use 10 GiB and
+5 CPUs, for 20 GiB combined. The previous default profile remains stopped with
+its data preserved. Each heavy job uses an 8 GiB container, no swap, four CPUs,
+and a limit of 512 processes and threads. Only one heavy job runs per profile.
+BuildKit stops before tests start. Limits do not increase after failures.
 
-The first shutdown matrix exposed one new type error in a supervisor test.
-The test now patches the standard-library module directly. The final separate
-type checks again report 1,940 existing errors on each Python version, with no
-added rendered diagnostic against the baseline. See `shutdown-*-mypy-final` and
-`shutdown-mypy-comparison.json`. Four supervisor tests, Black, and whitespace
-checks pass. Complete full suites and real-node comparisons remain outstanding.
+The [runner verification](final-independent/runner/verification.json) covers
+actual cancellation, duplicate prevention, and report persistence. A deliberate
+64 MiB OOM confirms containment. Console output rotates at 100 MiB with five
+files retained; the 600 MiB fixture discloses 100 MiB of expired output. Structured
+pytest results and audit JSON/CSV remain separate from console logs.
 
-The corrected original full suite reached 1,351 completed outcomes out of 1,752
-collected tests, then hit the 8 GiB cgroup limit. Docker recorded `OOMKilled=true`
-and one cgroup OOM kill. The command exited 2 after 4,607.7 seconds and produced
-no final pytest summary. The last phase was setup for the synchronous Compound
-pricing case at `0x6C8c6b02E7b2BE14d4fA6022Dfd6d75921D90E4E`; its setup peak RSS
-was 1,262,678,016 bytes before the subsequent rise to the limit. This is partial
-evidence, not a complete baseline comparison. See `full-original-oom`. Small
-dependency diagnostic processes also ran inside this container, so use separate
-controlled runs for final performance comparisons.
+The [direct Reth checks](reth-backends/README.md) establish archive access through
+NUC Reth. USDC decimals return 6 at blocks 16,830,000 and 18,000,000 by number
+and canonical hash. Lambo Reth timed out in the recorded probes, and the proxy
+returned HTTP 408. The expected Geth archive failure remains a separate control.
+These observations do not establish the cause of individual pricing timeouts.
 
-The scheduler follow-up at `4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1` removes
-negative wait timeouts without changing concurrency or the 600-second deadline.
-Seven focused dependency checks pass. The full dependency suite has 82 passes,
-16 skips, and the same two existing failures. Three short I/O probes reduce
-median wait calls from 25,848 to one and CPU time from 0.2065 to 0.00661 seconds.
-Wall time stays near 0.207 seconds and median peak RSS stays at 36,044,800 bytes.
-This change reduces allocation activity and CPU use; the earlier ownership
-repair provides the retained-memory reduction.
+## Earlier evidence
 
-The owning [aiosqlite repair](https://github.com/SatoshiAndKin/aiosqlite/pull/1)
-drains queued SQL through closed-loop delivery races and releases idle worker
-outcomes. Real database and weak-reference regressions fail against the prior
-worker and pass after the repair. All 36 dependency tests pass locally in Linux
-ARM64 Python 3.9.25 and 3.12.14; configured package mypy reports no issues in 11
-files. The CI test, coverage, and type commands pass on Python 3.9–3.13 across
-Linux, macOS, and Windows. The final test-only correction at
-`b8265cce6f09bcc8015ea09036f5e05c4546d740` also passes the configured local tests,
-83.6% coverage, type check, lint, wheel build, and source build. See
-`sqlite-owner-configured`. Its final CI run passes all 15 platform/version jobs
-and the package build. The final application integration matrix remains pending.
-Both dependency PRs and PR 43 remain draft.
-
-The runner now freezes helper files and workload inputs before a build. This
-fixes a provenance gap when the checkout changes during dependency installation.
-Five supervisor tests pass, including execution of the recorded helper after
-the live checkout is edited. Subsequent comparison runs use these frozen inputs.
-
-The Compound diagnostic on the original source was stopped after a controlled
-regression confirmed retained HTTP retry failures in dank_mids. It completed no
-pricing blocks. Its report remains incomplete, with no OOM recorded. During the
-profile, Python TLS buffer allocations grew from 8,914,834 to 251,450,759 bytes.
-The small regression then showed that eight failed HTTP 408 attempts remained
-owned while their replacement waited. This confirms one retention defect; it
-has not established the sole cause of the full-suite OOM. See
-`compound-retry-profile`.
-
-The owning [dank_mids repair](https://github.com/SatoshiAndKin/dank_mids/pull/9)
-at `c4f8ad7fc62152f0017ee6a6b206e31b4fe03579` leaves each HTTP 408 exception
-handler before it awaits the next attempt. Both release regressions now pass.
-All ten new cases pass, including cancellation, unchanged IDs, non-408 errors,
-and both local-timeout race winners. The full source unit comparison changes
-96 passes / 33 failures / 2 skips into 98 passes / 31 failures / 2 skips. The 31
-remaining failures are identical, including missing native extensions and class
-identity checks. The changed method has 25/25 statements and 4/4 branches covered.
-Configured mypy has the same 205 diagnostics before and after.
-
-Three controlled Linux ARM64 samples preserve 64 concurrent requests and 1,088
-attempts each. Median pending RSS falls from 295,972,864 to 227,442,688 bytes;
-median elapsed time falls from 0.029021 to 0.020908 seconds. These runs use no
-forced collection. The original retains all 1,024 failed payloads; the repaired
-samples retain 194 / 258 / 258 until normal cyclic collection. Separate allocation
-runs keep profiler overhead out of the timing figures. The weak-reference checks
-confirm that pending retries no longer own earlier failures after collection.
-See `dank-retry`. Native ARM64 dependency builds remain blocked by existing source
-build/type errors. Updated hosted native unit CI passes all 12 platform/version
-jobs, and all 15 native builds plus artifact aggregation pass. Final pricing
-validation remains pending. All three owning PRs and pricing PR 43 remain draft.
-
-The final dependency image for Python 3.12 built successfully, but the archive
-probe timed out on USDC decimals at block 16,830,000. A second contained probe
-failed at the same historical call. Chain ID and the historical header returned.
-The separate rpc-tune profile had no running container during the second check.
-The focused suite also remained in `eth_retry` during Multicall creation-block
-lookup, before test collection. Its saved stack and two failed probes establish
-an archive-access blocker. That startup was stopped and marked incomplete; no
-focused test pass or compiled-load pass is claimed for this run. See
-`archive-access-failure`. Containment, builds, type comparisons, and dependency
-checks can continue without that archive state. Full suites, scaling startup,
-and real-node price comparisons still require working archive access.
-
-Final independent checks pass in the approved profiles. Dependency images and
-application extension builds succeed on Python 3.11–3.13. BuildKit peaks are
-1,038,311,424 / 1,336,922,112 / 3,330,588,672 bytes for Python 3.12 / 3.11 / 3.13,
-with no OOM events. Application build containers stay at or below 1,242,468,352 bytes.
-The configured type checks retain 1,940 errors and the same 1,935 rendered Python
-diagnostic records on every version, with no added or removed records. The new
-probe annotation error was fixed and its corrected check is recorded separately.
-All seven cooperative ownership/deadline tests and all 36 SQLite tests pass in
-Linux ARM64 Python 3.11 and 3.13; SQLite's configured types also pass. This extends
-the earlier Python 3.12 dependency evidence. See `final-independent`.
-
-The new-profile containment checks pass, including deliberate OOM, cancellation,
-duplicate prevention, and report persistence. The actual runner's 600 MiB log
-check retains five 100 MiB files and discloses 100 MiB expired output.
-
-The retry probe's initial twelve rounds did not establish a plateau, so a
-240-round check ran in one process with unchanged concurrency and normal cyclic
-collection. It completes 261,120 attempts. Across rounds 41–240, pending RSS stays
-between 249,974,784 and 304,013,312 bytes; every sample has 129 pending tasks and
-normal collection reports no uncollectable objects. No forced collection or
-process restarts occur. See `dank-retry/turnover-240`. These are controlled retry
-results, not a replacement for complete public pricing or full-suite validation.
+[Earlier progress notes](earlier-results.md) retain the previous index without
+changing its bytes. Its pending statements describe earlier stages; use this
+index for current status. [Provenance](earlier-results-provenance.json) records
+the original commit, size, and hash. Earlier OOM runs, rejected build attempts,
+incomplete reports, and dependency comparisons remain available in their
+original directories. No partial run is relabeled as complete validation.
