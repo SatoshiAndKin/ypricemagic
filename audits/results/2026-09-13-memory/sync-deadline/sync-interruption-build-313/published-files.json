@@ -1,0 +1,26 @@
+[
+  {
+    "file": "build-status.json",
+    "private_original_sha256": "7ce75c1a4c863492945bb561c5ae87dabb9180dddafbc7f2ba9e038c4c79d65d",
+    "published_sha256": "7ce75c1a4c863492945bb561c5ae87dabb9180dddafbc7f2ba9e038c4c79d65d",
+    "private_values_removed": false
+  },
+  {
+    "file": "build.retention.json",
+    "private_original_sha256": "79178ee3140fbb59ad2cf97d4bfc06a342bc270a238c919b55003b89998fb2b3",
+    "published_sha256": "79178ee3140fbb59ad2cf97d4bfc06a342bc270a238c919b55003b89998fb2b3",
+    "private_values_removed": false
+  },
+  {
+    "file": "builder-limits.json",
+    "private_original_sha256": "70fd78a6b2ab53b0023326bcf6dd10017bff87ee380709cf3654ab785ceccf2a",
+    "published_sha256": "70fd78a6b2ab53b0023326bcf6dd10017bff87ee380709cf3654ab785ceccf2a",
+    "private_values_removed": false
+  },
+  {
+    "file": "run.json",
+    "private_original_sha256": "eb6210f935e66a253da8dd78fc91de3d6868dbb0291c70d34c77a3e8bd0fe6cd",
+    "published_sha256": "eb6210f935e66a253da8dd78fc91de3d6868dbb0291c70d34c77a3e8bd0fe6cd",
+    "private_values_removed": false
+  }
+]

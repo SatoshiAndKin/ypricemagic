@@ -1,5 +1,17 @@
 # Contained memory validation
 
+## Synchronous deadline and interruption cleanup
+
+The [deadline and owner repair](sync-deadline/README.md) activates the existing
+600-second synchronous test deadline and rejects a missing handler before
+collection. The pinned ez-a-sync repair releases its created request task after
+a caller interruption while preserving the original error and independent
+shared requests. All 278 application tests, 52 owner checks, and two deadline
+checks pass on Python 3.11–3.13. All ten application extensions and four owner
+extensions load native code. Type diagnostics remain unchanged at 1,836.
+The replacement full-suite and real-node queue remains separate from this
+focused validation.
+
 ## Latest pool ownership repair
 
 The [pool-index comparison](property-ownership/README.md) uses the same 524,288
@@ -32,7 +44,12 @@ The [final pinned baseline runs](final-node-validation/README.md) both reach the
 8 GiB limit and remain incomplete. The original revision records 412 of 1,752
 terminal outcomes; the pre-optimization revision records 476 of 1,816. Both load
 all ten compiled modules and pass the archive probe with identical dependencies.
-The optimized full suite, native quote, public pricing, and audit gates remain pending.
+The optimized run records 1,464 of 1,865 terminal outcomes and peaks at
+4,348,043,264 container bytes without OOM. It is interrupted after confirming
+that the configured synchronous test deadline has no installed handler. Its
+final pytest summary is missing. The native quote, public pricing, and audit
+gates remain pending in the replacement queue with the repaired deadline
+dependency and request cleanup. All interrupted and OOM reports remain incomplete.
 PR #43 remains draft. The controlled pool reduction does not establish a full
 pricing memory result.
 

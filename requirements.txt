@@ -8,7 +8,7 @@ dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@9a58cd91b4a652ac1
 eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@c986066ddd9ae10906a470008d786faab2355cc5
 eth_retry>=0.2.1
 evmspec>=0.3.4
-ez-a-sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@ebb981bfaffd887048d1945eff29ab5dfe360e34
+ez-a-sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@ed3459ee74abec91c7675f57fee4b75595edbfdc
 faster-eth-abi>=5.2.12,<6
 faster-eth-utils
 inflection>=0.1,<0.6

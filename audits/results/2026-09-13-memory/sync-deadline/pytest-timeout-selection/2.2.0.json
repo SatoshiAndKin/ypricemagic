@@ -1,0 +1,58 @@
+{
+  "name": "pytest-timeout",
+  "version": "2.2.0",
+  "license": "MIT",
+  "requires_python": ">=3.7",
+  "requires_dist": [
+    "pytest >=5.0.0"
+  ],
+  "project_urls": {
+    "Homepage": "https://github.com/pytest-dev/pytest-timeout"
+  },
+  "classifiers": [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: Plugins",
+    "Framework :: Pytest",
+    "Intended Audience :: Developers",
+    "License :: DFSG approved",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Software Development :: Testing"
+  ],
+  "vulnerabilities": [],
+  "files": [
+    {
+      "filename": "pytest_timeout-2.2.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/e2/3e/abfdb7319d71a179bb8f5980e211d93e7db03f0c0091794dbcd652d642da/pytest_timeout-2.2.0-py3-none-any.whl",
+      "digests": {
+        "blake2b_256": "e23eabfdb7319d71a179bb8f5980e211d93e7db03f0c0091794dbcd652d642da",
+        "md5": "06df07ef13f1fb5044e5fa422a7f2ccf",
+        "sha256": "bde531e096466f49398a59f2dde76fa78429a09a12411466f88a07213e220de2"
+      },
+      "upload_time_iso_8601": "2023-10-08T10:14:23.014944Z",
+      "yanked": false
+    },
+    {
+      "filename": "pytest-timeout-2.2.0.tar.gz",
+      "url": "https://files.pythonhosted.org/packages/2a/b0/8e3182e9ed65ad5b247f9d13769f214fc52b0d3522c3e1c8dbfa2f879e5a/pytest-timeout-2.2.0.tar.gz",
+      "digests": {
+        "blake2b_256": "2ab08e3182e9ed65ad5b247f9d13769f214fc52b0d3522c3e1c8dbfa2f879e5a",
+        "md5": "888263c4bf3025ef1c4128a58861e6f6",
+        "sha256": "3b0b95dabf3cb50bac9ef5ca912fa0cfc286526af17afc806824df20c2f72c90"
+      },
+      "upload_time_iso_8601": "2023-10-08T10:14:25.196773Z",
+      "yanked": false
+    }
+  ]
+}

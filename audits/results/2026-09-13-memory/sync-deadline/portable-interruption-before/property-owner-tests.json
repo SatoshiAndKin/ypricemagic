@@ -1,0 +1,9 @@
+{
+  "exit_code": 1,
+  "compiled_modules": {
+    "a_sync.a_sync.property": "/usr/local/lib/python3.12/site-packages/a_sync/a_sync/property.cpython-312-aarch64-linux-gnu.so",
+    "a_sync.async_property.cached": "/usr/local/lib/python3.12/site-packages/a_sync/async_property/cached.cpython-312-aarch64-linux-gnu.so",
+    "a_sync._smart": "/usr/local/lib/python3.12/site-packages/a_sync/_smart.cpython-312-aarch64-linux-gnu.so",
+    "a_sync.a_sync._helpers": "/usr/local/lib/python3.12/site-packages/a_sync/a_sync/_helpers.cpython-312-aarch64-linux-gnu.so"
+  }
+}

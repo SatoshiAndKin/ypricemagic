@@ -1,0 +1,92 @@
+[
+  {
+    "file": "command.json",
+    "private_original_sha256": "4a9a598530a0386a87fc603eff4bca40c3e5236e4898f0c25dc043260f6830e5",
+    "published_sha256": "4a9a598530a0386a87fc603eff4bca40c3e5236e4898f0c25dc043260f6830e5",
+    "private_values_removed": false
+  },
+  {
+    "file": "console.retention.json",
+    "private_original_sha256": "b08d324e40b5358a7eda1b989c50f3be18bcc5592cfc3d1fbf80cd1ad73f4cff",
+    "published_sha256": "b08d324e40b5358a7eda1b989c50f3be18bcc5592cfc3d1fbf80cd1ad73f4cff",
+    "private_values_removed": false
+  },
+  {
+    "file": "container-state.json",
+    "private_original_sha256": "fca99642e21da1161bfe21d1a04e7c33536b62083f7da790d8abe15dc1643797",
+    "published_sha256": "fca99642e21da1161bfe21d1a04e7c33536b62083f7da790d8abe15dc1643797",
+    "private_values_removed": false
+  },
+  {
+    "file": "dependencies-after.txt",
+    "private_original_sha256": "12a769f82407c2c232dfb9cc7105b62cbec9466e8e2471174022e90d6a775953",
+    "published_sha256": "12a769f82407c2c232dfb9cc7105b62cbec9466e8e2471174022e90d6a775953",
+    "private_values_removed": false
+  },
+  {
+    "file": "dependencies.txt",
+    "private_original_sha256": "a0927d66d1111fbb30b431287b21dabd201568b3ba3e7b3cc940621318525e81",
+    "published_sha256": "a0927d66d1111fbb30b431287b21dabd201568b3ba3e7b3cc940621318525e81",
+    "private_values_removed": false
+  },
+  {
+    "file": "environment.json",
+    "private_original_sha256": "80a07e8d6e26c075a31561513971f61465a2c6f6fa9e45f86d6cfbf0157b3db2",
+    "published_sha256": "80a07e8d6e26c075a31561513971f61465a2c6f6fa9e45f86d6cfbf0157b3db2",
+    "private_values_removed": false
+  },
+  {
+    "file": "image-build-dependencies.txt",
+    "private_original_sha256": "a0927d66d1111fbb30b431287b21dabd201568b3ba3e7b3cc940621318525e81",
+    "published_sha256": "a0927d66d1111fbb30b431287b21dabd201568b3ba3e7b3cc940621318525e81",
+    "private_values_removed": false
+  },
+  {
+    "file": "owner-mypy.txt",
+    "private_original_sha256": "79efe68dd250bbbad9b48e44655309b7b88dd177965cfa05e3d3b327772f18cb",
+    "published_sha256": "79efe68dd250bbbad9b48e44655309b7b88dd177965cfa05e3d3b327772f18cb",
+    "private_values_removed": false
+  },
+  {
+    "file": "progress.json",
+    "private_original_sha256": "ac9d82ad274e6029989e68c2cccf575c4dbc31cc2f35c9c5b82412126d28acfc",
+    "published_sha256": "ac9d82ad274e6029989e68c2cccf575c4dbc31cc2f35c9c5b82412126d28acfc",
+    "private_values_removed": false
+  },
+  {
+    "file": "property-owner-tests.json",
+    "private_original_sha256": "fc0cce3447c842857839400a50f6e4fd1278264c45acd6ca829f00cc6e2bfdaa",
+    "published_sha256": "fc0cce3447c842857839400a50f6e4fd1278264c45acd6ca829f00cc6e2bfdaa",
+    "private_values_removed": false
+  },
+  {
+    "file": "property-runtime-contract.json",
+    "private_original_sha256": "256ae239255f9f1bd6fd6386fa89a12842fadf4b0a61ccec0cf234278801ef94",
+    "published_sha256": "256ae239255f9f1bd6fd6386fa89a12842fadf4b0a61ccec0cf234278801ef94",
+    "private_values_removed": false
+  },
+  {
+    "file": "pytest.xml",
+    "private_original_sha256": "9ec789f6679ecdf829c5a3af1abd3f0ab90b5f28f7133d728b51e55629d6fa12",
+    "published_sha256": "9ec789f6679ecdf829c5a3af1abd3f0ab90b5f28f7133d728b51e55629d6fa12",
+    "private_values_removed": false
+  },
+  {
+    "file": "run.json",
+    "private_original_sha256": "22f0bcf19dbffac5dbf319404328111fd9333fb268991e273a361b54e85f7ffb",
+    "published_sha256": "22f0bcf19dbffac5dbf319404328111fd9333fb268991e273a361b54e85f7ffb",
+    "private_values_removed": false
+  },
+  {
+    "file": "runner-files.json",
+    "private_original_sha256": "bbf9030d5bcdf4801648efe08fc3bedbbfcfbf9b01a526ec0d5f545a437b7008",
+    "published_sha256": "bbf9030d5bcdf4801648efe08fc3bedbbfcfbf9b01a526ec0d5f545a437b7008",
+    "private_values_removed": false
+  },
+  {
+    "file": "workload-files.json",
+    "private_original_sha256": "6d73219c5dc9f8577890db2b04d08b85e249fffe475c732b79063768277b0a00",
+    "published_sha256": "6d73219c5dc9f8577890db2b04d08b85e249fffe475c732b79063768277b0a00",
+    "private_values_removed": false
+  }
+]

@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools", "wheel", "Cython==3.2.5"]
+
+[tool.black]
+line-length = 100
+
+[tool.isort]
+line_length = 100
+
+[tool.mypy]
+plugins = ["a_sync_mypy_plugin"]
+files = ["a_sync", "tests/mypy/cached_property_contract.py"]
+pretty = true
+ignore_missing_imports = true
+show_error_codes = true
+show_error_context = true
+show_traceback = true
+install_types = true
+non_interactive = true
+enable_incomplete_feature = ["Unpack"]
+
+[tool.validation]
+cached_property_tests = ["tests/a_sync/test_cached_property_ownership.py", "tests/a_sync/test_property.py", "tests/a_sync/test_sync_interruption.py", "tests/test_smart.py", "tests/test_smart_ownership.py", "tests/mypy/test_mypy_plugin.py"]
+
+[tool.validation.cached_property_pytest]
+addopts = "-p no:pytest_ethereum -p no:pytest-brownie --junitxml=/reports/pytest.xml"
+
+[tool.validation.full_pytest]
+testpaths = ["tests"]
+addopts = "-p no:pytest_ethereum -p no:pytest-brownie --junitxml=/reports/pytest.xml"

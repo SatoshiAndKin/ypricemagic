@@ -1,0 +1,14 @@
+{
+  "paused_parent_pid": 73806,
+  "previous_process": "73806 22356 Ts   env/bin/python /private/tmp/yprice-memory/queue-ownership-final-node-validation.py",
+  "completed_reports": [
+    "full-ownership-original",
+    "full-ownership-preoptimization",
+    "full-ownership-optimized"
+  ],
+  "cause": "The old queue fixes an obsolete dependency image without the synchronous deadline handler. Its child has already exited and all three incomplete full reports are preserved.",
+  "replacement": "queue-deadline-final-node-validation.py",
+  "pending_replacement_stages": 17,
+  "action": "Terminate the paused parent with no live children; preserve all reports and run the replacement after the final matrix and commit.",
+  "unix_time": 1789405518.3926132
+}

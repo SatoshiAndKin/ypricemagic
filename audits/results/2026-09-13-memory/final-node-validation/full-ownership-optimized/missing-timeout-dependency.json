@@ -1,0 +1,15 @@
+{
+  "queue_pid": 73806,
+  "validation_supervisor_pid": 84423,
+  "queue_session_id": 28411,
+  "unix_time": 1789402004.334514,
+  "cause": "Configured timeout=600 has no synchronous test handler because pytest-timeout is absent from requirements and the image",
+  "observed_case": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x6C8c6b02E7b2BE14d4fA6022Dfd6d75921D90E4E]",
+  "stack_proves_pricing_deadlock": false,
+  "archive_recheck": {
+    "block": 16830000,
+    "usdc_decimals": 6,
+    "elapsed_seconds": 0.02498064898827579
+  },
+  "action": "Pause only the owned outer queue; interrupt its owned full-run supervisor so it captures incomplete reports before repairing the test environment"
+}

@@ -1,0 +1,22 @@
+import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib
+from pathlib import Path
+source=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()
+config=tomllib.loads((source/'pyproject.toml').read_text())
+tests=config['tool']['validation']['cached_property_tests']
+for name in tests:
+    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)
+# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.
+(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\n[tool.pytest.ini_options]\ntestpaths = '+json.dumps(tests)+'\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\n')
+status=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode
+modules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}
+assert all(path.endswith('.so') for path in modules.values()),modules
+Path('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))
+result=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)
+output=result.stdout+result.stderr
+Path('/reports/owner-mypy.txt').write_text(output)
+assert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output
+namespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))
+asyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())
+asyncio.get_event_loop().run_until_complete(namespace['factory_contract']())
+Path('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))
+raise SystemExit(status)

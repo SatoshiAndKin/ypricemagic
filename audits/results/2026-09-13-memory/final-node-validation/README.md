@@ -17,8 +17,9 @@ PYTEST_ADDOPTS="-p no:pytest_ethereum" BROWNIE_NETWORK=mainnet make test
 | --- | --- | ---: | ---: | ---: | --- |
 | Original PR baseline | `476af288a520a30052668a8b3ad7e3e682cd101f` | 412 / 1,752 | 1,206.69 | 8,589,934,592 | OOM; incomplete |
 | Before memory optimization | `61be7b520aba7f771a0bf96b326315e68767fae4` | 476 / 1,816 | 1,469.06 | 8,589,959,168 | OOM; incomplete |
+| Pool ownership repair | `1a8023089c220ce4f1ae33497b70fb463fe582d3` | 1,464 / 1,865 | 3,929.25 | 4,348,043,264 | Interrupted; synchronous deadline unavailable |
 
-Both runs pass the historical archive probe and load all ten configured mypyc
+Both baseline runs pass the historical archive probe and load all ten configured mypyc
 modules from compiled extensions. Both record one cgroup OOM kill and Docker
 `OOMKilled=true`. Neither produces a final pytest summary. The effective limit
 remains 8,589,934,592 bytes; the second peak includes a small cgroup accounting
@@ -33,11 +34,28 @@ failure equivalence and coverage remain unverified. The
 outcomes that both runs recorded. It preserves exact errors and identifies
 outcomes present on only one side. Installed dependencies are byte-identical.
 
-The optimized full suite at `1a8023089c220ce4f1ae33497b70fb463fe582d3`, native
-quote checks, three public-pricing timing repeats, separate allocation profiles,
-and the mainnet audit remain in the local sequential queue. These baseline
-reports do not establish the optimized full-suite memory result. PR #43 remains
-draft.
+The optimized run records 1,074 passed calls, 369 failed calls, 15 skipped calls,
+and six setup skips. Its peak sampled process RSS is 3,154,800,640 bytes. It has
+zero cgroup OOM events and Docker reports `OOMKilled=false`. It passes the archive
+probe and loads all ten configured compiled modules. Its final pytest summary
+is missing, so its 4.05 GiB container peak remains an incomplete measurement.
+
+The run reaches synchronous Compound pricing after the cooperative tests. The
+configured `timeout = 600` has no synchronous handler: `pytest-timeout` is absent
+from the dependency image. The stack capture shows the call waiting in the
+event loop; it does not prove a pricing deadlock. A separate USDC archive recheck
+at block 16,830,000 returns six decimals in 0.02498 seconds. The run was
+interrupted to repair the missing test dependency, and the remaining queue was
+paused. The exact cause and stack remain in the optimized report. The
+[deadline and owner repair](../sync-deadline/README.md) now passes its focused
+Python 3.11–3.13 matrix. The old childless queue has been retired with all reports
+preserved. Its replacement retains every pending workload and repeats the
+three full revisions with the final dependency image.
+
+Native quote checks, three public-pricing timing repeats, separate allocation
+profiles, and the mainnet audit remain pending. Full failure equivalence and
+coverage are unverified. The two full comparisons explicitly reject incomplete
+reports. PR #43 remains draft.
 
 Each run retains source and runner hashes, dependencies, command, elapsed time,
 exit state, peak memory, cgroup OOM events, and Docker limits. Pytest events and

@@ -1,0 +1,60 @@
+{
+  "name": "pytest-timeout",
+  "version": "2.4.0",
+  "license": "MIT",
+  "requires_python": ">=3.7",
+  "requires_dist": [
+    "pytest>=7.0.0"
+  ],
+  "project_urls": {
+    "Homepage": "https://github.com/pytest-dev/pytest-timeout"
+  },
+  "classifiers": [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: Plugins",
+    "Framework :: Pytest",
+    "Intended Audience :: Developers",
+    "License :: DFSG approved",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Software Development :: Testing"
+  ],
+  "vulnerabilities": [],
+  "files": [
+    {
+      "filename": "pytest_timeout-2.4.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/fa/b6/3127540ecdf1464a00e5a01ee60a1b09175f6913f0644ac748494d9c4b21/pytest_timeout-2.4.0-py3-none-any.whl",
+      "digests": {
+        "blake2b_256": "fab63127540ecdf1464a00e5a01ee60a1b09175f6913f0644ac748494d9c4b21",
+        "md5": "9fe74fca4eec947f1515f5dddc958b3b",
+        "sha256": "c42667e5cdadb151aeb5b26d114aff6bdf5a907f176a007a30b940d3d865b5c2"
+      },
+      "upload_time_iso_8601": "2025-05-05T19:44:33.502941Z",
+      "yanked": false
+    },
+    {
+      "filename": "pytest_timeout-2.4.0.tar.gz",
+      "url": "https://files.pythonhosted.org/packages/ac/82/4c9ecabab13363e72d880f2fb504c5f750433b2b6f16e99f4ec21ada284c/pytest_timeout-2.4.0.tar.gz",
+      "digests": {
+        "blake2b_256": "ac824c9ecabab13363e72d880f2fb504c5f750433b2b6f16e99f4ec21ada284c",
+        "md5": "dbc9a376438aa779cff375236e505792",
+        "sha256": "7e68e90b01f9eff71332b25001f85c75495fc4e3a836701876183c4bcfd0540a"
+      },
+      "upload_time_iso_8601": "2025-05-05T19:44:34.990551Z",
+      "yanked": false
+    }
+  ]
+}

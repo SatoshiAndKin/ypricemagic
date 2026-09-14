@@ -1,0 +1,20 @@
+[
+  {
+    "file": "2.2.0.json",
+    "private_original_sha256": "c0a2cc546cb5e2a0d8a13de3909e16e613b4e15e9e60caad0a1aebf4f3add400",
+    "published_sha256": "c0a2cc546cb5e2a0d8a13de3909e16e613b4e15e9e60caad0a1aebf4f3add400",
+    "private_values_removed": false
+  },
+  {
+    "file": "2.4.0.json",
+    "private_original_sha256": "d6529522718e43160aa4b306b4261b1531b136e548dbf83a24f7dbe88418c0ef",
+    "published_sha256": "d6529522718e43160aa4b306b4261b1531b136e548dbf83a24f7dbe88418c0ef",
+    "private_values_removed": false
+  },
+  {
+    "file": "2.5.0.json",
+    "private_original_sha256": "2819211c25fa7f361c399dd26158c5a1237072e722068cffdfb853369f721c56",
+    "published_sha256": "2819211c25fa7f361c399dd26158c5a1237072e722068cffdfb853369f721c56",
+    "private_values_removed": false
+  }
+]

@@ -1,0 +1,65 @@
+import asyncio
+import importlib
+import json
+import signal
+from pathlib import Path
+
+import a_sync
+
+
+class InterruptedRequest(BaseException):
+    pass
+
+
+events = []
+failure = InterruptedRequest("caller interrupted the synchronous request")
+
+
+@a_sync.a_sync(default="sync")
+async def request():
+    events.append("entered")
+    try:
+        await asyncio.Event().wait()
+    finally:
+        events.append("released")
+
+
+def interrupt(signum, frame):
+    raise failure
+
+
+loop = asyncio.get_event_loop()
+before = asyncio.all_tasks(loop)
+handler = signal.signal(signal.SIGALRM, interrupt)
+caught = None
+try:
+    signal.setitimer(signal.ITIMER_REAL, 0.1)
+    request()
+except InterruptedRequest as error:
+    caught = error
+finally:
+    signal.setitimer(signal.ITIMER_REAL, 0)
+    signal.signal(signal.SIGALRM, handler)
+
+pending = asyncio.all_tasks(loop) - before
+result = {
+    "same_exception": caught is failure,
+    "events_after_interruption": list(events),
+    "pending_request_tasks": len(pending),
+    "native_helper": importlib.import_module("a_sync.a_sync._helpers").__file__,
+}
+assert result["native_helper"].endswith(".so"), result
+# Preserve the failure, then clean this diagnostic's own tasks before exit.
+for task in pending:
+    task.cancel()
+loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
+result["events_after_diagnostic_cleanup"] = list(events)
+result["complete"] = True
+result["ownership_passed"] = bool(
+    result["same_exception"]
+    and result["events_after_interruption"] == ["entered", "released"]
+    and result["pending_request_tasks"] == 0
+)
+Path("/reports/sync-interruption.json").write_text(json.dumps(result, indent=2) + "\n")
+print(json.dumps(result))
+raise SystemExit(0 if result["ownership_passed"] else 1)

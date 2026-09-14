@@ -1,0 +1,89 @@
+import json
+import re
+import shlex
+import subprocess
+import sys
+from collections import Counter
+from pathlib import Path
+
+root = Path('/Users/bryan/code/ypricemagic')
+base = Path('/private/tmp/yprice-memory')
+python = str(root / 'env/bin/python')
+sys.path.insert(0, str(root / 'tools/validation'))
+from compare import type_diagnostics
+from event_node_supervisor import run
+
+
+def normalized(counter):
+    result = Counter()
+    for (file, error), count in counter.items():
+        result[file, re.sub(r'on line \d+', 'on line <source line>', error)] += count
+    return result
+
+
+images = {}
+comparisons = {}
+for version in ['3.12', '3.11', '3.13']:
+    tag = version.replace('.', '')
+    name = 'sync-deadline-application-' + tag
+    report = base / name
+    command = (
+        'python /runner/probe.py && '
+        'python -m pip install --no-deps --no-build-isolation -e . && '
+        'python /work/tools/validation/test_timeout.py > /reports/timeout-probe.txt 2>&1 && '
+        'python /runner/focused.py && python -c '
+        + shlex.quote((base / 'sync-deadline-pin-proof.py').read_text())
+        + '; status=$?; python -m mypy > /reports/mypy.txt 2>&1; exit $status'
+    )
+    args = [python, str(root / 'tools/validation/run.py'), '--revision', 'worktree',
+            '--python', version, '--report', str(report), '--env-file',
+            str(base / 'runtime-lambo-reth.env')]
+    required = ['rpc-probe.json', 'compiled-modules.json', 'pytest-summary.json',
+                'mypy.txt', 'ownership-pins.json', 'timeout-probe.txt']
+    for file in required:
+        args += ['--require-report', file]
+    status = subprocess.run([*args, '--', 'sh', '-c', command], cwd=root,
+                            stdout=subprocess.DEVNULL).returncode
+    metadata = json.loads((report / 'run.json').read_text())
+    assert status == 0 and metadata['complete'] and not metadata['oom_killed'], metadata
+    tests = json.loads((report / 'pytest-summary.json').read_text())
+    assert tests['exit_code'] == 0 and tests['collected'] == 278, tests
+    assert len(json.loads((report / 'compiled-modules.json').read_text())) == 10
+    probe = (report / 'timeout-probe.txt').read_text()
+    assert 'Ran 2 tests' in probe and probe.rstrip().endswith('OK'), probe
+    images[version] = image = metadata['image']
+    (base / 'sync-deadline-pin-images.json').write_text(json.dumps(images, indent=2) + '\n')
+    print(name, '278 application passes, two deadline checks, ten compiled modules, archive and pins pass', flush=True)
+
+    before = base / ('sync-deadline-types-before-' + tag)
+    run(before.name, '1a8023089c220ce4f1ae33497b70fb463fe582d3', ['sh', '-c',
+        'python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && '
+        'python /runner/check_compiled.py && python -m mypy > /reports/mypy.txt 2>&1'],
+        ['rpc-probe.json', 'compiled-modules.json', 'mypy.txt'], dependency_image=image)
+    old = normalized(type_diagnostics(before / 'mypy.txt'))
+    new = normalized(type_diagnostics(report / 'mypy.txt'))
+    comparison = {
+        'before': sum(old.values()), 'after': sum(new.values()),
+        'added': [{'file': file, 'error': error, 'count': count} for (file, error), count in (new-old).items()],
+        'removed': [{'file': file, 'error': error, 'count': count} for (file, error), count in (old-new).items()],
+        'dependencies_equal': (before / 'dependencies-after.txt').read_bytes() == (report / 'dependencies-after.txt').read_bytes(),
+    }
+    assert comparison['dependencies_equal'] and not comparison['added'], comparison
+    comparisons[version] = comparison
+    (base / 'sync-deadline-type-comparison.json').write_text(json.dumps(comparisons, indent=2) + '\n')
+
+    owner = base / ('sync-deadline-owner-' + tag)
+    args = [python, str(root / 'tools/validation/run.py'), '--source',
+            '/private/tmp/yprice-async-memory', '--revision',
+            (base / 'sync-interruption-owner-sha.txt').read_text().strip(), '--image', image,
+            '--report', str(owner)]
+    for file in ['property-owner-tests.json', 'pytest.xml', 'owner-mypy.txt', 'property-runtime-contract.json']:
+        args += ['--require-report', file]
+    subprocess.run([*args, '--', 'env', 'PYTHONPATH=/runner', 'python', '-P', '-c',
+        (base / 'sync-interruption-owner-tests.py').read_text()], cwd=root,
+        stdout=subprocess.DEVNULL, check=True)
+    metadata = json.loads((owner / 'run.json').read_text())
+    assert metadata['complete'] and not metadata['oom_killed'], metadata
+    print(owner.name, 'pinned native lifecycle and plugin checks pass', flush=True)
+
+print('Final deadline and interruption matrix completed on all three Python versions.', flush=True)

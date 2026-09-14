@@ -106,6 +106,17 @@ process-exit failure, while keeping overall execution marked incomparable.
 Partial test reports and duplicate terminal outcomes never qualify for that
 comparison. Added and removed test IDs remain visible in its coverage fields.
 
+The central pytest configuration requires `pytest-timeout`. Version 2.2.0
+supports the pinned pytest 6.2.5 and activates the existing 600-second
+synchronous deadline. Missing the plugin stops collection with an error.
+The cooperative deadline and concurrency of 100 remain unchanged.
+Run `python /work/tools/validation/test_timeout.py` inside the validation
+container to check the missing-plugin error, synchronous interruption,
+fixture teardown, continued execution, and all 100 active cooperative cases.
+The synchronous bridge uses the pinned ez-a-sync repair to cancel and settle
+its own request before propagating a caller interruption. Independent shared
+requests retain their own lifetime.
+
 Price diagnostics and the `y.stuck?` logger serve separate purposes. Enable
 `logging.getLogger("y.stuck?").setLevel(logging.DEBUG)` for "still executing"
 messages every five minutes. These messages remain DEBUG-only.

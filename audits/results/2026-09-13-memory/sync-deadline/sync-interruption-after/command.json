@@ -1,0 +1,34 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=/runner",
+    "python",
+    "-P",
+    "-c",
+    "import asyncio\nimport importlib\nimport json\nimport signal\nfrom pathlib import Path\n\nimport a_sync\n\n\nclass InterruptedRequest(BaseException):\n    pass\n\n\nevents = []\nfailure = InterruptedRequest(\"caller interrupted the synchronous request\")\n\n\n@a_sync.a_sync(default=\"sync\")\nasync def request():\n    events.append(\"entered\")\n    try:\n        await asyncio.Event().wait()\n    finally:\n        events.append(\"released\")\n\n\ndef interrupt(signum, frame):\n    raise failure\n\n\nloop = asyncio.get_event_loop()\nbefore = asyncio.all_tasks(loop)\nhandler = signal.signal(signal.SIGALRM, interrupt)\ncaught = None\ntry:\n    signal.setitimer(signal.ITIMER_REAL, 0.1)\n    request()\nexcept InterruptedRequest as error:\n    caught = error\nfinally:\n    signal.setitimer(signal.ITIMER_REAL, 0)\n    signal.signal(signal.SIGALRM, handler)\n\npending = asyncio.all_tasks(loop) - before\nresult = {\n    \"same_exception\": caught is failure,\n    \"events_after_interruption\": list(events),\n    \"pending_request_tasks\": len(pending),\n    \"native_helper\": importlib.import_module(\"a_sync.a_sync._helpers\").__file__,\n}\nassert result[\"native_helper\"].endswith(\".so\"), result\n# Preserve the failure, then clean this diagnostic's own tasks before exit.\nfor task in pending:\n    task.cancel()\nloop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))\nresult[\"events_after_diagnostic_cleanup\"] = list(events)\nresult[\"complete\"] = True\nresult[\"ownership_passed\"] = bool(\n    result[\"same_exception\"]\n    and result[\"events_after_interruption\"] == [\"entered\", \"released\"]\n    and result[\"pending_request_tasks\"] == 0\n)\nPath(\"/reports/sync-interruption.json\").write_text(json.dumps(result, indent=2) + \"\\n\")\nprint(json.dumps(result))\nraise SystemExit(0 if result[\"ownership_passed\"] else 1)\n"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 1.2752711880020797,
+  "peak_sampled_process_rss_bytes": 17104896,
+  "cgroup_before": {
+    "memory.current": "8802304",
+    "memory.peak": "8908800",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "11108352",
+    "memory.peak": "36937728",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

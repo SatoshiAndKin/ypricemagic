@@ -1,0 +1,17 @@
+{
+  "complete": true,
+  "purpose": "Compile synchronous caller interruption cleanup with identical supporting dependencies",
+  "started_unix": 1789403592.242642,
+  "application": {
+    "source_sha": "d00a51464750a42d8f25737937858a983b0f80dd",
+    "source_revision": "d00a51464750a42d8f25737937858a983b0f80dd",
+    "source_archive_sha256": "8ee668322d3bdfbde80ed1ae730f995eaf2659fcda54be3612450f646e80eac4"
+  },
+  "owner": {
+    "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+    "source_revision": "worktree",
+    "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403"
+  },
+  "image": "sha256:72a637626c7e62405d9837ae899f2eb7cd239cbb5bdd14f48dfcde7c77610587",
+  "elapsed_seconds": 73.07281303405762
+}

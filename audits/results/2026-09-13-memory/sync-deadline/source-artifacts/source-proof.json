@@ -1,0 +1,68 @@
+{
+  "runtime_pin": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+  "owner_test_head": "03bf8d4aabd80ee538ee5ee03f0010c65246f63d",
+  "files": {
+    "a_sync/a_sync/_helpers.pyx": {
+      "runtime_sha256": "c48e3a18aca2a3f7111977de84d30d3fb582f4a13d5a75f610e470c4363da69f",
+      "current_sha256": "c48e3a18aca2a3f7111977de84d30d3fb582f4a13d5a75f610e470c4363da69f",
+      "runtime_unchanged": true,
+      "development_builds": {
+        "312": {
+          "sha256": "c48e3a18aca2a3f7111977de84d30d3fb582f4a13d5a75f610e470c4363da69f",
+          "same_as_runtime_pin": true
+        },
+        "311": {
+          "sha256": "c48e3a18aca2a3f7111977de84d30d3fb582f4a13d5a75f610e470c4363da69f",
+          "same_as_runtime_pin": true
+        },
+        "313": {
+          "sha256": "c48e3a18aca2a3f7111977de84d30d3fb582f4a13d5a75f610e470c4363da69f",
+          "same_as_runtime_pin": true
+        }
+      }
+    },
+    "tests/a_sync/test_sync_interruption.py": {
+      "runtime_sha256": "151403d8bea46f185c391f32a1a6f634261d9b69bbcc904db7889ae40d719e96",
+      "current_sha256": "74bace21326c4dd4d2f5e2d8ea4315d43e943ab276da448037cc7c4b78e566df",
+      "runtime_unchanged": false,
+      "development_builds": {
+        "312": {
+          "sha256": "151403d8bea46f185c391f32a1a6f634261d9b69bbcc904db7889ae40d719e96",
+          "same_as_runtime_pin": true
+        },
+        "311": {
+          "sha256": "151403d8bea46f185c391f32a1a6f634261d9b69bbcc904db7889ae40d719e96",
+          "same_as_runtime_pin": true
+        },
+        "313": {
+          "sha256": "151403d8bea46f185c391f32a1a6f634261d9b69bbcc904db7889ae40d719e96",
+          "same_as_runtime_pin": true
+        }
+      }
+    },
+    "pyproject.toml": {
+      "runtime_sha256": "9fd6f5aed90804fec004041b3cef9d172eba75286204676e2907316f9ac6a067",
+      "current_sha256": "9fd6f5aed90804fec004041b3cef9d172eba75286204676e2907316f9ac6a067",
+      "runtime_unchanged": true,
+      "development_builds": {
+        "312": {
+          "sha256": "9fd6f5aed90804fec004041b3cef9d172eba75286204676e2907316f9ac6a067",
+          "same_as_runtime_pin": true
+        },
+        "311": {
+          "sha256": "9fd6f5aed90804fec004041b3cef9d172eba75286204676e2907316f9ac6a067",
+          "same_as_runtime_pin": true
+        },
+        "313": {
+          "sha256": "9fd6f5aed90804fec004041b3cef9d172eba75286204676e2907316f9ac6a067",
+          "same_as_runtime_pin": true
+        }
+      }
+    }
+  },
+  "test_followup_changed_files": [
+    "README-property-memory.md",
+    "tests/a_sync/test_sync_interruption.py"
+  ],
+  "negative_deadline_helper_matches_recorded_runner": true
+}

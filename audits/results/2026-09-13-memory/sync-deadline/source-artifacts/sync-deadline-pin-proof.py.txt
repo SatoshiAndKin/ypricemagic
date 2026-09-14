@@ -1,0 +1,17 @@
+import ast,hashlib,importlib,importlib.metadata,json
+from pathlib import Path
+expected=next(line for line in Path('/work/requirements-dev.txt').read_text().splitlines() if line.startswith('pytest-asyncio-cooperative @')).rsplit('@',1)[1]
+cooperative=importlib.metadata.distribution('pytest-asyncio-cooperative')
+async_dist=importlib.metadata.distribution('ez-a-sync')
+proof={'cooperative':json.loads(cooperative.read_text('direct_url.json')),'ez_a_sync':json.loads(async_dist.read_text('direct_url.json'))}
+assert proof['cooperative']['vcs_info']['commit_id']==expected,proof
+required=next(line for line in Path('/work/requirements.txt').read_text().splitlines() if line.startswith('ez-a-sync @')).rsplit('@',1)[1]
+assert proof['ez_a_sync']['vcs_info']['commit_id']==required,proof
+proof['native_modules']={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}
+assert all(path.endswith('.so') for path in proof['native_modules'].values()),proof
+plugin=importlib.import_module('pytest_asyncio_cooperative.plugin')
+proof['cooperative_plugin_sha256']=hashlib.sha256(Path(plugin.__file__).read_bytes()).hexdigest()
+assert proof['cooperative_plugin_sha256']=='3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7',proof
+proof['pytest_timeout_version']=importlib.metadata.version('pytest-timeout')
+assert proof['pytest_timeout_version']=='2.2.0',proof
+Path('/reports/ownership-pins.json').write_text(json.dumps(proof,indent=2))

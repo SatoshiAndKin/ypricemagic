@@ -1,0 +1,23 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=/runner",
+    "python",
+    "-P",
+    "-c",
+    "import importlib,json,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/smart-owner-full-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\nshutil.copytree(source/'tests',target/'tests')\n# Keep mypy settings for the dependency's existing type-plugin tests.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\n'+''.join(key+' = '+json.dumps(value)+'\\n' for key,value in config['tool']['validation']['full_pytest'].items()))\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/owner-full.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nraise SystemExit(status)\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789402978.039687,
+  "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+  "source_revision": "worktree",
+  "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403",
+  "image": "sha256:5f67dfecf3085abd5cff6a15469e5bc36ea28fee0c557e05340cf7b181ac13bc",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 148.2793791294098
+}

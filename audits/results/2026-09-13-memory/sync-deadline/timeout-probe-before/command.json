@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /work/tools/validation/test_timeout.py > /reports/timeout-probe.txt 2>&1"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 2.303967289000866,
+  "peak_sampled_process_rss_bytes": 192208896,
+  "cgroup_before": {
+    "memory.current": "8953856",
+    "memory.peak": "9326592",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "19406848",
+    "memory.peak": "172261376",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

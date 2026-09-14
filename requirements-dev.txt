@@ -3,6 +3,8 @@
 wheel
 types-PyYAML==6.0.12.20260906
 pytest
+# Activate the centralized synchronous-test deadline with pytest 6.2.5.
+pytest-timeout==2.2.0
 numpy
 # Retain the shared event loop and release completed test state.
 pytest-asyncio-cooperative @ git+https://github.com/SatoshiAndKin/pytest-asyncio-cooperative@17677c7145d24c36917036877681eb83225ccdb3
