@@ -26,6 +26,8 @@ Dependency image: `sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1
 | [native-reviewed-deadline-before](native-reviewed-deadline-before/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 363.29 | 1165611008 | no | 130 |
 | [native-deadline-after](native-deadline-after/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 119.56 | 1165357056 | yes | 0 |
 | [native-reviewed-deadline-after](native-reviewed-deadline-after/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 333.08 | 1164902400 | yes | 1 |
+| [public-deadline-before-timing-1](public-deadline-before-timing-1/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 745.57 | 8589950976 | no | 137 |
+| [public-deadline-before-timing-2](public-deadline-before-timing-2/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 883.55 | 8589971456 | no | 137 |
 
 `full-deadline-original` records 291 passed calls, 109 failed calls, 9 skipped calls, 3 setup failures, and 0 setup skips. Its final pytest summary is missing.
 It records 1 cgroup OOM kills and Docker `OOMKilled=true`. It loads 10 compiled modules; the archive probe passes. Expired console bytes: 0.
@@ -105,10 +107,26 @@ The `before` process needs intervention after its final workload report because 
 
 Run elapsed time and container peaks include extension preparation and process shutdown; they do not measure native quote latency alone.
 
-Pending final reports: 10 of 17.
+### Public pricing workloads
 
-- `public-deadline-before-timing-1`
-- `public-deadline-before-timing-2`
+The workload calls public pricing at fixed blocks with cold, warm,
+repeated-amount, concurrent, and many-block requests. It requires 99 completed
+calls. These rows include failed and incomplete repetitions.
+
+| Run | Reported calls / 99 | Complete workload | Cgroup OOM kills | Docker OOMKilled | Final pricing summary |
+| --- | ---: | --- | ---: | --- | --- |
+| [public-deadline-before-timing-1](public-deadline-before-timing-1/run.json) | 0 / 99 | no | 1 | true | missing |
+| [public-deadline-before-timing-2](public-deadline-before-timing-2/run.json) | 0 / 99 | no | 1 | true | missing |
+
+An OOM before the first cold result supplies no completed price row or final
+pricing summary. It cannot enter a 99-call timing median. A revision needs all
+three complete timing repetitions for its median; allocation profiles remain
+separate. Exact-row differences preserve missing and unmatched rows and do not
+turn them into evidence of changed prices.
+
+
+Pending final reports: 8 of 17.
+
 - `public-deadline-before-timing-3`
 - `public-deadline-before-allocations`
 - `public-deadline-after-timing-1`

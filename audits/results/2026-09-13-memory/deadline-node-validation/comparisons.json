@@ -130,7 +130,20 @@
     "execution_complete_both": false
   },
   "public": {
-    "before": [],
+    "before": [
+      {
+        "name": "public-deadline-before-timing-1",
+        "workload_complete": false,
+        "summary": null,
+        "reported_calls": 0
+      },
+      {
+        "name": "public-deadline-before-timing-2",
+        "workload_complete": false,
+        "summary": null,
+        "reported_calls": 0
+      }
+    ],
     "after": [],
     "repeats": {}
   }
