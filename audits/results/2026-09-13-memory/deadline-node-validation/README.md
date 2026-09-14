@@ -31,6 +31,7 @@ Dependency image: `sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1
 | [public-deadline-before-timing-3](public-deadline-before-timing-3/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 714.51 | 8589946880 | no | 137 |
 | [public-deadline-before-allocations](public-deadline-before-allocations/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 652.56 | 8589934592 | no | 137 |
 | [public-deadline-after-timing-1](public-deadline-after-timing-1/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 1357.36 | 3222843392 | yes | 0 |
+| [public-deadline-after-timing-2](public-deadline-after-timing-2/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 1374.31 | 3111694336 | yes | 0 |
 
 `full-deadline-original` records 291 passed calls, 109 failed calls, 9 skipped calls, 3 setup failures, and 0 setup skips. Its final pytest summary is missing.
 It records 1 cgroup OOM kills and Docker `OOMKilled=true`. It loads 10 compiled modules; the archive probe passes. Expired console bytes: 0.
@@ -123,6 +124,7 @@ calls. These rows include failed and incomplete repetitions.
 | [public-deadline-before-timing-3](public-deadline-before-timing-3/run.json) | 0 / 99 | no | 1 | true | missing |
 | [public-deadline-before-allocations](public-deadline-before-allocations/run.json) | 0 / 99 | no | 1 | true | missing |
 | [public-deadline-after-timing-1](public-deadline-after-timing-1/run.json) | 99 / 99 | yes | 0 | false | present |
+| [public-deadline-after-timing-2](public-deadline-after-timing-2/run.json) | 99 / 99 | yes | 0 | false | present |
 
 An OOM before the first cold result supplies no completed price row or final
 pricing summary. It cannot enter a 99-call timing median. A revision needs all
@@ -133,12 +135,14 @@ turn them into evidence of changed prices.
 | Complete run | Pricing seconds | Workload peak RSS bytes | Live tasks at end | Market / result / state cache entries |
 | --- | ---: | ---: | ---: | --- |
 | [public-deadline-after-timing-1](public-deadline-after-timing-1/public-summary.json) | 1252.33 | 2087518208 | 53 | 33 / 35 / 16384 |
+| [public-deadline-after-timing-2](public-deadline-after-timing-2/public-summary.json) | 1253.86 | 2078216192 | 53 | 33 / 35 / 16384 |
 
 Pricing time excludes extension preparation and process shutdown. Workload RSS comes from `resource.getrusage`; sampled process RSS and total container memory remain separate in run metrics. Allocation-profile timings are excluded from performance medians. Logical RPC counters remain in each linked summary; they count adapter operations and batching, not necessarily physical requests.
 
-Pending final reports: 5 of 17.
+Exact price, amount, block, path, and error rows within `after` match across 2 completed workloads. Timing and logical RPC counters are excluded from this semantic comparison. This does not establish equality against a baseline that returned no prices.
 
-- `public-deadline-after-timing-2`
+Pending final reports: 4 of 17.
+
 - `public-deadline-after-timing-3`
 - `public-deadline-after-allocations`
 - `audit-deadline-before`

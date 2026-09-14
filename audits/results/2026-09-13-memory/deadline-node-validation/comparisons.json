@@ -184,16 +184,2542 @@
           "profiler": null
         },
         "reported_calls": 99
+      },
+      {
+        "name": "public-deadline-after-timing-2",
+        "workload_complete": true,
+        "summary": {
+          "complete": true,
+          "calls": 99,
+          "elapsed_seconds": 1253.855174780998,
+          "rss_peak_bytes": 2078216192,
+          "live_tasks": 53,
+          "logical_rpc_counts": {
+            "block_rpc": 0,
+            "http": 0,
+            "call_uid": 167639,
+            "request_uid": 12044,
+            "multicall_uid": 13731,
+            "jsonrpc_batch_uid": 16973
+          },
+          "cache_entries": {
+            "markets": 33,
+            "results": 35,
+            "state": 16384
+          },
+          "python_retained_bytes": null,
+          "python_peak_bytes": null,
+          "profiler": null
+        },
+        "reported_calls": 99
       }
     ],
     "within_revision_results": {
       "after": {
         "reference": "public-deadline-after-timing-1",
-        "comparisons": {}
+        "comparisons": {
+          "public-deadline-after-timing-2": {
+            "exactly_equal": true,
+            "unchanged_rows": 99,
+            "before_only": [],
+            "after_only": []
+          }
+        }
       }
     },
     "repeats": {
       "timing-1": {
+        "exactly_equal": false,
+        "unchanged_rows": 0,
+        "before_only": [],
+        "after_only": [
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999968,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x89b3edabd365e611d00e089db8d701724fb34503d6342edeac72aa4af2e36490",
+                  "block_number": 17999968,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999969,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0xf53daee8b625426b0a59e23a2f376c0781decbb83030b64855336f0b1da7bb34",
+                  "block_number": 17999969,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999970,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x11bba0f31d2db7891207b4863a74c0722f4e7ec65267bb4631a194ed478f8b40",
+                  "block_number": 17999970,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999971,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x3ae806fcd0cab037b4c8a0b771e8fec17c6e1e331cdeab8d89e8daed79c21eba",
+                  "block_number": 17999971,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999972,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x3278d8b1d6beadd15d8f4bff1f8e15b42ac3f7d4dfa5fecf59f2e8682ae7acba",
+                  "block_number": 17999972,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999973,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0xedfa60c972d66c52a647f2371a101683879fdb682fc9398f12e2c1fa3cead23b",
+                  "block_number": 17999973,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999974,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x518423a09c12532378001994faa4db4ba19cc0c437fb627044a439adc76c6790",
+                  "block_number": 17999974,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999975,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x50bcded82226bff6a66713c622da061611dc52412740e68b0adc6571957fe1f3",
+                  "block_number": 17999975,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999976,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0xfdf39e0593d1af9c9e78c9bc70b7dca985251d272be0f01b529054c02f6e8760",
+                  "block_number": 17999976,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999977,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x375f979347d12e199abfb9825545f6b53b74741e66f9d75cf09497ebd0699787",
+                  "block_number": 17999977,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999978,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x402061f97fe69f816d4f8daa671240e5fefaf227c3b65bbecd42a5eecebe48f5",
+                  "block_number": 17999978,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999979,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x46b049b2659120e5c0d014bf55e560901a329932bcd3fc7ab465bd7e43684d88",
+                  "block_number": 17999979,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999980,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x2d60954bc460ffd8e0ec53920ead0c8323c4719dde8ea726a8b6f8f723d61b30",
+                  "block_number": 17999980,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999981,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x1b94bb87d1c8e588b1794991317e4c679e73809affcd219ad8fed43865a964f7",
+                  "block_number": 17999981,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999982,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x116e971153bfec97d115414e75a3c93759e58a4d979ff5c3aed8e7956fac31e1",
+                  "block_number": 17999982,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999983,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x7fa45437269195e30685f95ef2138baff8502d0a13cf1b8f03ca8885a557a8fb",
+                  "block_number": 17999983,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999984,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x78cca3a675baf2c187321fbce0d48e85eef4b5127c4782fdf303d168fc210d2a",
+                  "block_number": 17999984,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999985,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0xfd66f9ada40830be435d964b0102a0bd493f930aeefa94c255ec1241c233dcbc",
+                  "block_number": 17999985,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999986,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0xf2f8870564ef98a200ffa91f07470e336bafcf7af1c7192226afd2417c2c717e",
+                  "block_number": 17999986,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999987,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x9222dd964341e87790dd3772a513b005df4a14b7c1aac766a6724e9870338195",
+                  "block_number": 17999987,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999988,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x3f498df4be593adda0b4678599fcb99d8fc86c2b41187e770dcaa06d6553dcf1",
+                  "block_number": 17999988,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999989,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x0e2362cc5102cba6c9c2106e87e6205322dc533a24a7b68b517ec793b81f2909",
+                  "block_number": 17999989,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999990,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x5cc7f0fc4af035e6c1801697d320e585207279ca128abf63f44531919b840849",
+                  "block_number": 17999990,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999991,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x4f5bbaddc537bbb9b0366651f7b5d2ab265b4269c421cf1a3d13e115947afe8e",
+                  "block_number": 17999991,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999992,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0xc5cc7ac99ec4c35a242c38ebc450c74b997df3d6daf78c8d185c9f95663491f7",
+                  "block_number": 17999992,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999993,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x18cdee988fd6a3e48a03870c7956e0998332cc573641f9b67363d6e93035ee59",
+                  "block_number": 17999993,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999994,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x052d5414acd611720d3285678dd5fa38dd772df235dae259bc2e696bdfc05d9e",
+                  "block_number": 17999994,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999995,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x964cebabfcd3fab8fa400771f794a939bd0c7fd91048599bebda77e9cec4e41d",
+                  "block_number": 17999995,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999996,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x551f5c4bb89c0d520ef20fb89da26d70054722579c27679ed68ddf303de36b0a",
+                  "block_number": 17999996,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999997,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0xcc7746095224fb7c4e388149e205d04c6c6b4b1b77c2b5280a3cbb74a283cf5d",
+                  "block_number": 17999997,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999998,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x0c68639f7585374b5ebe8390a945ab25823c0df5a2a0a1e6865baa983e30922b",
+                  "block_number": 17999998,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 17999999,
+              "phase": "historical",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x198723e0ddf20153951c6304093cbd97fd306c5db03287c5586c0430a986080d",
+                  "block_number": 17999999,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 18000000,
+              "phase": "cold",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+                  "block_number": 18000000,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 1,
+              "block": 18000000,
+              "phase": "repeated_amount",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886434937565141,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886434937565141,
+                "quote": {
+                  "block_hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+                  "block_number": 18000000,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 1000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 356616080354239,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 1000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 356616080354239,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "0.58864349375651419832677"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 2,
+              "block": 18000000,
+              "phase": "warm",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886433172436162,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886433172436162,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886433172436162,
+                "quote": {
+                  "block_hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+                  "block_number": 18000000,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 2000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 713231946835944,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 2000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 713231946835944,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "1.17728663448723239983992"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 1
+          },
+          {
+            "row": {
+              "amount": 3,
+              "block": 18000000,
+              "phase": "concurrent",
+              "result": {
+                "path": [
+                  {
+                    "price": 0.5886431407308238,
+                    "source": "Liquidity-based sale estimate",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 0.5886431407308238,
+                    "source": "Uniswap V2 0x795065dcc9f64b5614c407a6efdc400da6221fb0 via getAmountsOut(uint256,address[])",
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  {
+                    "price": 1650.63643,
+                    "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+                    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                  }
+                ],
+                "price": 0.5886431407308238,
+                "quote": {
+                  "block_hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+                  "block_number": 18000000,
+                  "holder_eligibility": "unverified",
+                  "input": {
+                    "amount": 3000000000000000000,
+                    "decimals": 18,
+                    "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                  },
+                  "outputs": [
+                    {
+                      "amount": 1069847599445307,
+                      "decimals": 18,
+                      "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                    }
+                  ],
+                  "steps": [
+                    {
+                      "contract": "0x795065dcc9f64b5614c407a6efdc400da6221fb0",
+                      "fees": "DEX fees included in native quote",
+                      "input": {
+                        "amount": 3000000000000000000,
+                        "decimals": 18,
+                        "token": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                      },
+                      "kind": "swap",
+                      "limits": "native quote limits; holder balance and allowance unverified",
+                      "method": "getAmountsOut(uint256,address[])",
+                      "outputs": [
+                        {
+                          "amount": 1069847599445307,
+                          "decimals": 18,
+                          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+                        }
+                      ],
+                      "protocol": "Uniswap V2"
+                    }
+                  ],
+                  "total_usd": "1.76592942219247152673401"
+                }
+              },
+              "token": "0x6B3595068778DD592e39A122f4f5a5cF09C90fE2"
+            },
+            "count": 64
+          }
+        ]
+      },
+      "timing-2": {
         "exactly_equal": false,
         "unchanged_rows": 0,
         "before_only": [],
