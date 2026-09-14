@@ -20,10 +20,10 @@
   ],
   "persisted": [
     "full-deadline-original",
-    "full-deadline-preoptimization"
+    "full-deadline-preoptimization",
+    "full-deadline-optimized"
   ],
   "pending": [
-    "full-deadline-optimized",
     "native-deadline-before",
     "native-reviewed-deadline-before",
     "native-deadline-after",

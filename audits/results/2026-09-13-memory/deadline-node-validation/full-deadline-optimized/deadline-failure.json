@@ -1,0 +1,83 @@
+{
+  "complete": false,
+  "observed_unix": 1789415444.749876,
+  "configured_test_deadline_seconds": 600,
+  "reason": "The timeout handler emitted its Timeout dump, but the same test has no call or teardown report after more than two deadline intervals. A read-only native snapshot shows the original pending Task at _helpers.pyx:83, not the cleanup gather at line 90. The cause of the unpropagated timeout is not yet established.",
+  "action": "Stop only this failed full-suite supervisor, preserve incomplete reports, and allow the existing queue to continue its independent native, public pricing, and audit stages.",
+  "sample": {
+    "last_event": {
+      "phase": "setup",
+      "elapsed_seconds": 4133.430747940001,
+      "rss_peak_bytes": 2991726592,
+      "live_tasks": 117,
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x158079Ee67Fce2f58472A96584A73C7Ab9AC95c1]",
+      "outcome": "passed",
+      "duration": 9.825101005844772e-05,
+      "error": null,
+      "error_message": null,
+      "cache_occupancy": {
+        "market_cache": {
+          "values": 33,
+          "flights": 0
+        },
+        "result_cache": {
+          "values": 14,
+          "flights": 0
+        },
+        "state_cache": {
+          "values": 16384,
+          "flights": 0
+        }
+      },
+      "logical_rpc_counts": {
+        "call_uid": 1431107,
+        "multicall_uid": 52100,
+        "request_uid": 143718,
+        "jsonrpc_batch_uid": 122041
+      }
+    },
+    "last_event_age_seconds": 2114.6470551490784,
+    "terminal_outcomes": 1467,
+    "collected": 1865,
+    "counts": {
+      "sessionstart:": 1,
+      "collection:": 1,
+      "setup:passed": 1462,
+      "call:passed": 1076,
+      "teardown:passed": 1461,
+      "call:skipped": 15,
+      "call:failed": 370,
+      "setup:skipped": 6,
+      "teardown:skipped": 6
+    },
+    "memory_peak_bytes": 4401676288,
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n"
+  },
+  "native_snapshot_private_sha256": "c336feb8781f758579b7f67866fb5e3f36e691fe189c3c1d990cecbc19d8e2af",
+  "diagnostic_tool": {
+    "version": "0.4.2",
+    "wheel_url": "https://files.pythonhosted.org/packages/89/23/3eb4c23c684ebd667674ce1d076ae855e0621d1d9bd5e052aa3f7982f757/py_spy-0.4.2-py2.py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+    "wheel_sha256": "142887e984a4e541071c99a4401ff8c3770f255d329dbd0f64e8c1dd51882cce",
+    "binary_sha256": "d33e743ff7962b4aeefaa34ee87ae1b35e047967f983d660c5335602cb44fba5",
+    "purpose": "One read-only native stack and Python local variable snapshot of a test past its deadline; no application dependency change"
+  },
+  "diagnostic_container": {
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-09-14T19:48:21.599150253Z",
+      "FinishedAt": "2026-09-14T19:48:21.804467167Z"
+    },
+    "memory": 134217728,
+    "memory_swap": 134217728,
+    "nano_cpus": 250000000,
+    "pids_limit": 32
+  }
+}

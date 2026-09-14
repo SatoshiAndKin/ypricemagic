@@ -1,0 +1,40 @@
+202 (idle): "MainThread"
+    epoll_pwait (libc.so.6)
+    0xfb31bac726a4 (select.cpython-312-aarch64-linux-gnu.so)
+    select (selectors.py:468)
+        Arguments:
+            self: <EpollSelector at 0xfb319d7241d0>
+            timeout: 269.207
+        Locals:
+            max_ev: 1
+            ready: []
+    _run_once (asyncio/base_events.py:1961)
+        Arguments:
+            self: <_UnixSelectorEventLoop at 0xfb319d727ad0>
+        Locals:
+            sched_count: 104
+            handle: <TimerHandle at 0xfb306d478cd0>
+            timeout: 269.2067883319978
+            when: 132944.746677788
+    run_forever (asyncio/base_events.py:645)
+        Arguments:
+            self: <_UnixSelectorEventLoop at 0xfb319d727ad0>
+        Locals:
+            old_agen_hooks: (None, None)
+    run_until_complete (asyncio/base_events.py:678)
+        Arguments:
+            self: <_UnixSelectorEventLoop at 0xfb319d727ad0>
+            future: <_asyncio.Task at 0xfb3173d1a380>
+        Locals:
+            new_task: False
+    _helpers__await (a_sync/a_sync/_helpers.pyx:83)
+    __call__ (a_sync/a_sync/method.pyx:652)
+    __call__ (a_sync/a_sync/method.pyx:619)
+    __call__ (a_sync/a_sync/method.pyx:947)
+    __call__ (a_sync/a_sync/method.pyx:935)
+    test_compound_pricing_sync (tests/prices/lending/test_compound.py:33)
+        Arguments:
+            token: "0x158079Ee67Fce2f58472A96584A73C7Ab9AC95c1"
+        Locals:
+            ctoken: <CToken at 0xfb315e9a3010>
+            block: 7720755

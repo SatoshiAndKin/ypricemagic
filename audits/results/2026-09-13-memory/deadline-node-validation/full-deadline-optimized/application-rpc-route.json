@@ -1,0 +1,19 @@
+{
+  "unix_time": 1789414528.3693786,
+  "purpose": "Read-only route check during the full suite",
+  "source_sha256": "fd66e5cc472cca312ab19f0a8ff5b2568d452a195f5236eff4b0c2db260ce563",
+  "mainnet_configuration_matches_requested_archive": true,
+  "pytest_pid": 202,
+  "connections": {
+    "expected_rpc": 33,
+    "other_at_rpc_port": 0,
+    "https": 0,
+    "other": 0
+  },
+  "tcp_states": {
+    "expected_rpc": {
+      "01": 33
+    }
+  },
+  "private_endpoints_omitted": true
+}

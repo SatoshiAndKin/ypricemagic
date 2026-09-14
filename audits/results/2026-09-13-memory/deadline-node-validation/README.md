@@ -21,6 +21,7 @@ Dependency image: `sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1
 | --- | --- | ---: | ---: | ---: | --- | ---: |
 | [full-deadline-original](full-deadline-original/run.json) | `476af288a520a30052668a8b3ad7e3e682cd101f` | 412 / 1752 | 1203.63 | 8589934592 | no | 2 |
 | [full-deadline-preoptimization](full-deadline-preoptimization/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | 486 / 1816 | 1525.52 | 8589996032 | no | 2 |
+| [full-deadline-optimized](full-deadline-optimized/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | 1467 / 1865 | 6465.46 | 4401676288 | no | 130 |
 
 `full-deadline-original` records 291 passed calls, 109 failed calls, 9 skipped calls, 3 setup failures, and 0 setup skips. Its final pytest summary is missing.
 It records 1 cgroup OOM kills and Docker `OOMKilled=true`. It loads 10 compiled modules; the archive probe passes. Expired console bytes: 0.
@@ -28,13 +29,35 @@ It records 1 cgroup OOM kills and Docker `OOMKilled=true`. It loads 10 compiled 
 `full-deadline-preoptimization` records 305 passed calls, 169 failed calls, 9 skipped calls, 3 setup failures, and 0 setup skips. Its final pytest summary is missing.
 It records 1 cgroup OOM kills and Docker `OOMKilled=true`. It loads 10 compiled modules; the archive probe passes. Expired console bytes: 0.
 
+`full-deadline-optimized` records 1076 passed calls, 370 failed calls, 15 skipped calls, 0 setup failures, and 6 setup skips. Its final pytest summary is missing.
+It records 0 cgroup OOM kills and Docker `OOMKilled=false`. It loads 10 compiled modules; the archive probe passes. Expired console bytes: 0.
+
+The optimized full suite is interrupted after its synchronous Compound case
+`0x158079Ee67Fce2f58472A96584A73C7Ab9AC95c1` emits the 600-second timeout dump
+but produces no call or teardown report after 2,114.65 seconds. The earlier
+three synchronous cases report their timeouts and advance. A
+[native stack sample](full-deadline-optimized/deadline-native-stack.txt)
+shows the original pending request at block 7,720,755 and
+`a_sync/a_sync/_helpers.pyx:83`; it is not the cancellation cleanup gather.
+The cause of this unpropagated timeout remains unresolved. The
+[failure record](full-deadline-optimized/deadline-failure.json) preserves the
+last state, diagnostic tool hash, and the diagnostic container's 128 MiB limit.
+This read-only diagnostic does not change application dependencies.
+
+The [active RPC route check](full-deadline-optimized/application-rpc-route.json)
+confirms that the pytest process uses the requested archive route: 33 established
+connections match it, and none use another host at the RPC port. This proves
+route selection, not the cause of slow pricing. Private endpoints remain omitted.
+All three full-suite executions remain incomplete, so the comparison cannot
+establish full coverage or absence of new failures. The existing queue continues
+the independent native quote, public pricing, and audit checks.
+
 A reported peak can include a small cgroup accounting overshoot. The effective memory limit remains 8,589,934,592 bytes; no limit was raised.
 
 Installed dependency lists for the persisted runs are byte-identical.
 
-Pending final reports: 15 of 17.
+Pending final reports: 14 of 17.
 
-- `full-deadline-optimized`
 - `native-deadline-before`
 - `native-reviewed-deadline-before`
 - `native-deadline-after`

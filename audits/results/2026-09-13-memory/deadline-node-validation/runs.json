@@ -130,5 +130,73 @@
       },
       "peak_observed_live_tasks": 97815
     }
+  },
+  "full-deadline-optimized": {
+    "run": {
+      "command": [
+        "sh",
+        "/runner/full_suite.sh"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789408981.1407812,
+      "source_sha": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_revision": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_archive_sha256": "3a1a9d464dfaf6a7a80da469ebd53b427fccefbd88bca0cba44bd0577b5d7aa9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "interrupted": true,
+      "exit_code": 130,
+      "oom_killed": false,
+      "missing_reports": [
+        "pytest-summary.json"
+      ],
+      "elapsed_seconds": 6465.463246822357
+    },
+    "container_peak_bytes": 4401676288,
+    "peak_sampled_process_rss_bytes": 3082756096,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 405507,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    },
+    "pytest": {
+      "collected": 1865,
+      "terminal_outcomes": 1467,
+      "unique_terminal_cases": 1467,
+      "counts": {
+        "sessionstart:": 1,
+        "collection:": 1,
+        "setup:passed": 1462,
+        "call:passed": 1076,
+        "teardown:passed": 1461,
+        "call:skipped": 15,
+        "call:failed": 370,
+        "setup:skipped": 6,
+        "teardown:skipped": 6
+      },
+      "final_summary_present": false,
+      "last_phase": "setup",
+      "last_logical_rpc_counts": {
+        "call_uid": 1431107,
+        "multicall_uid": 52100,
+        "request_uid": 143718,
+        "jsonrpc_batch_uid": 122041
+      },
+      "peak_observed_live_tasks": 93215
+    }
   }
 }

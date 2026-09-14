@@ -14,7 +14,13 @@ remains separate from this focused validation. With the final dependencies,
 the original and pre-optimization baselines reach 8 GiB after 1,203.63 and
 1,525.52 seconds. They record 412 of 1,752 and 486 of 1,816 terminal outcomes.
 Both pass the archive probe and load ten compiled modules, but their missing
-final summaries keep validation incomplete. The optimized full suite is running.
+final summaries keep validation incomplete. The optimized run records 1,467 of
+1,865 terminal outcomes and peaks at 4,401,676,288 bytes without OOM. It stops
+after a synchronous case emits its timeout but does not report a result after
+2,114.65 seconds. A native sample shows the original pending request at block
+7,720,755, not the new cancellation cleanup. The cause remains unresolved.
+All three full runs remain incomplete. The native quote, public pricing, and
+audit stages continue in the existing queue.
 
 ## Latest pool ownership repair
 
