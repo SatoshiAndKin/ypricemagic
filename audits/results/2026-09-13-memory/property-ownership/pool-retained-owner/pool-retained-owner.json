@@ -1,0 +1,68 @@
+{
+  "released": false,
+  "fields": {
+    "asynchronous": "builtins.bool",
+    "__a_sync_should_await_cache__": "builtins.dict",
+    "_deploy_block": "builtins.int",
+    "__async_property__": "a_sync.async_property.cached.AsyncCachedPropertyInstanceState"
+  },
+  "refs": [
+    {
+      "owner": {
+        "type": "a_sync.a_sync.property.__pyx_scope_struct_1_get_loader"
+      },
+      "parents": [
+        {
+          "type": "_cython_3_2_5.cython_function_or_method",
+          "name": "UniswapV2Pool.tokens"
+        },
+        {
+          "type": "builtins.list",
+          "length": 3
+        }
+      ]
+    },
+    {
+      "owner": {
+        "type": "builtins.dict",
+        "keys": [
+          "0x0000000000000000000000000000000012340099"
+        ]
+      },
+      "parents": [
+        {
+          "type": "builtins.dict",
+          "keys": [
+            "0x0000000000000000000000000000000000000101",
+            "0x0000000000000000000000000000000000000102"
+          ]
+        },
+        {
+          "type": "builtins.list",
+          "length": 3
+        }
+      ]
+    },
+    {
+      "owner": {
+        "type": "builtins.dict",
+        "keys": [
+          "0x0000000000000000000000000000000012340099"
+        ]
+      },
+      "parents": [
+        {
+          "type": "builtins.dict",
+          "keys": [
+            "0x0000000000000000000000000000000000000101",
+            "0x0000000000000000000000000000000000000102"
+          ]
+        },
+        {
+          "type": "builtins.list",
+          "length": 3
+        }
+      ]
+    }
+  ]
+}

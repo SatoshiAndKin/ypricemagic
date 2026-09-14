@@ -1,0 +1,71 @@
+{
+  "pool-smart-owner-final": {
+    "before_reported_and_parsed": 1839,
+    "after_reported_and_parsed": 1836,
+    "added": [],
+    "removed": [
+      {
+        "file": "y/prices/dex/uniswap/v2.py",
+        "error": "Argument 1 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"UniswapV2Pool\"; expected \"Self\" [arg-type]",
+        "count": 1
+      },
+      {
+        "file": "y/prices/dex/uniswap/v2.py",
+        "error": "Argument 2 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"type[UniswapV2Pool]\"; expected \"type[Self]\" [arg-type]",
+        "count": 1
+      },
+      {
+        "file": "y/prices/dex/uniswap/v2.py",
+        "error": "Function is missing a type annotation [no-untyped-def]",
+        "count": 1
+      }
+    ],
+    "normalization": "Only embedded source line numbers change to a source-line marker; exact unnormalized errors remain in mypy.txt."
+  },
+  "pool-plugin-owner-final": {
+    "before_reported_and_parsed": 1839,
+    "after_reported_and_parsed": 1836,
+    "added": [],
+    "removed": [
+      {
+        "file": "y/prices/dex/uniswap/v2.py",
+        "error": "Argument 1 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"UniswapV2Pool\"; expected \"Self\" [arg-type]",
+        "count": 1
+      },
+      {
+        "file": "y/prices/dex/uniswap/v2.py",
+        "error": "Argument 2 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"type[UniswapV2Pool]\"; expected \"type[Self]\" [arg-type]",
+        "count": 1
+      },
+      {
+        "file": "y/prices/dex/uniswap/v2.py",
+        "error": "Function is missing a type annotation [no-untyped-def]",
+        "count": 1
+      }
+    ],
+    "normalization": "Only embedded source line numbers change to a source-line marker; exact unnormalized errors remain in mypy.txt."
+  },
+  "ownership-pin-application-312": {
+    "before_reported_and_parsed": 1839,
+    "after_reported_and_parsed": 1836,
+    "added": [],
+    "removed": [
+      {
+        "file": "y/prices/dex/uniswap/v2.py",
+        "error": "Argument 1 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"UniswapV2Pool\"; expected \"Self\" [arg-type]",
+        "count": 1
+      },
+      {
+        "file": "y/prices/dex/uniswap/v2.py",
+        "error": "Argument 2 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"type[UniswapV2Pool]\"; expected \"type[Self]\" [arg-type]",
+        "count": 1
+      },
+      {
+        "file": "y/prices/dex/uniswap/v2.py",
+        "error": "Function is missing a type annotation [no-untyped-def]",
+        "count": 1
+      }
+    ],
+    "normalization": "Only embedded source line numbers change to a source-line marker; exact unnormalized errors remain in mypy.txt."
+  }
+}

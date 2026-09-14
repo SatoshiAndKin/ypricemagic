@@ -1,0 +1,12 @@
+[
+  {
+    "file": "mypy.txt",
+    "scrubbed_original_sha256": "98031a2e2c9053ee50fd86d5b439d667b300b5ee0a6f7b211693cc6a4b77a451",
+    "published_sha256": "cd8a1bdc7e1623f028e4a626fe614ee6da485cfe15c2836d71c41361544853ce"
+  },
+  {
+    "file": "property-base.json",
+    "scrubbed_original_sha256": "e35f3fdd9c8388be095a261287147e6fbf85f4e2fc21e32ad776056fec44321b",
+    "published_sha256": "d190b80c3ad4ea4479eb18e1b278af6ba6144479ceb9e86af00582a34c3fbf2d"
+  }
+]

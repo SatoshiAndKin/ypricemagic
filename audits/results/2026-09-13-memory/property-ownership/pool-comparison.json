@@ -1,0 +1,67 @@
+{
+  "pool-index-before": {
+    "timing_repeats": 3,
+    "timing_pools": 524288,
+    "allocation_pools": 131072,
+    "median_process_peak_bytes": 6796603392,
+    "median_index_seconds": 29.10732978800661,
+    "retained_python_bytes": 1503254888,
+    "peak_python_bytes": 1592256521,
+    "bound_methods": {
+      "a_sync.a_sync.property.HiddenMethod": 1572864
+    },
+    "scheduled_callbacks": 1572869,
+    "metadata_sha256": "ea1f044d3da1bcf44e2796970d8b7667ff3f50abe87330527b6728a8c027b2a8",
+    "logical_rpc_counts": {
+      "block_rpc": 0,
+      "http": 0,
+      "call_uid": 0,
+      "request_uid": 0,
+      "multicall_uid": 0,
+      "jsonrpc_batch_uid": 0
+    },
+    "boundary": "synthetic seeded pool metadata; no reserve or discovery RPC"
+  },
+  "pool-index-after": {
+    "timing_repeats": 3,
+    "timing_pools": 524288,
+    "allocation_pools": 131072,
+    "median_process_peak_bytes": 1650896896,
+    "median_index_seconds": 8.892595249999431,
+    "retained_python_bytes": 265754351,
+    "peak_python_bytes": 354751713,
+    "bound_methods": {},
+    "scheduled_callbacks": 5,
+    "metadata_sha256": "ea1f044d3da1bcf44e2796970d8b7667ff3f50abe87330527b6728a8c027b2a8",
+    "logical_rpc_counts": {
+      "block_rpc": 0,
+      "http": 0,
+      "call_uid": 0,
+      "request_uid": 0,
+      "multicall_uid": 0,
+      "jsonrpc_batch_uid": 0
+    },
+    "boundary": "synthetic seeded pool metadata; no reserve or discovery RPC"
+  },
+  "pool-index-final-after": {
+    "timing_repeats": 3,
+    "timing_pools": 524288,
+    "allocation_pools": 131072,
+    "median_process_peak_bytes": 1291739136,
+    "median_index_seconds": 7.182153743997333,
+    "retained_python_bytes": 261294567,
+    "peak_python_bytes": 266538047,
+    "bound_methods": {},
+    "scheduled_callbacks": 5,
+    "metadata_sha256": "ea1f044d3da1bcf44e2796970d8b7667ff3f50abe87330527b6728a8c027b2a8",
+    "logical_rpc_counts": {
+      "block_rpc": 0,
+      "http": 0,
+      "call_uid": 0,
+      "request_uid": 0,
+      "multicall_uid": 0,
+      "jsonrpc_batch_uid": 0
+    },
+    "boundary": "synthetic seeded pool metadata; no reserve or discovery RPC"
+  }
+}

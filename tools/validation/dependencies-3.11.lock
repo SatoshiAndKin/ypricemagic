@@ -43,7 +43,7 @@ eth-utils==5.3.1
 eth_abi==5.2.0
 evmspec @ git+https://github.com/SatoshiAndKin/evmspec.git@f0df0d9d8e4e7a7000580054ce2c0b6b6193a14c
 execnet==2.1.2
-ez_a_sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@000e4f24466ddc01abc6bb1a12cc429cbeea5813
+ez_a_sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@ebb981bfaffd887048d1945eff29ab5dfe360e34
 faster-eth-utils==5.3.20
 faster_eth_abi==5.2.22
 faster_hexbytes==1.3.4
@@ -87,7 +87,7 @@ pydantic==2.12.5
 pydantic_core==2.41.5
 pygments-lexer-solidity==0.7.0
 Pygments==2.19.2
-pytest-asyncio-cooperative @ git+https://github.com/SatoshiAndKin/pytest-asyncio-cooperative@4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1
+pytest-asyncio-cooperative @ git+https://github.com/SatoshiAndKin/pytest-asyncio-cooperative@17677c7145d24c36917036877681eb83225ccdb3
 pytest-forked==1.6.0
 pytest-xdist==1.34.0
 pytest==6.2.5

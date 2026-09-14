@@ -195,13 +195,15 @@ class UniswapV2Pool(ERC20):
 
     __factory__: HiddenMethodDescriptor[Self, Address]
 
-    @a_sync.aka.cached_property
+    @a_sync.cached_property
+    @stuck_coro_debugger
     async def tokens(self) -> tuple[ERC20, ERC20]:
-        return await self.__token0__, await self.__token1__
+        return await type(self).token0.get(self), await type(self).token1.get(self)
 
     __tokens__: HiddenMethodDescriptor[Self, tuple[ERC20, ERC20]]
 
-    @a_sync.aka.cached_property
+    @a_sync.cached_property
+    @stuck_coro_debugger
     async def token0(self) -> ERC20:
         try:
             if token0 := await Call(self.address, "token0()(address)"):
@@ -212,7 +214,8 @@ class UniswapV2Pool(ERC20):
 
     __token0__: HiddenMethodDescriptor[Self, ERC20]
 
-    @a_sync.aka.cached_property
+    @a_sync.cached_property
+    @stuck_coro_debugger
     async def token1(self) -> ERC20:
         try:
             if token1 := await Call(self.address, "token1()(address)"):
@@ -675,8 +678,8 @@ class UniswapRouterV2(ContractBase):
                 pools.append(UniswapV2Pool(address=pool_address, asynchronous=self.asynchronous))
 
         # Resolve token0/token1 for all pools (already-cached ones return instantly)
-        async def pool_tokens(pool):
-            return await pool.__tokens__
+        async def pool_tokens(pool: UniswapV2Pool) -> tuple[ERC20, ERC20]:
+            return await type(pool).tokens.get(pool)
 
         tokens = set(concat(await bounded_map(pool_tokens, pools)))
 
@@ -703,13 +706,13 @@ class UniswapRouterV2(ContractBase):
 
     __pools__: HiddenMethodDescriptor[Self, list[UniswapV2Pool]]
 
-    @a_sync.aka.cached_property
+    @a_sync.cached_property
     @stuck_coro_debugger
     async def pools_by_token(self) -> dict[str, dict[UniswapV2Pool, str]]:
         """Index the discovered pools once for all route traversals."""
         index: dict[str, dict[UniswapV2Pool, str]] = {}
         for i, pool in enumerate(await self.__pools__):
-            token0, token1 = await pool.__tokens__
+            token0, token1 = await type(pool).tokens.get(pool)
             first, second = str(token0), str(token1)
             index.setdefault(first, {})[pool] = second
             index.setdefault(second, {})[pool] = first
@@ -749,7 +752,7 @@ class UniswapRouterV2(ContractBase):
         for p in pools:
             pool = UniswapV2Pool(p, asynchronous=self.asynchronous)
             # this will return immediately since the pools are already loaded by this point
-            token0, token1 = await pool.__tokens__
+            token0, token1 = await type(pool).tokens.get(pool)
             if token_in == token0:
                 pool_to_token_out[pool] = token1
             elif token_in == token1:

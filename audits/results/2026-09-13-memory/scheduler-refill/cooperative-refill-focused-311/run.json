@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m venv /unit && /unit/bin/python -m pip install -r /runner/cooperative-owner-dependencies.lock && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && /unit/bin/python -c 'import hashlib,json,pathlib; import pytest_asyncio_cooperative.plugin as plugin; path=pathlib.Path(plugin.__file__); pathlib.Path(\"/reports/cooperative-source.json\").write_text(json.dumps({\"file\":str(path),\"sha256\":hashlib.sha256(path.read_bytes()).hexdigest()}))' && PYTEST_PLUGINS=pytest_report,pytest_asyncio_cooperative.plugin /unit/bin/python /runner/focused.py"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789385963.464504,
+  "source_sha": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+  "source_revision": "worktree",
+  "source_archive_sha256": "3477d6472174a8721123907a79ad80a96f05bad620ef8076f1663c65d0a3a2cc",
+  "image": "sha256:822612ab4817cd020717f6771a3d78898b91c287c21b5ae8563c31dd60dcdd16",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 10.180989027023315
+}

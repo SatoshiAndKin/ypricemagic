@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && for repeat in timing-1 timing-2 timing-3 allocations; do mkdir -p /reports/$repeat; if [ \"$repeat\" = allocations ]; then extra=\"--pools 131072 --allocations\"; else extra=\"\"; fi; VALIDATION_REPORT=/reports/$repeat python /runner/pool_discovery_profile.py $extra || exit $?; done"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 302.2667813270091,
+  "peak_sampled_process_rss_bytes": 6769225728,
+  "cgroup_before": {
+    "memory.current": "8908800",
+    "memory.peak": "8908800",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "146325504",
+    "memory.peak": "6923939840",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

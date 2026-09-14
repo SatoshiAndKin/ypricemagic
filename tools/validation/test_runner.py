@@ -11,6 +11,7 @@ from unittest.mock import patch
 
 import run
 from common import ConsoleLog
+from compare import type_diagnostics
 
 
 class LogTests(unittest.TestCase):
@@ -171,6 +172,54 @@ class BuildTests(unittest.TestCase):
 
 
 class ComparisonTests(unittest.TestCase):
+    def test_type_errors_keep_wrapped_headers_stubs_and_duplicate_messages(self) -> None:
+        output = (
+            "module.py: In function 'price':\n"
+            "module.py:10: error:\n"
+            '"Callable[[int], int]" has no attribute\n'
+            '"map"  [attr-defined]\n'
+            "    price.map()\n"
+            "    ^~~~~~~~~\n"
+            "    print('source.py:7: error: this is source context')\n"
+            "module.py:10: note: Use a bound method\n"
+            "module.py:20: error:\n"
+            '"Callable[[int], int]" has no attribute "map"  [attr-defined]\n'
+            "    price.map()\n"
+            "stub.pyi:3:9: error: Incompatible return value type\n"
+            "[return-value]\n"
+            "    return value\n"
+            "Found 3 errors in 2 files (checked 2 source files)\n"
+        )
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "mypy.txt"
+            path.write_text(output)
+            self.assertEqual(
+                type_diagnostics(path),
+                {
+                    (
+                        "module.py",
+                        '"Callable[[int], int]" has no attribute "map" [attr-defined]',
+                    ): 2,
+                    ("stub.pyi", "Incompatible return value type [return-value]"): 1,
+                },
+            )
+            path.write_text("Success: no issues found in 2 source files\n")
+            self.assertEqual(type_diagnostics(path), {})
+
+    def test_type_comparison_rejects_missing_or_unparsed_errors(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "mypy.txt"
+            for output in (
+                "module.py:3: error: Missing result [return]\n",
+                "Found 1 error in 1 file (checked 1 source file)\n",
+                "module.py:3: error: Missing result [return]\n"
+                "Success: no issues found in 1 source file\n",
+            ):
+                with self.subTest(output=output):
+                    path.write_text(output)
+                    with self.assertRaises(ValueError):
+                        type_diagnostics(path)
+
     def test_dependency_drift_and_missing_reports_prevent_comparison(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

@@ -1,0 +1,1708 @@
+Warning: Unpack is already enabled by default
+Installing missing stub packages:
+/usr/local/bin/python -m pip install types-docutils
+
+Collecting types-docutils
+  Downloading types_docutils-0.23.0.20260911-py3-none-any.whl.metadata (1.8 kB)
+Downloading types_docutils-0.23.0.20260911-py3-none-any.whl (92 kB)
+Installing collected packages: types-docutils
+Successfully installed types-docutils-0.23.0.20260911
+
+Found 300 errors in 20 files (checked 55 source files)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+
+[notice] A new release of pip is available: 25.0.1 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip
+a_sync/primitives/locks/event.pyi: note: In member "_debug_daemon" of class "CythonEvent":
+a_sync/primitives/locks/event.pyi:41: error: Signature of "_debug_daemon"
+incompatible with supertype "a_sync.primitives._debug._DebugDaemonMixin"
+[override]
+        async def _debug_daemon(self) -> None:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/locks/event.pyi:41: note:      Superclass:
+a_sync/primitives/locks/event.pyi:41: note:          def _debug_daemon(self, fut: Future[Any], fn: Any, *args: Any, **kwargs: Any) -> Coroutine[Any, Any, None]
+a_sync/primitives/locks/event.pyi:41: note:      Subclass:
+a_sync/primitives/locks/event.pyi:41: note:          def _debug_daemon(self) -> Coroutine[Any, Any, None]
+a_sync/executor.py:26: error: Module "asyncio.futures" has no attribute
+"_convert_future_exc"  [attr-defined]
+    from asyncio.futures import _convert_future_exc
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/executor.py: note: In member "submit" of class "_AsyncExecutorMixin":
+a_sync/executor.py:140: error: Signature of "submit" incompatible with
+supertype "concurrent.futures._base.Executor"  [override]
+        @overload
+         ^
+a_sync/executor.py:140: note:      Superclass:
+a_sync/executor.py:140: note:          def [_P`819, _T] submit(self, Callable[_P, _T], /, *args: _P.args, **kwargs: _P.kwargs) -> Future[_T]
+a_sync/executor.py:140: note:      Subclass:
+a_sync/executor.py:140: note:          @overload
+a_sync/executor.py:140: note:          def [P`815, T] submit(self, fn: Callable[P, T], *args: Any, fire_and_forget: Literal[True], **kwargs: Any) -> None
+a_sync/executor.py:140: note:          @overload
+a_sync/executor.py:140: note:          def [P`817, T] submit(self, fn: Callable[P, T], *args: P.args, **kwargs: P.kwargs) -> Future[T]
+a_sync/executor.py: note: In function "submit":
+a_sync/executor.py:141: error: Arguments not allowed after ParamSpec.args
+[valid-type]
+        def submit(self, fn: Callable[P, T], *args: P.args, fire_and_forge...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/executor.py:141: note: Error code "valid-type" not covered by "type: ignore" comment
+a_sync/executor.py: note: In member "submit" of class "_AsyncExecutorMixin":
+a_sync/executor.py:141: error: Overloaded function signatures 1 and 2 overlap
+with incompatible return types  [overload-overlap]
+        def submit(self, fn: Callable[P, T], *args: P.args, fire_and_forge...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/executor.py:141: note: Error code "overload-overlap" not covered by "type: ignore" comment
+a_sync/executor.py:141: note: Flipping the order of overloads will fix this error
+a_sync/executor.py: note: In function "submit":
+a_sync/executor.py:177: error: Arguments not allowed after ParamSpec.args
+[valid-type]
+        def submit(self, fn: Callable[P, T], *args: P.args, fire_and_forge...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/executor.py:177: note: Error code "valid-type" not covered by "type: ignore" comment
+a_sync/executor.py: note: In member "submit" of class "_AsyncExecutorMixin":
+a_sync/executor.py:177: error: Overloaded function implementation does not
+accept all possible arguments of signature 2  [misc]
+        def submit(self, fn: Callable[P, T], *args: P.args, fire_and_forge...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/executor.py:177: note: Error code "misc" not covered by "type: ignore" comment
+a_sync/executor.py:214: error: "_AsyncExecutorMixin" has no attribute
+"_ensure_debug_daemon"; maybe "_debug_daemon"?  [attr-defined]
+                self._ensure_debug_daemon(fut, fn, *args, **kwargs)
+                ^~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/iter.pyi: note: In class "_AwaitableAsyncIterableMixin":
+a_sync/iter.pyi:26: error: Class a_sync.iter._AwaitableAsyncIterableMixin has
+abstract attributes "__aiter__"  [misc]
+    class _AwaitableAsyncIterableMixin(AsyncIterable[T]):
+    ^
+a_sync/iter.pyi:26: note: If it is meant to be abstract, add 'abc.ABCMeta' as an explicit metaclass
+a_sync/iter.pyi: note: In class "_ASyncView":
+a_sync/iter.pyi:277: error: Incompatible types in assignment (expression has
+type "Callable[[T], Awaitable[bool]] | Callable[[T], bool]", base class
+"ASyncIterator" defined the type as "AsyncIterator[T]")  [assignment]
+        __wrapped__: ViewFn[T]
+        ^~~~~~~~~~~~~~~~~~~~~~
+a_sync/iter.pyi: note: In member "__aiter__" of class "ASyncSorter":
+a_sync/iter.pyi:348: error: Return type "AsyncIterator[T]" of "__aiter__"
+incompatible with return type "ASyncSorter[T]" in supertype "ASyncIterator"
+[override]
+        def __aiter__(self) -> AsyncIterator[T]:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/iter.pyi: note: In member "__anext__" of class "ASyncSorter":
+a_sync/iter.pyi:359: error: Return type "T" of "__anext__" incompatible with
+return type "Coroutine[Any, Any, T]" in supertype "ASyncIterator"  [override]
+        def __anext__(self) -> T: ...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/locks/semaphore.pyi: note: In member "_debug_daemon" of class "Semaphore":
+a_sync/primitives/locks/semaphore.pyi:97: error: Signature of "_debug_daemon"
+incompatible with supertype "a_sync.primitives._debug._DebugDaemonMixin"
+[override]
+        async def _debug_daemon(self) -> None:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/locks/semaphore.pyi:97: note:      Superclass:
+a_sync/primitives/locks/semaphore.pyi:97: note:          def _debug_daemon(self, fut: Future[Any], fn: Any, *args: Any, **kwargs: Any) -> Coroutine[Any, Any, None]
+a_sync/primitives/locks/semaphore.pyi:97: note:      Subclass:
+a_sync/primitives/locks/semaphore.pyi:97: note:          def _debug_daemon(self) -> Coroutine[Any, Any, None]
+a_sync/a_sync/config.py:120: error: Incompatible types in assignment
+(expression has type "str | None", variable has type "Literal['memory'] | None")
+ [assignment]
+        typ
+        ^~~
+a_sync/primitives/locks/prio_semaphore.pyi: note: In class "PrioritySemaphore":
+a_sync/primitives/locks/prio_semaphore.pyi:212: error: Type argument
+"_PrioritySemaphoreContextManager" of "_AbstractPrioritySemaphore" must be a
+subtype of "_AbstractPrioritySemaphoreContextManager[Priority]"  [type-var]
+    ...itySemaphore(_AbstractPrioritySemaphore[Numeric, _PrioritySemaphoreCon...
+                                                        ^
+a_sync/primitives/locks/counter.pyi: note: In member "_debug_daemon" of class "CounterLock":
+a_sync/primitives/locks/counter.pyi:108: error: Signature of "_debug_daemon"
+incompatible with supertype "a_sync.primitives._debug._DebugDaemonMixin"
+[override]
+        async def _debug_daemon(self) -> None:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/locks/counter.pyi:108: note:      Superclass:
+a_sync/primitives/locks/counter.pyi:108: note:          def _debug_daemon(self, fut: Future[Any], fn: Any, *args: Any, **kwargs: Any) -> Coroutine[Any, Any, None]
+a_sync/primitives/locks/counter.pyi:108: note:      Subclass:
+a_sync/primitives/locks/counter.pyi:108: note:          def _debug_daemon(self) -> Coroutine[Any, Any, None]
+a_sync/primitives/queue.py:205: error: Invalid location for ParamSpec "P"
+[valid-type]
+    class ProcessingQueue(asyncio.Queue[tuple[P, "Future[V]"]], Generic[P,...
+                                              ^
+a_sync/primitives/queue.py:205: note: You can use ParamSpec as the first argument to Callable, e.g., "Callable[P, int]"
+a_sync/primitives/queue.py: note: In member "put" of class "ProcessingQueue":
+a_sync/primitives/queue.py:350: error: Signature of "put" incompatible with
+supertype "asyncio.queues.Queue"  [override]
+        async def put(self, *args: P.args, **kwargs: P.kwargs) -> "Future[...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/primitives/queue.py:350: note:      Superclass:
+a_sync/primitives/queue.py:350: note:          def put(self, item: tuple[Any, Future[V]]) -> Coroutine[Any, Any, None]
+a_sync/primitives/queue.py:350: note:      Subclass:
+a_sync/primitives/queue.py:350: note:          def put(self, *args: P.args, **kwargs: P.kwargs) -> Coroutine[Any, Any, Future[V]]
+a_sync/primitives/queue.py: note: In member "put_nowait" of class "ProcessingQueue":
+a_sync/primitives/queue.py:387: error: Signature of "put_nowait" incompatible
+with supertype "asyncio.queues.Queue"  [override]
+        def put_nowait(self, *args: P.args, **kwargs: P.kwargs) -> "Future...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/primitives/queue.py:387: note:      Superclass:
+a_sync/primitives/queue.py:387: note:          def put_nowait(self, item: tuple[Any, Future[V]]) -> None
+a_sync/primitives/queue.py:387: note:      Subclass:
+a_sync/primitives/queue.py:387: note:          def put_nowait(self, *args: P.args, **kwargs: P.kwargs) -> Future[V]
+a_sync/primitives/queue.py:404: error: Cannot infer function type argument
+[misc]
+                return _put_nowait(self, (args, kwargs))
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py:404: error: Incompatible return value type (got
+"None", expected "Future[V]")  [return-value]
+                return _put_nowait(self, (args, kwargs))
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py: note: In member "_workers" of class "ProcessingQueue":
+a_sync/primitives/queue.py:431: error: Module not callable  [operator]
+                create_task(
+                ^~~~~~~~~~~~
+a_sync/primitives/queue.py:438: error: Module not callable  [operator]
+            task = create_task(
+                   ^~~~~~~~~~~~
+a_sync/primitives/queue.py:439: error: Module not callable  [operator]
+                igather(workers),
+                ^~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py: note: In member "_worker_coro" of class "ProcessingQueue":
+a_sync/primitives/queue.py:459: error: Argument after ** must be a mapping, not
+"Future[V]"  [arg-type]
+                        await func(*args, **kwargs)
+                              ^~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py:468: error: Need more than 2 values to unpack (3
+expected)  [misc]
+                        args, kwargs, fut = await get_next_job()
+                                            ^~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py:470: error: Argument 1 to "_check_loop_is_closed"
+has incompatible type "ProcessingQueue[P, V]"; expected "Queue[Any]"  [arg-type]
+                        if _check_loop_is_closed(self, e):
+                                                 ^~~~
+a_sync/primitives/queue.py:471: error: Return statement in function which does
+not return  [misc]
+                            return
+                            ^~~~~~
+a_sync/primitives/queue.py:482: error: Argument after ** must be a mapping, not
+"Future[V]"  [arg-type]
+                        result = await func(*args, **kwargs)
+                                       ^~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py: note: In member "_init" of class "_PriorityQueueMixin":
+a_sync/primitives/queue.py:569: note: By default the bodies of untyped functions are not checked, consider using --check-untyped-defs  [annotation-unchecked]
+a_sync/primitives/queue.py: note: In class "PriorityProcessingQueue":
+a_sync/primitives/queue.py:591: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "T"  [valid-type]
+    ...riorityProcessingQueue(_PriorityQueueMixin[T], ProcessingQueue[T, V]):
+                                                                      ^
+a_sync/primitives/queue.py: note: In member "put" of class "PriorityProcessingQueue":
+a_sync/primitives/queue.py:610: error: Signature of "put" incompatible with
+supertype "asyncio.queues.Queue"  [override]
+        async def put(self, priority: Any, *args: P.args, **kwargs: P.kwar...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/primitives/queue.py:610: note:      Superclass:
+a_sync/primitives/queue.py:610: note:          def put(self, item: tuple[Any, Future[Any]]) -> Coroutine[Any, Any, None]
+a_sync/primitives/queue.py:610: note:      Subclass:
+a_sync/primitives/queue.py:610: note:          def put(self, priority: Any, *args: Any, **kwargs: Any) -> Coroutine[Any, Any, Future[V]]
+a_sync/primitives/queue.py:610: error: ParamSpec "P" is unbound  [valid-type]
+        async def put(self, priority: Any, *args: P.args, **kwargs: P.kwar...
+                                                  ^
+a_sync/primitives/queue.py: note: In member "put_nowait" of class "PriorityProcessingQueue":
+a_sync/primitives/queue.py:649: error: Signature of "put_nowait" incompatible
+with supertype "asyncio.queues.Queue"  [override]
+        def put_nowait(self, priority: Any, *args: P.args, **kwargs: P.kwa...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/primitives/queue.py:649: note:      Superclass:
+a_sync/primitives/queue.py:649: note:          def put_nowait(self, item: tuple[Any, Future[Any]]) -> None
+a_sync/primitives/queue.py:649: note:      Subclass:
+a_sync/primitives/queue.py:649: note:          def put_nowait(self, priority: Any, *args: Any, **kwargs: Any) -> Future[V]
+a_sync/primitives/queue.py:649: error: ParamSpec "P" is unbound  [valid-type]
+        def put_nowait(self, priority: Any, *args: P.args, **kwargs: P.kwa...
+                                                   ^
+a_sync/primitives/queue.py:667: error: Cannot infer value of type parameter
+"_T" of "put_nowait" of "Queue"  [misc]
+            asyncio.Queue.put_nowait(self, (priority, args, kwargs, fut))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py: note: In class "SmartProcessingQueue":
+a_sync/primitives/queue.py:774: error: Bad number of arguments for type alias,
+expected 0, given 1  [type-arg]
+        _futs: "WeakValueDictionary[_SmartKey[T], SmartFuture[T]]"
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py: note: In member "__init__" of class "SmartProcessingQueue":
+a_sync/primitives/queue.py:802: error: "Callable[[T, **P], Awaitable[V]]" has
+no attribute "__wrapped__"  [attr-defined]
+                    unwrapped = unwrapped.__wrapped__
+                                ^~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py: note: In member "put" of class "SmartProcessingQueue":
+a_sync/primitives/queue.py:807: error: Signature of "put" incompatible with
+supertype "ProcessingQueue"  [override]
+        async def put(self, *args: P.args, **kwargs: P.kwargs) -> SmartFut...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/primitives/queue.py:807: note:      Superclass:
+a_sync/primitives/queue.py:807: note:          def put(self, T, /, *args: P.args, **kwargs: P.kwargs) -> Coroutine[Any, Any, Future[V]]
+a_sync/primitives/queue.py:807: note:      Subclass:
+a_sync/primitives/queue.py:807: note:          def put(self, *args: P.args, **kwargs: P.kwargs) -> Coroutine[Any, Any, SmartFuture[V]]
+a_sync/primitives/queue.py:807: error: Signature of "put" incompatible with
+supertype "asyncio.queues.Queue"  [override]
+        async def put(self, *args: P.args, **kwargs: P.kwargs) -> SmartFut...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/primitives/queue.py:807: note:      Superclass:
+a_sync/primitives/queue.py:807: note:          def put(self, item: tuple[Any, Future[V]]) -> Coroutine[Any, Any, None]
+a_sync/primitives/queue.py:807: note:      Subclass:
+a_sync/primitives/queue.py:807: note:          def put(self, *args: P.args, **kwargs: P.kwargs) -> Coroutine[Any, Any, SmartFuture[V]]
+a_sync/primitives/queue.py:824: error: "SmartProcessingQueue[T, P, V]" has no
+attribute "_loop"  [attr-defined]
+                putter = self._loop.create_future()
+                         ^~~~~~~~~~
+a_sync/primitives/queue.py: note: In member "put_nowait" of class "SmartProcessingQueue":
+a_sync/primitives/queue.py:863: error: Unexpected keyword argument "queue" for
+"SmartFuture"  [call-arg]
+                fut = SmartFuture(queue=self, key=key, loop=self._loop)
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py:863: error: "SmartProcessingQueue[T, P, V]" has no
+attribute "_loop"  [attr-defined]
+                fut = SmartFuture(queue=self, key=key, loop=self._loop)
+                                                            ^~~~~~~~~~
+/usr/local/lib/python3.12/site-packages/mypy/typeshed/stdlib/_asyncio.pyi:24: note: "SmartFuture" defined here
+a_sync/primitives/queue.py:863: error: Unexpected keyword argument "key" for
+"SmartFuture"  [call-arg]
+                fut = SmartFuture(queue=self, key=key, loop=self._loop)
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py: note: In member "put_nowait" of class "ProcessingQueue":
+a_sync/primitives/queue.py:406: error: Cannot infer function type argument
+[misc]
+            _put_nowait(self, (args, kwargs, proxy(fut)))
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py: note: In member "_ensure_workers" of class "ProcessingQueue":
+a_sync/primitives/queue.py:414: error: "Task[Never]" has no attribute
+"_workers"  [attr-defined]
+    ...       worker_subtasks: list["Task[NoReturn]"] = self._workers._worker...
+                                                        ^~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py:414: note: Maybe you forgot to use "await"?
+a_sync/primitives/queue.py:419: error: Item "None" of "BaseException | None"
+has no attribute "with_traceback"  [union-attr]
+                        raise exc.with_traceback(exc.__traceback__) from e...
+                              ^~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py:419: error: Item "None" of "BaseException | None"
+has no attribute "__traceback__"  [union-attr]
+                        raise exc.with_traceback(exc.__traceback__) from e...
+                                                 ^~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py:419: error: Item "None" of "BaseException | None"
+has no attribute "__cause__"  [union-attr]
+    ...        raise exc.with_traceback(exc.__traceback__) from exc.__cause__
+                                                                ^~~~~~~~~~~~~
+a_sync/primitives/queue.py:423: error: Item "None" of "BaseException | None"
+has no attribute "with_traceback"  [union-attr]
+                raise exc.with_traceback(exc.__traceback__) from exc.__cau...
+                      ^~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py:423: error: Item "None" of "BaseException | None"
+has no attribute "__traceback__"  [union-attr]
+                raise exc.with_traceback(exc.__traceback__) from exc.__cau...
+                                         ^~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py:423: error: Item "None" of "BaseException | None"
+has no attribute "__cause__"  [union-attr]
+    ...        raise exc.with_traceback(exc.__traceback__) from exc.__cause__
+                                                                ^~~~~~~~~~~~~
+a_sync/primitives/queue.py: note: In member "put_nowait" of class "SmartProcessingQueue":
+a_sync/primitives/queue.py:844: error: Signature of "put_nowait" incompatible
+with supertype "ProcessingQueue"  [override]
+        def put_nowait(self, *args: P.args, **kwargs: P.kwargs) -> SmartFu...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/primitives/queue.py:844: note:      Superclass:
+a_sync/primitives/queue.py:844: note:          def put_nowait(self, T, /, *args: P.args, **kwargs: P.kwargs) -> Future[V]
+a_sync/primitives/queue.py:844: note:      Subclass:
+a_sync/primitives/queue.py:844: note:          def put_nowait(self, *args: P.args, **kwargs: P.kwargs) -> SmartFuture[V]
+a_sync/primitives/queue.py:844: error: Signature of "put_nowait" incompatible
+with supertype "asyncio.queues.Queue"  [override]
+        def put_nowait(self, *args: P.args, **kwargs: P.kwargs) -> SmartFu...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/primitives/queue.py:844: note:      Superclass:
+a_sync/primitives/queue.py:844: note:          def put_nowait(self, item: tuple[Any, Future[V]]) -> None
+a_sync/primitives/queue.py:844: note:      Subclass:
+a_sync/primitives/queue.py:844: note:          def put_nowait(self, *args: P.args, **kwargs: P.kwargs) -> SmartFuture[V]
+a_sync/primitives/queue.py:865: error: Cannot infer value of type parameter "T"
+of "put_nowait" of "Queue"  [misc]
+                Queue.put_nowait(self, (_SmartFutureRef(fut), args, kwargs...
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py:868: error: Incompatible return value type (got
+"SmartFuture[T]", expected "SmartFuture[V]")  [return-value]
+                return fut
+                       ^~~
+a_sync/primitives/queue.py:868: note: Maybe you forgot to use "await"?
+a_sync/primitives/queue.py:869: error: Incompatible return value type (got
+"SmartFuture[V] | Future[V]", expected "SmartFuture[V]")  [return-value]
+            return shield(fut)
+                   ^~~~~~~~~~~
+a_sync/primitives/queue.py: note: In member "_worker_coro" of class "SmartProcessingQueue":
+a_sync/primitives/queue.py:906: error: Need more than 2 values to unpack (3
+expected)  [misc]
+                        args, kwargs, fut = await get_next_job()
+                                            ^~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py:908: error: Argument 1 to "_check_loop_is_closed"
+has incompatible type "SmartProcessingQueue[T, P, V]"; expected "Queue[Any]"
+[arg-type]
+                        if _check_loop_is_closed(self, e):
+                                                 ^~~~
+a_sync/primitives/queue.py:909: error: Return statement in function which does
+not return  [misc]
+                            return
+                            ^~~~~~
+a_sync/primitives/queue.py: note: In function "_check_loop_is_closed":
+a_sync/primitives/queue.py:971: error: "Queue[Any]" has no attribute
+"_unfinished_tasks"  [attr-defined]
+        if queue._unfinished_tasks:
+           ^~~~~~~~~~~~~~~~~~~~~~~
+a_sync/primitives/queue.py:975: error: "Queue[Any]" has no attribute
+"_unfinished_tasks"  [attr-defined]
+                queue._unfinished_tasks,
+                ^~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py:46: error: Name "create_task" already defined (by an import)
+[no-redef]
+    from a_sync.asyncio import create_task, igather
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py:46: error: Name "igather" already defined (by an import)
+[no-redef]
+    from a_sync.asyncio import create_task, igather
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py:54: error: Name "a_sync" already defined (by an import)
+[no-redef]
+        from a_sync import a_sync
+        ^~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py: note: In function "future":
+a_sync/future.py:58: error: Incompatible default for argument "callable"
+(default has type "None", argument has type
+"Callable[P, Awaitable[T]] | Callable[P, T]")  [assignment]
+        callable: AnyFn[P, T] = None,
+                                ^~~~
+a_sync/future.py:58: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+a_sync/future.py:58: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+a_sync/future.py: note: In function "_gather_check_and_materialize":
+a_sync/future.py:89: error: "Awaitable[T] | T" cannot be unpacked (must be
+tuple or TypeVarTuple)  [valid-type]
+    ...ef _gather_check_and_materialize(*things: Unpack[MaybeAwaitable[T]]) -...
+                                                        ^
+a_sync/future.py:106: error: Module not callable  [operator]
+        return await igather(map(_check_and_materialize, things))
+                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py: note: In class "ASyncFuture":
+a_sync/future.py:274: error: Signature of "result" incompatible with supertype
+"Future"  [override]
+        def result(self) -> Callable[[], T] | Any:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py:274: note:      Superclass:
+a_sync/future.py:274: note:          def result(self, timeout: float | None = ...) -> Any
+a_sync/future.py:274: note:      Subclass:
+a_sync/future.py:274: note:          Callable[[], T] | Any
+a_sync/future.py: note: In member "__getitem__" of class "ASyncFuture":
+a_sync/future.py:329: error: Value of type "object" is not indexable  [index]
+            return _materialize(self)[key]
+                   ^~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py: note: In member "__setitem__" of class "ASyncFuture":
+a_sync/future.py:344: error: Unsupported target for indexed assignment ("T")
+[index]
+            _materialize(self)[key] = value
+            ^~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py: note: In member "__contains__" of class "ASyncFuture":
+a_sync/future.py:362: error: Unsupported right operand type for in ("T")
+[operator]
+            return key in _materialize(self)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py: note: In member "__delitem__" of class "ASyncFuture":
+a_sync/future.py:376: error: "T" has no attribute "__delitem__"  [attr-defined]
+            del _materialize(self)[key]
+            ^
+a_sync/future.py: note: In member "_await" of class "ASyncFuture":
+a_sync/future.py:386: error: Module not callable  [operator]
+                self.__task = create_task(self.__awaitable__)
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py:389: error: Incompatible types in "await" (actual type "None",
+expected type "Awaitable[Any]")  [misc]
+                result = await self.__task
+                         ^~~~~~~~~~~~~~~~~
+a_sync/future.py: note: In member "__call__" of class "ASyncFuture":
+a_sync/future.py:399: error: "Awaitable[T]" not callable  [operator]
+            return await self.__awaitable__(*args, **kwargs)
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py: note: In member "__radd__" of class "ASyncFuture":
+a_sync/future.py:411: error: Invalid self argument "ASyncFuture[T]" to
+attribute function "__radd" with type
+"Callable[[ASyncFuture[int], int], Coroutine[Any, Any, ASyncFuture[int]]]"
+[misc]
+            return ASyncFuture(self.__radd(other), dependencies=dependenci...
+                               ^~~~~~~~~~~
+a_sync/future.py: note: In member "__rsub__" of class "ASyncFuture":
+a_sync/future.py:423: error: Invalid self argument "ASyncFuture[T]" to
+attribute function "__rsub" with type
+"Callable[[ASyncFuture[int], int], Coroutine[Any, Any, ASyncFuture[int]]]"
+[misc]
+            return ASyncFuture(self.__rsub(other), dependencies=dependenci...
+                               ^~~~~~~~~~~
+a_sync/future.py: note: In class "ASyncFuture":
+a_sync/future.py:497: error: Name "__add" already defined on line 493
+[no-redef]
+        @overload
+         ^
+a_sync/future.py: note: In member "__add" of class "ASyncFuture":
+a_sync/future.py:508: error: Overloaded function signature 3 will never be
+matched: signature 2's parameter type(s) are the same or broader
+[overload-cannot-match]
+        async def __add(
+        ^~~~~~~~~~~~~~~~
+a_sync/future.py:543: error: Overloaded function signature 10 will never be
+matched: signature 9's parameter type(s) are the same or broader
+[overload-cannot-match]
+        async def __add(
+        ^~~~~~~~~~~~~~~~
+a_sync/future.py: note: In member "__radd" of class "ASyncFuture":
+a_sync/future.py:602: error: Overloaded function signature 3 will never be
+matched: signature 2's parameter type(s) are the same or broader
+[overload-cannot-match]
+        async def __radd(
+        ^~~~~~~~~~~~~~~~~
+a_sync/future.py:637: error: Overloaded function signature 10 will never be
+matched: signature 9's parameter type(s) are the same or broader
+[overload-cannot-match]
+        async def __radd(
+        ^~~~~~~~~~~~~~~~~
+a_sync/future.py: note: In member "__rsub" of class "ASyncFuture":
+a_sync/future.py:672: error: Overloaded function signature 3 will never be
+matched: signature 2's parameter type(s) are the same or broader
+[overload-cannot-match]
+        async def __rsub(self: "ASyncFuture[float]", other: int) -> "ASync...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/future.py:695: error: Overloaded function signature 10 will never be
+matched: signature 9's parameter type(s) are the same or broader
+[overload-cannot-match]
+        async def __rsub(self: "ASyncFuture[float]", other: Awaitable[int]...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/future.py: note: In member "__bytes__" of class "ASyncFuture":
+a_sync/future.py:797: error: No overload variant of "bytes" matches argument
+type "T"  [call-overload]
+            return bytes(_materialize(self))
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py:797: note: Possible overload variants:
+a_sync/future.py:797: note:     def __new__(cls, Iterable[SupportsIndex] | SupportsIndex | SupportsBytes | Buffer, /) -> bytes
+a_sync/future.py:797: note:     def __new__(cls, str, /, encoding: str, errors: str = ...) -> bytes
+a_sync/future.py:797: note:     def __new__(cls) -> bytes
+a_sync/future.py: note: In member "__int__" of class "ASyncFuture":
+a_sync/future.py:803: error: No overload variant of "int" matches argument type
+"T"  [call-overload]
+            return int(_materialize(self))
+                   ^~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py:803: note: Possible overload variants:
+a_sync/future.py:803: note:     def __new__(cls, str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc = ..., /) -> int
+a_sync/future.py:803: note:     def __new__(cls, str | bytes | bytearray, /, base: SupportsIndex) -> int
+a_sync/future.py: note: In member "__float__" of class "ASyncFuture":
+a_sync/future.py:806: error: Argument 1 to "float" has incompatible type "T";
+expected "str | Buffer | SupportsFloat | SupportsIndex"  [arg-type]
+            return float(_materialize(self))
+                         ^~~~~~~~~~~~~~~~~~
+a_sync/future.py: note: In member "__sizeof__" of class "ASyncFuture":
+a_sync/future.py:848: error: Generator has incompatible item type "int";
+expected "bool"  [misc]
+                return sum(sys.getsizeof(v) for v in self.__awaitable__.cr...
+                           ^~~~~~~~~~~~~~~~
+a_sync/future.py:848: error: "Coroutine[Any, Any, Any]" has no attribute
+"cr_frame"  [attr-defined]
+                return sum(sys.getsizeof(v) for v in self.__awaitable__.cr...
+                                                     ^~~~~~~~~~~~~~~~~~~~~...
+a_sync/future.py: note: In class "_ASyncFutureWrappedFn":
+a_sync/future.py:855: error: Invalid base class "Callable"  [misc]
+    class _ASyncFutureWrappedFn(Callable[P, ASyncFuture[T]]):
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py: note: In member "__init__" of class "_ASyncFutureWrappedFn":
+a_sync/future.py:879: error: Incompatible default for argument "callable"
+(default has type "None", argument has type
+"Callable[P, Awaitable[T]] | Callable[P, T]")  [assignment]
+            callable: AnyFn[P, T] = None,
+                                    ^~~~
+a_sync/future.py:879: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+a_sync/future.py:879: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+a_sync/future.py:895: error: Module not callable  [operator]
+                a_sync_callable = a_sync(callable, default="async", **kwar...
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py: note: In member "__repr__" of class "_ASyncFutureInstanceMethod":
+a_sync/future.py:997: error: Item
+"_ASyncFutureInstanceMethod[_ASyncFutureInstanceMethod[I, P, T], P, T]" of
+"_ASyncFutureWrappedFn[P, T] | _ASyncFutureInstanceMethod[_ASyncFutureInstanceMethod[I, P, T], P, T]"
+has no attribute "callable"  [union-attr]
+                f"<{self.__class__.__name__} for {self.__wrapper.callable}...
+                                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py: note: In member "__call__" of class "_ASyncFutureInstanceMethod":
+a_sync/future.py:1001: error: Incompatible return value type (got
+"ASyncFuture[T] | T", expected "T")  [return-value]
+            return self.__wrapper(self.__instance, *fn_args, **fn_kwargs)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/future.py:1001: error: Argument 1 to "__call__" of
+"_ASyncFutureWrappedFn" has incompatible type "I"; expected "P.args"  [arg-type]
+            return self.__wrapper(self.__instance, *fn_args, **fn_kwargs)
+                                  ^~~~~~~~~~~~~~~
+a_sync/future.py:1001: error: Argument 1 to "__call__" of
+"_ASyncFutureInstanceMethod" has incompatible type "I"; expected "P.args"
+[arg-type]
+            return self.__wrapper(self.__instance, *fn_args, **fn_kwargs)
+                                  ^~~~~~~~~~~~~~~
+a_sync/a_sync/modifiers/manager.pyi: note: In member "keys" of class "ModifierManager":
+a_sync/a_sync/modifiers/manager.pyi:142: error: Return type "KeysView[str]" of
+"keys" incompatible with return type "dict_keys[str, Any]" in supertype
+"builtins.dict"  [override]
+        def keys(self) -> KeysView[str]:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/modifiers/manager.pyi: note: In member "values" of class "ModifierManager":
+a_sync/a_sync/modifiers/manager.pyi:151: error: Return type "ValuesView[Any]"
+of "values" incompatible with return type "dict_values[str, Any]" in supertype
+"builtins.dict"  [override]
+        def values(self) -> ValuesView[Any]:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/modifiers/manager.pyi: note: In member "items" of class "ModifierManager":
+a_sync/a_sync/modifiers/manager.pyi:160: error: Return type
+"ItemsView[str, Any]" of "items" incompatible with return type
+"dict_items[str, Any]" in supertype "builtins.dict"  [override]
+        def items(self) -> ItemsView[str, Any]:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/modifiers/manager.pyi: note: In member "__contains__" of class "ModifierManager":
+a_sync/a_sync/modifiers/manager.pyi:169: error: Argument 1 of "__contains__" is
+incompatible with supertype "typing.Mapping"; supertype defines the argument
+type as "object"  [override]
+        def __contains__(self, key: str) -> bool:
+                               ^~~~~~~~
+a_sync/a_sync/modifiers/manager.pyi:169: note: This violates the Liskov substitution principle
+a_sync/a_sync/modifiers/manager.pyi:169: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+a_sync/a_sync/modifiers/manager.pyi:169: error: Argument 1 of "__contains__" is
+incompatible with supertype "typing.Container"; supertype defines the argument
+type as "object"  [override]
+        def __contains__(self, key: str) -> bool:
+                               ^~~~~~~~
+a_sync/task.py: note: In class "TaskMapping":
+a_sync/task.py:104: error: Incompatible types in assignment (expression has
+type "None", variable has type "CythonEvent")  [assignment]
+        _next: Event = None
+                       ^~~~
+a_sync/task.py: note: In member "__init__" of class "TaskMapping":
+a_sync/task.py:121: error: ParamSpec must have "*args" typed as "P.args" and
+"**kwargs" typed as "P.kwargs"  [valid-type]
+        def __init__(
+        ^~~~~~~~~~~~
+a_sync/task.py:123: error: Incompatible default for argument "wrapped_func"
+(default has type "None", argument has type "Callable[[K, **P], Awaitable[V]]")
+[assignment]
+            wrapped_func: MappingFn[K, P, V] = None,
+                                               ^~~~
+a_sync/task.py:123: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+a_sync/task.py:123: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+a_sync/task.py:208: error: Incompatible types in assignment (expression has
+type "Callable[[], Coroutine[Any, Any, list[tuple[K, Future[V]]]]]", variable
+has type "Callable[[], Coroutine[Any, Any, tuple[tuple[K, Task[V]]]]] | None")
+[assignment]
+                self._init_loader_next = init_loader_queue.get_all
+                                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py: note: In member "__hash__" of class "TaskMapping":
+a_sync/task.py:219: error: Signature of "__hash__" incompatible with supertype
+"dict"  [override]
+        def __hash__(self) -> int:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:219: note:      Superclass:
+a_sync/task.py:219: note:          None
+a_sync/task.py:219: note:      Subclass:
+a_sync/task.py:219: note:          def __hash__(self) -> int
+a_sync/task.py: note: In member "__getitem__" of class "TaskMapping":
+a_sync/task.py:229: error: Incompatible return value type (got "Future[V]",
+expected "Task[V]")  [return-value]
+                return self.__start_task(item)
+                       ^~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py: note: In member "__await__" of class "TaskMapping":
+a_sync/task.py:233: error: No overload variant of "__get__" of
+"ASyncMethodDescriptorSyncDefault" matches argument types "TaskMapping[K, V]",
+"type[TaskMapping[K, V]]"  [call-overload]
+            return self.gather(sync=False).__await__()
+                   ^~~~~~~~~~~
+a_sync/task.py:233: note: Possible overload variants:
+a_sync/task.py:233: note:     def __get__(self, instance: None, owner: type[Never]) -> ASyncMethodDescriptorSyncDefault[Never, Never, Never]
+a_sync/task.py:233: note:     def __get__(self, instance: Never, owner: type[Never]) -> ASyncBoundMethodSyncDefault[Never, Never, Never]
+a_sync/task.py: note: In member "__aiter__" of class "TaskMapping":
+a_sync/task.py:268: error: Incompatible types in assignment (expression has
+type "dict[K, Task[V]]", variable has type "tuple[K, ...]")  [assignment]
+                if unyielded := {key: self[key] for key in self if key not...
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/task.py: note: In member "keys" of class "TaskMapping":
+a_sync/task.py:286: error: Signature of "keys" incompatible with supertype
+"builtins.dict"  [override]
+        def keys(self, pop: bool = False) -> "TaskMappingKeys[K, V]":
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:286: note:      Superclass:
+a_sync/task.py:286: note:          def keys(self) -> dict_keys[K, Task[V]]
+a_sync/task.py:286: note:      Subclass:
+a_sync/task.py:286: note:          def keys(self, pop: bool = ...) -> TaskMappingKeys[K, V]
+a_sync/task.py:286: error: Signature of "keys" incompatible with supertype
+"typing.Mapping"  [override]
+        def keys(self, pop: bool = False) -> "TaskMappingKeys[K, V]":
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:286: note:      Superclass:
+a_sync/task.py:286: note:          def keys(self) -> KeysView[K]
+a_sync/task.py:286: note:      Subclass:
+a_sync/task.py:286: note:          def keys(self, pop: bool = ...) -> TaskMappingKeys[K, V]
+a_sync/task.py: note: In member "values" of class "TaskMapping":
+a_sync/task.py:289: error: Signature of "values" incompatible with supertype
+"builtins.dict"  [override]
+        def values(self, pop: bool = False) -> "TaskMappingValues[K, V]":
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:289: note:      Superclass:
+a_sync/task.py:289: note:          def values(self) -> dict_values[K, Task[V]]
+a_sync/task.py:289: note:      Subclass:
+a_sync/task.py:289: note:          def values(self, pop: bool = ...) -> TaskMappingValues[K, V]
+a_sync/task.py:289: error: Signature of "values" incompatible with supertype
+"typing.Mapping"  [override]
+        def values(self, pop: bool = False) -> "TaskMappingValues[K, V]":
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:289: note:      Superclass:
+a_sync/task.py:289: note:          def values(self) -> ValuesView[Task[V]]
+a_sync/task.py:289: note:      Subclass:
+a_sync/task.py:289: note:          def values(self, pop: bool = ...) -> TaskMappingValues[K, V]
+a_sync/task.py:290: error: Argument 1 to "values" of "dict" has incompatible
+type "TaskMapping[K, V]"; expected "dict[K, V]"  [arg-type]
+            return TaskMappingValues(dict.values(self), self, pop=pop)
+                                                 ^~~~
+a_sync/task.py:290: note: Maybe you forgot to use "await"?
+a_sync/task.py: note: In member "items" of class "TaskMapping":
+a_sync/task.py:292: error: Signature of "items" incompatible with supertype
+"builtins.dict"  [override]
+        def items(self, pop: bool = False) -> "TaskMappingValues[K, V]":
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:292: note:      Superclass:
+a_sync/task.py:292: note:          def items(self) -> dict_items[K, Task[V]]
+a_sync/task.py:292: note:      Subclass:
+a_sync/task.py:292: note:          def items(self, pop: bool = ...) -> TaskMappingValues[K, V]
+a_sync/task.py:292: error: Signature of "items" incompatible with supertype
+"typing.Mapping"  [override]
+        def items(self, pop: bool = False) -> "TaskMappingValues[K, V]":
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:292: note:      Superclass:
+a_sync/task.py:292: note:          def items(self) -> ItemsView[K, Task[V]]
+a_sync/task.py:292: note:      Subclass:
+a_sync/task.py:292: note:          def items(self, pop: bool = ...) -> TaskMappingValues[K, V]
+a_sync/task.py:293: error: Cannot infer value of type parameter "V" of
+"TaskMappingItems"  [misc]
+            return TaskMappingItems(dict.items(self), self, pop=pop)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:293: error: Incompatible return value type (got
+"TaskMappingItems[Any, Any]", expected "TaskMappingValues[K, V]")
+[return-value]
+            return TaskMappingItems(dict.items(self), self, pop=pop)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py: note: In member "map" of class "TaskMapping":
+a_sync/task.py:344: error: Argument 1 to "__call__" of "ASyncGeneratorFunction"
+has incompatible type
+"*tuple[AsyncIterable[K] | Iterable[K] | Awaitable[AsyncIterable[K] | Iterable[K]], ...]";
+expected "TaskMapping[K, V]"  [arg-type]
+    ...              async for k, t in self._tasks_for_iterables(*iterables):
+                                                                  ^~~~~~~~~
+a_sync/task.py:374: error: Incompatible types in "yield" (actual type
+"K | tuple[K, V]", expected type "tuple[K, V]")  [misc]
+                            yield _yield(key, value, yields)
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:377: error: Incompatible types in "yield" (actual type
+"K | tuple[K, V]", expected type "tuple[K, V]")  [misc]
+                            yield _yield(key, value, yields)
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py: note: In class "TaskMapping":
+a_sync/task.py:381: error: Argument 1 to "ASyncMethodDescriptorSyncDefault" has
+incompatible type
+"Callable[[TaskMapping[K, V], bool], Coroutine[Any, Any, bool]]"; expected
+"def (*Never, **Never) -> Awaitable[Never] | def (*Never, **Never) -> Never"
+[arg-type]
+        @ASyncMethodDescriptorSyncDefault
+         ^
+a_sync/task.py:393: error: Argument 1 to "ASyncMethodDescriptorSyncDefault" has
+incompatible type
+"Callable[[TaskMapping[K, V], bool], Coroutine[Any, Any, bool]]"; expected
+"def (*Never, **Never) -> Awaitable[Never] | def (*Never, **Never) -> Never"
+[arg-type]
+        @ASyncMethodDescriptorSyncDefault
+         ^
+a_sync/task.py:405: error: Argument 1 to "ASyncMethodDescriptorSyncDefault" has
+incompatible type "Callable[[TaskMapping[K, V], bool], Coroutine[Any, Any, V]]";
+expected
+"def (*Never, **Never) -> Awaitable[Never] | def (*Never, **Never) -> Never"
+[arg-type]
+        @ASyncMethodDescriptorSyncDefault
+         ^
+a_sync/task.py: note: In member "max" of class "TaskMapping":
+a_sync/task.py:411: error: Unsupported left operand type for > ("V")
+[operator]
+                    if max is None or result > max:
+                                      ^~~~~~~~~~~~
+a_sync/task.py: note: In class "TaskMapping":
+a_sync/task.py:419: error: Argument 1 to "ASyncMethodDescriptorSyncDefault" has
+incompatible type "Callable[[TaskMapping[K, V], bool], Coroutine[Any, Any, V]]";
+expected
+"def (*Never, **Never) -> Awaitable[Never] | def (*Never, **Never) -> Never"
+[arg-type]
+        @ASyncMethodDescriptorSyncDefault
+         ^
+a_sync/task.py: note: In member "min" of class "TaskMapping":
+a_sync/task.py:426: error: Unsupported left operand type for < ("V")
+[operator]
+                    if min is None or result < min:
+                                      ^~~~~~~~~~~~
+a_sync/task.py: note: In class "TaskMapping":
+a_sync/task.py:434: error: Argument 1 to "ASyncMethodDescriptorSyncDefault" has
+incompatible type "Callable[[TaskMapping[K, V], bool], Coroutine[Any, Any, V]]";
+expected
+"def (*Never, **Never) -> Awaitable[Never] | def (*Never, **Never) -> Never"
+[arg-type]
+        @ASyncMethodDescriptorSyncDefault
+         ^
+a_sync/task.py: note: In member "sum" of class "TaskMapping":
+a_sync/task.py:440: error: Unsupported operand types for + ("int" and "V")
+[operator]
+                    retval += result
+                              ^~~~~~
+a_sync/task.py:442: error: Incompatible return value type (got "int", expected
+"V")  [return-value]
+                return 0
+                       ^
+a_sync/task.py:443: error: Incompatible return value type (got "int", expected
+"V")  [return-value]
+            return retval
+                   ^~~~~~
+a_sync/task.py: note: In class "TaskMapping":
+a_sync/task.py:445: error: "type[ASyncIterator[T]]" has no attribute "wrap"
+[attr-defined]
+        @ASyncIterator.wrap
+         ^~~~~~~~~~~~~~~~~~
+a_sync/task.py:475: error: Argument 1 to "ASyncMethodDescriptorSyncDefault" has
+incompatible type
+"def gather(self: TaskMapping[K, V], return_exceptions: bool = ..., exclude_if: Callable[[V], bool] = ..., tqdm: bool = ..., **tqdm_kwargs: Any) -> Coroutine[Any, Any, dict[K, V]]";
+expected
+"def (*Never, **Never) -> Awaitable[Never] | def (*Never, **Never) -> Never"
+[arg-type]
+        @ASyncMethodDescriptorSyncDefault
+         ^
+a_sync/task.py: note: In member "gather" of class "TaskMapping":
+a_sync/task.py:479: error: Incompatible default for argument "exclude_if"
+(default has type "None", argument has type "Callable[[V], bool]")  [assignment]
+            exclude_if: Excluder[V] = None,
+                                      ^~~~
+a_sync/task.py:479: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+a_sync/task.py:479: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+a_sync/task.py: note: In member "pop" of class "TaskMapping":
+a_sync/task.py:495: error: Signature of "pop" incompatible with supertype
+"builtins.dict"  [override]
+        @overload
+         ^
+a_sync/task.py:495: note:      Superclass:
+a_sync/task.py:495: note:          @overload
+a_sync/task.py:495: note:          def pop(self, K, /) -> Task[V]
+a_sync/task.py:495: note:          @overload
+a_sync/task.py:495: note:          def pop(self, K, Task[V], /) -> Task[V]
+a_sync/task.py:495: note:          @overload
+a_sync/task.py:495: note:          def [_T] pop(self, K, _T, /) -> Task[V] | _T
+a_sync/task.py:495: note:      Subclass:
+a_sync/task.py:495: note:          @overload
+a_sync/task.py:495: note:          def pop(self, item: K, *, cancel: bool = ...) -> Task[V] | Future[V]
+a_sync/task.py:495: note:          @overload
+a_sync/task.py:495: note:          def pop(self, item: K, default: K, *, cancel: bool = ...) -> Task[V] | Future[V]
+a_sync/task.py:495: error: Signature of "pop" incompatible with supertype
+"typing.MutableMapping"  [override]
+        @overload
+         ^
+a_sync/task.py:495: note:      Superclass:
+a_sync/task.py:495: note:          @overload
+a_sync/task.py:495: note:          def pop(self, K, /) -> Task[V]
+a_sync/task.py:495: note:          @overload
+a_sync/task.py:495: note:          def pop(self, K, /, default: Task[V]) -> Task[V]
+a_sync/task.py:495: note:          @overload
+a_sync/task.py:495: note:          def [_T] pop(self, K, /, default: _T) -> Task[V] | _T
+a_sync/task.py:495: note:      Subclass:
+a_sync/task.py:495: note:          @overload
+a_sync/task.py:495: note:          def pop(self, item: K, *, cancel: bool = ...) -> Task[V] | Future[V]
+a_sync/task.py:495: note:          @overload
+a_sync/task.py:495: note:          def pop(self, item: K, default: K, *, cancel: bool = ...) -> Task[V] | Future[V]
+a_sync/task.py:514: error: Overloaded function implementation does not accept
+all possible arguments of signature 1  [misc]
+        def pop(self, *args: K, cancel: bool = False) -> Task[V] | Future[...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:514: error: Overloaded function implementation does not accept
+all possible arguments of signature 2  [misc]
+        def pop(self, *args: K, cancel: bool = False) -> Task[V] | Future[...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py: note: In class "TaskMapping":
+a_sync/task.py:537: error: Name "_init_loader" already defined on line 95
+[no-redef]
+        @cached_property_unsafe
+         ^~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py: note: In member "_init_loader" of class "TaskMapping":
+a_sync/task.py:545: error: Argument 1 to "repr_trunc" has incompatible type
+"AsyncIterable[K] | Iterable[K] | Awaitable[AsyncIterable[K] | Iterable[K]]";
+expected "Iterable[Any]"  [arg-type]
+                iterables_repr = repr_trunc(iterables[0])
+                                            ^~~~~~~~~~~~
+a_sync/task.py:547: error: Argument 1 to "map" has incompatible type
+"Callable[[Iterable[Any]], str]"; expected
+"Callable[[AsyncIterable[K] | Iterable[K] | Awaitable[AsyncIterable[K] | Iterable[K]]], str]"
+ [arg-type]
+                iterables_repr = f"({', '.join(map(repr_trunc, iterables))...
+                                                   ^~~~~~~~~~
+a_sync/task.py: note: In member "_queue" of class "TaskMapping":
+a_sync/task.py:561: error: Argument 2 to "ProcessingQueue" has incompatible
+type "int | None"; expected "int"  [arg-type]
+            return ProcessingQueue(fn, self.concurrency, name=self._name)
+                                       ^~~~~~~~~~~~~~~~
+a_sync/task.py:561: error: Argument "name" to "ProcessingQueue" has
+incompatible type "str | None"; expected "str"  [arg-type]
+            return ProcessingQueue(fn, self.concurrency, name=self._name)
+                                                              ^~~~~~~~~~
+a_sync/task.py: note: In member "_start_tasks_for_iterables" of class "TaskMapping":
+a_sync/task.py:609: error: Incompatible types in "yield" (actual type
+"tuple[K, Future[V]]", expected type "tuple[K, Task[V]]")  [misc]
+                    yield key, self.__start_task(key)
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:614: error: Incompatible types in "yield" (actual type
+"tuple[K, Future[V]]", expected type "tuple[K, Task[V]]")  [misc]
+                        yield key, self.__start_task(key)
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py: note: In member "_wait_for_next_key" of class "TaskMapping":
+a_sync/task.py:640: error: "None" not callable  [misc]
+                self._init_loader_next(), name=self._name or str(self), lo...
+                ^~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:643: error: Value of type variable "_FT" of "wait" cannot be
+"Task[Any] | Task[None] | None"  [type-var]
+            done, pending = await wait((get_next, self._init_loader), retu...
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/task.py:645: error: Incompatible types in assignment (expression has
+type "Task[Any] | Task[None] | None", variable has type "Task[Any]")
+[assignment]
+            for task in done:
+            ^
+a_sync/task.py:648: error: Item "None" of "Task[None] | None" has no attribute
+"done"  [union-attr]
+            if self._init_loader.done() and not get_next.done():
+               ^~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py: note: In member "__start_task" of class "TaskMapping":
+a_sync/task.py:664: error: Cannot infer value of type parameter "_VT" of
+"__setitem__" of "dict"  [misc]
+            dict.__setitem__(self, item, fut)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py: note: In function "_unwrap":
+a_sync/task.py:751: error: "ASyncFunction[Any, Any]" has no attribute
+"_modified_fn"  [attr-defined]
+                wrapped_func._modified_fn if wrapped_func.is_async_def() e...
+                ^~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:751: error: "ASyncFunction[Any, Any]" has no attribute
+"is_async_def"  [attr-defined]
+                wrapped_func._modified_fn if wrapped_func.is_async_def() e...
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:751: error: "ASyncFunction[Any, Any]" has no attribute
+"_asyncified"  [attr-defined]
+    ..._modified_fn if wrapped_func.is_async_def() else wrapped_func._asyncif...
+                                                        ^~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py: note: In member "__len__" of class "_TaskMappingView":
+a_sync/task.py:788: error: Argument 1 to "len" has incompatible type
+"Iterable[T]"; expected "Sized"  [arg-type]
+            return len(self.__view__)
+                       ^~~~~~~~~~~~~
+a_sync/task.py: note: In member "aiterbykeys" of class "_TaskMappingView":
+a_sync/task.py:790: error: The return type of an async generator function
+should be "AsyncGenerator" or one of its supertypes  [misc]
+        async def aiterbykeys(self, reverse: bool = False) -> ASyncIterato...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/task.py: note: In member "aiterbyvalues" of class "_TaskMappingView":
+a_sync/task.py:796: error: The return type of an async generator function
+should be "AsyncGenerator" or one of its supertypes  [misc]
+        async def aiterbyvalues(self, reverse: bool = False) -> ASyncItera...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/task.py: note: In member "__await" of class "_TaskMappingView":
+a_sync/task.py:803: error: "_TaskMappingView[T, K, V]" has no attribute
+"__aiter__"; maybe "__iter__" or "__await__"? (not async iterable)
+[attr-defined]
+            return [result async for result in self]
+                                               ^~~~
+a_sync/task.py: note: In class "TaskMappingKeys":
+a_sync/task.py:811: error: Cannot infer type of lambda  [misc]
+        _get_from_item = lambda self, item: _get_key(item)
+                         ^
+a_sync/task.py: note: In member "__load_init_loader" of class "TaskMappingKeys":
+a_sync/task.py:854: error: Item "None" of "Task[None] | None" has no attribute
+"done"  [union-attr]
+            done = mapping._init_loader.done
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py:870: error: Incompatible types in "await" (actual type
+"Task[None] | None", expected type "Awaitable[Any]")  [misc]
+            await mapping._init_loader
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/task.py: note: In class "TaskMappingItems":
+a_sync/task.py:878: error: Cannot infer type of lambda  [misc]
+        _get_from_item = lambda self, item: item
+                         ^
+a_sync/task.py: note: In class "TaskMappingValues":
+a_sync/task.py:898: error: Cannot infer type of lambda  [misc]
+        _get_from_item = lambda self, item: _get_value(item)
+                         ^
+a_sync/debugging.pyi: note: In function "stuck_coro_debugger":
+a_sync/debugging.pyi:22: error: Overloaded function signatures 1 and 4 overlap
+with incompatible return types  [overload-overlap]
+    def stuck_coro_debugger(
+    ^~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/debugging.pyi:28: error: Overloaded function signatures 2 and 4 overlap
+with incompatible return types  [overload-overlap]
+    def stuck_coro_debugger(
+    ^~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/debugging.pyi:63: error: An implementation for an overloaded function is
+not allowed in a stub file  [misc]
+    def stuck_coro_debugger(fn, logger=logger, interval=_FIVE_MINUTES): .....
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/utils/iterators.py: note: In function "as_yielded":
+a_sync/utils/iterators.py:202: error: Overloaded function implementation does
+not accept all possible arguments of signature 2  [misc]
+    @stuck_coro_debugger
+     ^~~~~~~~~~~~~~~~~~~
+a_sync/utils/iterators.py:202: error: Overloaded function implementation does
+not accept all possible arguments of signature 3  [misc]
+    @stuck_coro_debugger
+     ^~~~~~~~~~~~~~~~~~~
+a_sync/utils/iterators.py:202: error: Overloaded function implementation does
+not accept all possible arguments of signature 4  [misc]
+    @stuck_coro_debugger
+     ^~~~~~~~~~~~~~~~~~~
+a_sync/utils/iterators.py:202: error: Overloaded function implementation does
+not accept all possible arguments of signature 5  [misc]
+    @stuck_coro_debugger
+     ^~~~~~~~~~~~~~~~~~~
+a_sync/utils/iterators.py:202: error: Overloaded function implementation does
+not accept all possible arguments of signature 6  [misc]
+    @stuck_coro_debugger
+     ^~~~~~~~~~~~~~~~~~~
+a_sync/utils/iterators.py:202: error: Overloaded function implementation does
+not accept all possible arguments of signature 7  [misc]
+    @stuck_coro_debugger
+     ^~~~~~~~~~~~~~~~~~~
+a_sync/utils/iterators.py:202: error: Overloaded function implementation does
+not accept all possible arguments of signature 8  [misc]
+    @stuck_coro_debugger
+     ^~~~~~~~~~~~~~~~~~~
+a_sync/utils/iterators.py:202: error: Overloaded function implementation does
+not accept all possible arguments of signature 9  [misc]
+    @stuck_coro_debugger
+     ^~~~~~~~~~~~~~~~~~~
+a_sync/utils/iterators.py:202: error: Overloaded function implementation does
+not accept all possible arguments of signature 10  [misc]
+    @stuck_coro_debugger
+     ^~~~~~~~~~~~~~~~~~~
+a_sync/utils/iterators.py:202: error: Overloaded function implementation does
+not accept all possible arguments of signature 11  [misc]
+    @stuck_coro_debugger
+     ^~~~~~~~~~~~~~~~~~~
+a_sync/utils/iterators.py:243: error: Argument 1 to "_Done" has incompatible
+type "BaseException"; expected "Exception | None"  [arg-type]
+                queue.put_nowait(_Done(exc))
+                                       ^~~
+a_sync/utils/iterators.py: note: In member "_tb" of class "_Done":
+a_sync/utils/iterators.py:296: error: Incompatible return value type (got
+"TracebackType | None", expected "TracebackType")  [return-value]
+            return cast(Exception, self._exc).__traceback__
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/decorator.py: note: In function "a_sync":
+a_sync/a_sync/decorator.py:199: error: Overloaded function signatures 7 and 8
+overlap with incompatible return types  [overload-overlap]
+    def a_sync(
+    ^~~~~~~~~~~
+a_sync/a_sync/decorator.py:199: note: Flipping the order of overloads will fix this error
+a_sync/a_sync/decorator.py:499: error: Overloaded function signature 17 will
+never be matched: signature 16's parameter type(s) are the same or broader
+[overload-cannot-match]
+    def a_sync(
+    ^~~~~~~~~~~
+a_sync/a_sync/decorator.py:529: error: Overloaded function implementation does
+not accept all possible arguments of signature 1  [misc]
+    def a_sync(
+    ^~~~~~~~~~~
+a_sync/a_sync/decorator.py:529: error: Overloaded function implementation does
+not accept all possible arguments of signature 2  [misc]
+    def a_sync(
+    ^~~~~~~~~~~
+a_sync/a_sync/decorator.py:529: error: Overloaded function implementation does
+not accept all possible arguments of signature 3  [misc]
+    def a_sync(
+    ^~~~~~~~~~~
+a_sync/a_sync/decorator.py:529: error: Overloaded function implementation does
+not accept all possible arguments of signature 4  [misc]
+    def a_sync(
+    ^~~~~~~~~~~
+a_sync/a_sync/decorator.py:529: error: Overloaded function implementation does
+not accept all possible arguments of signature 5  [misc]
+    def a_sync(
+    ^~~~~~~~~~~
+a_sync/a_sync/decorator.py:529: error: Overloaded function implementation does
+not accept all possible arguments of signature 10  [misc]
+    def a_sync(
+    ^~~~~~~~~~~
+a_sync/a_sync/decorator.py:529: error: Overloaded function implementation does
+not accept all possible arguments of signature 13  [misc]
+    def a_sync(
+    ^~~~~~~~~~~
+a_sync/a_sync/decorator.py:529: error: Overloaded function implementation does
+not accept all possible arguments of signature 16  [misc]
+    def a_sync(
+    ^~~~~~~~~~~
+a_sync/a_sync/decorator.py:529: error: Overloaded function implementation does
+not accept all possible arguments of signature 17  [misc]
+    def a_sync(
+    ^~~~~~~~~~~
+a_sync/a_sync/decorator.py:645: error: Incompatible types in assignment
+(expression has type "ASyncDecoratorAsyncDefault", variable has type
+"ASyncDecoratorSyncDefault")  [assignment]
+            deco = ASyncDecoratorAsyncDefault(default=default, **modifiers...
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/decorator.py:647: error: Incompatible types in assignment
+(expression has type "ASyncDecorator", variable has type
+"ASyncDecoratorSyncDefault")  [assignment]
+            deco = ASyncDecorator(default=default, **modifiers)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/_meta.py:9: error: Module "a_sync.a_sync.function" has no
+attribute "_ASyncFunction"; maybe "ASyncFunction"?  [attr-defined]
+    from a_sync.a_sync.function import _ASyncFunction, _ModifiedMixin
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi: note: In class "_ASyncPropertyDescriptorBase":
+a_sync/a_sync/property.pyi:24: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "tuple[()]"  [valid-type]
+    class _ASyncPropertyDescriptorBase(ASyncDescriptor[I, tuple[()], T]):
+                                                          ^
+a_sync/a_sync/property.pyi:32: error: Incompatible types in assignment
+(expression has type "ASyncFunction[Any, Any]", base class "ASyncDescriptor"
+defined the type as "Callable[[], ASyncFunction[Any, bool]]")  [assignment]
+        any: ASyncFunction[AnyIterable[I], bool]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi:32: note: "ASyncFunction[Any, Any].__call__" has type overloaded function
+a_sync/a_sync/property.pyi:32: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        any: ASyncFunction[AnyIterable[I], bool]
+                           ^
+a_sync/a_sync/property.pyi:33: error: Incompatible types in assignment
+(expression has type "ASyncFunction[Any, Any]", base class "ASyncDescriptor"
+defined the type as "Callable[[], ASyncFunction[Any, bool]]")  [assignment]
+        all: ASyncFunction[AnyIterable[I], bool]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi:33: note: "ASyncFunction[Any, Any].__call__" has type overloaded function
+a_sync/a_sync/property.pyi:33: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        all: ASyncFunction[AnyIterable[I], bool]
+                           ^
+a_sync/a_sync/property.pyi:34: error: Incompatible types in assignment
+(expression has type "ASyncFunction[Any, Any]", base class "ASyncDescriptor"
+defined the type as "Callable[[], ASyncFunction[Any, Any]]")  [assignment]
+        min: ASyncFunction[AnyIterable[I], T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi:34: note: "ASyncFunction[Any, Any].__call__" has type overloaded function
+a_sync/a_sync/property.pyi:34: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        min: ASyncFunction[AnyIterable[I], T]
+                           ^
+a_sync/a_sync/property.pyi:35: error: Incompatible types in assignment
+(expression has type "ASyncFunction[Any, Any]", base class "ASyncDescriptor"
+defined the type as "Callable[[], ASyncFunction[Any, Any]]")  [assignment]
+        max: ASyncFunction[AnyIterable[I], T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi:35: note: "ASyncFunction[Any, Any].__call__" has type overloaded function
+a_sync/a_sync/property.pyi:35: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        max: ASyncFunction[AnyIterable[I], T]
+                           ^
+a_sync/a_sync/property.pyi:36: error: Incompatible types in assignment
+(expression has type "ASyncFunction[Any, Any]", base class "ASyncDescriptor"
+defined the type as "Callable[[], ASyncFunction[Any, Any]]")  [assignment]
+        sum: ASyncFunction[AnyIterable[I], T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi:36: note: "ASyncFunction[Any, Any].__call__" has type overloaded function
+a_sync/a_sync/property.pyi:36: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        sum: ASyncFunction[AnyIterable[I], T]
+                           ^
+a_sync/a_sync/property.pyi:37: error: "HiddenMethodDescriptor" expects 2 type
+arguments, but 1 given  [type-arg]
+        hidden_method_descriptor: HiddenMethodDescriptor[T]
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi: note: In class "ASyncPropertyDescriptorSyncDefault":
+a_sync/a_sync/property.pyi:100: error: Incompatible types in assignment
+(expression has type "str", base class "_ModifiedMixin" defined the type as
+"Literal['sync', 'async'] | None")  [assignment]
+        default: str
+        ^~~~~~~~~~~~
+a_sync/a_sync/property.pyi:101: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        any: ASyncFunctionSyncDefault[AnyIterable[I], bool]
+                                      ^
+a_sync/a_sync/property.pyi:102: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        all: ASyncFunctionSyncDefault[AnyIterable[I], bool]
+                                      ^
+a_sync/a_sync/property.pyi:103: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        min: ASyncFunctionSyncDefault[AnyIterable[I], T]
+                                      ^
+a_sync/a_sync/property.pyi:104: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        max: ASyncFunctionSyncDefault[AnyIterable[I], T]
+                                      ^
+a_sync/a_sync/property.pyi:105: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        sum: ASyncFunctionSyncDefault[AnyIterable[I], T]
+                                      ^
+a_sync/a_sync/property.pyi: note: In member "__get__" of class "ASyncPropertyDescriptorSyncDefault":
+a_sync/a_sync/property.pyi:106: error: Signature of "__get__" incompatible with
+supertype "_ASyncPropertyDescriptorBase"  [override]
+        @overload
+         ^
+a_sync/a_sync/property.pyi:106: note:      Superclass:
+a_sync/a_sync/property.pyi:106: note:          @overload
+a_sync/a_sync/property.pyi:106: note:          def __get__(self, instance: None, owner: type[I]) -> ASyncPropertyDescriptorSyncDefault[I, T]
+a_sync/a_sync/property.pyi:106: note:          @overload
+a_sync/a_sync/property.pyi:106: note:          def __get__(self, instance: I, owner: type[I]) -> Awaitable[T]
+a_sync/a_sync/property.pyi:106: note:      Subclass:
+a_sync/a_sync/property.pyi:106: note:          @overload
+a_sync/a_sync/property.pyi:106: note:          def __get__(self, instance: None, owner: type[I]) -> ASyncPropertyDescriptorSyncDefault[I, T]
+a_sync/a_sync/property.pyi:106: note:          @overload
+a_sync/a_sync/property.pyi:106: note:          def __get__(self, instance: I, owner: type[I]) -> T
+a_sync/a_sync/property.pyi:110: error: An implementation for an overloaded
+function is not allowed in a stub file  [misc]
+        def __get__(self, instance: I | None, owner: type[I]) -> T | Self:...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/property.pyi: note: In class "ASyncPropertyDescriptorAsyncDefault":
+a_sync/a_sync/property.pyi:121: error: Incompatible types in assignment
+(expression has type "str", base class "_ModifiedMixin" defined the type as
+"Literal['sync', 'async'] | None")  [assignment]
+        default: str
+        ^~~~~~~~~~~~
+a_sync/a_sync/property.pyi:122: error: Incompatible types in assignment
+(expression has type "ASyncFunctionAsyncDefault[Any, Any]", base class
+"ASyncDescriptor" defined the type as "Callable[[], ASyncFunction[Any, bool]]")
+[assignment]
+        any: ASyncFunctionAsyncDefault[AnyIterable[I], bool]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi:122: note: "ASyncFunctionAsyncDefault[Any, Any].__call__" has type overloaded function
+a_sync/a_sync/property.pyi:122: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        any: ASyncFunctionAsyncDefault[AnyIterable[I], bool]
+                                       ^
+a_sync/a_sync/property.pyi:123: error: Incompatible types in assignment
+(expression has type "ASyncFunctionAsyncDefault[Any, Any]", base class
+"ASyncDescriptor" defined the type as "Callable[[], ASyncFunction[Any, bool]]")
+[assignment]
+        all: ASyncFunctionAsyncDefault[AnyIterable[I], bool]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi:123: note: "ASyncFunctionAsyncDefault[Any, Any].__call__" has type overloaded function
+a_sync/a_sync/property.pyi:123: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        all: ASyncFunctionAsyncDefault[AnyIterable[I], bool]
+                                       ^
+a_sync/a_sync/property.pyi:124: error: Incompatible types in assignment
+(expression has type "ASyncFunctionAsyncDefault[Any, Any]", base class
+"ASyncDescriptor" defined the type as "Callable[[], ASyncFunction[Any, Any]]")
+[assignment]
+        min: ASyncFunctionAsyncDefault[AnyIterable[I], T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi:124: note: "ASyncFunctionAsyncDefault[Any, Any].__call__" has type overloaded function
+a_sync/a_sync/property.pyi:124: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        min: ASyncFunctionAsyncDefault[AnyIterable[I], T]
+                                       ^
+a_sync/a_sync/property.pyi:125: error: Incompatible types in assignment
+(expression has type "ASyncFunctionAsyncDefault[Any, Any]", base class
+"ASyncDescriptor" defined the type as "Callable[[], ASyncFunction[Any, Any]]")
+[assignment]
+        max: ASyncFunctionAsyncDefault[AnyIterable[I], T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi:125: note: "ASyncFunctionAsyncDefault[Any, Any].__call__" has type overloaded function
+a_sync/a_sync/property.pyi:125: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        max: ASyncFunctionAsyncDefault[AnyIterable[I], T]
+                                       ^
+a_sync/a_sync/property.pyi:126: error: Incompatible types in assignment
+(expression has type "ASyncFunctionAsyncDefault[Any, Any]", base class
+"ASyncDescriptor" defined the type as "Callable[[], ASyncFunction[Any, Any]]")
+[assignment]
+        sum: ASyncFunctionAsyncDefault[AnyIterable[I], T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi:126: note: "ASyncFunctionAsyncDefault[Any, Any].__call__" has type overloaded function
+a_sync/a_sync/property.pyi:126: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "AsyncIterable[I] | Iterable[I]"
+[valid-type]
+        sum: ASyncFunctionAsyncDefault[AnyIterable[I], T]
+                                       ^
+a_sync/a_sync/property.pyi: note: In function "a_sync_property":
+a_sync/a_sync/property.pyi:149: error: Overloaded function signature 4 will
+never be matched: signature 3's parameter type(s) are the same or broader
+[overload-cannot-match]
+    def a_sync_property(
+    ^~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi: note: In member "__get__" of class "ASyncCachedPropertyDescriptorSyncDefault":
+a_sync/a_sync/property.pyi:253: error: Signature of "__get__" incompatible with
+supertype "_ASyncPropertyDescriptorBase"  [override]
+        @overload
+         ^
+a_sync/a_sync/property.pyi:253: note:      Superclass:
+a_sync/a_sync/property.pyi:253: note:          @overload
+a_sync/a_sync/property.pyi:253: note:          def __get__(self, instance: None, owner: type[I]) -> ASyncCachedPropertyDescriptorSyncDefault[I, T]
+a_sync/a_sync/property.pyi:253: note:          @overload
+a_sync/a_sync/property.pyi:253: note:          def __get__(self, instance: I, owner: type[I]) -> Awaitable[T]
+a_sync/a_sync/property.pyi:253: note:      Subclass:
+a_sync/a_sync/property.pyi:253: note:          @overload
+a_sync/a_sync/property.pyi:253: note:          def __get__(self, instance: None, owner: type[I]) -> ASyncCachedPropertyDescriptorSyncDefault[I, T]
+a_sync/a_sync/property.pyi:253: note:          @overload
+a_sync/a_sync/property.pyi:253: note:          def __get__(self, instance: I, owner: type[I]) -> T
+a_sync/a_sync/property.pyi:257: error: An implementation for an overloaded
+function is not allowed in a stub file  [misc]
+        def __get__(self, instance: I | None, owner: type[I]) -> T | Self:...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/property.pyi: note: In class "HiddenMethod":
+a_sync/a_sync/property.pyi:320: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "tuple[()]"  [valid-type]
+    class HiddenMethod(ASyncBoundMethodAsyncDefault[I, tuple[()], T]):
+                                                       ^
+a_sync/a_sync/property.pyi: note: At top level:
+a_sync/a_sync/property.pyi:349: error: Cannot inherit from final class
+"ASyncMethodDescriptorAsyncDefault"  [misc]
+    class HiddenMethodDescriptor(ASyncMethodDescriptorAsyncDefault[I, tupl...
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/property.pyi: note: In class "HiddenMethodDescriptor":
+a_sync/a_sync/property.pyi:349: error: Can only replace ParamSpec with a
+parameter types list or another ParamSpec, got "tuple[()]"  [valid-type]
+    ...nMethodDescriptor(ASyncMethodDescriptorAsyncDefault[I, tuple[()], T]):
+                                                              ^
+a_sync/a_sync/property.pyi: note: In member "__get__" of class "HiddenMethodDescriptor":
+a_sync/a_sync/property.pyi:375: error: Signature of "__get__" incompatible with
+supertype "a_sync.a_sync.method.ASyncMethodDescriptorAsyncDefault"  [override]
+        def __get__(self, instance: I, owner: type[I]) -> HiddenMethod[I, ...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi:375: note:      Superclass:
+a_sync/a_sync/property.pyi:375: note:          @overload
+a_sync/a_sync/property.pyi:375: note:          def __get__(self, instance: None, owner: type[Any]) -> ASyncMethodDescriptorAsyncDefault[Any, Any, Any]
+a_sync/a_sync/property.pyi:375: note:          @overload
+a_sync/a_sync/property.pyi:375: note:          def __get__(self, instance: Any, owner: type[Any]) -> ASyncBoundMethodAsyncDefault[Any, Any, Any]
+a_sync/a_sync/property.pyi:375: note:      Subclass:
+a_sync/a_sync/property.pyi:375: note:          def __get__(self, instance: I, owner: type[I]) -> HiddenMethod[I, T]
+a_sync/a_sync/property.pyi:375: error: Signature of "__get__" incompatible with
+supertype "a_sync.a_sync.method.ASyncMethodDescriptor"  [override]
+        def __get__(self, instance: I, owner: type[I]) -> HiddenMethod[I, ...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/property.pyi:375: note:      Superclass:
+a_sync/a_sync/property.pyi:375: note:          @overload
+a_sync/a_sync/property.pyi:375: note:          def __get__(self, instance: None, owner: type[Any]) -> HiddenMethodDescriptor[I, T]
+a_sync/a_sync/property.pyi:375: note:          @overload
+a_sync/a_sync/property.pyi:375: note:          def __get__(self, instance: Any, owner: type[Any]) -> ASyncBoundMethod[Any, Any, Any]
+a_sync/a_sync/property.pyi:375: note:      Subclass:
+a_sync/a_sync/property.pyi:375: note:          def __get__(self, instance: I, owner: type[I]) -> HiddenMethod[I, T]
+a_sync/a_sync/method.pyi: note: In class "ASyncMethodDescriptor":
+a_sync/a_sync/method.pyi:63: error: Incompatible types in assignment
+(expression has type "Callable[P, Awaitable[T]] | Callable[P, T]", base class
+"ASyncDescriptor" defined the type as
+"Callable[[I, **P], Awaitable[T]] | Callable[[I, **P], T]")  [assignment]
+        __wrapped__: AnyFn[P, T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/method.pyi: note: In class "ASyncMethodDescriptorSyncDefault":
+a_sync/a_sync/method.pyi:155: error: Incompatible types in assignment
+(expression has type "str", base class "_ModifiedMixin" defined the type as
+"Literal['sync', 'async'] | None")  [assignment]
+        default: str
+        ^~~~~~~~~~~~
+a_sync/a_sync/method.pyi:156: error: Incompatible types in assignment
+(expression has type
+"ASyncFunctionSyncDefault[[AsyncIterable[I] | Iterable[I], **P], bool]", base
+class "ASyncDescriptor" defined the type as
+"Callable[[], ASyncFunction[[AsyncIterable[I] | Iterable[I], **P], bool]]")
+[assignment]
+        any: ASyncFunctionSyncDefault[Concatenate[AnyIterable[I], P], bool...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/method.pyi:156: note: "ASyncFunctionSyncDefault[[AsyncIterable[I] | Iterable[I], **P], bool].__call__" has type overloaded function
+a_sync/a_sync/method.pyi:157: error: Incompatible types in assignment
+(expression has type
+"ASyncFunctionSyncDefault[[AsyncIterable[I] | Iterable[I], **P], bool]", base
+class "ASyncDescriptor" defined the type as
+"Callable[[], ASyncFunction[[AsyncIterable[I] | Iterable[I], **P], bool]]")
+[assignment]
+        all: ASyncFunctionSyncDefault[Concatenate[AnyIterable[I], P], bool...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/method.pyi:157: note: "ASyncFunctionSyncDefault[[AsyncIterable[I] | Iterable[I], **P], bool].__call__" has type overloaded function
+a_sync/a_sync/method.pyi:158: error: Incompatible types in assignment
+(expression has type
+"ASyncFunctionSyncDefault[[AsyncIterable[I] | Iterable[I], **P], T]", base class
+"ASyncDescriptor" defined the type as
+"Callable[[], ASyncFunction[[AsyncIterable[I] | Iterable[I], **P], T]]")
+[assignment]
+        min: ASyncFunctionSyncDefault[Concatenate[AnyIterable[I], P], T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/method.pyi:158: note: "ASyncFunctionSyncDefault[[AsyncIterable[I] | Iterable[I], **P], T].__call__" has type overloaded function
+a_sync/a_sync/method.pyi:159: error: Incompatible types in assignment
+(expression has type
+"ASyncFunctionSyncDefault[[AsyncIterable[I] | Iterable[I], **P], T]", base class
+"ASyncDescriptor" defined the type as
+"Callable[[], ASyncFunction[[AsyncIterable[I] | Iterable[I], **P], T]]")
+[assignment]
+        max: ASyncFunctionSyncDefault[Concatenate[AnyIterable[I], P], T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/method.pyi:159: note: "ASyncFunctionSyncDefault[[AsyncIterable[I] | Iterable[I], **P], T].__call__" has type overloaded function
+a_sync/a_sync/method.pyi:160: error: Incompatible types in assignment
+(expression has type
+"ASyncFunctionSyncDefault[[AsyncIterable[I] | Iterable[I], **P], T]", base class
+"ASyncDescriptor" defined the type as
+"Callable[[], ASyncFunction[[AsyncIterable[I] | Iterable[I], **P], T]]")
+[assignment]
+        sum: ASyncFunctionSyncDefault[Concatenate[AnyIterable[I], P], T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/method.pyi:160: note: "ASyncFunctionSyncDefault[[AsyncIterable[I] | Iterable[I], **P], T].__call__" has type overloaded function
+a_sync/a_sync/method.pyi: note: In class "ASyncMethodDescriptorAsyncDefault":
+a_sync/a_sync/method.pyi:196: error: Incompatible types in assignment
+(expression has type "str", base class "_ModifiedMixin" defined the type as
+"Literal['sync', 'async'] | None")  [assignment]
+        default: str
+        ^~~~~~~~~~~~
+a_sync/a_sync/method.pyi:197: error: Incompatible types in assignment
+(expression has type
+"ASyncFunctionAsyncDefault[[AsyncIterable[I] | Iterable[I], **P], bool]", base
+class "ASyncDescriptor" defined the type as
+"Callable[[], ASyncFunction[[AsyncIterable[I] | Iterable[I], **P], bool]]")
+[assignment]
+        any: ASyncFunctionAsyncDefault[Concatenate[AnyIterable[I], P], boo...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/method.pyi:197: note: "ASyncFunctionAsyncDefault[[AsyncIterable[I] | Iterable[I], **P], bool].__call__" has type overloaded function
+a_sync/a_sync/method.pyi:198: error: Incompatible types in assignment
+(expression has type
+"ASyncFunctionAsyncDefault[[AsyncIterable[I] | Iterable[I], **P], bool]", base
+class "ASyncDescriptor" defined the type as
+"Callable[[], ASyncFunction[[AsyncIterable[I] | Iterable[I], **P], bool]]")
+[assignment]
+        all: ASyncFunctionAsyncDefault[Concatenate[AnyIterable[I], P], boo...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/method.pyi:198: note: "ASyncFunctionAsyncDefault[[AsyncIterable[I] | Iterable[I], **P], bool].__call__" has type overloaded function
+a_sync/a_sync/method.pyi:199: error: Incompatible types in assignment
+(expression has type
+"ASyncFunctionAsyncDefault[[AsyncIterable[I] | Iterable[I], **P], T]", base
+class "ASyncDescriptor" defined the type as
+"Callable[[], ASyncFunction[[AsyncIterable[I] | Iterable[I], **P], T]]")
+[assignment]
+        min: ASyncFunctionAsyncDefault[Concatenate[AnyIterable[I], P], T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/method.pyi:199: note: "ASyncFunctionAsyncDefault[[AsyncIterable[I] | Iterable[I], **P], T].__call__" has type overloaded function
+a_sync/a_sync/method.pyi:200: error: Incompatible types in assignment
+(expression has type
+"ASyncFunctionAsyncDefault[[AsyncIterable[I] | Iterable[I], **P], T]", base
+class "ASyncDescriptor" defined the type as
+"Callable[[], ASyncFunction[[AsyncIterable[I] | Iterable[I], **P], T]]")
+[assignment]
+        max: ASyncFunctionAsyncDefault[Concatenate[AnyIterable[I], P], T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/method.pyi:200: note: "ASyncFunctionAsyncDefault[[AsyncIterable[I] | Iterable[I], **P], T].__call__" has type overloaded function
+a_sync/a_sync/method.pyi:201: error: Incompatible types in assignment
+(expression has type
+"ASyncFunctionAsyncDefault[[AsyncIterable[I] | Iterable[I], **P], T]", base
+class "ASyncDescriptor" defined the type as
+"Callable[[], ASyncFunction[[AsyncIterable[I] | Iterable[I], **P], T]]")
+[assignment]
+        sum: ASyncFunctionAsyncDefault[Concatenate[AnyIterable[I], P], T]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/method.pyi:201: note: "ASyncFunctionAsyncDefault[[AsyncIterable[I] | Iterable[I], **P], T].__call__" has type overloaded function
+a_sync/a_sync/method.pyi: note: In function "__call__":
+a_sync/a_sync/method.pyi:270: error: Arguments not allowed after ParamSpec.args
+ [valid-type]
+        def __call__(self, *args: P.args, sync: Literal[True], **kwargs: P...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/method.pyi:272: error: Arguments not allowed after ParamSpec.args
+ [valid-type]
+        def __call__(
+        ^~~~~~~~~~~~
+a_sync/a_sync/method.pyi:276: error: Arguments not allowed after ParamSpec.args
+ [valid-type]
+        def __call__(self, *args: P.args, asynchronous: Literal[False], **...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/method.pyi:278: error: Arguments not allowed after ParamSpec.args
+ [valid-type]
+        def __call__(
+        ^~~~~~~~~~~~
+a_sync/a_sync/method.pyi: note: In member "map" of class "ASyncBoundMethod":
+a_sync/a_sync/method.pyi:308: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        def map(
+        ^~~~~~~
+a_sync/a_sync/method.pyi: note: In member "any" of class "ASyncBoundMethod":
+a_sync/a_sync/method.pyi:333: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        async def any(
+        ^~~~~~~~~~~~~
+a_sync/a_sync/method.pyi: note: In member "all" of class "ASyncBoundMethod":
+a_sync/a_sync/method.pyi:354: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        async def all(
+        ^~~~~~~~~~~~~
+a_sync/a_sync/method.pyi: note: In member "min" of class "ASyncBoundMethod":
+a_sync/a_sync/method.pyi:375: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        async def min(
+        ^~~~~~~~~~~~~
+a_sync/a_sync/method.pyi: note: In member "max" of class "ASyncBoundMethod":
+a_sync/a_sync/method.pyi:396: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        async def max(
+        ^~~~~~~~~~~~~
+a_sync/a_sync/method.pyi: note: In member "sum" of class "ASyncBoundMethod":
+a_sync/a_sync/method.pyi:417: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        async def sum(
+        ^~~~~~~~~~~~~
+a_sync/a_sync/method.pyi: note: In function "__call__":
+a_sync/a_sync/method.pyi:466: error: Arguments not allowed after ParamSpec.args
+ [valid-type]
+        def __call__(self, *args: P.args, sync: Literal[True], **kwargs: P...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/method.pyi:468: error: Arguments not allowed after ParamSpec.args
+ [valid-type]
+        def __call__(
+        ^~~~~~~~~~~~
+a_sync/a_sync/method.pyi:472: error: Arguments not allowed after ParamSpec.args
+ [valid-type]
+        def __call__(self, *args: P.args, asynchronous: Literal[False], **...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/method.pyi:474: error: Arguments not allowed after ParamSpec.args
+ [valid-type]
+        def __call__(
+        ^~~~~~~~~~~~
+a_sync/a_sync/method.pyi: note: In member "__call__" of class "ASyncBoundMethodSyncDefault":
+a_sync/a_sync/method.pyi:479: error: An implementation for an overloaded
+function is not allowed in a stub file  [misc]
+        def __call__(self, *args, **kwargs): ...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/method.pyi: note: In function "__call__":
+a_sync/a_sync/method.pyi:509: error: Arguments not allowed after ParamSpec.args
+ [valid-type]
+        def __call__(self, *args: P.args, sync: Literal[True], **kwargs: P...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/method.pyi: note: In member "__call__" of class "ASyncBoundMethodAsyncDefault":
+a_sync/a_sync/method.pyi:509: error: Overloaded function signatures 1 and 5
+overlap with incompatible return types  [overload-overlap]
+        def __call__(self, *args: P.args, sync: Literal[True], **kwargs: P...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/method.pyi: note: In function "__call__":
+a_sync/a_sync/method.pyi:511: error: Arguments not allowed after ParamSpec.args
+ [valid-type]
+        def __call__(
+        ^~~~~~~~~~~~
+a_sync/a_sync/method.pyi:515: error: Arguments not allowed after ParamSpec.args
+ [valid-type]
+        def __call__(self, *args: P.args, asynchronous: Literal[False], **...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/method.pyi: note: In member "__call__" of class "ASyncBoundMethodAsyncDefault":
+a_sync/a_sync/method.pyi:515: error: Overloaded function signatures 3 and 5
+overlap with incompatible return types  [overload-overlap]
+        def __call__(self, *args: P.args, asynchronous: Literal[False], **...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/method.pyi: note: In function "__call__":
+a_sync/a_sync/method.pyi:517: error: Arguments not allowed after ParamSpec.args
+ [valid-type]
+        def __call__(
+        ^~~~~~~~~~~~
+a_sync/a_sync/method.pyi: note: In member "__call__" of class "ASyncBoundMethodAsyncDefault":
+a_sync/a_sync/method.pyi:522: error: An implementation for an overloaded
+function is not allowed in a stub file  [misc]
+        def __call__(self, *args, **kwargs): ...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+a_sync/a_sync/function.pyi: note: In function "__call__":
+a_sync/a_sync/function.pyi:109: error: Arguments not allowed after
+ParamSpec.args  [valid-type]
+        def __call__(self, *args: P.args, sync: Literal[True], **kwargs: P...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/function.pyi:123: error: Arguments not allowed after
+ParamSpec.args  [valid-type]
+        def __call__(
+        ^~~~~~~~~~~~
+a_sync/a_sync/function.pyi:139: error: Arguments not allowed after
+ParamSpec.args  [valid-type]
+        def __call__(self, *args: P.args, asynchronous: Literal[False], **...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/function.pyi:153: error: Arguments not allowed after
+ParamSpec.args  [valid-type]
+        def __call__(
+        ^~~~~~~~~~~~
+a_sync/a_sync/function.pyi: note: In member "map" of class "ASyncFunction":
+a_sync/a_sync/function.pyi:194: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        def map(
+        ^~~~~~~
+a_sync/a_sync/function.pyi:196: error: ParamSpec components are not allowed
+here  [valid-type]
+            *iterables: AnyIterable[P.args],
+                                    ^
+a_sync/a_sync/function.pyi:200: error: Invalid location for ParamSpec "P"
+[valid-type]
+        ) -> TaskMapping[P, T]:
+                         ^
+a_sync/a_sync/function.pyi:200: note: You can use ParamSpec as the first argument to Callable, e.g., "Callable[P, int]"
+a_sync/a_sync/function.pyi: note: In member "any" of class "ASyncFunction":
+a_sync/a_sync/function.pyi:217: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        async def any(
+        ^~~~~~~~~~~~~
+a_sync/a_sync/function.pyi:219: error: ParamSpec components are not allowed
+here  [valid-type]
+            *iterables: AnyIterable[P.args],
+                                    ^
+a_sync/a_sync/function.pyi: note: In member "all" of class "ASyncFunction":
+a_sync/a_sync/function.pyi:240: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        async def all(
+        ^~~~~~~~~~~~~
+a_sync/a_sync/function.pyi:242: error: ParamSpec components are not allowed
+here  [valid-type]
+            *iterables: AnyIterable[P.args],
+                                    ^
+a_sync/a_sync/function.pyi: note: In member "min" of class "ASyncFunction":
+a_sync/a_sync/function.pyi:263: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        async def min(
+        ^~~~~~~~~~~~~
+a_sync/a_sync/function.pyi:265: error: ParamSpec components are not allowed
+here  [valid-type]
+            *iterables: AnyIterable[P.args],
+                                    ^
+a_sync/a_sync/function.pyi: note: In member "max" of class "ASyncFunction":
+a_sync/a_sync/function.pyi:286: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        async def max(
+        ^~~~~~~~~~~~~
+a_sync/a_sync/function.pyi:288: error: ParamSpec components are not allowed
+here  [valid-type]
+            *iterables: AnyIterable[P.args],
+                                    ^
+a_sync/a_sync/function.pyi: note: In member "sum" of class "ASyncFunction":
+a_sync/a_sync/function.pyi:309: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        async def sum(
+        ^~~~~~~~~~~~~
+a_sync/a_sync/function.pyi:311: error: ParamSpec components are not allowed
+here  [valid-type]
+            *iterables: AnyIterable[P.args],
+                                    ^
+a_sync/a_sync/function.pyi: note: In member "__call__" of class "ASyncDecorator":
+a_sync/a_sync/function.pyi:376: error: Overloaded function signatures 2 and 3
+overlap with incompatible return types  [overload-overlap]
+        def __call__(self, func: CoroFn[P, T]) -> ASyncFunctionAsyncDefaul...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/function.pyi:376: note: Flipping the order of overloads will fix this error
+a_sync/a_sync/function.pyi: note: In function "__call__":
+a_sync/a_sync/function.pyi:428: error: Arguments not allowed after
+ParamSpec.args  [valid-type]
+        def __call__(self, *args: P.args, sync: Literal[True], **kwargs: P...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/function.pyi:430: error: Arguments not allowed after
+ParamSpec.args  [valid-type]
+        def __call__(
+        ^~~~~~~~~~~~
+a_sync/a_sync/function.pyi:434: error: Arguments not allowed after
+ParamSpec.args  [valid-type]
+        def __call__(self, *args: P.args, asynchronous: Literal[False], **...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/function.pyi:436: error: Arguments not allowed after
+ParamSpec.args  [valid-type]
+        def __call__(
+        ^~~~~~~~~~~~
+a_sync/a_sync/function.pyi:467: error: Arguments not allowed after
+ParamSpec.args  [valid-type]
+        def __call__(self, *args: P.args, sync: Literal[True], **kwargs: P...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/function.pyi: note: In member "__call__" of class "ASyncFunctionAsyncDefault":
+a_sync/a_sync/function.pyi:467: error: Overloaded function signatures 1 and 5
+overlap with incompatible return types  [overload-overlap]
+        def __call__(self, *args: P.args, sync: Literal[True], **kwargs: P...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/function.pyi: note: In function "__call__":
+a_sync/a_sync/function.pyi:469: error: Arguments not allowed after
+ParamSpec.args  [valid-type]
+        def __call__(
+        ^~~~~~~~~~~~
+a_sync/a_sync/function.pyi:473: error: Arguments not allowed after
+ParamSpec.args  [valid-type]
+        def __call__(self, *args: P.args, asynchronous: Literal[False], **...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/function.pyi: note: In member "__call__" of class "ASyncFunctionAsyncDefault":
+a_sync/a_sync/function.pyi:473: error: Overloaded function signatures 3 and 5
+overlap with incompatible return types  [overload-overlap]
+        def __call__(self, *args: P.args, asynchronous: Literal[False], **...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/function.pyi: note: In function "__call__":
+a_sync/a_sync/function.pyi:475: error: Arguments not allowed after
+ParamSpec.args  [valid-type]
+        def __call__(
+        ^~~~~~~~~~~~
+a_sync/a_sync/function.pyi: note: In member "__call__" of class "ASyncDecoratorSyncDefault":
+a_sync/a_sync/function.pyi:483: error: Signature of "__call__" incompatible
+with supertype "ASyncDecorator"  [override]
+        @overload
+         ^
+a_sync/a_sync/function.pyi:483: note:      Superclass:
+a_sync/a_sync/function.pyi:483: note:          @overload
+a_sync/a_sync/function.pyi:483: note:          def [B: ASyncGenericBase, P`1568, T] __call__(self, func: Callable[[B, **P], Awaitable[T]] | Callable[[B, **P], T]) -> ASyncBoundMethod[B, P, T]
+a_sync/a_sync/function.pyi:483: note:          @overload
+a_sync/a_sync/function.pyi:483: note:          def [P`1570, T] __call__(self, func: Callable[P, Awaitable[T]]) -> ASyncFunctionAsyncDefault[P, T]
+a_sync/a_sync/function.pyi:483: note:          @overload
+a_sync/a_sync/function.pyi:483: note:          def [P`1572, T] __call__(self, func: Callable[P, T]) -> ASyncFunctionSyncDefault[P, T]
+a_sync/a_sync/function.pyi:483: note:      Subclass:
+a_sync/a_sync/function.pyi:483: note:          @overload
+a_sync/a_sync/function.pyi:483: note:          def [B: ASyncGenericBase, P`1561, T] __call__(self, func: Callable[[B, **P], Awaitable[T]] | Callable[[B, **P], T]) -> ASyncBoundMethodSyncDefault[Any, Any, Any]
+a_sync/a_sync/function.pyi:483: note:          @overload
+a_sync/a_sync/function.pyi:483: note:          def [P`1563, T] __call__(self, func: CoroBoundMethod[Any, P, T] | SyncBoundMethod[Any, P, T]) -> ASyncFunctionSyncDefault[P, T]
+a_sync/a_sync/function.pyi:483: note:          @overload
+a_sync/a_sync/function.pyi:483: note:          def [P`1565, T] __call__(self, func: Callable[P, Awaitable[T]] | Callable[P, T]) -> ASyncFunctionSyncDefault[P, T]
+a_sync/a_sync/function.pyi: note: In function "__call__":
+a_sync/a_sync/function.pyi:484: error: "ASyncBoundMethodSyncDefault" expects 3
+type arguments, but 2 given  [type-arg]
+    ...ll__(self, func: AnyFn[Concatenate[B, P], T]) -> ASyncBoundMethodSyncD...
+                                                        ^~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/function.pyi: note: In member "__call__" of class "ASyncDecoratorAsyncDefault":
+a_sync/a_sync/function.pyi:529: error: Signature of "__call__" incompatible
+with supertype "ASyncDecorator"  [override]
+        @overload
+         ^
+a_sync/a_sync/function.pyi:529: note:      Superclass:
+a_sync/a_sync/function.pyi:529: note:          @overload
+a_sync/a_sync/function.pyi:529: note:          def [B: ASyncGenericBase, P`1582, T] __call__(self, func: Callable[[B, **P], Awaitable[T]] | Callable[[B, **P], T]) -> ASyncBoundMethod[B, P, T]
+a_sync/a_sync/function.pyi:529: note:          @overload
+a_sync/a_sync/function.pyi:529: note:          def [P`1584, T] __call__(self, func: Callable[P, Awaitable[T]]) -> ASyncFunctionAsyncDefault[P, T]
+a_sync/a_sync/function.pyi:529: note:          @overload
+a_sync/a_sync/function.pyi:529: note:          def [P`1586, T] __call__(self, func: Callable[P, T]) -> ASyncFunctionSyncDefault[P, T]
+a_sync/a_sync/function.pyi:529: note:      Subclass:
+a_sync/a_sync/function.pyi:529: note:          @overload
+a_sync/a_sync/function.pyi:529: note:          def [B: ASyncGenericBase, P`1575, T] __call__(self, func: Callable[[B, **P], Awaitable[T]] | Callable[[B, **P], T]) -> ASyncBoundMethodAsyncDefault[Any, Any, Any]
+a_sync/a_sync/function.pyi:529: note:          @overload
+a_sync/a_sync/function.pyi:529: note:          def [P`1577, T] __call__(self, func: CoroBoundMethod[Any, P, T] | SyncBoundMethod[Any, P, T]) -> ASyncFunctionAsyncDefault[P, T]
+a_sync/a_sync/function.pyi:529: note:          @overload
+a_sync/a_sync/function.pyi:529: note:          def [P`1579, T] __call__(self, func: Callable[P, Awaitable[T]] | Callable[P, T]) -> ASyncFunctionAsyncDefault[P, T]
+a_sync/a_sync/function.pyi: note: In function "__call__":
+a_sync/a_sync/function.pyi:530: error: "ASyncBoundMethodAsyncDefault" expects 3
+type arguments, but 2 given  [type-arg]
+    ...ll__(self, func: AnyFn[Concatenate[B, P], T]) -> ASyncBoundMethodAsync...
+                                                        ^~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/_descriptor.pyi:8: error: Module "a_sync.a_sync.function" does
+not explicitly export attribute "ModifierManager"  [attr-defined]
+    from a_sync.a_sync.function import ASyncFunction, ModifierManager, _Mo...
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+a_sync/a_sync/_descriptor.pyi: note: In member "map" of class "ASyncDescriptor":
+a_sync/a_sync/_descriptor.pyi:22: error: ParamSpec must have "*args" typed as
+"P.args" and "**kwargs" typed as "P.kwargs"  [valid-type]
+        def map(
+        ^~~~~~~
+a_sync/a_sync/modifiers/cache/memory.py: note: In function "apply_async_memory_cache":
+a_sync/a_sync/modifiers/cache/memory.py:169: error: Incompatible return value
+type (got
+"Callable[[Callable[..., Coroutine[Any, Any, _R]] | partial[Coroutine[Any, Any, _R]] | partialmethod[Coroutine[Any, Any, _R]]], _LRUCacheWrapper[_R]] | _LRUCacheWrapper[T]",
+expected
+"Callable[[Callable[P, Awaitable[T]]], Callable[P, Awaitable[T]]] | Callable[P, Awaitable[T]]")
+ [return-value]
+        return cache_decorator if coro_fn is None else cache_decorator(cor...
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...

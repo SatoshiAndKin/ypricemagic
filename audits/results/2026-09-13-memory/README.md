@@ -1,8 +1,40 @@
 # Contained memory validation
 
-## Latest historical profile
+## Latest pool ownership repair
 
-The committed shared-topic repair still reaches the 8 GiB limit in the
+The [pool-index comparison](property-ownership/README.md) uses the same 524,288
+seeded pools in three unprofiled runs per stage. Shared descriptor access and
+owning dependency repairs reduce median peak process RSS from 6,796,603,392 to
+1,291,739,136 bytes and index time from 29.1073 to 7.1822 seconds. Exact metadata
+and independent returned dictionaries match. Both sides make zero RPC calls.
+A separate allocation sample measures retained Python memory. No forced
+collection, cache clearing, expiry, or restart occurs within these workloads.
+
+All 278 focused application checks pass with the final dependency build. All
+ten configured mypyc modules load compiled extensions, and the archive probe
+passes. The same-dependency type comparison removes three diagnostics, adds
+none, and retains all 1,836 reported diagnostics. The owning dependency's full
+747-case comparison removes all 13 ownership failures and passes both metaclass
+checks; the same 15 baseline failures remain. The application now pins the
+committed repair. The [ordinary pinned Python 3.11–3.13 matrix](ownership-pinned/README.md)
+passes all 278 application tests and 47 owner tests on each version. All ten
+compiled application modules, the three native owner modules, and archive
+probes pass. Application container peaks range from 1,158,004,736 to
+1,197,735,936 bytes. Each installed source revision matches its lockfile.
+
+The [cooperative scheduler repair](scheduler-refill/README.md) fills available
+slots after a batch finishes. It retains the default concurrency of 100 and
+passes all three new barrier regressions. Its Python 3.11–3.13 owner checks keep
+the same two existing full-suite failures. This scheduling repair does not count
+as a production pricing memory reduction.
+
+Full application, native quote, public pricing, and audit gates remain pending.
+PR #43 remains draft. The controlled pool reduction does not establish a full
+pricing memory result.
+
+## Previous historical profile
+
+The shared-topic revision reached the 8 GiB limit in the
 historical Uniswap allocation profile. It records 130 terminal outcomes from
 171 collected cases, then ends with OOM after 1,915.68 seconds. All ten native
 modules and the archive probe pass. The final pytest summary is missing.
@@ -149,6 +181,7 @@ Different rows use different dependency builds.
 
 | Workload | Before RSS bytes | After RSS bytes | Preserved work and result |
 | --- | ---: | ---: | --- |
+| [Pool token index](property-ownership/README.md) | 6,796,603,392 | 1,291,739,136 | 524,288 identical pools; exact metadata; independent copies; zero RPC |
 | [Bulk persistence](storage-retention/README.md) | 528,093,184 | 190,730,240 | 4,096 rows; 64 MiB of exact ordered data; 128 batches |
 | [Unused pool construction](storage-retention/README.md) | 366,612,480 | 330,182,656 | 131,072 identical pools; unused reserve handles 131,072 to zero |
 | [Historical event chunks](event-backlog/README.md) | 319,193,088 | 195,379,200 | 512 identical chunks; 32 concurrent fetches; every ordered write and checkpoint |

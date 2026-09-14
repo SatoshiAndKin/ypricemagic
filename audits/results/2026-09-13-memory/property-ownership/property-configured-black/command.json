@@ -1,0 +1,34 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=/runner",
+    "python",
+    "-P",
+    "-c",
+    "import json,os,subprocess,sys\nfrom pathlib import Path\nfiles=['y/prices/dex/uniswap/v2.py','tests/test_pool_memory.py','tests/test_pricing_correctness.py','tests/test_routing_scaling.py','tools/validation/pool_discovery_profile.py','tools/validation/compare.py','tools/validation/test_runner.py']\ntests=subprocess.run([sys.executable,'-P','-m','unittest','discover','-s','/runner','-p','test_runner.py'],text=True,capture_output=True)\nPath('/reports/runner-tests.json').write_text(json.dumps({'exit_code':tests.returncode,'output':tests.stdout+tests.stderr},indent=2))\nassert tests.returncode==0,tests.stdout+tests.stderr\nsubprocess.run([sys.executable,'-m','pip','install','--no-deps','--target','/tmp/black25','black==25.9.0'],check=True)\nenv=dict(os.environ,PYTHONPATH='/tmp/black25')\nversion=subprocess.check_output([sys.executable,'-P','-m','black','--version'],env=env,text=True).strip()\nassert version.startswith('black, 25.9.0'),version\nresult=subprocess.run([sys.executable,'-P','-m','black','--check',*files],env=env,text=True,capture_output=True)\nPath('/reports/format.json').write_text(json.dumps({'version':version,'files':files,'exit_code':result.returncode,'output':result.stdout+result.stderr},indent=2))\nraise SystemExit(result.returncode)\n"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 1.2909062760008965,
+  "peak_sampled_process_rss_bytes": 16973824,
+  "cgroup_before": {
+    "memory.current": "8802304",
+    "memory.peak": "8912896",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "11636736",
+    "memory.peak": "36786176",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

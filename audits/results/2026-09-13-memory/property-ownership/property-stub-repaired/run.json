@@ -1,0 +1,23 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=/runner",
+    "python",
+    "-P",
+    "-c",
+    "import hashlib,importlib,json,subprocess,sys\nfrom pathlib import Path\np=importlib.import_module('a_sync.a_sync.property')\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],text=True,capture_output=True)\nPath('/reports/mypy.txt').write_text(result.stdout+result.stderr)\nPath('/reports/property-base.json').write_text(json.dumps({'runtime_bases':[b.__module__+'.'+b.__name__ for b in p.ASyncCachedPropertyDescriptor.__bases__],'native_path':p.__file__,'stub_sha256':hashlib.sha256(Path('a_sync/a_sync/property.pyi').read_bytes()).hexdigest(),'exit_code':result.returncode},indent=2))\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789387847.391605,
+  "source_sha": "000e4f24466ddc01abc6bb1a12cc429cbeea5813",
+  "source_revision": "worktree",
+  "source_archive_sha256": "ef6fa137e575d7ff4cc28e5149505fd2bbb718eda1c5b87f7ffb02c5cf2f6086",
+  "image": "sha256:90c9e64a153fd4543033071de3e031cec8d704c24be2f991bee1273fb04a08b0",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 5.859130144119263
+}

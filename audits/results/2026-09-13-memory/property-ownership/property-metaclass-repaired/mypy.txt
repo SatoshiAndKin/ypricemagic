@@ -1,0 +1,8 @@
+Warning: Unpack is already enabled by default
+Success: no issues found in 1 source file
+snippet.py:17: note: Revealed type is "a_sync.a_sync.method.ASyncMethodDescriptor[snippet.Thing, [value: builtins.int], builtins.int]"
+snippet.py:18: note: Revealed type is "a_sync.a_sync.method.ASyncBoundMethod[snippet.Thing, [value: builtins.int], builtins.int]"
+snippet.py:19: note: Revealed type is "a_sync.a_sync.property.ASyncPropertyDescriptor[snippet.Thing, builtins.int]"
+snippet.py:20: note: Revealed type is "a_sync.a_sync.property.ASyncCachedPropertyDescriptor[snippet.Thing, builtins.int]"
+snippet.py:21: note: Revealed type is "typing.Awaitable[builtins.int]"
+snippet.py:22: note: Revealed type is "typing.Awaitable[builtins.int]"

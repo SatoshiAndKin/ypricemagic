@@ -1,0 +1,34 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=/runner",
+    "python",
+    "-P",
+    "-c",
+    "import hashlib,importlib,json,subprocess,sys\nfrom pathlib import Path\np=importlib.import_module('a_sync.a_sync.property')\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],text=True,capture_output=True)\nPath('/reports/mypy.txt').write_text(result.stdout+result.stderr)\nPath('/reports/property-base.json').write_text(json.dumps({'runtime_bases':[b.__module__+'.'+b.__name__ for b in p.ASyncCachedPropertyDescriptor.__bases__],'native_path':p.__file__,'stub_sha256':hashlib.sha256(Path('a_sync/a_sync/property.pyi').read_bytes()).hexdigest(),'exit_code':result.returncode},indent=2))\n"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 5.311092941992683,
+  "peak_sampled_process_rss_bytes": 162136064,
+  "cgroup_before": {
+    "memory.current": "8785920",
+    "memory.peak": "8896512",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "36990976",
+    "memory.peak": "205627392",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

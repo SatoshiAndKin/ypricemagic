@@ -1,0 +1,359 @@
+{
+  "cooperative-refill-before": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python -m venv /unit && /unit/bin/python -m pip install -r /runner/cooperative-owner-dependencies.lock && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && /unit/bin/python -c 'import hashlib,json,pathlib; import pytest_asyncio_cooperative.plugin as plugin; path=pathlib.Path(plugin.__file__); pathlib.Path(\"/reports/cooperative-source.json\").write_text(json.dumps({\"file\":str(path),\"sha256\":hashlib.sha256(path.read_bytes()).hexdigest()}))' && PYTEST_PLUGINS=pytest_report,pytest_asyncio_cooperative.plugin /unit/bin/python /runner/focused.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789385305.311162,
+      "source_sha": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+      "source_revision": "worktree",
+      "source_archive_sha256": "642d44b87f0545ab0d9bb30aa631f08c0c575a02be6c378ba3a0797189d2e7b1",
+      "image": "sha256:90c9e64a153fd4543033071de3e031cec8d704c24be2f991bee1273fb04a08b0",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 18.011582136154175
+    },
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 10,
+        "call:passed": 7,
+        "teardown:passed": 10,
+        "call:failed": 3
+      },
+      "collected": 10
+    },
+    "proof": {
+      "file": "/work/pytest_asyncio_cooperative/plugin.py",
+      "sha256": "efb81accb54d76d49a9ce3ede4d5f3dfe6503298f07c35812899f584395451cd"
+    },
+    "failures": [
+      {
+        "test": "tests/test_refill.py::test_refills_free_slots_after_batch[pass]",
+        "phase": "call",
+        "error": "AssertionError: assert {'errors': 0,...pped': 0, ...} == {'errors': 0,...pped': 0, ...}\n  Omitting 4 identical items, use -vv to show\n  Differing items:\n  {'passed': 3} != {'passed': 6}\n  {'failed': 3} != {'failed': 0}\n  Use -v to get more diff"
+      },
+      {
+        "test": "tests/test_refill.py::test_refills_free_slots_after_batch[fail]",
+        "phase": "call",
+        "error": "AssertionError: assert {'errors': 0,...pped': 0, ...} == {'errors': 0,...pped': 0, ...}\n  Omitting 4 identical items, use -vv to show\n  Differing items:\n  {'passed': 0} != {'passed': 3}\n  {'failed': 6} != {'failed': 3}\n  Use -v to get more diff"
+      },
+      {
+        "test": "tests/test_refill.py::test_refills_free_slots_after_batch[cancel]",
+        "phase": "call",
+        "error": "AssertionError: assert {'errors': 0,...pped': 0, ...} == {'errors': 0,...pped': 0, ...}\n  Omitting 4 identical items, use -vv to show\n  Differing items:\n  {'passed': 0} != {'passed': 3}\n  {'failed': 6} != {'failed': 3}\n  Use -v to get more diff"
+      }
+    ]
+  },
+  "cooperative-refill-full-before": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python -m venv /unit && /unit/bin/python -m pip install -r /runner/cooperative-owner-dependencies.lock && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && /unit/bin/python -c 'import hashlib,json,pathlib; import pytest_asyncio_cooperative.plugin as plugin; path=pathlib.Path(plugin.__file__); pathlib.Path(\"/reports/cooperative-source.json\").write_text(json.dumps({\"file\":str(path),\"sha256\":hashlib.sha256(path.read_bytes()).hexdigest()}))' && PYTEST_PLUGINS=pytest_report,pytest_asyncio_cooperative.plugin /unit/bin/python -m pytest"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789385662.273914,
+      "source_sha": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+      "source_revision": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+      "source_archive_sha256": "a0c44743dcf52805ec28e347afdbd8fb57c668f30ab1ea0a04b0fa391c368ba9",
+      "image": "sha256:90c9e64a153fd4543033071de3e031cec8d704c24be2f991bee1273fb04a08b0",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 145.57881784439087
+    },
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 84,
+        "call:passed": 82,
+        "teardown:passed": 100,
+        "call:failed": 2,
+        "setup:skipped": 16
+      },
+      "collected": 100
+    },
+    "proof": {
+      "file": "/work/pytest_asyncio_cooperative/plugin.py",
+      "sha256": "efb81accb54d76d49a9ce3ede4d5f3dfe6503298f07c35812899f584395451cd"
+    },
+    "failures": [
+      {
+        "test": "example/hypothesis_test.py::test_a",
+        "phase": "call",
+        "error": "hypothesis.errors.FailedHealthCheck: example/hypothesis_test.py::test_a uses the 'my_fixture' fixture, which is reset between function calls but not between test cases generated by `@given(...)`.  You can change it to a module- or session-scoped fixture if it is safe to reuse; if not we recommend using a context manager inside your test function.  See https://docs.pytest.org/en/latest/how-to/fixtures.html#scope-sharing-fixtures-across-classes-modules-packages-or-session for details on fixture scope.\nSee https://hypothesis.readthedocs.io/en/latest/healthchecks.html for more information about this. If you want to disable just this health check, add HealthCheck.function_scoped_fixture to the suppress_health_check settings for this test."
+      },
+      {
+        "test": "tests/test_fixture.py::test_tmp_path",
+        "phase": "call",
+        "error": "AssertionError: assert {'errors': 0,...pped': 0, ...} == {'errors': 0,...pped': 0, ...}\n  Omitting 4 identical items, use -vv to show\n  Differing items:\n  {'failed': 1} != {'failed': 0}\n  {'passed': 0} != {'passed': 1}\n  Use -v to get more diff"
+      }
+    ]
+  },
+  "cooperative-refill-focused-312": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python -m venv /unit && /unit/bin/python -m pip install -r /runner/cooperative-owner-dependencies.lock && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && /unit/bin/python -c 'import hashlib,json,pathlib; import pytest_asyncio_cooperative.plugin as plugin; path=pathlib.Path(plugin.__file__); pathlib.Path(\"/reports/cooperative-source.json\").write_text(json.dumps({\"file\":str(path),\"sha256\":hashlib.sha256(path.read_bytes()).hexdigest()}))' && PYTEST_PLUGINS=pytest_report,pytest_asyncio_cooperative.plugin /unit/bin/python /runner/focused.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789385807.914853,
+      "source_sha": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+      "source_revision": "worktree",
+      "source_archive_sha256": "3477d6472174a8721123907a79ad80a96f05bad620ef8076f1663c65d0a3a2cc",
+      "image": "sha256:90c9e64a153fd4543033071de3e031cec8d704c24be2f991bee1273fb04a08b0",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 8.919112920761108
+    },
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 10,
+        "call:passed": 10,
+        "teardown:passed": 10
+      },
+      "collected": 10
+    },
+    "proof": {
+      "file": "/work/pytest_asyncio_cooperative/plugin.py",
+      "sha256": "3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7"
+    },
+    "failures": []
+  },
+  "cooperative-refill-full-312": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python -m venv /unit && /unit/bin/python -m pip install -r /runner/cooperative-owner-dependencies.lock && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && /unit/bin/python -c 'import hashlib,json,pathlib; import pytest_asyncio_cooperative.plugin as plugin; path=pathlib.Path(plugin.__file__); pathlib.Path(\"/reports/cooperative-source.json\").write_text(json.dumps({\"file\":str(path),\"sha256\":hashlib.sha256(path.read_bytes()).hexdigest()}))' && PYTEST_PLUGINS=pytest_report,pytest_asyncio_cooperative.plugin /unit/bin/python -m pytest"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789385816.879331,
+      "source_sha": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+      "source_revision": "worktree",
+      "source_archive_sha256": "3477d6472174a8721123907a79ad80a96f05bad620ef8076f1663c65d0a3a2cc",
+      "image": "sha256:90c9e64a153fd4543033071de3e031cec8d704c24be2f991bee1273fb04a08b0",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 146.5257978439331
+    },
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 87,
+        "call:passed": 85,
+        "teardown:passed": 103,
+        "call:failed": 2,
+        "setup:skipped": 16
+      },
+      "collected": 103
+    },
+    "proof": {
+      "file": "/work/pytest_asyncio_cooperative/plugin.py",
+      "sha256": "3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7"
+    },
+    "failures": [
+      {
+        "test": "example/hypothesis_test.py::test_a",
+        "phase": "call",
+        "error": "hypothesis.errors.FailedHealthCheck: example/hypothesis_test.py::test_a uses the 'my_fixture' fixture, which is reset between function calls but not between test cases generated by `@given(...)`.  You can change it to a module- or session-scoped fixture if it is safe to reuse; if not we recommend using a context manager inside your test function.  See https://docs.pytest.org/en/latest/how-to/fixtures.html#scope-sharing-fixtures-across-classes-modules-packages-or-session for details on fixture scope.\nSee https://hypothesis.readthedocs.io/en/latest/healthchecks.html for more information about this. If you want to disable just this health check, add HealthCheck.function_scoped_fixture to the suppress_health_check settings for this test."
+      },
+      {
+        "test": "tests/test_fixture.py::test_tmp_path",
+        "phase": "call",
+        "error": "AssertionError: assert {'errors': 0,...pped': 0, ...} == {'errors': 0,...pped': 0, ...}\n  Omitting 4 identical items, use -vv to show\n  Differing items:\n  {'passed': 0} != {'passed': 1}\n  {'failed': 1} != {'failed': 0}\n  Use -v to get more diff"
+      }
+    ]
+  },
+  "cooperative-refill-focused-311": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python -m venv /unit && /unit/bin/python -m pip install -r /runner/cooperative-owner-dependencies.lock && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && /unit/bin/python -c 'import hashlib,json,pathlib; import pytest_asyncio_cooperative.plugin as plugin; path=pathlib.Path(plugin.__file__); pathlib.Path(\"/reports/cooperative-source.json\").write_text(json.dumps({\"file\":str(path),\"sha256\":hashlib.sha256(path.read_bytes()).hexdigest()}))' && PYTEST_PLUGINS=pytest_report,pytest_asyncio_cooperative.plugin /unit/bin/python /runner/focused.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789385963.464504,
+      "source_sha": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+      "source_revision": "worktree",
+      "source_archive_sha256": "3477d6472174a8721123907a79ad80a96f05bad620ef8076f1663c65d0a3a2cc",
+      "image": "sha256:822612ab4817cd020717f6771a3d78898b91c287c21b5ae8563c31dd60dcdd16",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 10.180989027023315
+    },
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 10,
+        "call:passed": 10,
+        "teardown:passed": 10
+      },
+      "collected": 10
+    },
+    "proof": {
+      "file": "/work/pytest_asyncio_cooperative/plugin.py",
+      "sha256": "3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7"
+    },
+    "failures": []
+  },
+  "cooperative-refill-full-311": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python -m venv /unit && /unit/bin/python -m pip install -r /runner/cooperative-owner-dependencies.lock && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && /unit/bin/python -c 'import hashlib,json,pathlib; import pytest_asyncio_cooperative.plugin as plugin; path=pathlib.Path(plugin.__file__); pathlib.Path(\"/reports/cooperative-source.json\").write_text(json.dumps({\"file\":str(path),\"sha256\":hashlib.sha256(path.read_bytes()).hexdigest()}))' && PYTEST_PLUGINS=pytest_report,pytest_asyncio_cooperative.plugin /unit/bin/python -m pytest"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789385973.692035,
+      "source_sha": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+      "source_revision": "worktree",
+      "source_archive_sha256": "3477d6472174a8721123907a79ad80a96f05bad620ef8076f1663c65d0a3a2cc",
+      "image": "sha256:822612ab4817cd020717f6771a3d78898b91c287c21b5ae8563c31dd60dcdd16",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 147.5677080154419
+    },
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 87,
+        "call:passed": 85,
+        "teardown:passed": 103,
+        "call:failed": 2,
+        "setup:skipped": 16
+      },
+      "collected": 103
+    },
+    "proof": {
+      "file": "/work/pytest_asyncio_cooperative/plugin.py",
+      "sha256": "3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7"
+    },
+    "failures": [
+      {
+        "test": "example/hypothesis_test.py::test_a",
+        "phase": "call",
+        "error": "hypothesis.errors.FailedHealthCheck: example/hypothesis_test.py::test_a uses the 'my_fixture' fixture, which is reset between function calls but not between test cases generated by `@given(...)`.  You can change it to a module- or session-scoped fixture if it is safe to reuse; if not we recommend using a context manager inside your test function.  See https://docs.pytest.org/en/latest/how-to/fixtures.html#scope-sharing-fixtures-across-classes-modules-packages-or-session for details on fixture scope.\nSee https://hypothesis.readthedocs.io/en/latest/healthchecks.html for more information about this. If you want to disable just this health check, add HealthCheck.function_scoped_fixture to the suppress_health_check settings for this test."
+      },
+      {
+        "test": "tests/test_fixture.py::test_tmp_path",
+        "phase": "call",
+        "error": "AssertionError: assert {'errors': 0,...pped': 0, ...} == {'errors': 0,...pped': 0, ...}\n  Omitting 4 identical items, use -vv to show\n  Differing items:\n  {'failed': 1} != {'failed': 0}\n  {'passed': 0} != {'passed': 1}\n  Use -v to get more diff"
+      }
+    ]
+  },
+  "cooperative-refill-focused-313": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python -m venv /unit && /unit/bin/python -m pip install -r /runner/cooperative-owner-dependencies.lock && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && /unit/bin/python -c 'import hashlib,json,pathlib; import pytest_asyncio_cooperative.plugin as plugin; path=pathlib.Path(plugin.__file__); pathlib.Path(\"/reports/cooperative-source.json\").write_text(json.dumps({\"file\":str(path),\"sha256\":hashlib.sha256(path.read_bytes()).hexdigest()}))' && PYTEST_PLUGINS=pytest_report,pytest_asyncio_cooperative.plugin /unit/bin/python /runner/focused.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789386121.3087208,
+      "source_sha": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+      "source_revision": "worktree",
+      "source_archive_sha256": "3477d6472174a8721123907a79ad80a96f05bad620ef8076f1663c65d0a3a2cc",
+      "image": "sha256:8c2e692f5ce727d2b54ddc25cff02c407e2cab0255dae5f23319b5cb761653e3",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 9.025278329849243
+    },
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 10,
+        "call:passed": 10,
+        "teardown:passed": 10
+      },
+      "collected": 10
+    },
+    "proof": {
+      "file": "/work/pytest_asyncio_cooperative/plugin.py",
+      "sha256": "3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7"
+    },
+    "failures": []
+  },
+  "cooperative-refill-full-313": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python -m venv /unit && /unit/bin/python -m pip install -r /runner/cooperative-owner-dependencies.lock && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && /unit/bin/python -c 'import hashlib,json,pathlib; import pytest_asyncio_cooperative.plugin as plugin; path=pathlib.Path(plugin.__file__); pathlib.Path(\"/reports/cooperative-source.json\").write_text(json.dumps({\"file\":str(path),\"sha256\":hashlib.sha256(path.read_bytes()).hexdigest()}))' && PYTEST_PLUGINS=pytest_report,pytest_asyncio_cooperative.plugin /unit/bin/python -m pytest"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789386130.381253,
+      "source_sha": "4b1ac302a000f27a9d80dc687ed03ac1a41f1cd1",
+      "source_revision": "worktree",
+      "source_archive_sha256": "3477d6472174a8721123907a79ad80a96f05bad620ef8076f1663c65d0a3a2cc",
+      "image": "sha256:8c2e692f5ce727d2b54ddc25cff02c407e2cab0255dae5f23319b5cb761653e3",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 146.41361284255981
+    },
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 87,
+        "call:passed": 85,
+        "teardown:passed": 103,
+        "call:failed": 2,
+        "setup:skipped": 16
+      },
+      "collected": 103
+    },
+    "proof": {
+      "file": "/work/pytest_asyncio_cooperative/plugin.py",
+      "sha256": "3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7"
+    },
+    "failures": [
+      {
+        "test": "example/hypothesis_test.py::test_a",
+        "phase": "call",
+        "error": "hypothesis.errors.FailedHealthCheck: example/hypothesis_test.py::test_a uses the 'my_fixture' fixture, which is reset between function calls but not between test cases generated by `@given(...)`.  You can change it to a module- or session-scoped fixture if it is safe to reuse; if not we recommend using a context manager inside your test function.  See https://docs.pytest.org/en/latest/how-to/fixtures.html#scope-sharing-fixtures-across-classes-modules-packages-or-session for details on fixture scope.\nSee https://hypothesis.readthedocs.io/en/latest/healthchecks.html for more information about this. If you want to disable just this health check, add HealthCheck.function_scoped_fixture to the suppress_health_check settings for this test."
+      },
+      {
+        "test": "tests/test_fixture.py::test_tmp_path",
+        "phase": "call",
+        "error": "AssertionError: assert {'errors': 0,...pped': 0, ...} == {'errors': 0,...pped': 0, ...}\n  Omitting 4 identical items, use -vv to show\n  Differing items:\n  {'failed': 1} != {'failed': 0}\n  {'passed': 0} != {'passed': 1}\n  Use -v to get more diff"
+      }
+    ]
+  }
+}

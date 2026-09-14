@@ -1,0 +1,23 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=/runner",
+    "python",
+    "-P",
+    "-c",
+    "import json,os,subprocess,sys\nfrom pathlib import Path\nfiles=['y/prices/dex/uniswap/v2.py','tests/test_pool_memory.py','tests/test_pricing_correctness.py','tests/test_routing_scaling.py','tools/validation/pool_discovery_profile.py','tools/validation/compare.py','tools/validation/test_runner.py']\ntests=subprocess.run([sys.executable,'-P','-m','unittest','discover','-s','/work/tools/validation','-p','test_runner.py'],env=dict(os.environ,PYTHONPATH='/work/tools/validation'),text=True,capture_output=True)\nPath('/reports/runner-tests.json').write_text(json.dumps({'exit_code':tests.returncode,'output':tests.stdout+tests.stderr},indent=2))\nassert tests.returncode==0,tests.stdout+tests.stderr\nsubprocess.run([sys.executable,'-m','pip','install','--no-deps','--target','/tmp/black25','black==25.9.0'],check=True)\nenv=dict(os.environ,PYTHONPATH='/tmp/black25')\nversion=subprocess.check_output([sys.executable,'-P','-c','from black import __version__; print(__version__)'],env=env,text=True).strip()\nassert version=='25.9.0',version\nresult=subprocess.run([sys.executable,'-P','-m','black','--check',*files],env=env,text=True,capture_output=True)\nPath('/reports/format.json').write_text(json.dumps({'version':version,'files':files,'exit_code':result.returncode,'output':result.stdout+result.stderr},indent=2))\nassert result.returncode==0,result.stdout+result.stderr\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789394910.600659,
+  "source_sha": "2ecb8c9659c6f08375623e17ed359b1c55c33e93",
+  "source_revision": "worktree",
+  "source_archive_sha256": "1d934c88115b3079e4b9b455995b4ba434b3aa875284a1ab0f10c74c6bd5cc1f",
+  "image": "sha256:5f67dfecf3085abd5cff6a15469e5bc36ea28fee0c557e05340cf7b181ac13bc",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 2.5748441219329834
+}

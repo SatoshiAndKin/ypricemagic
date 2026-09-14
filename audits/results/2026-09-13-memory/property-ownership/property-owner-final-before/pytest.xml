@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="14" time="0.107" timestamp="2026-09-14T12:30:09.188372" hostname="fcdb5039b503"><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_min_async" time="0.001" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_max_async" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_all_async" time="0.001" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_any_async" time="0.001" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_sum_async" time="0.000" /><testcase classname="tests.a_sync.test_cached_property_ownership" name="test_cached_loader_releases_instances_and_reuses_values[False-AsyncCachedPropertyDescriptor]" time="0.000"><failure message="AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad3b685be0&gt; is None&#10; +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad3b685be0&gt; = &lt;weakref at 0xf9ad399cb330; to 'Sample' at 0xf9ad3b685be0&gt;()">descriptor_type = &lt;class 'a_sync.async_property.cached.AsyncCachedPropertyDescriptor'&gt;
+with_setter = False
+
+    @pytest.mark.parametrize(
+        "descriptor_type", [AsyncCachedPropertyDescriptor, ASyncCachedPropertyDescriptor]
+    )
+    @pytest.mark.parametrize("with_setter", [False, True])
+    def test_cached_loader_releases_instances_and_reuses_values(descriptor_type, with_setter):
+        calls, setters = {}, {}
+
+        async def value(instance):
+            calls[instance.key] = calls.get(instance.key, 0) + 1
+            return (instance.key, bytearray(1024))
+
+        def store(instance, result):
+            setters[instance.key] = result[0]
+
+        descriptor = descriptor_type(value, _fset=store if with_setter else None)
+
+        class Sample:
+            value = descriptor
+
+            def __init__(self, key):
+                self.key = key
+
+        async def check():
+            first, second = Sample("first"), Sample("second")
+            references = weakref.ref(first), weakref.ref(second)
+            first_value = await descriptor.get_loader(first)()
+            second_value = await descriptor.get_loader(second)()
+            assert first_value is await descriptor.get_loader(first)()
+            assert second_value is await descriptor.get_loader(second)()
+            assert first_value[0] == "first" and second_value[0] == "second"
+            assert first_value is not second_value
+            assert calls == {"first": 1, "second": 1}
+            assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+            del first, second
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            assert references[0]() is None
+            assert references[1]() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/a_sync/test_cached_property_ownership.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        first, second = Sample("first"), Sample("second")
+        references = weakref.ref(first), weakref.ref(second)
+        first_value = await descriptor.get_loader(first)()
+        second_value = await descriptor.get_loader(second)()
+        assert first_value is await descriptor.get_loader(first)()
+        assert second_value is await descriptor.get_loader(second)()
+        assert first_value[0] == "first" and second_value[0] == "second"
+        assert first_value is not second_value
+        assert calls == {"first": 1, "second": 1}
+        assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+        del first, second
+        await asyncio.sleep(0)
+        await asyncio.sleep(0)
+&gt;       assert references[0]() is None
+E       AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad3b685be0&gt; is None
+E        +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad3b685be0&gt; = &lt;weakref at 0xf9ad399cb330; to 'Sample' at 0xf9ad3b685be0&gt;()
+
+tests/a_sync/test_cached_property_ownership.py:48: AssertionError</failure></testcase><testcase classname="tests.a_sync.test_cached_property_ownership" name="test_cached_loader_releases_instances_and_reuses_values[False-ASyncCachedPropertyDescriptor]" time="0.000"><failure message="AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad3a795dc0&gt; is None&#10; +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad3a795dc0&gt; = &lt;weakref at 0xf9ad398fc3b0; to 'Sample' at 0xf9ad3a795dc0&gt;()">descriptor_type = &lt;class 'a_sync.a_sync.property.ASyncCachedPropertyDescriptor'&gt;
+with_setter = False
+
+    @pytest.mark.parametrize(
+        "descriptor_type", [AsyncCachedPropertyDescriptor, ASyncCachedPropertyDescriptor]
+    )
+    @pytest.mark.parametrize("with_setter", [False, True])
+    def test_cached_loader_releases_instances_and_reuses_values(descriptor_type, with_setter):
+        calls, setters = {}, {}
+
+        async def value(instance):
+            calls[instance.key] = calls.get(instance.key, 0) + 1
+            return (instance.key, bytearray(1024))
+
+        def store(instance, result):
+            setters[instance.key] = result[0]
+
+        descriptor = descriptor_type(value, _fset=store if with_setter else None)
+
+        class Sample:
+            value = descriptor
+
+            def __init__(self, key):
+                self.key = key
+
+        async def check():
+            first, second = Sample("first"), Sample("second")
+            references = weakref.ref(first), weakref.ref(second)
+            first_value = await descriptor.get_loader(first)()
+            second_value = await descriptor.get_loader(second)()
+            assert first_value is await descriptor.get_loader(first)()
+            assert second_value is await descriptor.get_loader(second)()
+            assert first_value[0] == "first" and second_value[0] == "second"
+            assert first_value is not second_value
+            assert calls == {"first": 1, "second": 1}
+            assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+            del first, second
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            assert references[0]() is None
+            assert references[1]() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/a_sync/test_cached_property_ownership.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        first, second = Sample("first"), Sample("second")
+        references = weakref.ref(first), weakref.ref(second)
+        first_value = await descriptor.get_loader(first)()
+        second_value = await descriptor.get_loader(second)()
+        assert first_value is await descriptor.get_loader(first)()
+        assert second_value is await descriptor.get_loader(second)()
+        assert first_value[0] == "first" and second_value[0] == "second"
+        assert first_value is not second_value
+        assert calls == {"first": 1, "second": 1}
+        assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+        del first, second
+        await asyncio.sleep(0)
+        await asyncio.sleep(0)
+&gt;       assert references[0]() is None
+E       AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad3a795dc0&gt; is None
+E        +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad3a795dc0&gt; = &lt;weakref at 0xf9ad398fc3b0; to 'Sample' at 0xf9ad3a795dc0&gt;()
+
+tests/a_sync/test_cached_property_ownership.py:48: AssertionError</failure></testcase><testcase classname="tests.a_sync.test_cached_property_ownership" name="test_cached_loader_releases_instances_and_reuses_values[True-AsyncCachedPropertyDescriptor]" time="0.000"><failure message="AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad39a70290&gt; is None&#10; +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad39a70290&gt; = &lt;weakref at 0xf9ad398fd6c0; to 'Sample' at 0xf9ad39a70290&gt;()">descriptor_type = &lt;class 'a_sync.async_property.cached.AsyncCachedPropertyDescriptor'&gt;
+with_setter = True
+
+    @pytest.mark.parametrize(
+        "descriptor_type", [AsyncCachedPropertyDescriptor, ASyncCachedPropertyDescriptor]
+    )
+    @pytest.mark.parametrize("with_setter", [False, True])
+    def test_cached_loader_releases_instances_and_reuses_values(descriptor_type, with_setter):
+        calls, setters = {}, {}
+
+        async def value(instance):
+            calls[instance.key] = calls.get(instance.key, 0) + 1
+            return (instance.key, bytearray(1024))
+
+        def store(instance, result):
+            setters[instance.key] = result[0]
+
+        descriptor = descriptor_type(value, _fset=store if with_setter else None)
+
+        class Sample:
+            value = descriptor
+
+            def __init__(self, key):
+                self.key = key
+
+        async def check():
+            first, second = Sample("first"), Sample("second")
+            references = weakref.ref(first), weakref.ref(second)
+            first_value = await descriptor.get_loader(first)()
+            second_value = await descriptor.get_loader(second)()
+            assert first_value is await descriptor.get_loader(first)()
+            assert second_value is await descriptor.get_loader(second)()
+            assert first_value[0] == "first" and second_value[0] == "second"
+            assert first_value is not second_value
+            assert calls == {"first": 1, "second": 1}
+            assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+            del first, second
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            assert references[0]() is None
+            assert references[1]() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/a_sync/test_cached_property_ownership.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        first, second = Sample("first"), Sample("second")
+        references = weakref.ref(first), weakref.ref(second)
+        first_value = await descriptor.get_loader(first)()
+        second_value = await descriptor.get_loader(second)()
+        assert first_value is await descriptor.get_loader(first)()
+        assert second_value is await descriptor.get_loader(second)()
+        assert first_value[0] == "first" and second_value[0] == "second"
+        assert first_value is not second_value
+        assert calls == {"first": 1, "second": 1}
+        assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+        del first, second
+        await asyncio.sleep(0)
+        await asyncio.sleep(0)
+&gt;       assert references[0]() is None
+E       AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad39a70290&gt; is None
+E        +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad39a70290&gt; = &lt;weakref at 0xf9ad398fd6c0; to 'Sample' at 0xf9ad39a70290&gt;()
+
+tests/a_sync/test_cached_property_ownership.py:48: AssertionError</failure></testcase><testcase classname="tests.a_sync.test_cached_property_ownership" name="test_cached_loader_releases_instances_and_reuses_values[True-ASyncCachedPropertyDescriptor]" time="0.000"><failure message="AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad39a70530&gt; is None&#10; +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad39a70530&gt; = &lt;weakref at 0xf9ad398fce00; to 'Sample' at 0xf9ad39a70530&gt;()">descriptor_type = &lt;class 'a_sync.a_sync.property.ASyncCachedPropertyDescriptor'&gt;
+with_setter = True
+
+    @pytest.mark.parametrize(
+        "descriptor_type", [AsyncCachedPropertyDescriptor, ASyncCachedPropertyDescriptor]
+    )
+    @pytest.mark.parametrize("with_setter", [False, True])
+    def test_cached_loader_releases_instances_and_reuses_values(descriptor_type, with_setter):
+        calls, setters = {}, {}
+
+        async def value(instance):
+            calls[instance.key] = calls.get(instance.key, 0) + 1
+            return (instance.key, bytearray(1024))
+
+        def store(instance, result):
+            setters[instance.key] = result[0]
+
+        descriptor = descriptor_type(value, _fset=store if with_setter else None)
+
+        class Sample:
+            value = descriptor
+
+            def __init__(self, key):
+                self.key = key
+
+        async def check():
+            first, second = Sample("first"), Sample("second")
+            references = weakref.ref(first), weakref.ref(second)
+            first_value = await descriptor.get_loader(first)()
+            second_value = await descriptor.get_loader(second)()
+            assert first_value is await descriptor.get_loader(first)()
+            assert second_value is await descriptor.get_loader(second)()
+            assert first_value[0] == "first" and second_value[0] == "second"
+            assert first_value is not second_value
+            assert calls == {"first": 1, "second": 1}
+            assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+            del first, second
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            assert references[0]() is None
+            assert references[1]() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/a_sync/test_cached_property_ownership.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        first, second = Sample("first"), Sample("second")
+        references = weakref.ref(first), weakref.ref(second)
+        first_value = await descriptor.get_loader(first)()
+        second_value = await descriptor.get_loader(second)()
+        assert first_value is await descriptor.get_loader(first)()
+        assert second_value is await descriptor.get_loader(second)()
+        assert first_value[0] == "first" and second_value[0] == "second"
+        assert first_value is not second_value
+        assert calls == {"first": 1, "second": 1}
+        assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+        del first, second
+        await asyncio.sleep(0)
+        await asyncio.sleep(0)
+&gt;       assert references[0]() is None
+E       AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad39a70530&gt; is None
+E        +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xf9ad39a70530&gt; = &lt;weakref at 0xf9ad398fce00; to 'Sample' at 0xf9ad39a70530&gt;()
+
+tests/a_sync/test_cached_property_ownership.py:48: AssertionError</failure></testcase><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_any_sync" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_all_sync" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_min_sync" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_max_sync" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_sum_sync" time="0.000" /></testsuite></testsuites>

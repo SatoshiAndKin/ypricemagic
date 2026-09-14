@@ -542,7 +542,10 @@ async def test_v2_discovery_uses_one_block_and_drains_loader(
         def __hash__(self) -> int:
             return hash(self.address)
 
-    setattr(Pool, "__tokens__", property(lambda p: Ready((p.token0, p.token1))))
+        @a_sync.property
+        async def tokens(self) -> tuple[str | None, str]:
+            return self.token0, self.token1
+
     monkeypatch.setattr(module, "UniswapV2Pool", Pool)
 
     async def count(factory: str, method: str, **kwargs: Any) -> int:
@@ -1029,13 +1032,10 @@ async def test_v2_pool_index_is_shared_and_results_are_copied(
             self.pair = (first, second)
             self.reads = 0
 
-        @property
-        def __tokens__(self) -> Coroutine[Any, Any, tuple[str, str]]:
-            async def tokens() -> tuple[str, str]:
-                self.reads += 1
-                return self.pair
-
-            return tokens()
+        @a_sync.property
+        async def tokens(self) -> tuple[str, str]:
+            self.reads += 1
+            return self.pair
 
     first, second = Pool(TOKEN, CHILD), Pool(TOKEN, "third")
     monkeypatch.setattr(UniswapRouterV2, "__pools__", property(lambda self: Ready([first, second])))

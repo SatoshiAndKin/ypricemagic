@@ -1,0 +1,10 @@
+attrs==26.1.0
+hypothesis==6.27.3
+iniconfig==2.3.0
+packaging==26.3
+pip==26.2.1
+pluggy==1.6.0
+pytest==7.4.4
+pytest-custom-report==1.0.1
+pytest-retry==1.4.2
+sortedcontainers==2.4.0

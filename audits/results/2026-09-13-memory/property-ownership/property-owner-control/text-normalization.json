@@ -1,0 +1,12 @@
+[
+  {
+    "file": "property-owner-tests.json",
+    "scrubbed_original_sha256": "21dd26092903b5fdbbbcd4c86b15b241d4f2634176c0dcfbacadfcd71229955a",
+    "published_sha256": "d7bd1249fb447469f43e6a1c44283e3e38bc19f012f9059ef2342b5c9f328c24"
+  },
+  {
+    "file": "pytest.xml",
+    "scrubbed_original_sha256": "29cb9f35b2d0730fd2cdec384382247a4447b069f8402a67883dc23ab49eba23",
+    "published_sha256": "d78eec15a936a7356e33ebb73e3a5be473bd534d1dbd2726464651271d7bbb1c"
+  }
+]

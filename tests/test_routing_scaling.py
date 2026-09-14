@@ -14,6 +14,8 @@ from time import perf_counter
 from types import SimpleNamespace
 from typing import Any
 
+import a_sync
+
 from tests.test_amount_quotes import BLOCK
 from tests.test_pricing_correctness import Ready, instance, run_async_test
 from y.datatypes import PriceResult, QuoteAsset, QuoteStep, UsdPrice
@@ -38,8 +40,13 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
     class Pool:
         def __init__(self, row: Any) -> None:
             self.address = row[0].lower()
-            self.tokens = tuple(t.lower() for t in row[1:3])
-            self.__tokens__ = Ready(tuple(row[1:3]))
+            self.pair = tuple(t.lower() for t in row[1:3])
+            self._tokens = tuple(row[1:3])
+            self.__tokens__ = Ready(self._tokens)
+
+        @a_sync.property
+        async def tokens(self) -> tuple[str, ...]:
+            return self._tokens
 
         def __str__(self) -> Any:
             return self.address
@@ -73,7 +80,7 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
             await asyncio.sleep(0)
             # Controlled reserves favor gas-asset pairs. The topology itself is
             # the complete cached mainnet Sushi graph.
-            reserve = 10**24 if weth in by_address[pool].tokens else 10**22
+            reserve = 10**24 if weth in by_address[pool].pair else 10**22
             return (reserve, reserve, 0)
         finally:
             active -= 1
@@ -121,7 +128,7 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
     count = reads
     assert first is not None and first.quote is not None
     assert first.quote.total_usd == 1994
-    assert count == sum(token in pool.tokens for pool in pools)
+    assert count == sum(token in pool.pair for pool in pools)
     assert peak <= 64 and active == 0
     assert quotes == 1
 

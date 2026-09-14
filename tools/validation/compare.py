@@ -2,10 +2,44 @@
 
 import argparse
 import json
+import re
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
 from common import write_json
+
+
+def type_diagnostics(path: Path) -> Counter[tuple[str, str]]:
+    """Read every pretty mypy error and require a matching final count."""
+    text = path.read_text()
+    lines = text.splitlines()
+    result: Counter[tuple[str, str]] = Counter()
+    index = 0
+    while index < len(lines):
+        match = re.match(r"^(\S.*\.pyi?):\d+(?::\d+)?: error:\s*(.*)$", lines[index])
+        index += 1
+        if match is None:
+            continue
+        parts = [match[2]]
+        while index < len(lines):
+            line = lines[index]
+            if (
+                not line
+                or line.startswith(("    ", "Found ", "Success:", "Warning:"))
+                or re.match(r"^\S.*\.pyi?:", line)
+            ):
+                break
+            parts.append(line)
+            index += 1
+        result[match[1], " ".join(" ".join(parts).split())] += 1
+    summary = re.search(r"^Found (\d+) errors? in ", text, re.MULTILINE)
+    expected = int(summary[1]) if summary else 0
+    if summary is None and not re.search(r"^Success: no issues found", text, re.MULTILINE):
+        raise ValueError(f"Missing final mypy summary: {path}")
+    if sum(result.values()) != expected:
+        raise ValueError(f"Incomplete mypy diagnostics: {path}")
+    return result
 
 
 def failures(directory: Path) -> dict[str, Any]:

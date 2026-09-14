@@ -1,0 +1,29 @@
+{
+  "State": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-14T13:38:13.199939814Z",
+    "FinishedAt": "2026-09-14T13:41:15.269660234Z"
+  },
+  "Image": "sha256:b0fe61590ed3fb62cee197720f6754fecdfccac18a6c18b91682554a8c55a841",
+  "HostConfig": {
+    "Memory": 8589934592,
+    "MemorySwap": 8589934592,
+    "NanoCpus": 4000000000,
+    "PidsLimit": 512,
+    "LogConfig": {
+      "Type": "json-file",
+      "Config": {
+        "max-file": "5",
+        "max-size": "100m"
+      }
+    }
+  }
+}

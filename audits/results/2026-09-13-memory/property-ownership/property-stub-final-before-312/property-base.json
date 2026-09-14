@@ -1,0 +1,10 @@
+{
+  "runtime_bases": [
+    "a_sync.a_sync.property._ASyncPropertyDescriptorBase",
+    "a_sync.async_property.cached.AsyncCachedPropertyDescriptor"
+  ],
+  "native_path": "/usr/local/lib/python3.12/site-packages/a_sync/a_sync/property.cpython-312-aarch64-linux-gnu.so",
+  "stub_sha256": "782bd4fe334b716c7be9f25f3fdd27c4726ea96e6656b37187df3a823f091d80",
+  "runtime_contract_passed": true,
+  "exit_code": 1
+}

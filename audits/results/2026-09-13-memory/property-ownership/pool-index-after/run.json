@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python -c 'import asyncio,gc,json,weakref\nfrom pathlib import Path\nimport a_sync\nfrom y.prices.dex.uniswap.v2 import UniswapV2Pool,UniswapRouterV2\nasync def main():\n    pool=object.__new__(UniswapV2Pool)\n    UniswapV2Pool.__init__(pool,'\"'\"'0x0000000000000000000000000000000012340099'\"'\"','\"'\"'0x0000000000000000000000000000000000000101'\"'\"','\"'\"'0x0000000000000000000000000000000000000102'\"'\"',18000000,asynchronous=True)\n    reference=weakref.ref(pool)\n    router=object.__new__(UniswapRouterV2);a_sync.ASyncGenericBase.__init__(router);router.asynchronous=True;router.address=router.label='\"'\"'test'\"'\"';router.pools=[pool]\n    index=await UniswapRouterV2.pools_by_token.get(router)\n    pair=await type(pool).tokens.get(pool)\n    result=await router.all_pools_for(str(pair[0]),sync=False);result.clear()\n    router.pools=[];router.pools_by_token={}\n    fields={k:type(v).__module__+'\"'\"'.'\"'\"'+type(v).__name__ for k,v in vars(pool).items()}\n    del index,pool\n    await asyncio.sleep(0);await asyncio.sleep(0)\n    def describe(obj):\n        row={'\"'\"'type'\"'\"':type(obj).__module__+'\"'\"'.'\"'\"'+type(obj).__name__}\n        if isinstance(obj,dict):row['\"'\"'keys'\"'\"']=[str(k)[:120] for k in obj][:12]\n        elif isinstance(obj,(list,tuple)):row['\"'\"'length'\"'\"']=len(obj)\n        elif hasattr(obj,'\"'\"'__qualname__'\"'\"'):row['\"'\"'name'\"'\"']=obj.__qualname__\n        return row\n    refs=gc.get_referrers(reference()) if reference() is not None else []\n    def ancestry(obj,depth,seen):\n        row=describe(obj)\n        if id(obj) in seen:return row\n        if depth:\n            row['\"'\"'parents'\"'\"']=[ancestry(p,depth-1,seen|{id(obj)}) for p in gc.get_referrers(obj) if not isinstance(p,(list,tuple))][:8]\n        return row\n    rows=[ancestry(r,4,set()) for r in refs]\n    Path('\"'\"'/reports/pool-retained-owner.json'\"'\"').write_text(json.dumps({'\"'\"'released'\"'\"':reference() is None,'\"'\"'fields'\"'\"':fields,'\"'\"'router_cache_keys'\"'\"':list(getattr(router,'\"'\"'__async_property__'\"'\"').cache),'\"'\"'router_cache_types'\"'\"':{k:type(v).__name__ for k,v in getattr(router,'\"'\"'__async_property__'\"'\"').cache.items()},'\"'\"'refs'\"'\"':rows},indent=2))\nasyncio.get_event_loop().run_until_complete(main())\n' && for repeat in timing-1 timing-2 timing-3 allocations; do mkdir -p /reports/$repeat; if [ \"$repeat\" = allocations ]; then extra=\"--pools 131072 --allocations\"; else extra=\"\"; fi; VALIDATION_REPORT=/reports/$repeat python /runner/pool_discovery_profile.py $extra || exit $?; done"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789389328.989332,
+  "source_sha": "2ecb8c9659c6f08375623e17ed359b1c55c33e93",
+  "source_revision": "worktree",
+  "source_archive_sha256": "b19a00da2c638f74fd4767124838a688069927b4b4fe8a3983d930b9dddce21f",
+  "image": "sha256:9c469532bb7944bdb36efeacfe2351f635759987c323cbca9bcfe7c0142434e9",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 197.42130208015442
+}

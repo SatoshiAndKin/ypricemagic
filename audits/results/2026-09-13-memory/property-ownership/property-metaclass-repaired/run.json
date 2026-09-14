@@ -1,0 +1,23 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=/runner",
+    "python",
+    "-P",
+    "-c",
+    "import ast,json,subprocess,sys,textwrap\nfrom pathlib import Path\nsource=Path('/work')\nmodule=ast.parse((source/'tests/mypy/test_mypy_plugin.py').read_text())\ntest=next(n for n in module.body if isinstance(n,ast.FunctionDef) and n.name=='test_metaclass_wraps_sync_methods_and_descriptors')\ncode=test.body[0].value.args[1].value\ntarget=Path('/tmp/property-metaclass-probe');target.mkdir()\n(target/'snippet.py').write_text(textwrap.dedent(code))\nconfig=(source/'pyproject.toml').read_text().replace('files = [\"a_sync\", \"tests/mypy/cached_property_contract.py\"]','files = [\"snippet.py\"]')\n(target/'pyproject.toml').write_text(config)\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=target,text=True,capture_output=True)\nPath('/reports/mypy.txt').write_text(result.stdout+result.stderr)\nPath('/reports/metaclass-probe.json').write_text(json.dumps({'exit_code':result.returncode,'source':code},indent=2))\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789391618.126848,
+  "source_sha": "000e4f24466ddc01abc6bb1a12cc429cbeea5813",
+  "source_revision": "worktree",
+  "source_archive_sha256": "8f45f6675ff2fcfb43b0a37a534a8067233061c5bfe3c31eed4ca6b0dc0f19bf",
+  "image": "sha256:fcd3908da00853ba93e682c1289990203420203fe8584580b552bf7ebd23c73c",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 3.9908878803253174
+}

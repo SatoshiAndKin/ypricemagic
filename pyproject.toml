@@ -14,7 +14,7 @@ requires = [
   "eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@c986066ddd9ae10906a470008d786faab2355cc5 ; platform_system == 'Linux' and platform_machine != 'i686'",
   "eth-retry==0.3.7",
   "eth-typing==5.2.1",
-  "ez-a-sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@000e4f24466ddc01abc6bb1a12cc429cbeea5813",
+  "ez-a-sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@ebb981bfaffd887048d1945eff29ab5dfe360e34",
   "faster-eth-abi>=5.2.12,<6",
   "faster-hexbytes==1.3.4",
   "typed-envs==0.2.4",

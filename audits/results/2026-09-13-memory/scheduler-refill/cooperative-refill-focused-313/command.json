@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m venv /unit && /unit/bin/python -m pip install -r /runner/cooperative-owner-dependencies.lock && /unit/bin/python -m pip freeze --all > /reports/unit-dependencies.txt && /unit/bin/python -c 'import hashlib,json,pathlib; import pytest_asyncio_cooperative.plugin as plugin; path=pathlib.Path(plugin.__file__); pathlib.Path(\"/reports/cooperative-source.json\").write_text(json.dumps({\"file\":str(path),\"sha256\":hashlib.sha256(path.read_bytes()).hexdigest()}))' && PYTEST_PLUGINS=pytest_report,pytest_asyncio_cooperative.plugin /unit/bin/python /runner/focused.py"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 8.339930211994215,
+  "peak_sampled_process_rss_bytes": 96198656,
+  "cgroup_before": {
+    "memory.current": "14147584",
+    "memory.peak": "14147584",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "118378496",
+    "memory.peak": "167350272",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

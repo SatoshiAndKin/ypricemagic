@@ -1,0 +1,12 @@
+[
+  {
+    "file": "format.json",
+    "scrubbed_original_sha256": "6fb0f165812371c6051690932df3558f49012cbe8149f1b0b01cf923c71d7886",
+    "published_sha256": "5f3c97618d9fcd6f7e9787e1ebe1c40acdb658d5a3ef54c350a98f32b1cfe68e"
+  },
+  {
+    "file": "runner-tests.json",
+    "scrubbed_original_sha256": "5e0c606c4f09e6475b32a252a908ea3e1a31dcd7f44fe1f09010aabc8f13f8c3",
+    "published_sha256": "cbc4b0c86050c46ed8bda000677789a62816446d6684e591a1fdf703e538bfc7"
+  }
+]

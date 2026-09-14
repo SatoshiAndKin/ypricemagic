@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && for repeat in timing-1 timing-2 timing-3 allocations; do mkdir -p /reports/$repeat; if [ \"$repeat\" = allocations ]; then extra=\"--pools 131072 --allocations\"; else extra=\"\"; fi; VALIDATION_REPORT=/reports/$repeat python /runner/pool_discovery_profile.py $extra || exit $?; done"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789387025.1714659,
+  "source_sha": "2ecb8c9659c6f08375623e17ed359b1c55c33e93",
+  "source_revision": "2ecb8c9659c6f08375623e17ed359b1c55c33e93",
+  "source_archive_sha256": "891e7b2ae55ad8cfd37fa115c39f65c2ea65ca28dc497e9760f846deda9cb5ad",
+  "image": "sha256:90c9e64a153fd4543033071de3e031cec8d704c24be2f991bee1273fb04a08b0",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 305.24017310142517
+}
