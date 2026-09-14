@@ -3,8 +3,9 @@
 Validation is incomplete. PR #43 remains draft. Three full suites before the
 event-loader repair reach the unchanged 8 GiB limit. The repair now bounds raw
 historical chunks and pending writes by the existing fetch capacity. Controlled
-memory checks and the 264-case Python matrix pass. The committed repair still
-needs historical profiling, the full suite, and remaining real-node checks.
+memory checks and the 264-case Python matrix pass. The committed repair
+has completed historical profiling. The full suite is running, and remaining
+real-node checks still need completion.
 
 ## Current evidence
 
@@ -127,7 +128,12 @@ performance results. The 29-case combined profile finishes with 10 passes and
 keeps 32 raw chunks instead of 499 in the controlled workload. Median elapsed
 time increases about 4%, from 1.75252 to 1.82288 seconds. Ordering, failure,
 cancellation, pending-write reuse, and zero-permit semaphore checks pass. The
-real historical profile and full suite still need the committed repair.
+[committed historical profile](event-historical/README.md) finishes without OOM
+at 4,798,681,088 container bytes, down from 5,477,474,304. Peak sampled raw logs
+fall from 519,924 to 17,733 and pending insert tasks from 1,827 to three. Both
+runs record ten passes and 19 failures. Nine Magic block values change with the
+chain tip; RPC, task, and pool counts increase. This diagnostic run does not
+establish identical-input performance or complete full-suite validation.
 
 The [native quote control](native-requester-before/README.md) records six passing
 cases. Its process exit remains incomplete because the old application waits

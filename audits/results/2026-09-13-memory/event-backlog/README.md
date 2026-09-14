@@ -70,7 +70,8 @@ million raw logs late in the run; pytest log capture remains empty. Profiling
 adds overhead and the workload includes configured timeouts.
 
 The [three full suites before this repair](../requester-full-suites/README.md)
-all reach 8 GiB and remain incomplete. The committed repair still needs the
-historical profile, full suite, and remaining native/public pricing and audit
-checks. Limits remain 8 GiB, no swap, four CPUs, and 512 processes/threads.
+all reach 8 GiB and remain incomplete. The
+[committed historical profile](../event-historical/README.md) now finishes without OOM at 4,798,681,088 container bytes. Its ten passes and 19 failures
+remain separate from the running full suite and remaining native/public pricing
+and audit checks. Limits remain 8 GiB, no swap, four CPUs, and 512 processes/threads.
 PR #43 remains draft.
