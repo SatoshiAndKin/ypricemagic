@@ -9,8 +9,12 @@ a caller interruption while preserving the original error and independent
 shared requests. All 278 application tests, 52 owner checks, and two deadline
 checks pass on Python 3.11–3.13. All ten application extensions and four owner
 extensions load native code. Type diagnostics remain unchanged at 1,836.
-The replacement full-suite and real-node queue remains separate from this
-focused validation.
+The [replacement full-suite and real-node queue](deadline-node-validation/README.md)
+remains separate from this focused validation. With the final dependencies,
+the original and pre-optimization baselines reach 8 GiB after 1,203.63 and
+1,525.52 seconds. They record 412 of 1,752 and 486 of 1,816 terminal outcomes.
+Both pass the archive probe and load ten compiled modules, but their missing
+final summaries keep validation incomplete. The optimized full suite is running.
 
 ## Latest pool ownership repair
 
