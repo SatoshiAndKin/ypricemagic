@@ -39,8 +39,12 @@ workload peak process RSS is 2,087,518,208 bytes (1.94 GiB). Final samples each
 contain 53 live tasks and 33/35/16,384 market/result/state cache entries. Logical
 RPC medians and individual counters remain in the linked summaries. These
 completed optimized runs cannot establish price equality or a timing ratio
-against baselines that return no prices. The separate allocation profile and
-two audits continue in the existing queue.
+against baselines that return no prices. The separate allocation profile also
+completes all 99 calls with matching results and saves both snapshots. It records
+1,703,254,202 traced Python bytes before the final census. Its full container
+peak is 8,393,064,448 bytes (7.82 GiB), including profiler overhead: above the
+7 GiB target, with no OOM. Tracing starts after application imports and does not
+measure all Python or native memory. Both mainnet audits remain in the queue.
 
 ## Latest pool ownership repair
 

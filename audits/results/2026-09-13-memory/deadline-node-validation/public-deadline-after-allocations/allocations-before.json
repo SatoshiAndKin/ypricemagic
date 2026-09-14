@@ -1,0 +1,447 @@
+{
+  "objects": {
+    "a_sync.a_sync.modifiers.manager.ModifierManager": 374,
+    "a_sync.debugging.__pyx_scope_struct__stuck_coro_debugger": 176,
+    "a_sync.a_sync.method.ASyncMethodDescriptor": 132,
+    "logging.Logger": 110,
+    "a_sync.primitives.locks.counter.CounterLock": 95,
+    "a_sync.async_property.cached.AsyncCachedPropertyInstanceState": 95,
+    "y.utils.events.Events": 92,
+    "a_sync.a_sync.function.ASyncFunctionSyncDefault": 78,
+    "dank_mids.helpers._session.HTTPStatusExtended": 67,
+    "a_sync.a_sync.property.HiddenMethodDescriptor": 52,
+    "a_sync.a_sync.function.ASyncFunctionAsyncDefault": 49,
+    "a_sync.a_sync.property.ASyncCachedPropertyDescriptor": 44,
+    "logging.PlaceHolder": 37,
+    "y.classes.singleton.ChecksumASyncSingletonMeta": 34,
+    "y.prices.chainlink.Feed": 31,
+    "y.classes.common.ERC20": 31,
+    "dank_mids.logging.CLogger": 21,
+    "dank_mids._web3.method.MethodNoFormat": 19,
+    "a_sync.a_sync._meta.ASyncMeta": 18,
+    "a_sync.functools.cached_property_unsafe": 18,
+    "y.networks.Network": 17,
+    "y.contracts.Contract": 16,
+    "y.prices.stable_swap.curve.Ids": 13,
+    "dank_mids._web3.abi.Formatter": 13,
+    "a_sync.iter.ASyncGeneratorFunction": 11,
+    "logging.StreamHandler": 9,
+    "a_sync.executor.PruningThreadPoolExecutor": 8,
+    "a_sync.a_sync.property.ASyncPropertyDescriptor": 8,
+    "a_sync.a_sync._meta.ASyncSingletonMeta": 7,
+    "y.prices.lending.compound.Comptroller": 7,
+    "a_sync.a_sync.method.ASyncMethodDescriptorSyncDefault": 6,
+    "dank_mids.helpers._retry_mechanics.RetryAction": 5,
+    "dank_mids.helpers._session._HTTPStatusExtension": 5,
+    "logging.Formatter": 4,
+    "logging.PercentStyle": 4,
+    "dank_mids._web3.abi.map_to_typed_data": 4,
+    "dank_mids.semaphores._BlockSemaphoreContextManager": 4,
+    "y._db.decorators.retry_locked_wrap_retry_locked_obj": 4,
+    "y._db.decorators.retry_locked_env": 4,
+    "y.prices.dex.balancer.v2.PoolSpecialization": 4,
+    "y.prices.dex.uniswap.v2.UniswapRouterV2": 3,
+    "y.classes.common.ContractBase": 3,
+    "logging.NullHandler": 3,
+    "a_sync.a_sync.property.__pyx_defaults": 3,
+    "evmspec.structs.trace.call.Type": 3,
+    "dank_mids.semaphores.EnvironmentVariable[BlockSemaphore]": 3,
+    "y.prices.dex.uniswap.v3.UniswapV3": 2,
+    "a_sync.a_sync.method.ASyncBoundMethodAsyncDefault": 2,
+    "a_sync.async_property.proxy._ObjectProxyMetaType": 2,
+    "evmspec.structs.receipt.Status": 2,
+    "evmspec.data._enum.StringToIntEnumMeta": 2,
+    "evmspec.structs.trace.reward.Type": 2,
+    "a_sync.executor.EnvironmentVariable[AsyncProcessPoolExecutor]": 2,
+    "a_sync.primitives.queue.SmartProcessingQueue": 2,
+    "y.audit.AuditClient": 1,
+    "y.prices.dex.uniswap.uniswap.UniswapMultiplexer": 1,
+    "y.prices.dex.uniswap.v1.UniswapV1": 1,
+    "y.prices.eth_derivs.wsteth.wstEth": 1,
+    "y.prices.gearbox.Gearbox": 1,
+    "y.prices.lending.aave.AaveRegistry": 1,
+    "y.prices.lending.compound.Compound": 1,
+    "y.prices.stable_swap.curve.CurveRegistry": 1,
+    "y.prices.stable_swap.curve.AddressProvider": 1,
+    "y.prices.stable_swap.curve.AddressProviderEvents": 1,
+    "y.prices.synthetix.Synthetix": 1,
+    "y.prices.magic._PriceRequest": 1,
+    "logging._StderrHandler": 1,
+    "logging.RootLogger": 1,
+    "logging.Manager": 1,
+    "_asyncio.Task": 1,
+    "_asyncio.TaskStepMethWrapper": 1,
+    "dank_mids._install_alias_guard.<locals>._DankModule": 1,
+    "a_sync.async_property.cached.AsyncCachedPropertyDescriptor": 1,
+    "a_sync.primitives.locks.semaphore.DummySemaphore": 1,
+    "a_sync.debugging.__pyx_defaults": 1,
+    "evmspec.structs.receipt._HexStringToIntEnumMeta": 1,
+    "dank_mids._mode.EnvironmentVariable[OperationMode]": 1,
+    "dank_mids.stats._StatsLogger": 1,
+    "dank_mids.stats._Collector": 1,
+    "dank_mids.stats._SentryExporter": 1,
+    "dank_mids.brownie_patch._BrowniePatchState": 1,
+    "evmspec.data._main.Address": 1,
+    "dank_mids._demo_mode.DummyLogger": 1,
+    "dank_mids.helpers._retry_mechanics.RetryDecision": 1,
+    "dank_mids.helpers._weaklist.WeakList": 1,
+    "dank_mids.helpers._requester.HTTPRequesterThread": 1,
+    "dank_mids.lock.Lock": 1,
+    "dank_mids.eth.DankEth": 1,
+    "a_sync.executor.AsyncThreadPoolExecutor": 1,
+    "y.networks.label_Network_obj": 1,
+    "y.networks.name_Network_obj": 1,
+    "y.networks.printable_Network_obj": 1,
+    "a_sync.a_sync.function.ASyncDecorator": 1,
+    "y._db.brownie.AsyncCursor": 1,
+    "y._db.decorators.__mypyc_lambda__0_obj": 1,
+    "y._db.decorators.__mypyc_lambda__1_obj": 1,
+    "y._db.decorators.__mypyc_lambda__2_obj": 1,
+    "a_sync.primitives.locks.semaphore.ThreadsafeSemaphore": 1,
+    "y.prices.chainlink.Chainlink": 1,
+    "y.prices.chainlink.FeedsFromEvents": 1,
+    "dank_mids.semaphores.BlockSemaphore": 1,
+    "y.prices.dex.balancer.v2.BalancerV2": 1,
+    "y.prices.dex.balancer.v2.BalancerV2Vault": 1,
+    "y.prices.dex.balancer.v2.BalancerEvents": 1,
+    "y.prices.dex.balancer.balancer.BalancerMultiplexer": 1,
+    "y.prices.dex.genericamm.GenericAmm": 1
+  },
+  "tasks_by_coroutine": {
+    "main:pending": 1
+  },
+  "historical_buffer_entries": {
+    "y.utils.events.Events._objects": 0,
+    "y.utils.events.Events._checkpoints": 0,
+    "y.prices.stable_swap.curve.AddressProviderEvents._objects": 0,
+    "y.prices.stable_swap.curve.AddressProviderEvents._checkpoints": 0,
+    "y.prices.chainlink.FeedsFromEvents._objects": 0,
+    "y.prices.chainlink.FeedsFromEvents._checkpoints": 0,
+    "y.prices.dex.balancer.v2.BalancerEvents._objects": 0,
+    "y.prices.dex.balancer.v2.BalancerEvents._checkpoints": 0
+  },
+  "queued_database_operations": {
+    "y._db.decorators.ydb_write_threads": 0
+  },
+  "logging": {},
+  "cached_property_state": {
+    "instances": 95,
+    "cache_entries": 0,
+    "locks_entries": 0,
+    "tasks_entries": 0
+  },
+  "async_caches": [
+    {
+      "function": "dank_mids._block.resolve_block_number",
+      "original_function": "dank_mids._block.resolve_block_number",
+      "hits": 0,
+      "misses": 0,
+      "maxsize": 1024,
+      "entries": 0,
+      "tasks": {},
+      "result_types": {}
+    },
+    {
+      "function": "dank_mids.eth.DankEth.block_number",
+      "original_function": "dank_mids.eth.DankEth.block_number",
+      "hits": 0,
+      "misses": 0,
+      "maxsize": null,
+      "entries": 0,
+      "tasks": {},
+      "result_types": {}
+    },
+    {
+      "function": "dank_mids._debugging._base._CSVWriter._ensure_headers",
+      "original_function": "dank_mids._debugging._base._CSVWriter._ensure_headers",
+      "hits": 0,
+      "misses": 0,
+      "maxsize": null,
+      "entries": 0,
+      "tasks": {},
+      "result_types": {}
+    }
+  ],
+  "cachebox_caches": [
+    {
+      "function": "y.utils.client.get_ethereum_client",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.utils.client.get_ethereum_client_async",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.time.check_node",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.time.check_node_async",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.contracts._extract_abi_data",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.contracts._extract_abi_data_async",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.contracts._get_explorer_api_key",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.chainlink.Feed.scale",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.chainlink.Chainlink._get_feed",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.chainlink.Chainlink._get_price",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.pendle.get_tokens",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.solidex._get_pool",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.utils.ypriceapi.get_session",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.utils.ypriceapi.get_chains",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "y.prices.utils.ypriceapi.chain_supported",
+      "hits": 0,
+      "misses": 0,
+      "entries": 0,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    }
+  ],
+  "pony_adapted_sql_cache": {
+    "entries": 0,
+    "query_characters": 0,
+    "adapted_query_characters": 0
+  },
+  "python_current_bytes": 370059,
+  "python_peak_bytes": 1994328,
+  "rss_peak_bytes": 184713216,
+  "top_allocations": [
+    {
+      "traceback": "<frozen abc>:123",
+      "bytes": 350470,
+      "count": 3381
+    },
+    {
+      "traceback": "/runner/profile_state.py:86",
+      "bytes": 8251,
+      "count": 107
+    },
+    {
+      "traceback": "/runner/profile_state.py:87",
+      "bytes": 3296,
+      "count": 2
+    },
+    {
+      "traceback": "/runner/profile_state.py:140",
+      "bytes": 3120,
+      "count": 15
+    },
+    {
+      "traceback": "/runner/profile_state.py:141",
+      "bytes": 1095,
+      "count": 15
+    },
+    {
+      "traceback": "/runner/profile_state.py:93",
+      "bytes": 908,
+      "count": 9
+    },
+    {
+      "traceback": "/runner/profile_state.py:113",
+      "bytes": 624,
+      "count": 3
+    },
+    {
+      "traceback": "/runner/profile_state.py:114",
+      "bytes": 247,
+      "count": 3
+    },
+    {
+      "traceback": "/runner/profile_state.py:45",
+      "bytes": 247,
+      "count": 3
+    },
+    {
+      "traceback": "/runner/profile_state.py:133",
+      "bytes": 208,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:122",
+      "bytes": 192,
+      "count": 3
+    },
+    {
+      "traceback": "/runner/profile_state.py:121",
+      "bytes": 192,
+      "count": 3
+    },
+    {
+      "traceback": "/runner/profile_state.py:160",
+      "bytes": 162,
+      "count": 3
+    },
+    {
+      "traceback": "/runner/profile_state.py:139",
+      "bytes": 128,
+      "count": 1
+    },
+    {
+      "traceback": "<string>:1",
+      "bytes": 80,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:105",
+      "bytes": 80,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:104",
+      "bytes": 80,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:66",
+      "bytes": 80,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:65",
+      "bytes": 80,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:64",
+      "bytes": 80,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:63",
+      "bytes": 80,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:62",
+      "bytes": 80,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:188",
+      "bytes": 75,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:196",
+      "bytes": 64,
+      "count": 2
+    },
+    {
+      "traceback": "/runner/profile_state.py:134",
+      "bytes": 64,
+      "count": 2
+    },
+    {
+      "traceback": "/runner/profile_state.py:97",
+      "bytes": 53,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:112",
+      "bytes": 32,
+      "count": 1
+    }
+  ]
+}

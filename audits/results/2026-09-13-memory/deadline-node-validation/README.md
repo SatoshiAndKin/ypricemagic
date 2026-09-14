@@ -33,6 +33,7 @@ Dependency image: `sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1
 | [public-deadline-after-timing-1](public-deadline-after-timing-1/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 1357.36 | 3222843392 | yes | 0 |
 | [public-deadline-after-timing-2](public-deadline-after-timing-2/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 1374.31 | 3111694336 | yes | 0 |
 | [public-deadline-after-timing-3](public-deadline-after-timing-3/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 1389.40 | 3120422912 | yes | 0 |
+| [public-deadline-after-allocations](public-deadline-after-allocations/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 1912.75 | 8393064448 | yes | 0 |
 
 `full-deadline-original` records 291 passed calls, 109 failed calls, 9 skipped calls, 3 setup failures, and 0 setup skips. Its final pytest summary is missing.
 It records 1 cgroup OOM kills and Docker `OOMKilled=true`. It loads 10 compiled modules; the archive probe passes. Expired console bytes: 0.
@@ -127,6 +128,7 @@ calls. These rows include failed and incomplete repetitions.
 | [public-deadline-after-timing-1](public-deadline-after-timing-1/run.json) | 99 / 99 | yes | 0 | false | present |
 | [public-deadline-after-timing-2](public-deadline-after-timing-2/run.json) | 99 / 99 | yes | 0 | false | present |
 | [public-deadline-after-timing-3](public-deadline-after-timing-3/run.json) | 99 / 99 | yes | 0 | false | present |
+| [public-deadline-after-allocations](public-deadline-after-allocations/run.json) | 99 / 99 | yes | 0 | false | present |
 
 An OOM before the first cold result supplies no completed price row or final
 pricing summary. It cannot enter a 99-call timing median. A revision needs all
@@ -139,16 +141,20 @@ turn them into evidence of changed prices.
 | [public-deadline-after-timing-1](public-deadline-after-timing-1/public-summary.json) | 1252.33 | 2087518208 | 53 | 33 / 35 / 16384 |
 | [public-deadline-after-timing-2](public-deadline-after-timing-2/public-summary.json) | 1253.86 | 2078216192 | 53 | 33 / 35 / 16384 |
 | [public-deadline-after-timing-3](public-deadline-after-timing-3/public-summary.json) | 1266.86 | 2087821312 | 53 | 33 / 35 / 16384 |
+| [public-deadline-after-allocations](public-deadline-after-allocations/public-summary.json) | 1739.08 | 4065476608 | 53 | 33 / 35 / 16384 |
 
 Pricing time excludes extension preparation and process shutdown. Workload RSS comes from `resource.getrusage`; sampled process RSS and total container memory remain separate in run metrics. Allocation-profile timings are excluded from performance medians. Logical RPC counters remain in each linked summary; they count adapter operations and batching, not necessarily physical requests.
 
 The `after` median across three complete unprofiled repetitions is 1253.86 pricing seconds and 2087518208 peak process RSS bytes.
 
-Exact price, amount, block, path, and error rows within `after` match across 3 completed workloads. Timing and logical RPC counters are excluded from this semantic comparison. This does not establish equality against a baseline that returned no prices.
+Exact price, amount, block, path, and error rows within `after` match across 4 completed workloads. Timing and logical RPC counters are excluded from this semantic comparison. This does not establish equality against a baseline that returned no prices.
 
-Pending final reports: 3 of 17.
+The `public-deadline-after-allocations` allocation profile completes all 99 requests and saves both snapshots. Traced Python allocations are 1,703,254,202 bytes before the final census and 1,706,641,897 bytes during the census. Tracing starts after application imports, so these values do not cover all Python or native memory. The complete container peak is 8,393,064,448 bytes, including profiler overhead. It exceeds the 7 GiB target; OOM events remain recorded separately. The public summary records workload time and RSS before the final census; the final allocation snapshot and container metrics capture the later memory increase.
 
-- `public-deadline-after-allocations`
+The final census records 527,793 V2 pool objects, 73,007 V3 pool objects, and 532,411 cached-property states. Those property states hold 0 locks and 0 tasks. The sampled database queues contain 0 pending operations. This single final census does not establish unlimited-workload memory bounds or a baseline allocation comparison. [Full allocation census](public-deadline-after-allocations/allocations-after.json).
+
+Pending final reports: 2 of 17.
+
 - `audit-deadline-before`
 - `audit-deadline-after`
 

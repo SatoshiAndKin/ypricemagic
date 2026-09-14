@@ -32,10 +32,10 @@
     "public-deadline-before-allocations",
     "public-deadline-after-timing-1",
     "public-deadline-after-timing-2",
-    "public-deadline-after-timing-3"
+    "public-deadline-after-timing-3",
+    "public-deadline-after-allocations"
   ],
   "pending": [
-    "public-deadline-after-allocations",
     "audit-deadline-before",
     "audit-deadline-after"
   ]
