@@ -1,8 +1,9 @@
 # Contained memory validation
 
-Validation is incomplete. PR #43 remains draft. The full test comparison and
-the final native quotes, public pricing workloads, and mainnet audits are still
-in progress. A passing focused test run does not complete these gates.
+Validation is incomplete. PR #43 remains draft. The changed full suite ended
+after file-descriptor exhaustion. Subsequent archive probes prevent the control
+suite and real-node checks from starting. Controlled dependency ownership work
+continues. A passing focused test run does not complete the remaining gates.
 
 ## Current evidence
 
@@ -40,8 +41,8 @@ and original names remain recorded.
 | Source | Revision | Status with final Python 3.12 dependency image |
 | --- | --- | --- |
 | Original PR baseline | `476af288a520a30052668a8b3ad7e3e682cd101f` | OOM; incomplete |
-| Before memory changes | `61be7b520aba7f771a0bf96b326315e68767fae4` | Queued after changed full suite |
-| Optimized behavior | `368a6e79fa7226cb0f7f92be27a90c80d5a649b7` | Full suite running |
+| Before memory changes | `61be7b520aba7f771a0bf96b326315e68767fae4` | Archive probe timeout; pytest did not start |
+| Optimized behavior | `368a6e79fa7226cb0f7f92be27a90c80d5a649b7` | File-descriptor exhaustion; incomplete |
 
 The [original full run](full-original-owner-pinned-oom/README.md) collected
 1,752 cases and recorded 438 terminal outcomes before reaching the 8 GiB limit.
@@ -49,7 +50,14 @@ Docker records `OOMKilled=true` and the cgroup records one OOM kill. It has no
 final pytest summary. Its partial outcomes cannot establish failure equivalence
 or preserved full coverage.
 
-All three full runs use image
+The [changed full run](full-optimized-descriptor-failure/README.md) records
+410 terminal outcomes out of 1,838 collected cases. It peaks at 1,173,213,184 bytes
+with no OOM, but has no final pytest summary. Its early exit prevents a full
+memory or failure comparison. [Later archive probes](archive-after-full-failure/README.md)
+time out on the required USDC call through direct NUC Reth. The native, public
+pricing, and audit checks have not started with these final dependencies.
+
+All three suite commands select image
 `sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b`,
 separate databases, and the required command:
 
@@ -80,7 +88,8 @@ Different rows use different dependency builds.
 
 The Sushi comparison uses the older locked dependency image. Its median elapsed
 time changes from 2.761 to 2.653 seconds, with identical amounts and quote outputs.
-A repeat with the final dependency image is queued. Sushi and logger workloads
+A repeat with the final dependency image stopped during archive-dependent
+startup and has no workload result. Sushi and logger workloads
 collect garbage at the same measurement boundaries on both sides. They do not
 clear caches or restart a process to produce the within-workload release result.
 The callable and retry workloads use normal cyclic collection only.
