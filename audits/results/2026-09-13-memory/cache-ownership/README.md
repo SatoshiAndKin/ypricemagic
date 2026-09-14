@@ -10,7 +10,8 @@ This result covers cache ownership. Full pricing validation remains incomplete.
 The application pins the owning repair at
 `10be25afe46afb32c8135db4d1b8e2d94431b9c1`. The remaining full-suite and
 real-node comparisons are pending.
-The separate unbounded topic-result cache remains visible in the diagnosis.
+The subsequent [topic-cache repair](../topic-cache/README.md) bounds that
+separate owner. Its historical and full pricing validation remain pending.
 
 ## Diagnosis
 

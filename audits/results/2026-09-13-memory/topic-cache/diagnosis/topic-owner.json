@@ -1,0 +1,22 @@
+{
+  "complete": true,
+  "topics": 8192,
+  "async_function": "y._db.utils.logs.get_topic_dbid",
+  "async_cache": {
+    "hits": 8192,
+    "misses": 8192,
+    "maxsize": null,
+    "currsize": 8192
+  },
+  "sync_caches": [
+    {
+      "function": "y._db.utils.logs.get_topic_dbid",
+      "cache": {
+        "hits": 0,
+        "misses": 8192,
+        "maxsize": null,
+        "currsize": 8192
+      }
+    }
+  ]
+}

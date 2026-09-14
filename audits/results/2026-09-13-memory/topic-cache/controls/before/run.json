@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python -c 'import pathlib,tomllib,pytest; cfg=tomllib.loads(pathlib.Path('\"'\"'pyproject.toml'\"'\"').read_text()); raise SystemExit(pytest.main(cfg['\"'\"'tool'\"'\"']['\"'\"'validation'\"'\"']['\"'\"'topic_tests'\"'\"']))'; python -m mypy > /reports/mypy.txt 2>&1"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789379425.820935,
+  "source_sha": "0b16d2fab24ca98637d0a9862a58a61bfec37eeb",
+  "source_revision": "worktree",
+  "source_archive_sha256": "e0074a9703747aca3d263b1e3313b7cd8023350e4f25088a184f2b942cc77ee9",
+  "image": "sha256:90c9e64a153fd4543033071de3e031cec8d704c24be2f991bee1273fb04a08b0",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 150.23353099822998
+}

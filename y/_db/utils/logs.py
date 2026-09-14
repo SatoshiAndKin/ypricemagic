@@ -14,9 +14,10 @@ from msgspec import DecodeError, ValidationError, json, msgpack
 from pony.orm import commit, db_session, select
 from pony.orm.core import Query
 
+from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._db.common import DiskCache, default_filter_threads, enc_hook, make_executor
-from y._db.decorators import db_session_cached, db_session_retry_locked, retry_locked
+from y._db.decorators import db_session_retry_locked, retry_locked
 from y._db.entities import Block, Hashes
 from y._db.entities import Log as DbLog
 from y._db.entities import LogCacheInfo, LogTopic
@@ -182,8 +183,11 @@ async def bulk_insert(logs: list[Log], executor: AsyncExecutor = default_filter_
     )
 
 
-@a_sync(default="async", executor=_topic_executor, ram_cache_maxsize=None)
-@db_session_cached
+# Cache completed IDs once for both synchronous and asynchronous callers.
+@a_sync(default="async", executor=_topic_executor)
+@retry_locked
+@cachebox.cached(cachebox.LRUCache(ENVS.DEFAULT_CACHE_MAXSIZE))
+@db_session_retry_locked
 def get_topic_dbid(topic: Topic) -> int:
     topic = _remove_0x_prefix(topic.strip())
     entity = _get_log_topic(topic=topic)
