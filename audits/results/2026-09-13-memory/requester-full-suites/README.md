@@ -15,7 +15,7 @@ PYTEST_ADDOPTS="-p no:pytest_ethereum" BROWNIE_NETWORK=mainnet make test
 | Source | Execution | Terminal outcomes / collected | Peak bytes | Elapsed seconds |
 | --- | --- | ---: | ---: | ---: |
 | original | OOM; incomplete | 415 / 1752 | 8,589,934,592 | 1521.86 |
-| preoptimization | Pending | Pending | Pending | Pending |
+| preoptimization | OOM; incomplete | 416 / 1816 | 8,590,004,224 | 1510.30 |
 | optimized | Pending | Pending | Pending | Pending |
 
 Execution completion is separate from test success. OOM, interruption, and
@@ -37,6 +37,15 @@ are below the soft limit of 1,024. This
 sampling does not establish the exact descriptor count at the later OOM.
 The source archive, dependencies, archive probe, all ten compiled extension
 paths, command, elapsed time, log retention, and final state remain recorded.
+
+The pre-optimization revision also reaches the limit and records one OOM kill.
+It records 301 passed calls, 106 failed calls, and nine skips out of 1,816 cases.
+Its last completed event is the Popsicle price check for
+`0x5C08A6762CAF9ec8a42F249eBC23aAE66097218D`, with 5,453 live tasks. The cgroup
+records 8,590,004,224 peak bytes against the unchanged 8,589,934,592-byte limit.
+Its maximum sampled descriptor count is 121. The complete installed dependency
+records match the original run byte for byte. Neither baseline has a final
+pytest summary.
 
 Earlier OOM and descriptor failures use separate reports and dependency images.
 They are not relabeled as runs of the new requester repair.
