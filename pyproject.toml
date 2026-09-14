@@ -50,8 +50,12 @@ asyncio_task_timeout = 600
 line-length = 100
 
 [tool.validation]
-memory_tests = ["tests/prices/test_popsicle.py"]
+memory_tests = [
+  "tests/prices/test_magic.py::test_get_prices",
+  "tests/prices/test_popsicle.py",
+]
 focused_tests = [
+  "tests/test_event_memory.py",
   "tests/prices/test_gearbox.py",
   "tests/prices/test_magic.py::test_bulk_fixture_releases_mapped_requests",
   "tests/test_memory_release.py",

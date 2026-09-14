@@ -1,12 +1,10 @@
 # Contained memory validation
 
-Validation is incomplete. PR #43 remains draft. The changed full suite ended
-after file-descriptor exhaustion. The owning dependency now releases cancelled
-HTTP requests and completed batch tasks. Its native tests pass on all supported
-CI test platforms. Direct Lambo Reth archive access has recovered. The pricing
-matrix passes with the repaired dependency. All three full suites reach
-the unchanged 8 GiB limit. The optimized full suite remains incomplete.
-Allocation profiles now trace historical event and pool discovery growth.
+Validation is incomplete. PR #43 remains draft. Three full suites before the
+event-loader repair reach the unchanged 8 GiB limit. The repair now bounds raw
+historical chunks and pending writes by the existing fetch capacity. Controlled
+memory checks and the 264-case Python matrix pass. The committed repair still
+needs historical profiling, the full suite, and remaining real-node checks.
 
 ## Current evidence
 
@@ -18,18 +16,19 @@ every round. All 150 dependency tests pass in each of 12 native CI jobs; all 15
 native builds pass. The application now pins their generated artifacts. The
 local source comparison fixes 20 failures with no added failed test IDs.
 
-The [current dependency matrix](requester-owner-matrix/README.md) passes all 251
-focused tests on Linux ARM64 Python 3.11, 3.12, and 3.13. Every run loads all ten configured
-compiled extensions and passes the historical archive probe. No OOM occurs.
-The final type checks report 1,935 errors on each version, compared with 1,959
-before optimization under the same dependencies. No rendered diagnostic was
-added; 24 were removed. These type checks still fail.
+The [current event-loader matrix](event-backlog/README.md) passes all 264
+focused tests on Linux ARM64 Python 3.11, 3.12, and 3.13. Every run loads all ten
+configured compiled extensions and passes the historical archive probe. No OOM
+occurs. Type checks report 1,922 errors per version, compared with 1,935 before
+this repair under identical dependencies. No rendered diagnostic is added; 13
+are removed. These type checks still fail. The earlier
+[251-case dependency matrix](requester-owner-matrix/README.md) remains separate.
 
 | Python | Focused passes | Container peak bytes | Run elapsed seconds |
 | --- | ---: | ---: | ---: |
-| 3.11 | 251 | 1,132,236,800 | 226.68 |
-| 3.12 | 251 | 1,169,694,720 | 247.19 |
-| 3.13 | 251 | 1,172,312,064 | 219.23 |
+| 3.11 | 264 | 1,120,059,392 | 198.59 |
+| 3.12 | 264 | 1,172,852,736 | 206.75 |
+| 3.13 | 264 | 1,158,500,352 | 219.83 |
 
 The [same four fixture release checks](bulk-fixture-ownership/README.md) fail
 before cleanup and pass afterward.
@@ -105,6 +104,7 @@ Different rows use different dependency builds.
 
 | Workload | Before RSS bytes | After RSS bytes | Preserved work and result |
 | --- | ---: | ---: | --- |
+| [Historical event chunks](event-backlog/README.md) | 319,193,088 | 195,379,200 | 512 identical chunks; 32 concurrent fetches; every ordered write and checkpoint |
 | [Cached Sushi topology, current requester](scaling-requester/README.md) | 424,853,504 | 276,234,240 | 309,675 reads; 4,131 quotes; 4,128 historical blocks; 64-operation bound |
 | [Request diagnostics](logger-comparison.json) | 215,588,864 | 183,836,672 | 10,000 requests; retained loggers and tasks fall from 10,000 to zero |
 | [Callable ownership](async-ownership/README.md) | 98,758,656 | 32,768,000 | 1,000 callables; all captured owners released |
@@ -122,8 +122,12 @@ The [historical discovery profile](discovery-allocations/README.md) identifies
 large raw log buffers, processed Uniswap pool state, and pending database insert
 coroutines. The 19-case run finishes with 10 passes and nine failures at a
 6,399,762,432-byte container peak. Allocation overhead remains separate from
-performance results. The combined Magic/Popsicle profile and backlog regression
-will test the next repair.
+performance results. The 29-case combined profile finishes with 10 passes and
+19 failures at a 5,477,474,304-byte peak. The [event-loader repair](event-backlog/README.md)
+keeps 32 raw chunks instead of 499 in the controlled workload. Median elapsed
+time increases about 4%, from 1.75252 to 1.82288 seconds. Ordering, failure,
+cancellation, pending-write reuse, and zero-permit semaphore checks pass. The
+real historical profile and full suite still need the committed repair.
 
 The [native quote control](native-requester-before/README.md) records six passing
 cases. Its process exit remains incomplete because the old application waits

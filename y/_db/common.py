@@ -1,12 +1,22 @@
 from abc import ABCMeta, abstractmethod
-from asyncio import Task, TimeoutError, create_task, get_event_loop, shield, sleep, wait_for
-from collections.abc import AsyncIterator, Awaitable, Callable, Container
+from asyncio import (
+    FIRST_COMPLETED,
+    Task,
+    TimeoutError,
+    create_task,
+    gather,
+    get_event_loop,
+    shield,
+    sleep,
+    wait,
+    wait_for,
+)
+from collections.abc import AsyncIterator, Awaitable, Callable, Iterator
 from copy import copy
-from itertools import dropwhile, groupby
+from itertools import dropwhile, groupby, islice
 from logging import DEBUG, getLogger
 from typing import TYPE_CHECKING, Any, Generic, NoReturn, Optional, TypeVar, final
 
-import a_sync
 import dank_mids
 import eth_retry
 from a_sync import (
@@ -307,6 +317,7 @@ class _DiskCachedMixin(ASyncIterable[T], Generic[T, C], metaclass=ABCMeta):
     @abstractmethod
     def insert_to_db(self) -> Callable[[T], None]: ...
 
+    @property
     def bulk_insert(self) -> Callable[[list[T]], Awaitable[None]]:
         """
         Function to bulk insert a list of objects into the database.
@@ -327,13 +338,14 @@ class _DiskCachedMixin(ASyncIterable[T], Generic[T, C], metaclass=ABCMeta):
         See Also:
             - :meth:`_load_cache`
         """
+        raise NotImplementedError
 
-    async def _extend(self, objs: Container[T]) -> None:
+    async def _extend(self, objs: list[T]) -> None:
         """
         Override this to pre-process objects before storing.
 
         Args:
-            objs ("Container[T]"): The objects to extend the list with.
+            objs: The objects to extend the list with.
 
         Example:
             >>> await instance._extend([obj1, obj2])
@@ -425,10 +437,10 @@ _metadata_write_executor = make_executor(1, 3, "ypricemagic Filter write metadat
 class Filter(_DiskCachedMixin[T, C]):
     # defaults are stored as class vars to keep instance dicts smaller
     _chunk_size = BATCH_SIZE
-    _chunks_per_batch = None
+    _chunks_per_batch: int | None = None
     _exc = None
     _tb = None
-    _db_task = None
+    _db_task: Task[None] | None = None
     _sleep_fut = None
     _sleep_time = 60
     _task = None
@@ -710,7 +722,7 @@ class Filter(_DiskCachedMixin[T, C]):
     @stuck_coro_debugger
     async def _fetch_range_wrapped(
         self, i: int, range_start: "Block", range_end: "Block", debug_logs: bool
-    ) -> list[T]:
+    ) -> tuple[int, "Block", list[T]]:
         """
         Wraps the _fetch_range call with concurrency control.
 
@@ -819,28 +831,71 @@ class Filter(_DiskCachedMixin[T, C]):
         """
         if debug_logs := logger.isEnabledFor(DEBUG):
             logger._log(DEBUG, "loading block range %s to %s", (from_block, to_block))
+        ranges: Iterator[tuple[int, tuple["Block", "Block"]]] = enumerate(
+            block_ranges(from_block, to_block, self._chunk_size)
+        )
+        if self._chunks_per_batch is not None:
+            ranges = islice(ranges, max(0, self._chunks_per_batch))
+
+        # Keep the existing fetch capacity. A completed chunk keeps its slot
+        # until processing and persistence release its raw objects.
+        # A semaphore with zero permits must still have a waiting fetch. An
+        # empty scheduling window would incorrectly report the range complete.
+        capacity = max(1, self.semaphore._capacity)
+        pending: set[Task[tuple[int, "Block", list[T]]]] = set()
+        finished: set[Task[tuple[int, "Block", list[T]]]] = set()
+        done: dict[int, tuple["Block", list[T]]] = {}
         chunks_yielded = 0
-        done = {}
-        coros = [
-            self._fetch_range_wrapped(i, start, end, debug_logs)
-            for i, (start, end) in enumerate(block_ranges(from_block, to_block, self._chunk_size))
-            if self._chunks_per_batch is None or i < self._chunks_per_batch
-        ]
-        async for i, end, objs in a_sync.as_completed(coros, aiter=True, tqdm=self._verbose):
-            next_chunk_loaded = False
-            done[i] = end, objs
-            for i in range(chunks_yielded, len(coros)):
-                if i not in done:
+        objs: list[T] = []
+        task = None
+
+        def fill() -> None:
+            for _ in range(capacity - len(pending) - len(done)):
+                item = next(ranges, None)
+                if item is None:
                     break
-                end, objs = done.pop(i)
-                self._insert_chunk(objs, from_block, end, debug_logs)
-                await self._extend(objs)
-                next_chunk_loaded = True
-                chunks_yielded += 1
-            if next_chunk_loaded:
-                await self._set_lock(end)
-                if debug_logs:
-                    logger._log(DEBUG, "%s loaded thru block %s", (self, end))
+                index, (start, end) = item
+                pending.add(create_task(self._fetch_range_wrapped(index, start, end, debug_logs)))
+
+        try:
+            if self._db_task is not None:
+                await shield(self._db_task)
+            fill()
+            while pending:
+                finished, pending = await wait(pending, return_when=FIRST_COMPLETED)
+                for task in finished:
+                    index, end, objs = task.result()
+                    done[index] = end, objs
+                task = None
+                objs = []
+                finished.clear()
+                while chunks_yielded in done:
+                    end, objs = done.pop(chunks_yielded)
+                    self._insert_chunk(objs, from_block, end, debug_logs)
+                    await self._extend(objs)
+                    objs = []
+                    # Queued writes remain owned by the filter if this reader
+                    # is cancelled. No new chunk can add another write backlog.
+                    assert self._db_task is not None
+                    await shield(self._db_task)
+                    await self._set_lock(end)
+                    chunks_yielded += 1
+                    fill()
+                    if self._verbose:
+                        logger.info(
+                            "%s loaded %s chunks thru block %s", str(self), chunks_yielded, end
+                        )
+                    if debug_logs:
+                        logger._log(DEBUG, "%s loaded thru block %s", (self, end))
+        finally:
+            for task in pending:
+                task.cancel()
+            await gather(*pending, *finished, return_exceptions=True)
+            pending.clear()
+            finished.clear()
+            done.clear()
+            task = None
+            objs = []
 
     @stuck_coro_debugger
     async def _set_lock(self, block: "Block") -> None:

@@ -332,7 +332,11 @@ def main() -> int:
                 freeze_files(
                     ROOT / "tests",
                     workload,
-                    ("test_routing_scaling.py", "data/sushi-mainnet-topology.json"),
+                    (
+                        "test_routing_scaling.py",
+                        "test_event_memory.py",
+                        "data/sushi-mainnet-topology.json",
+                    ),
                 ),
             )
             metadata.update(snapshot(args.source.resolve(), args.revision, work))

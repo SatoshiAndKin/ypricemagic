@@ -1,0 +1,386 @@
+{
+  "312": {
+    "complete": true,
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/focused.py && python -m mypy"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789359443.027283,
+      "source_sha": "0b829e9dd16e9d62a88d957c27a973fc5d1de2f6",
+      "source_revision": "worktree",
+      "source_archive_sha256": "a9b4c53ceacceb592deb56de2bd47a0a042e6a1be43026838a897ccc2beaacf1",
+      "image": "sha256:0fb5880df36df7c1c86b5772a5cb426fca4770df349007a069bea09bd4b8529d",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 206.74570393562317
+    },
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 264,
+        "call:passed": 264,
+        "teardown:passed": 264
+      },
+      "collected": 264
+    },
+    "type_run": {
+      "command": [
+        "python",
+        "-m",
+        "mypy"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789359332.4580202,
+      "source_sha": "0b829e9dd16e9d62a88d957c27a973fc5d1de2f6",
+      "source_revision": "worktree",
+      "source_archive_sha256": "a9b4c53ceacceb592deb56de2bd47a0a042e6a1be43026838a897ccc2beaacf1",
+      "image": "sha256:0fb5880df36df7c1c86b5772a5cb426fca4770df349007a069bea09bd4b8529d",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 25.16935396194458
+    },
+    "types": {
+      "baseline_rendered_errors": 1930,
+      "changed_rendered_errors": 1917,
+      "added": [],
+      "removed": [
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 1 to \"_extend\" of \"_DiskCachedMixin\" has incompatible type \"T\"; expected \"Container[T]\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 1 to \"_insert_chunk\" of \"Filter\" has incompatible type \"T\"; expected \"list[T]\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 1 to \"_set_lock\" of \"Filter\" has incompatible type \"T\"; expected \"int | BlockNumber\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 1 to \"extend\" of \"list\" has incompatible type \"Container[T]\"; expected \"Iterable[T]\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 3 to \"_insert_chunk\" of \"Filter\" has incompatible type \"T\"; expected \"int | BlockNumber\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Incompatible return value type (got \"tuple[int, int | BlockNumber, list[T]]\", expected \"list[T]\") [return-value]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Incompatible types in \"await\" (actual type \"Callable[[list[T]], Awaitable[None]]\", expected type \"Awaitable[Any]\") [misc]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Incompatible types in assignment (expression has type \"int\", variable has type \"T\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Missing return statement [empty-body]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Too many arguments for \"bulk_insert\" of \"_DiskCachedMixin\" [call-arg]",
+          "count": 1
+        },
+        {
+          "file": "y/utils/events.py",
+          "error": "Argument 1 of \"_extend\" is incompatible with supertype \"y._db.common._DiskCachedMixin\"; supertype defines the argument type as \"Container[Log]\" [override]",
+          "count": 2
+        },
+        {
+          "file": "y/utils/events.py",
+          "error": "Signature of \"bulk_insert\" incompatible with supertype \"y._db.common._DiskCachedMixin\" [override]",
+          "count": 1
+        }
+      ],
+      "dependencies_equal": true,
+      "cli_summaries": {
+        "before": [
+          "Found 1935 errors in 116 files (checked 192 source files)"
+        ],
+        "after": [
+          "Found 1922 errors in 116 files (checked 194 source files)"
+        ]
+      }
+    }
+  },
+  "311": {
+    "complete": true,
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/focused.py && python -m mypy"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789359649.839328,
+      "source_sha": "0b829e9dd16e9d62a88d957c27a973fc5d1de2f6",
+      "source_revision": "worktree",
+      "source_archive_sha256": "a9b4c53ceacceb592deb56de2bd47a0a042e6a1be43026838a897ccc2beaacf1",
+      "image": "sha256:930fb33a6019eda0e3116caff1b2a4c50d09533e09d220138cbdf997f7a337e1",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 198.58599185943604
+    },
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 264,
+        "call:passed": 264,
+        "teardown:passed": 264
+      },
+      "collected": 264
+    },
+    "type_run": {
+      "command": [
+        "python",
+        "-m",
+        "mypy"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789359357.6814961,
+      "source_sha": "0b829e9dd16e9d62a88d957c27a973fc5d1de2f6",
+      "source_revision": "worktree",
+      "source_archive_sha256": "a9b4c53ceacceb592deb56de2bd47a0a042e6a1be43026838a897ccc2beaacf1",
+      "image": "sha256:930fb33a6019eda0e3116caff1b2a4c50d09533e09d220138cbdf997f7a337e1",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 24.377925872802734
+    },
+    "types": {
+      "baseline_rendered_errors": 1930,
+      "changed_rendered_errors": 1917,
+      "added": [],
+      "removed": [
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 1 to \"_extend\" of \"_DiskCachedMixin\" has incompatible type \"T\"; expected \"Container[T]\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 1 to \"_insert_chunk\" of \"Filter\" has incompatible type \"T\"; expected \"list[T]\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 1 to \"_set_lock\" of \"Filter\" has incompatible type \"T\"; expected \"int | BlockNumber\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 1 to \"extend\" of \"list\" has incompatible type \"Container[T]\"; expected \"Iterable[T]\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 3 to \"_insert_chunk\" of \"Filter\" has incompatible type \"T\"; expected \"int | BlockNumber\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Incompatible return value type (got \"tuple[int, int | BlockNumber, list[T]]\", expected \"list[T]\") [return-value]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Incompatible types in \"await\" (actual type \"Callable[[list[T]], Awaitable[None]]\", expected type \"Awaitable[Any]\") [misc]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Incompatible types in assignment (expression has type \"int\", variable has type \"T\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Missing return statement [empty-body]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Too many arguments for \"bulk_insert\" of \"_DiskCachedMixin\" [call-arg]",
+          "count": 1
+        },
+        {
+          "file": "y/utils/events.py",
+          "error": "Argument 1 of \"_extend\" is incompatible with supertype \"y._db.common._DiskCachedMixin\"; supertype defines the argument type as \"Container[Log]\" [override]",
+          "count": 2
+        },
+        {
+          "file": "y/utils/events.py",
+          "error": "Signature of \"bulk_insert\" incompatible with supertype \"y._db.common._DiskCachedMixin\" [override]",
+          "count": 1
+        }
+      ],
+      "dependencies_equal": true,
+      "cli_summaries": {
+        "before": [
+          "Found 1935 errors in 116 files (checked 192 source files)"
+        ],
+        "after": [
+          "Found 1922 errors in 116 files (checked 194 source files)"
+        ]
+      }
+    }
+  },
+  "313": {
+    "complete": true,
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/focused.py && python -m mypy"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789359848.490287,
+      "source_sha": "0b829e9dd16e9d62a88d957c27a973fc5d1de2f6",
+      "source_revision": "worktree",
+      "source_archive_sha256": "a9b4c53ceacceb592deb56de2bd47a0a042e6a1be43026838a897ccc2beaacf1",
+      "image": "sha256:b716530eea304f6ea8f2d7ec76ba52216452736cc149dc9d68f7e7d788e8a200",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 219.82793498039246
+    },
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 264,
+        "call:passed": 264,
+        "teardown:passed": 264
+      },
+      "collected": 264
+    },
+    "type_run": {
+      "command": [
+        "python",
+        "-m",
+        "mypy"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789359382.112275,
+      "source_sha": "0b829e9dd16e9d62a88d957c27a973fc5d1de2f6",
+      "source_revision": "worktree",
+      "source_archive_sha256": "a9b4c53ceacceb592deb56de2bd47a0a042e6a1be43026838a897ccc2beaacf1",
+      "image": "sha256:b716530eea304f6ea8f2d7ec76ba52216452736cc149dc9d68f7e7d788e8a200",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 25.226773977279663
+    },
+    "types": {
+      "baseline_rendered_errors": 1930,
+      "changed_rendered_errors": 1917,
+      "added": [],
+      "removed": [
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 1 to \"_extend\" of \"_DiskCachedMixin\" has incompatible type \"T\"; expected \"Container[T]\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 1 to \"_insert_chunk\" of \"Filter\" has incompatible type \"T\"; expected \"list[T]\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 1 to \"_set_lock\" of \"Filter\" has incompatible type \"T\"; expected \"int | BlockNumber\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 1 to \"extend\" of \"list\" has incompatible type \"Container[T]\"; expected \"Iterable[T]\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Argument 3 to \"_insert_chunk\" of \"Filter\" has incompatible type \"T\"; expected \"int | BlockNumber\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Incompatible return value type (got \"tuple[int, int | BlockNumber, list[T]]\", expected \"list[T]\") [return-value]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Incompatible types in \"await\" (actual type \"Callable[[list[T]], Awaitable[None]]\", expected type \"Awaitable[Any]\") [misc]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Incompatible types in assignment (expression has type \"int\", variable has type \"T\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Missing return statement [empty-body]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "error": "Too many arguments for \"bulk_insert\" of \"_DiskCachedMixin\" [call-arg]",
+          "count": 1
+        },
+        {
+          "file": "y/utils/events.py",
+          "error": "Argument 1 of \"_extend\" is incompatible with supertype \"y._db.common._DiskCachedMixin\"; supertype defines the argument type as \"Container[Log]\" [override]",
+          "count": 2
+        },
+        {
+          "file": "y/utils/events.py",
+          "error": "Signature of \"bulk_insert\" incompatible with supertype \"y._db.common._DiskCachedMixin\" [override]",
+          "count": 1
+        }
+      ],
+      "dependencies_equal": true,
+      "cli_summaries": {
+        "before": [
+          "Found 1935 errors in 116 files (checked 192 source files)"
+        ],
+        "after": [
+          "Found 1922 errors in 116 files (checked 194 source files)"
+        ]
+      }
+    }
+  }
+}

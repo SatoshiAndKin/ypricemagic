@@ -1,0 +1,15 @@
+{
+  "chunks": 512,
+  "bytes_per_chunk": 262144,
+  "peak_fetch_operations": 32,
+  "peak_retained_chunks": 32,
+  "retained_chunks_after": 0,
+  "persisted_sha256": "51dfdc30539dad6b5e53e3fd51531483e0ea5f1151efa49aedf45a3f8968bf75",
+  "final_block": 512,
+  "elapsed_seconds": 1.9593200829986017,
+  "rss_peak_bytes": 195346432,
+  "python_current_bytes": 115949,
+  "python_peak_bytes": 8530993,
+  "profiler": "tracemalloc; exclude timings",
+  "boundary": "controlled in-process fetch and write delays; no real RPC timing"
+}
