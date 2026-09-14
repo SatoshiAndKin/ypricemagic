@@ -1,0 +1,92 @@
+[
+  {
+    "file": "command.json",
+    "private_original_sha256": "3f4880d3372640aa664af4d9acc56556faa003862b62c57b8261c470d41d25ce",
+    "published_sha256": "3f4880d3372640aa664af4d9acc56556faa003862b62c57b8261c470d41d25ce",
+    "private_values_removed": false
+  },
+  {
+    "file": "compiled-modules.json",
+    "private_original_sha256": "f7c8033a81021cf5121a9f6f3a025fdb0d1c7d49a38813efb2d30f529dfd33f2",
+    "published_sha256": "f7c8033a81021cf5121a9f6f3a025fdb0d1c7d49a38813efb2d30f529dfd33f2",
+    "private_values_removed": false
+  },
+  {
+    "file": "console.retention.json",
+    "private_original_sha256": "12f94c05e7462bd7dbd8cbe2c966f5f62c5b1fe87a94f55aedef8a45dd38e65f",
+    "published_sha256": "12f94c05e7462bd7dbd8cbe2c966f5f62c5b1fe87a94f55aedef8a45dd38e65f",
+    "private_values_removed": false
+  },
+  {
+    "file": "container-state.json",
+    "private_original_sha256": "4653b25bb315d0bff8b6e0d5cf0f9daf213485f6869c609719a96d2a14291cb9",
+    "published_sha256": "4653b25bb315d0bff8b6e0d5cf0f9daf213485f6869c609719a96d2a14291cb9",
+    "private_values_removed": false
+  },
+  {
+    "file": "dependencies-after.txt",
+    "private_original_sha256": "5dd873e1db01c7e9e81be143210beb3c67b1b05ed000d1f391d0cdda869dfb84",
+    "published_sha256": "5dd873e1db01c7e9e81be143210beb3c67b1b05ed000d1f391d0cdda869dfb84",
+    "private_values_removed": false
+  },
+  {
+    "file": "dependencies.txt",
+    "private_original_sha256": "257651cd82552ecd2f76ba5aeab21151b1c9a45e5fdcdb14593cc9408bee27cb",
+    "published_sha256": "257651cd82552ecd2f76ba5aeab21151b1c9a45e5fdcdb14593cc9408bee27cb",
+    "private_values_removed": false
+  },
+  {
+    "file": "environment.json",
+    "private_original_sha256": "c481a104899d561f17a1d567a67280eccf00fe98fa7d522643ddc081d1d31c65",
+    "published_sha256": "c481a104899d561f17a1d567a67280eccf00fe98fa7d522643ddc081d1d31c65",
+    "private_values_removed": false
+  },
+  {
+    "file": "fd-samples.jsonl",
+    "private_original_sha256": "988e9a61a60a24a9317fc625e273aeca6ff120db14a58360440b9ab069a7e0c3",
+    "published_sha256": "988e9a61a60a24a9317fc625e273aeca6ff120db14a58360440b9ab069a7e0c3",
+    "private_values_removed": false
+  },
+  {
+    "file": "image-build-dependencies.txt",
+    "private_original_sha256": "257651cd82552ecd2f76ba5aeab21151b1c9a45e5fdcdb14593cc9408bee27cb",
+    "published_sha256": "257651cd82552ecd2f76ba5aeab21151b1c9a45e5fdcdb14593cc9408bee27cb",
+    "private_values_removed": false
+  },
+  {
+    "file": "progress.json",
+    "private_original_sha256": "200546c19a1c96e5d4891bd34b61d3de6bda817ccb9950806e846ea2d1ef6d30",
+    "published_sha256": "200546c19a1c96e5d4891bd34b61d3de6bda817ccb9950806e846ea2d1ef6d30",
+    "private_values_removed": false
+  },
+  {
+    "file": "pytest-events.jsonl",
+    "private_original_sha256": "4869ef0aed7475cb4b68fe65653e3fe39a724695b8a501603a7b381a089e2e6b",
+    "published_sha256": "5079dd5c9896c7045ec7f909155a23f679ef46209bf9227e3682a5a86338f3ed",
+    "private_values_removed": true
+  },
+  {
+    "file": "rpc-probe.json",
+    "private_original_sha256": "0ab2b6c45701183c5d3d6b6039c73985cb78ba05d53bea3274c7b9632565137c",
+    "published_sha256": "0ab2b6c45701183c5d3d6b6039c73985cb78ba05d53bea3274c7b9632565137c",
+    "private_values_removed": false
+  },
+  {
+    "file": "run.json",
+    "private_original_sha256": "f79707456f0559ccd2422adfa8fb02ec229f15cb7f078a3391a67e5574e6051e",
+    "published_sha256": "f79707456f0559ccd2422adfa8fb02ec229f15cb7f078a3391a67e5574e6051e",
+    "private_values_removed": false
+  },
+  {
+    "file": "runner-files.json",
+    "private_original_sha256": "330473f711ee8cb630f1ab924fb47e347b122fba4d431b9c7922ed216bd90633",
+    "published_sha256": "330473f711ee8cb630f1ab924fb47e347b122fba4d431b9c7922ed216bd90633",
+    "private_values_removed": false
+  },
+  {
+    "file": "workload-files.json",
+    "private_original_sha256": "6d73219c5dc9f8577890db2b04d08b85e249fffe475c732b79063768277b0a00",
+    "published_sha256": "6d73219c5dc9f8577890db2b04d08b85e249fffe475c732b79063768277b0a00",
+    "private_values_removed": false
+  }
+]

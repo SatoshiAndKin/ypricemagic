@@ -28,7 +28,11 @@ passes all three new barrier regressions. Its Python 3.11–3.13 owner checks ke
 the same two existing full-suite failures. This scheduling repair does not count
 as a production pricing memory reduction.
 
-Full application, native quote, public pricing, and audit gates remain pending.
+The [final pinned baseline runs](final-node-validation/README.md) both reach the
+8 GiB limit and remain incomplete. The original revision records 412 of 1,752
+terminal outcomes; the pre-optimization revision records 476 of 1,816. Both load
+all ten compiled modules and pass the archive probe with identical dependencies.
+The optimized full suite, native quote, public pricing, and audit gates remain pending.
 PR #43 remains draft. The controlled pool reduction does not establish a full
 pricing memory result.
 
