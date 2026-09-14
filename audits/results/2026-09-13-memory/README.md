@@ -44,7 +44,10 @@ completes all 99 calls with matching results and saves both snapshots. It record
 1,703,254,202 traced Python bytes before the final census. Its full container
 peak is 8,393,064,448 bytes (7.82 GiB), including profiler overhead: above the
 7 GiB target, with no OOM. Tracing starts after application imports and does not
-measure all Python or native memory. Both mainnet audits remain in the queue.
+measure all Python or native memory. The baseline mainnet audit ends with OOM
+after 819.25 seconds, with no audit JSON or CSV. It remains incomplete. Console
+rotation expires 104,857,600 bytes (100 MiB) of output; the retention report
+discloses that loss. The optimized audit continues in the existing queue.
 
 ## Latest pool ownership repair
 

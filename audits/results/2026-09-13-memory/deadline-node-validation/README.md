@@ -34,6 +34,7 @@ Dependency image: `sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1
 | [public-deadline-after-timing-2](public-deadline-after-timing-2/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 1374.31 | 3111694336 | yes | 0 |
 | [public-deadline-after-timing-3](public-deadline-after-timing-3/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 1389.40 | 3120422912 | yes | 0 |
 | [public-deadline-after-allocations](public-deadline-after-allocations/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 1912.75 | 8393064448 | yes | 0 |
+| [audit-deadline-before](audit-deadline-before/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 819.25 | 8589942784 | no | 137 |
 
 `full-deadline-original` records 291 passed calls, 109 failed calls, 9 skipped calls, 3 setup failures, and 0 setup skips. Its final pytest summary is missing.
 It records 1 cgroup OOM kills and Docker `OOMKilled=true`. It loads 10 compiled modules; the archive probe passes. Expired console bytes: 0.
@@ -153,9 +154,16 @@ The `public-deadline-after-allocations` allocation profile completes all 99 requ
 
 The final census records 527,793 V2 pool objects, 73,007 V3 pool objects, and 532,411 cached-property states. Those property states hold 0 locks and 0 tasks. The sampled database queues contain 0 pending operations. This single final census does not establish unlimited-workload memory bounds or a baseline allocation comparison. [Full allocation census](public-deadline-after-allocations/allocations-after.json).
 
-Pending final reports: 2 of 17.
+### Mainnet audits
 
-- `audit-deadline-before`
+| Run | JSON / CSV present | Complete execution | OOM kills | Expired console bytes |
+| --- | --- | --- | ---: | ---: |
+| [audit-deadline-before](audit-deadline-before/run.json) | no / no | no | 1 | 104,857,600 |
+
+An audit with missing JSON or CSV supplies no complete coverage or failure comparison. Rotated console output is not a replacement for the structured audit report. Expired bytes are disclosed above; retained local logs remain bounded to five files of 100 MiB each.
+
+Pending final reports: 1 of 17.
+
 - `audit-deadline-after`
 
 [Run metrics](runs.json) preserve exact outcomes, cgroup OOM events, Docker
