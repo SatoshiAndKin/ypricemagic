@@ -454,5 +454,91 @@
       "file_limit_bytes": 104857600,
       "retained_files": 5
     }
+  },
+  "public-deadline-before-timing-3": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/pricing_profile.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789418135.1497102,
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_revision": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_archive_sha256": "46250ae5f72bd79819c3a88db91469bbf8c89f412ba0da16f28065a74aac49b9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 137,
+      "oom_killed": true,
+      "missing_reports": [
+        "public-summary.json"
+      ],
+      "elapsed_seconds": 714.510922908783
+    },
+    "container_peak_bytes": 8589946880,
+    "peak_sampled_process_rss_bytes": 8609857536,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 10761,
+      "oom": 1,
+      "oom_kill": 1,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": true,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 14513,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "public-deadline-before-allocations": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/pricing_profile.py --allocations"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789418849.774369,
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_revision": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_archive_sha256": "46250ae5f72bd79819c3a88db91469bbf8c89f412ba0da16f28065a74aac49b9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 137,
+      "oom_killed": true,
+      "missing_reports": [
+        "public-summary.json"
+      ],
+      "elapsed_seconds": 652.5580339431763
+    },
+    "container_peak_bytes": 8589934592,
+    "peak_sampled_process_rss_bytes": 8554885120,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 1278,
+      "oom": 1,
+      "oom_kill": 1,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": true,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 13120,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
   }
 }

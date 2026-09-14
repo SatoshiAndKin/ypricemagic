@@ -27,10 +27,12 @@ All 14 native case rows match exactly between revisions: 13 passes and the same
 unavailable Curve gauge result. Both optimized native processes exit normally;
 both baseline processes need intervention after their final reports because an
 idle SQLite worker blocks exit. These baseline executions remain incomplete.
-The first two baseline public-pricing repetitions reach 8 GiB before returning
-the cold price. Both record OOM, zero completed calls, and missing final pricing
-summaries. They cannot provide a 99-call timing median. The remaining public
-pricing and audit stages continue in the existing queue.
+All three baseline public-pricing timing repetitions and the separate allocation
+profile reach 8 GiB before returning the cold price. All four record OOM, zero
+completed calls, and missing final pricing summaries. They cannot provide a
+99-call timing median. The allocation profile retains its initial snapshot but
+has no snapshot after pricing. The optimized public-pricing and audit stages
+continue in the existing queue.
 
 ## Latest pool ownership repair
 

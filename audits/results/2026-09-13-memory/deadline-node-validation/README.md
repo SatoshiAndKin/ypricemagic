@@ -28,6 +28,8 @@ Dependency image: `sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1
 | [native-reviewed-deadline-after](native-reviewed-deadline-after/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 333.08 | 1164902400 | yes | 1 |
 | [public-deadline-before-timing-1](public-deadline-before-timing-1/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 745.57 | 8589950976 | no | 137 |
 | [public-deadline-before-timing-2](public-deadline-before-timing-2/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 883.55 | 8589971456 | no | 137 |
+| [public-deadline-before-timing-3](public-deadline-before-timing-3/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 714.51 | 8589946880 | no | 137 |
+| [public-deadline-before-allocations](public-deadline-before-allocations/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 652.56 | 8589934592 | no | 137 |
 
 `full-deadline-original` records 291 passed calls, 109 failed calls, 9 skipped calls, 3 setup failures, and 0 setup skips. Its final pytest summary is missing.
 It records 1 cgroup OOM kills and Docker `OOMKilled=true`. It loads 10 compiled modules; the archive probe passes. Expired console bytes: 0.
@@ -117,6 +119,8 @@ calls. These rows include failed and incomplete repetitions.
 | --- | ---: | --- | ---: | --- | --- |
 | [public-deadline-before-timing-1](public-deadline-before-timing-1/run.json) | 0 / 99 | no | 1 | true | missing |
 | [public-deadline-before-timing-2](public-deadline-before-timing-2/run.json) | 0 / 99 | no | 1 | true | missing |
+| [public-deadline-before-timing-3](public-deadline-before-timing-3/run.json) | 0 / 99 | no | 1 | true | missing |
+| [public-deadline-before-allocations](public-deadline-before-allocations/run.json) | 0 / 99 | no | 1 | true | missing |
 
 An OOM before the first cold result supplies no completed price row or final
 pricing summary. It cannot enter a 99-call timing median. A revision needs all
@@ -125,10 +129,8 @@ separate. Exact-row differences preserve missing and unmatched rows and do not
 turn them into evidence of changed prices.
 
 
-Pending final reports: 8 of 17.
+Pending final reports: 6 of 17.
 
-- `public-deadline-before-timing-3`
-- `public-deadline-before-allocations`
 - `public-deadline-after-timing-1`
 - `public-deadline-after-timing-2`
 - `public-deadline-after-timing-3`

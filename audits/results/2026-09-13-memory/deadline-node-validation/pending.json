@@ -27,11 +27,11 @@
     "native-deadline-after",
     "native-reviewed-deadline-after",
     "public-deadline-before-timing-1",
-    "public-deadline-before-timing-2"
+    "public-deadline-before-timing-2",
+    "public-deadline-before-timing-3",
+    "public-deadline-before-allocations"
   ],
   "pending": [
-    "public-deadline-before-timing-3",
-    "public-deadline-before-allocations",
     "public-deadline-after-timing-1",
     "public-deadline-after-timing-2",
     "public-deadline-after-timing-3",
