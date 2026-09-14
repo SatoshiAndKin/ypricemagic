@@ -1,0 +1,1720 @@
+{
+  "run": {
+    "command": [
+      "sh",
+      "/runner/full_suite.sh"
+    ],
+    "docker_context": "colima-ypricemagic",
+    "builder": "ypricemagic-validation-55871f24db8c",
+    "complete": false,
+    "started_unix": 1789368217.7276008,
+    "source_sha": "1657cdcf4c00072178cd9828341bdf3dd7e8f215",
+    "source_revision": "1657cdcf4c00072178cd9828341bdf3dd7e8f215",
+    "source_archive_sha256": "dabe88d53f8100dc016d4b9e4d0c5cd393d45afd8dabe879ad6bd0f56cb700bd",
+    "image": "sha256:0fb5880df36df7c1c86b5772a5cb426fca4770df349007a069bea09bd4b8529d",
+    "exit_code": 2,
+    "oom_killed": true,
+    "missing_reports": [
+      "pytest-summary.json"
+    ],
+    "elapsed_seconds": 3639.603956222534
+  },
+  "phase_counts": {
+    "sessionstart:": 1,
+    "collection:": 1,
+    "setup:passed": 1238,
+    "call:passed": 893,
+    "teardown:passed": 1240,
+    "call:skipped": 14,
+    "call:failed": 330,
+    "setup:failed": 3
+  },
+  "collected": 1857,
+  "terminal_outcomes": 1240,
+  "cgroup": {
+    "memory.current": "169840640",
+    "memory.peak": "8591007744",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 7479\noom 1\noom_kill 1\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "8"
+  },
+  "failure_kinds": {
+    "configured timeout": 139,
+    "TypeError": 71,
+    "ContractLogicError": 3,
+    "AssertionError": 110,
+    "ZeroDivisionError": 2,
+    "missing fixture": 3,
+    "yPriceMagicError": 5
+  },
+  "failures": [
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x4688a8b1F292FDaB17E9a90c8Bc379dC1DBd8713]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x459086F2376525BdCebA5bDDA135e4E9d3FeF5bf]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x5555f75e3d5278082200Fb451D1b6bA946D8e13b]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-17267952]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/test_erc4626.py::test_erc4626_get_price_direct",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xC581b735A1688071A1746c968e0798D642EDE491]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-19444461]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x13B02c8dE71680e71F0820c996E4bE43c2F57d15]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-21620971]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xFAFdF0C4c1CB09d430Bf88c75D88BB46DAe09967]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-23797481]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-25973991]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xD71eCFF9342A5Ced620049e616c5035F1dB98620]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-11475581]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x408e41876cCCDC0F92210600ef50372656052a38]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-15100183]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/test_erc4626.py::test_sdai_price_greater_than_dai",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x1CC481cE2BD2EC7Bf67d1Be64d4878b16078F309]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-18724786]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x000000000000000000000000000000000000019a]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-22349388]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/test_erc4626.py::test_sdai_returns_price_result",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x0D8775F648430679A709E98d2b0Cb6250d2887EF]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-25973991]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-15931958]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-18442466]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-20952975]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-23463483]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-25973992]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-17708470]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-19774850]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/test_erc4626.py::test_erc4626_bucket",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-21841231]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48-6092465]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-23907611]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48-11062846]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-25973992]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48-16033228]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-4729568]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48-21003609]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-10040674]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48-25973991]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-15351780]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x0000000000085d4780B73119b644AE5ecd22b376-6998184]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-20662886]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x0000000000085d4780B73119b644AE5ecd22b376-11742135]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-25973992]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x0000000000085d4780B73119b644AE5ecd22b376-16486087]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-6776284]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x0000000000085d4780B73119b644AE5ecd22b376-21230039]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-11575711]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x0000000000085d4780B73119b644AE5ecd22b376-25973991]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-16375138]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-8938158]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-21174565]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-13197116]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-25973992]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-17456074]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-4630855]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-21715032]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-9966639]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-25973991]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-15302423]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-4644748]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-20638207]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-9977058]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-25973992]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-15309369]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x4Fabb145d64652a948d72533023f6E7A623C7C53]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/test_erc4626.py::test_sdai_price_positive",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-20641680]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x4C19596f5aAfF459fA38B0f7eD92F11AE6543784]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-25973991]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xcB3df3108635932D912632ef7132d03EcFC39080]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3-5761012]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3-10814256]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x853d955aCEf822Db058eb8505911ED77F175b99e]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x0000000000085d4780B73119b644AE5ecd22b376]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x6B175474E89094C44Da98b954EedeAC495271d0F]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0xdAC17F958D2ee523a2206206994597C13D831ec7]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xe28b3B32B6c345A34Ff64674606124Dd5Aceca30]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (603.77 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x4e840AADD28DA189B9906674B4Afcb77C128d9ea]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xf8C3527CC04340b208C854E985240c02F7B7793f]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x459086F2376525BdCebA5bDDA135e4E9d3FeF5bf]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x13B02c8dE71680e71F0820c996E4bE43c2F57d15]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x5CAF29fD8efbe4ED0cfc43A8a211B276E9889583]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0xEa5A82B35244d9e5E48781F00b11B14E627D2951]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x9AFb950948c2370975fb91a441F36FDC02737cD4]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x1C5db575E2Ff833E46a2E9864C22F4B22E0B37C2]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x81d66D255D47662b6B16f3C5bbfBb15283B05BC2]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0xd36932143F6eBDEDD872D5Fb0651f4B72Fd15a84]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0xa693B19d2931d498c5B318dF961919BB4aee87a5]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x3832d2F059E55934220881F831bE501D180671A7]",
+      "phase": "call",
+      "error": "web3.exceptions.ContractLogicError: execution reverted"
+    },
+    {
+      "test": "tests/prices/test_exotic_tokens.py::test_xpremia_bucket",
+      "phase": "call",
+      "error": "AssertionError: Expected 'xpremia' bucket for xPREMIA, got 'None'\nassert None == 'xpremia'\n  +None\n  -'xpremia'"
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xbA38029806AbE4B45D5273098137DDb52dA8e62F]",
+      "phase": "call",
+      "error": "ZeroDivisionError: float division by zero"
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xd2EF15af2649CC46e3E23B96563a3d44ef5E5A06]",
+      "phase": "call",
+      "error": "ZeroDivisionError: float division by zero"
+    },
+    {
+      "test": "tests/prices/test_curve_gauge.py::test_hardcoded_gauge_still_resolves",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (604.71 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v1[0x6B175474E89094C44Da98b954EedeAC495271d0F]",
+      "phase": "setup",
+      "error": "file /work/tests/prices/dex/test_uniswap.py, line 58\n  @pytest.mark.parametrize(\"token\", V1_TOKENS)\n  @pytest.mark.asyncio_cooperative\n  async def test_uniswap_v1(token, async_uni_v1):\n      \"\"\"Test Uniswap V1 price fetching.\n\n      This test concurrently retrieves the price using an asynchronous Uniswap V1 caller and the generic\n      :func:`~y.prices.magic.get_price` function. It verifies that the prices obtained from both methods are\n      consistent within a 5% relative tolerance.\n\n      Args:\n          token: The token address to query.\n          async_uni_v1: Fixture providing an asynchronous Uniswap V1 instance.\n\n      See Also:\n          :meth:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer.get_price`\n      \"\"\"\n      price, alt_price = await cgather(\n          async_uni_v1.get_price(token, None),\n          magic.get_price(token, skip_cache=True, sync=False),\n      )\n      print(token, price, alt_price)\n      # check if price is within 5% range\n      assert price == pytest.approx(alt_price, rel=5e-2)\nE       fixture 'async_uni_v1' not found\n>       available fixtures: Contract, a, accounts, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, chain, doctest_namespace, fn_isolation, history, interface, module_isolation, monkeypatch, no_call_coverage, pm, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, rpc, skip_coverage, state_machine, testrun_uid, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, web3, worker_id\n>       use 'pytest --fixtures [testpath]' for help on them.\n\n/work/tests/prices/dex/test_uniswap.py:58"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v1[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2]",
+      "phase": "setup",
+      "error": "file /work/tests/prices/dex/test_uniswap.py, line 58\n  @pytest.mark.parametrize(\"token\", V1_TOKENS)\n  @pytest.mark.asyncio_cooperative\n  async def test_uniswap_v1(token, async_uni_v1):\n      \"\"\"Test Uniswap V1 price fetching.\n\n      This test concurrently retrieves the price using an asynchronous Uniswap V1 caller and the generic\n      :func:`~y.prices.magic.get_price` function. It verifies that the prices obtained from both methods are\n      consistent within a 5% relative tolerance.\n\n      Args:\n          token: The token address to query.\n          async_uni_v1: Fixture providing an asynchronous Uniswap V1 instance.\n\n      See Also:\n          :meth:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer.get_price`\n      \"\"\"\n      price, alt_price = await cgather(\n          async_uni_v1.get_price(token, None),\n          magic.get_price(token, skip_cache=True, sync=False),\n      )\n      print(token, price, alt_price)\n      # check if price is within 5% range\n      assert price == pytest.approx(alt_price, rel=5e-2)\nE       fixture 'async_uni_v1' not found\n>       available fixtures: Contract, a, accounts, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, chain, doctest_namespace, fn_isolation, history, interface, module_isolation, monkeypatch, no_call_coverage, pm, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, rpc, skip_coverage, state_machine, testrun_uid, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, web3, worker_id\n>       use 'pytest --fixtures [testpath]' for help on them.\n\n/work/tests/prices/dex/test_uniswap.py:58"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v1[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2]",
+      "phase": "setup",
+      "error": "file /work/tests/prices/dex/test_uniswap.py, line 58\n  @pytest.mark.parametrize(\"token\", V1_TOKENS)\n  @pytest.mark.asyncio_cooperative\n  async def test_uniswap_v1(token, async_uni_v1):\n      \"\"\"Test Uniswap V1 price fetching.\n\n      This test concurrently retrieves the price using an asynchronous Uniswap V1 caller and the generic\n      :func:`~y.prices.magic.get_price` function. It verifies that the prices obtained from both methods are\n      consistent within a 5% relative tolerance.\n\n      Args:\n          token: The token address to query.\n          async_uni_v1: Fixture providing an asynchronous Uniswap V1 instance.\n\n      See Also:\n          :meth:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer.get_price`\n      \"\"\"\n      price, alt_price = await cgather(\n          async_uni_v1.get_price(token, None),\n          magic.get_price(token, skip_cache=True, sync=False),\n      )\n      print(token, price, alt_price)\n      # check if price is within 5% range\n      assert price == pytest.approx(alt_price, rel=5e-2)\nE       fixture 'async_uni_v1' not found\n>       available fixtures: Contract, a, accounts, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, chain, doctest_namespace, fn_isolation, history, interface, module_isolation, monkeypatch, no_call_coverage, pm, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, rpc, skip_coverage, state_machine, testrun_uid, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory, web3, worker_id\n>       use 'pytest --fixtures [testpath]' for help on them.\n\n/work/tests/prices/dex/test_uniswap.py:58"
+    },
+    {
+      "test": "tests/prices/test_exotic_tokens.py::test_xpremia_price",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (606.40 s)"
+    },
+    {
+      "test": "tests/prices/test_exotic_tokens.py::test_xpremia_returns_price_result",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (606.30 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[11000000]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[12497399]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.09 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[13994798]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[15492197]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[16989596]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.03 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[18486995]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.02 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[19984394]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[21481793]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[22979192]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (602.33 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[24476591]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.04 s)"
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xa0273C10b8A4BF0bDC57cb0bC974E3A9d89527b8]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0x495410B129A27bC771ce8fb316d804a5686B8Ea7]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE90]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE91]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x7FC66500C84A76AD7E9C93437BFC5AC33E2DDAE9]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x514910771af9ca656af840dff83e8264ecf986ca]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x514910771AF9CA656AF840DFF83E8264ECF986CA]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xa7053782dC3523D2C82B439Acf3f9344Fb47b97f]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.42 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x514910771AF9Ca656af840dff83E8264EcF986CA1]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x514910771AF9Ca656af840dff83E8264EcF986CA0]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xd2C5A739ebfE3E00CFa88A51749d367d7c496CCf]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.02 s)"
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0x949FDF28F437258E7564a35596b1A99b24F81e4e]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.01 s)"
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xFF338D347E59d6B61E5C69382915D863bb22Ef2f]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_balancer.py::test_balancer_v2_token_price",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.04 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xba11d00c5f74255f56a5e366f4f77f5a186d7f55]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xBA11D00C5F74255F56A5E366F4F77F5A186D7F55]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f550]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f551]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.35 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc00e94cb662c3520282e6f5717214004a7f26888]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc944E90C64B2c07662A292be6244BDf05Cda44a70]",
+      "phase": "call",
+      "error": "assert 0.01855848794737184 == 0.018766995930221794\n  +0.01855848794737184\n  -0.018766995930221794"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC944E90C64B2C07662A292BE6244BDF05CDA44A7]",
+      "phase": "call",
+      "error": "assert 0.01855848794737184 == 0.018766995930221794\n  +0.01855848794737184\n  -0.018766995930221794"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc944e90c64b2c07662a292be6244bdf05cda44a7]",
+      "phase": "call",
+      "error": "assert 0.01855848794737184 == 0.018766995930221794\n  +0.01855848794737184\n  -0.018766995930221794"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc944E90C64B2c07662A292be6244BDf05Cda44a71]",
+      "phase": "call",
+      "error": "assert 0.01855848794737184 == 0.018766995930221794\n  +0.01855848794737184\n  -0.018766995930221794"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xec67005c4e498ec7f55e092bd1d35cbc47c91892]",
+      "phase": "call",
+      "error": "assert 1.3267548218739824 == 1.3302392024560374\n  +1.3267548218739824\n  -1.3302392024560374"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x0F5D2fB29fb7d3CFeE444a200298f468908cC9420]",
+      "phase": "call",
+      "error": "assert 0.07577036589430525 == 0.07610095131780234\n  +0.07577036589430525\n  -0.07610095131780234"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC00E94CB662C3520282E6F5717214004A7F26888]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.28 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc00e94Cb662C3520282E6f5717214004A7f268880]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.34 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x0f5d2fb29fb7d3cfee444a200298f468908cc942]",
+      "phase": "call",
+      "error": "assert 0.07577036589430525 == 0.07610095131780234\n  +0.07577036589430525\n  -0.07610095131780234"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x0F5D2FB29FB7D3CFEE444A200298F468908CC942]",
+      "phase": "call",
+      "error": "assert 0.07577036589430525 == 0.07610095131780234\n  +0.07577036589430525\n  -0.07610095131780234"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x0F5D2fB29fb7d3CFeE444a200298f468908cC9421]",
+      "phase": "call",
+      "error": "assert 0.07577036589430525 == 0.07610095131780234\n  +0.07577036589430525\n  -0.07610095131780234"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xEC67005C4E498EC7F55E092BD1D35CBC47C91892]",
+      "phase": "call",
+      "error": "assert 1.3267548218739824 == 1.3302392024560374\n  +1.3267548218739824\n  -1.3302392024560374"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc00e94Cb662C3520282E6f5717214004A7f268881]",
+      "phase": "call",
+      "error": "assert 19.56903071789524 == 19.569538187101923\n  +19.56903071789524\n  -19.569538187101923"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xec67005c4E498Ec7f55E092bd1d35cbC47C918920]",
+      "phase": "call",
+      "error": "assert 1.3267548218739824 == 1.3302392024560374\n  +1.3267548218739824\n  -1.3302392024560374"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xec67005c4E498Ec7f55E092bd1d35cbC47C918921]",
+      "phase": "call",
+      "error": "assert 1.3267548218739824 == 1.3302392024560374\n  +1.3267548218739824\n  -1.3302392024560374"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x1f9840a85d5aF5bf1D1762F925BDADdC4201F9840]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x1f9840a85d5af5bf1d1762f925bdaddc4201f984]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x1F9840A85D5AF5BF1D1762F925BDADDC4201F984]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x1f9840a85d5aF5bf1D1762F925BDADdC4201F9841]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xd533a949740bb3306d119cc777fa900ba034cd52]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C5991]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x2260fac5e5542a773aa44fbcfedf7c193bc2c599]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C5990]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x2260FAC5E5542A773AA44FBCFEDF7C193BC2C599]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF8281]",
+      "phase": "call",
+      "error": "TypeError: cannot unpack non-iterable NoneType object"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x04fa0d235c4abf4bcf4787af4cf447de572ef828]",
+      "phase": "call",
+      "error": "TypeError: cannot unpack non-iterable NoneType object"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x04FA0D235C4ABF4BCF4787AF4CF447DE572EF828]",
+      "phase": "call",
+      "error": "TypeError: cannot unpack non-iterable NoneType object"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF8280]",
+      "phase": "call",
+      "error": "TypeError: cannot unpack non-iterable NoneType object"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F1]",
+      "phase": "call",
+      "error": "TypeError: cannot unpack non-iterable NoneType object"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE91]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE90]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7FC66500C84A76AD7E9C93437BFC5AC33E2DDAE9]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x6b175474e89094c44da98b954eedeac495271d0f]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f]",
+      "phase": "call",
+      "error": "assert 0.21412310439954704 == 0.214962268472416\n  +0.21412310439954704\n  -0.214962268472416"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x6B175474E89094C44DA98B954EEDEAC495271D0F]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x6B175474E89094C44Da98b954EedeAC495271d0F0]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.04 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x6B175474E89094C44Da98b954EedeAC495271d0F1]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.06 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC011A73EE8576FB46F5E1C5751CA3B9FE0AF2A6F]",
+      "phase": "call",
+      "error": "assert 0.21412310439954704 == 0.214962268472416\n  +0.21412310439954704\n  -0.214962268472416"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F0]",
+      "phase": "call",
+      "error": "assert 0.21412310439954704 == 0.214962268472416\n  +0.21412310439954704\n  -0.214962268472416"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xba11d00c5f74255f56a5e366f4f77f5a186d7f55]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.19581458, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f550]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.19581458, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xBA11D00C5F74255F56A5E366F4F77F5A186D7F55]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.19581458, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f551]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.19581458, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC00E94CB662C3520282E6F5717214004A7F26888]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$19.64372900, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc00e94cb662c3520282e6f5717214004a7f26888]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$19.64372900, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xdac17f958d2ee523a2206206994597c13d831ec7]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xdAC17F958D2ee523a2206206994597C13D831ec71]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xDAC17F958D2EE523A2206206994597C13D831EC7]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xdAC17F958D2ee523a2206206994597C13D831ec70]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.05 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x9F8F72AA9304C8B593D555F12EF6589CC3A579A2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.08 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A20]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc00e94Cb662C3520282E6f5717214004A7f268881]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$19.64372900, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc00e94Cb662C3520282E6f5717214004A7f268880]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$19.64372900, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x514910771af9ca656af840dff83e8264ecf986ca]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A21]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x514910771AF9Ca656af840dff83E8264EcF986CA1]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x514910771AF9CA656AF840DFF83E8264ECF986CA]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x514910771AF9Ca656af840dff83E8264EcF986CA0]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xe41d2489571d322189246dafa5ebde1f4699f498]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xD533A949740BB3306D119CC777FA900BA034CD52]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.36124914, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xD533a949740bb3306d119CC777fa900bA034cd520]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.36124914, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xd533a949740bb3306d119cc777fa900ba034cd52]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.36124914, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xE41D2489571D322189246DAFA5EBDE1F4699F498]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xE41d2489571d322189246DaFA5ebDe1F4699F4980]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xE41d2489571d322189246DaFA5ebDe1F4699F4981]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc944e90c64b2c07662a292be6244bdf05cda44a7]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.01887500, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC944E90C64B2C07662A292BE6244BDF05CDA44A7]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.01887500, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xD533a949740bb3306d119CC777fa900bA034cd521]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.36124914, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc944E90C64B2c07662A292be6244BDf05Cda44a71]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.01887500, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc944E90C64B2c07662A292be6244BDf05Cda44a70]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.01887500, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB480]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB481]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0F5D2fB29fb7d3CFeE444a200298f468908cC9420]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.07577037, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0F5D2FB29FB7D3CFEE444A200298F468908CC942]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.07577037, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0f5d2fb29fb7d3cfee444a200298f468908cc942]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.07577037, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xec67005c4e498ec7f55e092bd1d35cbc47c91892]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$1.32675482, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0F5D2fB29fb7d3CFeE444a200298f468908cC9421]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.07577037, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xEC67005C4E498EC7F55E092BD1D35CBC47C91892]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$1.32675482, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xec67005c4E498Ec7f55E092bd1d35cbC47C918920]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$1.33491998, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xec67005c4E498Ec7f55E092bd1d35cbC47C918921]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$1.33491998, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4fe83213d56308330ec302a8bd641f1d0113a4cc]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.01491175, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4FE83213D56308330EC302A8BD641F1D0113A4CC]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.01491175, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$1455.20271800, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x1f9840a85d5af5bf1d1762f925bdaddc4201f984]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x1F9840A85D5AF5BF1D1762F925BDADDC4201F984]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4fE83213D56308330EC302a8BD641f1d0113A4Cc0]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.01491175, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A20]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$1455.20271800, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A21]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$1455.20271800, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810E776880C02933D47DB1B9FC05908E5386B96]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[5 steps])\n  +None\n  -PriceResult(price=$114.06317500, path=[5 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880c02933d47db1b9fc05908e5386b96]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[5 steps])\n  +None\n  -PriceResult(price=$114.06317500, path=[5 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880C02933D47DB1b9fc05908e5386b960]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[5 steps])\n  +None\n  -PriceResult(price=$114.06317500, path=[5 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x1f9840a85d5aF5bf1D1762F925BDADdC4201F9840]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x1f9840a85d5aF5bf1D1762F925BDADdC4201F9841]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880C02933D47DB1b9fc05908e5386b961]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[5 steps])\n  +None\n  -PriceResult(price=$114.06317500, path=[5 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x9F8F72AA9304C8B593D555F12EF6589CC3A579A2]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$1455.20271800, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4fE83213D56308330EC302a8BD641f1d0113A4Cc1]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.01491175, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.02 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC02AAA39B223FE8D0A0E5C4F27EAD9083C756CC2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.02 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc20]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.02 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v2[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc21]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x04fa0d235c4abf4bcf4787af4cf447de572ef828]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.37209278, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x04FA0D235C4ABF4BCF4787AF4CF447DE572EF828]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.37209278, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC011A73EE8576FB46F5E1C5751CA3B9FE0AF2A6F]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.21654000, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.21654000, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF8280]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.37209278, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF8281]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[4 steps])\n  +None\n  -PriceResult(price=$0.37209278, path=[4 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F1]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.21654000, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F0]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.21654000, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x2260fac5e5542a773aa44fbcfedf7c193bc2c599]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x2260FAC5E5542A773AA44FBCFEDF7C193BC2C599]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6b175474e89094c44da98b954eedeac495271d0f]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.02 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C5990]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6B175474E89094C44DA98B954EEDEAC495271D0F]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.02 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C5991]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0BC529C00C6401AEF6D220BE8C6EA1667F6AD93E]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$2199.78000000, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$2199.78000000, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e0]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$2199.78000000, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6B175474E89094C44Da98b954EedeAC495271d0F0]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xE41d2489571d322189246DaFA5ebDe1F4699F4980]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.11249600, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xE41D2489571D322189246DAFA5EBDE1F4699F498]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.11249600, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xe41d2489571d322189246dafa5ebde1f4699f498]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.11249600, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e1]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$2199.78000000, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xE41d2489571d322189246DaFA5ebDe1F4699F4981]",
+      "phase": "call",
+      "error": "assert None == PriceResult(p...ath=[1 steps])\n  +None\n  -PriceResult(price=$0.11249600, path=[1 steps])"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6B175474E89094C44Da98b954EedeAC495271d0F1]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.01 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xDAC17F958D2EE523A2206206994597C13D831EC7]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xdac17f958d2ee523a2206206994597c13d831ec7]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x6F634c6135D2EBD550000ac92F494F9CB8183dAe]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xc2e2152647F4C26028482Efaf64b2Aa28779EFC4]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xdAC17F958D2ee523a2206206994597C13D831ec71]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xdAC17F958D2ee523a2206206994597C13D831ec70]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x0A6172fb19E85DBae18898eA2f7a596B5681f1eE]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_wrapped_atoken_v3",
+      "phase": "call",
+      "error": "assert False"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_wrapped_atoken_v2",
+      "phase": "call",
+      "error": "assert PriceResult(p...ath=[3 steps]) == 1.112026\n  +PriceResult(price=$1.11280275, path=[3 steps])\n  -1.112026"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x4Fabb145d64652a948d72533023f6E7A623C7C53]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x4C19596f5aAfF459fA38B0f7eD92F11AE6543784]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xcB3df3108635932D912632ef7132d03EcFC39080]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x4688a8b1F292FDaB17E9a90c8Bc379dC1DBd8713]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xC581b735A1688071A1746c968e0798D642EDE491]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xe28b3B32B6c345A34Ff64674606124Dd5Aceca30]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xf8C3527CC04340b208C854E985240c02F7B7793f]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x8290333ceF9e6D528dD5618Fb97a76f268f3EDD4]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f55]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xCa5DFDABBfFD58cfD49A9f78Ca52eC8e0591a3C5]",
+      "phase": "call",
+      "error": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet G-UNI 0xD2eeC91055F07fE24C9cCB25828ecfEFd4be0c41 at block 25974244"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x584bC13c7D411c00c01A62e8019472dE68768430]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xd26114cd6EE289AccF82350c8d8487fedB8A0C07]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x4575f41308EC1483f3d399aa9a2826d74Da13Deb]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x75231F58b43240C9718Dd58B4967c5114342a86c]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x0000000000000000000000000000000000000236]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xD46bA6D942050d489DBd938a2C909A5d5039A161]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x3155BA85D5F96b2d030a4966AF206230e46849cb]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x0000000000000000000000000000000000000164]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x967da4048cD07aB37855c090aAF366e4ce1b9F48]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xfF20817765cB7f73d4bde2e66e067E58D11095C2]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xbE9375C6a420D2eEB258962efB95551A5b722803]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x84cA8bc7997272c7CfB4D0Cd3D55cd942B3c9419]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xADE00C28244d5CE17D72E40330B1c318cD12B7c3]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xa3BeD4E1c75D00fa6f4E5E6922DB7261B5E9AcD2]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x57Ab1ec28D129707052df4dF418D58a2D46d5f51]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xe1aFe1Fd76Fd88f78cBf599ea1846231B8bA3B6B]",
+      "phase": "call",
+      "error": "AssertionError: assert 'synthetix' == 'chainlink feed'\n  - chainlink feed\n  + synthetix"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x674C6Ad92Fd080e4004b2312b45f796a192D27a0]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x3472A5A71965499acd81997a54BBA8D852C6E53d]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB480]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB481]",
+      "phase": "call",
+      "error": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x00000000000000000000000000000000000002c6]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x8CE9137d39326AD0cD6491fb5CC0CbA0e089b6A9]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x6f259637dcD74C767781E37Bc6133cd6A68aa161]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x8Ab7404063Ec4DBcfd4598215992DC3F8EC853d7]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x221657776846890989a759BA2973e427DfF5C9bB]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink[0x33D0568941C0C64ff7e0FB4fbA0B11BD37deEd9f]",
+      "phase": "call",
+      "error": "AssertionError: assert None == 'chainlink feed'\n  +None\n  -'chainlink feed'"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.05 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc20]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.12 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02AAA39B223FE8D0A0E5C4F27EAD9083C756CC2]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.49 s)"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc21]",
+      "phase": "call",
+      "error": "asyncio.exceptions.CancelledError: Test took too long (600.43 s)"
+    },
+    {
+      "test": "tests/test_constants.py::test_stablecoins[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48]",
+      "phase": "call",
+      "error": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet USDC 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 at block 6092465"
+    },
+    {
+      "test": "tests/test_constants.py::test_stablecoins[0x0000000000085d4780B73119b644AE5ecd22b376]",
+      "phase": "call",
+      "error": "web3.exceptions.ContractLogicError: execution reverted: implementation contract not set"
+    },
+    {
+      "test": "tests/test_constants.py::test_stablecoins[0x6B175474E89094C44Da98b954EedeAC495271d0F]",
+      "phase": "call",
+      "error": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet DAI 0x6B175474E89094C44Da98b954EedeAC495271d0F at block 8938158"
+    },
+    {
+      "test": "tests/test_constants.py::test_stablecoins[0xdAC17F958D2ee523a2206206994597C13D831ec7]",
+      "phase": "call",
+      "error": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet USDT 0xdAC17F958D2ee523a2206206994597C13D831ec7 at block 4644748"
+    },
+    {
+      "test": "tests/test_constants.py::test_stablecoins[0x57Ab1E02fEE23774580C119740129eAC7081e9D3]",
+      "phase": "call",
+      "error": "web3.exceptions.ContractLogicError: execution reverted"
+    },
+    {
+      "test": "tests/test_constants.py::test_stablecoins[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E]",
+      "phase": "call",
+      "error": "AssertionError: Stablecoin price not $1\nassert PriceResult(p...ath=[4 steps]) == 1\n  +PriceResult(price=$0.99964761, path=[4 steps])\n  -1"
+    },
+    {
+      "test": "tests/test_constants.py::test_stablecoins[0x853d955aCEf822Db058eb8505911ED77F175b99e]",
+      "phase": "call",
+      "error": "AssertionError: Stablecoin price not $1\nassert PriceResult(p...ath=[5 steps]) == 1\n  +PriceResult(price=$3.19148558, path=[5 steps])\n  -1"
+    },
+    {
+      "test": "tests/test_constants.py::test_stablecoins[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8]",
+      "phase": "call",
+      "error": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet PYUSD 0x6c3ea9036406852006290770BEdFcAbA0e23A0e8 at block 15931958"
+    },
+    {
+      "test": "tests/test_constants.py::test_stablecoins[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f]",
+      "phase": "call",
+      "error": "AssertionError: Stablecoin price not $1\nassert PriceResult(p...ath=[5 steps]) == 1\n  +PriceResult(price=$0.98842174, path=[5 steps])\n  -1"
+    }
+  ]
+}

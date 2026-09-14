@@ -5,7 +5,8 @@ unchanged 8 GiB limit. Event loading now bounds historical chunks and pending
 writes. The [latest storage repair](storage-retention/README.md) removes retained
 SQL payload strings and defers unused reserve-call handles. Controlled memory
 checks, the 270-case Python matrix, and PostgreSQL persistence checks pass.
-The repaired full suite and remaining real-node checks still need completion.
+The [repaired full suite](storage-full-suite/README.md) records 1,240 of 1,857
+cases before another OOM. Remaining real-node checks still need completion.
 
 ## Current evidence
 
@@ -56,6 +57,12 @@ isort, and autoflake for the changed Python files. Recorded source fixtures use
 and original names remain recorded.
 
 ## Full suites and source identity
+
+The [storage-repair full run](storage-full-suite/README.md) records 893 passed
+calls, 330 failed calls, 14 skips, and three setup failures before Docker stops
+it for OOM at 3,639.60 seconds. It has no final pytest summary and misses the
+7 GiB memory target. The source, dependency image, partial failure comparisons,
+and final cgroup state remain recorded. Further cache ownership work is required.
 
 The [new full-suite sequence](requester-full-suites/README.md) uses the repaired
 requester image and direct Lambo Reth. The original revision records 415 terminal
