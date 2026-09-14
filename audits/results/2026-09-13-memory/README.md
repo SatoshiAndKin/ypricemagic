@@ -4,8 +4,9 @@ Validation is incomplete. PR #43 remains draft. Three full suites before the
 event-loader repair reach the unchanged 8 GiB limit. The repair now bounds raw
 historical chunks and pending writes by the existing fetch capacity. Controlled
 memory checks and the 264-case Python matrix pass. The committed repair
-has completed historical profiling. The full suite is running, and remaining
-real-node checks still need completion.
+completes historical profiling, but the [next full suite](event-full-suite/README.md)
+also reaches 8 GiB. Uniswap allocation diagnosis and remaining real-node checks
+still need completion.
 
 ## Current evidence
 
