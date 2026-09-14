@@ -1,0 +1,10 @@
+{
+  "complete": true,
+  "application_version": "0.0.0",
+  "dependency_versions": {
+    "ez-a-sync": "0.34.3.dev17",
+    "mypy": "1.19.1+bytesrefcount1",
+    "eth-brownie": "1.22.0.dev2"
+  },
+  "global_override_present": false
+}

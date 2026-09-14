@@ -32,6 +32,8 @@ Use an endpoint that Docker can reach. The runner writes the endpoint only to th
 container's private Brownie configuration. Keep the env file outside the repo.
 The runner does not copy host Brownie databases, environments, or credentials.
 Each run uses a new database and source directory inside its container.
+The archive version override applies only to the `ypricemagic` distribution.
+Dependency builds keep their own source versions.
 
 The runner accepts a Git revision, a new report directory, and a command after
 `--`. Use `--revision worktree` during development. Its report includes both the

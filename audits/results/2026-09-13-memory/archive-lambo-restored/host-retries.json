@@ -1,0 +1,66 @@
+{
+  "unix_time": 1789347934.932956,
+  "boundary": "host direct read-only probes; Docker preflight still required",
+  "results": [
+    {
+      "backend": "NUC Reth",
+      "samples": [
+        {
+          "mode": "number",
+          "block": "0x100ce30",
+          "id": 1,
+          "deadline_seconds": 30,
+          "passed": false,
+          "error_type": "TimeoutError",
+          "elapsed_seconds": 30.021333999931812
+        },
+        {
+          "mode": "canonical_hash",
+          "block": {
+            "blockHash": "0x6e65cf41a9208837f764d22dd0358f7d67f57cd71ec5ee975d98674e292322bd",
+            "requireCanonical": true
+          },
+          "id": 1,
+          "deadline_seconds": 30,
+          "passed": false,
+          "error_type": "TimeoutError",
+          "elapsed_seconds": 30.00796450022608
+        }
+      ]
+    },
+    {
+      "backend": "Lambo Reth",
+      "samples": [
+        {
+          "mode": "number",
+          "block": "0x100ce30",
+          "id": 1,
+          "deadline_seconds": 30,
+          "response": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": "0x0000000000000000000000000000000000000000000000000000000000000006"
+          },
+          "pass": true,
+          "elapsed_seconds": 0.03344454197213054
+        },
+        {
+          "mode": "canonical_hash",
+          "block": {
+            "blockHash": "0x6e65cf41a9208837f764d22dd0358f7d67f57cd71ec5ee975d98674e292322bd",
+            "requireCanonical": true
+          },
+          "id": 1,
+          "deadline_seconds": 30,
+          "response": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": "0x0000000000000000000000000000000000000000000000000000000000000006"
+          },
+          "pass": true,
+          "elapsed_seconds": 0.009600999765098095
+        }
+      ]
+    }
+  ]
+}

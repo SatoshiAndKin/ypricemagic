@@ -1,0 +1,12 @@
+unit (ubuntu-latest, 3.10)	Run unit tests	2026-09-14T01:10:33.1227306Z ======================= 150 passed, 6 warnings in 13.70s =======================
+unit (ubuntu-latest, 3.12)	Run unit tests	2026-09-14T01:10:23.6846022Z ===================== 150 passed, 3002 warnings in 10.92s ======================
+unit (macos-latest, 3.11)	Run unit tests	2026-09-14T01:12:41.9471240Z ======================= 150 passed, 6 warnings in 54.51s =======================
+unit (ubuntu-latest, 3.13)	Run unit tests	2026-09-14T01:10:24.2258417Z ===================== 150 passed, 3002 warnings in 10.65s ======================
+unit (windows-latest, 3.10)	Run unit tests	2026-09-14T01:11:02.4589879Z ====================== 150 passed, 6 warnings in 19.28s =======================
+unit (macos-latest, 3.13)	Run unit tests	2026-09-14T01:13:00.5174340Z ===================== 150 passed, 3002 warnings in 45.66s ======================
+unit (macos-latest, 3.10)	Run unit tests	2026-09-14T01:13:00.8202160Z ======================= 150 passed, 6 warnings in 49.58s =======================
+unit (ubuntu-latest, 3.11)	Run unit tests	2026-09-14T01:10:24.1462172Z ======================= 150 passed, 6 warnings in 10.37s =======================
+unit (windows-latest, 3.12)	Run unit tests	2026-09-14T01:11:00.0642402Z ===================== 150 passed, 3002 warnings in 19.28s =====================
+unit (windows-latest, 3.11)	Run unit tests	2026-09-14T01:10:54.3514883Z ====================== 150 passed, 6 warnings in 18.02s =======================
+unit (macos-latest, 3.12)	Run unit tests	2026-09-14T01:13:50.7519510Z ===================== 150 passed, 3002 warnings in 47.14s ======================
+unit (windows-latest, 3.13)	Run unit tests	2026-09-14T01:10:41.5232628Z ===================== 150 passed, 3002 warnings in 15.37s =====================

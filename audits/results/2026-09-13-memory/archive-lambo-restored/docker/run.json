@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python",
+    "/runner/probe.py"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789348081.470712,
+  "source_sha": "6458675cc9cc929689234016c1848cc9123714a1",
+  "source_revision": "HEAD",
+  "source_archive_sha256": "45674611f283edc4cbf1aaff4da610caf497158d96681336dc1324176f42f178",
+  "image": "sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 3.6819911003112793
+}

@@ -1,0 +1,33 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m pip install --no-deps --no-build-isolation -e . && python -c \"$1\"",
+    "scope",
+    "import importlib.metadata as md,json,os\nfrom pathlib import Path\nassert 'SETUPTOOLS_SCM_PRETEND_VERSION' not in os.environ\nassert os.environ['SETUPTOOLS_SCM_PRETEND_VERSION_FOR_YPRICEMAGIC']=='0.0.0'\nassert md.version('ypricemagic')=='0.0.0'\nPath('/reports/version-scope.json').write_text(json.dumps({'complete':True,'application_version':md.version('ypricemagic'),'dependency_versions':{name:md.version(name) for name in ['ez-a-sync','mypy','eth-brownie']},'global_override_present':False},indent=2)+'\\n')\n"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 88.82074292800098,
+  "peak_sampled_process_rss_bytes": 1066532864,
+  "cgroup_before": {
+    "memory.current": "8970240",
+    "memory.peak": "8970240",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "134930432",
+    "memory.peak": "1171263488",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

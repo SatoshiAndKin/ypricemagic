@@ -1,0 +1,23 @@
+{
+  "command": [
+    "env",
+    "PYTEST_PLUGINS=",
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1",
+    "python",
+    "-c",
+    "from pathlib import Path\nimport json,sys,tomllib,pytest\nclass Results:\n def __init__(self): self.rows=[]\n def pytest_runtest_logreport(self,report):\n  self.rows.append(dict(test=report.nodeid,phase=report.when,outcome=report.outcome,error=str(report.longrepr) if report.failed else None))\n def pytest_sessionfinish(self,session,exitstatus):\n  Path('/reports/owner-tests.json').write_text(json.dumps(dict(collected=session.testscollected,exit_code=int(exitstatus),events=self.rows),indent=2)+'\\n')\nconfig=tomllib.loads(Path('pyproject.toml').read_text())\nraise SystemExit(pytest.main(config['tool']['validation']['focused_tests'],plugins=[Results()]))\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789346263.721233,
+  "source_sha": "cc66b8e5754def5ea8cb2a214ce949049977a006",
+  "source_revision": "worktree",
+  "source_archive_sha256": "4a7b922cbf1625d53269c091d4ec1a497feaf64e767f1c26d08866b2b6824abb",
+  "image": "sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 4.424152135848999
+}

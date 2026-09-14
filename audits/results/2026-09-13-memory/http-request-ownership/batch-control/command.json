@@ -1,0 +1,34 @@
+{
+  "command": [
+    "env",
+    "PYTEST_PLUGINS=",
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1",
+    "python",
+    "-c",
+    "from pathlib import Path\nimport json,sys,tomllib,pytest\nclass Results:\n def __init__(self): self.rows=[]\n def pytest_runtest_logreport(self,report):\n  self.rows.append(dict(test=report.nodeid,phase=report.when,outcome=report.outcome,error=str(report.longrepr) if report.failed else None))\n def pytest_sessionfinish(self,session,exitstatus):\n  Path('/reports/owner-tests.json').write_text(json.dumps(dict(collected=session.testscollected,exit_code=int(exitstatus),events=self.rows),indent=2)+'\\n')\nconfig=tomllib.loads(Path('pyproject.toml').read_text())\nraise SystemExit(pytest.main(config['tool']['validation']['focused_tests'],plugins=[Results()]))\n"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 3.2866044900001725,
+  "peak_sampled_process_rss_bytes": 188284928,
+  "cgroup_before": {
+    "memory.current": "8908800",
+    "memory.peak": "8908800",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "15187968",
+    "memory.peak": "160210944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

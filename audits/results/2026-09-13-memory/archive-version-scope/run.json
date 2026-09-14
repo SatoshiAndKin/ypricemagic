@@ -1,0 +1,22 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m pip install --no-deps --no-build-isolation -e . && python -c \"$1\"",
+    "scope",
+    "import importlib.metadata as md,json,os\nfrom pathlib import Path\nassert 'SETUPTOOLS_SCM_PRETEND_VERSION' not in os.environ\nassert os.environ['SETUPTOOLS_SCM_PRETEND_VERSION_FOR_YPRICEMAGIC']=='0.0.0'\nassert md.version('ypricemagic')=='0.0.0'\nPath('/reports/version-scope.json').write_text(json.dumps({'complete':True,'application_version':md.version('ypricemagic'),'dependency_versions':{name:md.version(name) for name in ['ez-a-sync','mypy','eth-brownie']},'global_override_present':False},indent=2)+'\\n')\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789347991.462701,
+  "source_sha": "6458675cc9cc929689234016c1848cc9123714a1",
+  "source_revision": "worktree",
+  "source_archive_sha256": "afde08f94d7ec749d83edebe605152a2ba214839d4c93407f975fb1fbea36b10",
+  "image": "sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 89.84409809112549
+}

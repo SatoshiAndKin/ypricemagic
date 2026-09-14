@@ -1,14 +1,23 @@
 # Contained memory validation
 
 Validation is incomplete. PR #43 remains draft. The changed full suite ended
-after file-descriptor exhaustion. Subsequent archive probes prevent the control
-suite and real-node checks from starting. Controlled dependency ownership work
-continues. A passing focused test run does not complete the remaining gates.
+after file-descriptor exhaustion. The owning dependency now releases cancelled
+HTTP requests and completed batch tasks. Its native tests pass on all supported
+CI test platforms. Direct Lambo Reth archive access has recovered. The pricing
+matrix passes with the repaired dependency. New full suites will use that image.
 
 ## Current evidence
 
-The [bulk fixture checks](bulk-fixture-ownership/README.md) pass all 251 focused
-tests on Linux ARM64 Python 3.11, 3.12, and 3.13. Every run loads all ten configured
+The [HTTP ownership repair](http-request-ownership/README.md) reduces median
+process peak RSS from 203,718,656 to 169,242,624 bytes in the identical 256-call
+local workload. Retained connections and requester tasks fall from 256 to zero.
+The 6,400-call turnover check keeps zero of each and 27 file descriptors after
+every round. All 150 dependency tests pass in each of 12 native CI jobs; all 15
+native builds pass. The application now pins their generated artifacts. The
+local source comparison fixes 20 failures with no added failed test IDs.
+
+The [current dependency matrix](requester-owner-matrix/README.md) passes all 251
+focused tests on Linux ARM64 Python 3.11, 3.12, and 3.13. Every run loads all ten configured
 compiled extensions and passes the historical archive probe. No OOM occurs.
 The final type checks report 1,935 errors on each version, compared with 1,959
 before optimization under the same dependencies. No rendered diagnostic was
@@ -16,11 +25,12 @@ added; 24 were removed. These type checks still fail.
 
 | Python | Focused passes | Container peak bytes | Run elapsed seconds |
 | --- | ---: | ---: | ---: |
-| 3.11 | 251 | 1,127,145,472 | 257.59 |
-| 3.12 | 251 | 1,162,887,168 | 255.77 |
-| 3.13 | 251 | 1,166,450,688 | 290.16 |
+| 3.11 | 251 | 1,132,236,800 | 226.68 |
+| 3.12 | 251 | 1,169,694,720 | 247.19 |
+| 3.13 | 251 | 1,172,312,064 | 219.23 |
 
-The same four fixture release checks fail before cleanup and pass afterward.
+The [same four fixture release checks](bulk-fixture-ownership/README.md) fail
+before cleanup and pass afterward.
 They cover child failure and caller cancellation during price and deployment
 mapping. The fixtures retain their token lists, historical blocks, assertions,
 600-second deadline, and existing concurrency.
@@ -38,7 +48,7 @@ and original names remain recorded.
 
 ## Full suites and source identity
 
-| Source | Revision | Status with final Python 3.12 dependency image |
+| Source | Revision | Status before the HTTP ownership repair |
 | --- | --- | --- |
 | Original PR baseline | `476af288a520a30052668a8b3ad7e3e682cd101f` | OOM; incomplete |
 | Before memory changes | `61be7b520aba7f771a0bf96b326315e68767fae4` | Archive probe timeout; pytest did not start |
@@ -54,8 +64,9 @@ The [changed full run](full-optimized-descriptor-failure/README.md) records
 410 terminal outcomes out of 1,838 collected cases. It peaks at 1,173,213,184 bytes
 with no OOM, but has no final pytest summary. Its early exit prevents a full
 memory or failure comparison. [Later archive probes](archive-after-full-failure/README.md)
-time out on the required USDC call through direct NUC Reth. The native, public
-pricing, and audit checks have not started with these final dependencies.
+time out on the required USDC call through direct NUC Reth. A subsequent
+[direct Lambo Reth probe](archive-lambo-restored/README.md) passes. The native,
+public pricing, and audit checks still need the newly repaired dependency image.
 
 All three suite commands select image
 `sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b`,
@@ -85,6 +96,7 @@ Different rows use different dependency builds.
 | [Request diagnostics](logger-comparison.json) | 215,588,864 | 183,836,672 | 10,000 requests; retained loggers and tasks fall from 10,000 to zero |
 | [Callable ownership](async-ownership/README.md) | 98,758,656 | 32,768,000 | 1,000 callables; all captured owners released |
 | [HTTP retry ownership](dank-retry/comparison.json) | 295,972,864 | 227,442,688 | 64 concurrent requests; 1,088 attempts; unchanged request IDs and retry rules |
+| [HTTP cancellation ownership](http-request-ownership/comparison.json) | 203,718,656 | 169,242,624 | 64 concurrent requests; 256 identical HTTP bodies; connections and requester tasks fall to zero |
 
 The Sushi comparison uses the older locked dependency image. Its median elapsed
 time changes from 2.761 to 2.653 seconds, with identical amounts and quote outputs.
@@ -119,11 +131,16 @@ actual cancellation, duplicate prevention, and report persistence. A deliberate
 files retained; the 600 MiB fixture discloses 100 MiB of expired output. Structured
 pytest results and audit JSON/CSV remain separate from console logs.
 
-The [direct Reth checks](reth-backends/README.md) establish archive access through
-NUC Reth. USDC decimals return 6 at blocks 16,830,000 and 18,000,000 by number
-and canonical hash. Lambo Reth timed out in the recorded probes, and the proxy
-returned HTTP 408. The expected Geth archive failure remains a separate control.
-These observations do not establish the cause of individual pricing timeouts.
+The [latest direct Reth checks](archive-lambo-restored/README.md) establish archive
+access through Lambo Reth. The Docker probe returns USDC decimals 6 at blocks
+16,830,000 and 18,000,000, including canonical hash selection. Direct NUC Reth
+times out in the new host retries. [Earlier observations](reth-backends/README.md)
+remain recorded separately. The expected Geth archive failure remains a separate
+control. These checks do not establish the cause of individual pricing timeouts.
+
+The [archive version check](archive-version-scope/README.md) verifies that the
+runner applies its source version override only to ypricemagic. Dependency
+source builds keep their own versions.
 
 ## Earlier evidence
 

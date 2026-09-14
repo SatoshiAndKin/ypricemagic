@@ -26,7 +26,7 @@ ckzg==2.1.5
 click==8.5.0
 cloudpickle==3.1.2
 cytoolz==1.1.0
-dank-mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@c4f8ad7fc62152f0017ee6a6b206e31b4fe03579
+dank-mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@9a58cd91b4a652ac10d41cc5862c7b2770727632
 dictstruct==0.0.9
 eip712==0.3.3
 eth-account==0.13.7

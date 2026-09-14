@@ -372,7 +372,7 @@ def main() -> int:
                 "--env=PYTEST_PLUGINS=pytest_report",
                 "--env=PYTHONPATH=/runner:/work",
                 "--env=YPRICEMAGIC_SQLITE_PATH=/data/prices.sqlite",
-                "--env=SETUPTOOLS_SCM_PRETEND_VERSION=0.0.0",
+                "--env=SETUPTOOLS_SCM_PRETEND_VERSION_FOR_YPRICEMAGIC=0.0.0",
                 "--env=VALIDATION_REPORT=/reports",
                 "--env=PYTHONUNBUFFERED=1",
             ]

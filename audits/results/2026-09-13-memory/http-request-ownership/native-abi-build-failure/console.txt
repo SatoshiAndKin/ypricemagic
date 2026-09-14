@@ -1,0 +1,72 @@
+Collecting coverage==7.10.7
+  Downloading coverage-7.10.7-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (8.9 kB)
+Downloading coverage-7.10.7-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (253 kB)
+Installing collected packages: coverage
+Successfully installed coverage-7.10.7
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+
+[notice] A new release of pip is available: 25.0.1 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip
+Requirement already satisfied: mypy==1.19.1 in /usr/local/lib/python3.12/site-packages (from mypy[mypyc]==1.19.1->-r /work/requirements-build.txt (line 1)) (1.19.1+bytesrefcount1)
+Requirement already satisfied: setuptools in /usr/local/lib/python3.12/site-packages (from -r /work/requirements-build.txt (line 2)) (80.10.2)
+Requirement already satisfied: types-requests in /usr/local/lib/python3.12/site-packages (from -r /work/requirements-build.txt (line 3)) (2.33.0.20260906)
+Requirement already satisfied: eth-typing==5.2.1 in /usr/local/lib/python3.12/site-packages (from -r /work/requirements-build.txt (line 4)) (5.2.1)
+Requirement already satisfied: eth-retry==0.3.7 in /usr/local/lib/python3.12/site-packages (from -r /work/requirements-build.txt (line 5)) (0.3.7)
+Collecting ez-a-sync==0.34.2 (from -r /work/requirements-build.txt (line 6))
+  Downloading ez_a_sync-0.34.2.tar.gz (3.7 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.7/3.7 MB 15.9 MB/s eta 0:00:00
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting faster-eth-abi==5.2.26 (from -r /work/requirements-build.txt (line 7))
+  Downloading faster_eth_abi-5.2.26.tar.gz (89 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'error'
+  error: subprocess-exited-with-error
+  
+  × Preparing metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [10 lines of output]
+      faster_eth_abi/tools/_strategies.py:44: error: Missing type parameters for generic type "SearchStrategy"  [type-arg]
+      faster_eth_abi/tools/_strategies.py:45: error: Missing type parameters for generic type "SearchStrategy"  [type-arg]
+      faster_eth_abi/tools/_strategies.py:65: error: Missing type parameters for generic type "SearchStrategy"  [type-arg]
+      faster_eth_abi/tools/_strategies.py:92: error: Missing type parameters for generic type "SearchStrategy"  [type-arg]
+      faster_eth_abi/tools/_strategies.py:103: error: Missing type parameters for generic type "SearchStrategy"  [type-arg]
+      faster_eth_abi/tools/_strategies.py:118: error: Missing type parameters for generic type "SearchStrategy"  [type-arg]
+      faster_eth_abi/tools/_strategies.py:130: error: Missing type parameters for generic type "SearchStrategy"  [type-arg]
+      faster_eth_abi/tools/_strategies.py:142: error: Missing type parameters for generic type "SearchStrategy"  [type-arg]
+      faster_eth_abi/tools/_strategies.py:157: error: Missing type parameters for generic type "SearchStrategy"  [type-arg]
+      faster_eth_abi/tools/_strategies.py:175: error: Missing type parameters for generic type "SearchStrategy"  [type-arg]
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+
+[notice] A new release of pip is available: 25.0.1 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> See above for output.
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+Traceback (most recent call last):
+  File "/work/scripts/run_mypyc_build.py", line 105, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/work/scripts/run_mypyc_build.py", line 97, in main
+    run_checked(install_command)
+  File "/work/scripts/run_mypyc_build.py", line 65, in run_checked
+    subprocess.run(command, check=True, cwd=ROOT, env=env)
+  File "/usr/local/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['python', '-m', 'pip', 'install', '-r', '/work/requirements-build.txt']' returned non-zero exit status 1.
