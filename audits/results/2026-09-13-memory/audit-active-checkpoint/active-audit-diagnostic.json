@@ -1,0 +1,72 @@
+{
+  "complete": true,
+  "kind": "read-only diagnostic; not a final audit report",
+  "observed_unix": 1789430269.0641248,
+  "source_sha": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+  "tool": {
+    "version": "0.4.2",
+    "wheel_url": "https://files.pythonhosted.org/packages/89/23/3eb4c23c684ebd667674ce1d076ae855e0621d1d9bd5e052aa3f7982f757/py_spy-0.4.2-py2.py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+    "wheel_sha256": "142887e984a4e541071c99a4401ff8c3770f255d329dbd0f64e8c1dd51882cce",
+    "binary_sha256": "d33e743ff7962b4aeefaa34ee87ae1b35e047967f983d660c5335602cb44fba5",
+    "purpose": "One read-only native stack and Python local variable snapshot of the active audit; no application dependency change"
+  },
+  "sample": {
+    "sample_unix": 1789429802.920741,
+    "attach_exit": 0,
+    "truncated": false,
+    "captured_bytes": 27454,
+    "stack_sha256": "e45e056ee55604322a6f4dabc8cb7e11f01272774b0531e868c585b43b029337",
+    "container_state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-09-14T23:50:02.738614989Z",
+      "FinishedAt": "2026-09-14T23:50:02.904131682Z"
+    },
+    "limits": {
+      "Memory": 134217728,
+      "MemorySwap": 134217728,
+      "NanoCpus": 250000000,
+      "PidsLimit": 32,
+      "NetworkMode": "none",
+      "PidMode": "container:6e250707b4a04a24c2a5e9b3b49d1983b44314a44a7711b8bac604e8a28630b8",
+      "CapAdd": [
+        "CAP_SYS_PTRACE"
+      ],
+      "CapDrop": [
+        "ALL"
+      ]
+    }
+  },
+  "main_thread_frames": [
+    "select (selectors.py:468)",
+    "_run_once (asyncio/base_events.py:1961)",
+    "run_forever (asyncio/base_events.py:645)",
+    "run_until_complete (asyncio/base_events.py:678)",
+    "run_manifest (y/audit.py:419)",
+    "main (y/cli.py:322)"
+  ],
+  "last_retained_request_diagnostic": {
+    "operation": "y.prices._markets.discover",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "block": 16797588,
+    "block_hash": "0x9c6aaff4be2b414d8411d84e5d10d99556d4bb7e49fde7171d6c28cad318a9d0",
+    "request_amount_units": 720585692050498645,
+    "request_amount_decimals": 18,
+    "diagnostic_minutes": 10.0
+  },
+  "bounded_map_diagnostic_bytes": 63702722,
+  "limitations": [
+    "The stack sample waits in the event loop and does not establish a deadlock.",
+    "The request diagnostic is the last retained matching log message, not a completed audit row.",
+    "Raw local-variable output stays private; the record preserves its hash.",
+    "The diagnostic container is removed. Application source and dependencies remain unchanged.",
+    "The audit includes this short diagnostic sample; no unprofiled pricing timing repetition uses it."
+  ]
+}

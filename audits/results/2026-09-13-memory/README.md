@@ -48,6 +48,11 @@ measure all Python or native memory. The baseline mainnet audit ends with OOM
 after 819.25 seconds, with no audit JSON or CSV. It remains incomplete. Console
 rotation expires 104,857,600 bytes (100 MiB) of output; the retention report
 discloses that loss. The optimized audit continues in the existing queue.
+The [active audit checkpoint](audit-active-checkpoint/README.md), captured on
+September 15 at 17:35 UTC, records a 6.04 GiB container peak and no OOM events.
+It preserves source identity, all ten compiled checks, archive evidence, and
+sparse process and container memory samples. Audit JSON, CSV, and final status
+remain missing at that checkpoint; it provides no completed audit row counts.
 
 ## Latest pool ownership repair
 

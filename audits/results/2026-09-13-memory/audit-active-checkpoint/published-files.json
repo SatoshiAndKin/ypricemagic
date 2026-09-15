@@ -1,0 +1,56 @@
+[
+  {
+    "file": "active-audit-diagnostic.json",
+    "private_original_sha256": "50b5f4ce806913910639106847209546d0725829cebc68363b46a6fd5ed7b0a0",
+    "published_sha256": "50b5f4ce806913910639106847209546d0725829cebc68363b46a6fd5ed7b0a0",
+    "private_values_removed": false
+  },
+  {
+    "file": "checkpoint.json",
+    "private_original_sha256": "0462053b34a994dcaa6b52f598e40ea3ef9a061773df9223b0312b3150629340",
+    "published_sha256": "0462053b34a994dcaa6b52f598e40ea3ef9a061773df9223b0312b3150629340",
+    "private_values_removed": false
+  },
+  {
+    "file": "compiled-modules.json",
+    "private_original_sha256": "f7c8033a81021cf5121a9f6f3a025fdb0d1c7d49a38813efb2d30f529dfd33f2",
+    "published_sha256": "f7c8033a81021cf5121a9f6f3a025fdb0d1c7d49a38813efb2d30f529dfd33f2",
+    "private_values_removed": false
+  },
+  {
+    "file": "dependencies.txt",
+    "private_original_sha256": "36efe52a7e3ce9e8cbf3c6fef3dc1cddd3fe6bbb4a965aab2e7d47c38df72657",
+    "published_sha256": "36efe52a7e3ce9e8cbf3c6fef3dc1cddd3fe6bbb4a965aab2e7d47c38df72657",
+    "private_values_removed": false
+  },
+  {
+    "file": "earlier-archive-probe.json",
+    "private_original_sha256": "5bb02b4559618764db962cee17077f76f9aa722be33f70d5475cb8c149511ba5",
+    "published_sha256": "5bb02b4559618764db962cee17077f76f9aa722be33f70d5475cb8c149511ba5",
+    "private_values_removed": false
+  },
+  {
+    "file": "progress-counters.jsonl",
+    "private_original_sha256": "088ebc96dd77aec1581f374f9ad212620053503436a18af0c9154394d49ed3c8",
+    "published_sha256": "088ebc96dd77aec1581f374f9ad212620053503436a18af0c9154394d49ed3c8",
+    "private_values_removed": false
+  },
+  {
+    "file": "request-progress.jsonl",
+    "private_original_sha256": "36a5836bec9ca68cc7997b4d880c1c039837feed3a49f8ba0f1be975df17d6ec",
+    "published_sha256": "36a5836bec9ca68cc7997b4d880c1c039837feed3a49f8ba0f1be975df17d6ec",
+    "private_values_removed": false
+  },
+  {
+    "file": "rpc-probe.json",
+    "private_original_sha256": "0ab2b6c45701183c5d3d6b6039c73985cb78ba05d53bea3274c7b9632565137c",
+    "published_sha256": "0ab2b6c45701183c5d3d6b6039c73985cb78ba05d53bea3274c7b9632565137c",
+    "private_values_removed": false
+  },
+  {
+    "file": "run.json",
+    "private_original_sha256": "9821833f040c660f5b8182a1054b20eb9279077be4d2d237ff45472517393ea7",
+    "published_sha256": "9821833f040c660f5b8182a1054b20eb9279077be4d2d237ff45472517393ea7",
+    "private_values_removed": false
+  }
+]
