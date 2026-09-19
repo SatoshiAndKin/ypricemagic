@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Checkout code
         id: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref }}
         continue-on-error: true
@@ -41,7 +41,7 @@ jobs:
 
       - name: Mypycify
         id: mypycify
-        uses: BobTheBuidler/mypycify@v0.3.3
+        uses: BobTheBuidler/mypycify@v0.5.0
         with:
           python-version: "3.12"
           hash-key: |
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -94,19 +94,19 @@ jobs:
           publish_dir: ./docs/_build/html
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: gh-pages
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           # Upload entire repository
           path: '.'
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
