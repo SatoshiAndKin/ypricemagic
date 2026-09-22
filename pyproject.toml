@@ -69,6 +69,7 @@ focused_tests = [
   "tests/test_price_result.py",
   "tests/test_trade_path_sources.py",
   "tests/test_audit_prices.py",
+  "tests/test_cli_logging.py",
   "tests/test_routing_scaling.py",
   "tests/test_cachebox.py",
 ]

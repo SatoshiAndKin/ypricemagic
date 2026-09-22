@@ -35,6 +35,7 @@ Dependency image: `sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1
 | [public-deadline-after-timing-3](public-deadline-after-timing-3/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 1389.40 | 3120422912 | yes | 0 |
 | [public-deadline-after-allocations](public-deadline-after-allocations/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 1912.75 | 8393064448 | yes | 0 |
 | [audit-deadline-before](audit-deadline-before/run.json) | `61be7b520aba7f771a0bf96b326315e68767fae4` | — / — | 819.25 | 8589942784 | no | 137 |
+| [audit-deadline-after](audit-deadline-after/run.json) | `c16d43e0c6b38e146834f0cd8d75090bb25222c7` | — / — | 207492.79 | 8589934592 | no | 137 |
 
 `full-deadline-original` records 291 passed calls, 109 failed calls, 9 skipped calls, 3 setup failures, and 0 setup skips. Its final pytest summary is missing.
 It records 1 cgroup OOM kills and Docker `OOMKilled=true`. It loads 10 compiled modules; the archive probe passes. Expired console bytes: 0.
@@ -62,8 +63,8 @@ confirms that the pytest process uses the requested archive route: 33 establishe
 connections match it, and none use another host at the RPC port. This proves
 route selection, not the cause of slow pricing. Private endpoints remain omitted.
 All three full-suite executions remain incomplete, so the comparison cannot
-establish full coverage or absence of new failures. The existing queue continues
-the independent native quote, public pricing, and audit checks.
+establish full coverage or absence of new failures. All independent native
+quote, public pricing, and audit jobs have now stopped; their outcomes follow.
 
 A reported peak can include a small cgroup accounting overshoot. The effective memory limit remains 8,589,934,592 bytes; no limit was raised.
 
@@ -159,16 +160,25 @@ The final census records 527,793 V2 pool objects, 73,007 V3 pool objects, and 53
 | Run | JSON / CSV present | Complete execution | OOM kills | Expired console bytes |
 | --- | --- | --- | ---: | ---: |
 | [audit-deadline-before](audit-deadline-before/run.json) | no / no | no | 1 | 104,857,600 |
+| [audit-deadline-after](audit-deadline-after/run.json) | no / no | no | 1 | 23,488,102,400 |
 
 An audit with missing JSON or CSV supplies no complete coverage or failure comparison. Rotated console output is not a replacement for the structured audit report. Expired bytes are disclosed above; retained local logs remain bounded to five files of 100 MiB each.
 
-Pending final reports: 1 of 17.
+All 17 jobs have stopped. The optimized audit exits with status 137 after
+207,492.79 seconds. Docker records `OOMKilled=true`; the cgroup records one
+OOM kill and an 8,589,934,592-byte peak. Peak sampled process RSS is
+8,395,034,624 bytes. The archive probe passes, and all ten compiled extensions
+load. The full-audit memory target below 7 GiB remains unmet.
 
-- `audit-deadline-after`
+The [September 15 checkpoint](../audit-active-checkpoint/README.md) remains a
+historical snapshot taken before this OOM. The later
+[CLI logging repair](../cli-logging/README.md) prevents an import from enabling
+DEBUG, but this audit ran the earlier source. Its outcome does not measure the
+logging repair. No full audit with that repair has completed.
 
 [Run metrics](runs.json) preserve exact outcomes, cgroup OOM events, Docker
 `OOMKilled`, source and runner hashes, dependencies, and log retention.
-[Comparisons](comparisons.json) contain completed pairs as they become available.
+[Comparisons](comparisons.json) preserve completed pairs and missing reports.
 Full test errors, exact native quote rows, public pricing rows, and audit JSON/CSV
 remain separate. Three unprofiled timing runs
 produce medians only when all 99 calls complete; allocation profiles remain

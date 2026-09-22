@@ -1,0 +1,5 @@
+{
+  "pyproject.toml": "44995bb8b32a6c98ccdbf5836e3020bf151d5487e059f6b7d8d6fa046dd62e5f",
+  "tests/test_cli_logging.py": "a8ab3603d4d08190b5c8957871cdd0c1283cca95e1fff49bf53e53e939d75388",
+  "y/prices/utils/debug.py": "fe0d669e8f8db9e3a9786224bc98854decc913d902eee04b802647e4801faf86"
+}

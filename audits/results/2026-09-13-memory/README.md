@@ -1,5 +1,19 @@
 # Contained memory validation
 
+## Final status
+
+All 17 deadline-aware node jobs have stopped. Full-suite and mainnet audit
+validation remain incomplete. Both audit revisions reach the 8 GiB limit and
+omit their final JSON and CSV reports. The full-audit target below 7 GiB remains
+unmet. PR #43 stays draft.
+
+The [CLI logging repair](cli-logging/README.md) prevents audit and database
+commands from enabling DEBUG during import. Explicit price debugging still
+enables diagnostics and preserves DEBUG-only five-minute `y.stuck?` messages.
+Four new checks fail on the old runtime; all 283 focused tests pass with the
+repair on Python 3.11–3.13. Each run loads all ten compiled extensions and has
+no OOM. The 1,836 existing mypy errors remain unchanged.
+
 ## Synchronous deadline and interruption cleanup
 
 The [deadline and owner repair](sync-deadline/README.md) activates the existing
@@ -47,8 +61,11 @@ peak is 8,393,064,448 bytes (7.82 GiB), including profiler overhead: above the
 measure all Python or native memory. The baseline mainnet audit ends with OOM
 after 819.25 seconds, with no audit JSON or CSV. It remains incomplete. Console
 rotation expires 104,857,600 bytes (100 MiB) of output; the retention report
-discloses that loss. The optimized audit continues in the existing queue.
-The [active audit checkpoint](audit-active-checkpoint/README.md), captured on
+discloses that loss. The optimized audit also ends with OOM after 207,492.79
+seconds at an 8 GiB container peak. Its JSON and CSV reports are missing.
+Rotation expires 23,488,102,400 bytes (21.875 GiB) of console output. Neither
+audit supplies complete price, coverage, or failure comparisons.
+The [historical audit checkpoint](audit-active-checkpoint/README.md), captured on
 September 15 at 17:35 UTC, records a 6.04 GiB container peak and no OOM events.
 It preserves source identity, all ten compiled checks, archive evidence, and
 sparse process and container memory samples. Audit JSON, CSV, and final status
@@ -89,9 +106,9 @@ all ten compiled modules and pass the archive probe with identical dependencies.
 The optimized run records 1,464 of 1,865 terminal outcomes and peaks at
 4,348,043,264 container bytes without OOM. It is interrupted after confirming
 that the configured synchronous test deadline has no installed handler. Its
-final pytest summary is missing. The native quote, public pricing, and audit
-gates remain pending in the replacement queue with the repaired deadline
-dependency and request cleanup. All interrupted and OOM reports remain incomplete.
+final pytest summary is missing. The replacement queue with the repaired
+deadline dependency and request cleanup has now stopped; its final outcomes
+appear above. All interrupted and OOM reports remain incomplete.
 PR #43 remains draft. The controlled pool reduction does not establish a full
 pricing memory result.
 
@@ -217,8 +234,9 @@ The [changed full run](full-optimized-descriptor-failure/README.md) records
 with no OOM, but has no final pytest summary. Its early exit prevents a full
 memory or failure comparison. [Later archive probes](archive-after-full-failure/README.md)
 time out on the required USDC call through direct NUC Reth. A subsequent
-[direct Lambo Reth probe](archive-lambo-restored/README.md) passes. The remaining native,
-public pricing, and audit checks still need completion with the repaired image.
+[direct Lambo Reth probe](archive-lambo-restored/README.md) passes. The later
+native, public pricing, and audit outcomes appear in the final node reports
+linked above.
 
 Those three earlier suite commands select image
 `sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b`,

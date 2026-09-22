@@ -1,0 +1,7 @@
+{
+  "total_bytes": 23909504778,
+  "expired_bytes": 23488102400,
+  "rotations": 228,
+  "file_limit_bytes": 104857600,
+  "retained_files": 5
+}

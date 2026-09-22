@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python -c 'import faulthandler,signal,runpy,shutil; faulthandler.register(signal.SIGUSR1,all_threads=True); runpy.run_path(shutil.which(\"ypricemagic\"),run_name=\"__main__\")' audit-prices audits/mainnet.json --json /reports/audit.json --csv /reports/audit.csv"
+  ],
+  "exit_code": 137,
+  "interrupted": false,
+  "elapsed_seconds": 143636.00461579798,
+  "peak_sampled_process_rss_bytes": 8395034624,
+  "cgroup_before": {
+    "memory.current": "9154560",
+    "memory.peak": "9154560",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "18100224",
+    "memory.peak": "8589934592",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 292\noom 1\noom_kill 1\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

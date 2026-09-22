@@ -6,18 +6,25 @@ The y/cli.py module provides command-line tools for debugging and database manag
 Debugging
 ---------
 
-The CLI includes two debugging commands that leverage Brownie's run command to execute dedicated debugging scripts. They are designed to simplify the process of investigating price retrieval and Curve pool operations without manually setting environment variables.
+The CLI includes commands to inspect price retrieval and Curve pool operations.
 
 debug price
 ~~~~~~~~~~~
 Description:
-    Debug token price retrieval. This command runs the Brownie script "debug-price" using the specified token address and, optionally, a block number. The token is passed via the --token flag and the block number via --block.
+    Debug token price retrieval with the specified token address and an optional
+    block number. This operation enables DEBUG logging for ``y``. It reuses an
+    available handler, or adds a stream handler if none is available. Importing
+    the CLI and running ``audit-prices`` or database commands preserve the
+    configured logging level and handlers.
+
+    Long-running calls emit DEBUG-only ``y.stuck?`` messages every five minutes
+    when that logger is enabled. See :doc:`caching` for diagnostic guidance.
 
 Usage:
     ypricemagic debug price --token <token_address> [--block <block_number>]
 
 Example:
-    ypricemagic debug price --token 0xABCdef... --block 1234567
+    ypricemagic debug price --token 0x6B3595068778DD592e39A122f4f5a5cF09C90fE2 --block 18000000
 
 debug curve
 ~~~~~~~~~~~

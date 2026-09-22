@@ -10273,5 +10273,15 @@
         ]
       }
     }
+  },
+  "audit": {
+    "missing_reports": [
+      "audit-deadline-before/audit.json",
+      "audit-deadline-before/audit.csv",
+      "audit-deadline-after/audit.json",
+      "audit-deadline-after/audit.csv"
+    ],
+    "execution_complete_both": false,
+    "complete_coverage_both": false
   }
 }
