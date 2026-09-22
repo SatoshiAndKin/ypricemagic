@@ -21,3 +21,12 @@ with no added diagnostics and identical dependencies. No run has an OOM event
 or expired console output. These focused checks do not complete the interrupted
 full suites or the mainnet audit. Both mainnet audit revisions ended with OOM
 and missing JSON/CSV reports. The full-audit memory gate remains unmet.
+
+The [committed-source check](committed-312/run.json) verifies commit
+`2d97481797e8d3d0b9a1a536b4b888e75308229b` with the same Python 3.12 image
+and identical installed dependencies. All 283 tests pass, all ten extensions
+load, and the archive probe passes. This run uses the mainnet endpoint configured
+on the host on September 21; it does not prove the same backend route as the
+earlier direct Reth runs. Container peak: 1,172,824,064 bytes; elapsed: 197.61 seconds.
+No OOM events or console output expiry occur. The exact test IDs and results
+match the preceding Python 3.12 matrix run.
