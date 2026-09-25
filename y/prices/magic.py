@@ -36,6 +36,7 @@ from y.prices import (
     yearn,
 )
 from y.prices._candidates import derive_price, pool_address, valid_price
+from y.prices._usdc import USDC_VALUATION, fixed_usdc_price
 from y.prices.dex import *
 from y.prices.dex.uniswap import UniswapV2Pool
 from y.prices.eth_derivs import *
@@ -402,6 +403,10 @@ def __cache(get_price: _PriceLookup) -> _PriceLookup:
         ignore_pools: tuple[Pool, ...] = (),
         silent: bool = False,
     ) -> PriceResult | None:
+        fixed = fixed_usdc_price(str(token), constants.CHAINID)
+        if fixed is not None:
+            return fixed
+
         from y._db.utils import price as db
 
         use_cache = (
@@ -600,10 +605,12 @@ async def _exit_early_for_known_tokens(
 
     elif bucket == "chainlink and band":
         price = await chainlink.get_price(token_address, block, sync=False)
-        if not valid_price(price):
+        if valid_price(price):
+            source = f"Chainlink feed for {addr_short}"
+        else:
             price = await band.get_price(token_address, block, sync=False)
-        if price is not None:
-            source = f"Chainlink/Band feed for {addr_short}"
+            if price is not None:
+                source = f"Band USDC rate for {addr_short}; {USDC_VALUATION}"
 
     elif bucket == "chainlink feed":
         price = await chainlink.get_price(token_address, block, sync=False)

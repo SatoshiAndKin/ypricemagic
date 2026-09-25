@@ -5,6 +5,7 @@ import faulthandler
 import json
 import os
 import signal
+from contextlib import aclosing
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any
@@ -37,6 +38,11 @@ def direct(to: Any, sig: str, types: Any = (), args: Any = (), outputs: Any = ("
             block_identifier=BLOCK,
         ),
     )
+
+
+async def first_redemption(asset: QuoteAsset, block: BlockRef) -> Any:
+    async with aclosing(redeem(asset, block, frozenset())) as candidates:
+        return await anext(candidates, None)
 
 
 async def main() -> int:
@@ -109,7 +115,7 @@ async def main() -> int:
         "Balancer V2 LP exit",
         asset,
         {t.lower(): a for t, a in zip(tokens, amounts) if a},
-        lambda: redeem(asset, block, frozenset()),
+        lambda: first_redemption(asset, block),
     )
     for name, token, shares, decimals in [
         ("Compound cDAI", "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643", 10**10, 8),
@@ -144,7 +150,7 @@ async def main() -> int:
             expected = {direct(token, "lp_token()", outputs=["address"])[0]: shares}
         else:
             expected = {"0x6c3f90f043a72fa612cbac8115ee7e52bde6e490": shares}
-        await check(name, asset, expected, lambda: redeem(asset, block, frozenset()))
+        await check(name, asset, expected, lambda: first_redemption(asset, block))
     await block.verify()
     status = int(any(row["status"] != "pass" for row in rows))
     write_json(

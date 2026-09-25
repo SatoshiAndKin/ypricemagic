@@ -5,6 +5,7 @@ import faulthandler
 import json
 import os
 import signal
+from contextlib import aclosing
 from pathlib import Path
 from typing import Any
 
@@ -33,6 +34,11 @@ def direct(to: Any, sig: str, types: Any, args: Any, outputs: Any, block: Any) -
             block_identifier=block,
         ),
     )
+
+
+async def first_redemption(asset: QuoteAsset, block: BlockRef) -> Any:
+    async with aclosing(redeem(asset, block, frozenset())) as candidates:
+        return await anext(candidates, None)
 
 
 async def main() -> int:
@@ -131,7 +137,7 @@ async def main() -> int:
         expected = direct(
             vault, "previewRedeem(uint256)", ["uint256"], [10**21], ["uint256"], block.number
         )[0]
-        redemption = await redeem(QuoteAsset(vault, 10**21, 18), block, frozenset())
+        redemption = await first_redemption(QuoteAsset(vault, 10**21, 18), block)
         assert redemption is not None
         assert redemption[0].outputs[0].amount == expected
         results.append(

@@ -117,6 +117,8 @@ class Band(a_sync.ASyncGenericSingleton):
 
         Returns:
             The price of the asset in terms of USDC, or None if the price cannot be fetched.
+            Pricing consumers value this rate using the fixed 1 USDC = $1 policy;
+            it is not a historical USD feed.
 
         Examples:
             >>> band = Band(asynchronous=True)

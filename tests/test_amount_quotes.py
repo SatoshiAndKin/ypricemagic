@@ -1,6 +1,7 @@
 """Behavior tests for the public amount API and native liquidity routing."""
 
 import asyncio
+from contextlib import aclosing
 from dataclasses import replace
 from decimal import Decimal
 from types import SimpleNamespace
@@ -83,6 +84,11 @@ def graph(monkeypatch: Any, pools: Any, rates: Any = None) -> Any:
     monkeypatch.setattr(service, "redeem", AsyncMock(return_value=None))
     monkeypatch.setattr(service, "explicit", AsyncMock(return_value=None))
     return service, seen, discovery
+
+
+async def first_redemption(*args: Any) -> Any:
+    async with aclosing(_redemptions.redeem(*args)) as candidates:
+        return await anext(candidates, None)
 
 
 @pytest.mark.parametrize(
@@ -346,7 +352,7 @@ async def test_erc4626_uses_full_preview_and_never_convert_to_assets(
 
     monkeypatch.setattr(_redemptions, "optional_read", optional)
     monkeypatch.setattr(_redemptions, "read", AsyncMock(return_value=6))
-    result = await _redemptions.redeem(QuoteAsset(TOKEN, 1000000, 6), BLOCK, frozenset())
+    result = await first_redemption(QuoteAsset(TOKEN, 1000000, 6), BLOCK, frozenset())
     if expected is None:
         assert result is None
     else:
@@ -373,7 +379,11 @@ async def test_compare_direct_sale_with_complete_redemption(
         "included",
         "unverified",
     )
-    monkeypatch.setattr(_redemptions, "redeem", AsyncMock(return_value=(step, ())))
+
+    async def redeem(*args: Any) -> Any:
+        yield step, ()
+
+    monkeypatch.setattr(_redemptions, "redeem", redeem)
     result = await service.price(TOKEN, BLOCK, 1)
     assert float(result) == expected
     assert result.quote.holder_eligibility == "unverified"
@@ -397,7 +407,8 @@ async def test_redemption_aggregates_outputs_and_excludes_withdrawn_pool(monkeyp
     )
 
     async def redeem(asset: Any, *args: Any) -> Any:
-        return (step, ("withdrawn",)) if asset.token == TOKEN else None
+        if asset.token == TOKEN:
+            yield step, ("withdrawn",)
 
     monkeypatch.setattr(_redemptions, "redeem", redeem)
     result = await service.price(TOKEN, BLOCK, 1)
@@ -447,7 +458,7 @@ async def test_compound_redemption_checks_full_withdrawal_cash(
 
     monkeypatch.setattr(_redemptions, "optional_read", optional)
     monkeypatch.setattr(_redemptions, "read", read)
-    result = await _redemptions.redeem(QuoteAsset(TOKEN, 500000, 6), BLOCK, frozenset())
+    result = await first_redemption(QuoteAsset(TOKEN, 500000, 6), BLOCK, frozenset())
     if available:
         assert result is not None
         assert result[0].outputs == (QuoteAsset(USD, 1000000, 6),)
@@ -527,7 +538,7 @@ async def test_yearn_exit_deducts_locked_profit_and_requires_idle_cash(
 
     monkeypatch.setattr(_redemptions, "optional_read", optional)
     monkeypatch.setattr(_redemptions, "read", read)
-    result = await _redemptions.redeem(QuoteAsset(TOKEN, 500, 6), BLOCK, frozenset())
+    result = await first_redemption(QuoteAsset(TOKEN, 500, 6), BLOCK, frozenset())
     if available:
         assert result is not None and result[0].outputs == (QuoteAsset(USD, 900, 6),)
     else:
@@ -561,12 +572,12 @@ async def test_convex_checks_staker_backing_and_shutdown_custody(
 
     monkeypatch.setattr(_redemptions, "optional_read", optional)
     monkeypatch.setattr(_redemptions, "read", read)
-    result = await _redemptions.redeem(QuoteAsset(TOKEN, 1000, 6), BLOCK, frozenset())
+    result = await first_redemption(QuoteAsset(TOKEN, 1000, 6), BLOCK, frozenset())
     assert result is not None and result[0].outputs == (QuoteAsset(USD, 1000, 6),)
     assert (
         balances == [(USD, booster)] if shutdown else balances == [(gauge, staker), (USD, staker)]
     )
-    assert await _redemptions.redeem(QuoteAsset(TOKEN, 1000, 6), BLOCK, frozenset([staker])) is None
+    assert await first_redemption(QuoteAsset(TOKEN, 1000, 6), BLOCK, frozenset([staker])) is None
 
 
 @run_async_test

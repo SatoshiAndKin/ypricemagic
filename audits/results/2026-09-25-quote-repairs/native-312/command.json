@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m pip install --no-deps --no-build-isolation -e . && python /runner/probe.py && python /runner/check_compiled.py && { python /runner/native.py; first=$?; python /runner/native_reviewed.py; second=$?; test \"$first\" -eq 0 && test \"$second\" -eq 0; }"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 460.7372507380787,
+  "peak_sampled_process_rss_bytes": 1089830912,
+  "cgroup_before": {
+    "memory.current": "8830976",
+    "memory.peak": "8830976",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "141897728",
+    "memory.peak": "1172008960",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

@@ -1,8 +1,8 @@
 from collections import defaultdict
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Callable
 from functools import cached_property, lru_cache
 from logging import DEBUG, getLogger
-from typing import DefaultDict, Final
+from typing import Any, DefaultDict, Final, cast
 
 import a_sync
 from a_sync.a_sync import HiddenMethodDescriptor
@@ -284,6 +284,17 @@ class UniswapV3Pool(ContractBase):
         raise TokenNotFound(token_in, self)
 
 
+@stuck_coro_debugger
+async def load_quoter(address: str) -> Contract:
+    """Retain verified ABIs, with the standard ABI for unverified quoters."""
+    try:
+        return await Contract.coroutine(address)
+    except ContractNotVerified:
+        # The a_sync classmethod descriptor omits this synchronous overload.
+        from_abi = cast(Callable[[str, str, list[dict[str, Any]]], Contract], Contract.from_abi)
+        return from_abi("Quoter", address, UNIV3_QUOTER_ABI)
+
+
 class UniswapV3(a_sync.ASyncGenericBase):
     """Represents the Uniswap V3 protocol."""
 
@@ -392,10 +403,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
         See Also:
             :class:`Contract`
         """
-        try:
-            return await Contract.coroutine(self._quoter)
-        except ContractNotVerified:
-            return Contract.from_abi("Quoter", self._quoter, UNIV3_QUOTER_ABI)
+        return await load_quoter(self._quoter)
 
     __quoter__: HiddenMethodDescriptor[Self, Contract]
 

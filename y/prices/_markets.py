@@ -318,10 +318,10 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
     elif protocol in ("Uniswap V3", "Slipstream"):
         from eth_abi.packed import encode_packed
 
-        from y.contracts import Contract
+        from y.prices.dex.uniswap.v3 import load_quoter
 
         method = "quoteExactInput(bytes,uint256)"
-        quoter = await Contract.coroutine(market.router)
+        quoter = await load_quoter(market.router)
         index_type, pool_key = (
             ("int24", market.tick_spacing) if protocol == "Slipstream" else ("uint24", market.fee)
         )
@@ -393,16 +393,16 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
     if result <= 0:
         return None
     decimals = (
-        18
-        if output == address(EEE_ADDRESS)
-        else int(await read(output, "decimals()(uint8)", block))
+        18 if output == address(EEE_ADDRESS) else await read(output, "decimals()(uint8)", block)
     )
+    if decimals is None:
+        return None
     return QuoteStep(
         "swap",
         protocol,
         pool,
         asset,
-        (QuoteAsset(output, result, decimals),),
+        (QuoteAsset(output, result, int(decimals)),),
         method,
         "DEX fees included in native quote",
         limits,

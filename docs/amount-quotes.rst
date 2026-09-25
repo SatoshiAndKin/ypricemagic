@@ -37,10 +37,22 @@ Native V2 and Solidly router quotes, V3 quoters, Curve ``get_dy``, Balancer V1
 ``calcOutGivenIn``, and Balancer V2 ``queryBatchSwap`` retain DEX fees and price
 impact. Balancer V1 discovery retains the existing proxy's candidate universe;
 the estimate selects one pool and does not use the proxy's split allocation.
-The router values terminal stablecoins and native assets with historical USD
-feeds. A stablecoin classification, including one read from the database, does
-not assign a fixed $1 price. Calls without an amount retain API, oracle, and
-wrapper valuation priority. DEX fallback estimates one readable token.
+Spot prices and terminal quote valuation use **1 USDC = $1**, at every block,
+for curated chain-and-address entries and configured USDC contracts, including
+USDC.e and USDbC. This policy takes precedence over cached, API, and oracle
+prices. Token symbols never establish membership. It is a valuation assumption,
+not a modeled Coinbase withdrawal. Band rates remain denominated in USDC and
+are converted using this same fixed valuation policy.
+
+Other stablecoins and native terminal assets retain historical feed valuation.
+A stablecoin classification alone, including one read from the database, does
+not assign a fixed $1 price. Other spot requests retain API, oracle, and wrapper
+valuation priority. DEX fallback estimates one readable token.
+
+Amount requests always model actual sales, including USDC inputs: selling
+1,000 USDC can be worth more or less than $1,000 after DEX fees and price impact.
+Missing or reverted input decimals make the quote unavailable under the normal
+``fail_to_None`` policy; unexpected RPC errors still propagate.
 
 Immediate redemption support
 ----------------------------
@@ -77,6 +89,11 @@ Immediate redemption support
 * Balancer V2 Weighted, Stable, and ComposableStable pool LP tokens: a native
   proportional ``queryExit`` includes fees and checks the returned BPT input.
   Other pool versions without this contract remain unavailable.
+
+Curve single-coin withdrawals are tried lazily in address order. The first exit
+whose complete output can be valued is selected. Failed exits do not carry
+provisional pool exclusions, paths, or rejection decisions into later exits;
+exact native swap observations can be reused.
 
 If both direct sale and redemption succeed, the estimate uses the better total
 USD value. It aggregates identical redemption outputs and processes them in

@@ -1,5 +1,6 @@
 """Liquidity-based price estimation. This does not maximize route prices."""
 
+from contextlib import aclosing
 from dataclasses import dataclass, field, replace
 from decimal import Decimal, localcontext
 from functools import lru_cache
@@ -19,6 +20,7 @@ from y.prices._candidates import valid_price
 from y.prices._markets import Market, address, discover, swap
 from y.prices._quote import SharedCache, to_base_units
 from y.prices._rpc import BlockRef, state, unavailable
+from y.prices._usdc import USDC_VALUATION, fixed_usdc_price
 
 
 @dataclass(frozen=True)
@@ -74,7 +76,10 @@ class QuoteService:
         )
 
     async def usd(self, token: str, block: BlockRef) -> PriceResult | None:
-        """Use historical USD feeds for terminal assets, including stablecoins."""
+        """Value USDC at $1; use historical feeds for other terminal assets."""
+        fixed = fixed_usdc_price(token, block.chain)
+        if fixed is not None:
+            return fixed
         from y import convert
         from y.prices import band, chainlink
 
@@ -97,7 +102,13 @@ class QuoteService:
                     UsdPrice(float(price)),
                     [
                         PriceStep(
-                            token, UsdPrice(float(price)), f"{name} historical USD for {token}"
+                            token,
+                            UsdPrice(float(price)),
+                            (
+                                f"Band USDC rate for {token}; {USDC_VALUATION}"
+                                if name == "Band"
+                                else f"{name} historical USD for {token}"
+                            ),
                         )
                     ],
                 )
@@ -161,58 +172,66 @@ class QuoteService:
             or len(ancestors) >= 32
         ):
             return None
+        rejected: set[tuple[str, str, str]] = set()
+        rejected_redemptions: set[str] = set()
         try:
-            redemption = await redeem(asset, block, ignored)
+            async with aclosing(redeem(asset, block, ignored)) as candidates:
+                async for step, changed_pools in candidates:
+                    # Alternatives see the original request state, never a failed
+                    # candidate's provisional exclusions or rejection decisions.
+                    candidate = SearchContext(
+                        search.rejected.copy(), search.rejected_redemptions.copy(), search.swaps
+                    )
+                    used = ignored | frozenset(changed_pools) | {step.contract}
+                    outputs = aggregate([output for output in step.outputs if output.amount])
+                    if not outputs:
+                        continue
+                    total = Decimal(0)
+                    steps = [replace(step, outputs=outputs)]
+                    prices: list[PriceStep] = []
+                    final_outputs: list[QuoteAsset] = []
+                    try:
+                        for output in outputs:
+                            child = await self.estimate(
+                                output,
+                                block,
+                                used,
+                                ancestors | {asset.token},
+                                skip_cache,
+                                require_trade=False,
+                                swaps_left=swaps_left,
+                                search=candidate,
+                            )
+                            if child is None:
+                                break
+                            total += child.value
+                            steps.extend(child.steps)
+                            prices.extend(child.prices)
+                            final_outputs.extend(child.outputs)
+                            used = child.used
+                        else:
+                            search.rejected.update(candidate.rejected)
+                            search.rejected_redemptions.update(candidate.rejected_redemptions)
+                            return Estimate(
+                                aggregate(final_outputs),
+                                total,
+                                tuple(steps),
+                                (*priced_steps((step,), total), *prices),
+                                used,
+                            )
+                    except Exception as exc:
+                        if not unavailable(exc):
+                            raise
+                    rejected.update(candidate.rejected)
+                    rejected_redemptions.update(candidate.rejected_redemptions)
         except Exception as exc:
             if not unavailable(exc):
                 raise
-            search.rejected_redemptions.add(asset.token)
-            return None
-        if redemption is None:
-            search.rejected_redemptions.add(asset.token)
-            return None
-        step, changed_pools = redemption
-        used = ignored | frozenset(changed_pools) | {step.contract}
-        outputs: dict[str, QuoteAsset] = {}
-        for output in step.outputs:
-            if output.amount:
-                existing = outputs.get(output.token)
-                outputs[output.token] = replace(
-                    output, amount=output.amount + (existing.amount if existing else 0)
-                )
-        if not outputs:
-            search.rejected_redemptions.add(asset.token)
-            return None
-        total = Decimal(0)
-        steps = [replace(step, outputs=tuple(outputs[t] for t in sorted(outputs)))]
-        prices: list[PriceStep] = []
-        final_outputs: list[QuoteAsset] = []
-        for token in sorted(outputs):
-            child = await self.estimate(
-                outputs[token],
-                block,
-                used,
-                ancestors | {asset.token},
-                skip_cache,
-                require_trade=False,
-                swaps_left=swaps_left,
-                search=search,
-            )
-            if child is None:
-                search.rejected_redemptions.add(asset.token)
-                return None
-            total += child.value
-            steps.extend(child.steps)
-            prices.extend(child.prices)
-            final_outputs.extend(child.outputs)
-            used = child.used
-        return Estimate(
-            aggregate(final_outputs),
-            total,
-            tuple(steps),
-            (*priced_steps((step,), total), *prices),
-            used,
-        )
+        # Preserve request-wide dead-end pruning only after every exit failed.
+        search.rejected.update(rejected)
+        search.rejected_redemptions.update(rejected_redemptions)
+        search.rejected_redemptions.add(asset.token)
+        return None
 
     @stuck_coro_debugger
     async def route(
@@ -420,11 +439,22 @@ class QuoteService:
         first_markets: tuple[str, ...] = (),
     ) -> PriceResult | None:
         token = address(token)
-        decimals = (
-            18
-            if token == address(EEE_ADDRESS)
-            else int(await state(token, "decimals()(uint8)", block))
-        )
+        try:
+            raw_decimals = (
+                18
+                if token == address(EEE_ADDRESS)
+                else await state(token, "decimals()(uint8)", block)
+            )
+            # multicall can represent an empty or undecodable response as None.
+            if raw_decimals is None:
+                await block.verify()
+                return None
+            decimals = int(raw_decimals)
+        except Exception as exc:
+            if not unavailable(exc):
+                raise
+            await block.verify()
+            return None
         asset = QuoteAsset(
             token, to_base_units(1 if amount is None else amount, decimals), decimals
         )

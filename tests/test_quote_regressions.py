@@ -31,10 +31,10 @@ async def test_wrapper_dead_ends_do_not_retry_edges_in_other_prefixes(monkeypatc
 
     async def redeem(asset: QuoteAsset, *args: Any) -> Any:
         if asset.token not in wrappers:
-            return None
+            return
         redemptions[asset.token] += 1
         output = replace(asset, token=tokens[wrappers.index(asset.token) + 1])
-        return (
+        yield (
             QuoteStep(
                 "redemption",
                 "ERC4626",
@@ -70,8 +70,8 @@ async def test_intermediate_wrapper_compares_both_exits(
 
     async def redeem(asset: QuoteAsset, *args: Any) -> Any:
         if asset.token != CHILD:
-            return None
-        return (
+            return
+        yield (
             QuoteStep(
                 "redemption",
                 "ERC4626",
