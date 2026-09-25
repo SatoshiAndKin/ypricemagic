@@ -242,6 +242,54 @@
       "pids.current": "12"
     }
   },
+  "committed-312": {
+    "complete": true,
+    "exit_code": 0,
+    "missing_reports": [],
+    "elapsed_seconds": 214.7507038116455,
+    "source_sha": "3c11705038931ce9b5c0b479a9ec72e20f5353e5",
+    "source_archive_sha256": "d2af50a3e5233ed5cd3eb36563018643deb6b2adeff31d5d0fc3363add98be67",
+    "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+    "oom_killed": false,
+    "cgroup_after": {
+      "memory.current": "165281792",
+      "memory.peak": "1162104832",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 370,
+        "call:passed": 370,
+        "teardown:passed": 370
+      },
+      "collected": 370
+    },
+    "mypy": {
+      "before": 1836,
+      "after": 1834,
+      "added": [],
+      "removed": [
+        [
+          "y/prices/dex/uniswap/v3.py",
+          "Returning Any from function declared to return \"Contract\" [no-any-return]",
+          1
+        ],
+        [
+          "y/prices/dex/uniswap/v3.py",
+          "No overload variant of \"__call__\" of \"ASyncFunctionSyncDefault\" matches argument types \"str\", \"ChecksumAddress\", \"list[dict[str, Sequence[Collection[str]]]]\" [call-overload]",
+          1
+        ]
+      ],
+      "baseline_report": "audits/results/2026-09-13-memory/cli-logging/cli-logging-after-312",
+      "dependencies_identical": true
+    }
+  },
   "empty-before-312b": {
     "complete": true,
     "exit_code": 1,
@@ -465,6 +513,28 @@
       "cpu.max": "400000 100000",
       "pids.max": "512",
       "pids.current": "14"
+    }
+  },
+  "full-rerun-312": {
+    "complete": false,
+    "exit_code": 143,
+    "missing_reports": [
+      "pytest-summary.json"
+    ],
+    "elapsed_seconds": 4012.314007997513,
+    "source_sha": "7d233886219cc3e2b73069860b8f287e2b7c387d",
+    "source_archive_sha256": "864bb9dbff78cfe63ed8cb2da8265f9f99ff8aba930511f28431bda51ec34ce0",
+    "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+    "oom_killed": false,
+    "cgroup_after": {
+      "memory.current": "3881725952",
+      "memory.peak": "4025540608",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "39"
     }
   },
   "types-final-312": {

@@ -1,0 +1,20 @@
+{
+  "commit": "3c11705038931ce9b5c0b479a9ec72e20f5353e5",
+  "match": true,
+  "actual": {
+    "y/prices/_usdc.py": "b5ce9e769ca1292666920d26a742edd37d7c9f2070666b5346f48d5f5ddaff4e",
+    "y/prices/_routing.py": "f5ed5e6c257c8eba4cbede5400e4fb99367b3d77b5479816ae3507c091d9aacb",
+    "y/prices/_redemptions.py": "f778968c9efb8fca6e1b73881cc58b91180fa139521d1f79e16cb66509c55890",
+    "y/prices/_markets.py": "eaebffdeec40a87606104537c0803020226fc62d8d3201d8747af2d44527fe22",
+    "y/prices/magic.py": "f669592cc947f32b9031c390e99e6ffc7ad26e81f3ad27167e6acb53fdad1b73",
+    "y/prices/band.py": "550e99fce5df536e2381b5a5899c26d8b468c1afdb80d7c6750b23a48b34d1c5",
+    "y/prices/dex/uniswap/v3.py": "d2c6e0aa235aab7f2f317b4981491034d527df753014b700b28879ad315f705e",
+    "tests/test_quote_repairs.py": "d1f246494c988936e6b7062ee3359d7b03d801319ddd64b47114d1c6ad28a4f7",
+    "tests/test_quote_regressions.py": "8e732762b668ab869886c35711ad66a5c4a2235cd3a9798381e078c13e003407",
+    "tests/test_amount_quotes.py": "b35ddc058616f1671a784062bc4fedc8bed9201674efc03b06cac42f2fccaae1",
+    "tools/validation/native.py": "828d16b2a1ddab087a676c03382309c63989e8e5df59c3499b41710ac30816e8",
+    "tools/validation/native_reviewed.py": "f945c3cca2531da27302ccd5e673a761a1b8d9b4785c1fdf56113a968c25ce11",
+    "pyproject.toml": "c7350a50e2a807016c767299f518958e682eef7e83a5637b6fff27abba7e5a94",
+    "docs/amount-quotes.rst": "a546fa9d07d911b0f4209fee61946a9bce5f6c46d8006ead6850f6c2eff00f9d"
+  }
+}

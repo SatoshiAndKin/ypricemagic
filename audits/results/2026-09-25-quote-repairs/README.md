@@ -10,6 +10,7 @@ The user's generated `build/__native_ypricemagic.c` change is excluded. No depen
 - `empty-before-312b`: 366 passes and two additional failures demonstrate that an actual empty RPC response decodes to `None` and previously escaped as `TypeError` in both public failure modes.
 - `repaired-311`, `repaired-312`, `repaired-313`: **370 passes on each Python version**, all ten extensions verified, no OOM. The 3.12 run preceded a test-only import annotation correction; `types-final-312` checks that correction on 3.12. The final 3.11/3.13 sources include it.
 - Final configured mypy comparisons retain **1,834 pre-existing diagnostics**, down from 1,836, with no added diagnostics. Mypy still exits nonzero. Baseline reports use the exact same dependency images and byte-identical installed dependencies. The intermediate `repaired-312` mypy report's one test-only import diagnostic is superseded by `types-final-312`.
+- `committed-312`: source `3c11705038931ce9b5c0b479a9ec72e20f5353e5` passes all **370 tests**, loads all ten extensions, and passes the archive probe. It retains 1,834 mypy diagnostics with none added, peaks at **1,162,104,832 bytes**, and records no OOM. Production and test sources are unchanged after this commit.
 - Black 25.9.0, isort 7.0.0, autoflake 2.2.1, and diff whitespace checks pass; see `formatting.json` and `source-files.json`.
 
 ## Native checks
@@ -24,7 +25,11 @@ The required Python 3.12 command is run unchanged inside Docker:
 PYTEST_ADDOPTS="-p no:pytest_ethereum" BROWNIE_NETWORK=mainnet make test
 ```
 
-The final-source rerun is still in progress when this initial evidence is committed. Its result will be recorded separately before updating PR #43. Full validation is not claimed complete.
+`full-rerun-312` is **incomplete**. It was manually interrupted after **4,012.31 seconds** and two consecutive 600-second synchronous Compound timeouts. The suite advanced at each deadline; this was a deliberate interruption, not evidence of a permanently hung process. At interruption, **1,558 / 1,957 cases** had terminal outcomes: **1,157 passed, 380 failed, and 21 skipped**. The remaining 399 cases did not complete. All **87 new repair cases passed** within this full run. The runner exits 125 for incomplete validation, the container exits 143, and `pytest-summary.json` is missing.
+
+All ten compiled extensions loaded. The fourteen changed source files match commit `3c11705038931ce9b5c0b479a9ec72e20f5353e5` byte for byte (`source-comparison.json`), despite the snapshot's pre-commit parent SHA. The container peaked at **4,025,540,608 bytes**, with no OOM events and the approved limits unchanged.
+
+`full-comparison.json` compares observed failures with the earlier incomplete `full-deadline-optimized` report. Of 380 failed case/phase pairs, **294 already failed in that report**, with **172 identical error messages**. **32 previously passing cases now time out** (20 Chainlink feed cases and 12 Aave cases); their cause remains unresolved. Another **54 failures have no matching baseline outcome**, including historical sample IDs that differ between runs. These observations do **not** establish absence of new full-suite failures. Complete structured failures and the explicit interruption checkpoint are retained in `full-rerun-312`.
 
 `full-final-312` was **prematurely interrupted** after an outdated stall assessment. Its final checkpoint actually shows resumed progress: 389 / 1,957 terminal cases, comprising 270 passes, nine skips, and 110 failures. Of those failures, 100 are 600-second cooperative timeouts and ten are `TypeError` in unchanged Chainlink `latest_timestamp`; all ten Chainlink IDs/messages also fail identically in the earlier optimized full-suite report. This partial run does not establish coverage or absence of new failures. Its corrected checkpoint explicitly records the interruption error.
 

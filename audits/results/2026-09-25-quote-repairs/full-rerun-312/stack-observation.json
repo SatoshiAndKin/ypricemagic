@@ -1,0 +1,5 @@
+{
+  "pid": 190,
+  "unix": 1790365923.564595,
+  "reason": "Observe pending second synchronous Compound call before its configured 600-second deadline"
+}

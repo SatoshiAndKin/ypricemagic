@@ -1,0 +1,57 @@
+{
+  "unix": 1790366271.4277644,
+  "reason": "Manual interruption after more than one hour and two consecutive 600-second synchronous Compound timeouts. The suite advanced at each deadline; this is incomplete validation, not a claim that the process was permanently hung.",
+  "collected": 1957,
+  "terminal_cases": 1558,
+  "outcomes": {
+    "passed": 1157,
+    "skipped": 21,
+    "failed": 380
+  },
+  "last_event": {
+    "phase": "setup",
+    "elapsed_seconds": 3598.727537344006,
+    "rss_peak_bytes": 3009007616,
+    "live_tasks": 126,
+    "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5]",
+    "outcome": "passed",
+    "duration": 0.0005687630036845803,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 12,
+        "flights": 0
+      },
+      "result_cache": {
+        "values": 2,
+        "flights": 0
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 1242228,
+      "multicall_uid": 51887,
+      "request_uid": 113256,
+      "jsonrpc_batch_uid": 94428
+    }
+  },
+  "progress": {
+    "elapsed_seconds": 4009.668908927997,
+    "sampled_process_rss_bytes": 3038027776,
+    "peak_sampled_process_rss_bytes": 3189334016,
+    "cgroup": {
+      "memory.current": "3882192896",
+      "memory.peak": "4025540608",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "40"
+    }
+  }
+}
