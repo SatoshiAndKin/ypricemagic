@@ -21,7 +21,9 @@ Public pricing signatures, the fixed USDC policy, and DEBUG-only five-minute stu
 
 **All 397 focused cases pass on Python 3.11–3.13**, with all ten compiled extensions verified, including `y.convert`. Each version retains **1,827 mypy diagnostics versus 1,834 before**, with none added and byte-identical installed dependencies to its baseline image. Mypy still fails overall. The three runs share the same source archive hash. Container peaks range from **1,165,869,056 to 1,368,010,752 bytes**, with no OOM events. Matrix results, compiled extension paths, configured mypy comparisons, frozen dependency checks, and memory measurements are indexed in `summary.json`. Formatting versions and results are recorded separately.
 
-Use only completed reports as completed evidence. The full suite and native checks have not yet been recorded for this revision. Earlier full-suite timeouts, 32 newly observed timeout cases, and audit OOM evidence in the quote-repair reports remain unresolved and separate. PR #43 remains draft.
+Committed source `065e6b527dff43f1681ecfb8f207717baba39af4` separately passes **all 397 tests**, loads all ten extensions, and passes the archive probe. It retains 1,827 mypy diagnostics with none added, peaks at **1,174,122,496 bytes**, and records no OOM. The live runs verify matching changed-source hashes in `source-comparison.json`.
+
+Use only completed reports as completed evidence. Both native scripts complete sequentially, including the final Curve withdrawal and canonical-block check. All **14 rows exactly match** the prior baseline: **13 passes and one unchanged unavailable Curve steCRV gauge**. The native command exits 1 solely for that known unavailable case. The full suite is still running and its final result remains pending. Earlier full-suite timeouts, 32 newly observed timeout cases, and audit OOM evidence in the quote-repair reports remain unresolved and separate. PR #43 remains draft.
 
 ## Reproducibility and containment
 

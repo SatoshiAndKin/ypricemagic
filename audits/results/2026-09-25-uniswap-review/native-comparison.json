@@ -1,0 +1,14 @@
+{
+  "native.json": {
+    "baseline": "audits/results/2026-09-25-quote-repairs/native-312/native.json",
+    "rows_equal": true,
+    "cases": 6,
+    "passes": 6
+  },
+  "native-reviewed.json": {
+    "baseline": "audits/results/2026-09-25-quote-repairs/native-312/native-reviewed.json",
+    "rows_equal": true,
+    "cases": 8,
+    "passes": 7
+  }
+}

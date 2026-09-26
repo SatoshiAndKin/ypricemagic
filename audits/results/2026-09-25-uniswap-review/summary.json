@@ -224,6 +224,100 @@
       "dependencies_identical": true
     }
   },
+  "committed-312": {
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 414.0762219429016,
+    "source_sha": "065e6b527dff43f1681ecfb8f207717baba39af4",
+    "source_archive_sha256": "3f586becad023e06e13639b38b2dd48eb129011cda7a57456dcffcbb06b064f2",
+    "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+    "missing_reports": [],
+    "oom_killed": false,
+    "command": {
+      "command": [
+        "sh",
+        "-c",
+        "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python -m mypy > /reports/mypy.txt 2>&1 || true; python /runner/check_compiled.py; python tools/validation/focused.py"
+      ],
+      "exit_code": 0,
+      "interrupted": false,
+      "elapsed_seconds": 403.113618891,
+      "peak_sampled_process_rss_bytes": 1058418688,
+      "cgroup_before": {
+        "memory.current": "8740864",
+        "memory.peak": "8847360",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      },
+      "cgroup_after": {
+        "memory.current": "169603072",
+        "memory.peak": "1174122496",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      }
+    },
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 397,
+        "call:passed": 397,
+        "teardown:passed": 397
+      },
+      "collected": 397
+    },
+    "mypy": {
+      "before": 1834,
+      "after": 1827,
+      "added": [],
+      "removed": [
+        [
+          "tests/prices/dex/test_uniswap.py",
+          "Function is missing a type annotation [no-untyped-def]",
+          1
+        ],
+        [
+          "tests/prices/dex/test_uniswap.py",
+          "Module has no attribute \"block_number\" [attr-defined]",
+          1
+        ],
+        [
+          "tests/prices/dex/test_uniswap.py",
+          "Unexpected keyword argument \"sync\" for \"get_price\" of \"UniswapV1\" [call-arg]",
+          1
+        ],
+        [
+          "tests/prices/dex/test_uniswap.py",
+          "Unexpected keyword argument \"sync\" for \"get_price\" of \"UniswapRouterV2\" [call-arg]",
+          1
+        ],
+        [
+          "tests/prices/dex/test_uniswap.py",
+          "Unexpected keyword argument \"sync\" for \"get_price\" of \"UniswapV3\" [call-arg]",
+          1
+        ],
+        [
+          "tests/prices/dex/test_uniswap.py",
+          "Argument 1 to \"float\" has incompatible type \"PriceResult | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\" [arg-type]",
+          1
+        ],
+        [
+          "tests/prices/dex/test_uniswap.py",
+          "Unexpected keyword argument \"sync\" for \"get_price\" of \"UniswapMultiplexer\" [call-arg]",
+          1
+        ]
+      ],
+      "baseline": "audits/results/2026-09-25-quote-repairs/committed-312",
+      "dependencies_identical": true
+    }
+  },
   "final-311": {
     "complete": true,
     "exit_code": 0,
@@ -599,6 +693,47 @@
       ],
       "baseline": "audits/results/2026-09-25-quote-repairs/committed-312",
       "dependencies_identical": true
+    }
+  },
+  "native-312": {
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 539.7796719074249,
+    "source_sha": "fdfaea7148380d8d026de83176282b191d930594",
+    "source_archive_sha256": "741c3d7a6002aa90cdcb7c5fab1aa56359a70c06f1ba523ac5d064b6cf75b86e",
+    "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+    "missing_reports": [],
+    "oom_killed": false,
+    "command": {
+      "command": [
+        "sh",
+        "-c",
+        "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; set +e; python /runner/native.py; quote_native_status=$?; python /runner/native_reviewed.py; quote_reviewed_status=$?; test \"$quote_native_status\" -eq 0 && test \"$quote_reviewed_status\" -eq 0"
+      ],
+      "exit_code": 1,
+      "interrupted": false,
+      "elapsed_seconds": 538.362134818,
+      "peak_sampled_process_rss_bytes": 1082068992,
+      "cgroup_before": {
+        "memory.current": "8749056",
+        "memory.peak": "8855552",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      },
+      "cgroup_after": {
+        "memory.current": "141824000",
+        "memory.peak": "1172328448",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      }
     }
   },
   "probe-312": {
