@@ -1,0 +1,13 @@
+{
+  "intentional": true,
+  "reason": "Ended the live full-suite run after repeated configured 600-second timeouts, the known synchronous Compound timeout, and all 34 new regressions passing. The next Compound case had started. Remaining full-suite validation is explicitly incomplete.",
+  "supervisor_signal": "SIGTERM",
+  "supervisor_pid": 25910,
+  "supervisor_exit_code": 125,
+  "recorded_run_exit_code": 130,
+  "command_exit_code": -15,
+  "missing_reports": [
+    "pytest-summary.json"
+  ],
+  "not_a_hung_process_claim": true
+}

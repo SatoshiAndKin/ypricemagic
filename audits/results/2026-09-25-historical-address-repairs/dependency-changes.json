@@ -1,0 +1,23 @@
+{
+  "fixed-311": {
+    "added": [
+      "# Editable install with no version control (ypricemagic==0.0.0)",
+      "-e /work"
+    ],
+    "removed": []
+  },
+  "fixed-312": {
+    "added": [
+      "# Editable install with no version control (ypricemagic==0.0.0)",
+      "-e /work"
+    ],
+    "removed": []
+  },
+  "fixed-313": {
+    "added": [
+      "# Editable install with no version control (ypricemagic==0.0.0)",
+      "-e /work"
+    ],
+    "removed": []
+  }
+}

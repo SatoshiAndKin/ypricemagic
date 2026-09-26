@@ -1,0 +1,396 @@
+{
+  "baseline": "audits/results/2026-09-25-uniswap-review/full-312",
+  "current": "audits/results/2026-09-25-historical-address-repairs/full-312",
+  "limitation": "The baseline is incomplete and live historical samples can differ. This compares observed outcomes only, not complete-suite equivalence.",
+  "collected": 1934,
+  "observed_terminal_cases": 1534,
+  "outcomes": {
+    "skipped": 21,
+    "passed": 1201,
+    "failed": 312
+  },
+  "same_previously_failing_case_phase": 237,
+  "identical_error_message": 106,
+  "previously_passed_now_failed": [
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x1CC481cE2BD2EC7Bf67d1Be64d4878b16078F309]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x8Ab7404063Ec4DBcfd4598215992DC3F8EC853d7]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x5CAF29fD8efbe4ED0cfc43A8a211B276E9889583]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x13B02c8dE71680e71F0820c996E4bE43c2F57d15]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xcB3df3108635932D912632ef7132d03EcFC39080]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x3155BA85D5F96b2d030a4966AF206230e46849cb]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xE41d2489571d322189246DaFA5ebDe1F4699F498]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x0D8775F648430679A709E98d2b0Cb6250d2887EF]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xdeFA4e8a7bcBA345F687a2f1456F5Edd9CE97202]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x4688a8b1F292FDaB17E9a90c8Bc379dC1DBd8713]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x6f259637dcD74C767781E37Bc6133cd6A68aa161]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xC581b735A1688071A1746c968e0798D642EDE491]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x5555f75e3d5278082200Fb451D1b6bA946D8e13b]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (604.19 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xc12eCeE46ed65D970EE5C899FCC7AE133AfF9b03]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (604.19 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (604.19 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x00000000000000000000000000000000000003d2]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (604.19 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.01 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x000000000000000000000000000000000000009c]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.01 s)"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x6B3595068778DD592e39A122f4f5a5cF09C90fE2]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.01 s)"
+    }
+  ],
+  "no_baseline_outcome": [
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-21884066]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-23971864]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48-11084264]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-26059662]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48-16076063]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48-21067862]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-10062091]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48-26059662]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-15394615]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-20727138]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x0000000000085d4780B73119b644AE5ecd22b376-11763553]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-26059662]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x0000000000085d4780B73119b644AE5ecd22b376-16528923]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x0000000000085d4780B73119b644AE5ecd22b376-21294292]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-11597128]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x0000000000085d4780B73119b644AE5ecd22b376-26059662]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-16417973]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-21238817]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-13218534]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-26059662]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-17498910]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-21779286]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-9988056]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-26059662]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-15345258]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-20702460]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-9998476]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-26059662]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-15352205]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-20705933]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-26059662]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3-10835674]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-19465879]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-21663807]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-23861734]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-26059662]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-15121601]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-18767621]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-22413641]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-26059662]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-18463884]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-20995810]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-23527736]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-26059662]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-19796268]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.00 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[17023864]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.59 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[21541762]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.59 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[14011932]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.59 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[23047728]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.59 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[12505966]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.59 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[15517898]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.59 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[24553694]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.59 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[18529830]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.59 s)"
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[20035796]",
+      "phase": "call",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (600.59 s)"
+    }
+  ],
+  "repair_file_outcomes": {
+    "passed": 34
+  }
+}

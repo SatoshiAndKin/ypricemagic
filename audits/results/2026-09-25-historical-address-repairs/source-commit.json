@@ -1,0 +1,13 @@
+{
+  "commit": "a7c7545d121b4ec5ecb5830f1e7363d4073ca68d",
+  "files": {
+    "y/prices/_markets.py": "ba4bd95d011eaff8bb170c33c8df16d38965ffc47ed56f205ac2e5b12bb92a19",
+    "y/prices/dex/uniswap/v2.py": "26838cf8afec544ae42db3588cfd965d90b73ebd915a3ccef4b6043a396e1b49",
+    "y/prices/dex/uniswap/v3.py": "b219f5b6c46cac2b9e190daa4a494ece77a6190f654d2c23dc9ef066252d5d93",
+    "tests/test_uniswap_address_repairs.py": "4927aa9886bfa133670e595f00a79dda313e70b0d6b232a6a50f4e8030b6b38c",
+    "tools/validation/native.py": "d244bd69ae95175da13cf914a329888cf98b73cccd2779d1c89bd02b0a67c2af",
+    "pyproject.toml": "7bab6705d9b57fa18e0a44fef7766af21a1c38b915faf1cc9e2106216a6ceef2"
+  },
+  "matches_worktree_validated_files": true,
+  "worktree_source_archive_sha256": "0f050399a080b97a49529cc2708d2fc4de50c29f4d85a4c3a0752061fa6c4fe4"
+}
