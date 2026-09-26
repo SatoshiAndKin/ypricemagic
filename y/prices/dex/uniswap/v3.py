@@ -511,7 +511,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
         from y.prices._routing import liquidity_price
 
         return await liquidity_price(
-            str(token),
+            await convert.to_address_async(token),
             block,
             ignore_pools=ignore_pools,
             skip_cache=skip_cache,

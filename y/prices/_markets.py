@@ -304,6 +304,8 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
     if protocol == "Uniswap V2":
         method = "getAmountsOut(uint256,address[])"
         amounts = await read(market.router, method + "(uint256[])", block, amount, [token, output])
+        if amounts is None or not amounts:
+            return None
         result = int(amounts[-1])
     elif protocol in ("Solidly", "Velodrome V2"):
         route: tuple[Any, ...] = (token, output, market.stable)

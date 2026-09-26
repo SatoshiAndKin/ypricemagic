@@ -67,6 +67,7 @@ focused_tests = [
   "tests/test_amount_quotes.py",
   "tests/test_quote_regressions.py",
   "tests/test_quote_repairs.py",
+  "tests/test_uniswap_address_repairs.py",
   "tests/prices/dex/test_uniswap.py::test_uniswap_v2",
   "tests/test_price_result.py",
   "tests/test_trade_path_sources.py",

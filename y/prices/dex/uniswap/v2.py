@@ -724,6 +724,7 @@ class UniswapRouterV2(ContractBase):
 
     @stuck_coro_debugger
     async def all_pools_for(self, token_in: Address) -> dict[UniswapV2Pool, Address]:
+        token_in = await convert.to_address_async(token_in)
         return (await self.__pools_by_token__).get(str(token_in), {}).copy()
 
     @stuck_coro_debugger
@@ -934,6 +935,7 @@ class UniswapRouterV2(ContractBase):
     @stuck_coro_debugger
     @a_sync.a_sync(ram_cache_maxsize=100_000, ram_cache_ttl=60 * 60)
     async def check_liquidity(self, token: Address, block: Block, ignore_pools=[]) -> int:
+        token = await convert.to_address_async(token)
         if debug_logs := logger.isEnabledFor(DEBUG):
             log_debug(
                 "checking %s liquidity for %s %s at %s",
