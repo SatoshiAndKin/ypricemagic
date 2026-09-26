@@ -677,12 +677,12 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
         """
         token0, token1, fee, tick_spacing, pool = event.values()
         return UniswapV3Pool(
-            pool,
-            token0,
-            token1,
-            fee,
-            tick_spacing,
-            event.block_number,
+            address=pool,
+            token0=token0,
+            token1=token1,
+            tick_spacing=tick_spacing,
+            fee=fee,
+            deploy_block=event.block_number,
             asynchronous=self.asynchronous,
         )
 
@@ -713,13 +713,13 @@ class SlipstreamPools(UniV3Pools):
     def _process_event(self, event: _EventItem) -> UniswapV3Pool:
         token0, token1, tick_spacing, pool = event.values()
         return SlipstreamPool(
-            pool,
-            token0,
-            token1,
+            address=pool,
+            token0=token0,
+            token1=token1,
+            tick_spacing=tick_spacing,
             # The native Slipstream quoter includes the pool's dynamic fee.
-            0,
-            tick_spacing,
-            event.block_number,
+            fee=0,
+            deploy_block=event.block_number,
             asynchronous=self.asynchronous,
         )
 

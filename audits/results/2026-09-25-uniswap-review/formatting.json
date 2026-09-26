@@ -1,0 +1,14 @@
+{
+  "black": "25.9.0",
+  "isort": "7.0.0",
+  "autoflake": "2.2.1",
+  "result": "pass",
+  "files": [
+    "y/convert.py",
+    "y/prices/dex/uniswap/v3.py",
+    "y/prices/dex/uniswap/uniswap.py",
+    "tests/test_quote_repairs.py",
+    "tests/prices/dex/test_uniswap.py"
+  ],
+  "source_diff_whitespace": "pass"
+}

@@ -1,18 +1,24 @@
 """Tests for Uniswap price fetching functions.
 
 This module contains asynchronous tests for verifying price retrieval via the Uniswap multiplexer
-across different Uniswap versions (V1, V2, and V3). In particular, note that for Uniswap V2 the test now uses
-the highest valid price across all supported routers at one block.
+across different Uniswap versions (V1, V2, and V3). Controlled multiplexer tests
+assert deepest-viable-pool selection, independent of the highest USD quote.
 
 See Also:
     :class:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer`
 """
 
+from typing import Any
+
 import pytest
 from a_sync import cgather
 from brownie import chain
+from web3.exceptions import ContractLogicError
 
 from tests.fixtures import mutate_addresses
+from tests.test_amount_quotes import BLOCK, TOKEN, USD, market
+from tests.test_pricing_correctness import run_async_test
+from tests.test_quote_repairs import multiplexer_graph
 from y.networks import Network
 from y.prices import magic
 from y.prices.dex.uniswap import v3
@@ -80,34 +86,37 @@ async def test_uniswap_v1(token, async_uni_v1):
     assert price == pytest.approx(alt_price, rel=5e-2)
 
 
-@pytest.mark.parametrize("token", V2_TOKENS)
-@pytest.mark.asyncio_cooperative
-async def test_uniswap_v2(token):
-    """Test Uniswap V2 price fetching.
-
-    This test compares all router quotes with the multiplexer result at one
-    concrete block. A shallower router can provide the highest USD quote.
-
-    Args:
-        token: The token address to query.
-
-    See Also:
-        :meth:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer.routers_by_depth`
-    """
-    import dank_mids
-
-    from y.prices._candidates import valid_price
-
-    block = await dank_mids.eth.block_number
-    candidates = await cgather(
-        *(
-            router.get_price(token, block, skip_cache=True, sync=False)
-            for router in uniswap_multiplexer.uniswaps
-        )
+@run_async_test
+@pytest.mark.parametrize("scenario", ["deep", "reverted", "zero", "excluded", "exhausted", "tie"])
+async def test_uniswap_v2(monkeypatch: pytest.MonkeyPatch, scenario: str) -> None:
+    """The public multiplexer selects the deepest viable pool, with stable ties."""
+    pools = [market("shallow", depth=1), market("deep", depth=2)]
+    rates: dict[str, Any] = {"shallow": 9, "deep": 2}
+    if scenario == "reverted":
+        rates["deep"] = ContractLogicError("execution reverted")
+    elif scenario in ("zero", "exhausted"):
+        rates["deep"] = 0
+        if scenario == "exhausted":
+            rates["shallow"] = 0
+    elif scenario == "tie":
+        pools = [market("b", depth=2), market("a", depth=2)]
+        rates = {"a": 2, "b": 9}
+    _, seen, _ = multiplexer_graph(monkeypatch, pools, rates)
+    ignored = ("deep",) if scenario == "excluded" else ()
+    result = await uniswap_multiplexer.get_price(
+        TOKEN, BLOCK.number, ignore_pools=ignored, skip_cache=True
     )
-    expected = max((float(price) for price in candidates if valid_price(price)), default=None)
-    result = await uniswap_multiplexer.get_price(token, block, skip_cache=True, sync=False)
+    expected = None if scenario == "exhausted" else 2 if scenario in ("deep", "tie") else 9
     assert (float(result) if result is not None else None) == expected
+    attempted = {
+        "deep": ["deep"],
+        "reverted": ["deep", "shallow"],
+        "zero": ["deep", "shallow"],
+        "excluded": ["shallow"],
+        "exhausted": ["deep", "shallow"],
+        "tie": ["a"],
+    }[scenario]
+    assert seen == [(pool, TOKEN, 10**6, USD) for pool in attempted]
 
 
 @pytest.mark.parametrize("token", V2_TOKENS)

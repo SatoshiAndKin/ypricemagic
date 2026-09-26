@@ -2,6 +2,7 @@
 
 import asyncio
 import importlib
+from collections.abc import AsyncIterator
 from dataclasses import replace
 from decimal import Decimal
 from types import SimpleNamespace
@@ -30,6 +31,166 @@ USDC_CASES = [
     for token, name in tokens.items()
     if name in ("usdc", "usdc.e", "usdbc")
 ]
+
+
+def multiplexer_graph(monkeypatch: Any, pools: Any, rates: Any = None) -> Any:
+    """Keep the public multiplexer and routing code over a controlled market graph."""
+    service, seen, discovery = graph(monkeypatch, pools, rates)
+    monkeypatch.setattr(_routing, "quote_service", lambda: service)
+    monkeypatch.setattr(BlockRef, "resolve", AsyncMock(return_value=BLOCK))
+    return service, seen, discovery
+
+
+@run_async_test
+@pytest.mark.parametrize(
+    "protocol,fee,spacing",
+    [("Uniswap V3", 3000, 60), ("Uniswap V3", 10000, 200), ("Slipstream", 0, 60)],
+)
+async def test_pool_created_event_reaches_native_quoter(
+    monkeypatch: Any, protocol: str, fee: int, spacing: int
+) -> None:
+    from y import convert
+    from y.prices.dex.uniswap import uniswap_multiplexer, v3
+
+    pool_address = f"0x{fee + spacing + 100000:040x}"
+    values: tuple[Any, ...] = (TOKEN, USD, spacing, pool_address)
+    registry = v3.SlipstreamPools if protocol == "Slipstream" else v3.UniV3Pools
+    if protocol == "Uniswap V3":
+        values = (TOKEN, USD, fee, spacing, pool_address)
+    event = SimpleNamespace(values=lambda: values, block_number=BLOCK.number - 1)
+    pool = registry._process_event(cast(Any, SimpleNamespace(asynchronous=True)), cast(Any, event))
+
+    async def pools_for_token(token: str, block: int) -> AsyncIterator[Any]:
+        assert token == convert.to_address(TOKEN) and block == BLOCK.number
+        yield pool
+
+    router = SimpleNamespace(_quoter=CHILD, _factory=USD, pools_for_token=pools_for_token)
+    monkeypatch.setattr(uniswap_multiplexer, "v2_routers", {})
+    monkeypatch.setattr(uniswap_multiplexer, "v1", None)
+    monkeypatch.setattr(uniswap_multiplexer, "v3", None)
+    monkeypatch.setattr(uniswap_multiplexer, "v3_forks", [router])
+    balancer = importlib.import_module("y.prices.dex.balancer")
+    monkeypatch.setattr(
+        balancer, "balancer_multiplexer", SimpleNamespace(__v1__=Ready(None), __v2__=Ready(None))
+    )
+    monkeypatch.setattr(importlib.import_module("y.prices.stable_swap.curve"), "curve", None)
+    deployed = AsyncMock(return_value=True)
+    monkeypatch.setattr(_markets, "deployed", deployed)
+
+    async def balance(target: str, signature: str, block: BlockRef, owner: str) -> int:
+        assert target in (TOKEN, USD)
+        assert signature == "balanceOf(address)(uint256)" and block == BLOCK
+        assert owner == pool_address
+        return 2000000 if target == TOKEN else 3000000
+
+    monkeypatch.setattr(_markets, "state", balance)
+    native = AsyncMock(return_value=997000)
+    monkeypatch.setattr(
+        Contract,
+        "coroutine",
+        AsyncMock(return_value=SimpleNamespace(quoteExactInput=SimpleNamespace(coroutine=native))),
+    )
+    monkeypatch.setattr(_markets, "read", AsyncMock(return_value=6))
+    markets = await _markets.discover(TOKEN, BLOCK)
+    assert len(markets) == 1
+    result = await _markets.swap(markets[0], QuoteAsset(TOKEN, 1000001, 6), USD, BLOCK)
+    key = spacing if protocol == "Slipstream" else fee
+    native.assert_awaited_once_with(
+        bytes.fromhex(TOKEN[2:])
+        + key.to_bytes(3, "big", signed=protocol == "Slipstream")
+        + bytes.fromhex(USD[2:]),
+        1000001,
+        block_identifier=BLOCK.identifier,
+    )
+    assert result is not None and result.outputs == (QuoteAsset(USD, 997000, 6),)
+    assert result.contract == pool_address and result.protocol == protocol
+    assert pool.fee == fee and pool.tick_spacing == spacing
+    assert pool._deploy_block == BLOCK.number - 1
+    assert markets[0].balances == (2000000, 3000000)
+    assert markets[0].fee == fee
+    assert markets[0].tick_spacing == (spacing if protocol == "Slipstream" else None)
+    deployed.assert_awaited_once_with(pool_address, BLOCK)
+
+
+@run_async_test
+@pytest.mark.parametrize("scenario", ["only", "deepest", "excluded", "unavailable"])
+async def test_multiplexer_includes_slipstream(monkeypatch: Any, scenario: str) -> None:
+    from y.prices.dex.uniswap import uniswap_multiplexer
+
+    pools = [market("slipstream", depth=2000, protocol="Slipstream")]
+    if scenario != "only":
+        pools.append(market("shallow", depth=1000))
+    rates = {"slipstream": 2, "shallow": 9}
+    if scenario == "unavailable":
+        rates["slipstream"] = 0
+    _, seen, _ = multiplexer_graph(monkeypatch, pools, rates)
+    ignored = ("slipstream",) if scenario == "excluded" else ()
+    result = await uniswap_multiplexer.get_price(
+        TOKEN, BLOCK.number, ignore_pools=ignored, skip_cache=True
+    )
+    fallback = scenario in ("excluded", "unavailable")
+    assert result is not None and float(result) == (9 if fallback else 2)
+    expected = ["shallow"] if scenario == "excluded" else ["slipstream"]
+    if scenario == "unavailable":
+        expected.append("shallow")
+    assert seen == [(pool, TOKEN, 10**6, USD) for pool in expected]
+
+
+@run_async_test
+@pytest.mark.parametrize("kind", ["integer", "hexbytes", "bytes", "checksum", "lower", "erc20"])
+async def test_multiplexer_normalizes_supported_addresses(monkeypatch: Any, kind: str) -> None:
+    from hexbytes import HexBytes
+
+    from y import convert
+    from y.classes.common import ERC20
+    from y.prices.dex.uniswap import uniswap_multiplexer
+
+    token = f"0x{0xABCD:040x}"
+    inputs = {
+        "integer": int(token, 16),
+        "hexbytes": HexBytes(token),
+        "bytes": bytes.fromhex(token[2:]),
+        "checksum": convert.to_address(token),
+        "lower": token,
+        "erc20": ERC20(token, asynchronous=True),
+    }
+    _, seen, discovery = multiplexer_graph(monkeypatch, [market("pool", first=token)], {"pool": 2})
+    result = await uniswap_multiplexer.get_price(inputs[kind], BLOCK.number, skip_cache=True)
+    assert result is not None and float(result) == 2
+    assert seen == [("pool", token, 10**6, USD)]
+    discovery.assert_awaited_once_with(token, BLOCK)
+
+
+@run_async_test
+async def test_multiplexer_rejects_invalid_address_before_rpc(monkeypatch: Any) -> None:
+    from y.prices.dex.uniswap import uniswap_multiplexer
+
+    rpc = AsyncMock(return_value=None)
+    monkeypatch.setattr(_routing, "liquidity_price", rpc)
+    with pytest.raises(ValueError, match="not a valid ETH address"):
+        await uniswap_multiplexer.get_price("not-an-address", BLOCK.number)
+    rpc.assert_not_awaited()
+
+
+@run_async_test
+@pytest.mark.parametrize("value", [0, 1, 0xABCD, int(DAI, 16), 2**160 - 1])
+async def test_integer_address_conversion_preserves_every_byte(value: int) -> None:
+    from y import convert
+
+    expected = convert.to_address(f"0x{value:040x}")
+    assert convert.to_address(value) == expected
+    assert await convert.to_address_async(value) == expected
+
+
+@run_async_test
+@pytest.mark.parametrize("value", [-1, 2**160])
+async def test_integer_address_conversion_rejects_out_of_range(value: int) -> None:
+    from y import convert
+
+    with pytest.raises(ValueError):
+        convert.to_address(value)
+    with pytest.raises(ValueError):
+        await convert.to_address_async(value)
 
 
 @run_async_test

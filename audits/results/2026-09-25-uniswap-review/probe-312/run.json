@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python",
+    "/runner/probe.py"
+  ],
+  "docker_context": "colima-rpc-tune",
+  "builder": "ypricemagic-validation-4168ea425aa6",
+  "complete": true,
+  "started_unix": 1790382274.7040792,
+  "source_sha": "fdfaea7148380d8d026de83176282b191d930594",
+  "source_revision": "HEAD",
+  "source_archive_sha256": "514c6c2f175addb83142e9c781a21c8997a1060e3645e40d461705a24bd16860",
+  "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 6.501022815704346
+}

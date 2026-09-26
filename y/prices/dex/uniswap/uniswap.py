@@ -131,12 +131,20 @@ class UniswapMultiplexer(ASyncGenericSingleton):
         """Use liquidity ranking across supported Uniswap pools."""
         from y.prices._routing import liquidity_price
 
+        token_in = await convert.to_address_async(token_in)
         return await liquidity_price(
-            str(token_in),
+            token_in,
             block,
             ignore_pools=ignore_pools,
             skip_cache=skip_cache,
-            first_markets=("Uniswap V1", "Uniswap V2", "Uniswap V3", "Solidly", "Velodrome V2"),
+            first_markets=(
+                "Uniswap V1",
+                "Uniswap V2",
+                "Uniswap V3",
+                "Slipstream",
+                "Solidly",
+                "Velodrome V2",
+            ),
         )
 
     @stuck_coro_debugger
