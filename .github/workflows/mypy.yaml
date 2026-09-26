@@ -42,6 +42,10 @@ jobs:
         path: .mypy_cache
         key: mypy-cache-${{ runner.os }}-${{ matrix.pyversion }}-${{ hashFiles('**/*.py', 'pyproject.toml') }}
 
+    - name: Allow long dependency submodule paths on Windows
+      if: runner.os == 'Windows'
+      run: git config --global core.longpaths true
+
     - name: Install build and runtime dependencies
       shell: python
       run: |
