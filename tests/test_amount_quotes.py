@@ -40,11 +40,19 @@ def graph(monkeypatch: Any, pools: Any, rates: Any = None) -> Any:
     rates = rates or {}
     seen = []
 
-    async def discover(token: Any, block: Any) -> Any:
+    async def discover(token: Any, block: Any, first_markets: tuple[str, ...] = ()) -> Any:
         assert block == BLOCK
         return tuple(
             sorted(
-                (p for p in pools if token in p.tokens),
+                (
+                    p
+                    for p in pools
+                    if token in p.tokens
+                    and (
+                        not first_markets
+                        or any(key in (p.protocol, p.router, p.factory) for key in first_markets)
+                    )
+                ),
                 key=lambda p: (-p.depth(token), p.protocol, p.pool),
             )
         )

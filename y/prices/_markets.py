@@ -90,11 +90,14 @@ async def curve_pool_state(pool: str, block: BlockRef) -> Market | None:
 
 
 @stuck_coro_debugger
-async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
+async def discover(
+    token: str, block: BlockRef, first_markets: tuple[str, ...] = ()
+) -> tuple[Market, ...]:
     """Reuse registry indexes. Process each protocol with one bounded worker pool.
 
     Registry loading remains owned by the registry. No route prefix or amount
-    enters this function's cache key.
+    enters this function's cache key. Factory/protocol restrictions exclude
+    irrelevant inventories before their pools or balances are loaded.
     """
     from y import convert
     from y.prices.dex.balancer import balancer_multiplexer
@@ -113,6 +116,9 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
     balancer_v1: Any
     balancer_v2: Any
     markets: list[Market] = []
+
+    def allowed(*keys: str) -> bool:
+        return not first_markets or any(key in keys for key in first_markets)
 
     async def safely(
         function: Callable[[Any], Awaitable[Market | None]], value: Any
@@ -136,11 +142,26 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
         return [item async for item in iterator]
 
     for router in uniswap_multiplexer.v2_routers.values():
+        protocol = (
+            "Velodrome V2"
+            if isinstance(router, VelodromeRouterV2)
+            else "Solidly" if isinstance(router, SolidlyRouterBase) else "Uniswap V2"
+        )
+        if first_markets and not allowed(protocol, address(router), address(router.factory)):
+            continue
+        if not await deployed(address(router.factory), block):
+            continue
         # The existing immutable token index contains deployment data, including
         # cached Sushi tuples. Avoid pools_for_token's task-per-pool filter.
         pools = await loaded(router.get_pools_for(checksum, block=block.number, sync=False), {})
 
         async def v2_snapshot(pool: Any) -> Market | None:
+            # Cached factory events already identify pools created after this block.
+            # Avoid an RPC for every modern pool during historical discovery.
+            if (
+                created := getattr(pool, "_deploy_block", None)
+            ) is not None and created > block.number:
+                return None
             if not await deployed(address(pool), block):
                 return None
             tokens = tuple(address(t) for t in await pool.__tokens__)
@@ -168,18 +189,25 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
     for router in [uniswap_multiplexer.v3, *uniswap_multiplexer.v3_forks]:
         if router is None:
             continue
+        # Slipstream uses the same router class; the pool determines its protocol.
+        if first_markets and not allowed(
+            "Uniswap V3", "Slipstream", address(router._quoter), address(router._factory)
+        ):
+            continue
+        if not await deployed(address(router._factory), block):
+            continue
         pools = await loaded(collect(router.pools_for_token(checksum, block.number)), [])
 
         async def v3_snapshot(pool: Any) -> Market | None:
             if not await deployed(address(pool), block):
                 return None
             tokens = (address(pool.token0), address(pool.token1))
-            balances = tuple(
-                [
-                    int(await state(t, "balanceOf(address)(uint256)", block, address(pool)))
-                    for t in tokens
-                ]
-            )
+            raw_balances = [
+                await state(t, "balanceOf(address)(uint256)", block, address(pool)) for t in tokens
+            ]
+            if any(balance is None for balance in raw_balances):
+                return None
+            balances = tuple(map(int, raw_balances))
             if not balances[tokens.index(token)]:
                 return None
             return Market(
@@ -195,7 +223,7 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
 
         markets.extend(m for m in await bounded_map(lambda p: safely(v3_snapshot, p), pools) if m)
 
-    if curve:
+    if curve and allowed("Curve", ""):
         pools = (await loaded(curve.__coin_to_pools__, {})).get(checksum, ())
 
         async def curve_snapshot(pool: Any) -> Market | None:
@@ -213,6 +241,8 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
     balancer_v2 = await loaded(balancer_multiplexer.__v2__, None)
     if balancer_v2:
         for vault in balancer_v2.vaults:
+            if not allowed("Balancer V2", address(vault), ""):
+                continue
             if not await deployed(address(vault), block):
                 continue
             pools = await loaded(collect(vault.pools(block=block.number)), [])
@@ -243,7 +273,9 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
                 m for m in await bounded_map(lambda p: safely(balancer_snapshot, p), pools) if m
             )
 
-    balancer_v1 = await loaded(balancer_multiplexer.__v1__, None)
+    balancer_v1 = (
+        await loaded(balancer_multiplexer.__v1__, None) if allowed("Balancer V1", "") else None
+    )
     if balancer_v1 and balancer_v1.exchange_proxy:
         from y.prices.dex.balancer.v1 import TOKENOUTS_TO_TRY
 
@@ -275,7 +307,7 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
             if m
         )
 
-    if uniswap_multiplexer.v1 and token != address(EEE_ADDRESS):
+    if uniswap_multiplexer.v1 and allowed("Uniswap V1", "") and token != address(EEE_ADDRESS):
         exchange = await optional_read(
             uniswap_multiplexer.v1.factory, "getExchange(address)(address)", block, token
         )
@@ -291,7 +323,12 @@ async def discover(token: str, block: BlockRef) -> tuple[Market, ...]:
                     )
                 )
 
-    return tuple(sorted(markets, key=lambda m: (-m.depth(token), m.protocol, m.pool)))
+    return tuple(
+        sorted(
+            (m for m in markets if allowed(m.protocol, m.router, m.factory)),
+            key=lambda m: (-m.depth(token), m.protocol, m.pool),
+        )
+    )
 
 
 @stuck_coro_debugger
@@ -389,7 +426,10 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
         )
     elif protocol == "Uniswap V1":
         method = "getTokenToEthInputPrice(uint256)"
-        result = int(await read(pool, method + "(uint256)", block, amount))
+        quoted = await optional_read(pool, method + "(uint256)", block, amount)
+        if quoted is None:
+            return None
+        result = int(quoted)
     else:
         raise ValueError(f"unknown swap protocol {protocol}")
     if result <= 0:

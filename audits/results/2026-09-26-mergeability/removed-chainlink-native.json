@@ -1,0 +1,47 @@
+{
+  "block": 26064471,
+  "block_hash": "0xbf093aca401a4d9e669c11f270dd92858330abb495a8c09ce2b2b41d6a218791",
+  "feed": "0x1A31D42149e82Eb99777f903C08A2E41A00085d3",
+  "records": [
+    {
+      "method": "eth_call",
+      "params": [
+        {
+          "to": "0x1A31D42149e82Eb99777f903C08A2E41A00085d3",
+          "data": "0x245a7bfc"
+        },
+        {
+          "blockHash": "0xbf093aca401a4d9e669c11f270dd92858330abb495a8c09ce2b2b41d6a218791",
+          "requireCanonical": true
+        }
+      ],
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "result": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    {
+      "method": "eth_call",
+      "params": [
+        {
+          "to": "0x1A31D42149e82Eb99777f903C08A2E41A00085d3",
+          "data": "0x8205bf6a"
+        },
+        {
+          "blockHash": "0xbf093aca401a4d9e669c11f270dd92858330abb495a8c09ce2b2b41d6a218791",
+          "requireCanonical": true
+        }
+      ],
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "error": {
+          "code": 3,
+          "message": "execution reverted",
+          "data": "0x"
+        }
+      }
+    }
+  ]
+}

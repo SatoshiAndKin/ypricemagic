@@ -1,0 +1,22 @@
+{
+  "block": 10836738,
+  "method": "eth_call",
+  "params": [
+    {
+      "to": "0x69f276abd6456152d519d23086031da7c73f91b8",
+      "data": "0x95b68fe70000000000000000000000000000000000000000000000000de0b6b3a7640000"
+    },
+    {
+      "blockHash": "0xe4747a03e41e9a5a965db8db223cf9825b68d5fa629505a5959df9ccbf7d8b05",
+      "requireCanonical": true
+    }
+  ],
+  "response": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32003,
+      "message": "EVM error: InvalidJump"
+    }
+  }
+}

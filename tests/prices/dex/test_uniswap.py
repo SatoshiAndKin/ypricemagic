@@ -21,6 +21,7 @@ from tests.test_pricing_correctness import run_async_test
 from tests.test_quote_repairs import multiplexer_graph
 from y.networks import Network
 from y.prices import magic
+from y.prices._rpc import BlockRef
 from y.prices.dex.uniswap import v3
 from y.prices.dex.uniswap.uniswap import uniswap_multiplexer
 
@@ -77,13 +78,16 @@ async def test_uniswap_v1(token, async_uni_v1):
     See Also:
         :meth:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer.get_price`
     """
+    block = await BlockRef.resolve(None)
+    lookup: Any = magic.get_price  # a_sync supplies the runtime sync flag.
     price, alt_price = await cgather(
-        async_uni_v1.get_price(token, None),
-        magic.get_price(token, skip_cache=True, sync=False),
+        async_uni_v1.get_price(token, block.number),
+        lookup(token, block.number, skip_cache=True, sync=False),
     )
-    print(token, price, alt_price)
+    print(token, block, price, alt_price, price.path if price is not None else None)
     # check if price is within 5% range
-    assert price == pytest.approx(alt_price, rel=5e-2)
+    assert price is not None and alt_price is not None
+    assert float(price) == pytest.approx(float(alt_price), rel=5e-2)
 
 
 @run_async_test
@@ -134,9 +138,12 @@ async def test_uniswap_v3(token):
     See Also:
         :meth:`~y.prices.dex.uniswap.v3.uniswap_v3.get_price`
     """
+    block = await BlockRef.resolve(None)
+    lookup: Any = magic.get_price  # a_sync supplies the runtime sync flag.
     price, alt_price = await cgather(
-        v3.uniswap_v3.get_price(token, skip_cache=True, sync=False),
-        magic.get_price(token, skip_cache=True, sync=False),
+        v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False),
+        lookup(token, block.number, skip_cache=True, sync=False),
     )
-    print(token, price, alt_price)
-    assert price == pytest.approx(alt_price, rel=5e-2)
+    print(token, block, price, alt_price, price.path if price is not None else None)
+    assert price is not None and alt_price is not None
+    assert float(price) == pytest.approx(float(alt_price), rel=5e-2)

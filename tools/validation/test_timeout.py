@@ -85,7 +85,7 @@ class TimeoutTests(unittest.TestCase):
 
                     @pytest.mark.timeout(1)
                     def test_sync_deadline(owned_state, request):
-                        assert float(request.config.getini("timeout")) == 600
+                        assert float(request.config.getini("timeout")) == 3600
                         try:
                             time.sleep(30)
                         finally:

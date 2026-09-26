@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; tar -xzf validation_native.tar.gz; PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -c \"import eth_utils, web3, pytest; raise SystemExit(pytest.main([\\\"tests/unit\\\"]))\""
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 9.383664124994539,
+  "peak_sampled_process_rss_bytes": 354164736,
+  "cgroup_before": {
+    "memory.current": "8843264",
+    "memory.peak": "8843264",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "28041216",
+    "memory.peak": "306438144",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

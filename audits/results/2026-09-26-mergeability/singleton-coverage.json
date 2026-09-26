@@ -1,0 +1,23 @@
+{
+  "source_sha": "1f76d99a9e727de7a6ed795f1cad9dbeb3db6cfa",
+  "new_statements": [
+    1125,
+    1126,
+    1130,
+    1131,
+    1132,
+    1133
+  ],
+  "covered_statements": [
+    1125,
+    1126,
+    1130,
+    1131,
+    1132,
+    1133
+  ],
+  "coverage": 1.0,
+  "instrumented_process_exit": 139,
+  "baseline_instrumented_process_exit": 139,
+  "normal_full_unit_suite_exit": 0
+}

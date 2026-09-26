@@ -7,14 +7,14 @@ from dataclasses import replace
 from decimal import Decimal
 from types import SimpleNamespace
 from typing import Any, cast
-from unittest.mock import AsyncMock, Mock
+from unittest.mock import AsyncMock, Mock, call
 
 import pytest
 from eth_abi.exceptions import InsufficientDataBytes
 from web3.exceptions import ContractLogicError
 
 from tests.test_amount_quotes import BLOCK, CHILD, TOKEN, USD, graph, market
-from tests.test_pricing_correctness import Ready, run_async_test
+from tests.test_pricing_correctness import Ready, instance, run_async_test
 from y import constants
 from y.contracts import Contract
 from y.datatypes import QuoteAsset
@@ -33,6 +33,79 @@ USDC_CASES = [
 ]
 
 
+@run_async_test
+async def test_historical_v2_discovery_uses_known_deployment_boundaries(monkeypatch: Any) -> None:
+    from y.classes.common import ERC20
+    from y.prices.dex.uniswap import uniswap_multiplexer, v2
+
+    pools = [
+        v2.UniswapV2Pool(
+            f"0x{0xD000 + i:040x}",
+            ERC20(TOKEN),
+            ERC20(USD),
+            created,
+            asynchronous=True,
+        )
+        for i, created in enumerate((BLOCK.number - 1, BLOCK.number, BLOCK.number + 1, None))
+    ]
+    router = instance(v2.UniswapRouterV2)
+    router.address, router.factory, router.pools = CHILD, USD, pools
+    router._supports_factory_helper = False
+    monkeypatch.setattr(uniswap_multiplexer, "v2_routers", {"test": router})
+    monkeypatch.setattr(uniswap_multiplexer, "v1", None)
+    monkeypatch.setattr(uniswap_multiplexer, "v3", None)
+    monkeypatch.setattr(uniswap_multiplexer, "v3_forks", [])
+    monkeypatch.setattr(
+        importlib.import_module("y.prices.dex.balancer"),
+        "balancer_multiplexer",
+        SimpleNamespace(__v1__=Ready(None), __v2__=Ready(None)),
+    )
+    monkeypatch.setattr(importlib.import_module("y.prices.stable_swap.curve"), "curve", None)
+    deployed = AsyncMock(side_effect=lambda target, block: target != pools[2].address.lower())
+    reserves = AsyncMock(return_value=(2000000, 3000000, 0))
+    monkeypatch.setattr(_markets, "deployed", deployed)
+    monkeypatch.setattr(_markets, "state", reserves)
+    result = await _markets.discover(TOKEN, BLOCK)
+    eligible = [pool.address.lower() for pool in (pools[0], pools[1], pools[3])]
+    assert [item.pool for item in result] == eligible
+    assert all(item.balances == (2000000, 3000000) for item in result)
+    assert deployed.await_args_list == [call(USD, BLOCK), *[call(p, BLOCK) for p in eligible]]
+    assert reserves.await_args_list == [
+        call(p, "getReserves()(uint256,uint256,uint256)", BLOCK) for p in eligible
+    ]
+    assert len(await router.all_pools_for(TOKEN, sync=False)) == 4
+
+
+@run_async_test
+@pytest.mark.parametrize("error", [None, RuntimeError("RPC unavailable")])
+async def test_undeployed_factories_do_not_load_pool_indexes(monkeypatch: Any, error: Any) -> None:
+    from y.prices.dex.uniswap import uniswap_multiplexer
+
+    pools = Mock(side_effect=AssertionError("undeployed factory index must not load"))
+    v2 = SimpleNamespace(factory=TOKEN, get_pools_for=pools)
+    v3 = SimpleNamespace(_factory=CHILD, pools_for_token=pools)
+    monkeypatch.setattr(uniswap_multiplexer, "v2_routers", {"test": v2})
+    monkeypatch.setattr(uniswap_multiplexer, "v3", v3)
+    monkeypatch.setattr(uniswap_multiplexer, "v3_forks", [])
+    monkeypatch.setattr(uniswap_multiplexer, "v1", None)
+    monkeypatch.setattr(
+        importlib.import_module("y.prices.dex.balancer"),
+        "balancer_multiplexer",
+        SimpleNamespace(__v1__=Ready(None), __v2__=Ready(None)),
+    )
+    monkeypatch.setattr(importlib.import_module("y.prices.stable_swap.curve"), "curve", None)
+    deployed = AsyncMock(return_value=False, side_effect=error)
+    monkeypatch.setattr(_markets, "deployed", deployed)
+    if error:
+        with pytest.raises(RuntimeError, match="RPC unavailable"):
+            await _markets.discover(TOKEN, BLOCK)
+        deployed.assert_awaited_once_with(TOKEN, BLOCK)
+    else:
+        assert await _markets.discover(TOKEN, BLOCK) == ()
+        assert deployed.await_args_list == [call(TOKEN, BLOCK), call(CHILD, BLOCK)]
+    pools.assert_not_called()
+
+
 def multiplexer_graph(monkeypatch: Any, pools: Any, rates: Any = None) -> Any:
     """Keep the public multiplexer and routing code over a controlled market graph."""
     service, seen, discovery = graph(monkeypatch, pools, rates)
@@ -42,12 +115,13 @@ def multiplexer_graph(monkeypatch: Any, pools: Any, rates: Any = None) -> Any:
 
 
 @run_async_test
+@pytest.mark.parametrize("missing_balance", [None, TOKEN, USD])
 @pytest.mark.parametrize(
     "protocol,fee,spacing",
     [("Uniswap V3", 3000, 60), ("Uniswap V3", 10000, 200), ("Slipstream", 0, 60)],
 )
 async def test_pool_created_event_reaches_native_quoter(
-    monkeypatch: Any, protocol: str, fee: int, spacing: int
+    monkeypatch: Any, protocol: str, fee: int, spacing: int, missing_balance: str | None
 ) -> None:
     from y import convert
     from y.prices.dex.uniswap import uniswap_multiplexer, v3
@@ -77,10 +151,12 @@ async def test_pool_created_event_reaches_native_quoter(
     deployed = AsyncMock(return_value=True)
     monkeypatch.setattr(_markets, "deployed", deployed)
 
-    async def balance(target: str, signature: str, block: BlockRef, owner: str) -> int:
+    async def balance(target: str, signature: str, block: BlockRef, owner: str) -> int | None:
         assert target in (TOKEN, USD)
         assert signature == "balanceOf(address)(uint256)" and block == BLOCK
         assert owner == pool_address
+        if target == missing_balance:
+            return None
         return 2000000 if target == TOKEN else 3000000
 
     monkeypatch.setattr(_markets, "state", balance)
@@ -92,6 +168,10 @@ async def test_pool_created_event_reaches_native_quoter(
     )
     monkeypatch.setattr(_markets, "read", AsyncMock(return_value=6))
     markets = await _markets.discover(TOKEN, BLOCK)
+    if missing_balance is not None:
+        assert markets == ()
+        native.assert_not_awaited()
+        return
     assert len(markets) == 1
     result = await _markets.swap(markets[0], QuoteAsset(TOKEN, 1000001, 6), USD, BLOCK)
     key = spacing if protocol == "Slipstream" else fee
@@ -109,7 +189,7 @@ async def test_pool_created_event_reaches_native_quoter(
     assert markets[0].balances == (2000000, 3000000)
     assert markets[0].fee == fee
     assert markets[0].tick_spacing == (spacing if protocol == "Slipstream" else None)
-    deployed.assert_awaited_once_with(pool_address, BLOCK)
+    assert deployed.await_args_list == [call(USD, BLOCK), call(pool_address, BLOCK)]
 
 
 @run_async_test
@@ -158,7 +238,11 @@ async def test_multiplexer_normalizes_supported_addresses(monkeypatch: Any, kind
     result = await uniswap_multiplexer.get_price(inputs[kind], BLOCK.number, skip_cache=True)
     assert result is not None and float(result) == 2
     assert seen == [("pool", token, 10**6, USD)]
-    discovery.assert_awaited_once_with(token, BLOCK)
+    discovery.assert_awaited_once_with(
+        token,
+        BLOCK,
+        ("Slipstream", "Solidly", "Uniswap V1", "Uniswap V2", "Uniswap V3", "Velodrome V2"),
+    )
 
 
 @run_async_test
@@ -685,8 +769,6 @@ async def test_unavailable_decimals_still_checks_canonical_block(monkeypatch: An
 @run_async_test
 @pytest.mark.parametrize("fail", [True, False])
 async def test_empty_rpc_decimals_obey_public_failure_policy(monkeypatch: Any, fail: bool) -> None:
-    from dank_mids.brownie_patch import dank_web3
-
     from y.prices import _rpc
     from y.prices._quote import SharedCache
 
@@ -697,7 +779,7 @@ async def test_empty_rpc_decimals_obey_public_failure_policy(monkeypatch: Any, f
     cache: SharedCache[Any] = SharedCache(16)
     monkeypatch.setattr(_rpc, "state_cache", lambda: cache)
     call = AsyncMock(return_value=b"")
-    monkeypatch.setattr(dank_web3.eth, "call", call)
+    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=call)))
     monkeypatch.setattr(magic, "ERC20", lambda *a, **kw: SimpleNamespace(symbol=Ready("USDC")))
     if fail:
         assert (

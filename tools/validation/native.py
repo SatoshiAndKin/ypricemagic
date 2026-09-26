@@ -18,7 +18,7 @@ from eth_utils.crypto import keccak
 from y.datatypes import QuoteAsset
 from y.prices._markets import Market, curve_pool_state, swap
 from y.prices._redemptions import redeem
-from y.prices._rpc import BlockRef
+from y.prices._rpc import BlockRef, optional_read
 
 USDC = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
 WETH = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
@@ -67,6 +67,70 @@ async def main() -> int:
         )
         assert actual is None
         await historical.verify()
+        row.update(adapter_result=None, canonical_verified=True, status="pass")
+    except Exception as exc:
+        row.update(status="failure", error=f"{type(exc).__name__}: {exc}")
+    results.append(row)
+    print(json.dumps(row), flush=True)
+    legacy = await BlockRef.resolve(7720735)
+    bat = "0x0D8775F648430679A709E98d2b0Cb6250d2887EF"
+    row = {
+        "case": "Legacy invalid opcode is unavailable",
+        "block": legacy.number,
+        "hash": legacy.hash,
+    }
+    try:
+        assert web3.eth.get_code(to_checksum_address(bat), legacy.number)
+        try:
+            direct(bat, "asset()", [], [], ["address"], legacy.identifier)
+        except ValueError as exc:
+            assert isinstance(exc.args[0], dict)
+            assert exc.args[0]["message"] == "EVM error: InvalidFEOpcode"
+            row["direct_error"] = {key: exc.args[0][key] for key in ("code", "message")}
+        else:
+            raise AssertionError("expected the historical BAT absent-selector failure")
+        assert await optional_read(bat, "asset()(address)", legacy) is None
+        await legacy.verify()
+        row.update(adapter_result=None, canonical_verified=True, status="pass")
+    except Exception as exc:
+        row.update(status="failure", error=f"{type(exc).__name__}: {exc}")
+    results.append(row)
+    print(json.dumps(row), flush=True)
+    v1_block = await BlockRef.resolve(10836738)
+    old_susd = "0x57ab1e02fee23774580c119740129eac7081e9d3"
+    exchange = "0x69f276abd6456152d519d23086031da7c73f91b8"
+    eth = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    row = {
+        "case": "V1 historical failed quote is unavailable",
+        "block": v1_block.number,
+        "hash": v1_block.hash,
+        "pool": exchange,
+    }
+    try:
+        assert web3.eth.get_code(to_checksum_address(exchange), v1_block.number)
+        try:
+            direct(
+                exchange,
+                "getTokenToEthInputPrice(uint256)",
+                ["uint256"],
+                [10**18],
+                ["uint256"],
+                v1_block.identifier,
+            )
+        except ValueError as exc:
+            assert isinstance(exc.args[0], dict)
+            assert exc.args[0]["message"] == "EVM error: InvalidJump"
+            row["direct_error"] = {key: exc.args[0][key] for key in ("code", "message")}
+        else:
+            raise AssertionError("expected the historical exchange quote failure")
+        actual = await swap(
+            Market("Uniswap V1", exchange, (old_susd, eth), (0, 0)),
+            QuoteAsset(old_susd, 10**18, 18),
+            eth,
+            v1_block,
+        )
+        assert actual is None
+        await v1_block.verify()
         row.update(adapter_result=None, canonical_verified=True, status="pass")
     except Exception as exc:
         row.update(status="failure", error=f"{type(exc).__name__}: {exc}")

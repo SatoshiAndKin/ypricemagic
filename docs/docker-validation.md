@@ -35,6 +35,14 @@ Each run uses a new database and source directory inside its container.
 The archive version override applies only to the `ypricemagic` distribution.
 Dependency builds keep their own source versions.
 
+Record provider-specific tuning with the reports. During PR 43 validation, a
+10,000-block `eth_getLogs` request exceeded 45 seconds while a 1,000-block
+subrange completed in 3.01 seconds. Subsequent runs set the existing
+`YPRICEMAGIC_GETLOGS_BATCH_SIZE=1000` option in the private env file. Smaller
+ranges increase request counts but can avoid expensive individual scans.
+Keep results using different settings identifiable; the running containers
+retain the environment with which they started.
+
 The runner accepts a Git revision, a new report directory, and a command after
 `--`. Use `--revision worktree` during development. Its report includes both the
 parent SHA and the exact source archive SHA256. Commit and rerun the final checks
@@ -107,9 +115,16 @@ Partial test reports and duplicate terminal outcomes never qualify for that
 comparison. Added and removed test IDs remain visible in its coverage fields.
 
 The central pytest configuration requires `pytest-timeout`. Version 2.2.0
-supports the pinned pytest 6.2.5 and activates the existing 600-second
-synchronous deadline. Missing the plugin stops collection with an error.
-The cooperative deadline and concurrency of 100 remain unchanged.
+supports the pinned pytest 6.2.5. Both synchronous and cooperative tests have
+a 3,600-second deadline, configured in `pyproject.toml`. Three successful cold
+mainnet price measurements took 912.15, 914.76, and 922.89 seconds. A complete
+full-suite run with a 1,800-second deadline then passed 43 calls above 600 seconds,
+including one at 1,792.82 seconds, and timed out two other cases. One hour gives
+those historical calls headroom. Missing the plugin stops collection with an
+error. Cooperative concurrency remains 100.
+The interpreter matrix uses the controlled regression targets in
+`tool.validation.focused_tests`. Live Chainlink and bucket-registry checks remain
+in the full Python 3.12 suite, which exercises their shared cold initialization.
 Run `python /work/tools/validation/test_timeout.py` inside the validation
 container to check the missing-plugin error, synchronous interruption,
 fixture teardown, continued execution, and all 100 active cooperative cases.
@@ -131,8 +146,12 @@ object-release result within a repetition.
 
 The pinned cooperative scheduler also waits for the next active test deadline.
 It does not repeatedly poll while tests wait for I/O or finish cancellation
-cleanup. The default 600-second timeout and configured concurrency remain
-unchanged.
+cleanup. The configured 3,600-second timeout does not change concurrency.
+Set `VALIDATION_WAITS=1` in the container to sample coroutine locations and logical
+RPC counters every 30 seconds. `price_waits.py` uses the same sampler for isolated
+synchronous Compound pricing, with an explicit diagnostic deadline. These reports
+contain code locations, allowlisted bucket labels and scalar retry categories,
+not arbitrary coroutine locals, request bodies or RPC credentials.
 
 The `repeat_scaling.sh` command runs three timing measurements and one separate
 allocation profile of the cached Sushi topology. The runner copies and hashes
@@ -198,6 +217,11 @@ the same connection remains open and usable.
 The pinned [dank_mids repair](https://github.com/SatoshiAndKin/dank_mids/pull/9)
 releases earlier HTTP 408 attempts before the next retry waits. It retains the
 same request ID, retry count, observer events, and local-timeout race behavior.
+Failed singleton multicalls now retry the original direct call instead of
+bisecting forever. This matters when injected
+multicall bytecode uses an opcode unavailable at a historical block. Direct
+requests preserve the block hash, canonical requirement and original response.
+Longer test deadlines do not repair an unbounded retry loop.
 `dank_retry_profile.py --output /reports/retries.json` measures 64 concurrent
 requests, 16 HTTP 408 responses per request, and 128 KiB diagnostic payloads.
 Run three independent timing samples and a separate `--allocations` sample

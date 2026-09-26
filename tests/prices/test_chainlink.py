@@ -1,11 +1,10 @@
-import time
-
 import pytest
 from brownie import ZERO_ADDRESS, chain
 
 from tests.fixtures import mainnet_only
 from y.contracts import contract_creation_block_async
 from y.networks import Network
+from y.prices._rpc import BlockRef, read
 from y.prices.chainlink import FEEDS, chainlink
 
 feeds = set(FEEDS.keys())
@@ -138,30 +137,18 @@ async def test_chainlink_get_feed(token):
 @pytest.mark.parametrize("token", FEEDS)
 @pytest.mark.asyncio_cooperative
 async def test_chainlink_latest(token):
-    """
-    Test the latest price availability for a token using Chainlink.
-
-    This test checks whether ``chainlink.get_price(token)`` returns a valid price.
-    If no price is returned, it retrieves the corresponding Feed object from
-    ``chainlink.get_feed(token)`` and checks its latest timestamp. If the timestamp
-    indicates that the feed is stale (i.e. more than 24 hours old relative to the current time),
-    the test is skipped. Otherwise, it asserts that the associated feed's contract's
-    aggregator property is the zero address, thereby indicating that no current price is provided.
-
-    See Also:
-        :func:`y.prices.chainlink.chainlink.get_feed`
-    """
-    if not await chainlink.get_price(token):
-        feed = await chainlink.get_feed(token)
+    """Unavailable feeds must be stale or have an explicitly removed aggregator."""
+    block = await BlockRef.resolve(None)
+    if not await chainlink.get_price(token, block=block.number):
+        feed = await chainlink.get_feed(token, block=block)
         if feed is None:
             return  # The registry removed this feed.
-        latest_timestamp = await feed.latest_timestamp()
-        if latest_timestamp and latest_timestamp + 24 * 60 * 60 < time.time():
+        if await read(feed.address, "aggregator()(address)", block) == ZERO_ADDRESS:
+            return  # A removed aggregator's timestamp call can revert directly.
+        latest_timestamp = await feed.latest_timestamp(block)
+        if latest_timestamp and latest_timestamp + 24 * 60 * 60 < block.timestamp:
             pytest.skip("feed is stale")
-        try:
-            assert await feed.contract.aggregator == ZERO_ADDRESS, "no current price available"
-        except AttributeError as e:
-            raise AttributeError(*e.args, feed) from e
+        pytest.fail("no current price available from an active aggregator")
 
 
 @mainnet_only

@@ -30,7 +30,7 @@ T = TypeVar("T")
 
 
 def run_async_test(function: Callable[P, Coroutine[Any, Any, None]]) -> Callable[P, None]:
-    """Run tests that patch shared pricing modules one at a time."""
+    """Run controlled async tests without concurrent live RPC tests."""
 
     @wraps(function)
     def run(*args: P.args, **kwargs: P.kwargs) -> None:
@@ -524,6 +524,9 @@ async def test_v2_discovery_uses_one_block_and_drains_loader(
     monkeypatch.setattr(module, "dank_mids", SimpleNamespace(eth=head))
 
     class Pool:
+        token0: Any = SimpleNamespace(get_cache_value=lambda pool: pool.token0)
+        token1: Any = SimpleNamespace(get_cache_value=lambda pool: pool.token1)
+
         def __init__(
             self,
             address: str,

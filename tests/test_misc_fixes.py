@@ -39,6 +39,8 @@ def test_chainlink_get_feed_falls_back_to_static_feeds(monkeypatch):
 
     import a_sync
 
+    from y.prices._rpc import BlockRef
+
     module = importlib.import_module("y.prices.chainlink")
     chainlink = object.__new__(module.Chainlink)
     a_sync.ASyncGenericBase.__init__(chainlink)
@@ -46,14 +48,28 @@ def test_chainlink_get_feed_falls_back_to_static_feeds(monkeypatch):
     asset = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
     static = SimpleNamespace(asset=asset, address=asset, start_block=0)
     chainlink._feeds = [static]
+    chainlink.registry = "0x0000000000000000000000000000000000000100"
+    block = BlockRef(1, 20_000_000, "0x" + "12" * 32, 1_700_000_000)
 
     async def events(to_block):
         assert to_block == 20_000_000
         yield SimpleNamespace(asset="0x0000000000000000000000000000000000000001", start_block=1)
 
     chainlink._feeds_from_events = SimpleNamespace(objects=events)
-    monkeypatch.setattr(module, "contract_creation_block_async", AsyncMock(return_value=1))
+    deployed = AsyncMock(return_value=True)
+    registered = AsyncMock(return_value=module.ZERO_ADDRESS)
+    monkeypatch.setattr(module, "deployed", deployed)
+    monkeypatch.setattr(module, "optional_read", registered)
     result = asyncio.get_event_loop().run_until_complete(
-        chainlink.get_feed(asset, 20_000_000, sync=False)
+        chainlink.get_feed(asset, block, sync=False)
     )
     assert result is static
+    registered.assert_awaited_once_with(
+        chainlink.registry,
+        "getFeed(address,address)(address)",
+        block,
+        asset,
+        module.DENOMINATIONS["USD"],
+    )
+    assert deployed.await_count == 2
+    deployed.assert_awaited_with(static.address, block)

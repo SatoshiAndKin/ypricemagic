@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; python -m pip install --no-deps coverage==7.6.12; tar -xzf validation_native.tar.gz; PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python validation_tests.py"
+  ],
+  "exit_code": 139,
+  "interrupted": false,
+  "elapsed_seconds": 11.35043503199995,
+  "peak_sampled_process_rss_bytes": 359772160,
+  "cgroup_before": {
+    "memory.current": "8884224",
+    "memory.peak": "8884224",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "198770688",
+    "memory.peak": "359796736",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

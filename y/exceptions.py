@@ -250,6 +250,10 @@ class CallReverted(Exception):
 def call_reverted(e: Exception) -> bool:
     if isinstance(e, ContractLogicError):
         return True
+    # Reth's responses for legacy contract execution failures.
+    if isinstance(e, ValueError) and e.args and isinstance(response := e.args[0], dict):
+        if response.get("message") in ("EVM error: InvalidFEOpcode", "EVM error: InvalidJump"):
+            return True
     triggers = (
         "execution reverted",
         "No data was returned - the call likely reverted",

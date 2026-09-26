@@ -95,6 +95,14 @@ async def check_bucket(token: AnyAddressType, block: int | None = None) -> str |
 
     bucket = await db.get_bucket(token_address)
     if bucket and bucket not in ("chainlink feed", "chainlink and band"):
+        # These structural categories follow oracles in the normal priority order.
+        # A category cached at an older block must not hide a subsequently added feed.
+        if bucket in ("synthetix", "yearn or yearn-like", "curve lp") and chainlink:
+            _, has_feed = await _safe_check_bucket(
+                "chainlink feed", chainlink.has_feed(token_address, block=block)
+            )
+            if has_feed:
+                bucket = "chainlink and band" if token_address in band else "chainlink feed"
         logger.debug("returning bucket %s from ydb", bucket)
         return bucket
 

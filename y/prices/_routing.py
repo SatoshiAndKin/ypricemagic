@@ -70,9 +70,16 @@ class QuoteService:
         self.market_cache: SharedCache[tuple[Market, ...]] = SharedCache(4096, immutable=True)
         self.result_cache: SharedCache[PriceResult | None] = SharedCache(2048)
 
-    async def markets(self, token: str, block: BlockRef, skip_cache: bool) -> tuple[Market, ...]:
+    @stuck_coro_debugger
+    async def markets(
+        self, token: str, block: BlockRef, skip_cache: bool, first_markets: tuple[str, ...] = ()
+    ) -> tuple[Market, ...]:
+        first_markets = tuple(sorted(set(first_markets)))
         return await self.market_cache.get(
-            (block.chain, block.hash, token), lambda: discover(token, block)
+            (block.chain, block.hash, token, first_markets),
+            lambda: (
+                discover(token, block, first_markets) if first_markets else discover(token, block)
+            ),
         )
 
     async def usd(self, token: str, block: BlockRef) -> PriceResult | None:
@@ -291,7 +298,11 @@ class QuoteService:
                 stack[-1] = node
             selected = False
             if len(node.steps) < swaps_left:
-                markets = await self.markets(node.asset.token, block, skip_cache)
+                markets = (
+                    await self.markets(node.asset.token, block, skip_cache, first_markets)
+                    if not node.steps and first_markets
+                    else await self.markets(node.asset.token, block, skip_cache)
+                )
                 for market in markets:
                     if market.pool in node.used:
                         continue

@@ -1,0 +1,1046 @@
+[
+  {
+    "name": "audit-final",
+    "complete": false,
+    "exit_code": null,
+    "elapsed_seconds": null,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "682ccd70b2e6374ccbd18304e54010f2ae39a8d9244daca02f84c71746ab748a",
+    "missing_reports": null,
+    "oom_killed": null
+  },
+  {
+    "name": "compound-isolated",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 1937.3428869247437,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "0f67ff3e27691b07cafbe69e359b4802fc16eb77379a2c00f41d832fad80f3df",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "1105711104",
+      "memory.peak": "3510697984",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 1935.3103460779967
+  },
+  {
+    "name": "compound-optimized-cold",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 1363.161515712738,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "3293448a5ff200d3b8825aab86ef737317b901a79894090e4e0fe0088c73b52e",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "143818752",
+      "memory.peak": "1174085632",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 1360.997341741997
+  },
+  {
+    "name": "dank-before-native",
+    "complete": false,
+    "exit_code": 143,
+    "elapsed_seconds": 46.28554606437683,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "e360f5e5148393dafcbf9930e7ec4c504ac37c706c3462eb42fd518d5ada1a9b",
+    "missing_reports": [
+      "pytest-summary.json",
+      "coverage.json"
+    ],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "198795264",
+      "memory.peak": "328962048",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "4"
+    },
+    "interrupted": true,
+    "last_progress_seconds": 41.30243007300305
+  },
+  {
+    "name": "dank-before-native2",
+    "complete": true,
+    "exit_code": 139,
+    "elapsed_seconds": 30.476837873458862,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "5b50e35cd6ddfee7c9742e9efb1b43401060a72527a7f6e3fe74689b33c1a255",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "204316672",
+      "memory.peak": "371359744",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "counts": {
+        "setup:passed": 158,
+        "call:passed": 151,
+        "teardown:passed": 158,
+        "call:failed": 7
+      },
+      "collected": 158,
+      "exit_code": 1
+    },
+    "last_progress_seconds": 22.236151978002454
+  },
+  {
+    "name": "dank-ci-native",
+    "complete": true,
+    "exit_code": 2,
+    "elapsed_seconds": 29.91231107711792,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "6fe7a121f5aed087837ad26905a5752848bcba2f25928a5b47717232502de377",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "82300928",
+      "memory.peak": "604037120",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "4"
+    },
+    "interrupted": false,
+    "pytest": {
+      "counts": {},
+      "collected": 99,
+      "exit_code": 2
+    },
+    "last_progress_seconds": 27.23670256100013
+  },
+  {
+    "name": "dank-ci-native2",
+    "complete": true,
+    "exit_code": 139,
+    "elapsed_seconds": 38.232409715652466,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "f0befd3f007bd2300ad97872553665482e8fc43b94530c1359a433c623745c1c",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "255832064",
+      "memory.peak": "604270592",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "counts": {
+        "setup:passed": 158,
+        "call:passed": 157,
+        "teardown:passed": 158,
+        "call:failed": 1
+      },
+      "collected": 158,
+      "exit_code": 1
+    },
+    "last_progress_seconds": 34.26324323299923
+  },
+  {
+    "name": "dank-ci-native3",
+    "complete": true,
+    "exit_code": 2,
+    "elapsed_seconds": 36.07244801521301,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "c8aee0d6ae585e9bb930dc914b6da79f85956884bd721fb17ddad9a7e6553bf4",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "84279296",
+      "memory.peak": "604332032",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "counts": {},
+      "collected": 99,
+      "exit_code": 2
+    },
+    "last_progress_seconds": 30.28393936199427
+  },
+  {
+    "name": "dank-ci-native4",
+    "complete": true,
+    "exit_code": 139,
+    "elapsed_seconds": 15.540868759155273,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "a05eba6e8c6ec045de733e4216b10454ee4eebbc09e44bd89bcc59c19add05f3",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "198770688",
+      "memory.peak": "359796736",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "counts": {
+        "setup:passed": 158,
+        "call:passed": 158,
+        "teardown:passed": 158
+      },
+      "collected": 158,
+      "exit_code": 0
+    },
+    "last_progress_seconds": 10.199077783006942
+  },
+  {
+    "name": "dank-fixed",
+    "complete": false,
+    "exit_code": 1,
+    "elapsed_seconds": 3.4368391036987305,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "6ba92e49d01c591177fcfb360bc099f55ecd3f3452b19d0f4d3d2ba74a4b7249",
+    "missing_reports": [
+      "pytest-summary.json",
+      "native-owners.json",
+      "coverage.json"
+    ],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "9924608",
+      "memory.peak": "37175296",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 0.22094363800715655
+  },
+  {
+    "name": "dank-fixed-plain",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 16.11607313156128,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "eea282b25070a762eb164e45ff0af54c3483533b5904ce1b30506564a52b96ed",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "28041216",
+      "memory.peak": "306438144",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 8.23810100099945
+  },
+  {
+    "name": "dank-fixed2",
+    "complete": false,
+    "exit_code": 1,
+    "elapsed_seconds": 3.1162302494049072,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "e15ef4655fe521245c49256cbd5fc6b0fdeffc37ae7560c3d716ca5d40ed3d25",
+    "missing_reports": [
+      "pytest-summary.json",
+      "coverage.json"
+    ],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "45395968",
+      "memory.peak": "52654080",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 0.18757076699694153
+  },
+  {
+    "name": "dank-fixed3",
+    "complete": false,
+    "exit_code": 1,
+    "elapsed_seconds": 6.789345979690552,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "e15ef4655fe521245c49256cbd5fc6b0fdeffc37ae7560c3d716ca5d40ed3d25",
+    "missing_reports": [
+      "pytest-summary.json",
+      "coverage.json"
+    ],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "41885696",
+      "memory.peak": "242868224",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 4.20909414900234
+  },
+  {
+    "name": "dank-fixed4",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 14.196526765823364,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "d9e110041f126e2995b2d031793b5808b60c26505a862be1e01c9a828f9a7e90",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "38608896",
+      "memory.peak": "343838720",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "counts": {
+        "setup:passed": 158,
+        "call:passed": 123,
+        "teardown:passed": 158,
+        "call:failed": 33,
+        "call:skipped": 2
+      },
+      "collected": 158,
+      "exit_code": 1
+    },
+    "last_progress_seconds": 11.209556027999497
+  },
+  {
+    "name": "dank-native",
+    "complete": false,
+    "exit_code": 1,
+    "elapsed_seconds": 18.100332021713257,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "dfcb230705f6d54e4e820d350418f3b45d46303642cb10d36ecf2aedc569557a",
+    "missing_reports": [
+      "pytest-summary.json",
+      "coverage.json"
+    ],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "34627584",
+      "memory.peak": "287166464",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 15.205362196997157
+  },
+  {
+    "name": "dank-no-dns",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 10.766837120056152,
+    "source_sha": "eaf03e8f10563840be39c8fbdb630a7d051c087a",
+    "source_archive_sha256": "d5bdfb3a6baef25856e27f385d876c45732492c4eef3c4437ba351702dbbfd79",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "27684864",
+      "memory.peak": "306737152",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 8.177428474999033
+  },
+  {
+    "name": "dank-source-native",
+    "complete": false,
+    "exit_code": 1,
+    "elapsed_seconds": 41.846866846084595,
+    "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+    "source_archive_sha256": "dfcb230705f6d54e4e820d350418f3b45d46303642cb10d36ecf2aedc569557a",
+    "missing_reports": [
+      "pytest-summary.json",
+      "coverage.json"
+    ],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "127197184",
+      "memory.peak": "769282048",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 39.31272612200701
+  },
+  {
+    "name": "focused-final-312",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 2487.479178905487,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "a690eaa9eed1c9e58ca9f07847e53cf7cf39ee82e54942b15fe67a734bbedf39",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "255344640",
+      "memory.peak": "1194979328",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 683,
+        "call:passed": 576,
+        "teardown:passed": 683,
+        "call:skipped": 10,
+        "call:failed": 97
+      },
+      "collected": 683
+    },
+    "last_progress_seconds": 2484.897519691993
+  },
+  {
+    "name": "focused-final-3600-312",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 297.7162868976593,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "3293448a5ff200d3b8825aab86ef737317b901a79894090e4e0fe0088c73b52e",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "167235584",
+      "memory.peak": "1173168128",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 514,
+        "call:passed": 514,
+        "teardown:passed": 514
+      },
+      "collected": 514
+    },
+    "last_progress_seconds": 295.63106798801164
+  },
+  {
+    "name": "focused-final-validated-312",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 2498.6451938152313,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "f5fe6096573f2803bc72e1e49eb27d9df72e9435fb222da296836673c3ce7265",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "171614208",
+      "memory.peak": "1173565440",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 709,
+        "call:passed": 601,
+        "teardown:passed": 709,
+        "call:failed": 98,
+        "call:skipped": 10
+      },
+      "collected": 709
+    },
+    "last_progress_seconds": 2496.3999838430027
+  },
+  {
+    "name": "focused-optimized-312",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 463.9367821216583,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "85edbe59c14e2ec686ae111e75b4341586854b10977c1aa8f30f0dd63757bafd",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "171204608",
+      "memory.peak": "1173258240",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 703,
+        "call:passed": 687,
+        "teardown:passed": 703,
+        "call:skipped": 10,
+        "call:failed": 6
+      },
+      "collected": 703
+    },
+    "last_progress_seconds": 461.417502412005
+  },
+  {
+    "name": "focused-singleton-311",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 300.2485067844391,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "be699a0fcea292cbfff34ad57407c58b1990e9ef628ff74e93f3dca6a66572a7",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "164540416",
+      "memory.peak": "1125158912",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 479,
+        "call:passed": 479,
+        "teardown:passed": 479
+      },
+      "collected": 479
+    },
+    "last_progress_seconds": 298.3564211280027
+  },
+  {
+    "name": "focused-singleton-313",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 313.7227237224579,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "8272b12c261b4f3bc417ded7ede7a9321086b4b29d4961049761b93015591a66",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "171876352",
+      "memory.peak": "1161469952",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 479,
+        "call:passed": 479,
+        "teardown:passed": 479
+      },
+      "collected": 479
+    },
+    "last_progress_seconds": 310.5206981960073
+  },
+  {
+    "name": "focused-validated-311",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 309.49955916404724,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "3293448a5ff200d3b8825aab86ef737317b901a79894090e4e0fe0088c73b52e",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "159068160",
+      "memory.peak": "1122136064",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 514,
+        "call:passed": 514,
+        "teardown:passed": 514
+      },
+      "collected": 514
+    },
+    "last_progress_seconds": 307.3725902730075
+  },
+  {
+    "name": "focused-validated-312",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 457.6897270679474,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "6758f30c92ec3a6ffc8e2ec336a1578e370a224383db3a26c904ef9598b80ff0",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "170909696",
+      "memory.peak": "1173868544",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 703,
+        "call:passed": 693,
+        "teardown:passed": 703,
+        "call:skipped": 10
+      },
+      "collected": 703
+    },
+    "last_progress_seconds": 455.60310646900325
+  },
+  {
+    "name": "focused-validated-313",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 293.6085641384125,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "3293448a5ff200d3b8825aab86ef737317b901a79894090e4e0fe0088c73b52e",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "168046592",
+      "memory.peak": "1170464768",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 514,
+        "call:passed": 514,
+        "teardown:passed": 514
+      },
+      "collected": 514
+    },
+    "last_progress_seconds": 291.39737995300675
+  },
+  {
+    "name": "full-1800",
+    "complete": false,
+    "exit_code": 1,
+    "elapsed_seconds": 128.229336977005,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "e845b788907c9ebec7dd6d14cbde940e2f141203358ee36ce3287e2cf89d027f",
+    "missing_reports": [
+      "pytest-summary.json",
+      "mypy.txt"
+    ],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "140546048",
+      "memory.peak": "1163063296",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 126.19732170300267
+  },
+  {
+    "name": "full-merged",
+    "complete": false,
+    "exit_code": 130,
+    "elapsed_seconds": 146.37523794174194,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "f9bd45b136de7d6fc03bbcc6b7785d89d872452400e09e4549809ee8a1818752",
+    "missing_reports": [
+      "pytest-summary.json",
+      "compiled-modules.json"
+    ],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "137146368",
+      "memory.peak": "1173454848",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": true,
+    "last_progress_seconds": 144.29486196400103
+  },
+  {
+    "name": "full-optimized-312",
+    "complete": true,
+    "exit_code": 2,
+    "elapsed_seconds": 5955.010525941849,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "babc0d336551d1feb9447bc162cff66b0c2bae2868b272734b8e0076feac3907",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "1191960576",
+      "memory.peak": "4339249152",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 1987,
+        "call:skipped": 215,
+        "teardown:passed": 1987,
+        "call:passed": 1684,
+        "call:failed": 88,
+        "setup:skipped": 6,
+        "teardown:skipped": 6
+      },
+      "collected": 1993
+    },
+    "last_progress_seconds": 5952.404245658006
+  },
+  {
+    "name": "full-singleton",
+    "complete": false,
+    "exit_code": 143,
+    "elapsed_seconds": 7970.58078122139,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "be699a0fcea292cbfff34ad57407c58b1990e9ef628ff74e93f3dca6a66572a7",
+    "missing_reports": [
+      "pytest-summary.json"
+    ],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "4879245312",
+      "memory.peak": "5258190848",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "18"
+    },
+    "interrupted": true,
+    "last_progress_seconds": 7967.989656455997
+  },
+  {
+    "name": "merged-focused",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 167.50036311149597,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "96b6b61cc165dc0196d242514089b03ba0a25615a047cbc1b444f5c80b880339",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "151916544",
+      "memory.peak": "1163587584",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 453,
+        "call:passed": 448,
+        "teardown:passed": 453,
+        "call:failed": 5
+      },
+      "collected": 453
+    },
+    "last_progress_seconds": 165.40380462699977
+  },
+  {
+    "name": "native-final",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 514.9753069877625,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "8c5384a0fdffd775abd84d2f37d632ed7cacb7533dc88e8309372bc784a7ae90",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "86814720",
+      "memory.peak": "1172824064",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 512.8679297589988
+  },
+  {
+    "name": "native-final-execution-errors",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 121.25086522102356,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "3293448a5ff200d3b8825aab86ef737317b901a79894090e4e0fe0088c73b52e",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "140398592",
+      "memory.peak": "1166856192",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 119.13222720001068
+  },
+  {
+    "name": "native-optimized",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 2287.0466980934143,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "df86368cc0ff9210f9a29084043d65d80687e6b6c3f833de6975f7be80c04858",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "141381632",
+      "memory.peak": "1164144640",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 2284.9271240060043
+  },
+  {
+    "name": "repairs-before",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 145.08354711532593,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "9427af1f81ed10f039d67be7c589744a8db0f3daa6739ffc2a303106476649ff",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "243572736",
+      "memory.peak": "1261871104",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 150,
+        "call:failed": 25,
+        "teardown:passed": 150,
+        "call:passed": 125
+      },
+      "collected": 150
+    },
+    "last_progress_seconds": 143.0372404600057
+  },
+  {
+    "name": "repairs-before-execution-errors",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 137.25037693977356,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "c2a5a00093c2b3c5e84e1fd8aa2deeb9b03a00e359ea30adaefc6b5cc13761da",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "147333120",
+      "memory.peak": "1172815872",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 171,
+        "call:failed": 41,
+        "teardown:passed": 171,
+        "call:passed": 130
+      },
+      "collected": 171
+    },
+    "last_progress_seconds": 135.14758845200413
+  },
+  {
+    "name": "repairs-before-final",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 142.48840975761414,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "b736787351a73a16c478365ce9562fdafd4b653da6e1188f4e7a695b843d50da",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "147292160",
+      "memory.peak": "1172860928",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 165,
+        "call:failed": 37,
+        "teardown:passed": 165,
+        "call:passed": 128
+      },
+      "collected": 165
+    },
+    "last_progress_seconds": 140.2938974199933
+  },
+  {
+    "name": "validated-1800",
+    "complete": false,
+    "exit_code": 143,
+    "elapsed_seconds": 2210.438329219818,
+    "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+    "source_archive_sha256": "f5fb2a11ae2f91e8edb27221a2faf7d8df6347509cd86659f5b685793107931d",
+    "missing_reports": [
+      "pytest-summary.json"
+    ],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "2417348608",
+      "memory.peak": "2419027968",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "26"
+    },
+    "interrupted": true,
+    "last_progress_seconds": 2207.9861842129976
+  }
+]

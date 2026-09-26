@@ -49,15 +49,23 @@ async def main() -> int:
     block = await BlockRef.resolve(BLOCK)
     rows = []
 
-    async def check(name: str, asset: QuoteAsset, expected: Any, call: Any) -> None:
+    async def check(
+        name: str, asset: QuoteAsset, expected: Any, call: Any, evidence: Any = None
+    ) -> None:
         row = {"case": name, "block": block.number, "hash": block.hash, "input": asdict(asset)}
+        if evidence is not None:
+            row["evidence"] = evidence
         try:
             actual = await call()
             step = actual[0] if isinstance(actual, tuple) else actual
-            assert step is not None, "adapter returned unavailable"
-            outputs = {o.token: o.amount for o in step.outputs}
-            assert outputs == expected, (outputs, expected)
-            row.update(status="pass", expected=expected, quote=asdict(step))
+            if expected is None:
+                assert step is None, "adapter quoted an exit without sufficient backing"
+                row.update(status="pass", expected=None, quote=None)
+            else:
+                assert step is not None, "adapter returned unavailable"
+                outputs = {o.token: o.amount for o in step.outputs}
+                assert outputs == expected, (outputs, expected)
+                row.update(status="pass", expected=expected, quote=asdict(step))
         except Exception as exc:
             row.update(status="failure", error=f"{type(exc).__name__}: {exc}")
         rows.append(row)
@@ -126,6 +134,8 @@ async def main() -> int:
         ("Curve 3crv withdrawal", "0x6c3f90f043a72fa612cbac8115ee7e52bde6e490", 10**21, 18),
     ]:
         asset = QuoteAsset(token, shares, decimals)
+        evidence = None
+        expected: dict[str, int] | None
         if name.startswith("Compound"):
             underlying = direct(token, "underlying()", outputs=["address"])[0]
             expected = {underlying: shares * direct(token, "exchangeRateCurrent()")[0] // 10**18}
@@ -147,10 +157,13 @@ async def main() -> int:
                 )[0]
             }
         elif name.startswith("Curve ste"):
-            expected = {direct(token, "lp_token()", outputs=["address"])[0]: shares}
+            lp = direct(token, "lp_token()", outputs=["address"])[0]
+            cash = direct(lp, "balanceOf(address)", ["address"], [token])[0]
+            evidence = {"lp_token": lp, "lp_balance": cash, "requested_shares": shares}
+            expected = {lp: shares} if cash >= shares else None
         else:
             expected = {"0x6c3f90f043a72fa612cbac8115ee7e52bde6e490": shares}
-        await check(name, asset, expected, lambda: first_redemption(asset, block))
+        await check(name, asset, expected, lambda: first_redemption(asset, block), evidence)
     await block.verify()
     status = int(any(row["status"] != "pass" for row in rows))
     write_json(

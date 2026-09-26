@@ -1,0 +1,9 @@
+{
+  "tuple_error": "IndexError: list index out of range",
+  "list_calldata": "70a082310000000000000000000000009a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
+  "source_file": "y/prices/tokenized_fund/piedao.py",
+  "source_sha256": "28cb2718c29ecfbf75ec3252404ffb5b67303965e9ee407f694b3b34835ff51f",
+  "unchanged_from_master": true,
+  "master_sha": "2ebf9c56115219f3b74cf16d93e376206861d641",
+  "scope": "Constructor-only check in frozen Python 3.12 image; no RPC sent"
+}

@@ -1,0 +1,23 @@
+{
+  "setting": "YPRICEMAGIC_GETLOGS_BATCH_SIZE",
+  "value": 1000,
+  "previous_value": "unset; mainnet fallback 10000",
+  "reason": "Direct 10000-block scan exceeded 45 seconds; first 1000 blocks completed in 3.0148605419963133 seconds. Validate the existing provider configuration before changing production defaults.",
+  "applies_to": "jobs started after focused-final-validated-312; running audit-final and focused-final-validated-312 retain their original environment",
+  "unchanged": {
+    "pytest_cooperative_concurrency": 100,
+    "GETLOGS_DOP": 32,
+    "memory_gib": 8,
+    "swap_gib": 0,
+    "cpus": 4,
+    "pids": 512
+  },
+  "source_file": "y/ENVIRONMENT_VARIABLES.py",
+  "source_sha256": "dd79745464a2af0b6855c6a817472f9675081b7c1880294acb68dcf4fcca2a25",
+  "observed_runs": {
+    "native-optimized": {
+      "YPRICEMAGIC_GETLOGS_BATCH_SIZE": "1000",
+      "verification": "Read the named running container environment without printing other variables."
+    }
+  }
+}

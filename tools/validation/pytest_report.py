@@ -19,6 +19,7 @@ class Report:
         self.started = time.monotonic()
         self.stream = (directory / "pytest-events.jsonl").open("w")
         self.counts: dict[str, int] = {}
+        self.sampler: asyncio.Task[None] | None = None
         if allocations:
             tracemalloc.start()
 
@@ -32,6 +33,12 @@ class Report:
 
             main()
         self.event("sessionstart")
+        if os.environ.get("VALIDATION_WAITS") == "1":
+            from price_waits import sample
+
+            self.sampler = asyncio.get_event_loop().create_task(
+                sample(self.directory, self.started)
+            )
 
     def event(self, phase: str, **extra: Any) -> None:
         try:
@@ -118,6 +125,11 @@ class Report:
             + "\n"
         )
         self.stream.close()
+        if self.sampler is not None:
+            self.sampler.cancel()
+            asyncio.get_event_loop().run_until_complete(
+                asyncio.gather(self.sampler, return_exceptions=True)
+            )
 
 
 def pytest_configure(config: Any) -> None:

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; tar -xzf validation_native.tar.gz; PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -c \"import eth_utils, web3, pytest; raise SystemExit(pytest.main([\\\"tests/unit\\\"]))\""
+  ],
+  "docker_context": "colima-rpc-tune",
+  "builder": "ypricemagic-validation-4168ea425aa6",
+  "complete": true,
+  "started_unix": 1790443652.64429,
+  "source_sha": "9a58cd91b4a652ac10d41cc5862c7b2770727632",
+  "source_revision": "worktree",
+  "source_archive_sha256": "eea282b25070a762eb164e45ff0af54c3483533b5904ce1b30506564a52b96ed",
+  "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 16.11607313156128
+}

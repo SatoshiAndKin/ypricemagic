@@ -1,4 +1,5 @@
 import pytest
+from brownie import chain
 
 from tests.fixtures import mainnet_only, mutate_address, mutate_contract
 from tests.prices.lending.test_aave import ATOKENS
@@ -9,6 +10,7 @@ from tests.prices.test_synthetix import SYNTHS
 from tests.test_constants import STABLECOINS
 from y import convert
 from y.constants import EEE_ADDRESS, WRAPPED_GAS_COIN
+from y.prices.chainlink import chainlink
 from y.prices.utils.buckets import check_bucket
 
 STARGATE_LPS = ("0xdf0770dF86a8034b3EFEf0A1Bb3c889B8332FF56",)
@@ -33,7 +35,11 @@ async def test_check_bucket_chainlink(token):
         pytest.skip(f"Not applicable to stablecoins.")
     if token in mutate_contract(WRAPPED_GAS_COIN) + mutate_address(EEE_ADDRESS):
         pytest.skip(f"Not applicable to native token.")
-    assert await check_bucket(token, sync=False) == "chainlink feed"
+    # FEEDS includes historical registry entries that may since have been removed.
+    # Compare both lookups at one block rather than requiring a retired feed.
+    block = int(chain.height)
+    expected = "chainlink feed" if await chainlink.has_feed(token, block) else None
+    assert await check_bucket(token, block, sync=False) == expected
 
 
 @pytest.mark.parametrize("token", CTOKENS)

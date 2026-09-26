@@ -7,6 +7,7 @@ import cachebox
 import dank_mids
 from brownie import ZERO_ADDRESS
 from brownie.network.event import _EventItem
+from eth_abi.exceptions import InsufficientDataBytes
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
@@ -226,17 +227,23 @@ class Feed:
         return Contract(self.address)
 
     async def latest_timestamp(self, block_id: int | BlockRef | None = None) -> int:
-        return int(
-            await read(self.address, "latestTimestamp()(uint256)", await BlockRef.resolve(block_id))
-        )
+        return await self._read_int("latestTimestamp()(uint256)", block_id)
 
     async def latest_answer(self, block_id: int | BlockRef | None = None) -> int:
-        return int(
-            await read(self.address, "latestAnswer()(int256)", await BlockRef.resolve(block_id))
-        )
+        return await self._read_int("latestAnswer()(int256)", block_id)
 
     async def decimals(self, block: int | BlockRef | None = None) -> int:
-        return int(await read(self.address, "decimals()(uint256)", await BlockRef.resolve(block)))
+        return await self._read_int("decimals()(uint256)", block)
+
+    @stuck_coro_debugger
+    async def _read_int(self, signature: str, block: int | BlockRef | None) -> int:
+        resolved = await BlockRef.resolve(block)
+        value = await read(self.address, signature, resolved)
+        if value is None:
+            raise InsufficientDataBytes(
+                f"Empty {signature} response from {self.address} at {resolved.number}"
+            )
+        return int(value)
 
     @cachebox.cached(cachebox.LRUCache(ENVS.DEFAULT_CACHE_MAXSIZE))
     async def scale(self, block: int | BlockRef | None = None) -> int:

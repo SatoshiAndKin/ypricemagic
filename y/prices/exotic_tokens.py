@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 # PREMIA token address (used by xPREMIA pricing)
 _PREMIA_ADDRESS = "0x6399C842dD2bE3dE30BF99Bc7D1bBF6Fa3650E70"
 # Mainnet Premia V1 staking deployment; verified with code and premia() at block 15,000,000.
-_XPREMIA_ADDRESS = "0x16f9D564Df80376C61AC914205D3fDff7057d610"
+_XPREMIA_ADDRESS = "0x16f9D564Df80376C61AC914205D3fDfF7057d610"
 
 
 def _shorten_address(address: str) -> str:

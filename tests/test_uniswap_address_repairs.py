@@ -8,7 +8,6 @@ from typing import Any, cast
 from unittest.mock import AsyncMock
 
 import pytest
-from dank_mids.brownie_patch import dank_web3
 from eth_abi.abi import encode
 from hexbytes import HexBytes
 
@@ -18,7 +17,7 @@ from y import convert
 from y.classes.common import ERC20
 from y.datatypes import QuoteAsset
 from y.exceptions import yPriceMagicError
-from y.prices import _markets, _routing, magic
+from y.prices import _markets, _routing, _rpc, magic
 from y.prices._rpc import BlockRef
 from y.prices.dex.uniswap import v2, v3
 
@@ -64,7 +63,7 @@ def empty_quote_graph(monkeypatch: Any, empty: str, viable: bool) -> tuple[Any, 
         assert target == SECOND_ROUTER
         return encode(["uint256[]"], [[1000001, 997003]])
 
-    monkeypatch.setattr(dank_web3.eth, "call", rpc)
+    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
     return service, calls
 
 
@@ -115,7 +114,9 @@ async def test_decoded_empty_v2_quote_is_unavailable(monkeypatch: Any, empty: An
 )
 async def test_v2_unexpected_errors_propagate(monkeypatch: Any, error: BaseException) -> None:
     service, _ = empty_quote_graph(monkeypatch, "rpc", True)
-    monkeypatch.setattr(dank_web3.eth, "call", AsyncMock(side_effect=error))
+    monkeypatch.setattr(
+        _rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=AsyncMock(side_effect=error)))
+    )
     with pytest.raises(type(error), match=str(error)):
         await service.price(TOKEN, BLOCK, Decimal("1.000001"))
 

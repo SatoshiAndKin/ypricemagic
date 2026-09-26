@@ -1,0 +1,86 @@
+[
+  {
+    "case": "V2 before Router02 deployment",
+    "block": 10100000,
+    "hash": "0x5e1bf57830198afe8da55194b916982922cb923b80fb2b050fecb80ee183d1cc",
+    "pool": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+    "router": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+    "amount_in": 1000000000,
+    "pool_code_bytes": 11293,
+    "router_code_bytes": 0,
+    "adapter_result": null,
+    "canonical_verified": true,
+    "status": "pass"
+  },
+  {
+    "case": "Legacy invalid opcode is unavailable",
+    "block": 7720735,
+    "hash": "0xade4bff819a53954876e1ed42de4bfac2daea8ce2082cfc9b379ddd8cd85c034",
+    "direct_error": {
+      "code": -32003,
+      "message": "EVM error: InvalidFEOpcode"
+    },
+    "status": "failure",
+    "error": "ValueError: {'code': -32003, 'message': 'EVM error: InvalidFEOpcode', 'dankmids_added_context': PartialRequest(method='eth_call', id=14, params=({'to': '0x0D8775F648430679A709E98d2b0Cb6250d2887EF', 'data': '0x38d52e0f'}, {'blockHash': '0xade4bff819a53954876e1ed42de4bfac2daea8ce2082cfc9b379ddd8cd85c034', 'requireCanonical': True}))}"
+  },
+  {
+    "case": "V1 historical failed quote is unavailable",
+    "block": 10836738,
+    "hash": "0xe4747a03e41e9a5a965db8db223cf9825b68d5fa629505a5959df9ccbf7d8b05",
+    "pool": "0x69f276abd6456152d519d23086031da7c73f91b8",
+    "direct_error": {
+      "code": -32003,
+      "message": "EVM error: InvalidJump"
+    },
+    "status": "failure",
+    "error": "ValueError: {'code': -32003, 'message': 'EVM error: InvalidJump', 'dankmids_added_context': PartialRequest(method='eth_call', id=21, params=({'to': '0x69f276aBd6456152d519D23086031DA7c73F91b8', 'data': '0x95b68fe70000000000000000000000000000000000000000000000000de0b6b3a7640000'}, {'blockHash': '0xe4747a03e41e9a5a965db8db223cf9825b68d5fa629505a5959df9ccbf7d8b05', 'requireCanonical': True}))}"
+  },
+  {
+    "case": "V2",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "amount_in": 1000000000,
+    "amount_out": 604341080120514628,
+    "status": "pass"
+  },
+  {
+    "case": "V3",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "amount_in": 1000000000,
+    "amount_out": 605704440938728572,
+    "status": "pass"
+  },
+  {
+    "case": "Curve",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "amount_in": 1000000000,
+    "amount_out": 999867774427437404698,
+    "status": "pass"
+  },
+  {
+    "case": "ERC4626 sDAI",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "shares": 1000000000000000000000,
+    "assets": 1031762943605008098272,
+    "status": "pass"
+  },
+  {
+    "case": "Curve int128 getter",
+    "pool": "0xa2b47e3d5c44877cca798226b7b8118f9bfb7a56",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "first_coin": "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643",
+    "status": "pass"
+  },
+  {
+    "case": "Curve int128 getter",
+    "pool": "0x45f783cce6b7ff23b2ab2d70e416cdb7d6055f51",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "first_coin": "0x16de59092dae5ccf4a1e6439d611fd0653f0bd01",
+    "status": "pass"
+  }
+]
