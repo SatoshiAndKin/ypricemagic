@@ -1,0 +1,58 @@
+{
+  "captured_unix": 1790386309.272201,
+  "reason": "Intentional termination of broader full-suite validation after more than 50 minutes and a completed 600-second synchronous Compound timeout; the next Compound case is pending. All review-focused checks have completed. This is not evidence of a permanently hung process.",
+  "collected": 1900,
+  "terminal_cases": 1500,
+  "outcomes": {
+    "skipped": 21,
+    "passed": 1171,
+    "failed": 308
+  },
+  "seconds_since_last_event": 46.62118983268738,
+  "last_event": {
+    "phase": "setup",
+    "elapsed_seconds": 2720.9021958350004,
+    "rss_peak_bytes": 2807050240,
+    "live_tasks": 113,
+    "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643]",
+    "outcome": "passed",
+    "duration": 0.00029329300014069304,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 8,
+        "flights": 0
+      },
+      "result_cache": {
+        "values": 0,
+        "flights": 0
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 661153,
+      "multicall_uid": 18753,
+      "request_uid": 65939,
+      "jsonrpc_batch_uid": 47599
+    }
+  },
+  "progress": {
+    "elapsed_seconds": 3001.0390489380006,
+    "sampled_process_rss_bytes": 2840412160,
+    "peak_sampled_process_rss_bytes": 3003469824,
+    "cgroup": {
+      "memory.current": "3112607744",
+      "memory.peak": "3507015680",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "42"
+    }
+  }
+}

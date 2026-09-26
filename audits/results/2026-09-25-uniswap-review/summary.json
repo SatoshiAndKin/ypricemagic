@@ -695,6 +695,48 @@
       "dependencies_identical": true
     }
   },
+  "full-312": {
+    "complete": false,
+    "exit_code": 143,
+    "elapsed_seconds": 3003.5308759212494,
+    "source_sha": "fdfaea7148380d8d026de83176282b191d930594",
+    "source_archive_sha256": "741c3d7a6002aa90cdcb7c5fab1aa56359a70c06f1ba523ac5d064b6cf75b86e",
+    "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+    "missing_reports": [
+      "pytest-summary.json"
+    ],
+    "oom_killed": false,
+    "command": {
+      "command": [
+        "sh",
+        "/runner/full_suite.sh"
+      ],
+      "exit_code": -15,
+      "interrupted": true,
+      "elapsed_seconds": 3002.283981119999,
+      "peak_sampled_process_rss_bytes": 3003469824,
+      "cgroup_before": {
+        "memory.current": "8781824",
+        "memory.peak": "8888320",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      },
+      "cgroup_after": {
+        "memory.current": "3112038400",
+        "memory.peak": "3507015680",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "32"
+      }
+    }
+  },
   "native-312": {
     "complete": true,
     "exit_code": 1,

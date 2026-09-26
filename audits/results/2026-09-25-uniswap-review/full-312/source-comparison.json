@@ -1,0 +1,12 @@
+{
+  "commit": "065e6b527dff43f1681ecfb8f207717baba39af4",
+  "match": true,
+  "actual": {
+    "y/convert.py": "d8f34440c54aa93e6646d4f74bf6d4939cd06d6a90c433c74a491c4d9df603be",
+    "y/prices/dex/uniswap/v3.py": "4c7a7755945120fbfb8d818974d004eb3b53565d40a34cfb5d32941580f56f3b",
+    "y/prices/dex/uniswap/uniswap.py": "d7a20b45d5f7933dd2051c733dedaceab0fac8ce2133af1aaa56096fb446d4cf",
+    "tests/test_quote_repairs.py": "52447ff306bbaedcdf5bd532a91f1c0e6ce80f4dfae95f18d1f69890c22a0ba3",
+    "tests/prices/dex/test_uniswap.py": "d752c050856a11606e62d87a42ed777fc388bff417d6681328d40b7215e4c99f",
+    "pyproject.toml": "fe845bdb0b7bc203871377638d8a1007cb2e4330b93f5fb967057519287a270b"
+  }
+}
