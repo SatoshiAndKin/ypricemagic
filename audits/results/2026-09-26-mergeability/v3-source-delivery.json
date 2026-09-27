@@ -7,7 +7,6 @@
   "preserved_uncommitted_generated_c_sha256": "099f4992d9c8404dc31bc761d0fcfb5aeef32cd9f582688dc1b9f73646104506",
   "checked_unix": 1790505379.329901,
   "validation_pending": [
-    "required full suite",
     "mainnet audit"
   ],
   "draft": true,
@@ -16,6 +15,7 @@
     "543 committed-source focused tests on Python3.12",
     "all3 native inventory cases and9 direct V3 index checks",
     "all10 compiled extensions",
-    "CI lint and compile pass;all9 mypy jobs15removed0added"
+    "CI lint and compile pass;all9 mypy jobs15removed0added",
+    "required full suite:1745passed68failed221skipped,zero timeouts,noOOM/missingreports"
   ]
 }

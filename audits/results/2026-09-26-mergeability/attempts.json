@@ -50,6 +50,16 @@
     "last_progress_seconds": 2469.238950341998
   },
   {
+    "name": "audit-v3-inventory-312",
+    "complete": false,
+    "exit_code": null,
+    "elapsed_seconds": null,
+    "source_sha": "d414e7d3c27bc335a253012dddd7c3e58aa1da57",
+    "source_archive_sha256": "1a0e22293863990c1d850e7cd788faefdac3231c7d39e25ba33c2fb037c97ba5",
+    "missing_reports": null,
+    "oom_killed": null
+  },
+  {
     "name": "compound-isolated",
     "complete": true,
     "exit_code": 1,
@@ -1275,6 +1285,41 @@
     "last_progress_seconds": 7967.989656455997
   },
   {
+    "name": "full-v3-inventory-312",
+    "complete": true,
+    "exit_code": 2,
+    "elapsed_seconds": 5563.374973773956,
+    "source_sha": "d414e7d3c27bc335a253012dddd7c3e58aa1da57",
+    "source_archive_sha256": "1a0e22293863990c1d850e7cd788faefdac3231c7d39e25ba33c2fb037c97ba5",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "1206788096",
+      "memory.peak": "4243509248",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 2028,
+        "call:skipped": 215,
+        "teardown:passed": 2028,
+        "call:passed": 1745,
+        "call:failed": 68,
+        "setup:skipped": 6,
+        "teardown:skipped": 6
+      },
+      "collected": 2034
+    },
+    "last_progress_seconds": 5555.881619650012
+  },
+  {
     "name": "inventory-cache-before-312",
     "complete": true,
     "exit_code": 1,
@@ -1531,13 +1576,25 @@
   },
   {
     "name": "memory-retention-v3-final-312",
-    "complete": false,
-    "exit_code": null,
-    "elapsed_seconds": null,
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 5845.7410089969635,
     "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
     "source_archive_sha256": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
-    "missing_reports": null,
-    "oom_killed": null
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "995598336",
+      "memory.peak": "5612863488",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 5843.387088276999
   },
   {
     "name": "merged-focused",
@@ -1832,6 +1889,37 @@
     "last_progress_seconds": 118.32534355200187
   },
   {
+    "name": "v3-inventory-committed-312",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 219.86230397224426,
+    "source_sha": "d414e7d3c27bc335a253012dddd7c3e58aa1da57",
+    "source_archive_sha256": "1a0e22293863990c1d850e7cd788faefdac3231c7d39e25ba33c2fb037c97ba5",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "167555072",
+      "memory.peak": "1172914176",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 543,
+        "call:passed": 543,
+        "teardown:passed": 543
+      },
+      "collected": 543
+    },
+    "last_progress_seconds": 213.73595220698917
+  },
+  {
     "name": "v3-inventory-final-311",
     "complete": true,
     "exit_code": 0,
@@ -1895,13 +1983,34 @@
   },
   {
     "name": "v3-inventory-final-313",
-    "complete": false,
-    "exit_code": null,
-    "elapsed_seconds": null,
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 240.872487783432,
     "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
     "source_archive_sha256": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
-    "missing_reports": null,
-    "oom_killed": null
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "199106560",
+      "memory.peak": "1190309888",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 543,
+        "call:passed": 543,
+        "teardown:passed": 543
+      },
+      "collected": 543
+    },
+    "last_progress_seconds": 238.97224262499367
   },
   {
     "name": "v3-inventory-focused-312",

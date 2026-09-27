@@ -2,7 +2,7 @@
   "sequential": true,
   "source_commit": "d414e7d3c27bc335a253012dddd7c3e58aa1da57",
   "source_archive_sha256": "1a0e22293863990c1d850e7cd788faefdac3231c7d39e25ba33c2fb037c97ba5",
-  "failure_input_complete": false,
+  "failure_input_complete": true,
   "requests": [
     {
       "request": {

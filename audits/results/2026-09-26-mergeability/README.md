@@ -1,6 +1,13 @@
 # PR 43 timeout investigation and mergeability
 
-Validation is in progress. PR remains draft until the remaining checks complete.
+The required full suite and focused/native checks are complete on source
+`d414e7d3`. The fresh mainnet audit remains active, so PR #43 remains draft.
+
+Latest full-suite outcome: **1,745 passed, 68 failed, 221 skipped; zero
+timeouts**, all ten compiled extensions, no OOM or missing reports, and a
+4,243,509,248-byte peak. This is a completed run with known failures, not a
+green full suite. The focused matrix passes 543 tests on each of Python
+3.11–3.13. Detailed source-specific outcomes follow below.
 
 - [x] Fetch and fast-forward the assigned branch; preserve the generated C file.
 - [x] Resolve conflicts with master 2ebf9c56, retaining bounded event/write ownership and adopting startup/cache repairs.
@@ -51,7 +58,7 @@ Validation is in progress. PR remains draft until the remaining checks complete.
 - [x] Bound retained inventories by pool count and prove eviction, object release, oversized delivery and cancellation behavior.
 - [x] Pass all 526 focused tests on Python 3.11–3.13 with ten compiled extensions and no added mypy diagnostics.
 - [x] Verify the unchanged native cold inventory, unique adjacent pools and exact warm index reads.
-- [ ] Complete the required full suite after the cache and history repairs.
+- [x] Complete the required full suite after the cache and history repairs.
 - [ ] Complete the mainnet audit with both reports and memory measurements.
 - [x] Commit and push the remaining source changes; rerun focused checks on that commit.
 - [ ] Publish the final validation reports after the remaining runs complete.
@@ -535,7 +542,8 @@ boundary. Slipstream inherits the same index behavior.
 - [x] Finish the expanded 543-case Python 3.11–3.13 matrix and mypy comparison.
 - [x] Commit and push the history repair; rerun focused checks on the commit.
 - [x] Verify native cold inventory, unique adjacent pools and direct warm index reads.
-- [ ] Complete the unchanged required full suite and a fresh audit on final source.
+- [x] Complete the unchanged required full suite on final source.
+- [ ] Complete a fresh audit on final source.
 - [ ] Update PR #43 and verify remote alignment before marking it ready.
 
 The initial repaired matrix attempt, `v3-inventory-focused-312`, finishes
@@ -610,3 +618,46 @@ backup; the new run uses lightweight counters. The repeat is a market-cache
 hit, supplemented by the separate direct index checks. Exact comparisons are
 in `v3-native-inventory-comparison.json`. The unchanged required full-suite
 command has now started on `d414e7d3`; the fresh audit remains active.
+
+
+### Completed full suite after the history repair
+
+`full-v3-inventory-312` completes the unchanged required Python 3.12 command
+on `d414e7d3`: **1,745 passed, 68 failed and 221 skipped** (2,034 collected).
+Every collected test has a terminal outcome and the final pytest summary is
+present. Pytest exits 1 and make exits 2; this is not a green suite. All ten
+compiled extensions are verified, with no OOM or missing reports. The command
+takes 5,557.06 seconds and the supervisor 5,563.37 seconds; peak cgroup memory
+is **4,243,509,248 bytes**. Both before/after measurements confirm 8 GiB, no
+swap, four CPUs and 512 processes. The archive is
+`1a0e22293863990c1d850e7cd788faefdac3231c7d39e25ba33c2fb037c97ba5`.
+
+There are **zero deadline failures**. Sixty-three successful calls exceed
+600 seconds, including two above 1,800 seconds; the longest takes 1,805.77
+seconds. The final 3,600-second deadlines remain unchanged.
+
+The 68 failures comprise 45 other assertion/contract/pricing failures,
+12 V3 comparisons against alternate prices, and 11 historical-state provider
+errors. Three exact IDs that previously passed now fail on the same Balancer
+Vault provider request. All 11 provider failures reduce to three distinct
+requests, each subsequently returning data while its requested hash remains
+canonical before and after the replay. `full-v3-provider-rechecks.json`
+records the exact calls and results using the complete final failure input.
+Unexpected provider errors remain visible in production.
+
+`sample-position-comparison.json` pairs the five generated blocks per ERC20
+and ten batch-price blocks by position. No previously passing sample position
+becomes failing. Exact blocks and messages remain visible: generated blocks
+change with chain height, and one batch sample propagates a different first
+error. The two Aave sync-context messages differ only in object addresses and
+keyword-set order. Live V3 numeric values and latest-block Aave errors also
+change. These comparisons establish the observed failure families, not
+same-block source equivalence or a pristine pre-PR baseline. Native quote
+checks preserve exact outputs and do not establish complete input consumption
+or agreement with alternate pricing routes.
+
+The report-only commit `16e52040` also passes CI compilation and lint. All
+nine mypy jobs have exactly the same normalized diagnostics as `d414e7d3`:
+zero added or removed. Existing mypy failures remain visible in
+`ci-v3-evidence-diagnostic-comparison.json`. Production source is unchanged.
+The fresh mainnet audit remains active; no final audit coverage is claimed.
