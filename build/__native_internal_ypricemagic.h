@@ -6,7 +6,7 @@
 
 int CPyGlobalsInit(void);
 
-extern PyObject *CPyStatics[680];
+extern PyObject *CPyStatics[687];
 extern const char * const CPyLit_Str[];
 extern const char * const CPyLit_Bytes[];
 extern const char * const CPyLit_Int[];
@@ -25,6 +25,7 @@ extern CPyModule *CPyModule_collections___abc;
 extern CPyModule *CPyModule_functools;
 extern CPyModule *CPyModule_pathlib;
 extern CPyModule *CPyModule_sqlite3;
+extern CPyModule *CPyModule_threading;
 extern CPyModule *CPyModule_typing;
 extern CPyModule *CPyModule_aiosqlite;
 extern CPyModule *CPyModule_a_sync;
@@ -132,6 +133,8 @@ extern PyObject *CPyDef_brownie___connect_AsyncCursor_gen_____await__(PyObject *
 extern PyObject *CPyPy_brownie___connect_AsyncCursor_gen_____await__(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames);
 extern PyObject *CPyDef_brownie___AsyncCursor___connect(PyObject *cpy_r_self);
 extern PyObject *CPyPy_brownie___AsyncCursor___connect(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames);
+extern char CPyDef_brownie___AsyncCursor____close_at_shutdown(PyObject *cpy_r_self);
+extern PyObject *CPyPy_brownie___AsyncCursor____close_at_shutdown(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames);
 extern PyObject *CPyDef_brownie___insert_AsyncCursor_gen_____mypyc_generator_helper__(PyObject *cpy_r___mypyc_self__, PyObject *cpy_r_type, PyObject *cpy_r_value, PyObject *cpy_r_traceback, PyObject *cpy_r_arg, PyObject **cpy_r_stop_iter_ptr);
 extern PyObject *CPyDef_brownie___insert_AsyncCursor_gen_____next__(PyObject *cpy_r___mypyc_self__);
 extern PyObject *CPyPy_brownie___insert_AsyncCursor_gen_____next__(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames);
@@ -271,11 +274,9 @@ extern char CPyDef_decorators_____top_level__(void);
 extern PyObject *CPyStatic_stringify___UTC;
 extern PyObject *CPyStatic_stringify___astimezone;
 extern PyObject *CPyStatic_stringify___isoformat;
-extern PyObject *CPyDef_stringify___stringify_column_value(PyObject *cpy_r_value, PyObject *cpy_r_provider);
-extern PyObject *CPyPy_stringify___stringify_column_value(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames);
-extern PyObject *CPyDef_stringify___build_row(PyObject *cpy_r_row, PyObject *cpy_r_provider);
-extern PyObject *CPyPy_stringify___build_row(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames);
-extern PyObject *CPyDef_stringify___build_query(PyObject *cpy_r_provider_name, PyObject *cpy_r_entity_name, PyObject *cpy_r_columns, PyObject *cpy_r_items);
+extern PyObject *CPyDef_stringify___column_parameter(PyObject *cpy_r_value, PyObject *cpy_r_provider);
+extern PyObject *CPyPy_stringify___column_parameter(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames);
+extern tuple_T2OO CPyDef_stringify___build_query(PyObject *cpy_r_provider_name, PyObject *cpy_r_entity_name, PyObject *cpy_r_columns, PyObject *cpy_r_items);
 extern PyObject *CPyPy_stringify___build_query(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames);
 extern char CPyDef_stringify_____top_level__(void);
 extern PyObject *CPyStatic_ENVIRONMENT_VARIABLES____envs;

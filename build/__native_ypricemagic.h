@@ -463,7 +463,7 @@ typedef struct {
     PyObject *___mypyc_generator_attribute__underlyings;
     PyObject *___mypyc_temp__10;
     PyObject *___mypyc_temp__11;
-    PyObject *___mypyc_temp__12;
+    int64_t ___mypyc_temp__12;
     PyObject *___mypyc_generator_attribute__und;
     PyObject *___mypyc_generator_attribute__questionable_underlyings;
     PyObject *___mypyc_temp__13;
