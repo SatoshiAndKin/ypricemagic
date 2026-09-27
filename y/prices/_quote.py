@@ -70,8 +70,18 @@ class _Flight(Generic[T]):
 class SharedCache(Generic[T]):
     """Bound completed results and isolate cancellation between active callers."""
 
-    def __init__(self, maxsize: int, *, immutable: bool = False) -> None:
-        self.values: LRUCache[Hashable, T] = LRUCache(maxsize)
+    def __init__(
+        self,
+        maxsize: int,
+        *,
+        immutable: bool = False,
+        maxweight: int | None = None,
+        getsizeof: Callable[[T], int] | None = None,
+    ) -> None:
+        self.max_entries = maxsize
+        self.values: LRUCache[Hashable, T] = LRUCache(
+            maxsize if maxweight is None else maxweight, getsizeof=getsizeof
+        )
         self.flights: dict[tuple[asyncio.AbstractEventLoop, Hashable], _Flight[T]] = {}
         self.immutable = immutable
 
@@ -80,7 +90,7 @@ class SharedCache(Generic[T]):
         key: Hashable,
         factory: Callable[[], Coroutine[Any, Any, T]],
         *,
-        skip_cache: bool = False
+        skip_cache: bool = False,
     ) -> T:
         if skip_cache:
             return await factory()
@@ -94,7 +104,12 @@ class SharedCache(Generic[T]):
         flight.waiters += 1
         try:
             result = await asyncio.shield(flight.task)
-            self.values[key] = result
+            # Oversized results still belong to every active caller, but must
+            # not evict useful entries or fail merely because they cannot fit.
+            if self.max_entries > 0 and self.values.getsizeof(result) <= self.values.maxsize:
+                if key not in self.values and len(self.values) >= self.max_entries:
+                    self.values.popitem()
+                self.values[key] = result
             return result if self.immutable else deepcopy(result)
         finally:
             flight.waiters -= 1

@@ -1,0 +1,13 @@
+{
+  "status": "in progress",
+  "completed_cases": [
+    "cold"
+  ],
+  "pending_cases": [
+    "adjacent",
+    "repeat"
+  ],
+  "partial_reports": true,
+  "helper_sha256": "49b5189c0324d29d585828a2c673fb299222cc4ad741a1f0040a0fdf77c67eea",
+  "note": "No final command or retention summary is claimed. The active run will publish its final outcome separately."
+}

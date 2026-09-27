@@ -67,7 +67,14 @@ class QuoteService:
     """Own caches, never mutate cached paths or pool collections."""
 
     def __init__(self) -> None:
-        self.market_cache: SharedCache[tuple[Market, ...]] = SharedCache(4096, immutable=True)
+        # A single historical WETH inventory can contain over 470,000 pools.
+        # Bound retained snapshots as well as keys, including empty inventories.
+        self.market_cache: SharedCache[tuple[Market, ...]] = SharedCache(
+            4096,
+            immutable=True,
+            maxweight=1_000_000,
+            getsizeof=lambda markets: max(1, len(markets)),
+        )
         self.result_cache: SharedCache[PriceResult | None] = SharedCache(2048)
 
     @stuck_coro_debugger

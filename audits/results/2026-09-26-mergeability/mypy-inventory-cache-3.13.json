@@ -1,0 +1,135 @@
+{
+  "python": "3.13",
+  "baseline": "/private/tmp/yprice-review-fixes/final-313/mypy.txt",
+  "current": "/private/tmp/yprice-mergeable/inventory-cache-focused-313/mypy.txt",
+  "baseline_sha256": "594d88a938bd2bfa24d2ff1cb7b19633f19dec38c9be3005c8428d90ae276835",
+  "current_sha256": "fca42adb93f35939389414b8bedef1ba26346f9f45769102168e5f39566d092e",
+  "baseline_count": 1827,
+  "current_count": 1803,
+  "normalization": "Embedded on line <number> references only; source line numbers excluded by diagnostic parser",
+  "added": [],
+  "removed": [
+    {
+      "file": "y/utils/events.py",
+      "message": "Call to untyped function \"LogCache\" in typed context [no-untyped-call]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "Function is missing a type annotation [no-untyped-def]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "The type \"type[Log]\" is not generic and not indexable [misc]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "Missing type parameters for generic type \"tuple\" [type-arg]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "Argument 1 to \"get_hash_dbid\" has incompatible type \"str\"; expected \"HexStr\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "Argument 1 to \"get_hash_dbid\" has incompatible type \"Address | None\"; expected \"HexStr\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "No overload variant of \"zip_longest\" matches argument types \"range\", \"object\" [call-overload]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "Missing type parameters for generic type \"Query\" [type-arg]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Missing type parameters for generic type \"Address\" [type-arg]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Incompatible types in assignment (expression has type \"CythonEvent\", variable has type \"None\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Returning Any from function declared to return \"Awaitable[Literal[True]]\" [no-any-return]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "\"None\" has no attribute \"wait\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Incompatible types in assignment (expression has type \"Task[Never]\", variable has type \"None\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "\"None\" has no attribute \"add_done_callback\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Incompatible return value type (got \"None\", expected \"Task[Never]\") [return-value]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Incompatible types in assignment (expression has type \"Exception\", variable has type \"None\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Incompatible types in assignment (expression has type \"Task[bool]\", variable has type \"None\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Incompatible return value type (got \"None\", expected \"Awaitable[Literal[True]]\") [return-value]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Implicit return in function which does not return [misc]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/stable_swap/curve.py",
+      "message": "Return type \"Coroutine[Any, Any, None]\" of \"_load\" incompatible with return type \"Coroutine[Any, Any, Never]\" in supertype \"y.classes.common._Loader\" [override]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/stable_swap/curve.py",
+      "message": "\"None\" has no attribute \"set\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "tests/prices/test_chainlink.py",
+      "message": "Function is missing a type annotation [no-untyped-def]",
+      "count": 1
+    },
+    {
+      "file": "tests/prices/dex/test_uniswap.py",
+      "message": "No overload variant of \"get_price\" matches argument types \"Any\", \"bool\", \"bool\" [call-overload]",
+      "count": 2
+    }
+  ],
+  "previous_repaired_source": {
+    "run": "fixture-focused-retry-313",
+    "sha256": "3e9d22591e59e0ba0fa1a7f74570dd2eb4b333ad11348eec6dac63622a831908",
+    "count": 1803,
+    "added": [],
+    "removed": []
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "test_sha256": "3c776b94654da8afed03141b682c78d3c5b3b16053bb2887b4ad880004ca5c3d",
+  "identical_test_file_on_pre_fix_and_repaired_sources": true,
+  "valid_negative_run": "inventory-cache-before-final-312",
+  "negative_results": {
+    "failed": 2,
+    "passed": 1
+  },
+  "failures": [
+    "1100000 retained snapshots instead of700000 after weighted eviction",
+    "1000002 retained snapshots instead of1 after oversized-result delivery"
+  ],
+  "production_changes": [
+    "y/prices/_quote.py",
+    "y/prices/_routing.py"
+  ],
+  "invalid_attempts": {
+    "inventory-cache-before-312": "Wrong imported BLOCK type; failed before cache behavior",
+    "inventory-cache-before-retry-312": "Duplicated block hash deadlocked the test gate; explicitly interrupted and incomplete, missing pytest summary"
+  },
+  "policy": "Retain at most4096 inventories and1000000 pool snapshots; empty inventories weigh1; oversized results are delivered but not cached.",
+  "native_observation": {
+    "block": 23479243,
+    "markets_in_one_inventory": 470546,
+    "canonical_verified": true,
+    "inventory_sha256": "05e59e50da97a1151a29497ae18a7e49c02e38fb7adbe509ec162516c6409f98"
+  },
+  "limit_rationale": "The snapshot budget permits two observed WETH inventories plus smaller entries while preventing thousands of full inventories being retained. It is a pool-count bound, not an exact byte guarantee; complete audit validation remains required."
+}

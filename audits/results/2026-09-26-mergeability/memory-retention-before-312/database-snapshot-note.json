@@ -1,0 +1,9 @@
+{
+  "created_utc": "2026-09-27T06:23:30.528033+00:00",
+  "method": "SQLite online backup from read-only source connection",
+  "source": "/data/prices.sqlite",
+  "destination": "private retention-database-snapshot.sqlite",
+  "bytes": 533929984,
+  "purpose": "Preserve loaded registry data for follow-up diagnostics if the cold inventory cannot complete before its configured deadline.",
+  "measurement_limit": "Backup adds page-cache and I/O work during an already instrumented diagnostic. This run is not an uninstrumented latency or memory benchmark."
+}

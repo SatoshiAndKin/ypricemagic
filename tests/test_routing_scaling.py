@@ -159,7 +159,7 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
     # Turn over both caches with distinct canonical historical blocks. Never
     # clear a cache or restart the process to achieve bounded retained state.
     started = perf_counter()
-    blocks = int(service.market_cache.values.maxsize) + 32
+    blocks = service.market_cache.max_entries + 32
     for index in range(blocks):
         historical = BlockRef(
             BLOCK.chain,
@@ -172,7 +172,8 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
         assert result.quote.total_usd == 1994
         assert result.quote.block_hash == historical.hash
         assert result.quote.steps[0].outputs[0].amount == 997 * 10**15
-        assert len(service.market_cache.values) <= service.market_cache.values.maxsize
+        assert len(service.market_cache.values) <= service.market_cache.max_entries
+        assert service.market_cache.values.currsize <= service.market_cache.values.maxsize
         assert len(service.result_cache.values) <= service.result_cache.values.maxsize
         assert not service.market_cache.flights and not service.result_cache.flights
     assert reads == count * (blocks + 1)

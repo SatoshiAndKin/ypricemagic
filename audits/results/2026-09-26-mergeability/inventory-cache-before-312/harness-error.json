@@ -1,0 +1,4 @@
+{
+  "valid_regression_evidence": false,
+  "reason": "Imported the integer BLOCK from test_pricing_correctness instead of the BlockRef from test_amount_quotes. All three tests failed before reaching cache behavior. Corrected and rerunning exact final assertions on unchanged pre-fix production source."
+}

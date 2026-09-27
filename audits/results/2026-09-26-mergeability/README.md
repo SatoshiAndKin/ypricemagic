@@ -44,8 +44,12 @@ Validation is in progress. PR remains draft until the remaining checks complete.
 - [x] Compare the same cold checks with the previous 10,000-block log range.
 - [x] Recheck the unchanged full-suite command on the fixture commit with the normal 10,000-block range.
 - [x] Let the mainnet audit reach its terminal outcome under the unchanged cap; retain the OOM and missing reports.
-- [ ] Measure the current source retention responsible for the audit memory gap.
-- [ ] Repair the measured retention and prove regression behavior without changing quote results.
+- [x] Measure a canonical WETH inventory containing 470,546 market snapshots in one cache entry.
+- [x] Reproduce large-inventory retention and oversized-result caching failures against unchanged pre-fix production.
+- [ ] Finish the adjacent-block allocation census and validate the retention repair under native workloads.
+- [x] Bound retained inventories by pool count and prove eviction, object release, oversized delivery and cancellation behavior.
+- [x] Pass all 526 focused tests on Python 3.11–3.13 with ten compiled extensions and no added mypy diagnostics.
+- [ ] Verify native inventory equality and complete the unchanged full-suite command after the cache repair.
 - [ ] Complete the mainnet audit with both reports and memory measurements.
 - [x] Commit and push the remaining source changes; rerun focused checks on that commit.
 - [ ] Publish the final validation reports after the remaining runs complete.
@@ -454,3 +458,43 @@ still-canonical block. The live feed fixture finishes 97 passed and five skipped
 between the two completed full runs; fixture code, runtime log range and live
 state differ. This does not supply a pristine pre-PR baseline or turn the full
 suite green. Exact failures remain in `full-default-range-312/failure-analysis.json`.
+
+The current-source cold inventory probe completes at block 23,479,243 in
+3,287.72 seconds with 470,546 markets in a single cache entry. Its canonical
+block hash and ordered inventory digest are recorded in
+`inventory-cache-regression-proof.json`. The adjacent-block census is still
+running; this measurement does not yet establish that all audit memory growth
+has been resolved. A private SQLite online backup was taken during the probe,
+adding file-cache and I/O work; the probe is not an uninstrumented performance
+benchmark.
+
+The cache repair adds a one-million pool-snapshot budget alongside the existing
+4,096-entry limit. Empty inventories consume one unit. Oversized inventories
+are still returned in full and shared by active callers, but are not retained.
+The budget permits two observed WETH inventories plus smaller entries; it is
+a pool-count bound, not an exact byte guarantee. Native amounts, inventory
+ordering, routing, fees and public pricing signatures are unchanged.
+
+`inventory-cache-before-final-312` completes with two expected assertion
+failures and one pass against the pre-fix production source: it retains
+1,100,000 snapshots where weighted eviction should leave 700,000, and retains
+an oversized inventory after delivery. The existing empty-inventory entry
+bound passes. All ten compiled extensions are verified. Two earlier harness
+attempts are explicitly invalid: the first imported an integer block fixture;
+the second reused a block hash and deadlocked its own gate. The second was
+interrupted, remains incomplete, and lacks a pytest summary. Neither is
+pricing or timeout regression evidence. The identical corrected assertions
+pass in the repaired-source focused matrix: 526 tests on each of Python
+3.11–3.13, with all ten compiled extensions. All three runs share source
+archive `809f38c2d21bc07be93db890618b6170d56851353f774446ae7139ba8b0fafda`;
+the current checkout matches all 323 recorded source-file hashes. Configured
+formatting passes. Mypy remains at 1,803 diagnostics with no additions against
+either the original recorded baselines or the immediately preceding repaired
+source. Peaks are 1,172,828,160 bytes (3.11), 1,166,925,824 (3.12), and
+1,210,642,432 (3.13), with no OOM or missing reports. Committed-source and
+native/audit verification remain pending.
+
+At report-only head `d539812d`, lint and compilation pass. All nine mypy jobs
+complete with exactly the same normalized diagnostics as `62fd373c`: zero
+added or removed diagnostics. Their failed status remains visible in
+`ci-report-head-diagnostic-comparison.json`.

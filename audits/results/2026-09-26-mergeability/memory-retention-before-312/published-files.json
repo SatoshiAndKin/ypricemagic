@@ -1,0 +1,50 @@
+{
+  "run.json": {
+    "original_sha256": "ba3dcde53c62ca893abcdd036f4d4b8146837e6dc4461f81e0344f21854b4bec",
+    "published_sha256": "ba3dcde53c62ca893abcdd036f4d4b8146837e6dc4461f81e0344f21854b4bec",
+    "redacted": false,
+    "trailing_whitespace_normalized": false
+  },
+  "compiled-modules.json": {
+    "original_sha256": "f7c8033a81021cf5121a9f6f3a025fdb0d1c7d49a38813efb2d30f529dfd33f2",
+    "published_sha256": "f7c8033a81021cf5121a9f6f3a025fdb0d1c7d49a38813efb2d30f529dfd33f2",
+    "redacted": false,
+    "trailing_whitespace_normalized": false
+  },
+  "runner-files.json": {
+    "original_sha256": "28fe59df02a5559295135367e417ae5a5be3b91ecf2351f64af63571924947c3",
+    "published_sha256": "28fe59df02a5559295135367e417ae5a5be3b91ecf2351f64af63571924947c3",
+    "redacted": false,
+    "trailing_whitespace_normalized": false
+  },
+  "workload-files.json": {
+    "original_sha256": "6d73219c5dc9f8577890db2b04d08b85e249fffe475c732b79063768277b0a00",
+    "published_sha256": "6d73219c5dc9f8577890db2b04d08b85e249fffe475c732b79063768277b0a00",
+    "redacted": false,
+    "trailing_whitespace_normalized": false
+  },
+  "retention-cases.json": {
+    "original_sha256": "28f08c5a5b6a15281ac873ad41fc1bef359fd9cef981fdda6874f4b10a7d0918",
+    "published_sha256": "28f08c5a5b6a15281ac873ad41fc1bef359fd9cef981fdda6874f4b10a7d0918",
+    "redacted": false,
+    "trailing_whitespace_normalized": false
+  },
+  "retention-progress.jsonl": {
+    "original_sha256": "8bfa97d7704cf8d3dd69b91a9f8406163d6730bfcb095497bec7336595a292af",
+    "published_sha256": "8bfa97d7704cf8d3dd69b91a9f8406163d6730bfcb095497bec7336595a292af",
+    "redacted": false,
+    "trailing_whitespace_normalized": false
+  },
+  "database-snapshot-note.json": {
+    "original_sha256": "3195d7f36066ede957c5eb44199fa588330563663986836d0ea72509635a86f5",
+    "published_sha256": "3195d7f36066ede957c5eb44199fa588330563663986836d0ea72509635a86f5",
+    "redacted": false,
+    "trailing_whitespace_normalized": false
+  },
+  "allocations-cold.json": {
+    "original_sha256": "58310cfcfc5daf743c32cdfa40ea575e6845ae62b4bfb238c2f15bfbdaa7d064",
+    "published_sha256": "58310cfcfc5daf743c32cdfa40ea575e6845ae62b4bfb238c2f15bfbdaa7d064",
+    "redacted": false,
+    "trailing_whitespace_normalized": false
+  }
+}
