@@ -1,0 +1,20 @@
+{
+  "run.json": {
+    "original_sha256": "12cc5b819da6a03ed8188128eeac685e41ef868ba19fbef3847f1ce592680c08",
+    "published_sha256": "12cc5b819da6a03ed8188128eeac685e41ef868ba19fbef3847f1ce592680c08",
+    "redacted": false,
+    "trailing_whitespace_normalized": false
+  },
+  "runner-files.json": {
+    "original_sha256": "d6d446eab62f74be0fc4ab6725e629d2a7162bc9c39d8d7db5d95357dcfc07e6",
+    "published_sha256": "d6d446eab62f74be0fc4ab6725e629d2a7162bc9c39d8d7db5d95357dcfc07e6",
+    "redacted": false,
+    "trailing_whitespace_normalized": false
+  },
+  "workload-files.json": {
+    "original_sha256": "6d73219c5dc9f8577890db2b04d08b85e249fffe475c732b79063768277b0a00",
+    "published_sha256": "6d73219c5dc9f8577890db2b04d08b85e249fffe475c732b79063768277b0a00",
+    "redacted": false,
+    "trailing_whitespace_normalized": false
+  }
+}

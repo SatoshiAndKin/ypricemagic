@@ -4,7 +4,7 @@ from brownie import ZERO_ADDRESS, chain
 from tests.fixtures import mainnet_only
 from y.contracts import contract_creation_block_async
 from y.networks import Network
-from y.prices._rpc import BlockRef, read
+from y.prices._rpc import BlockRef, optional_read
 from y.prices.chainlink import FEEDS, chainlink
 
 feeds = set(FEEDS.keys())
@@ -136,14 +136,14 @@ async def test_chainlink_get_feed(token):
 
 @pytest.mark.parametrize("token", FEEDS)
 @pytest.mark.asyncio_cooperative
-async def test_chainlink_latest(token):
+async def test_chainlink_latest(token: str) -> None:
     """Unavailable feeds must be stale or have an explicitly removed aggregator."""
     block = await BlockRef.resolve(None)
     if not await chainlink.get_price(token, block=block.number):
         feed = await chainlink.get_feed(token, block=block)
         if feed is None:
             return  # The registry removed this feed.
-        if await read(feed.address, "aggregator()(address)", block) == ZERO_ADDRESS:
+        if await optional_read(feed.address, "aggregator()(address)", block) == ZERO_ADDRESS:
             return  # A removed aggregator's timestamp call can revert directly.
         latest_timestamp = await feed.latest_timestamp(block)
         if latest_timestamp and latest_timestamp + 24 * 60 * 60 < block.timestamp:

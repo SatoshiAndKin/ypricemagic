@@ -33,13 +33,24 @@ Validation is in progress. PR remains draft until the remaining checks complete.
 - [x] Pass the same expanded assertions and focused regressions on Python 3.11–3.13 against all ten compiled extensions.
 - [x] Compare Python 3.12 configured mypy diagnostics: 1,804 versus 1,827, with no additions after normalizing positional line references. Configured formatting passes; final source/matrix checks remain below.
 - [x] Finish the required Python 3.12 full suite at 1,800 seconds and retain all exact failures.
-- [ ] Finish the final 3,600-second full suite, including the V1 guard and repaired Chainlink fixture.
-- [ ] Finish sequential native checks and mainnet audit with complete reports and memory measurements.
-- [ ] Inspect, commit, push, verify remote alignment and generated C hash, update PR Summary/Rationale/Details and ready status.
+- [x] Commit and push the source repairs and master integration; pass the committed-source focused rerun.
+- [x] Pass all nine final sequential native adapter checks; retain eight additional passing redemption checks with their separate source hash.
+- [x] Repair Windows dependency checkout paths and verify all nine CI jobs reach mypy.
+- [x] Finish the required 3,600-second full suite at commit `5936a496` and classify every failure.
+- [x] Prove and repair the live Chainlink fixture failure for legacy feeds without `aggregator()`.
+- [x] Rerun the 102 live feed cases: 97 pass and five stale feeds skip.
+- [ ] Finish the final Python 3.11–3.13 focused runs and mypy comparisons after helper import repairs.
+- [x] Recheck the two remaining ERC20 timeouts sequentially at the same blocks and deadline.
+- [ ] Compare the same cold checks with the previous 10,000-block log range.
+- [ ] Finish the mainnet audit with both reports and memory measurements.
+- [ ] Commit and push the remaining scoped changes; rerun focused checks on that commit.
+- [ ] Verify remote alignment and the preserved generated C hash; update PR Summary/Rationale/Details and assess ready status.
 
 The unrelated generated C SHA256 is `099f4992d9c8404dc31bc761d0fcfb5aeef32cd9f582688dc1b9f73646104506`.
 
 All heavy runs retain 8 GiB, no swap, four CPUs and 512 processes/threads, one heavy job per approved profile. Prior interrupted full suites and audit OOMs remain separate historical evidence.
+
+The records below retain successive source snapshots. Later completed results supersede earlier pending statuses; each failed or interrupted attempt remains separate evidence.
 
 The first 1,800-second application run recorded 70 explicit deadline failures.
 It was stopped after the singleton loop and incorrect cached decimals were
@@ -172,7 +183,7 @@ fallback, exhaustion, and non-ValueError lookalikes. A final negative/native
 recheck is required; the preceding native failure remains preserved.
 
 Final interpreter-matrix targets retain all controlled repair regressions and
-compiled-extension checks. The 194 live Chainlink/latest and bucket-registry
+compiled-extension checks. The 204 live Chainlink/latest and bucket-registry
 cases remain in the unchanged full-suite command, rather than repeating their
 shared historical-registry initialization for each interpreter. Their earlier
 timeouts remain recorded. The final native rerun covers the nine affected
@@ -235,3 +246,133 @@ reports. The eight additional native redemption cases passed in
 Published text reports normalize trailing whitespace for repository formatting;
 raw report hashes remain in each publication manifest alongside the published
 hashes. Private raw originals are retained separately.
+
+The committed-source rerun at `5936a4969bb0ed4e70cf057cce97c758f409db4c`
+passes all **514** focused cases, with identical test IDs, all ten compiled
+extensions and no added mypy diagnostics. It takes 283.53 seconds and peaks
+at 1,163,137,024 bytes, with no OOM or missing reports. Its source
+archive is `efe6bf996d0e0bb62a42c07ab2c0ad291c801c28040b2befb05725a48d4251d2`.
+The required full-suite command is running against that same commit.
+
+The follow-up `f689b2c6` changes only Windows CI setup: Git long-path support
+is enabled before installing nested dependency submodules. The preceding Windows
+CI failure occurred before mypy; `windows-ci-checkout.json` records its cause.
+
+GitHub compile and lint pass on `f689b2c6` (runs 36280880213 and 36280880186).
+All nine mypy jobs reach type checking after the Windows checkout repair but
+remain failing: 1,807 diagnostics on Linux/macOS and 1,838–1,840 on Windows.
+Compared with the frozen Linux Docker report, Linux/macOS add three diagnostics
+for missing click/numpy, and Windows 3.12 adds 34 including platform-specific APIs.
+This cross-environment comparison is not a source-regression baseline; see
+`ci-mypy-final.json` and `ci-vs-frozen-mypy.json`.
+
+The compile workflow pushes generated-only commit `2172c19f`; its application
+Python is identical to the locally tested `5936a496` source. The local branch
+fast-forwards to it while restoring the user's generated C bytes exactly.
+The bot-triggered follow-up workflows require GitHub action approval; these are
+not represented as successful checks.
+
+`full-committed-3600-312` completes the exact required command at `5936a496`:
+**1,717 passed, 72 failed and 216 skipped** (2,005 collected). Pytest exits 1
+and make exits 2; the supervisor records completion, no missing reports or OOM,
+8,150.72 seconds and a 3,838,300,160-byte memory peak. The archive hash remains
+`efe6bf996d0e0bb62a42c07ab2c0ad291c801c28040b2befb05725a48d4251d2`.
+
+There are two configured deadline failures (GHO at block 17,708,470 and PYUSD
+at block 18,465,234), five legacy-feed fixture failures, four provider
+historical-state errors, 16 V3 unavailable/native-versus-alternate-price
+comparisons, and 45 other assertion or contract/pricing failures. Thirty failures
+have the same test ID and exact error message as the prior completed repaired-source
+probe. That comparison is not a pristine full-suite baseline. All failures are
+retained in `full-committed-3600-312/failure-analysis.json`.
+
+The completed run passes **162** calls exceeding 600 seconds and **65** exceeding
+1,800 seconds, reaching **3,591.42 seconds**. This demonstrates that the old
+limits rejected successful work. The two remaining timeout cases require the
+queued sequential check before another timeout adjustment is justified.
+
+The initial `fixture-before-312` attempt fails before building or running tests
+because the extracted negative-control snapshot lacks Git metadata. It is recorded
+as incomplete; no regression outcome is claimed. The snapshot now has local Git
+metadata and the retry is queued under the same resource limits. Positive fixture
+validation is running separately.
+
+`fixture-focused-312` and `fixture-live-312` both stop before pytest collection:
+the installed legacy TOML parser rejects the mixed string/integer arrays added
+for sequential timeout cases. Both attempts are incomplete with a missing pytest
+summary. The configuration now uses tables; both `toml` and `tomllib` parse the
+same settings. No dependency or timeout setting changes for this repair.
+
+`fixture-focused-311` passes all **523** cases against all ten compiled extensions,
+with no OOM or missing reports, 320.12 seconds and a 1,172,873,216-byte peak.
+Mypy exposes one new test-only diagnostic for an implicitly re-exported
+`ZERO_ADDRESS`. The test now imports the same constant directly from Brownie;
+the final matrix will rerun this source rather than claiming the diagnostic was
+absent from the preceding run.
+
+`fixture-focused-313` passes all **523** cases against all ten compiled extensions,
+with no OOM or missing reports, 316.70 seconds and a 1,220,861,952-byte peak.
+It uses the same source archive as the preceding Python 3.11 run and records the
+same single test-import mypy diagnostic, fixed before the queued final reruns.
+The sequential GHO/PYUSD recheck runs afterward on the same profile; the separate
+audit still shares the RPC provider, so this is not an isolated provider-load
+benchmark.
+
+`fixture-before-retry-312` completes the negative control: **2 failed, 10 passed**,
+with the two expected direct-revert errors for legacy feeds lacking `aggregator()`.
+Its production code and original fixture match `2172c19f`; the regression assertions
+match the repaired worktree. The run takes 132.64 seconds, peaks at
+1,173,598,208 bytes, verifies all ten compiled extensions and has no missing
+reports or OOM. `fixture-negative-provenance.json` records the exact source boundary.
+
+`slow-erc20-312` produces both case records but reaches neither valid pricing
+measurement: importing the test outside pytest captured a disconnected Brownie
+provider in multicall. Both cases fail immediately with `endpoint_uri` attribute
+errors. The helper now connects Brownie and applies the same source-fetching
+setting as `conftest.py` before importing the synchronous collection fixture.
+The recorded setup failures do not establish price availability or justify a
+timeout change. A corrected sequential rerun is queued after the final matrix.
+
+`fixture-focused-retry-312` passes all **523** cases, with no OOM or missing
+reports, in 305.07 seconds. Its mypy comparison finds one helper-only implicit
+re-export of Brownie's `connect` function. The helper now imports that same
+function from its defining module; the final Python 3.12 type comparison runs
+with the corrected sequential check before committing.
+
+`fixture-live-retry-312` completes **97 passed, 5 skipped** across all 102 live
+feed cases, with no failures, missing reports or OOM. It takes 422.89 seconds
+and peaks at 1,164,873,728 bytes. The five full-suite legacy-feed failures map
+to the five repaired skips. The event reporter does not store skip reasons;
+the fixture's explicit skip branch is its stale-timestamp check, covered by
+the controlled regressions. `fixture-red-to-green.json` records both that
+limitation and the exact mapping. All 12 negative-control test IDs pass in
+the repaired focused run; both expected pre-fix failures are reproduced.
+
+`fixture-focused-retry-311` passes all **523** cases on the final helper/fixture
+source, verifies all ten compiled extensions, and adds no configured mypy
+diagnostics: **1,803 versus 1,827** in its recorded baseline. It takes
+318.62 seconds, peaks at 1,113,001,984 bytes, and has no OOM or missing reports.
+Its source archive is
+`2d9ceec58ea71c2847886f7e484faaeda0d12662464d8d8f439d1f264ad7ae27`.
+
+`fixture-focused-retry-313` passes all **523** cases on that same final source
+archive, with all ten compiled extensions and no added mypy diagnostics:
+**1,803 versus 1,827**. It takes 298.75 seconds and peaks at 1,170,538,496 bytes,
+with no OOM or missing reports. The corrected sequential check now runs with
+Python 3.12 configured mypy before its two pricing cases.
+
+The corrected sequential job's completed Python 3.12 mypy phase records
+**1,803 diagnostics versus 1,834**, with no additions. The pricing phase has
+started real RPC work; its case outcomes remain pending. This static result
+does not claim that the sequential measurements or audit have completed.
+
+`slow-erc20-retry-312` passes both original full-suite timeout cases at the
+unchanged 3,600-second deadline: GHO at block 17,708,470 in **3,286.11 seconds**,
+then PYUSD at block 18,465,234 in **82.91 seconds**. Both canonical block hashes
+are verified. The cold first case populates shared inventories; the second
+case is not an independent cold-start measurement. The command completes in
+3,534.49 seconds, peaks at 3,091,181,568 bytes, verifies all ten compiled
+extensions, and records no OOM or missing reports. Source archive is the same
+`2d9ceec58ea71c2847886f7e484faaeda0d12662464d8d8f439d1f264ad7ae27`.
+The 10,000-block range comparison remains pending; no further deadline increase
+is justified solely by the preceding concurrent full-suite timeouts.

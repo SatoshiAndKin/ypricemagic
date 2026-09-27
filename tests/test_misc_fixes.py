@@ -1,8 +1,17 @@
 """Tests for misc bug fixes: NonStandardERC20 catch, stablecoins, Chainlink feed resolution."""
 
 import asyncio
+from types import SimpleNamespace
+from typing import Any
 from unittest.mock import AsyncMock
 
+import pytest
+from brownie import ZERO_ADDRESS
+from eth_abi.abi import encode
+from eth_utils.crypto import keccak
+from web3.exceptions import ContractLogicError
+
+from tests.test_pricing_correctness import run_async_test
 from y.constants import STABLECOINS
 
 # ---------------------------------------------------------------------------
@@ -73,3 +82,86 @@ def test_chainlink_get_feed_falls_back_to_static_feeds(monkeypatch):
     )
     assert deployed.await_count == 2
     deployed.assert_awaited_with(static.address, block)
+
+
+@run_async_test
+@pytest.mark.parametrize(
+    "response",
+    ["legacy_revert", "legacy_empty", "removed", "active_stale", "active_fresh", "legacy_fresh"],
+)
+async def test_latest_feed_validation_handles_legacy_and_removed_aggregators(
+    monkeypatch: Any, response: str
+) -> None:
+    from tests.prices import test_chainlink as fixture
+    from y.prices import _rpc
+    from y.prices.chainlink import Feed
+
+    token = "0x0000000000000000000000000000000000000101"
+    block = _rpc.BlockRef(1, 20_000_000, "0x" + "12" * 32, 1_700_000_000)
+    feed = Feed(token, token, asynchronous=True)
+    seen: list[bytes] = []
+
+    async def rpc(transaction: dict[str, Any], *, block_identifier: Any) -> bytes:
+        assert block_identifier == block.identifier
+        assert transaction["to"].lower() == token
+        data = bytes(transaction["data"])
+        seen.append(data)
+        if data == keccak(text="aggregator()")[:4]:
+            if response in ("legacy_revert", "legacy_fresh"):
+                raise ContractLogicError("execution reverted")
+            if response == "legacy_empty":
+                return b""
+            return encode(["address"], [ZERO_ADDRESS if response == "removed" else token])
+        assert response != "removed", "removed aggregators must not query a reverting timestamp"
+        assert data == keccak(text="latestTimestamp()")[:4]
+        return encode(
+            ["uint256"],
+            [block.timestamp if response.endswith("fresh") else block.timestamp - 86401],
+        )
+
+    price, get_feed = AsyncMock(return_value=None), AsyncMock(return_value=feed)
+    monkeypatch.setattr(fixture, "chainlink", SimpleNamespace(get_price=price, get_feed=get_feed))
+    monkeypatch.setattr(_rpc.BlockRef, "resolve", AsyncMock(return_value=block))
+    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
+    if response == "removed":
+        await fixture.test_chainlink_latest(token)
+    elif response.endswith("fresh"):
+        with pytest.raises(pytest.fail.Exception, match="active aggregator"):
+            await fixture.test_chainlink_latest(token)
+    else:
+        with pytest.raises(pytest.skip.Exception, match="feed is stale"):
+            await fixture.test_chainlink_latest(token)
+    assert seen == [keccak(text="aggregator()")[:4]] + (
+        [] if response == "removed" else [keccak(text="latestTimestamp()")[:4]]
+    )
+    price.assert_awaited_once_with(token, block=block.number)
+    get_feed.assert_awaited_once_with(token, block=block)
+
+
+@run_async_test
+@pytest.mark.parametrize(
+    "error", [TypeError("bad decoder"), RuntimeError("RPC failed"), asyncio.CancelledError()]
+)
+async def test_latest_feed_validation_propagates_unexpected_errors(
+    monkeypatch: Any, error: BaseException
+) -> None:
+    from tests.prices import test_chainlink as fixture
+    from y.prices import _rpc
+
+    token = "0x0000000000000000000000000000000000000101"
+    block = _rpc.BlockRef(1, 20_000_000, "0x" + "12" * 32, 1_700_000_000)
+    rpc = AsyncMock(side_effect=error)
+    monkeypatch.setattr(
+        fixture,
+        "chainlink",
+        SimpleNamespace(
+            get_price=AsyncMock(return_value=None),
+            get_feed=AsyncMock(return_value=SimpleNamespace(address=token)),
+        ),
+    )
+    monkeypatch.setattr(_rpc.BlockRef, "resolve", AsyncMock(return_value=block))
+    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
+    with pytest.raises(type(error)) as raised:
+        await fixture.test_chainlink_latest(token)
+    assert raised.value is error
+    rpc.assert_awaited_once()

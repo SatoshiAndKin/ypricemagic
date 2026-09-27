@@ -1,0 +1,13 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; python tools/validation/focused.py"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": false,
+  "started_unix": 1790475107.666293,
+  "error": "Command '('git', '-C', '/private/tmp/yprice-mergeable/before-chainlink-fixture', 'rev-parse', 'HEAD')' returned non-zero exit status 128.",
+  "elapsed_seconds": 0.07519412040710449
+}

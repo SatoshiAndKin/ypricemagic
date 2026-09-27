@@ -1,0 +1,14 @@
+{
+  "base_revision": "2172c19fb334f89022b8027eb360d40cc7a37d23",
+  "negative_snapshot_revision": "0910a492e679083a4bdd1d186bcdb49f600b03a2",
+  "changed_tracked_files_excluding_generated_and_reports": [
+    "pyproject.toml",
+    "tests/test_misc_fixes.py"
+  ],
+  "fixture_source_matches_base": true,
+  "regression_assertions_match_current_worktree": true,
+  "target_scope": "Negative snapshot runs tests/test_misc_fixes.py only; production source and the original Chainlink fixture are unchanged.",
+  "snapshot_uses_worktree": true,
+  "regression_test_sha256": "151e682db4a85001fd3568b8a324186a6e8fc1b4decd1f89a0e8e4ffb74d13bd",
+  "negative_source_archive_sha256": "9c9fe73b1902bbfd6a07e1044e410ffc1b1918456c310b2f3c9a795879152c1f"
+}

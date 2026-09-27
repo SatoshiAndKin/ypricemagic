@@ -1,11 +1,11 @@
 {
   "python": "3.13",
   "baseline": "/private/tmp/yprice-review-fixes/final-313/mypy.txt",
-  "current": "/private/tmp/yprice-mergeable/focused-validated-313/mypy.txt",
+  "current": "/private/tmp/yprice-mergeable/fixture-focused-retry-313/mypy.txt",
   "baseline_sha256": "594d88a938bd2bfa24d2ff1cb7b19633f19dec38c9be3005c8428d90ae276835",
-  "current_sha256": "65105e2f1a4a239d00aa17c0ff793599da4266a7701c61d08be0f46d7f210631",
+  "current_sha256": "3e9d22591e59e0ba0fa1a7f74570dd2eb4b333ad11348eec6dac63622a831908",
   "baseline_count": 1827,
-  "current_count": 1804,
+  "current_count": 1803,
   "normalization": "Embedded on line <number> references only; source line numbers excluded by diagnostic parser",
   "added": [],
   "removed": [
@@ -112,6 +112,11 @@
     {
       "file": "y/prices/stable_swap/curve.py",
       "message": "\"None\" has no attribute \"set\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "tests/prices/test_chainlink.py",
+      "message": "Function is missing a type annotation [no-untyped-def]",
       "count": 1
     },
     {

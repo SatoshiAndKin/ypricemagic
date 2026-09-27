@@ -1,0 +1,655 @@
+{
+  "source_archive_sha256": "efe6bf996d0e0bb62a42c07ab2c0ad291c801c28040b2befb05725a48d4251d2",
+  "over_600_seconds": 162,
+  "over_1800_seconds": 65,
+  "tests": [
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-17267952]",
+      "duration": 3591.4206721782684
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0x949FDF28F437258E7564a35596b1A99b24F81e4e]",
+      "duration": 3410.111456632614
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xa0273C10b8A4BF0bDC57cb0bC974E3A9d89527b8]",
+      "duration": 3410.09556388855
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0x495410B129A27bC771ce8fb316d804a5686B8Ea7]",
+      "duration": 3410.095552921295
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xa7053782dC3523D2C82B439Acf3f9344Fb47b97f]",
+      "duration": 3410.0204849243164
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xd2C5A739ebfE3E00CFa88A51749d367d7c496CCf]",
+      "duration": 3410.020456790924
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xFF338D347E59d6B61E5C69382915D863bb22Ef2f]",
+      "duration": 3407.904406309128
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880c02933d47db1b9fc05908e5386b96]",
+      "duration": 3385.044459581375
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810E776880C02933D47DB1B9FC05908E5386B96]",
+      "duration": 3384.957563638687
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880C02933D47DB1b9fc05908e5386b960]",
+      "duration": 3384.881859779358
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880C02933D47DB1b9fc05908e5386b961]",
+      "duration": 3379.9612469673157
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-9999827]",
+      "duration": 3246.47482585907
+    },
+    {
+      "test": "tests/prices/test_curve_gauge.py::test_hardcoded_gauge_still_resolves",
+      "duration": 3218.999446630478
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x0000000000085d4780B73119b644AE5ecd22b376-11764904]",
+      "duration": 3190.766176223755
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-11475581]",
+      "duration": 3188.8264808654785
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[12506506]",
+      "duration": 2510.8312158584595
+    },
+    {
+      "test": "tests/prices/test_exotic_tokens.py::test_xpremia_price",
+      "duration": 2443.615368127823
+    },
+    {
+      "test": "tests/prices/test_exotic_tokens.py::test_xpremia_returns_price_result",
+      "duration": 2416.80215549469
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0x36e9B6e7FADC7b8Ee289c8A24Ad96573cda3D7D9]",
+      "duration": 2326.314777612686
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0f5d2fb29fb7d3cfee444a200298f468908cc942]",
+      "duration": 2253.8704476356506
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0F5D2FB29FB7D3CFEE444A200298F468908CC942]",
+      "duration": 2253.5325412750244
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0F5D2fB29fb7d3CFeE444a200298f468908cC9420]",
+      "duration": 2253.53253698349
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0F5D2fB29fb7d3CFeE444a200298f468908cC9421]",
+      "duration": 2253.4394483566284
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4fe83213d56308330ec302a8bd641f1d0113a4cc]",
+      "duration": 2248.101864337921
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4FE83213D56308330EC302A8BD641F1D0113A4CC]",
+      "duration": 2248.1018102169037
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4fE83213D56308330EC302a8BD641f1d0113A4Cc0]",
+      "duration": 2242.2276470661163
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4fE83213D56308330EC302a8BD641f1d0113A4Cc1]",
+      "duration": 2241.2755675315857
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x04FA0D235C4ABF4BCF4787AF4CF447DE572EF828]",
+      "duration": 2240.273848056793
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF8281]",
+      "duration": 2240.2736780643463
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF8280]",
+      "duration": 2239.6146273612976
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x04fa0d235c4abf4bcf4787af4cf447de572ef828]",
+      "duration": 2239.614417076111
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x6Ee0f7BB50a54AB5253dA0667B0Dc2ee526C30a8]",
+      "duration": 2098.224782705307
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-20731190]",
+      "duration": 2089.545410633087
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-26065065]",
+      "duration": 2089.5453271865845
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-15397316]",
+      "duration": 2089.544315099716
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2]",
+      "duration": 2089.498942375183
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xA361718326c15715591c299427c62086F69923D9]",
+      "duration": 2085.833684682846
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-16420674]",
+      "duration": 2084.0071988105774
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xD37EE7e4f452C6638c96536e68090De8cBcdb583]",
+      "duration": 2083.9480242729187
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599]",
+      "duration": 2083.86567735672
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-26065065]",
+      "duration": 2083.864106655121
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-21242869]",
+      "duration": 2083.8640763759613
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-15347960]",
+      "duration": 2083.7109835147858
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-20706512]",
+      "duration": 2083.7108340263367
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2]",
+      "duration": 2083.5844416618347
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-26065065]",
+      "duration": 2083.582768201828
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-11598479]",
+      "duration": 2083.318517923355
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xc2e2152647F4C26028482Efaf64b2Aa28779EFC4]",
+      "duration": 2074.9286069869995
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x6F634c6135D2EBD550000ac92F494F9CB8183dAe]",
+      "duration": 2053.891542196274
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x683923dB55Fead99A79Fa01A27EeC3cB19679cC3]",
+      "duration": 2053.5376048088074
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x625aE63000f46200499120B906716420bd059240]",
+      "duration": 2047.7394564151764
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x7D2D3688Df45Ce7C552E19c27e007673da9204B8]",
+      "duration": 2044.7716286182404
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x71010A9D003445aC60C4e6A7017c1E89A477B438]",
+      "duration": 2043.860957622528
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x6FCE4A401B6B80ACe52baAefE4421Bd188e76F6f]",
+      "duration": 2043.278618812561
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x712DB54daA836B53Ef1EcBb9c6ba3b9Efb073F40]",
+      "duration": 2039.4681558609009
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x69948cC03f478B95283F7dbf1CE764d0fc7EC54C]",
+      "duration": 2037.8493673801422
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x6C5024Cd4F8A59110119C56f8933403A539555EB]",
+      "duration": 2028.988668680191
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xa685a61171bb30d4072B338c80Cb7b2c865c873E]",
+      "duration": 2027.2037191390991
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xaC6Df26a590F08dcC95D5a4705ae8abbc88509Ef]",
+      "duration": 2026.921330690384
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xCC12AbE4ff81c9378D670De1b57F8e0Dd228D77a]",
+      "duration": 2026.1411509513855
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xF256CC7847E919FAc9B808cC216cAc87CCF2f47a]",
+      "duration": 2019.3495020866394
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x1E6bb68Acec8fefBD87D192bE09bb274170a0548]",
+      "duration": 2018.3169977664948
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x514cd6756CCBe28772d4Cb81bC3156BA9d1744aa]",
+      "duration": 2018.281034231186
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xc9BC48c72154ef3e5425641a3c747242112a46AF]",
+      "duration": 2018.1887817382812
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xA9e201A4e269d6cd5E9F0FcbcB78520cf815878B]",
+      "duration": 2004.4909899234772
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6B175474E89094C44DA98B954EEDEAC495271D0F]",
+      "duration": 1320.5437333583832
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6B175474E89094C44Da98b954EedeAC495271d0F0]",
+      "duration": 1320.4960494041443
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6b175474e89094c44da98b954eedeac495271d0f]",
+      "duration": 1320.1815094947815
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6B175474E89094C44Da98b954EedeAC495271d0F1]",
+      "duration": 1319.2239124774933
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9]",
+      "duration": 1300.6125502586365
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7FC66500C84A76AD7E9C93437BFC5AC33E2DDAE9]",
+      "duration": 1300.5814218521118
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE90]",
+      "duration": 1300.548656463623
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE91]",
+      "duration": 1300.519912481308
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC00E94CB662C3520282E6F5717214004A7F26888]",
+      "duration": 1297.365956068039
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc00e94Cb662C3520282E6f5717214004A7f268881]",
+      "duration": 1297.365880727768
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc00e94Cb662C3520282E6f5717214004A7f268880]",
+      "duration": 1297.3658714294434
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc00e94cb662c3520282e6f5717214004a7f26888]",
+      "duration": 1297.3658680915833
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc944e90c64b2c07662a292be6244bdf05cda44a7]",
+      "duration": 1296.4130990505219
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC944E90C64B2C07662A292BE6244BDF05CDA44A7]",
+      "duration": 1295.6382341384888
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc944E90C64B2c07662A292be6244BDf05Cda44a70]",
+      "duration": 1295.569171667099
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x514910771af9ca656af840dff83e8264ecf986ca]",
+      "duration": 1293.1897943019867
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc944E90C64B2c07662A292be6244BDf05Cda44a71]",
+      "duration": 1293.1891009807587
+    },
+    {
+      "test": "tests/prices/test_convex.py::test_dynamic_convex_price",
+      "duration": 1188.4293386936188
+    },
+    {
+      "test": "tests/prices/test_curve_gauge.py::test_gauge_price_equals_lp_price",
+      "duration": 1178.102945804596
+    },
+    {
+      "test": "tests/prices/test_curve_gauge.py::test_gauge_returns_price_result",
+      "duration": 1177.7603805065155
+    },
+    {
+      "test": "tests/prices/test_convex.py::test_convex_price_matches_underlying",
+      "duration": 1176.4611432552338
+    },
+    {
+      "test": "tests/prices/test_exotic_tokens.py::test_pickle_pslp_price",
+      "duration": 1175.9129793643951
+    },
+    {
+      "test": "tests/prices/test_exotic_tokens.py::test_pickle_pslp_returns_price_result",
+      "duration": 1175.9079546928406
+    },
+    {
+      "test": "tests/prices/test_convex.py::test_hardcoded_convex_price",
+      "duration": 1174.6503915786743
+    },
+    {
+      "test": "tests/prices/test_convex.py::test_convex_returns_price_result",
+      "duration": 1174.6483263969421
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0x5C08A6762CAF9ec8a42F249eBC23aAE66097218D]",
+      "duration": 1170.0214023590088
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xaE7b92C8B14E7bdB523408aE0A6fFbf3f589adD9]",
+      "duration": 1169.265130996704
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0x9683D433621A83aA7dd290106e1da85251317F55]",
+      "duration": 1169.2651212215424
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0x212Aa024E25A9C9bAF5b5397B558B7ccea81740B]",
+      "duration": 1169.2651197910309
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xBE5d1d15617879B22C7b6a8e1e16aDD6d0bE3c61]",
+      "duration": 1168.2852647304535
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xa1BE64Bb138f2B6BCC2fBeCb14c3901b63943d0E]",
+      "duration": 1167.8549149036407
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0x8d8B490fCe6Ca1A31752E7cFAFa954Bf30eB7EE2]",
+      "duration": 1167.831651210785
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xF4f542E4b5E2345A1f2D0fEab9492357Ebc5c8f4]",
+      "duration": 1164.3190319538116
+    },
+    {
+      "test": "tests/prices/dex/test_balancer.py::test_balancer_v2_pool_price",
+      "duration": 1134.8958580493927
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v1[0x6B175474E89094C44Da98b954EedeAC495271d0F]",
+      "duration": 1088.227074623108
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v1[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2]",
+      "duration": 1085.4983129501343
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v1[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2]",
+      "duration": 1085.4218418598175
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x0000000000085d4780B73119b644AE5ecd22b376-26065065]",
+      "duration": 908.6549074649811
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xC581b735A1688071A1746c968e0798D642EDE491]",
+      "duration": 908.5414600372314
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x1F573D6Fb3F13d689FF844B4cE37794d79a7FF1C]",
+      "duration": 908.5414052009583
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xD46bA6D942050d489DBd938a2C909A5d5039A161]",
+      "duration": 908.5414037704468
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x8290333ceF9e6D528dD5618Fb97a76f268f3EDD4]",
+      "duration": 908.5413618087769
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x75231F58b43240C9718Dd58B4967c5114342a86c]",
+      "duration": 908.5413594245911
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0xdAC17F958D2ee523a2206206994597C13D831ec7]",
+      "duration": 908.5377414226532
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x4Fabb145d64652a948d72533023f6E7A623C7C53]",
+      "duration": 908.5147449970245
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x6f259637dcD74C767781E37Bc6133cd6A68aa161]",
+      "duration": 908.5146927833557
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x4575f41308EC1483f3d399aa9a2826d74Da13Deb]",
+      "duration": 908.500862121582
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xADE00C28244d5CE17D72E40330B1c318cD12B7c3]",
+      "duration": 908.5008239746094
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x6B175474E89094C44Da98b954EedeAC495271d0F]",
+      "duration": 908.4905836582184
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-26065065]",
+      "duration": 908.4900772571564
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-26065065]",
+      "duration": 908.4896082878113
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-26065065]",
+      "duration": 908.4895939826965
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-26065065]",
+      "duration": 908.4895658493042
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-26065065]",
+      "duration": 908.4894342422485
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-26065065]",
+      "duration": 908.4892752170563
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x853d955aCEf822Db058eb8505911ED77F175b99e]",
+      "duration": 908.3303797245026
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f]",
+      "duration": 908.3268747329712
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E]",
+      "duration": 908.2883772850037
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x0000000000085d4780B73119b644AE5ecd22b376]",
+      "duration": 908.2853486537933
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8]",
+      "duration": 908.2851738929749
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xa693B19d2931d498c5B318dF961919BB4aee87a5]",
+      "duration": 907.6484172344208
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x459086F2376525BdCebA5bDDA135e4E9d3FeF5bf]",
+      "duration": 907.6365382671356
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x00000000000000000000000000000000000002be]",
+      "duration": 907.6364753246307
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xdeFA4e8a7bcBA345F687a2f1456F5Edd9CE97202]",
+      "duration": 907.6260347366333
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x4e840AADD28DA189B9906674B4Afcb77C128d9ea]",
+      "duration": 907.6260316371918
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6]",
+      "duration": 907.6255826950073
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xd36932143F6eBDEDD872D5Fb0651f4B72Fd15a84]",
+      "duration": 907.6255733966827
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB]",
+      "duration": 907.6079404354095
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x111111111117dC0aa78b770fA6A738034120C302]",
+      "duration": 907.6079065799713
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xE41d2489571d322189246DaFA5ebDe1F4699F498]",
+      "duration": 907.607882976532
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xc00e94Cb662C3520282E6f5717214004A7f26888]",
+      "duration": 907.6078541278839
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9]",
+      "duration": 907.6078491210938
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xEa5A82B35244d9e5E48781F00b11B14E627D2951]",
+      "duration": 907.5850043296814
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b]",
+      "duration": 907.5849804878235
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD]",
+      "duration": 896.1883716583252
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x95dFDC8161832e4fF7816aC4B6367CE201538253]",
+      "duration": 895.2064969539642
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xf6b1c627e95bfc3c1b4c9b825a032ff0fbf3e07d]",
+      "duration": 895.2064156532288
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xD533a949740bb3306d119CC777fa900bA034cd52]",
+      "duration": 895.1414728164673
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x6B3595068778DD592e39A122f4f5a5cF09C90fE2]",
+      "duration": 895.0767321586609
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x584bC13c7D411c00c01A62e8019472dE68768430]",
+      "duration": 894.0674686431885
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xfF20817765cB7f73d4bde2e66e067E58D11095C2]",
+      "duration": 894.0388207435608
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x0000000000000000000000000000000000000260]",
+      "duration": 893.4229998588562
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x945Facb997494CC2570096c74b5F66A3507330a1]",
+      "duration": 893.1541106700897
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x6B175474E89094C44Da98b954EedeAC495271d0F]",
+      "duration": 893.1487123966217
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xdd974D5C2e2928deA5F71b9825b8b646686BD200]",
+      "duration": 893.1356439590454
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x0000000000000000000000000000000000000024]",
+      "duration": 892.9008703231812
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2]",
+      "duration": 892.410754442215
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x4C19596f5aAfF459fA38B0f7eD92F11AE6543784]",
+      "duration": 860.4089963436127
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-23975916]",
+      "duration": 765.9598522186279
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-23865786]",
+      "duration": 763.2265775203705
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-23531788]",
+      "duration": 741.3447937965393
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0]",
+      "duration": 674.9469449520111
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-22417694]",
+      "duration": 658.3897759914398
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x514910771AF9Ca656af840dff83E8264EcF986CA]",
+      "duration": 652.5920686721802
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-21886767]",
+      "duration": 621.3989236354828
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-21783338]",
+      "duration": 616.4683980941772
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-21666508]",
+      "duration": 609.7354366779327
+    }
+  ]
+}

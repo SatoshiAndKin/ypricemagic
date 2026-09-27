@@ -1,0 +1,44 @@
+{
+  "checked_at": "2026-09-27T02:37:04.603311+00:00",
+  "checks": [
+    {
+      "tool": "black",
+      "version": "25.9.0",
+      "arguments": [
+        "--check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "tool": "isort",
+      "version": "7.0.0",
+      "arguments": [
+        "--profile",
+        "black",
+        "--check-only"
+      ],
+      "exit_code": 0
+    },
+    {
+      "tool": "autoflake",
+      "version": "2.2.1",
+      "arguments": [
+        "--check",
+        "--remove-all-unused-imports",
+        "--remove-unused-variables"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "files": {
+    "tests/prices/test_chainlink.py": "3c5221e7fb6fab5521ae1abb18c4df6bdfb5cded9db1318149e2552aa4f96fd3",
+    "tests/test_misc_fixes.py": "151e682db4a85001fd3568b8a324186a6e8fc1b4decd1f89a0e8e4ffb74d13bd",
+    "tools/validation/slow_erc20.py": "437e1fe05b98c03fbf9cd2a5a552a0d6931345dafaf2606d5de4e652a1c895eb"
+  },
+  "toml_compatibility": {
+    "pyproject_sha256": "429df1d767bcea791409425d69b206e866d3d2ffa011e86c9f7cae153cac0e5c",
+    "toml_version": "0.10.2",
+    "tomllib_python": "3.12.12",
+    "validation_settings_equal": true
+  }
+}
