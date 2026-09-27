@@ -1,7 +1,7 @@
 {
   "python": "3.12",
   "baseline": "/private/tmp/yprice-review-fixes/baseline-312/mypy.txt",
-  "current": "/private/tmp/yprice-mergeable/slow-erc20-retry-312/mypy.txt",
+  "current": "/private/tmp/yprice-mergeable/fixture-committed-312/mypy.txt",
   "baseline_sha256": "024a0ee5bd25463d1c7dd096ae9c853026820767d5956e4cfdbdef84256dca10",
   "current_sha256": "e30e83fba6ec1f818d4c7e422c6e5d07fcdf4d0665b40b8d6d501b62198cb5b6",
   "baseline_count": 1834,

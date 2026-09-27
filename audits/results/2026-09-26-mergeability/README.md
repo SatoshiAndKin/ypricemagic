@@ -39,11 +39,13 @@ Validation is in progress. PR remains draft until the remaining checks complete.
 - [x] Finish the required 3,600-second full suite at commit `5936a496` and classify every failure.
 - [x] Prove and repair the live Chainlink fixture failure for legacy feeds without `aggregator()`.
 - [x] Rerun the 102 live feed cases: 97 pass and five stale feeds skip.
-- [ ] Finish the final Python 3.11–3.13 focused runs and mypy comparisons after helper import repairs.
+- [x] Finish the final Python 3.11–3.13 focused runs and mypy comparisons after helper import repairs.
 - [x] Recheck the two remaining ERC20 timeouts sequentially at the same blocks and deadline.
-- [ ] Compare the same cold checks with the previous 10,000-block log range.
+- [x] Compare the same cold checks with the previous 10,000-block log range.
+- [ ] Recheck the unchanged full-suite command on the fixture commit with the normal 10,000-block range.
 - [ ] Finish the mainnet audit with both reports and memory measurements.
-- [ ] Commit and push the remaining scoped changes; rerun focused checks on that commit.
+- [x] Commit and push the remaining source changes; rerun focused checks on that commit.
+- [ ] Publish the final validation reports after the remaining runs complete.
 - [ ] Verify remote alignment and the preserved generated C hash; update PR Summary/Rationale/Details and assess ready status.
 
 The unrelated generated C SHA256 is `099f4992d9c8404dc31bc761d0fcfb5aeef32cd9f582688dc1b9f73646104506`.
@@ -376,3 +378,34 @@ extensions, and records no OOM or missing reports. Source archive is the same
 `2d9ceec58ea71c2847886f7e484faaeda0d12662464d8d8f439d1f264ad7ae27`.
 The 10,000-block range comparison remains pending; no further deadline increase
 is justified solely by the preceding concurrent full-suite timeouts.
+
+`slow-erc20-default-312` passes both cases with 10,000-block ranges: cold GHO
+**761.91 seconds**, then PYUSD **28.63 seconds**, with the same canonical hashes,
+source archive, dependencies, 3,600-second deadline and resource limits. Its
+command takes 956.61 seconds and peaks at 3,380,346,880 bytes, with no OOM or
+missing reports. The observed GHO duration ratio is 4.31; provider load and
+chain head vary, so this does not isolate causal speedup. The smaller range
+was an experimental response to one slow request, not a production-default
+change. The final full-suite recheck uses the normal 10,000-block range.
+
+Fixture commit `62fd373c438a681b7d699751745a60db0c211dd3` is pushed. All 242
+recorded source-file hashes match the tested matrix snapshot. CI lint and
+compilation pass; all nine CI mypy jobs reach type checking and remain failed,
+with one fewer diagnostic per job than the preceding run (Linux/macOS 1,806;
+Windows 3.12 1,837; Windows 3.11/3.13 1,839). The committed focused rerun is active.
+
+`fixture-committed-312` passes all **523** cases at `62fd373c`, verifies all ten
+compiled extensions, and records no OOM or missing reports. Its command takes
+302.31 seconds and peaks at 1,164,333,056 bytes. The committed archive hash is
+`b5300d9c649bd504cea27680f73de1831aadf27c3abd4d4b72579ed685985463`.
+`fixture-final-focused-matrix.json` verifies identical 523 test IDs across
+Python 3.11–3.13 and all 242 recorded source-file hashes against the commit.
+The Python 3.12 mypy result remains **1,803 versus 1,834**, with no additions.
+All nine CI jobs also have no added diagnostics relative to their preceding
+CI counterparts; each removes one missing-annotation diagnostic.
+
+`full-default-provider-recheck.json` records a transient archive-state failure
+shared by three Popsicle cases in the active full recheck. The requested block
+is still canonical, and replaying the exact hash-bound Balancer call succeeds.
+The original errors remain full-suite failures; the successful later read does
+not turn that run into a pass or justify suppressing provider errors.

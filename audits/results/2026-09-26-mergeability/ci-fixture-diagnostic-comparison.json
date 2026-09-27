@@ -1,0 +1,124 @@
+{
+  "before": "f689b2c62051c6c1b139489951202794bd652eb1",
+  "after": "62fd373c438a681b7d699751745a60db0c211dd3",
+  "normalization": "Diagnostic source positions excluded; embedded on line references normalized. CI transitive dependencies are not frozen.",
+  "jobs": [
+    {
+      "name": "mypy (macos-latest, 3.13)",
+      "before_count": 1807,
+      "after_count": 1806,
+      "added": [],
+      "removed": [
+        {
+          "file": "tests/prices/test_chainlink.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "name": "mypy (windows-latest, 3.11)",
+      "before_count": 1840,
+      "after_count": 1839,
+      "added": [],
+      "removed": [
+        {
+          "file": "tests\\prices\\test_chainlink.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.11)",
+      "before_count": 1807,
+      "after_count": 1806,
+      "added": [],
+      "removed": [
+        {
+          "file": "tests/prices/test_chainlink.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "name": "mypy (windows-latest, 3.12)",
+      "before_count": 1838,
+      "after_count": 1837,
+      "added": [],
+      "removed": [
+        {
+          "file": "tests\\prices\\test_chainlink.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "name": "mypy (windows-latest, 3.13)",
+      "before_count": 1840,
+      "after_count": 1839,
+      "added": [],
+      "removed": [
+        {
+          "file": "tests\\prices\\test_chainlink.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "name": "mypy (macos-latest, 3.11)",
+      "before_count": 1807,
+      "after_count": 1806,
+      "added": [],
+      "removed": [
+        {
+          "file": "tests/prices/test_chainlink.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "name": "mypy (macos-latest, 3.12)",
+      "before_count": 1807,
+      "after_count": 1806,
+      "added": [],
+      "removed": [
+        {
+          "file": "tests/prices/test_chainlink.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.13)",
+      "before_count": 1807,
+      "after_count": 1806,
+      "added": [],
+      "removed": [
+        {
+          "file": "tests/prices/test_chainlink.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.12)",
+      "before_count": 1807,
+      "after_count": 1806,
+      "added": [],
+      "removed": [
+        {
+          "file": "tests/prices/test_chainlink.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

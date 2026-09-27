@@ -1,0 +1,86 @@
+{
+  "runs": [
+    {
+      "name": "slow-erc20-retry-312",
+      "log_range": 1000,
+      "source_archive_sha256": "2d9ceec58ea71c2847886f7e484faaeda0d12662464d8d8f439d1f264ad7ae27",
+      "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+      "cases": [
+        {
+          "token": "0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f",
+          "block": 17708470,
+          "deadline_seconds": 3600,
+          "block_hash": "0xb4ec089bb2febdcd604badaa9304ce724b66880e9e94488b2985982a2728ea66",
+          "status": "pass",
+          "canonical_verified": true,
+          "elapsed_seconds": 3286.112828366997
+        },
+        {
+          "token": "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8",
+          "block": 18465234,
+          "deadline_seconds": 3600,
+          "block_hash": "0xb345f7349b7c30987a12757fab882674d3c6fbb6390c6348afd40c3d808114b8",
+          "status": "pass",
+          "canonical_verified": true,
+          "elapsed_seconds": 82.91073087599943
+        }
+      ],
+      "command_elapsed_seconds": 3534.485609216994,
+      "peak_cgroup_bytes": 3091181568,
+      "final_sample": {
+        "elapsed_seconds": 3363.5635091669974,
+        "retries": {
+          "rpc_request:TimeoutError:size=:other": 22
+        },
+        "logical_rpc_counts": {
+          "call_uid": 150006,
+          "multicall_uid": 3997,
+          "request_uid": 1181,
+          "jsonrpc_batch_uid": 4359
+        }
+      }
+    },
+    {
+      "name": "slow-erc20-default-312",
+      "log_range": 10000,
+      "source_archive_sha256": "2d9ceec58ea71c2847886f7e484faaeda0d12662464d8d8f439d1f264ad7ae27",
+      "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+      "cases": [
+        {
+          "token": "0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f",
+          "block": 17708470,
+          "deadline_seconds": 3600,
+          "block_hash": "0xb4ec089bb2febdcd604badaa9304ce724b66880e9e94488b2985982a2728ea66",
+          "status": "pass",
+          "canonical_verified": true,
+          "elapsed_seconds": 761.9121873900003
+        },
+        {
+          "token": "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8",
+          "block": 18465234,
+          "deadline_seconds": 3600,
+          "block_hash": "0xb345f7349b7c30987a12757fab882674d3c6fbb6390c6348afd40c3d808114b8",
+          "status": "pass",
+          "canonical_verified": true,
+          "elapsed_seconds": 28.630330804997357
+        }
+      ],
+      "command_elapsed_seconds": 956.609415629995,
+      "peak_cgroup_bytes": 3380346880,
+      "final_sample": {
+        "elapsed_seconds": 780.1311445930041,
+        "retries": {
+          "rpc_request:TimeoutError:size=:other": 26
+        },
+        "logical_rpc_counts": {
+          "call_uid": 38643,
+          "multicall_uid": 3814,
+          "request_uid": 1120,
+          "jsonrpc_batch_uid": 4237
+        }
+      }
+    }
+  ],
+  "comparison": "Fresh database/container for each run; identical source, dependencies, cases, 3600-second case deadline and container limits. The first case is cold, the second reuses inventories. Only log range differs between environment files. Provider load and chain head vary, and the separate audit shares the provider, so observed timing ratios do not isolate causal speedup.",
+  "gho_observed_duration_ratio": 4.312981053136682
+}

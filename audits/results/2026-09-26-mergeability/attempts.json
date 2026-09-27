@@ -473,6 +473,37 @@
     "last_progress_seconds": 130.43226257200877
   },
   {
+    "name": "fixture-committed-312",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 307.19416403770447,
+    "source_sha": "62fd373c438a681b7d699751745a60db0c211dd3",
+    "source_archive_sha256": "b5300d9c649bd504cea27680f73de1831aadf27c3abd4d4b72579ed685985463",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "167329792",
+      "memory.peak": "1164333056",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 523,
+        "call:passed": 523,
+        "teardown:passed": 523
+      },
+      "collected": 523
+    },
+    "last_progress_seconds": 301.16788690999965
+  },
+  {
     "name": "fixture-focused-311",
     "complete": true,
     "exit_code": 0,
@@ -1085,6 +1116,16 @@
     "last_progress_seconds": 8144.200495079
   },
   {
+    "name": "full-default-range-312",
+    "complete": false,
+    "exit_code": null,
+    "elapsed_seconds": null,
+    "source_sha": "62fd373c438a681b7d699751745a60db0c211dd3",
+    "source_archive_sha256": "b5300d9c649bd504cea27680f73de1831aadf27c3abd4d4b72579ed685985463",
+    "missing_reports": null,
+    "oom_killed": null
+  },
+  {
     "name": "full-merged",
     "complete": false,
     "exit_code": 130,
@@ -1386,13 +1427,25 @@
   },
   {
     "name": "slow-erc20-default-312",
-    "complete": false,
-    "exit_code": null,
-    "elapsed_seconds": null,
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 957.8073301315308,
     "source_sha": "2172c19fb334f89022b8027eb360d40cc7a37d23",
     "source_archive_sha256": "2d9ceec58ea71c2847886f7e484faaeda0d12662464d8d8f439d1f264ad7ae27",
-    "missing_reports": null,
-    "oom_killed": null
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "1006792704",
+      "memory.peak": "3380346880",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 955.4552970699879
   },
   {
     "name": "slow-erc20-retry-312",
