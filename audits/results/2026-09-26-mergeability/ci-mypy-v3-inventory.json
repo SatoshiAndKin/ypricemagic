@@ -1,0 +1,96 @@
+{
+  "head": "d414e7d3c27bc335a253012dddd7c3e58aa1da57",
+  "run_id": 36305165931,
+  "jobs": [
+    {
+      "name": "mypy (ubuntu-latest, 3.11)",
+      "job_id": 108580230550,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1791 errors in 117 files (checked 219 source files)",
+      "raw_log_sha256": "1ab2e1598a6f0d647aecc0acdc76edf5a9c1716c2c0515989bf9943c4c43f14b"
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.13)",
+      "job_id": 108580230627,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1791 errors in 117 files (checked 219 source files)",
+      "raw_log_sha256": "e21b94e2c5868110e472c12a3533b1e63fd27594f9ed4a854c86c0a0bcbec852"
+    },
+    {
+      "name": "mypy (windows-latest, 3.11)",
+      "job_id": 108580230637,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1824 errors in 131 files (checked 219 source files)",
+      "raw_log_sha256": "8738284a8fd3eef7275205f3fe26e451cc4336f6136060ba356bab1a028669af"
+    },
+    {
+      "name": "mypy (macos-latest, 3.13)",
+      "job_id": 108580230652,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1791 errors in 117 files (checked 219 source files)",
+      "raw_log_sha256": "81a665450dd40d70dd6eea6d65ddbaf8c0feb64f5aa880fee951ccaf127a8d09"
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.12)",
+      "job_id": 108580230690,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1791 errors in 117 files (checked 219 source files)",
+      "raw_log_sha256": "5810ecd8fe0d97b589ba8906b709e17e926f60cf563dcf9a0b82e26cd27254cd"
+    },
+    {
+      "name": "mypy (macos-latest, 3.11)",
+      "job_id": 108580230692,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1791 errors in 117 files (checked 219 source files)",
+      "raw_log_sha256": "9066e84f90ba6935a11403949f608eb138319e18cbc3580a4d755c9a47270f38"
+    },
+    {
+      "name": "mypy (macos-latest, 3.12)",
+      "job_id": 108580230693,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1791 errors in 117 files (checked 219 source files)",
+      "raw_log_sha256": "ec59d4955c3f45d9ab59041ffbeec10886971f9720f92fc210447dad01f03257"
+    },
+    {
+      "name": "mypy (windows-latest, 3.13)",
+      "job_id": 108580230734,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1824 errors in 131 files (checked 219 source files)",
+      "raw_log_sha256": "cff0bd8ee6d66e49792178b52c5a0995bd7b0efb0f04e90e35daced4fcfb5e08"
+    },
+    {
+      "name": "mypy (windows-latest, 3.12)",
+      "job_id": 108580230735,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1822 errors in 130 files (checked 219 source files)",
+      "raw_log_sha256": "d5b80948882c8830c626da5378687eb31d784be1db2237c884f2b3a78f241a57"
+    }
+  ]
+}

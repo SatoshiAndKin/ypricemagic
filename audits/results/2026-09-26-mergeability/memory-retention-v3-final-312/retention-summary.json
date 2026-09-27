@@ -1,0 +1,16 @@
+{
+  "complete": true,
+  "elapsed_seconds": 5711.368388154995,
+  "cache_metrics": {
+    "market_keys": 2,
+    "market_cache_capacity": 1000000,
+    "inventory_market_references": 941092,
+    "inventory_tuple_shallow_bytes": 7528816,
+    "result_keys": 0,
+    "state_keys": 16384,
+    "rss_peak_bytes": 4642086912,
+    "cgroup_current_bytes": 5612814336,
+    "traced_current_bytes": 0
+  },
+  "instrumentation": "Lightweight cache metrics only; no tracemalloc, object census, or SQLite backup. Exact cold baseline digest plus unique V3 snapshots and direct warm index checks against factory metadata. Adjacent baseline digest contained duplicate V3 pools and is not an expected result."
+}

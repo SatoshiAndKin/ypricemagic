@@ -47,10 +47,11 @@ Validation is in progress. PR remains draft until the remaining checks complete.
 - [x] Measure a canonical WETH inventory containing 470,546 market snapshots in one cache entry.
 - [x] Reproduce large-inventory retention and oversized-result caching failures against unchanged pre-fix production.
 - [x] Finish the adjacent-block allocation census and identify V3 inventory replay.
-- [ ] Validate the combined retention and history repairs under native workloads.
+- [x] Validate the combined retention and history repairs under the native inventory workload.
 - [x] Bound retained inventories by pool count and prove eviction, object release, oversized delivery and cancellation behavior.
 - [x] Pass all 526 focused tests on Python 3.11–3.13 with ten compiled extensions and no added mypy diagnostics.
-- [ ] Verify the unchanged native cold inventory, unique adjacent pools and exact warm index reads; complete the required full suite after the cache and history repairs.
+- [x] Verify the unchanged native cold inventory, unique adjacent pools and exact warm index reads.
+- [ ] Complete the required full suite after the cache and history repairs.
 - [ ] Complete the mainnet audit with both reports and memory measurements.
 - [x] Commit and push the remaining source changes; rerun focused checks on that commit.
 - [ ] Publish the final validation reports after the remaining runs complete.
@@ -532,8 +533,8 @@ boundary. Slipstream inherits the same index behavior.
   passing controls, with all ten compiled extensions.
 - [x] Implement inclusive event ranges and complete, unique incremental V3 indexes.
 - [x] Finish the expanded 543-case Python 3.11–3.13 matrix and mypy comparison.
-- [ ] Commit and push the history repair; rerun focused checks on the commit.
-- [ ] Verify native cold inventory, unique adjacent pools and direct warm index reads.
+- [x] Commit and push the history repair; rerun focused checks on the commit.
+- [x] Verify native cold inventory, unique adjacent pools and direct warm index reads.
 - [ ] Complete the unchanged required full suite and a fresh audit on final source.
 - [ ] Update PR #43 and verify remote alignment before marking it ready.
 
@@ -569,3 +570,43 @@ profile run, whose archive exactly matches the final 3.11/3.12 runs; a duplicate
 source equivalence. Exact memory peaks and durations are in
 `v3-inventory-final-matrix.json`. The native follow-up uses that same source
 archive and remains in progress.
+
+The pushed history commit `d414e7d3` passes its committed-source rerun: **543
+tests**, ten compiled extensions, 1,788 mypy diagnostics with no additions,
+no OOM and no missing reports. Supervisor time is 219.86 seconds;
+peak cgroup memory is 1,172,914,176 bytes. The committed archive is
+`1a0e22293863990c1d850e7cd788faefdac3231c7d39e25ba33c2fb037c97ba5`.
+The fresh mainnet audit has started on this commit. CI compilation and lint
+pass (runs 36305165918 and 36305165987); CI mypy is still running.
+
+All nine CI mypy jobs at `d414e7d3` complete with **15 removed diagnostics and
+zero additions** against `62fd373c`: 1,791 on Linux/macOS, 1,822 on Windows
+3.12, and 1,824 on Windows 3.11/3.13. Existing failures remain visible; no
+protection settings or type-checking exclusions were changed. Exact comparisons
+are in `ci-v3-inventory-diagnostic-comparison.json`.
+
+The native follow-up `memory-retention-v3-final-312` completes successfully:
+all three cases pass, all ten compiled extensions are verified, no OOM or
+missing reports, and a **5,612,863,488-byte** cgroup peak. Its worktree archive
+matches the focused matrix and all 324 committed source hashes in `d414e7d3`.
+The supervisor takes 5,845.74 seconds. The exact helper hash matches the
+published probe and frozen runner manifest.
+
+Cold discovery returns **470,546 markets** in 3,251.21 seconds, preserving the
+prior canonical block hash and ordered inventory digest. The adjacent block
+returns **470,546**, replacing the old **506,362** result: exactly **35,816
+replayed V3 entries are removed**. Both contain 433,882 V2 markets, 35,816 V3,
+165 Curve, 674 Balancer V2, eight Balancer V1, and one Uniswap V1. Adjacent
+state takes 2,457.37 seconds. The repeat preserves the cold digest in 2.79
+seconds. Both retained inventories total 941,092 snapshots, within the bound.
+All nine direct V3 index reads match factory metadata exactly, remain unique,
+and honor same/older-block bounds independently of the market snapshot cache.
+Both canonical historical hashes are verified. The changed adjacent digest is
+expected because the old digest included duplicate pools.
+
+These are correctness and retention results, not isolated speed comparisons:
+the old diagnostic included allocation tracing, object censuses, and a SQLite
+backup; the new run uses lightweight counters. The repeat is a market-cache
+hit, supplemented by the separate direct index checks. Exact comparisons are
+in `v3-native-inventory-comparison.json`. The unchanged required full-suite
+command has now started on `d414e7d3`; the fresh audit remains active.

@@ -1,0 +1,170 @@
+[
+  {
+    "phase": "cold",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "block": 23479243,
+    "deadline_seconds": 3600,
+    "block_hash": "0x0b6c2373db136669e187029cb13c2893a69d9e5d6bcc97044d38e83123cf5a76",
+    "status": "pass",
+    "canonical_verified": true,
+    "markets": 470546,
+    "inventory_sha256": "05e59e50da97a1151a29497ae18a7e49c02e38fb7adbe509ec162516c6409f98",
+    "protocol_counts": {
+      "Uniswap V2": 433882,
+      "Uniswap V3": 35816,
+      "Curve": 165,
+      "Balancer V2": 674,
+      "Balancer V1": 8,
+      "Uniswap V1": 1
+    },
+    "v3_unique": true,
+    "v3_indexes": [
+      {
+        "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "block": 23479243,
+        "pools": 36914,
+        "sha256": "18bc09b7dde6adab14dfb4d24959522c672e17c49c3ea9891d82a11d87834cc0",
+        "exact_metadata_match": true,
+        "unique": true
+      },
+      {
+        "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "block": 23479242,
+        "pools": 36914,
+        "sha256": "18bc09b7dde6adab14dfb4d24959522c672e17c49c3ea9891d82a11d87834cc0",
+        "exact_metadata_match": true,
+        "unique": true
+      },
+      {
+        "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "block": 23479243,
+        "pools": 36914,
+        "sha256": "18bc09b7dde6adab14dfb4d24959522c672e17c49c3ea9891d82a11d87834cc0",
+        "exact_metadata_match": true,
+        "unique": true
+      }
+    ],
+    "market_keys": 1,
+    "market_cache_capacity": 1000000,
+    "inventory_market_references": 470546,
+    "inventory_tuple_shallow_bytes": 3764408,
+    "result_keys": 0,
+    "state_keys": 16384,
+    "rss_peak_bytes": 4252409856,
+    "cgroup_current_bytes": 5222092800,
+    "traced_current_bytes": 0,
+    "elapsed_seconds": 3251.2087131159933
+  },
+  {
+    "phase": "adjacent",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "block": 23479244,
+    "deadline_seconds": 3600,
+    "block_hash": "0x66e2783d5d15c43607b6b8611ab29c9ef45898127fa576715e1a5bd294ae1a94",
+    "status": "pass",
+    "canonical_verified": true,
+    "markets": 470546,
+    "inventory_sha256": "88b43334df8bac7f77423dacd2ad9dcd3f126433bbbb3acfe29941cdbf652696",
+    "protocol_counts": {
+      "Uniswap V2": 433882,
+      "Uniswap V3": 35816,
+      "Curve": 165,
+      "Balancer V2": 674,
+      "Balancer V1": 8,
+      "Uniswap V1": 1
+    },
+    "v3_unique": true,
+    "v3_indexes": [
+      {
+        "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "block": 23479244,
+        "pools": 36914,
+        "sha256": "18bc09b7dde6adab14dfb4d24959522c672e17c49c3ea9891d82a11d87834cc0",
+        "exact_metadata_match": true,
+        "unique": true
+      },
+      {
+        "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "block": 23479243,
+        "pools": 36914,
+        "sha256": "18bc09b7dde6adab14dfb4d24959522c672e17c49c3ea9891d82a11d87834cc0",
+        "exact_metadata_match": true,
+        "unique": true
+      },
+      {
+        "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "block": 23479244,
+        "pools": 36914,
+        "sha256": "18bc09b7dde6adab14dfb4d24959522c672e17c49c3ea9891d82a11d87834cc0",
+        "exact_metadata_match": true,
+        "unique": true
+      }
+    ],
+    "market_keys": 2,
+    "market_cache_capacity": 1000000,
+    "inventory_market_references": 941092,
+    "inventory_tuple_shallow_bytes": 7528816,
+    "result_keys": 0,
+    "state_keys": 16384,
+    "rss_peak_bytes": 4642086912,
+    "cgroup_current_bytes": 5612658688,
+    "traced_current_bytes": 0,
+    "elapsed_seconds": 2457.3676284060057
+  },
+  {
+    "phase": "repeat",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "block": 23479243,
+    "deadline_seconds": 3600,
+    "block_hash": "0x0b6c2373db136669e187029cb13c2893a69d9e5d6bcc97044d38e83123cf5a76",
+    "status": "pass",
+    "canonical_verified": true,
+    "markets": 470546,
+    "inventory_sha256": "05e59e50da97a1151a29497ae18a7e49c02e38fb7adbe509ec162516c6409f98",
+    "protocol_counts": {
+      "Uniswap V2": 433882,
+      "Uniswap V3": 35816,
+      "Curve": 165,
+      "Balancer V2": 674,
+      "Balancer V1": 8,
+      "Uniswap V1": 1
+    },
+    "v3_unique": true,
+    "v3_indexes": [
+      {
+        "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "block": 23479243,
+        "pools": 36914,
+        "sha256": "18bc09b7dde6adab14dfb4d24959522c672e17c49c3ea9891d82a11d87834cc0",
+        "exact_metadata_match": true,
+        "unique": true
+      },
+      {
+        "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "block": 23479242,
+        "pools": 36914,
+        "sha256": "18bc09b7dde6adab14dfb4d24959522c672e17c49c3ea9891d82a11d87834cc0",
+        "exact_metadata_match": true,
+        "unique": true
+      },
+      {
+        "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "block": 23479243,
+        "pools": 36914,
+        "sha256": "18bc09b7dde6adab14dfb4d24959522c672e17c49c3ea9891d82a11d87834cc0",
+        "exact_metadata_match": true,
+        "unique": true
+      }
+    ],
+    "market_keys": 2,
+    "market_cache_capacity": 1000000,
+    "inventory_market_references": 941092,
+    "inventory_tuple_shallow_bytes": 7528816,
+    "result_keys": 0,
+    "state_keys": 16384,
+    "rss_peak_bytes": 4642086912,
+    "cgroup_current_bytes": 5612818432,
+    "traced_current_bytes": 0,
+    "elapsed_seconds": 2.7909257560095284
+  }
+]

@@ -10,5 +10,8 @@
     "repeat inventory digest"
   ],
   "instrumentation": "Lightweight cache counters; no allocation tracing, object census, or SQLite backup",
-  "status": "prepared, not yet run"
+  "status": "complete: all three cases and nine direct index checks pass",
+  "run": "memory-retention-v3-final-312",
+  "source_archive_sha256": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
+  "peak_cgroup_bytes": 5612863488
 }

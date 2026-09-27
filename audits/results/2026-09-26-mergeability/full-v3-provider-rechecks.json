@@ -1,0 +1,124 @@
+{
+  "sequential": true,
+  "source_commit": "d414e7d3c27bc335a253012dddd7c3e58aa1da57",
+  "source_archive_sha256": "1a0e22293863990c1d850e7cd788faefdac3231c7d39e25ba33c2fb037c97ba5",
+  "failure_input_complete": false,
+  "requests": [
+    {
+      "request": {
+        "method": "eth_call",
+        "params": [
+          {
+            "to": "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+            "data": "0xf94d466860ce0ac20a0cd8fcdc9720f62696e9136d03a1b3000200000000000000000301"
+          },
+          {
+            "blockHash": "0x5cd8bb885471791b21361fe0d1a40f9d306cb5a570bccccde01c0322295e6d7a",
+            "requireCanonical": true
+          }
+        ]
+      },
+      "tests": [
+        "tests/prices/test_popsicle.py::test_popsicle_get_price[0xd2C5A739ebfE3E00CFa88A51749d367d7c496CCf]",
+        "tests/prices/test_popsicle.py::test_popsicle_get_price[0xa7053782dC3523D2C82B439Acf3f9344Fb47b97f]",
+        "tests/prices/test_popsicle.py::test_popsicle_get_price[0x949FDF28F437258E7564a35596b1A99b24F81e4e]",
+        "tests/prices/test_popsicle.py::test_popsicle_get_price[0xFF338D347E59d6B61E5C69382915D863bb22Ef2f]",
+        "tests/prices/test_popsicle.py::test_popsicle_get_price[0x495410B129A27bC771ce8fb316d804a5686B8Ea7]",
+        "tests/prices/test_popsicle.py::test_popsicle_get_price[0xa0273C10b8A4BF0bDC57cb0bC974E3A9d89527b8]"
+      ],
+      "original_error": "ValueError: {'code': -32000, 'message': 'historical state 134b36679e2f18bd50eff4d229749c33a3d3d49d8ff06d9be09fed7fd9a5706c is not available', 'dankmids_added_context': Request(method='eth_call', id=839038, params=({'to': '0xBA12222222228d8Ba445958a75a0704d566BF2C8', 'data': '0xf94d466860ce0ac20a0cd8fcdc9720f62696e9136d03a1b3000200000000000000000301'}, {'blockHash': '0x5cd8bb885471791b21361fe0d1a40f9d306cb5a570bccccde01c0322295e6d7a', 'requireCanonical': True}))}",
+      "observed_unix": 1790504287.5963452,
+      "block_by_hash": {
+        "number": "0x18dc41a",
+        "hash": "0x5cd8bb885471791b21361fe0d1a40f9d306cb5a570bccccde01c0322295e6d7a",
+        "stateRoot": "0x134b36679e2f18bd50eff4d229749c33a3d3d49d8ff06d9be09fed7fd9a5706c",
+        "timestamp": "0x6ab8e643"
+      },
+      "canonical_hash_before": "0x5cd8bb885471791b21361fe0d1a40f9d306cb5a570bccccde01c0322295e6d7a",
+      "canonical_before": true,
+      "recheck": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000003e58d34c8cf108897b1296ef462ad18522f7e1220000000000000000000000007558f7f023d676841ab118d4637a68943e650196000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "canonical_hash_after": "0x5cd8bb885471791b21361fe0d1a40f9d306cb5a570bccccde01c0322295e6d7a",
+      "canonical_after": true,
+      "canonical": true
+    },
+    {
+      "request": {
+        "method": "eth_call",
+        "params": [
+          {
+            "to": "0xBA11D00c5f74255f56a5E366F4F77f5A186d7f55",
+            "data": "0x313ce567"
+          },
+          {
+            "blockHash": "0x6cd4fca0d91b3e54f15ca9b659b78d6f0d07d1ceaa3014ddb97b08688251121b",
+            "requireCanonical": true
+          }
+        ]
+      },
+      "tests": [
+        "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xBA11D00C5F74255F56A5E366F4F77F5A186D7F55]",
+        "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xba11d00c5f74255f56a5e366f4f77f5a186d7f55]",
+        "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f550]",
+        "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f551]"
+      ],
+      "original_error": "ValueError: {'code': -32000, 'message': 'historical state df50db2f4d7599fe9856425e7cb9883f111ea6e03b16cf590c60e04a939157c9 is not available', 'dankmids_added_context': Request(method='eth_call', id=873634, params=({'to': '0xBA11D00c5f74255f56a5E366F4F77f5A186d7f55', 'data': '0x313ce567'}, {'blockHash': '0x6cd4fca0d91b3e54f15ca9b659b78d6f0d07d1ceaa3014ddb97b08688251121b', 'requireCanonical': True}))}",
+      "observed_unix": 1790504287.749891,
+      "block_by_hash": {
+        "number": "0x18dc41f",
+        "hash": "0x6cd4fca0d91b3e54f15ca9b659b78d6f0d07d1ceaa3014ddb97b08688251121b",
+        "stateRoot": "0xdf50db2f4d7599fe9856425e7cb9883f111ea6e03b16cf590c60e04a939157c9",
+        "timestamp": "0x6ab8e67f"
+      },
+      "canonical_hash_before": "0x6cd4fca0d91b3e54f15ca9b659b78d6f0d07d1ceaa3014ddb97b08688251121b",
+      "canonical_before": true,
+      "recheck": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": "0x0000000000000000000000000000000000000000000000000000000000000012"
+      },
+      "canonical_hash_after": "0x6cd4fca0d91b3e54f15ca9b659b78d6f0d07d1ceaa3014ddb97b08688251121b",
+      "canonical_after": true,
+      "canonical": true
+    },
+    {
+      "request": {
+        "method": "eth_call",
+        "params": [
+          {
+            "to": "0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95",
+            "data": "0x06f2bf620000000000000000000000006810e776880c02933d47db1b9fc05908e5386b96"
+          },
+          {
+            "blockHash": "0x6cd4fca0d91b3e54f15ca9b659b78d6f0d07d1ceaa3014ddb97b08688251121b",
+            "requireCanonical": true
+          }
+        ]
+      },
+      "tests": [
+        "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880c02933d47db1b9fc05908e5386b96]"
+      ],
+      "original_error": "ValueError: {'code': -32000, 'message': 'historical state df50db2f4d7599fe9856425e7cb9883f111ea6e03b16cf590c60e04a939157c9 is not available', 'dankmids_added_context': Request(method='eth_call', id=876299, params=({'to': '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95', 'data': '0x06f2bf620000000000000000000000006810e776880c02933d47db1b9fc05908e5386b96'}, {'blockHash': '0x6cd4fca0d91b3e54f15ca9b659b78d6f0d07d1ceaa3014ddb97b08688251121b', 'requireCanonical': True}))}",
+      "observed_unix": 1790504287.8698418,
+      "block_by_hash": {
+        "number": "0x18dc41f",
+        "hash": "0x6cd4fca0d91b3e54f15ca9b659b78d6f0d07d1ceaa3014ddb97b08688251121b",
+        "stateRoot": "0xdf50db2f4d7599fe9856425e7cb9883f111ea6e03b16cf590c60e04a939157c9",
+        "timestamp": "0x6ab8e67f"
+      },
+      "canonical_hash_before": "0x6cd4fca0d91b3e54f15ca9b659b78d6f0d07d1ceaa3014ddb97b08688251121b",
+      "canonical_before": true,
+      "recheck": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": "0x000000000000000000000000e8e45431b93215566ba923a7e611b7342ea954df"
+      },
+      "canonical_hash_after": "0x6cd4fca0d91b3e54f15ca9b659b78d6f0d07d1ceaa3014ddb97b08688251121b",
+      "canonical_after": true,
+      "canonical": true
+    }
+  ]
+}
