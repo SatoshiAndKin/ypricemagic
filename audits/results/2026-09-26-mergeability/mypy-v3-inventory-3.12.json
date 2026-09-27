@@ -1,0 +1,261 @@
+{
+  "python": "3.12",
+  "baseline": "/private/tmp/yprice-review-fixes/baseline-312/mypy.txt",
+  "current": "/private/tmp/yprice-mergeable/v3-inventory-final-312/mypy.txt",
+  "baseline_sha256": "024a0ee5bd25463d1c7dd096ae9c853026820767d5956e4cfdbdef84256dca10",
+  "current_sha256": "8e407ad5776f024390270fbe3d07d952a06298ba16a5095d1653c306bb042248",
+  "baseline_count": 1834,
+  "current_count": 1788,
+  "normalization": "Embedded on line <number> references only; source line numbers excluded by diagnostic parser",
+  "added": [],
+  "removed": [
+    {
+      "file": "y/_db/common.py",
+      "message": "Function is missing a type annotation for one or more arguments [no-untyped-def]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/common.py",
+      "message": "Function is missing a type annotation [no-untyped-def]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/common.py",
+      "message": "Call to untyped function \"skip_too_early\" in typed context [no-untyped-call]",
+      "count": 4
+    },
+    {
+      "file": "y/utils/events.py",
+      "message": "Call to untyped function \"LogCache\" in typed context [no-untyped-call]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "Function is missing a type annotation [no-untyped-def]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "The type \"type[Log]\" is not generic and not indexable [misc]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "Missing type parameters for generic type \"tuple\" [type-arg]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "Argument 1 to \"get_hash_dbid\" has incompatible type \"str\"; expected \"HexStr\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "Argument 1 to \"get_hash_dbid\" has incompatible type \"Address | None\"; expected \"HexStr\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "No overload variant of \"zip_longest\" matches argument types \"range\", \"object\" [call-overload]",
+      "count": 1
+    },
+    {
+      "file": "y/_db/utils/logs.py",
+      "message": "Missing type parameters for generic type \"Query\" [type-arg]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Missing type parameters for generic type \"Address\" [type-arg]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Incompatible types in assignment (expression has type \"CythonEvent\", variable has type \"None\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Returning Any from function declared to return \"Awaitable[Literal[True]]\" [no-any-return]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "\"None\" has no attribute \"wait\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Incompatible types in assignment (expression has type \"Task[Never]\", variable has type \"None\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "\"None\" has no attribute \"add_done_callback\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Incompatible return value type (got \"None\", expected \"Task[Never]\") [return-value]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Incompatible types in assignment (expression has type \"Exception\", variable has type \"None\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Incompatible types in assignment (expression has type \"Task[bool]\", variable has type \"None\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Incompatible return value type (got \"None\", expected \"Awaitable[Literal[True]]\") [return-value]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "message": "Implicit return in function which does not return [misc]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/stable_swap/curve.py",
+      "message": "Return type \"Coroutine[Any, Any, None]\" of \"_load\" incompatible with return type \"Coroutine[Any, Any, Never]\" in supertype \"y.classes.common._Loader\" [override]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/stable_swap/curve.py",
+      "message": "\"None\" has no attribute \"set\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/dex/uniswap/v3.py",
+      "message": "Incompatible types in assignment (expression has type \"_EventItem[Any]\", variable has type \"UniswapV3Pool\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/dex/uniswap/v3.py",
+      "message": "Invalid index type \"int | None\" for \"dict[int | BlockNumber, list[UniswapV3Pool]]\"; expected type \"int | BlockNumber\" [index]",
+      "count": 3
+    },
+    {
+      "file": "y/prices/dex/uniswap/v3.py",
+      "message": "Incompatible types in assignment (expression has type \"list[UniswapV3Pool]\", variable has type \"UniV3Pools\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/dex/uniswap/v3.py",
+      "message": "Unsupported operand types for < (\"int\" and \"None\") [operator]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/dex/uniswap/v3.py",
+      "message": "Unsupported operand types for < (\"BlockNumber\" and \"None\") [operator]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/dex/uniswap/v3.py",
+      "message": "Incompatible types in assignment (expression has type \"UniV3Pools\", target has type \"list[UniswapV3Pool]\") [assignment]",
+      "count": 2
+    },
+    {
+      "file": "tests/prices/test_chainlink.py",
+      "message": "Function is missing a type annotation [no-untyped-def]",
+      "count": 1
+    },
+    {
+      "file": "tests/prices/dex/test_uniswap.py",
+      "message": "Function is missing a type annotation [no-untyped-def]",
+      "count": 1
+    },
+    {
+      "file": "tests/prices/dex/test_uniswap.py",
+      "message": "No overload variant of \"get_price\" matches argument types \"Any\", \"bool\", \"bool\" [call-overload]",
+      "count": 2
+    },
+    {
+      "file": "tests/prices/dex/test_uniswap.py",
+      "message": "Module has no attribute \"block_number\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "tests/prices/dex/test_uniswap.py",
+      "message": "Unexpected keyword argument \"sync\" for \"get_price\" of \"UniswapV1\" [call-arg]",
+      "count": 1
+    },
+    {
+      "file": "tests/prices/dex/test_uniswap.py",
+      "message": "Unexpected keyword argument \"sync\" for \"get_price\" of \"UniswapRouterV2\" [call-arg]",
+      "count": 1
+    },
+    {
+      "file": "tests/prices/dex/test_uniswap.py",
+      "message": "Unexpected keyword argument \"sync\" for \"get_price\" of \"UniswapV3\" [call-arg]",
+      "count": 1
+    },
+    {
+      "file": "tests/prices/dex/test_uniswap.py",
+      "message": "Argument 1 to \"float\" has incompatible type \"PriceResult | None\"; expected \"str | Buffer | SupportsFloat | SupportsIndex\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "tests/prices/dex/test_uniswap.py",
+      "message": "Unexpected keyword argument \"sync\" for \"get_price\" of \"UniswapMultiplexer\" [call-arg]",
+      "count": 1
+    }
+  ],
+  "previous_repaired_source": {
+    "run": "inventory-cache-focused-312",
+    "sha256": "b973864a9ba4f1f33fcc4dad9d0715288c4a51326f2c47f1bc9888145060786a",
+    "count": 1803,
+    "added": [],
+    "removed": [
+      {
+        "file": "y/_db/common.py",
+        "message": "Function is missing a type annotation for one or more arguments [no-untyped-def]",
+        "count": 1
+      },
+      {
+        "file": "y/_db/common.py",
+        "message": "Function is missing a type annotation [no-untyped-def]",
+        "count": 1
+      },
+      {
+        "file": "y/_db/common.py",
+        "message": "Call to untyped function \"skip_too_early\" in typed context [no-untyped-call]",
+        "count": 4
+      },
+      {
+        "file": "y/prices/dex/uniswap/v3.py",
+        "message": "Incompatible types in assignment (expression has type \"_EventItem[Any]\", variable has type \"UniswapV3Pool\") [assignment]",
+        "count": 1
+      },
+      {
+        "file": "y/prices/dex/uniswap/v3.py",
+        "message": "Invalid index type \"int | None\" for \"dict[int | BlockNumber, list[UniswapV3Pool]]\"; expected type \"int | BlockNumber\" [index]",
+        "count": 3
+      },
+      {
+        "file": "y/prices/dex/uniswap/v3.py",
+        "message": "Incompatible types in assignment (expression has type \"list[UniswapV3Pool]\", variable has type \"UniV3Pools\") [assignment]",
+        "count": 1
+      },
+      {
+        "file": "y/prices/dex/uniswap/v3.py",
+        "message": "Unsupported operand types for < (\"int\" and \"None\") [operator]",
+        "count": 1
+      },
+      {
+        "file": "y/prices/dex/uniswap/v3.py",
+        "message": "Unsupported operand types for < (\"BlockNumber\" and \"None\") [operator]",
+        "count": 1
+      },
+      {
+        "file": "y/prices/dex/uniswap/v3.py",
+        "message": "Incompatible types in assignment (expression has type \"UniV3Pools\", target has type \"list[UniswapV3Pool]\") [assignment]",
+        "count": 2
+      }
+    ]
+  }
+}

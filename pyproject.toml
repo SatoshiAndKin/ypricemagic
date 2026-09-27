@@ -58,6 +58,7 @@ topic_tests = ["tests/test_topic_memory.py"]
 fixture_tests = ["tests/prices/dex/test_uniswap.py::test_uniswap_v1"]
 chainlink_fixture_tests = ["tests/prices/test_chainlink.py::test_chainlink_latest"]
 inventory_cache_tests = ["tests/test_inventory_cache.py"]
+v3_inventory_tests = ["tests/test_v3_inventory_cache.py"]
 slow_erc20_cases = [
   { token = "0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f", block = 17708470 },
   { token = "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8", block = 18465234 },
@@ -79,6 +80,7 @@ focused_tests = [
   "tests/prices/test_magic.py::test_bulk_fixture_releases_mapped_requests",
   "tests/test_memory_release.py",
   "tests/test_inventory_cache.py",
+  "tests/test_v3_inventory_cache.py",
   "tests/test_dank_import_guard.py",
   "tests/test_pricing_correctness.py",
   "tests/test_amount_quotes.py",

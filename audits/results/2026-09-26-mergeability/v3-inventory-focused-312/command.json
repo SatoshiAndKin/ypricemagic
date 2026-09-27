@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; python -m mypy > /reports/mypy.txt 2>&1 || true; python tools/validation/focused.py"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 221.99864119199628,
+  "peak_sampled_process_rss_bytes": 1043886080,
+  "cgroup_before": {
+    "memory.current": "8777728",
+    "memory.peak": "8884224",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "172486656",
+    "memory.peak": "1166569472",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

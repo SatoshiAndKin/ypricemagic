@@ -46,10 +46,11 @@ Validation is in progress. PR remains draft until the remaining checks complete.
 - [x] Let the mainnet audit reach its terminal outcome under the unchanged cap; retain the OOM and missing reports.
 - [x] Measure a canonical WETH inventory containing 470,546 market snapshots in one cache entry.
 - [x] Reproduce large-inventory retention and oversized-result caching failures against unchanged pre-fix production.
-- [ ] Finish the adjacent-block allocation census and validate the retention repair under native workloads.
+- [x] Finish the adjacent-block allocation census and identify V3 inventory replay.
+- [ ] Validate the combined retention and history repairs under native workloads.
 - [x] Bound retained inventories by pool count and prove eviction, object release, oversized delivery and cancellation behavior.
 - [x] Pass all 526 focused tests on Python 3.11–3.13 with ten compiled extensions and no added mypy diagnostics.
-- [ ] Verify native inventory equality and complete the unchanged full-suite command after the cache repair.
+- [ ] Verify the unchanged native cold inventory, unique adjacent pools and exact warm index reads; complete the required full suite after the cache and history repairs.
 - [ ] Complete the mainnet audit with both reports and memory measurements.
 - [x] Commit and push the remaining source changes; rerun focused checks on that commit.
 - [ ] Publish the final validation reports after the remaining runs complete.
@@ -498,3 +499,73 @@ At report-only head `d539812d`, lint and compilation pass. All nine mypy jobs
 complete with exactly the same normalized diagnostics as `62fd373c`: zero
 added or removed diagnostics. Their failed status remains visible in
 `ci-report-head-diagnostic-comparison.json`.
+
+The committed-source rerun at `2d778440` also passes all 526 tests with ten
+compiled extensions, no added mypy diagnostics, no OOM or missing reports,
+and a 1,165,754,368-byte peak. All 323 source-file hashes match the validated
+worktree matrix. The fresh audit on this commit has started; native inventory
+comparison and the required full-suite rerun remain pending.
+
+
+### Historical inventory replay follow-up
+
+The completed `memory-retention-before-312` diagnostic retains 470,546 cold
+markets, then 506,362 at the adjacent block, for 976,908 snapshot references in
+two cache entries. All three cases finish and verify canonical blocks; peak
+cgroup memory is 7,656,062,976 bytes, above the 7 GiB soft target but below the
+unchanged 8 GiB hard cap. The adjacent inventory's extra 35,816 markets exposed
+V3 pool replay. Its digest includes duplicates and is not an expected result
+for the repaired implementation. Allocation tracing, object census and the
+private SQLite backup make these diagnostic timings unsuitable as production
+benchmarks.
+
+The follow-up fixes three connected boundaries: `ProcessedEvents.objects`
+forwards its lower block bound, the buffered iterator consumes each object
+once within inclusive bounds, and the V3 token index tracks fully consumed
+history separately from partially populated pool groups. Historical reads use
+ordered deployment groups, partial reads cannot mark a block complete, and
+concurrent readers cannot duplicate cached pools or regress the completed
+boundary. Slipstream inherits the same index behavior.
+
+- [x] Reproduce the history defects with real event/index methods and controlled
+  factory metadata: `v3-inventory-before-312` has 11 expected failures and six
+  passing controls, with all ten compiled extensions.
+- [x] Implement inclusive event ranges and complete, unique incremental V3 indexes.
+- [x] Finish the expanded 543-case Python 3.11–3.13 matrix and mypy comparison.
+- [ ] Commit and push the history repair; rerun focused checks on the commit.
+- [ ] Verify native cold inventory, unique adjacent pools and direct warm index reads.
+- [ ] Complete the unchanged required full suite and a fresh audit on final source.
+- [ ] Update PR #43 and verify remote alignment before marking it ready.
+
+The initial repaired matrix attempt, `v3-inventory-focused-312`, finishes
+537 passed / six failed: the new iterator called the existing checkpoint
+helper on an empty checkpoint index. Restoring the nonempty guard addresses
+that implementation oversight; all 17 regression assertions remain unchanged.
+The corrected runs use the separate `v3-inventory-repaired-*` report prefix.
+
+`memory-retention-after-312` and `audit-inventory-cache-312` were explicitly
+interrupted because they used the superseded `2d778440` source. They remain
+incomplete; the latter lacks both audit reports after 2,475.61 seconds and
+was not OOM-killed. The native helper's shutdown exception is recorded in the
+interrupted attempt, not counted as an independent pricing regression. The
+queued `full-inventory-cache-312` never started. These attempts remain separate
+from the older audit's natural OOM and from completed timeout measurements.
+
+The first corrected iterator runs pass 543 tests on Python 3.12 and 3.11.
+Mypy then identifies five new diagnostics confined to test fixture annotations;
+explicit dynamic fixture types and `BlockNumber` construction remove those
+without changing any assertion. The final matrix is recorded separately as
+`v3-inventory-final-*`. CI at `2d778440` passes lint and compilation; all nine
+mypy jobs have exactly the same normalized diagnostics as `62fd373c`.
+
+The final annotated source passes **543 tests on each of Python 3.11–3.13**,
+with ten compiled extensions and no OOM or missing reports. All three share
+source archive `f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2`;
+all 324 current source-file hashes match. Mypy records **1,788 diagnostics**,
+with no additions against the original baselines or the immediately preceding
+1,803-diagnostic cache repair. The Python 3.13 proof uses the completed RPC
+profile run, whose archive exactly matches the final 3.11/3.12 runs; a duplicate
+3.13 run on the other profile may complete later and is not required for this
+source equivalence. Exact memory peaks and durations are in
+`v3-inventory-final-matrix.json`. The native follow-up uses that same source
+archive and remains in progress.

@@ -1,0 +1,21 @@
+[
+  {
+    "phase": "cold",
+    "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "block": 23479243,
+    "deadline_seconds": 3600,
+    "block_hash": "0x0b6c2373db136669e187029cb13c2893a69d9e5d6bcc97044d38e83123cf5a76",
+    "status": "failure",
+    "error": "RuntimeError: cannot schedule new futures after shutdown",
+    "market_keys": 0,
+    "market_cache_capacity": 1000000,
+    "inventory_market_references": 0,
+    "inventory_tuple_shallow_bytes": 0,
+    "result_keys": 0,
+    "state_keys": 16384,
+    "rss_peak_bytes": 2279362560,
+    "cgroup_current_bytes": 3014025216,
+    "traced_current_bytes": 0,
+    "elapsed_seconds": 490.2013037949946
+  }
+]

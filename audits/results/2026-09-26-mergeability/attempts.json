@@ -25,6 +25,31 @@
     "last_progress_seconds": 39153.939500608
   },
   {
+    "name": "audit-inventory-cache-312",
+    "complete": false,
+    "exit_code": 130,
+    "elapsed_seconds": 2475.6147820949554,
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "5b4646c70fb73b6ec75f1c26f00dafe11f448a575f6c08fee6e875082dba3e40",
+    "missing_reports": [
+      "audit.json",
+      "audit.csv"
+    ],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "4118237184",
+      "memory.peak": "4119564288",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "12"
+    },
+    "interrupted": true,
+    "last_progress_seconds": 2469.238950341998
+  },
+  {
     "name": "compound-isolated",
     "complete": true,
     "exit_code": 1,
@@ -1250,12 +1275,267 @@
     "last_progress_seconds": 7967.989656455997
   },
   {
+    "name": "inventory-cache-before-312",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 130.51680374145508,
+    "source_sha": "d539812da77f52dba019d3043eca896d442e04d6",
+    "source_archive_sha256": "3b6e43af126a12a0515835554562d1fb7aba50d783342c7b2cd571e1f18501ab",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "179707904",
+      "memory.peak": "1203339264",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 3,
+        "call:failed": 3,
+        "teardown:passed": 3
+      },
+      "collected": 3
+    },
+    "last_progress_seconds": 128.35334320399852
+  },
+  {
+    "name": "inventory-cache-before-final-312",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 134.63615727424622,
+    "source_sha": "6187a9bbc241f55d15548309c657e4d837ec9026",
+    "source_archive_sha256": "0ccad6a8bc8cb05c3d5740ed5fd969f7e35a8be9850d56c7e73d2672406b796c",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "146419712",
+      "memory.peak": "1163030528",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 3,
+        "call:failed": 2,
+        "teardown:passed": 3,
+        "call:passed": 1
+      },
+      "collected": 3
+    },
+    "last_progress_seconds": 132.50178697600495
+  },
+  {
+    "name": "inventory-cache-before-retry-312",
+    "complete": false,
+    "exit_code": 130,
+    "elapsed_seconds": 285.12247586250305,
+    "source_sha": "6187a9bbc241f55d15548309c657e4d837ec9026",
+    "source_archive_sha256": "c7702c50d163c4baa7643e1537636587b38ed4851644b92da153a147d03e2fab",
+    "missing_reports": [
+      "pytest-summary.json"
+    ],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "332906496",
+      "memory.peak": "1173700608",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "8"
+    },
+    "interrupted": true,
+    "last_progress_seconds": 282.95967552300135
+  },
+  {
+    "name": "inventory-cache-committed-312",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 231.94567108154297,
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "5b4646c70fb73b6ec75f1c26f00dafe11f448a575f6c08fee6e875082dba3e40",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "167473152",
+      "memory.peak": "1165754368",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 526,
+        "call:passed": 526,
+        "teardown:passed": 526
+      },
+      "collected": 526
+    },
+    "last_progress_seconds": 225.71545192800113
+  },
+  {
+    "name": "inventory-cache-focused-311",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 214.82340717315674,
+    "source_sha": "d539812da77f52dba019d3043eca896d442e04d6",
+    "source_archive_sha256": "809f38c2d21bc07be93db890618b6170d56851353f774446ae7139ba8b0fafda",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "233947136",
+      "memory.peak": "1172828160",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 526,
+        "call:passed": 526,
+        "teardown:passed": 526
+      },
+      "collected": 526
+    },
+    "last_progress_seconds": 212.72846844799642
+  },
+  {
+    "name": "inventory-cache-focused-312",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 237.17915177345276,
+    "source_sha": "d539812da77f52dba019d3043eca896d442e04d6",
+    "source_archive_sha256": "809f38c2d21bc07be93db890618b6170d56851353f774446ae7139ba8b0fafda",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "170770432",
+      "memory.peak": "1166925824",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 526,
+        "call:passed": 526,
+        "teardown:passed": 526
+      },
+      "collected": 526
+    },
+    "last_progress_seconds": 234.90651835600147
+  },
+  {
+    "name": "inventory-cache-focused-313",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 225.9816210269928,
+    "source_sha": "d539812da77f52dba019d3043eca896d442e04d6",
+    "source_archive_sha256": "809f38c2d21bc07be93db890618b6170d56851353f774446ae7139ba8b0fafda",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "236179456",
+      "memory.peak": "1210642432",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 526,
+        "call:passed": 526,
+        "teardown:passed": 526
+      },
+      "collected": 526
+    },
+    "last_progress_seconds": 223.966750779
+  },
+  {
+    "name": "memory-retention-after-312",
+    "complete": false,
+    "exit_code": 130,
+    "elapsed_seconds": 609.04714179039,
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "5b4646c70fb73b6ec75f1c26f00dafe11f448a575f6c08fee6e875082dba3e40",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "3014197248",
+      "memory.peak": "3015163904",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "7"
+    },
+    "interrupted": true,
+    "last_progress_seconds": 602.9851033239975
+  },
+  {
     "name": "memory-retention-before-312",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 6260.351943969727,
+    "source_sha": "6187a9bbc241f55d15548309c657e4d837ec9026",
+    "source_archive_sha256": "f799fceb946dff5c6a11e20cb8e4dfaae58937607becc0db37547c69e3d3d286",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "1707864064",
+      "memory.peak": "7656062976",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 6256.453005187999
+  },
+  {
+    "name": "memory-retention-v3-final-312",
     "complete": false,
     "exit_code": null,
     "elapsed_seconds": null,
-    "source_sha": "6187a9bbc241f55d15548309c657e4d837ec9026",
-    "source_archive_sha256": "f799fceb946dff5c6a11e20cb8e4dfaae58937607becc0db37547c69e3d3d286",
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
     "missing_reports": null,
     "oom_killed": null
   },
@@ -1518,6 +1798,235 @@
     },
     "interrupted": false,
     "last_progress_seconds": 3533.317604230004
+  },
+  {
+    "name": "v3-inventory-before-312",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 120.41607284545898,
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "707dffa857e3c6b5fc3801e90bd1e963d45fdf4fd816ade3c48fb36f0abeb37a",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "151863296",
+      "memory.peak": "1163149312",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 17,
+        "call:passed": 6,
+        "teardown:passed": 17,
+        "call:failed": 11
+      },
+      "collected": 17
+    },
+    "last_progress_seconds": 118.32534355200187
+  },
+  {
+    "name": "v3-inventory-final-311",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 222.99151587486267,
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "184578048",
+      "memory.peak": "1139884032",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 543,
+        "call:passed": 543,
+        "teardown:passed": 543
+      },
+      "collected": 543
+    },
+    "last_progress_seconds": 220.97309970999777
+  },
+  {
+    "name": "v3-inventory-final-312",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 202.06778597831726,
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "185978880",
+      "memory.peak": "1186885632",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 543,
+        "call:passed": 543,
+        "teardown:passed": 543
+      },
+      "collected": 543
+    },
+    "last_progress_seconds": 199.90783676400315
+  },
+  {
+    "name": "v3-inventory-final-313",
+    "complete": false,
+    "exit_code": null,
+    "elapsed_seconds": null,
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
+    "missing_reports": null,
+    "oom_killed": null
+  },
+  {
+    "name": "v3-inventory-focused-312",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 222.9318630695343,
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "794791f3ba44b05e766d0d1c5021e17ea842a759db825192f27a6054e30e0bf6",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "172486656",
+      "memory.peak": "1166569472",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 543,
+        "call:passed": 537,
+        "teardown:passed": 543,
+        "call:failed": 6
+      },
+      "collected": 543
+    },
+    "last_progress_seconds": 220.84294936500373
+  },
+  {
+    "name": "v3-inventory-repaired-311",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 207.2165651321411,
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "f37b2a6bf2184c74cfbf0f886690e6148b2c5b5d0400bac12317936f90c538d5",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "399233024",
+      "memory.peak": "1311526912",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 543,
+        "call:passed": 543,
+        "teardown:passed": 543
+      },
+      "collected": 543
+    },
+    "last_progress_seconds": 205.16299429000355
+  },
+  {
+    "name": "v3-inventory-repaired-312",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 212.06004667282104,
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "f37b2a6bf2184c74cfbf0f886690e6148b2c5b5d0400bac12317936f90c538d5",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "167280640",
+      "memory.peak": "1166536704",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 543,
+        "call:passed": 543,
+        "teardown:passed": 543
+      },
+      "collected": 543
+    },
+    "last_progress_seconds": 210.03725838000537
+  },
+  {
+    "name": "v3-inventory-repaired-313",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 211.36707210540771,
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "410923008",
+      "memory.peak": "1366507520",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 543,
+        "call:passed": 543,
+        "teardown:passed": 543
+      },
+      "collected": 543
+    },
+    "last_progress_seconds": 209.29986658500275
   },
   {
     "name": "validated-1800",

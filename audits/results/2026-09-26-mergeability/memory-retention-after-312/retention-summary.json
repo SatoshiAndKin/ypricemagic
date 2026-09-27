@@ -1,0 +1,16 @@
+{
+  "complete": false,
+  "elapsed_seconds": 490.22049792100734,
+  "cache_metrics": {
+    "market_keys": 0,
+    "market_cache_capacity": 1000000,
+    "inventory_market_references": 0,
+    "inventory_tuple_shallow_bytes": 0,
+    "result_keys": 0,
+    "state_keys": 16384,
+    "rss_peak_bytes": 2279362560,
+    "cgroup_current_bytes": 3014004736,
+    "traced_current_bytes": 0
+  },
+  "instrumentation": "Tracemalloc and object census start after cold inventory; timings are not production benchmarks."
+}

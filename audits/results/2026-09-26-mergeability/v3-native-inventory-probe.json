@@ -1,0 +1,14 @@
+{
+  "helper_sha256": "d8ea650dc048001b286817c8de30b04b86c105f7661f6eece589b59303b1ab87",
+  "cold_expected_block": 23479243,
+  "cold_expected_sha256": "05e59e50da97a1151a29497ae18a7e49c02e38fb7adbe509ec162516c6409f98",
+  "checks": [
+    "canonical block identity",
+    "exact cold inventory digest",
+    "V3 snapshot uniqueness per factory",
+    "direct V3 index equality to factory metadata at same and older blocks",
+    "repeat inventory digest"
+  ],
+  "instrumentation": "Lightweight cache counters; no allocation tracing, object census, or SQLite backup",
+  "status": "prepared, not yet run"
+}

@@ -42,5 +42,16 @@
       "mypy_count": 1803,
       "mypy_additions": 0
     }
-  ]
+  ],
+  "committed_rerun": {
+    "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+    "source_archive_sha256": "5b4646c70fb73b6ec75f1c26f00dafe11f448a575f6c08fee6e875082dba3e40",
+    "passed": 526,
+    "compiled_extensions": 10,
+    "verified_source_files": 323,
+    "command_seconds": 226.85236903000623,
+    "supervisor_seconds": 231.94567108154297,
+    "peak_cgroup_bytes": 1165754368,
+    "source_boundary": "All323 recorded source files match the committed checkout. Git archives include reports/build metadata excluded from worktree snapshots; generated build files are removed before Linux compilation."
+  }
 }

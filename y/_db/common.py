@@ -13,7 +13,7 @@ from asyncio import (
 )
 from collections.abc import AsyncIterator, Awaitable, Callable, Iterator
 from copy import copy
-from itertools import dropwhile, groupby, islice
+from itertools import groupby, islice
 from logging import DEBUG, getLogger
 from typing import TYPE_CHECKING, Any, Generic, NoReturn, Optional, TypeVar, final
 
@@ -561,58 +561,22 @@ class Filter(_DiskCachedMixin[T, C]):
         yielded = self._pruned
         done_thru = 0
         get_block_for_obj = self._get_block_for_obj
-        if self.is_reusable:
-            if from_block:
-                reached_from_block = False
-
-                def obj_out_of_range(obj) -> bool:
-                    if get_block_for_obj(obj) < from_block:
-                        return True
-                    nonlocal reached_from_block
-                    reached_from_block = True
-                    return False
-
-                def skip_too_early(objects):
-                    nonlocal yielded
-                    if checkpoints := self._checkpoints:
-                        start_checkpoint_index = _get_checkpoint_index(from_block, checkpoints)
-                        if start_checkpoint_index is not None:
-                            objects = objects[start_checkpoint_index:]
-                            yielded += start_checkpoint_index
-                    start_len = len(objects)
-                    objects = tuple(dropwhile(obj_out_of_range, objects))
-                    yielded += start_len - len(objs)
-                    return objects
-
-            if objs := self._objects:
-                if block is None:
-                    if from_block:
-                        objs = skip_too_early(objs)
-                    for obj in objs:
-                        yield obj
-                    yielded += len(objs)
-                    done_thru = get_block_for_obj(obj)
-                elif self._checkpoints:
-                    checkpoint_index = _get_checkpoint_index(block, self._checkpoints)
-                    if checkpoint_index is not None:
-                        objs = objs[:checkpoint_index]
-                        done_thru = get_block_for_obj(objs[-1])
-                        if from_block:
-                            objs = skip_too_early(objs)
-                        for obj in objs:
-                            yield obj
-                        yielded += len(objs)
-
-                elif from_block:
-                    skip_too_early(objs)
-
-        elif from_block:
-            raise RuntimeError(
-                f"You cannot pass a value for `from_block` unless the {type(self).__name__} is reusable"
-            )
+        if from_block:
+            if not self.is_reusable:
+                raise RuntimeError(
+                    f"You cannot pass a value for `from_block` unless the {type(self).__name__} is reusable"
+                )
+            # A checkpoint at the lower bound can include objects from that
+            # block. Start strictly before it, then test each object's block.
+            if self._checkpoints:
+                checkpoint_index = _get_checkpoint_index(from_block - 1, self._checkpoints)
+                if checkpoint_index is not None:
+                    yielded = max(yielded, checkpoint_index)
 
         while True:
-            if block is None or done_thru < block:
+            if (block is None or done_thru < block) and yielded >= self._pruned + len(
+                self._objects
+            ):
                 # TODO: extract this block to a helper method
                 while True:
                     self._wakeup()
@@ -626,42 +590,22 @@ class Filter(_DiskCachedMixin[T, C]):
                 # raise a copy of it so multiple waiters don't destroy the traceback
                 raise self._exc.with_traceback(self._tb) from self._exc.__cause__
             if to_yield := self._objects[yielded - self._pruned :]:
-                if from_block and not reached_from_block:
-                    objs = skip_too_early(to_yield)
-                    if block is None:
-                        for obj in objs:
-                            yield obj
-                    else:
-                        for obj in objs:
-                            if get_block_for_obj(obj) > block:
-                                return
-                            yield obj
-                    yielded += len(objs)
-
-                elif block:
-                    if self.is_reusable:
-                        for obj in to_yield:
-                            if get_block_for_obj(obj) > block:
-                                return
-                            yield obj
-                        yielded += len(to_yield)
-                    else:
-                        for obj in to_yield:
-                            if get_block_for_obj(obj) > block:
-                                self._prune(yielded - self._pruned)
-                                return
-                            yield obj
-                            yielded += 1
-
-                else:
-                    for obj in to_yield:
+                for obj in to_yield:
+                    obj_block = get_block_for_obj(obj)
+                    if block is not None and obj_block > block:
+                        if not self.is_reusable:
+                            self._prune(yielded - self._pruned)
+                        return
+                    if from_block is None or obj_block >= from_block:
                         yield obj
-                    yielded += len(to_yield)
+                    # Advance for every consumed object, including those below
+                    # the lower bound, so a later pass cannot replay the prefix.
+                    yielded += 1
 
                 if not self.is_reusable:
                     self._prune(len(to_yield))
 
-            elif block and done_thru >= block:
+            elif block is not None and done_thru >= block:
                 return
 
             done_thru = self._lock.value

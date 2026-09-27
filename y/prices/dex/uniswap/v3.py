@@ -458,46 +458,35 @@ class UniswapV3(a_sync.ASyncGenericBase):
 
         # we use a cache here to prevent unnecessary calls to __contains__
         # stringify token in case type is Contract or EthAddress
-        if cache := pools._pools_by_token_cache[str(token)]:
-            for deploy_block, cached_pools in cache.items():
-                if deploy_block > block:
-                    return
-                for pool in cached_pools:
+        token_key = str(token)
+        cache = pools._pools_by_token_cache[token_key]
+        loaded_through = pools._pools_loaded_through.get(token_key, -1)
+        seen: set[UniswapV3Pool] = set()
+        for deploy_block, cached_pools in sorted(cache.items()):
+            if deploy_block > block:
+                break
+            for pool in tuple(cached_pools):
+                if pool not in seen:
+                    seen.add(pool)
                     yield pool
 
-            if deploy_block == block:
-                # we got all for `block` and dont need to bother checking
-                return
-            async for pool in pools.objects(to_block=block, from_block=deploy_block + 1):
-                if token in pool:
-                    cache[pool._deploy_block].append(pool)
-                    yield pool
-        else:
-            async for pool in pools.objects(to_block=block):
-                if token in pool:
-                    cache[pool._deploy_block].append(pool)
-                    yield pool
-
-        try:
-            most_recent_deploy_block = pool._deploy_block
-        except NameError:
+        if block <= loaded_through:
             return
 
-        if cache:
-            cached_thru_block, pools = cache.popitem()
-            if most_recent_deploy_block > cached_thru_block:
-                # Signal to the cache that has loaded all pools for `token`
-                # thru the deploy block of the most recent pool deployed
-                cache[most_recent_deploy_block]
-                # If the item wasn't a placeholder, put it back
-                if pools:
-                    cache[cached_thru_block] = pools
-            else:
-                cache[cached_thru_block] = pools
-        else:
-            # Signal to the cache that has loaded all pools for `token`
-            # thru the deploy block of the most recent pool deployed
-            cache[most_recent_deploy_block]
+        async for pool in pools.objects(to_block=block, from_block=loaded_through + 1):
+            if token in pool:
+                entries = cache[pool._deploy_block]
+                if pool not in entries:
+                    entries.append(pool)
+                if pool not in seen:
+                    seen.add(pool)
+                    yield pool
+
+        # Only a fully consumed iterator establishes completeness. Concurrent
+        # older readers must not move another reader's completed boundary back.
+        pools._pools_loaded_through[token_key] = max(
+            block, pools._pools_loaded_through.get(token_key, -1)
+        )
 
     @stuck_coro_debugger
     async def get_price(
@@ -632,8 +621,9 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
     """Represents a collection of Uniswap V3 Pools."""
 
     _pools_by_token_cache: DefaultDict[Address, dict[Block, list[UniswapV3Pool]]]
+    _pools_loaded_through: dict[str, int]
 
-    __slots__ = "asynchronous", "_pools_by_token_cache"
+    __slots__ = "asynchronous", "_pools_by_token_cache", "_pools_loaded_through"
 
     def __init__(self, factory: Contract, asynchronous: bool = False):
         """
@@ -653,6 +643,7 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
         self.asynchronous = asynchronous
         super().__init__(addresses=[factory.address], topics=[factory.topics["PoolCreated"]])
         self._pools_by_token_cache = defaultdict(lambda: defaultdict(list))
+        self._pools_loaded_through = {}
 
     def _process_event(self, event: _EventItem) -> UniswapV3Pool:
         """

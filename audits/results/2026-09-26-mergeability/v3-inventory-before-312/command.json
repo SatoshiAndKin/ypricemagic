@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; python -c 'import tomllib, pathlib, pytest; raise SystemExit(pytest.main(tomllib.loads(pathlib.Path(\"pyproject.toml\").read_text())[\"tool\"][\"validation\"][\"v3_inventory_tests\"]))' "
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 119.48550983499445,
+  "peak_sampled_process_rss_bytes": 1062408192,
+  "cgroup_before": {
+    "memory.current": "8798208",
+    "memory.peak": "8798208",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "151863296",
+    "memory.peak": "1163149312",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

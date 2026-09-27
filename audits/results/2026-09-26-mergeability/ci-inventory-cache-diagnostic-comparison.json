@@ -1,0 +1,70 @@
+{
+  "before": "62fd373c438a681b7d699751745a60db0c211dd3",
+  "after": "2d7784408172c9a7742493a490c3c54311832c94",
+  "normalization": "Diagnostic source positions excluded; embedded on line references normalized. CI transitive dependencies are not frozen.",
+  "jobs": [
+    {
+      "name": "mypy (windows-latest, 3.11)",
+      "before_count": 1839,
+      "after_count": 1839,
+      "added": [],
+      "removed": []
+    },
+    {
+      "name": "mypy (macos-latest, 3.12)",
+      "before_count": 1806,
+      "after_count": 1806,
+      "added": [],
+      "removed": []
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.13)",
+      "before_count": 1806,
+      "after_count": 1806,
+      "added": [],
+      "removed": []
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.12)",
+      "before_count": 1806,
+      "after_count": 1806,
+      "added": [],
+      "removed": []
+    },
+    {
+      "name": "mypy (windows-latest, 3.12)",
+      "before_count": 1837,
+      "after_count": 1837,
+      "added": [],
+      "removed": []
+    },
+    {
+      "name": "mypy (windows-latest, 3.13)",
+      "before_count": 1839,
+      "after_count": 1839,
+      "added": [],
+      "removed": []
+    },
+    {
+      "name": "mypy (macos-latest, 3.11)",
+      "before_count": 1806,
+      "after_count": 1806,
+      "added": [],
+      "removed": []
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.11)",
+      "before_count": 1806,
+      "after_count": 1806,
+      "added": [],
+      "removed": []
+    },
+    {
+      "name": "mypy (macos-latest, 3.13)",
+      "before_count": 1806,
+      "after_count": 1806,
+      "added": [],
+      "removed": []
+    }
+  ]
+}

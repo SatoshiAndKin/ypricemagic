@@ -1,0 +1,7 @@
+{
+  "interrupted": true,
+  "complete": false,
+  "reason": "Superseded by verified historical event-range and V3 incremental-index defects exposed by the native retention diagnostic. This audit uses 2d778440 before those repairs and cannot validate the final source.",
+  "requested_unix": 1790495558.277863,
+  "source_commit": "2d7784408172c9a7742493a490c3c54311832c94"
+}

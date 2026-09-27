@@ -1,13 +1,11 @@
 {
-  "status": "in progress",
+  "status": "complete",
   "completed_cases": [
-    "cold"
-  ],
-  "pending_cases": [
+    "cold",
     "adjacent",
     "repeat"
   ],
-  "partial_reports": true,
-  "helper_sha256": "49b5189c0324d29d585828a2c673fb299222cc4ad741a1f0040a0fdf77c67eea",
-  "note": "No final command or retention summary is claimed. The active run will publish its final outcome separately."
+  "partial_reports": false,
+  "below_memory_target": false,
+  "note": "No OOM or missing reports; instrumented peak exceeded7GiB soft target but remained under8GiB cap. Adjacent inventory growth exposed a separate processed-event/V3 cache replay bug."
 }

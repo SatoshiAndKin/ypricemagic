@@ -1,0 +1,6 @@
+{
+  "complete": false,
+  "reason": "Superseded after the completed before diagnostic exposed a35816-market adjacent-block jump. ProcessedEvents.objects ignores from_block, replaying previously cached V3 pools; the underlying reusable-filter lower-bound accounting also uses the unfiltered outer variable. Stop this old-source comparison and its queued full-suite run to reproduce and repair those paths.",
+  "source_commit": "2d7784408172c9a7742493a490c3c54311832c94",
+  "queued_full_suite": "Not started; no full-suite outcome claimed."
+}
