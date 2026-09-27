@@ -1,0 +1,48 @@
+{
+  "previous_run": "full-committed-3600-312",
+  "current_run": "full-default-range-312",
+  "production_files_changed": [],
+  "limit": "Production source is identical between these completed repaired-source runs. The fixture/tests, log-range setting, live blocks and provider state differ; this is not a pristine pre-PR baseline.",
+  "previous_pass_now_failed": [
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0x949FDF28F437258E7564a35596b1A99b24F81e4e]",
+      "category": "provider historical-state error"
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xa7053782dC3523D2C82B439Acf3f9344Fb47b97f]",
+      "category": "provider historical-state error"
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xa0273C10b8A4BF0bDC57cb0bC974E3A9d89527b8]",
+      "category": "provider historical-state error"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880C02933D47DB1b9fc05908e5386b961]",
+      "category": "provider historical-state error"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880c02933d47db1b9fc05908e5386b96]",
+      "category": "provider historical-state error"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810E776880C02933D47DB1B9FC05908E5386B96]",
+      "category": "provider historical-state error"
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880C02933D47DB1b9fc05908e5386b960]",
+      "category": "provider historical-state error"
+    }
+  ],
+  "exact_error_matches": 34,
+  "configured_deadline_failures": 0,
+  "chainlink_latest": {
+    "passed": 97,
+    "skipped": 5
+  },
+  "command_elapsed_seconds": 5764.763785169998,
+  "supervisor_elapsed_seconds": 5769.372245311737,
+  "peak_cgroup_bytes": 4216393728,
+  "compiled_extensions": 10,
+  "oom_killed": false,
+  "missing_reports": []
+}

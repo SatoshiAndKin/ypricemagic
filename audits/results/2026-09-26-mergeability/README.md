@@ -42,8 +42,11 @@ Validation is in progress. PR remains draft until the remaining checks complete.
 - [x] Finish the final Python 3.11–3.13 focused runs and mypy comparisons after helper import repairs.
 - [x] Recheck the two remaining ERC20 timeouts sequentially at the same blocks and deadline.
 - [x] Compare the same cold checks with the previous 10,000-block log range.
-- [ ] Recheck the unchanged full-suite command on the fixture commit with the normal 10,000-block range.
-- [ ] Finish the mainnet audit with both reports and memory measurements.
+- [x] Recheck the unchanged full-suite command on the fixture commit with the normal 10,000-block range.
+- [x] Let the mainnet audit reach its terminal outcome under the unchanged cap; retain the OOM and missing reports.
+- [ ] Measure the current source retention responsible for the audit memory gap.
+- [ ] Repair the measured retention and prove regression behavior without changing quote results.
+- [ ] Complete the mainnet audit with both reports and memory measurements.
 - [x] Commit and push the remaining source changes; rerun focused checks on that commit.
 - [ ] Publish the final validation reports after the remaining runs complete.
 - [ ] Verify remote alignment and the preserved generated C hash; update PR Summary/Rationale/Details and assess ready status.
@@ -409,3 +412,45 @@ shared by three Popsicle cases in the active full recheck. The requested block
 is still canonical, and replaying the exact hash-bound Balancer call succeeds.
 The original errors remain full-suite failures; the successful later read does
 not turn that run into a pass or justify suppressing provider errors.
+
+`audit-final` is **incomplete**: the 8 GiB cgroup limit OOM-kills the workload
+after 39,156.77 seconds (10h 52m). The command exits 137 and the supervisor
+returns 125. Both `audit.json` and `audit.csv` are missing. Cgroup peak is
+8,590,204,928 bytes, with one OOM and one OOM kill; the small recorded overshoot
+does not change the configured 8,589,934,592-byte cap. There was no manual
+interruption or limit increase. The four-file source boundary remains recorded
+in `audit-source-boundary.json`. This outcome is separate from prior audit OOMs,
+full-suite timeouts, and the passing timeout-case checks.
+
+The next diagnostic uses current production source in an isolated checkout and
+measures retained market inventories at adjacent historical blocks, followed by
+a repeat of the first block. It records ordered inventory hashes, cache counts
+and allocation samples; instrumented timings are not production benchmarks.
+The audit memory gap remains open, so PR #43 remains draft.
+
+`full-default-range-312` completes the exact required command at `62fd373c` with
+**1,725 passed, 68 failed and 221 skipped** (2,014 collected). There are **zero
+deadline failures**, no OOM and no missing reports. All ten compiled extensions
+are verified. The supervisor takes 5,769.37 seconds; command time is 5,764.76
+seconds and peak cgroup memory is 4,216,393,728 bytes. Its committed archive hash
+is `b5300d9c649bd504cea27680f73de1831aadf27c3abd4d4b72579ed685985463`.
+
+It passes 51 calls over 600 seconds and eight over 1,800 seconds, with a maximum
+of 1,973.63 seconds. The original GHO case at block 17,708,470 passes in
+1,936.63 seconds. The generated PYUSD sample moves to block 18,465,557 and
+passes in 1,973.63 seconds; the original block 18,465,234 is covered by both
+sequential checks. The completed results support retaining the 3,600-second
+deadline and normal 10,000-block log range, without another timeout increase.
+Observed elapsed times are not controlled provider-load benchmarks.
+
+Failures comprise 45 other assertion/contract/pricing failures, 12 V3
+unavailable/native-versus-alternate-price comparisons, and 11 provider
+historical-state failures. There are 34 exact error matches to the preceding
+completed run. Seven previously passing test IDs now fail on provider state
+reads (three Popsicle, four GNO V3); all eleven provider failures reduce to
+three distinct requests, each of which succeeds on sequential replay at a
+still-canonical block. The live feed fixture finishes 97 passed and five skipped.
+`full-default-comparison.json` records that production Python is identical
+between the two completed full runs; fixture code, runtime log range and live
+state differ. This does not supply a pristine pre-PR baseline or turn the full
+suite green. Exact failures remain in `full-default-range-312/failure-analysis.json`.

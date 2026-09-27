@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; export VALIDATION_WAITS=1; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; PYTEST_ADDOPTS=\"-p no:pytest_ethereum\" BROWNIE_NETWORK=mainnet make test"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1790482509.187739,
+  "source_sha": "62fd373c438a681b7d699751745a60db0c211dd3",
+  "source_revision": "62fd373c438a681b7d699751745a60db0c211dd3",
+  "source_archive_sha256": "b5300d9c649bd504cea27680f73de1831aadf27c3abd4d4b72579ed685985463",
+  "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+  "exit_code": 2,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 5769.372245311737
+}

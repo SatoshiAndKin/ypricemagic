@@ -1,0 +1,8 @@
+{
+  "production_source_commit": "62fd373c438a681b7d699751745a60db0c211dd3",
+  "report_only_head": "6187a9bbc241f55d15548309c657e4d837ec9026",
+  "verified_production_files": 131,
+  "production_mismatches": [],
+  "helper_sha256": "49b5189c0324d29d585828a2c673fb299222cc4ad741a1f0040a0fdf77c67eea",
+  "purpose": "Read-only retention diagnostic; no production change; trace allocation starts after cold discovery."
+}

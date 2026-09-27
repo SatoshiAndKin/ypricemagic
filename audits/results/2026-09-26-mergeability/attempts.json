@@ -2,12 +2,27 @@
   {
     "name": "audit-final",
     "complete": false,
-    "exit_code": null,
-    "elapsed_seconds": null,
+    "exit_code": 137,
+    "elapsed_seconds": 39156.768286943436,
     "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
     "source_archive_sha256": "682ccd70b2e6374ccbd18304e54010f2ae39a8d9244daca02f84c71746ab748a",
-    "missing_reports": null,
-    "oom_killed": null
+    "missing_reports": [
+      "audit.json",
+      "audit.csv"
+    ],
+    "oom_killed": true,
+    "cgroup": {
+      "memory.current": "18038784",
+      "memory.peak": "8590204928",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 1309\noom 1\noom_kill 1\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 39153.939500608
   },
   {
     "name": "compound-isolated",
@@ -1117,13 +1132,38 @@
   },
   {
     "name": "full-default-range-312",
-    "complete": false,
-    "exit_code": null,
-    "elapsed_seconds": null,
+    "complete": true,
+    "exit_code": 2,
+    "elapsed_seconds": 5769.372245311737,
     "source_sha": "62fd373c438a681b7d699751745a60db0c211dd3",
     "source_archive_sha256": "b5300d9c649bd504cea27680f73de1831aadf27c3abd4d4b72579ed685985463",
-    "missing_reports": null,
-    "oom_killed": null
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "1087909888",
+      "memory.peak": "4216393728",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 2008,
+        "call:skipped": 215,
+        "teardown:passed": 2008,
+        "call:passed": 1725,
+        "call:failed": 68,
+        "setup:skipped": 6,
+        "teardown:skipped": 6
+      },
+      "collected": 2014
+    },
+    "last_progress_seconds": 5763.517406254003
   },
   {
     "name": "full-merged",
@@ -1208,6 +1248,16 @@
     },
     "interrupted": true,
     "last_progress_seconds": 7967.989656455997
+  },
+  {
+    "name": "memory-retention-before-312",
+    "complete": false,
+    "exit_code": null,
+    "elapsed_seconds": null,
+    "source_sha": "6187a9bbc241f55d15548309c657e4d837ec9026",
+    "source_archive_sha256": "f799fceb946dff5c6a11e20cb8e4dfaae58937607becc0db37547c69e3d3d286",
+    "missing_reports": null,
+    "oom_killed": null
   },
   {
     "name": "merged-focused",

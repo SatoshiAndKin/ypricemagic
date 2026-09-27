@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; ypricemagic audit-prices audits/mainnet.json --json /reports/audit.json --csv /reports/audit.csv"
+  ],
+  "exit_code": 137,
+  "interrupted": false,
+  "elapsed_seconds": 39155.25476371401,
+  "peak_sampled_process_rss_bytes": 8592670720,
+  "cgroup_before": {
+    "memory.current": "8851456",
+    "memory.peak": "8962048",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "18038784",
+    "memory.peak": "8590204928",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 1309\noom 1\noom_kill 1\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}
