@@ -51,13 +51,25 @@
   },
   {
     "name": "audit-v3-inventory-312",
-    "complete": false,
-    "exit_code": null,
-    "elapsed_seconds": null,
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 35670.98947620392,
     "source_sha": "d414e7d3c27bc335a253012dddd7c3e58aa1da57",
     "source_archive_sha256": "1a0e22293863990c1d850e7cd788faefdac3231c7d39e25ba33c2fb037c97ba5",
-    "missing_reports": null,
-    "oom_killed": null
+    "missing_reports": [],
+    "oom_killed": false,
+    "cgroup": {
+      "memory.current": "506294272",
+      "memory.peak": "6723567616",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "interrupted": false,
+    "last_progress_seconds": 35664.44453025701
   },
   {
     "name": "compound-isolated",

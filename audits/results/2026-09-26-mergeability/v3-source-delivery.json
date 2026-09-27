@@ -5,17 +5,16 @@
   "matrix_and_native_worktree_archive": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
   "committed_source_archive": "1a0e22293863990c1d850e7cd788faefdac3231c7d39e25ba33c2fb037c97ba5",
   "preserved_uncommitted_generated_c_sha256": "099f4992d9c8404dc31bc761d0fcfb5aeef32cd9f582688dc1b9f73646104506",
-  "checked_unix": 1790505379.329901,
-  "validation_pending": [
-    "mainnet audit"
-  ],
-  "draft": true,
+  "checked_unix": 1790532698.1717818,
+  "validation_pending": [],
   "completed_checks": [
     "543 focused tests on Python3.11-3.13",
     "543 committed-source focused tests on Python3.12",
     "all3 native inventory cases and9 direct V3 index checks",
     "all10 compiled extensions",
     "CI lint and compile pass;all9 mypy jobs15removed0added",
-    "required full suite:1745passed68failed221skipped,zero timeouts,noOOM/missingreports"
-  ]
+    "required full suite:1745passed68failed221skipped,zero timeouts,noOOM/missingreports",
+    "mainnet audit:1615pass81price_failure824incomplete;2520matching rows;noOOM/missingreports;23canonical backing checks and3exact error replays"
+  ],
+  "readiness_assessment": "Validation and failure triage complete; ready for review with documented failed checks and external-reference coverage limits."
 }

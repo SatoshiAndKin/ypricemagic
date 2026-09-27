@@ -1,7 +1,8 @@
 # PR 43 timeout investigation and mergeability
 
-The required full suite and focused/native checks are complete on source
-`d414e7d3`. The fresh mainnet audit remains active, so PR #43 remains draft.
+The required full suite, focused/native checks, and fresh mainnet audit are
+complete on source `d414e7d3`. Validation and failure triage are complete for
+review; known failed checks and external-reference coverage limits remain below.
 
 Latest full-suite outcome: **1,745 passed, 68 failed, 221 skipped; zero
 timeouts**, all ten compiled extensions, no OOM or missing reports, and a
@@ -59,10 +60,10 @@ green full suite. The focused matrix passes 543 tests on each of Python
 - [x] Pass all 526 focused tests on Python 3.11–3.13 with ten compiled extensions and no added mypy diagnostics.
 - [x] Verify the unchanged native cold inventory, unique adjacent pools and exact warm index reads.
 - [x] Complete the required full suite after the cache and history repairs.
-- [ ] Complete the mainnet audit with both reports and memory measurements.
+- [x] Complete the mainnet audit with both reports and memory measurements.
 - [x] Commit and push the remaining source changes; rerun focused checks on that commit.
-- [ ] Publish the final validation reports after the remaining runs complete.
-- [ ] Verify remote alignment and the preserved generated C hash; update PR Summary/Rationale/Details and assess ready status.
+- [x] Publish the final validation reports after the remaining runs complete.
+- [x] Verify remote alignment and the preserved generated C hash; update PR Summary/Rationale/Details and assess ready status.
 
 The unrelated generated C SHA256 is `099f4992d9c8404dc31bc761d0fcfb5aeef32cd9f582688dc1b9f73646104506`.
 
@@ -543,8 +544,8 @@ boundary. Slipstream inherits the same index behavior.
 - [x] Commit and push the history repair; rerun focused checks on the commit.
 - [x] Verify native cold inventory, unique adjacent pools and direct warm index reads.
 - [x] Complete the unchanged required full suite on final source.
-- [ ] Complete a fresh audit on final source.
-- [ ] Update PR #43 and verify remote alignment before marking it ready.
+- [x] Complete a fresh audit on final source.
+- [x] Update PR #43 and verify remote alignment before marking it ready.
 
 The initial repaired matrix attempt, `v3-inventory-focused-312`, finishes
 537 passed / six failed: the new iterator called the existing checkpoint
@@ -661,3 +662,52 @@ nine mypy jobs have exactly the same normalized diagnostics as `d414e7d3`:
 zero added or removed. Existing mypy failures remain visible in
 `ci-v3-evidence-diagnostic-comparison.json`. Production source is unchanged.
 The fresh mainnet audit remains active; no final audit coverage is claimed.
+
+
+## Completed mainnet audit and final assessment
+
+`audit-v3-inventory-312` completes on committed source `d414e7d3` with
+**1,615 passes, 81 pricing failures, and 824 incomplete rows** across 2,520
+matching JSON/CSV rows and 117 requested samples. Exit code 1 remains visible.
+There are no preparation errors, timeouts reported by the audit, OOM events, or
+missing reports. The audit itself has no per-price test deadline; its completion
+is separate from the required full suite's zero deadline failures. All ten
+compiled extensions and the unchanged cgroup limits are verified. Supervisor
+time is **35,670.989476 seconds**; peak memory is **6,723,567,616 bytes**, below
+both the 7 GiB soft target and 8 GiB hard cap. The older natural OOM and explicitly
+interrupted attempts remain separate evidence.
+
+`failure-classification.json` accounts for every pricing failure:
+
+- 60 gauge-sale failures: independent canonical-hash-bound reads find zero LP
+  backing at all 20 affected blocks. Returning unavailable preserves the native
+  withdrawal limit.
+- Nine Yearn-sale failures: all three affected blocks have zero idle assets;
+  the documented immediate, idle-only exit cannot cover any requested amount.
+- Three CRV-sale failures: exact sequential replays reproduce Reth's unsupported
+  `OutOfOffset` error at the same canonical block. It remains visible, consistent
+  with the narrow execution-error classifier; no fallback value is invented.
+- Nine spot/reference differences: four directly follow fixed USDC valuation,
+  two compare USDC/WETH reserve NAV during the depeg, and three compare the
+  Convex wrapper's underlying Curve LP valuation with a different wrapper
+  reference. Each Convex value exactly matches its underlying LP's independently
+  passing audit row. These comparisons remain failures, not reclassified passes.
+
+The 824 incomplete rows comprise 104 missing references, 97 references lacking
+the required confidence field, five stale references, and 618 sale sizes without
+a usable reference. All 160 deployment-boundary rows lack usable external
+references: this audit does **not** prove deployment-boundary price coverage.
+The controlled boundary regressions and native historical adapter checks are
+separate evidence. Reference confidence rules, fixed USDC policy, and error
+propagation are unchanged.
+
+The 23 backing checks and three error replays retain 122 exact RPC requests and
+responses in `native-outcome-rechecks.json`, with canonical hashes checked before
+and after. The audit is complete but non-green. No unclassified failure or new
+repair requirement remains from this run. Review readiness does not imply a
+green full suite, green mypy, complete external-reference coverage, or proven
+failure equivalence with pristine pre-PR source.
+
+Latest report-only commit `4847a909` passes CI compilation and lint. All nine
+mypy jobs have exactly the same diagnostics as the tested source; the failed
+status is retained. No required checks or repository protection were weakened.
