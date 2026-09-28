@@ -1,5 +1,9 @@
 # Historical pricing repair validation
 
+Pricing repair commit: `17c08dda9796994ea755699032975dc4b91fd06e`. The subsequent bot commit changes generated C files only. The frozen focused matrix passed 613 tests on each of Python 3.11, 3.12 and 3.13; the committed-source recheck also passed 613. All ten compiled extensions were verified. Fourteen protocol-native checks and nine additional fixed-block public-price checks passed.
+
+The final full workload recorded 2,059 passes, 23 provider-state failures and 22 skips, with no assertion failures, timeouts or OOM. The provider-affected pytest recheck recorded 29 passes and nine provider-state failures; those nine prices subsequently passed native calls at their exact failed canonical blocks. These failed pytest runs remain failures. PR 43 remains draft with full-suite RPC and baseline mypy validation gaps.
+
 Every row is a separate immutable source snapshot. A completed command is not necessarily a passing or complete test run. Negative controls use original production source with the documented regression-test/configuration overlay.
 
 The original 68-failure run, older deadline experiments, master diagnostic, and audit OOM remain in `../2026-09-26-mergeability/`; they are not merged into these results.
@@ -7,6 +11,7 @@ The original 68-failure run, older deadline experiments, master diagnostic, and 
 | Attempt | Passed / failed / skipped | Test report complete | Interrupted | Peak GiB |
 | --- | ---: | --- | --- | ---: |
 | [before-312](before-312/run.json) | 0 / 20 / 0 | True | False | 1.084 |
+| [committed-312](committed-312/run.json) | 613 / 0 / 0 | True | False | 1.089 |
 | [complete-regressions-before-312](complete-regressions-before-312/run.json) | 9 / 61 / 0 | True | False | 1.085 |
 | [expanded-after-312](expanded-after-312/run.json) | 45 / 0 / 0 | True | False | 1.085 |
 | [expanded-before-312](expanded-before-312/run.json) | 3 / 4 / 0 | False | False | 1.092 |
@@ -30,6 +35,10 @@ The original 68-failure run, older deadline experiments, master diagnostic, and 
 | [matrix-final-312](matrix-final-312/run.json) | 606 / 0 / 0 | True | False | 1.096 |
 | [matrix-final-313](matrix-final-313/run.json) | 604 / 0 / 0 | True | False | 1.090 |
 | [matrix-repaired-311](matrix-repaired-311/run.json) | 603 / 1 / 0 | True | False | 1.047 |
+| [native-provider-312](native-provider-312/run.json) | native 9 / 0 | n/a - native report | False | 3.102 |
+| [provider-recheck-312](provider-recheck-312/run.json) | 29 / 9 / 0 | True | False | 3.389 |
+
+Native-only commands have their own complete result report and do not request a pytest summary. The native pass/failure counts and completeness are also recorded in validation-summary.json.
 
 Exact source/archive hashes, byte-level memory peaks, exit codes, and missing reports are recorded in [validation-summary.json](validation-summary.json). Each directory retains pytest events, compiled-extension verification, resource limits, and publication hashes. Full console logs and complete mypy output remain in the corresponding local `/private/tmp/yprice-repairs/` report; published mypy comparisons retain every changed diagnostic.
 

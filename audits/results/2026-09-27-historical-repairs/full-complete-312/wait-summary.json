@@ -1,0 +1,122 @@
+{
+  "samples": 122,
+  "last_sample_elapsed_seconds": 3655.1033218299854,
+  "last_logical_rpc_counts": {
+    "call_uid": 1841639,
+    "multicall_uid": 202561,
+    "request_uid": 113250,
+    "jsonrpc_batch_uid": 123687
+  },
+  "peak_sampled_live_tasks": 76650,
+  "peak_task_sample_elapsed_seconds": 303.5866421049868,
+  "top_waits_at_peak": [
+    [
+      "/usr/local/lib/python3.12/asyncio/tasks.py:684:_wrap_awaitable",
+      12919
+    ],
+    [
+      "a_sync/debugging.pyx:64:stuck_coro_wrap",
+      5804
+    ],
+    [
+      "/work/y/contracts.py:829:has_methods",
+      3876
+    ],
+    [
+      "/work/tests/prices/test_magic.py:83:get_price -> /work/y/prices/magic.py:189:get_price",
+      3395
+    ],
+    [
+      "/work/y/prices/utils/buckets.py:239:_safe_check_bucket[gelato]",
+      3217
+    ],
+    [
+      "/work/y/prices/utils/buckets.py:239:_safe_check_bucket[balancer pool] -> /work/y/prices/utils/buckets.py:302:_check_bucket_helper[balancer pool]",
+      3209
+    ],
+    [
+      "/work/y/prices/utils/buckets.py:239:_safe_check_bucket[basketdao] -> /work/y/prices/utils/buckets.py:302:_check_bucket_helper[basketdao] -> /work/y/prices/tokenized_fund/basketdao.py:38:is_basketdao_index",
+      2594
+    ],
+    [
+      "/work/y/prices/utils/buckets.py:239:_safe_check_bucket[reserve] -> /work/y/prices/utils/buckets.py:302:_check_bucket_helper[reserve] -> /work/y/prices/tokenized_fund/reserve.py:37:is_rtoken",
+      2589
+    ],
+    [
+      "/work/y/prices/utils/buckets.py:239:_safe_check_bucket[saddle] -> /work/y/prices/utils/buckets.py:302:_check_bucket_helper[saddle] -> /usr/local/lib/python3.12/site-packages/async_lru/__init__.py:249:__call__ -> /usr/local/lib/python3.12/site-packages/async_lru/__init__.py:216:_shield_and_handle_cancelled_error",
+      2280
+    ],
+    [
+      "/work/y/prices/utils/buckets.py:239:_safe_check_bucket[mstable feeder pool] -> /work/y/prices/utils/buckets.py:302:_check_bucket_helper[mstable feeder pool] -> /usr/local/lib/python3.12/site-packages/async_lru/__init__.py:249:__call__ -> /usr/local/lib/python3.12/site-packages/async_lru/__init__.py:216:_shield_and_handle_cancelled_error",
+      2271
+    ]
+  ],
+  "final_retry_categories": {
+    "multicall:BadResponse:size=2:unsupported opcode": 3,
+    "multicall:OutOfGas:size=16:out of gas": 12,
+    "multicall:OutOfGas:size=10:out of gas": 31,
+    "multicall:OutOfGas:size=17:out of gas": 17,
+    "multicall:OutOfGas:size=8:out of gas": 60,
+    "multicall:OutOfGas:size=5:out of gas": 149,
+    "multicall:OutOfGas:size=9:out of gas": 68,
+    "multicall:OutOfGas:size=4:out of gas": 230,
+    "multicall:OutOfGas:size=35:out of gas": 3,
+    "multicall:OutOfGas:size=18:out of gas": 20,
+    "multicall:OutOfGas:size=36:out of gas": 3,
+    "multicall:OutOfGas:size=21:out of gas": 10,
+    "multicall:OutOfGas:size=11:out of gas": 27,
+    "multicall:OutOfGas:size=6:out of gas": 102,
+    "multicall:OutOfGas:size=83:out of gas": 1,
+    "multicall:OutOfGas:size=42:out of gas": 3,
+    "multicall:OutOfGas:size=63:out of gas": 2,
+    "multicall:OutOfGas:size=29:out of gas": 4,
+    "multicall:OutOfGas:size=53:out of gas": 2,
+    "multicall:OutOfGas:size=32:out of gas": 3,
+    "multicall:OutOfGas:size=14:out of gas": 20,
+    "multicall:OutOfGas:size=27:out of gas": 4,
+    "multicall:OutOfGas:size=7:out of gas": 76,
+    "multicall:OutOfGas:size=45:out of gas": 1,
+    "multicall:OutOfGas:size=23:out of gas": 5,
+    "multicall:OutOfGas:size=12:out of gas": 32,
+    "multicall:OutOfGas:size=112:out of gas": 1,
+    "multicall:OutOfGas:size=56:out of gas": 1,
+    "multicall:OutOfGas:size=28:out of gas": 6,
+    "multicall:OutOfGas:size=26:out of gas": 7,
+    "multicall:OutOfGas:size=13:out of gas": 23,
+    "multicall:OutOfGas:size=162:out of gas": 1,
+    "multicall:OutOfGas:size=81:out of gas": 1,
+    "multicall:OutOfGas:size=40:out of gas": 2,
+    "multicall:OutOfGas:size=20:out of gas": 1,
+    "multicall:OutOfGas:size=86:out of gas": 1,
+    "multicall:OutOfGas:size=43:out of gas": 1,
+    "multicall:OutOfGas:size=15:out of gas": 17,
+    "multicall:OutOfGas:size=57:out of gas": 1,
+    "multicall:OutOfGas:size=19:out of gas": 8,
+    "multicall:OutOfGas:size=25:out of gas": 7,
+    "multicall:OutOfGas:size=22:out of gas": 4,
+    "multicall:OutOfGas:size=24:out of gas": 4,
+    "multicall:BadResponse:size=9:historical state unavailable": 4,
+    "multicall:BadResponse:size=3:historical state unavailable": 15,
+    "multicall:BadResponse:size=10:historical state unavailable": 4,
+    "multicall:BadResponse:size=14:historical state unavailable": 1,
+    "multicall:BadResponse:size=2:historical state unavailable": 22,
+    "multicall:BadResponse:size=5:historical state unavailable": 8,
+    "multicall:BadResponse:size=4:historical state unavailable": 7,
+    "multicall:BadResponse:size=7:historical state unavailable": 3,
+    "multicall:OutOfGas:size=34:out of gas": 4,
+    "multicall:OutOfGas:size=37:out of gas": 1,
+    "multicall:OutOfGas:size=49:out of gas": 1,
+    "multicall:OutOfGas:size=54:out of gas": 1,
+    "multicall:OutOfGas:size=58:out of gas": 1,
+    "multicall:OutOfGas:size=67:out of gas": 1,
+    "multicall:OutOfGas:size=52:out of gas": 1,
+    "multicall:OutOfGas:size=69:out of gas": 1,
+    "multicall:OutOfGas:size=31:out of gas": 1,
+    "multicall:OutOfGas:size=46:out of gas": 1,
+    "multicall:OutOfGas:size=41:out of gas": 1,
+    "multicall:OutOfGas:size=38:out of gas": 1,
+    "multicall:OutOfGas:size=30:out of gas": 5,
+    "other": 6
+  },
+  "note": "Logical RPC counts include batched calls and are not HTTP request counts. Wait sampling is observational and does not alter task deadlines or pricing."
+}

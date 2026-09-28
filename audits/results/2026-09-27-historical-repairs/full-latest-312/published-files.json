@@ -2,6 +2,7 @@
   "command.json": "3b4a50b3746a6b69c9f22f2efc4cc871b8d36b50d339bb325cde49f7dc1e5b52",
   "compiled-modules.json": "f7c8033a81021cf5121a9f6f3a025fdb0d1c7d49a38813efb2d30f529dfd33f2",
   "container-state.json": "16a7b80372e216e8b528326c5f8d89e377637ea511b296f277b6acf789149de9",
+  "deadline-analysis.json": "47d85f840b4b36a34d54fcd65822058ca36593d929d20d7e08b4bb701b1a1c23",
   "dependencies-after.txt": "5de7741e27355787211132eab3611aec4939388573e7d45e601b5dd65c5216fb",
   "dependencies.txt": "731c1ca9b428d237fad55238d6ad9796c9ffd5bc1c0f917690b883ae206c9c20",
   "environment.json": "c481a104899d561f17a1d567a67280eccf00fe98fa7d522643ddc081d1d31c65",
@@ -13,5 +14,6 @@
   "rpc-probe.json": "0ab2b6c45701183c5d3d6b6039c73985cb78ba05d53bea3274c7b9632565137c",
   "run.json": "452df26b5273d35ae7aa461d42a1e66d6f51853bb245d86bddb47bad99ec7771",
   "runner-files.json": "35ee813bd2c2c0b53c1a0928cbe444ba60642baabf4546328b96e7d44b9fc17a",
+  "wait-summary.json": "8a192caeb485fc9a4e4dc26158e0fcb9bbd647413aedeb20eafa55108b57b92e",
   "workload-files.json": "d4d93480b46f78b239327ec3699bbc876f3859cad908de11bf6365f22e72a577"
 }

@@ -1,0 +1,75 @@
+{
+  "samples": 52,
+  "last_sample_elapsed_seconds": 1532.5194879340124,
+  "last_logical_rpc_counts": {
+    "call_uid": 656874,
+    "multicall_uid": 74469,
+    "request_uid": 34508,
+    "jsonrpc_batch_uid": 37432
+  },
+  "peak_sampled_live_tasks": 18095,
+  "peak_task_sample_elapsed_seconds": 1110.9217785059882,
+  "top_waits_at_peak": [
+    [
+      "/work/y/prices/_quote.py:51:worker -> /work/y/prices/_markets.py:148:safely -> /work/y/prices/_markets.py:272:balancer_snapshot",
+      4620
+    ],
+    [
+      "a_sync/debugging.pyx:64:stuck_coro_wrap",
+      4548
+    ],
+    [
+      "/work/y/prices/_quote.py:51:worker -> /work/y/prices/_markets.py:148:safely -> /work/y/prices/_markets.py:275:balancer_snapshot -> /work/y/prices/_rpc.py:82:state -> /work/y/prices/_quote.py:106:get",
+      3956
+    ],
+    [
+      "/work/y/prices/_rpc.py:74:code -> /usr/local/lib/python3.12/site-packages/dank_mids/eth.py:157:get_code -> /usr/local/lib/python3.12/site-packages/web3/module.py:118:caller -> /usr/local/lib/python3.12/site-packages/web3/manager.py:335:coro_request -> /usr/local/lib/python3.12/site-packages/web3/manager.py:219:_coro_make_request -> /usr/local/lib/python3.12/site-packages/dank_mids/controller.py:257:__call__",
+      2967
+    ],
+    [
+      "a_sync/asyncio/create_task.pyx:181:__await",
+      449
+    ],
+    [
+      "/usr/local/lib/python3.12/site-packages/dank_mids/controller.py:331:execute_batch",
+      444
+    ],
+    [
+      "/usr/local/lib/python3.12/site-packages/dank_mids/helpers/_requester.py:63:post",
+      399
+    ],
+    [
+      "/work/y/prices/_routing.py:493:calculate",
+      150
+    ],
+    [
+      "/usr/local/lib/python3.12/site-packages/a_sync/task.py:195:_wrapped_set_next",
+      125
+    ],
+    [
+      "/usr/local/lib/python3.12/asyncio/tasks.py:684:_wrap_awaitable",
+      124
+    ]
+  ],
+  "final_retry_categories": {
+    "multicall:OutOfGas:size=62:out of gas": 1,
+    "multicall:OutOfGas:size=31:out of gas": 1,
+    "multicall:OutOfGas:size=54:out of gas": 1,
+    "multicall:OutOfGas:size=16:out of gas": 2,
+    "multicall:OutOfGas:size=8:out of gas": 4,
+    "multicall:OutOfGas:size=27:out of gas": 2,
+    "multicall:OutOfGas:size=4:out of gas": 5,
+    "multicall:OutOfGas:size=13:out of gas": 3,
+    "multicall:OutOfGas:size=14:out of gas": 1,
+    "multicall:OutOfGas:size=7:out of gas": 3,
+    "multicall:OutOfGas:size=15:out of gas": 2,
+    "multicall:OutOfGas:size=9:out of gas": 5,
+    "multicall:OutOfGas:size=5:out of gas": 5,
+    "multicall:OutOfGas:size=18:out of gas": 1,
+    "multicall:OutOfGas:size=12:out of gas": 3,
+    "multicall:OutOfGas:size=6:out of gas": 7,
+    "multicall:OutOfGas:size=25:out of gas": 1,
+    "multicall:OutOfGas:size=17:out of gas": 1
+  },
+  "note": "Logical RPC counts include batched calls and are not HTTP request counts. Wait sampling is observational and does not alter task deadlines or pricing."
+}

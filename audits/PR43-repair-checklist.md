@@ -76,7 +76,7 @@ termination do not establish that the PR's failures were pre-existing.
 - [x] Reconstruct PieDAO's historical value from native balances and feeds.
 - [x] Enable the 199 previously unmarked Compound async cases.
 - [x] Collect all individual batch-pricing failures before asserting.
-- [ ] Verify explicit supported, uninitialized, retired, and unavailable historical cases.
+- [x] Verify explicit supported, uninitialized, retired, and unavailable historical cases.
 
 ## Validation
 
@@ -88,8 +88,14 @@ termination do not establish that the PR's failures were pre-existing.
 - [x] Configured formatting and mypy diagnostic comparison: 1,772 diagnostics
   versus 1,788 baseline on each version. The sole added message replaces the
   existing Gelato decorator diagnostic after its return annotation gained None.
+  GitHub's Ubuntu/Python 3.13 job similarly records 1,775 versus 1,791 baseline;
+  the three diagnostics beyond the frozen local count concern unchanged missing
+  click/numpy imports and their consequence. CI remains failing.
 - [x] Required Python 3.12 full command, unchanged; record provider failures explicitly.
-- [ ] Same-block provider replays and healthy-provider validation for RPC failures.
+- [x] Same-block provider replays and subsequent public-price validation: 29
+  affected pytest cases passed; all nine remaining provider-failed prices passed
+  sequential native calls at their exact failed canonical blocks. Preserve the
+  failing pytest runs separately.
 - [x] Record source/archive hashes, memory peaks, missing reports and interruptions.
 
 All heavy jobs use 8 GiB RAM, no swap, four CPUs and 512 processes/threads,
@@ -129,6 +135,9 @@ with provider historical-state errors, and 22 skipped. There were no assertion
 failures, timeouts, or OOM. Peak cgroup memory was 4,526,096,384 bytes and workload
 duration was 4,197.005 seconds. Archive hash:
 `079400b6a3ff82771bb837837f696495cdde9bdf2641ae886b3c65d2f2040af3`.
+Its longest individual test passed in 2,692.870 seconds. The preceding full run's
+longest test passed in 2,436.113 seconds. Both fit the unchanged 3,600-second
+per-test deadline; neither run had a timeout failure.
 The host supervisor did not finish reporting; complete command and pytest reports
 were recovered intact from the exited container. Host completion remains false,
 with workload completion recorded separately in `full-latest-312/recovery.json`.
@@ -138,15 +147,30 @@ replayed at their original canonical hashes. Responses include both data and
 native EVM rejections from selector probes. The preceding full snapshot recorded
 2,055 passes, 21 provider-state failures, the two subsequently repaired
 Inverse/PieDAO failures, and 22 skips. The 38 distinct provider-failed public tests
-from both runs are being rerun with unchanged production and test source; only
-the centrally configured test selection differs. Neither failed full run is
-relabelled as passing.
+from both runs were rerun with unchanged production and test source; only the
+centrally configured test selection differed. That recheck completed with 29
+passes and nine provider-state failures at newly selected blocks, with no
+assertion failures or timeouts. Its four unique failed requests now reach state
+at their exact original hashes. A separate sequential native check passed all
+nine affected public prices at blocks 26,076,808 and 26,076,809, verifying each
+canonical hash before and after pricing. All ten compiled extensions were
+verified. The native-only runner, inputs, source identity proof, exact prices,
+and resource measurements are retained in `native-provider-312/`. Neither failed
+full run nor the failed pytest recheck is relabelled as passing.
 
 ## Delivery
 
 - [x] Inspect scoped diff and preserved generated C hash:
   `099f4992d9c8404dc31bc761d0fcfb5aeef32cd9f582688dc1b9f73646104506`.
-- [ ] Commit and push scoped changes.
-- [ ] Rerun focused checks against committed source.
-- [ ] Update PR Summary, Rationale and Details; keep draft while gaps remain.
-- [ ] Verify remote alignment and final generated C hash.
+- [x] Commit and push scoped changes: `17c08dda9796994ea755699032975dc4b91fd06e`.
+- [x] Rerun focused checks against committed source: 613 passed on Python 3.12,
+  all ten compiled extensions verified. The following bot commit `bd1302d1`
+  changes only generated C files; Python source and tests are identical.
+- [x] Update PR Summary, Rationale and Details; keep draft while gaps remain.
+- [x] Verify remote alignment and preserved generated C hash; the local C file
+  remains the sole unrelated working-tree change. Retain the bot's generated C
+  commit separately from the pricing repair and validation evidence commits.
+
+The repairs are delivered, but the PR remains draft. The full-suite provider
+failures, baseline mypy failures, and earlier source-specific audit limitations
+remain visible; successful targeted/native checks do not make those runs green.

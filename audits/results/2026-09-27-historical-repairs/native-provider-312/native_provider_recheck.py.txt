@@ -1,0 +1,36 @@
+"""Replay provider-failed public prices at their exact recorded canonical blocks."""
+import asyncio
+import json
+import os
+from pathlib import Path
+from typing import Any, cast
+from y.prices._rpc import BlockRef
+from y.prices.lending.aave import AaveRegistry
+from y.prices.lending.compound import compound
+
+async def main() -> int:
+    cases = json.loads(Path('native-provider-cases.json').read_text())
+    report = Path(os.environ['VALIDATION_REPORT']) / 'native-provider-recheck.json'
+    rows = []
+    aave = cast(Any, AaveRegistry(asynchronous=True))
+    for case in cases:
+        row = dict(case)
+        try:
+            block = await BlockRef.resolve(case['number'])
+            assert block.hash == case['hash'], (block.hash, case['hash'])
+            adapter = cast(Any, compound) if case['protocol'] == 'Compound' else aave
+            price = await adapter.get_price(case['token'], block.number, skip_cache=True, sync=False)
+            row['price'] = float(price) if price is not None else None
+            assert price is not None and float(price) > 0, row
+            await block.verify()
+            row['status'] = 'pass'
+        except Exception as exc:
+            row.update(status='failure', error_type=type(exc).__name__, error=str(exc))
+        rows.append(row)
+        report.write_text(json.dumps({'complete':False, 'rows':rows},indent=2)+'\n')
+        print(json.dumps(row),flush=True)
+    report.write_text(json.dumps({'complete':True, 'rows':rows},indent=2)+'\n')
+    return int(any(r['status'] != 'pass' for r in rows))
+
+if __name__ == '__main__':
+    raise SystemExit(asyncio.get_event_loop().run_until_complete(main()))

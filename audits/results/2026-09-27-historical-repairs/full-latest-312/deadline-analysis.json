@@ -1,0 +1,7 @@
+{
+  "longest_call_seconds": 2692.8697698116302,
+  "longest_call_test": "tests/prices/test_magic.py::test_get_prices[24566483]",
+  "longest_call_outcome": "passed",
+  "configured_per_test_timeout_seconds": 3600,
+  "timeout_failures": []
+}
