@@ -1,0 +1,81 @@
+[
+  {
+    "case": "Balancer native route",
+    "swap_deltas": [
+      1000000000000000000,
+      -990676243530743826
+    ],
+    "bpt_burned": 990676243530743826,
+    "exit_outputs": {
+      "0xba100000625a3754423978a60c9317c58a424e3d": 2207702813795210556,
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": 1415578606525465
+    },
+    "BAL_to_WETH": 5675616216084243,
+    "ETH_USD_answer": 173883000000,
+    "native_USD": "12.33038229339843856164",
+    "adapter_USD": 12.330382293398438,
+    "equal_as_float": true,
+    "block": 17500000,
+    "hash": "0x4425bc6cfa2d05157ea7182501f858aff20587b16b9da59b97b03dbfd446220f",
+    "canonical_verified": true
+  },
+  {
+    "case": "Old MLN V3 path selection",
+    "paths": [
+      {
+        "fee": 3000,
+        "via_WETH": false,
+        "error": "execution reverted: Unexpected error"
+      },
+      {
+        "fee": 3000,
+        "via_WETH": true,
+        "native_USDC": 10292,
+        "old_fee_adjusted_USD": "0.01035403099971931843675459679"
+      },
+      {
+        "fee": 500,
+        "via_WETH": false,
+        "error": "execution reverted"
+      },
+      {
+        "fee": 500,
+        "via_WETH": true,
+        "error": "execution reverted"
+      },
+      {
+        "fee": 10000,
+        "via_WETH": false,
+        "error": "execution reverted: Unexpected error"
+      },
+      {
+        "fee": 10000,
+        "via_WETH": true,
+        "native_USDC": 0,
+        "old_fee_adjusted_USD": "0E+5"
+      },
+      {
+        "fee": 100,
+        "via_WETH": false,
+        "error": "execution reverted"
+      },
+      {
+        "fee": 100,
+        "via_WETH": true,
+        "error": "execution reverted"
+      }
+    ],
+    "old_best_price": "0.01035403099971931843675459679",
+    "block": 26063967,
+    "hash": "0xb70aaad0284471dfe63bac8acd9b3690445e79fe1fcbafd19c1b08a63e465817",
+    "canonical_verified": true
+  },
+  {
+    "case": "Historical sDEFI freshness",
+    "rate": 2915995870830000000000,
+    "stale": false,
+    "block": 11000000,
+    "hash": "0x4d5e647b2d8d3a3c8c1561ebb88734bc5fc3c2941016f810cf218738c0ecd99e",
+    "canonical_verified": true
+  }
+]

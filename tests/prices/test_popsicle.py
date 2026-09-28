@@ -1,3 +1,4 @@
+from y.classes.common import ERC20
 import a_sync
 import pytest
 from brownie import chain
@@ -78,6 +79,9 @@ async def test_popsicle_get_price(token):
     prices = a_sync.map(popsicle.get_price, blocks, token=token)
     try:
         async for block, price in prices:
-            assert price, f"Failed to fetch price for {token} at block {block}."
+            if not await ERC20(token, asynchronous=True).total_supply(block):
+                assert price is None
+            else:
+                assert price, f"Failed to fetch price for {token} at block {block}."
     finally:
         await prices.close()

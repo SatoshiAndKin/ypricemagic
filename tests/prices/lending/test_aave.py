@@ -161,7 +161,12 @@ async def test_atokens_async(token):
     assert await aave.pool_for_atoken(token), f"Cannot find pool for atoken {token}"
     underlying = await aave.underlying(token)
     assert underlying, f"Cannot find underlying for atoken {token}"
-    assert await aave.get_price(token), f"Cannot find price for atoken {token}"
+    if token.lower() == "0x0a6172fb19e85dbae18898ea2f7a596b5681f1ee":
+        # ATOM's USD feed was active here and retired before block 18,000,000.
+        assert await aave.get_price(token, block=15_000_000)
+        assert await aave.get_price(token, block=26_068_032) is None
+    else:
+        assert await aave.get_price(token), f"Cannot find price for atoken {token}"
 
 
 @pytest.mark.asyncio_cooperative
@@ -178,7 +183,11 @@ async def test_wrapped_atoken_v2():
     wrapped_ausdt = "0xf8Fd466F12e236f4c96F7Cce6c79EAdB819abF58"
     aave: AaveRegistry = AaveRegistry(asynchronous=True)
     assert await aave.is_wrapped_atoken_v2(wrapped_ausdt)
-    assert await aave.get_price_wrapped_v2(wrapped_ausdt, block=17_000_000) == 1.112026
+    price = await aave.get_price_wrapped_v2(wrapped_ausdt, block=17_000_000)
+    # 1.112026 aUSDT per share, valued at the historical $1.0006985 USDT feed.
+    # Permit only the final floating-point rounding, not a price tolerance.
+    assert price is not None
+    assert float(price) == pytest.approx(1.112802750161, rel=0, abs=3e-16)
 
 
 @pytest.mark.asyncio_cooperative

@@ -1,0 +1,5 @@
+{
+  "interrupted": true,
+  "reason": "Superseded snapshot: GUNI bucket collector mismatch, missing oracle states, and batch fixture still assumes fail-fast cancellation while production test now aggregates all failures. The fixture leaves synthetic requests waiting forever. This is not a completed full or focused validation and is not a timeout result.",
+  "recorded_unix": 1790567557.8073862
+}

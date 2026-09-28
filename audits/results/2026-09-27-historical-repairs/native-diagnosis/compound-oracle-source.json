@@ -1,0 +1,9 @@
+{
+  "chain_id": 1,
+  "address": "0xF9d60249C9590eF60B6A7d3f95fD0F98Cb512588",
+  "contract": "PriceOracleProxyIB",
+  "source_sha256": "9654280d760593db1a2cd784478a16c0960966b86a837d9f0e24abb43c375dec",
+  "source_url": "https://etherscan.io/address/0xF9d60249C9590eF60B6A7d3f95fD0F98Cb512588#code",
+  "finding": "getUnderlyingPrice reverts with no price after supported oracle paths and deprecated-market fallback are exhausted.",
+  "token_config_source": "https://raw.githubusercontent.com/compound-finance/open-oracle/master/contracts/Uniswap/UniswapConfig.sol"
+}

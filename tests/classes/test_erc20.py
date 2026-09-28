@@ -137,6 +137,10 @@ async def test_erc20_at_block(token, block):
     if token.address == OLD_SUSD and block >= 13222927:
         pytest.skip("Not applicable to the old sUSD after migration block.")
 
+    if token.address == OLD_SUSD and block == 5_761_012:
+        assert await Call(token.address, "target()(address)", block_id=block) == ZERO_ADDRESS
+        return
+
     # NOTE Some proxy tokens would fail tests in early days because no implementation is specified.
     try:
         if await Call(token.address, "implementation()(address)", block_id=block) == ZERO_ADDRESS:
@@ -156,4 +160,15 @@ async def test_erc20_at_block(token, block):
     except NoProxyImplementation:
         pass
 
-    assert await token.price(block), f"Cannot fetch price for token {token}"
+    unavailable = {
+        ("0x6b175474e89094c44da98b954eedeac495271d0f", 8_938_158),
+        ("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", 4_729_568),
+        ("0x2260fac5e5542a773aa44fbcfedf7c193bc2c599", 6_776_284),
+        ("0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2", 4_630_855),
+        ("0xdac17f958d2ee523a2206206994597c13d831ec7", 4_644_748),
+        ("0x6c3ea9036406852006290770bedfcabA0e23a0e8".lower(), 15_931_958),
+    }
+    if (token.address.lower(), block) in unavailable:
+        assert await token.price(block, return_None_on_failure=True) is None
+    else:
+        assert await token.price(block), f"Cannot fetch price for token {token}"

@@ -7,10 +7,12 @@ from brownie import ZERO_ADDRESS
 from multicall import Call
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.contracts import has_method
 from y.datatypes import Address, AnyAddressType, Block, UsdPrice, UsdValue
 from y.exceptions import call_reverted
+from y.prices._candidates import gather_owned
 from y.utils.raw_calls import raw_call
 
 logger = logging.getLogger(__name__)
@@ -111,6 +113,7 @@ async def get_bpool(pie_address: Address, block: Block | None = None) -> Address
         return pie_address
 
 
+@stuck_coro_debugger
 async def get_tvl(
     pie_address: Address,
     block: Block | None = None,
@@ -137,11 +140,16 @@ async def get_tvl(
     pool, tokens = await cgather(get_bpool(pie_address, block), get_tokens(pie_address, block))
     if tokens is None:
         return None
-    return await a_sync.map(get_value, tokens, bpool=pool, block=block, skip_cache=skip_cache).sum(
-        pop=True, sync=False
+    return UsdValue(
+        sum(
+            await gather_owned(
+                get_value(pool, token, block=block, skip_cache=skip_cache) for token in tokens
+            )
+        )
     )
 
 
+@stuck_coro_debugger
 async def get_balance(bpool: Address, token: ERC20, block: Block | None = None) -> Decimal:
     """
     Get the balance of a token in a Balancer pool.
@@ -156,7 +164,7 @@ async def get_balance(bpool: Address, token: ERC20, block: Block | None = None) 
         1000.0
     """
     balance, scale = await cgather(
-        Call(token.address, ("balanceOf(address)(uint)", bpool), block_id=block),
+        Call(token.address, ["balanceOf(address)(uint)", bpool], block_id=block),
         token.__scale__,
     )
     return Decimal(balance) / scale

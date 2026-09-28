@@ -1,0 +1,581 @@
+[
+  {
+    "name": "before-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "d444eba21fe4ca42b1698cb34b3647ef1dafb0efe7b77a74a3fcfec8e3861698",
+    "exit_code": 1,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 20,
+        "call:failed": 20,
+        "teardown:passed": 20
+      },
+      "collected": 20
+    },
+    "memory_peak_bytes": 1163542528,
+    "missing_reports": [],
+    "elapsed_seconds": 163.39659070968628,
+    "oom_killed": false
+  },
+  {
+    "name": "complete-regressions-before-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "a6c56745c374a77e76a7b44e4b20bbf6df5f588bd04bb7fccf648de53355e804",
+    "exit_code": 1,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 70,
+        "call:failed": 61,
+        "teardown:passed": 70,
+        "call:passed": 9
+      },
+      "collected": 70
+    },
+    "memory_peak_bytes": 1165053952,
+    "missing_reports": [],
+    "elapsed_seconds": 127.78857707977295,
+    "oom_killed": false
+  },
+  {
+    "name": "expanded-after-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "f0bc1a4588c1cf6c3a973252054ad6436f806101caf5a49af3b070f94ebc3bfb",
+    "exit_code": 0,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 45,
+        "call:passed": 45,
+        "teardown:passed": 45
+      },
+      "collected": 45
+    },
+    "memory_peak_bytes": 1164861440,
+    "missing_reports": [],
+    "elapsed_seconds": 129.24304604530334,
+    "oom_killed": false
+  },
+  {
+    "name": "expanded-before-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "46b2bf86b0b9012fc03d2b61d2b0eb56295c06f95ff9c28394bb3c375a629182",
+    "exit_code": 3,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": false,
+    "tests": {
+      "exit_code": 3,
+      "counts": {
+        "setup:passed": 8,
+        "call:failed": 4,
+        "teardown:passed": 7,
+        "call:passed": 3
+      },
+      "collected": 43
+    },
+    "memory_peak_bytes": 1173028864,
+    "missing_reports": [],
+    "elapsed_seconds": 102.08108377456665,
+    "oom_killed": false
+  },
+  {
+    "name": "expanded-before-retry-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "b658e86c3f0ebeebf71da1747844745737c917f1bb2ca7ad86a4fdf0c2e628c8",
+    "exit_code": 1,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 43,
+        "call:failed": 39,
+        "teardown:passed": 43,
+        "call:passed": 4
+      },
+      "collected": 43
+    },
+    "memory_peak_bytes": 1173716992,
+    "missing_reports": [],
+    "elapsed_seconds": 110.26890110969543,
+    "oom_killed": false
+  },
+  {
+    "name": "final-regressions-before-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "97d163920beef0824f421aa0fe4debc2f9dcb903fe7b40879f5f1d22e1ef611c",
+    "exit_code": 1,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 67,
+        "call:failed": 58,
+        "teardown:passed": 67,
+        "call:passed": 9
+      },
+      "collected": 67
+    },
+    "memory_peak_bytes": 1165307904,
+    "missing_reports": [],
+    "elapsed_seconds": 131.7424237728119,
+    "oom_killed": false
+  },
+  {
+    "name": "first-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "297cdf8d912da8a0fd76db1c93b3c920cedb957026c1599610310c12c86d4ac2",
+    "exit_code": 0,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 563,
+        "call:passed": 563,
+        "teardown:passed": 563
+      },
+      "collected": 563
+    },
+    "memory_peak_bytes": 1175678976,
+    "missing_reports": [],
+    "elapsed_seconds": 238.37099409103394,
+    "oom_killed": false
+  },
+  {
+    "name": "full-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "d298d19d5289feb41337a79aabe8b1ccc930d084c21cc6c6ba5386c0f7f3856b",
+    "exit_code": 143,
+    "runner_complete": false,
+    "workload_complete": false,
+    "host_reporting_recovered": false,
+    "interrupted": true,
+    "test_report_complete": false,
+    "tests": null,
+    "memory_peak_bytes": 3540738048,
+    "missing_reports": [
+      "pytest-summary.json"
+    ],
+    "elapsed_seconds": 954.4212901592255,
+    "oom_killed": false
+  },
+  {
+    "name": "full-complete-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "42e0a3fe1d85c8ea14d863563f396b9f95332f39143cbddf0320f4dd7d45e650",
+    "exit_code": 2,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 2094,
+        "call:passed": 2055,
+        "teardown:passed": 2094,
+        "call:skipped": 16,
+        "call:failed": 23,
+        "setup:skipped": 6,
+        "teardown:skipped": 6
+      },
+      "collected": 2100
+    },
+    "memory_peak_bytes": 4459614208,
+    "missing_reports": [],
+    "elapsed_seconds": 3886.448702096939,
+    "oom_killed": false
+  },
+  {
+    "name": "full-final-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "e5359ae1d8e231869efaebeea5fc7952913210dfe82963198f413d6bcb5bf7cd",
+    "exit_code": 143,
+    "runner_complete": false,
+    "workload_complete": false,
+    "host_reporting_recovered": false,
+    "interrupted": true,
+    "test_report_complete": false,
+    "tests": null,
+    "memory_peak_bytes": 1178652672,
+    "missing_reports": [
+      "pytest-summary.json"
+    ],
+    "elapsed_seconds": 334.97873187065125,
+    "oom_killed": false
+  },
+  {
+    "name": "full-guarded-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "b46ca577cf715d41b209cc9e120c1d9e1e16343231632e7d96bb7b1f2b220f26",
+    "exit_code": 2,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 2089,
+        "call:skipped": 16,
+        "teardown:passed": 2089,
+        "call:passed": 2008,
+        "call:failed": 65,
+        "setup:skipped": 6,
+        "teardown:skipped": 6
+      },
+      "collected": 2095
+    },
+    "memory_peak_bytes": 4392861696,
+    "missing_reports": [],
+    "elapsed_seconds": 3934.2612631320953,
+    "oom_killed": false
+  },
+  {
+    "name": "full-latest-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "079400b6a3ff82771bb837837f696495cdde9bdf2641ae886b3c65d2f2040af3",
+    "exit_code": 2,
+    "runner_complete": false,
+    "workload_complete": true,
+    "host_reporting_recovered": true,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 2098,
+        "call:skipped": 16,
+        "teardown:passed": 2098,
+        "call:passed": 2059,
+        "call:failed": 23,
+        "setup:skipped": 6,
+        "teardown:skipped": 6
+      },
+      "collected": 2104
+    },
+    "memory_peak_bytes": 4526096384,
+    "missing_reports": [],
+    "elapsed_seconds": 4197.005036183982,
+    "oom_killed": false
+  },
+  {
+    "name": "full-repaired-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "cb6374a29d5ab6323c956f2ca18234573f76ed9c81a0ae9238d9796e3468a41a",
+    "exit_code": 1,
+    "runner_complete": false,
+    "workload_complete": false,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 65,
+        "call:passed": 64,
+        "teardown:passed": 65,
+        "call:failed": 1
+      },
+      "collected": 65
+    },
+    "memory_peak_bytes": 1174925312,
+    "missing_reports": [
+      "pre-full-repairs.json"
+    ],
+    "elapsed_seconds": 131.61758422851562,
+    "oom_killed": false
+  },
+  {
+    "name": "late-complete-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "cd0f94e4be0fc0e426d68bc490440be9fc30d3613d74d3ae296b112097f61bd8",
+    "exit_code": 0,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 613,
+        "call:passed": 613,
+        "teardown:passed": 613
+      },
+      "collected": 613
+    },
+    "memory_peak_bytes": 3314966528,
+    "missing_reports": [],
+    "elapsed_seconds": 952.5838711261749,
+    "oom_killed": false
+  },
+  {
+    "name": "latest-matrix-311",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "b8b4c716c7280ffe724eec81c9e276418c19487738ee4731b02ff91008ce3d0b",
+    "exit_code": 0,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 613,
+        "call:passed": 613,
+        "teardown:passed": 613
+      },
+      "collected": 613
+    },
+    "memory_peak_bytes": 1123749888,
+    "missing_reports": [],
+    "elapsed_seconds": 241.6600799560547,
+    "oom_killed": false
+  },
+  {
+    "name": "latest-matrix-313",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "3128f1bc6f6391884c7d159a36ffdc4f6a950f37afd0641f111fc662ad31adba",
+    "exit_code": 0,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 613,
+        "call:passed": 613,
+        "teardown:passed": 613
+      },
+      "collected": 613
+    },
+    "memory_peak_bytes": 1160159232,
+    "missing_reports": [],
+    "elapsed_seconds": 230.34189987182617,
+    "oom_killed": false
+  },
+  {
+    "name": "latest-negative-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "e3d72349657bd8245d18cab542d0225ed0e1dfa9d865c8681691fec3875e4202",
+    "exit_code": 1,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 74,
+        "call:failed": 65,
+        "teardown:passed": 74,
+        "call:passed": 9
+      },
+      "collected": 74
+    },
+    "memory_peak_bytes": 1163341824,
+    "missing_reports": [],
+    "elapsed_seconds": 123.21303915977478,
+    "oom_killed": false
+  },
+  {
+    "name": "matrix-311",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "d49de141da5e3e0ffbf3699b1adaf3d5c7ce68699128b487961f7d7b80a07000",
+    "exit_code": 143,
+    "runner_complete": false,
+    "workload_complete": false,
+    "host_reporting_recovered": false,
+    "interrupted": true,
+    "test_report_complete": false,
+    "tests": null,
+    "memory_peak_bytes": 1116938240,
+    "missing_reports": [
+      "pytest-summary.json"
+    ],
+    "elapsed_seconds": 568.922688961029,
+    "oom_killed": false
+  },
+  {
+    "name": "matrix-complete-311",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "bb144f2493bbbe2629da875f86d8a18a92d159ed87d35e5c71af09a87a65b12c",
+    "exit_code": 0,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 609,
+        "call:passed": 609,
+        "teardown:passed": 609
+      },
+      "collected": 609
+    },
+    "memory_peak_bytes": 1115598848,
+    "missing_reports": [],
+    "elapsed_seconds": 454.98519682884216,
+    "oom_killed": false
+  },
+  {
+    "name": "matrix-complete-313",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "bb144f2493bbbe2629da875f86d8a18a92d159ed87d35e5c71af09a87a65b12c",
+    "exit_code": 0,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 609,
+        "call:passed": 609,
+        "teardown:passed": 609
+      },
+      "collected": 609
+    },
+    "memory_peak_bytes": 1162649600,
+    "missing_reports": [],
+    "elapsed_seconds": 236.57845091819763,
+    "oom_killed": false
+  },
+  {
+    "name": "matrix-final-311",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "cb8f8a6155a58541538d4d13a545bdd4868123803513380e228eb44b82b5f818",
+    "exit_code": 0,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 604,
+        "call:passed": 604,
+        "teardown:passed": 604
+      },
+      "collected": 604
+    },
+    "memory_peak_bytes": 1117810688,
+    "missing_reports": [],
+    "elapsed_seconds": 745.6147871017456,
+    "oom_killed": false
+  },
+  {
+    "name": "matrix-final-312",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "73163f0958d76015bb639a9a7c0ad63084160a5cd43ead349ae0a073818fd4cc",
+    "exit_code": 0,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 606,
+        "call:passed": 606,
+        "teardown:passed": 606
+      },
+      "collected": 606
+    },
+    "memory_peak_bytes": 1176391680,
+    "missing_reports": [],
+    "elapsed_seconds": 250.76056504249573,
+    "oom_killed": false
+  },
+  {
+    "name": "matrix-final-313",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "cb8f8a6155a58541538d4d13a545bdd4868123803513380e228eb44b82b5f818",
+    "exit_code": 0,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 604,
+        "call:passed": 604,
+        "teardown:passed": 604
+      },
+      "collected": 604
+    },
+    "memory_peak_bytes": 1170432000,
+    "missing_reports": [],
+    "elapsed_seconds": 253.95264792442322,
+    "oom_killed": false
+  },
+  {
+    "name": "matrix-repaired-311",
+    "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+    "archive_sha256": "cb6374a29d5ab6323c956f2ca18234573f76ed9c81a0ae9238d9796e3468a41a",
+    "exit_code": 1,
+    "runner_complete": true,
+    "workload_complete": true,
+    "host_reporting_recovered": false,
+    "interrupted": false,
+    "test_report_complete": true,
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 604,
+        "call:passed": 603,
+        "teardown:passed": 604,
+        "call:failed": 1
+      },
+      "collected": 604
+    },
+    "memory_peak_bytes": 1123921920,
+    "missing_reports": [],
+    "elapsed_seconds": 255.2711112499237,
+    "oom_killed": false
+  }
+]

@@ -120,7 +120,15 @@ async def check_bucket(token: AnyAddressType, block: int | None = None) -> str |
 
     # Dictionary order defines priority, independently of completion order.
     results = await gather_owned(
-        _safe_check_bucket(name, _check_bucket_helper(name, check, token_address), paired=True)
+        _safe_check_bucket(
+            name,
+            (
+                gelato._is_gelato_pool(token_address, block)
+                if name == "gelato"
+                else _check_bucket_helper(name, check, token_address)
+            ),
+            paired=name != "gelato",
+        )
         for name, check in calls_only.items()
     )
     for bucket, is_member in results:

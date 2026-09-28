@@ -1,0 +1,213 @@
+{
+  "complete": true,
+  "rows": [
+    {
+      "case": "V2 Router02 unavailable",
+      "number": 10100000,
+      "hash": "0x5e1bf57830198afe8da55194b916982922cb923b80fb2b050fecb80ee183d1cc",
+      "evidence": {
+        "pool_code": true,
+        "router_code": false,
+        "quote": null
+      },
+      "status": "pass"
+    },
+    {
+      "case": "V2 later successful quote",
+      "number": 18000000,
+      "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+      "evidence": {
+        "pool_code": true,
+        "router_code": true,
+        "quote": {
+          "kind": "swap",
+          "protocol": "Uniswap V2",
+          "contract": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+          "input": {
+            "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "amount": 1000000,
+            "decimals": 6
+          },
+          "outputs": [
+            {
+              "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+              "amount": 604362601126644,
+              "decimals": 18
+            }
+          ],
+          "method": "getAmountsOut(uint256,address[])",
+          "fees": "DEX fees included in native quote",
+          "limits": "native quote limits; holder balance and allowance unverified"
+        }
+      },
+      "status": "pass"
+    },
+    {
+      "case": "MKR V1 native two-leg USDC sale",
+      "number": 9990134,
+      "hash": "0xdf36bf9f0cbcca0472a327a5f76ff0a30d1cb68fc675a912a4785fae5ca6ca8f",
+      "evidence": [
+        {
+          "kind": "swap",
+          "protocol": "Uniswap V1",
+          "contract": "0x2c4bd064b998838076fa341a83d007fc2fa50957",
+          "input": {
+            "token": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
+            "amount": 1000000000000000000,
+            "decimals": 18
+          },
+          "outputs": [
+            {
+              "token": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "amount": 1642042402415904373,
+              "decimals": 18
+            }
+          ],
+          "method": "getTokenToEthInputPrice(uint256)",
+          "fees": "DEX fees included in native quote",
+          "limits": "native quote limits; holder balance and allowance unverified"
+        },
+        {
+          "kind": "swap",
+          "protocol": "Uniswap V1",
+          "contract": "0x97dec872013f6b5fb443861090ad931542878126",
+          "input": {
+            "token": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "amount": 1642042402415904373,
+            "decimals": 18
+          },
+          "outputs": [
+            {
+              "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+              "amount": 356324373,
+              "decimals": 6
+            }
+          ],
+          "method": "getEthToTokenInputPrice(uint256)",
+          "fees": "DEX fees included in native quote",
+          "limits": "native quote limits; holder balance and allowance unverified"
+        }
+      ],
+      "status": "pass"
+    },
+    {
+      "case": "MLN partial fill rejected",
+      "number": 26063967,
+      "hash": "0xb70aaad0284471dfe63bac8acd9b3690445e79fe1fcbafd19c1b08a63e465817",
+      "evidence": null,
+      "status": "pass"
+    },
+    {
+      "case": "CRV full input",
+      "number": 26063944,
+      "hash": "0xa8d3ca69ad104183a97d34c9780700018b7bbefd5fd1906c302ed86ead6ce1ee",
+      "evidence": {
+        "kind": "swap",
+        "protocol": "Uniswap V3",
+        "contract": "0x07b1c12be0d62fe548a2b4b025ab7a5ca8def21e",
+        "input": {
+          "token": "0xd533a949740bb3306d119cc777fa900ba034cd52",
+          "amount": 1000000000000000000,
+          "decimals": 18
+        },
+        "outputs": [
+          {
+            "token": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+            "amount": 269190,
+            "decimals": 6
+          }
+        ],
+        "method": "quoteExactInput(bytes,uint256)",
+        "fees": "DEX fees included in native quote",
+        "limits": "native quote limits; holder balance and allowance unverified"
+      },
+      "status": "pass"
+    },
+    {
+      "case": "YFI full input",
+      "number": 26065255,
+      "hash": "0x2dae8321da4e0a72fc39cdf86aa01d48b9c4d47a2ea996f78dd28ab8e16fa4ed",
+      "evidence": {
+        "kind": "swap",
+        "protocol": "Uniswap V3",
+        "contract": "0x04916039b1f59d9745bf6e0a21f191d1e0a84287",
+        "input": {
+          "token": "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e",
+          "amount": 1000000000000000000,
+          "decimals": 18
+        },
+        "outputs": [
+          {
+            "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "amount": 720711902814369320,
+            "decimals": 18
+          }
+        ],
+        "method": "quoteExactInput(bytes,uint256)",
+        "fees": "DEX fees included in native quote",
+        "limits": "native quote limits; holder balance and allowance unverified"
+      },
+      "status": "pass"
+    },
+    {
+      "case": "historical sUSD",
+      "number": 10837752,
+      "hash": "0x9aadbe9a9ad5f8a4247c036fdc529043b87d35811fa8b05490711107af54ccaf",
+      "evidence": {
+        "price": 1.0
+      },
+      "status": "pass"
+    },
+    {
+      "case": "historical sDEFI",
+      "number": 11000000,
+      "hash": "0x4d5e647b2d8d3a3c8c1561ebb88734bc5fc3c2941016f810cf218738c0ecd99e",
+      "evidence": {
+        "price": 2915.99587083
+      },
+      "status": "pass"
+    },
+    {
+      "case": "Cream BBTC ETH-denominated oracle",
+      "number": 11212982,
+      "hash": "0x08a1704c82992ce9a7e58c560adc8eeb9393452937b761e7dc5c5cb107db4664",
+      "evidence": {
+        "controller": "0x3d5bc3c8d13dcb8bf317092d84783c2697ae9258",
+        "oracle": "0x4b7dba23bea9d1a2d652373bcd1b78b0e9e0188a",
+        "raw": 339710892300000000000000000000,
+        "eth_usd_answer": 43396000000,
+        "expected_usd": 14742.093882250798,
+        "actual_usd": 14742.093882250798
+      },
+      "status": "pass"
+    },
+    {
+      "case": "Cream HFIL ETH-denominated oracle",
+      "number": 11297588,
+      "hash": "0xcd4d2ad6fc0282b7aa39898c13c50796325a3e4a8d36a3e24473492b835bcfe4",
+      "evidence": {
+        "controller": "0x3d5bc3c8d13dcb8bf317092d84783c2697ae9258",
+        "oracle": "0x4b7dba23bea9d1a2d652373bcd1b78b0e9e0188a",
+        "raw": 57340480000000000,
+        "eth_usd_answer": 50885000000,
+        "expected_usd": 29.177703248,
+        "actual_usd": 29.177703248
+      },
+      "status": "pass"
+    },
+    {
+      "case": "IronBank EUR USD-denominated oracle",
+      "number": 12867424,
+      "hash": "0x3dfda86af23efd5249389a99ed57088e3e6035f891832c8e4f46bf2c790b3fc2",
+      "evidence": {
+        "controller": "0xab1c342c7bf5ec5f02adea1c2270670bca144cbb",
+        "oracle": "0xde19f5a7cf029275be9cec538e81aa298e297266",
+        "raw": 1178470000000000000,
+        "eth_usd_answer": null,
+        "expected_usd": 1.17847,
+        "actual_usd": 1.17847
+      },
+      "status": "pass"
+    }
+  ]
+}

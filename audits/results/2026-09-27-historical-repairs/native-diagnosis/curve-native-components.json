@@ -1,0 +1,58 @@
+{
+  "case": "Curve DOLA LP native components",
+  "block": 15000000,
+  "hash": "0x9a71a95be3fe957457b11817587e5af4c7e24836d5b383c430ff25b9286a457f",
+  "threepool_coins": [
+    "0x6b175474e89094c44da98b954eedeac495271d0f",
+    "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "0xdac17f958d2ee523a2206206994597c13d831ec7"
+  ],
+  "threepool_balances": [
+    180694307565236627073720325,
+    183550015705362,
+    676053466936632
+  ],
+  "threepool_prices": [
+    "1.00065134",
+    "1",
+    "0.9989"
+  ],
+  "threepool_price_sources": [
+    "0xdec0a100ead1faa37407f0edc76033426cf90b82",
+    "fixed USDC",
+    "0xa964273552c1dba201f5f000215f5bd5576e8f93"
+  ],
+  "threepool_supply": 1018151088955201694290636512,
+  "threepool_NAV": "1.021137074941178090664281195",
+  "DOLA_pool_balances": [
+    10979742918104945878214382,
+    7086760560444741935950545
+  ],
+  "DOLA_pool_supply": 18109263256187984193672315,
+  "one_DOLA_native_3CRV_out": 974141242882853208,
+  "native_exit_candidates": [
+    {
+      "coin": "0x6b175474e89094c44da98b954eedeac495271d0f",
+      "withdrawn": 994420442623853963,
+      "DOLA_USD": "0.99506814843495258404026042",
+      "LP_USD": "1.002920226426409970201166449",
+      "difference_from_adapter": "-0.000016239363299529798833551"
+    },
+    {
+      "coin": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "withdrawn": 994448,
+      "DOLA_USD": "0.994448",
+      "LP_USD": "1.002544227122047446090653479",
+      "difference_from_adapter": "-0.000392238667662053909346521"
+    },
+    {
+      "coin": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "withdrawn": 995754,
+      "DOLA_USD": "0.9946586706",
+      "LP_USD": "1.002671957830673183485304712",
+      "difference_from_adapter": "-0.000264507959036316514695288"
+    }
+  ],
+  "DOLA_using_NAV": "0.994731739336960444602446977",
+  "canonical_verified": true
+}

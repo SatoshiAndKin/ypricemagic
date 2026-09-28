@@ -108,7 +108,28 @@ async def discover(
     from y.prices.stable_swap.curve import curve
 
     if token == address(EEE_ADDRESS):
-        return ()
+        # Native ETH needs a sale exit before historical ETH/USD feeds existed.
+        # V1 has no ETH exchange: buy USDC from its token exchange directly.
+        from y.constants import usdc
+        from dank_mids.brownie_patch import dank_web3
+
+        v1 = uniswap_multiplexer.v1
+        if not v1 or (first_markets and "Uniswap V1" not in first_markets):
+            return ()
+        if not await deployed(address(v1.factory), block):
+            return ()
+        output = address(usdc)
+        exchange = await optional_read(v1.factory, "getExchange(address)(address)", block, output)
+        if not exchange or address(exchange) == address(ZERO_ADDRESS):
+            return ()
+        if not await deployed(address(exchange), block):
+            return ()
+        balance = await dank_web3.eth.get_balance(
+            await convert.to_address_async(exchange), block.identifier
+        )
+        if not balance:
+            return ()
+        return (Market("Uniswap V1", address(exchange), (token, output), (int(balance), 0)),)
     checksum = await convert.to_address_async(token)
     router: Any
     pools: Any
@@ -372,6 +393,25 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
             block_identifier=block.identifier,
         )
         result = int(quoted if isinstance(quoted, int) else quoted[0])
+        if result <= 0:
+            return None
+        # Exact-input quoters can stop at a price limit with unspent input.
+        # Their scalar result does not report that remainder. A reverse-path
+        # exact-output quote for one more output atom must require MORE input.
+        # Exact-output callbacks enforce delivery of the entire requested output;
+        # a revert or a cheaper next atom cannot prove a full sale.
+        try:
+            required = await quoter.quoteExactOutput.coroutine(
+                encode_packed(["address", index_type, "address"], [output, pool_key, token]),
+                result + 1,
+                block_identifier=block.identifier,
+            )
+        except Exception as exc:
+            if not unavailable(exc):
+                raise
+            return None
+        if int(required if isinstance(required, int) else required[0]) <= amount:
+            return None
     elif protocol == "Curve":
         from y.contracts import Contract
 
@@ -425,7 +465,11 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
             )
         )
     elif protocol == "Uniswap V1":
-        method = "getTokenToEthInputPrice(uint256)"
+        method = (
+            "getEthToTokenInputPrice(uint256)"
+            if token == address(EEE_ADDRESS)
+            else "getTokenToEthInputPrice(uint256)"
+        )
         quoted = await optional_read(pool, method + "(uint256)", block, amount)
         if quoted is None:
             return None

@@ -67,7 +67,12 @@ async def test_factory_restricted_price_does_not_scan_other_protocols(monkeypatc
     monkeypatch.setattr(
         Contract,
         "coroutine",
-        AsyncMock(return_value=SimpleNamespace(quoteExactInput=SimpleNamespace(coroutine=native))),
+        AsyncMock(
+            return_value=SimpleNamespace(
+                quoteExactInput=SimpleNamespace(coroutine=native),
+                quoteExactOutput=SimpleNamespace(coroutine=AsyncMock(return_value=10**30)),
+            )
+        ),
     )
     monkeypatch.setattr(_rpc.BlockRef, "verify", AsyncMock())
     service = QuoteService()
@@ -370,7 +375,12 @@ async def test_v3_quote_encodes_the_protocol_pool_key(
     monkeypatch.setattr(
         Contract,
         "coroutine",
-        AsyncMock(return_value=SimpleNamespace(quoteExactInput=SimpleNamespace(coroutine=quote))),
+        AsyncMock(
+            return_value=SimpleNamespace(
+                quoteExactInput=SimpleNamespace(coroutine=quote),
+                quoteExactOutput=SimpleNamespace(coroutine=AsyncMock(return_value=10**30)),
+            )
+        ),
     )
     monkeypatch.setattr(_markets, "read", AsyncMock(return_value=6))
     pool = _markets.Market(

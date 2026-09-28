@@ -53,6 +53,10 @@ asyncio_task_timeout = 3600
 line-length = 100
 
 [tool.validation]
+repair_tests = [
+  "tests/test_historical_price_repairs.py",
+  "tests/prices/test_magic.py::test_bulk_fixture_releases_mapped_requests",
+]
 memory_tests = ["tests/prices/dex/test_uniswap.py"]
 topic_tests = ["tests/test_topic_memory.py"]
 fixture_tests = ["tests/prices/dex/test_uniswap.py::test_uniswap_v1"]
@@ -64,6 +68,7 @@ slow_erc20_cases = [
   { token = "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8", block = 18465234 },
 ]
 focused_tests = [
+  "tests/test_historical_price_repairs.py",
   "tests/test_constants.py",
   "tests/test_misc_fixes.py",
   "tests/test_filter_ranges.py",

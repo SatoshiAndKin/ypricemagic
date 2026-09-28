@@ -41,5 +41,5 @@ async def test_balancer_v2_token_price():
     """
     v2_token = "0x616e8BfA43F920657B3497DBf40D6b1A02D4608d"
     assert await get_price(v2_token, 17_500_000, skip_cache=True, sync=False) == UsdPrice(
-        12.522495269157522
+        12.330382293398438
     )

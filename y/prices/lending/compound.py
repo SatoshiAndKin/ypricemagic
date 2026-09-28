@@ -1,13 +1,14 @@
 import logging
-from typing import Optional, cast
+from typing import Any, Optional, cast
 
 import a_sync
-from a_sync import PruningThreadPoolExecutor, cgather
+from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
-from brownie import chain
+from brownie import ZERO_ADDRESS, chain
 from brownie.exceptions import VirtualMachineError
 from multicall import Call
 from typing_extensions import Self
+from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y._decorators import stuck_coro_debugger
@@ -17,7 +18,7 @@ from y.contracts import Contract, has_methods
 from y.datatypes import AddressOrContract, AnyAddressType, Block, PriceResult
 from y.exceptions import ContractNotVerified, call_reverted
 from y.networks import Network
-from y.prices._candidates import derive_price, gather_owned
+from y.prices._candidates import derive_price
 from y.utils.logging import _gh_issue_request
 from y.utils.raw_calls import raw_call
 
@@ -67,6 +68,26 @@ TROLLERS = {
 }.get(chain.id, {})
 
 
+def _oracle_unavailable(exc: Exception) -> bool:
+    """Recognize only the protocol's documented unavailable-feed reverts."""
+    if not isinstance(exc, (VirtualMachineError, ContractLogicError)):
+        return False
+    # dank_mids may append a Request to args; Brownie may append source text.
+    # Match the native revert reason rather than the formatted exception tuple.
+    reason = getattr(exc, "revert_msg", None) or (exc.args[0] if exc.args else str(exc))
+    if not isinstance(reason, str):
+        return False
+    reason = reason.removeprefix("execution reverted: ").removeprefix("revert: ")
+    return reason in {
+        "grace period not over",
+        "Chainlink feeds are not being updated",
+        "Feed not found",
+        "token config not found",
+        "no price",
+        "invalid resilient oracle price",
+    }
+
+
 class CToken(ERC20):
     def __init__(
         self,
@@ -106,34 +127,30 @@ class CToken(ERC20):
             >>> price = await ctoken.get_price()
             >>> price_at_block = await ctoken.get_price(block=12345678)
         """
-        if self.troller:
-            # We can use the protocol's oracle which will be quick (if it works)
-            underlying_per_ctoken, underlying_price = await gather_owned(
-                [
-                    self.underlying_per_ctoken(block=block, asynchronous=True),
-                    self.get_underlying_price(block=block, asynchronous=True),
-                ]
-            )
-            if underlying_price and underlying_per_ctoken is not None:
-                return derive_price(
-                    self.address,
-                    float(underlying_per_ctoken) * float(underlying_price),
-                    f"Compound {self.address} underlying",
-                    underlying_price,
-                )
-
-        # Or we can just price the underlying token ourselves
-        underlying = await self.__underlying__
-        underlying_per_ctoken, child_price = cast(
-            tuple[float | None, PriceResult | None],
-            await gather_owned(
-                [
-                    self.underlying_per_ctoken(block=block, asynchronous=True),
-                    underlying.price(block=block, skip_cache=skip_cache, asynchronous=True),
-                ]
-            ),
+        try:
+            underlying_per_ctoken = await self.underlying_per_ctoken(block=block, asynchronous=True)
+        except Exception as exc:
+            if not call_reverted(exc):
+                raise
+            return None
+        if not underlying_per_ctoken:
+            return None
+        underlying_price = await self.get_underlying_price(
+            block=block, skip_cache=skip_cache, asynchronous=True
         )
-        if underlying_per_ctoken is None or child_price is None:
+        if underlying_price:
+            return derive_price(
+                self.address,
+                float(underlying_per_ctoken) * float(underlying_price),
+                f"Compound {self.address} historical underlying oracle",
+                underlying_price,
+            )
+
+        underlying = await self.__underlying__
+        child_price = await underlying.price(
+            block=block, skip_cache=skip_cache, return_None_on_failure=True, asynchronous=True
+        )
+        if child_price is None:
             return None
         return derive_price(
             self.address,
@@ -191,6 +208,7 @@ class CToken(ERC20):
         return exchange_rate * 10 ** (decimals - await underlying.__decimals__)
 
     # yLazyLogger(logger)
+    @stuck_coro_debugger
     async def exchange_rate(self, block: Block | None = None) -> float:
         """
         Get the current exchange rate of the CToken.
@@ -212,15 +230,11 @@ class CToken(ERC20):
         if exchange_rate is None:
             # NOTE: Sometimes this works, not sure why
             contract = await Contract.coroutine(self.address)
-            try:
-                exchange_rate = contract.exchangeRateCurrent.call(block_identifier=block)
-            except Exception as e:
-                if "borrow rate is absurdly high" not in str(e):
-                    raise
-                exchange_rate = 0
+            exchange_rate = await contract.exchangeRateCurrent.coroutine(block_identifier=block)
 
         return exchange_rate / 10**18
 
+    @stuck_coro_debugger
     async def get_underlying_price(
         self, block: Block | None = None, skip_cache: bool = ENVS.SKIP_CACHE
     ) -> float | None:
@@ -235,35 +249,60 @@ class CToken(ERC20):
             >>> price = await ctoken.get_underlying_price()
             >>> price_at_block = await ctoken.get_underlying_price(block=12345678)
         """
-        oracle: Contract
-        underlying: ERC20
-        # always query the oracle in case it was changed
-        oracle, underlying = await gather_owned(
-            [self.troller.oracle(block, asynchronous=True), self.__underlying__]
+        # A standalone CToken has no registry-injected comptroller. Resolve it
+        # at the requested block; never attach historical metadata to the instance.
+        troller = (
+            self.troller.address
+            if self.troller
+            else await Call(self.address, "comptroller()(address)", block_id=block)
         )
-        price, underlying_decimals = await cgather(
-            oracle.getUnderlyingPrice.coroutine(self.address, block_identifier=block),
-            underlying.__decimals__,
-            return_exceptions=True,
-        )
-        if isinstance(price, Exception):
-            # TODO debug why this occurs and refactor. only found on arbitrum cream
-            try:
-                price = await self.__run_sync(
-                    oracle.getUnderlyingPrice, self.address, block_identifier=block
+        if not troller or troller == ZERO_ADDRESS:
+            return None
+        oracle = await Call(troller, "oracle()(address)", block_id=block)
+        if not oracle or oracle == ZERO_ADDRESS:
+            return None
+        try:
+            price = await Call(
+                oracle, ["getUnderlyingPrice(address)(uint256)", self.address], block_id=block
+            )
+        except Exception as exc:
+            if _oracle_unavailable(exc):
+                return None
+            # This immutable Inverse oracle delegates to configured Chainlink
+            # proxies. A retired proxy with no aggregator reverts without a
+            # reason. Verify that state instead of accepting arbitrary reverts.
+            if (
+                chain.id == Network.Mainnet
+                and oracle.lower() == "0xe8929afd47064efd36a7fb51da3f8c5eb40c4cb4"
+                and isinstance(exc, ContractLogicError)
+                and exc.args
+                and exc.args[0] == "execution reverted"
+            ):
+                feed = await Call(
+                    oracle, ["feeds(address)(address,uint8)", self.address], block_id=block
                 )
-            except VirtualMachineError as e:
-                if str(e) in {
-                    "revert: grace period not over",
-                    "revert: Chainlink feeds are not being updated",
-                    "revert: Feed not found",
-                }:
-                    return None
-                raise
-        price /= 10 ** (36 - underlying_decimals)
+                if feed and feed[0] != ZERO_ADDRESS:
+                    aggregator = await Call(feed[0], "aggregator()(address)", block_id=block)
+                    if aggregator == ZERO_ADDRESS:
+                        return None
+            raise
+        if not price:
+            return None
+        underlying = await self.__underlying__
+        price /= 10 ** (36 - await underlying.__decimals__)
+        # This verified legacy Cream oracle quotes all markets relative to ETH.
+        # Later Cream and Compound oracles quote USD with the same decimal scale.
+        if (
+            chain.id == Network.Mainnet
+            and oracle.lower() == "0x4b7dba23bea9d1a2d652373bcd1b78b0e9e0188a"
+        ):
+            eth_price = await cast(Any, ERC20(EEE_ADDRESS, asynchronous=True).price)(
+                block=block, skip_cache=skip_cache, return_None_on_failure=True, asynchronous=True
+            )
+            if eth_price is None:
+                return None
+            price *= float(eth_price)
         return price
-
-    __run_sync = PruningThreadPoolExecutor(4).run
 
 
 class Comptroller(ContractBase):

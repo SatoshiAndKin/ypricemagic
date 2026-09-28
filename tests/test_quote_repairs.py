@@ -164,7 +164,12 @@ async def test_pool_created_event_reaches_native_quoter(
     monkeypatch.setattr(
         Contract,
         "coroutine",
-        AsyncMock(return_value=SimpleNamespace(quoteExactInput=SimpleNamespace(coroutine=native))),
+        AsyncMock(
+            return_value=SimpleNamespace(
+                quoteExactInput=SimpleNamespace(coroutine=native),
+                quoteExactOutput=SimpleNamespace(coroutine=AsyncMock(return_value=10**30)),
+            )
+        ),
     )
     monkeypatch.setattr(_markets, "read", AsyncMock(return_value=6))
     markets = await _markets.discover(TOKEN, BLOCK)
@@ -502,7 +507,10 @@ async def test_v3_shared_fallback_quotes_exact_amount_and_hash(
     monkeypatch: Any, unverified: bool, quoted: Any, protocol: str, key: int
 ) -> None:
     quote = AsyncMock(return_value=quoted)
-    contract = SimpleNamespace(quoteExactInput=SimpleNamespace(coroutine=quote))
+    contract = SimpleNamespace(
+        quoteExactInput=SimpleNamespace(coroutine=quote),
+        quoteExactOutput=SimpleNamespace(coroutine=AsyncMock(return_value=10**30)),
+    )
     load = AsyncMock(
         side_effect=ContractNotVerified("quoter") if unverified else None, return_value=contract
     )

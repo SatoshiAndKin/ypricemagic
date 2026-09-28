@@ -1,0 +1,57 @@
+{
+  "block": 15000000,
+  "hash": "0x9a71a95be3fe957457b11817587e5af4c7e24836d5b383c430ff25b9286a457f",
+  "pie": "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
+  "pool": "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
+  "supply": 37034462648479253443606,
+  "decimals": 18,
+  "tokens": [
+    {
+      "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "balance": 17428232684,
+      "decimals": 6,
+      "policy": "fixed USDC",
+      "usd_price": "1"
+    },
+    {
+      "token": "0x6b175474e89094c44da98b954eedeac495271d0f",
+      "balance": 7569894208496704144973,
+      "decimals": 18,
+      "feed": [
+        "0xdec0a100ead1faa37407f0edc76033426cf90b82"
+      ],
+      "answer": 100065134,
+      "feed_decimals": 8,
+      "updated_at": 1655778452,
+      "usd_price": "1.00065134"
+    },
+    {
+      "token": "0x0000000000085d4780b73119b644ae5ecd22b376",
+      "balance": 10659715261845463713213,
+      "decimals": 18,
+      "feed": [
+        "0x98953e9c76573e06ec265bdde1dbb89fa02d56d3"
+      ],
+      "answer": 99993483,
+      "feed_decimals": 8,
+      "updated_at": 1655738481,
+      "usd_price": "0.99993483"
+    },
+    {
+      "token": "0x57ab1ec28d129707052df4df418d58a2d46d5f51",
+      "balance": 1377199028627411642430,
+      "decimals": 18,
+      "feed": [
+        "0x1187272a0e3a603ec4734cec73a0880055ecc593"
+      ],
+      "answer": 100214568,
+      "feed_decimals": 8,
+      "updated_at": 1655724816,
+      "usd_price": "1.00214568"
+    }
+  ],
+  "usd_value": "37042.23209263147253963652582",
+  "expected_price": "1.000209789574266663021318583",
+  "canonical_hash_after": "0x9a71a95be3fe957457b11817587e5af4c7e24836d5b383c430ff25b9286a457f",
+  "expected_float_api_price": 1.0002097895742665
+}

@@ -126,24 +126,70 @@ async def test_uniswap_v2(monkeypatch: pytest.MonkeyPatch, scenario: str) -> Non
 @pytest.mark.parametrize("token", V2_TOKENS)
 @pytest.mark.asyncio_cooperative
 async def test_uniswap_v3(token):
-    """Test Uniswap V3 price fetching.
+    """Replay full-token native quotes instead of comparing them with spot oracles."""
+    # Pin independent native replay to the investigated canonical historical state.
+    from eth_abi.packed import encode_packed
+    from y.prices._routing import liquidity_price
+    from y.prices._rpc import read
+    from y.prices.dex.uniswap.v3 import load_quoter
 
-    This test concurrently retrieves pricing data using the Uniswap V3 router and the generic
-    :func:`~y.prices.magic.get_price` function. It ensures that the price returned by the Uniswap V3 router
-    is within a 5% relative tolerance of the price obtained from the magic fetch.
-
-    Args:
-        token: The token address to query.
-
-    See Also:
-        :meth:`~y.prices.dex.uniswap.v3.uniswap_v3.get_price`
-    """
-    block = await BlockRef.resolve(None)
-    lookup: Any = magic.get_price  # a_sync supplies the runtime sync flag.
-    price, alt_price = await cgather(
-        v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False),
-        lookup(token, block.number, skip_cache=True, sync=False),
-    )
-    print(token, block, price, alt_price, price.path if price is not None else None)
-    assert price is not None and alt_price is not None
-    assert float(price) == pytest.approx(float(alt_price), rel=5e-2)
+    block = await BlockRef.resolve(26_063_967)
+    price = await v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False)
+    quoter = await load_quoter(v3.uniswap_v3._quoter)
+    if price is None:
+        token_address = str(token).lower()
+        assert token_address in {
+            "0xec67005c4e498ec7f55e092bd1d35cbc47c91892",
+            "0xba11d00c5f74255f56a5e366f4f77f5a186d7f55",
+        }
+        path = encode_packed(
+            ["address", "uint24", "address"],
+            [token, 3000, "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"],
+        )
+        if token_address == "0xba11d00c5f74255f56a5e366f4f77f5a186d7f55":
+            # BAND's native pool is at its price boundary and rejects either input.
+            for amount in (10**16, 10**18):
+                with pytest.raises(ContractLogicError, match="execution reverted: SPL"):
+                    await quoter.quoteExactInput.coroutine(
+                        path, amount, block_identifier=block.identifier
+                    )
+        else:
+            # MLN exhausts liquidity: 0.01 and 1 MLN return the same WETH amount.
+            # A full-token sale must be unavailable.
+            small = await quoter.quoteExactInput.coroutine(
+                path, 10**16, block_identifier=block.identifier
+            )
+            large = await quoter.quoteExactInput.coroutine(
+                path, 10**18, block_identifier=block.identifier
+            )
+            assert small == large == 3838826218858
+    else:
+        sale = await liquidity_price(
+            str(token),
+            block.number,
+            amount=1,
+            skip_cache=True,
+            first_markets=(str(v3.uniswap_v3._factory).lower(),),
+        )
+        assert sale is not None and sale.quote is not None
+        assert float(price) == float(sale)
+        for step in sale.quote.steps:
+            if step.protocol != "Uniswap V3":
+                continue
+            fee = await read(step.contract, "fee()(uint24)", block)
+            factory = await read(step.contract, "factory()(address)", block)
+            router = next(
+                router
+                for router in (uniswap_multiplexer.v3, *uniswap_multiplexer.v3_forks)
+                if router and str(router._factory).lower() == str(factory).lower()
+            )
+            native_quoter = await load_quoter(router._quoter)
+            path = encode_packed(
+                ["address", "uint24", "address"], [step.input.token, fee, step.outputs[0].token]
+            )
+            native = await native_quoter.quoteExactInput.coroutine(
+                path, step.input.amount, block_identifier=block.identifier
+            )
+            assert step.outputs[0].amount == (native if isinstance(native, int) else native[0])
+        assert sale.quote.input.amount == 10**sale.quote.input.decimals
+    await block.verify()

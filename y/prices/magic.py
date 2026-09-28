@@ -497,13 +497,20 @@ async def _get_price(
 
         # Try bucket-specific pricing
         if raw_price is None:
-            bucket_price, bucket_source = await _exit_early_for_known_tokens(
-                token,
-                block=block,
-                ignore_pools=ignore_pools,
-                skip_cache=skip_cache,
-                logger=logger,
-            )
+            try:
+                bucket_price, bucket_source = await _exit_early_for_known_tokens(
+                    token,
+                    block=block,
+                    ignore_pools=ignore_pools,
+                    skip_cache=skip_cache,
+                    logger=logger,
+                )
+            except yPriceMagicError as exc:
+                # A missing child valuation invalidates this candidate. Keep the
+                # parent's DEX fallback and public fail_to_None policy in control.
+                if not isinstance(exc.exception, (ContractNotFound, NonStandardERC20, PriceError)):
+                    raise
+                bucket_price, bucket_source = None, None
             if valid_price(bucket_price):
                 raw_price = bucket_price
                 source = bucket_source
@@ -781,6 +788,11 @@ async def _exit_early_for_known_tokens(
             price = await oracle.get_price(token_address, block, sync=False)
         if valid_price(price):
             source = f"Chainlink historical stablecoin USD for {token_address}"
+        elif synthetix:
+            oracle = synthetix
+            price = await oracle.get_price(token_address, block, sync=False)
+            if valid_price(price):
+                source = f"Synthetix historical stablecoin USD for {token_address}"
 
     elif bucket == "synthetix":
         price = await synthetix.get_price(token_address, block, sync=False)

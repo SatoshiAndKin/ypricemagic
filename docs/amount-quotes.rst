@@ -37,6 +37,13 @@ Native V2 and Solidly router quotes, V3 quoters, Curve ``get_dy``, Balancer V1
 ``calcOutGivenIn``, and Balancer V2 ``queryBatchSwap`` retain DEX fees and price
 impact. Balancer V1 discovery retains the existing proxy's candidate universe;
 the estimate selects one pool and does not use the proxy's split allocation.
+V1 includes native ETH-to-USDC exchanges for historical routes before USD feeds
+were available. V3 and Slipstream exact-input quotes must also pass a reverse
+exact-output quote for one additional output atom. That quote must require more
+than the requested input. Exhausted liquidity or an unavailable proof rejects
+the candidate so routing can try the next pool. Native fees and integer amounts
+remain unchanged; unexpected RPC errors and cancellation still propagate.
+
 Spot prices and terminal quote valuation use **1 USDC = $1**, at every block,
 for curated chain-and-address entries and configured USDC contracts, including
 USDC.e and USDbC. This policy takes precedence over cached, API, and oracle

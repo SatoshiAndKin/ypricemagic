@@ -1,7 +1,7 @@
 # sourcery skip: dont-import-test-modules
 import asyncio
 from collections.abc import Iterable
-from typing import Any
+from typing import Any, cast
 
 import a_sync
 import pytest
@@ -59,11 +59,15 @@ async def test_get_prices(block: int) -> None:
     Just add the failing identifier to 'chainlink_identifiers_not_tokens' below.
     """
     tokens = await relevant_tokens(ALL_TOKENS, block)
-    prices = a_sync.map(get_price, tokens, block=block)
-    try:
-        checked_separately = await prices.values()
-    finally:
-        await prices.close()
+    checked_separately = await asyncio.gather(
+        *(get_price(token, block) for token in tokens), return_exceptions=True
+    )
+    failures = [
+        (token, type(result).__name__, str(result))
+        for token, result in zip(tokens, checked_separately)
+        if isinstance(result, BaseException)
+    ]
+    assert not failures, f"Individual pricing failures at {block}: {failures}"
     # ez-a-sync supplies the sync keyword at runtime.
     lookup: Any = magic.get_prices
     checked_together = await lookup(tokens, block, fail_to_None=True, skip_cache=True, sync=False)
@@ -73,10 +77,10 @@ async def test_get_prices(block: int) -> None:
         ), f"magic.get_prices price discrepancy for {tokens[i]}"
 
 
-async def get_price(token, block):
+async def get_price(token: Any, block: int) -> Any:
     """This is just to diagnose issues with the test itself. We may need to exclude certain tokens."""
     try:
-        return await magic.get_price(
+        return await cast(Any, magic.get_price)(
             token, block, fail_to_None=True, skip_cache=True, asynchronous=True
         )
     except CantFetchParam as e:
@@ -141,6 +145,7 @@ async def test_bulk_fixture_releases_mapped_requests(
     requests: set[asyncio.Task[Any]] = set()
     active: set[str] = set()
     failure = RuntimeError("failed mapped fixture request")
+    second_failure = ValueError("second mapped fixture failure")
 
     async def request(token: str, block: int | None = None) -> int:
         task = asyncio.current_task()
@@ -153,6 +158,10 @@ async def test_bulk_fixture_releases_mapped_requests(
             await release.wait()
             if outcome == "failure" and token == tokens[0]:
                 raise failure
+            if outcome == "failure" and phase == "prices":
+                if token == tokens[1]:
+                    raise second_failure
+                return 7
             await asyncio.Event().wait()
             raise AssertionError("Pending request resumed without cancellation")
         finally:
@@ -186,9 +195,21 @@ async def test_bulk_fixture_releases_mapped_requests(
                 await parent
         else:
             release.set()
-            with pytest.raises(RuntimeError) as caught:
-                await parent
-            assert caught.value is failure
+            if phase == "prices":
+                with pytest.raises(AssertionError) as collected:
+                    await parent
+                expected = [
+                    (tokens[0], "RuntimeError", str(failure)),
+                    (tokens[1], "ValueError", str(second_failure)),
+                ]
+                assert (
+                    str(collected.value).splitlines()[0]
+                    == f"Individual pricing failures at 18000000: {expected}"
+                )
+            else:
+                with pytest.raises(RuntimeError) as caught:
+                    await parent
+                assert caught.value is failure
         await asyncio.sleep(0)
         assert not active
         assert all(task.done() for task in requests)

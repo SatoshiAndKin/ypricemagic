@@ -1,0 +1,7 @@
+{
+  "host_runner_complete": false,
+  "workload_complete": true,
+  "reason": "Host exec session and supervisor were absent at resumption; recovered complete reports and logs from the exited container. The host runner remains explicitly incomplete.",
+  "container_finished_at": "2026-09-28T06:37:08.927438558Z",
+  "command_interrupted": false
+}

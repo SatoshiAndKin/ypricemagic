@@ -1,8 +1,7 @@
 import logging
-from typing import Final, final
+from typing import Any, Final, final
 
 import a_sync
-from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import ZERO_ADDRESS
 from eth_typing import ChecksumAddress, HexStr
@@ -11,11 +10,13 @@ from multicall import Call
 from typing_extensions import Self
 
 from y import convert
+from y._decorators import stuck_coro_debugger
 from y.constants import CHAINID
 from y.contracts import Contract, has_method
 from y.datatypes import AnyAddressType, Block, UsdPrice
 from y.exceptions import UnsupportedNetwork, call_reverted
 from y.networks import Network
+from y.prices._rpc import unavailable
 from y.utils import a_sync_ttl_cache
 
 logger: Final = logging.getLogger(__name__)
@@ -28,6 +29,16 @@ addresses: Final = {
 
 def encode_bytes(s: str) -> bytes:
     return encode(["bytes32"], [s.encode()])
+
+
+@stuck_coro_debugger
+async def _optional_call(token: str, signature: str, block: Block | None) -> Any:
+    try:
+        return await Call(token, signature, block_id=block)
+    except Exception as exc:
+        if not unavailable(exc):
+            raise
+        return None
 
 
 @final
@@ -186,6 +197,7 @@ class Synthetix(a_sync.ASyncGenericSingleton):
             else None
         )
 
+    @stuck_coro_debugger
     async def get_price(self, token: AnyAddressType, block: Block | None = None) -> UsdPrice | None:
         """Get the price of a synth in dollars.
 
@@ -208,16 +220,26 @@ class Synthetix(a_sync.ASyncGenericSingleton):
             - :meth:`get_currency_key`
         """
         token = await convert.to_address_async(token)
-        rates, key = await cgather(
-            self.get_address("ExchangeRates", block=block, sync=False),
-            self.get_currency_key(token, sync=False),
+        target = await _optional_call(token, "target()(address)", block)
+        target = target if target and target != ZERO_ADDRESS else token
+        key = await _optional_call(target, "currencyKey()(bytes32)", block)
+        if not key:
+            return None
+        resolver = await _optional_call(target, "resolver()(address)", block)
+        if not resolver or resolver == ZERO_ADDRESS:
+            return None
+        rates = await Call(
+            resolver,
+            ["getAddress(bytes32)(address)", encode_bytes("ExchangeRates")],
+            block_id=block,
         )
-        if rates is None or await rates.rateIsStale.coroutine(key, block_identifier=block):
+        if not rates or rates == ZERO_ADDRESS:
             return None
         try:
-            return UsdPrice(
-                await rates.rateForCurrency.coroutine(key, block_identifier=block, decimals=18)
-            )
+            if await Call(rates, ["rateIsStale(bytes32)(bool)", key], block_id=block):
+                return None
+            rate = await Call(rates, ["rateForCurrency(bytes32)(uint256)", key], block_id=block)
+            return UsdPrice(rate / 10**18) if rate is not None else None
         except Exception as e:
             if not call_reverted(e):
                 raise
