@@ -6,7 +6,7 @@
 
 int CPyGlobalsInit(void);
 
-extern PyObject *CPyStatics[687];
+extern PyObject *CPyStatics[690];
 extern const char * const CPyLit_Str[];
 extern const char * const CPyLit_Bytes[];
 extern const char * const CPyLit_Int[];
@@ -474,7 +474,7 @@ extern PyObject *CPyDef_sense_check____exit_sense_check_gen___close(PyObject *cp
 extern PyObject *CPyPy_sense_check____exit_sense_check_gen___close(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames);
 extern PyObject *CPyDef_sense_check____exit_sense_check_gen_____await__(PyObject *cpy_r___mypyc_self__);
 extern PyObject *CPyPy_sense_check____exit_sense_check_gen_____await__(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames);
-extern PyObject *CPyDef_sense_check____exit_sense_check(PyObject *cpy_r_token_address);
+extern PyObject *CPyDef_sense_check____exit_sense_check(PyObject *cpy_r_token_address, PyObject *cpy_r_block);
 extern PyObject *CPyPy_sense_check____exit_sense_check(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames);
 extern char CPyDef_sense_check_____top_level__(void);
 extern PyObject *CPyStatic_gather___Call;
