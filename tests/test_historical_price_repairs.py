@@ -16,6 +16,7 @@ from web3.exceptions import ContractLogicError
 from tests.test_amount_quotes import BLOCK, CHILD, TOKEN, USD
 from tests.test_pricing_correctness import Ready, instance, run_async_test
 from y.constants import EEE_ADDRESS
+from y.contracts import Contract
 from y.datatypes import QuoteAsset
 from y.prices import _markets
 from y.prices._markets import Market
@@ -645,7 +646,7 @@ async def test_unverified_aave_v3_uses_contract_methods(monkeypatch: Any) -> Non
     module = importlib.import_module("y.prices.lending.aave")
     registry = instance(module.AaveRegistry)
     monkeypatch.setattr(
-        module.Contract, "coroutine", AsyncMock(return_value=SimpleNamespace(verified=False))
+        Contract, "coroutine", AsyncMock(return_value=SimpleNamespace(verified=False))
     )
 
     async def response(self: Any, *a: Any, **kw: Any) -> str:

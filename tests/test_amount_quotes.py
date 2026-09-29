@@ -332,8 +332,8 @@ async def test_public_amount_bypasses_oracles_and_numeric_database(monkeypatch: 
 async def test_public_batch_preserves_duplicate_tokens_and_checks_lengths_before_rpc(
     monkeypatch: Any,
 ) -> None:
-    rpc = SimpleNamespace(eth=SimpleNamespace(block_number=None))
-    monkeypatch.setattr(magic, "dank_mids", rpc)
+    rpc = SimpleNamespace(block_number=None)
+    monkeypatch.setattr(magic, "dank_eth", rpc)
     with pytest.raises(ValueError, match="same length"):
         await cast(Any, magic.get_prices)([TOKEN, TOKEN], amounts=[1], sync=False)
     lookup = AsyncMock(side_effect=lambda token, block, **kw: kw["amount"])

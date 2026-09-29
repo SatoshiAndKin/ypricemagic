@@ -23,7 +23,7 @@ _T = TypeVar("_T")
 
 @stuck_coro_debugger
 async def _retry_state_read(request: Callable[[], Awaitable[_T]]) -> _T:
-    """Retry archive-state misses at the unchanged hash, for at most 121.5s of backoff.
+    """Retry archive-state misses at the unchanged block identifier, for at most 121.5s of backoff.
 
     Failures during concurrent historical reads can outlast a short retry burst.
     Keep a bounded recovery window while propagating a persistent archive miss.
@@ -47,7 +47,7 @@ async def _retry_state_read(request: Callable[[], Awaitable[_T]]) -> _T:
                 raise
             delay = min(0.5 * 2**attempt, 30.0)
             getLogger(__name__).debug(
-                "Archive state unavailable; retrying the same block hash in %ss (%s/9)",
+                "Archive state unavailable; retrying the same block identifier in %ss (%s/9)",
                 delay,
                 attempt + 1,
             )

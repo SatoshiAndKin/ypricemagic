@@ -233,6 +233,17 @@ async def main() -> int:
 
     await record("PieDAO native balances and historical feeds", 15_000_000, pie)
 
+    async def exchange_rate(block: BlockRef) -> Any:
+        token = "0x250Fb308199FE8C5220509C1bf83D21d60b7f74A"
+        assert block.hash == "0x81c7c1b4feb7b185ea4592be62622b8cc34b70c405247cfadde7c946d6d7401d"
+        raw = await read(token, "exchangeRateCurrent()(uint256)", block)
+        assert raw == 200000000000000000000000000
+        actual = await CToken(token, asynchronous=True).exchange_rate(block.number, sync=False)
+        assert actual == 200000000.0
+        return {"token": token, "raw_exchange_rate": raw, "scaled_exchange_rate": actual}
+
+    await record("Compound exchange rate after archive-state miss", 26_081_277, exchange_rate)
+
     write_json(report, {"complete": True, "rows": rows})
     return int(any(row["status"] != "pass" for row in rows))
 

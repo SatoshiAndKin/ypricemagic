@@ -19,6 +19,7 @@ from y.datatypes import AddressOrContract, AnyAddressType, Block, PriceResult
 from y.exceptions import ContractNotVerified, call_reverted
 from y.networks import Network
 from y.prices._candidates import derive_price
+from y.prices._rpc import _retry_state_read
 from y.utils.logging import _gh_issue_request
 from y.utils.raw_calls import raw_call
 
@@ -88,6 +89,11 @@ def _oracle_unavailable(exc: Exception) -> bool:
         "no price",
         "invalid resilient oracle price",
     }
+
+
+@stuck_coro_debugger
+async def _read(address: str, signature: str | list[str], block: Block | None) -> Any:
+    return await _retry_state_read(lambda: Call(address, signature, block_id=block))
 
 
 class CToken(ERC20):
@@ -223,7 +229,9 @@ class CToken(ERC20):
             >>> rate_at_block = await ctoken.exchange_rate(block=12345678)
         """
         try:
-            exchange_rate = await self.exchange_rate_current(block_id=block)
+            exchange_rate = await _retry_state_read(
+                lambda: self.exchange_rate_current(block_id=block)
+            )
         except Exception as e:
             if not call_reverted(e):
                 raise
@@ -232,7 +240,9 @@ class CToken(ERC20):
         if exchange_rate is None:
             # NOTE: Sometimes this works, not sure why
             contract = await Contract.coroutine(self.address)
-            exchange_rate = await contract.exchangeRateCurrent.coroutine(block_identifier=block)
+            exchange_rate = await _retry_state_read(
+                lambda: contract.exchangeRateCurrent.coroutine(block_identifier=block)
+            )
 
         return cast(float, exchange_rate / 10**18)
 
@@ -256,16 +266,16 @@ class CToken(ERC20):
         troller = (
             self.troller.address
             if self.troller
-            else await Call(self.address, "comptroller()(address)", block_id=block)
+            else await _read(self.address, "comptroller()(address)", block)
         )
         if not troller or troller == ZERO_ADDRESS:
             return None
-        oracle = await Call(troller, "oracle()(address)", block_id=block)
+        oracle = await _read(troller, "oracle()(address)", block)
         if not oracle or oracle == ZERO_ADDRESS:
             return None
         try:
-            price = await Call(
-                oracle, ["getUnderlyingPrice(address)(uint256)", self.address], block_id=block
+            price = await _read(
+                oracle, ["getUnderlyingPrice(address)(uint256)", self.address], block
             )
         except Exception as exc:
             if _oracle_unavailable(exc):
@@ -280,11 +290,9 @@ class CToken(ERC20):
                 and exc.args
                 and exc.args[0] == "execution reverted"
             ):
-                feed = await Call(
-                    oracle, ["feeds(address)(address,uint8)", self.address], block_id=block
-                )
+                feed = await _read(oracle, ["feeds(address)(address,uint8)", self.address], block)
                 if feed and feed[0] != ZERO_ADDRESS:
-                    aggregator = await Call(feed[0], "aggregator()(address)", block_id=block)
+                    aggregator = await _read(feed[0], "aggregator()(address)", block)
                     if aggregator == ZERO_ADDRESS:
                         return None
             raise

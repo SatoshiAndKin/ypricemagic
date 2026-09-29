@@ -1,6 +1,7 @@
 """Retry transient archive-state misses without changing the requested block."""
 
 import asyncio
+import importlib
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, call
 
@@ -9,9 +10,11 @@ from eth_abi.abi import encode
 from hexbytes import HexBytes
 
 from tests.test_amount_quotes import BLOCK, TOKEN
-from tests.test_pricing_correctness import run_async_test
+from tests.test_pricing_correctness import Ready, run_async_test
+from y.contracts import Contract
 from y.prices import _rpc
 from y.prices._quote import SharedCache
+from y.prices.lending.compound import CToken
 
 
 def state_error() -> ValueError:
@@ -136,3 +139,102 @@ async def test_archive_state_retry_recovers_after_short_burst(
     assert rpc.await_count == 6
     assert rpc.await_args_list == [rpc.await_args_list[0]] * 6
     assert sleep.await_args_list == [call(0.5), call(1.0), call(2.0), call(4.0), call(8.0)]
+
+
+@run_async_test
+async def test_compound_exchange_rate_retries_real_call_decoding(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    raw = 123456789012345678901
+    rpc = AsyncMock(side_effect=[state_error(), HexBytes(encode(["uint256"], [raw]))])
+    monkeypatch.setattr(
+        importlib.import_module("multicall.call"),
+        "get_async_w3",
+        lambda _: SimpleNamespace(eth=SimpleNamespace(call=rpc)),
+    )
+    sleep = AsyncMock()
+    monkeypatch.setattr(asyncio, "sleep", sleep)
+    token = CToken(TOKEN, asynchronous=True)
+    assert await token.exchange_rate(BLOCK.number, sync=False) == raw / 10**18
+    expected = call({"to": TOKEN, "data": HexBytes("0xbd6d894d")}, BLOCK.number)
+    assert rpc.await_args_list == [expected, expected]
+    sleep.assert_awaited_once_with(0.5)
+
+
+@run_async_test
+async def test_compound_oracle_retries_only_failed_native_request(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from tests.test_amount_quotes import CHILD, USD
+
+    rpc = AsyncMock(
+        side_effect=[
+            HexBytes(encode(["address"], [CHILD])),
+            HexBytes(encode(["address"], [USD])),
+            state_error(),
+            HexBytes(encode(["uint256"], [3 * 10**30])),
+        ]
+    )
+    monkeypatch.setattr(
+        importlib.import_module("multicall.call"),
+        "get_async_w3",
+        lambda _: SimpleNamespace(eth=SimpleNamespace(call=rpc)),
+    )
+    monkeypatch.setattr(asyncio, "sleep", AsyncMock())
+    monkeypatch.setattr(CToken, "__underlying__", Ready(SimpleNamespace(__decimals__=Ready(6))))
+    token = CToken(TOKEN, asynchronous=True)
+    assert await token.get_underlying_price(BLOCK.number, sync=False) == 3.0
+    assert [c.args[0]["to"].lower() for c in rpc.await_args_list] == [TOKEN, CHILD, USD, USD]
+    assert all(c.args[1] == BLOCK.number for c in rpc.await_args_list)
+    assert rpc.await_args_list[-1] == rpc.await_args_list[-2]
+
+
+@run_async_test
+@pytest.mark.parametrize(
+    "error", [state_error(), TypeError("unexpected RPC"), asyncio.CancelledError()]
+)
+async def test_compound_exchange_rate_propagates_exhaustion_errors_and_cancellation(
+    monkeypatch: pytest.MonkeyPatch, error: BaseException
+) -> None:
+    rpc = AsyncMock(side_effect=error)
+    monkeypatch.setattr(
+        importlib.import_module("multicall.call"),
+        "get_async_w3",
+        lambda _: SimpleNamespace(eth=SimpleNamespace(call=rpc)),
+    )
+    sleep = AsyncMock()
+    monkeypatch.setattr(asyncio, "sleep", sleep)
+    token = CToken(TOKEN, asynchronous=True)
+    with pytest.raises(type(error)) as raised:
+        await token.exchange_rate(BLOCK.number, sync=False)
+    assert raised.value is error
+    attempts = 10 if isinstance(error, ValueError) else 1
+    assert rpc.await_count == attempts
+    assert rpc.await_args_list == [rpc.await_args_list[0]] * attempts
+    assert sleep.await_count == attempts - 1
+
+
+@run_async_test
+async def test_compound_contract_fallback_retries_same_block(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    rpc = AsyncMock(return_value=HexBytes("0x"))
+    monkeypatch.setattr(
+        importlib.import_module("multicall.call"),
+        "get_async_w3",
+        lambda _: SimpleNamespace(eth=SimpleNamespace(call=rpc)),
+    )
+    fallback = AsyncMock(side_effect=[state_error(), 2 * 10**18])
+    monkeypatch.setattr(
+        Contract,
+        "coroutine",
+        AsyncMock(
+            return_value=SimpleNamespace(exchangeRateCurrent=SimpleNamespace(coroutine=fallback))
+        ),
+    )
+    sleep = AsyncMock()
+    monkeypatch.setattr(asyncio, "sleep", sleep)
+    assert await CToken(TOKEN, asynchronous=True).exchange_rate(BLOCK.number, sync=False) == 2.0
+    rpc.assert_awaited_once()
+    assert fallback.await_args_list == [call(block_identifier=BLOCK.number)] * 2
+    sleep.assert_awaited_once_with(0.5)
