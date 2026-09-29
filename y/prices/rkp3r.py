@@ -1,4 +1,5 @@
 import logging
+from typing import cast
 from decimal import Decimal
 
 import a_sync
@@ -78,10 +79,12 @@ async def get_price(
             get_discount(block),
         ]
     )
+    price = cast(PriceResult, price)
+    discount = cast(Decimal, discount)
     return derive_price(
         address,
         Decimal(float(price)) * (100 - discount) / 100,
-        f"rKP3R {address} discounted KP3R",
+        f"rKP3R {str(address)} discounted KP3R",
         price,
     )
 

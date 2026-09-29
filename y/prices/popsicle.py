@@ -120,7 +120,7 @@ async def get_tvl(
         - :func:`get_price`
         - :func:`get_balances`
     """
-    balances: tuple[WeiBalance, WeiBalance]
+    balances: tuple[WeiBalance, WeiBalance] | None
     balances = await get_balances(
         token, block, skip_cache=skip_cache, _async_balance_objects=True, sync=False
     )

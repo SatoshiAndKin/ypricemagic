@@ -8,9 +8,12 @@ This module tests the following exotic token types:
 - Tarot SupplyVault: Fantom-only (skipped on mainnet)
 """
 
+from y import convert
+
+
 from decimal import Decimal
 
-import dank_mids
+from dank_mids.brownie_patch import dank_eth
 import pytest
 
 from tests.fixtures import mainnet_only
@@ -52,7 +55,7 @@ TEST_BLOCK_EARLY = 13_000_000
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_pickle_pslp_bucket():
+async def test_pickle_pslp_bucket() -> None:
     """A Pickle pSLP token should be bucketed as 'pickle pslp'."""
     bucket = await check_bucket(PSLP_ETH_USDC, sync=False)
     assert (
@@ -62,7 +65,7 @@ async def test_pickle_pslp_bucket():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_pickle_pslp_price():
+async def test_pickle_pslp_price() -> None:
     """A Pickle pSLP token should resolve to a nonzero price."""
     result = await magic.get_price(
         PSLP_ETH_USDC, TEST_BLOCK_EARLY, fail_to_None=True, skip_cache=True, sync=False
@@ -75,7 +78,7 @@ async def test_pickle_pslp_price():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_pickle_pslp_returns_price_result():
+async def test_pickle_pslp_returns_price_result() -> None:
     """Pickle pSLP pricing should return a PriceResult with descriptive source."""
     result = await magic.get_price(
         PSLP_ETH_USDC, TEST_BLOCK_EARLY, fail_to_None=True, skip_cache=True, sync=False
@@ -96,7 +99,7 @@ async def test_pickle_pslp_returns_price_result():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_pool_together_v4_bucket():
+async def test_pool_together_v4_bucket() -> None:
     """A PoolTogether V4 Ticket should be bucketed as 'pool together v4 ticket'."""
     bucket = await check_bucket(PT_USDC_TICKET, sync=False)
     assert (
@@ -106,7 +109,7 @@ async def test_pool_together_v4_bucket():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_pool_together_v4_price():
+async def test_pool_together_v4_price() -> None:
     """PoolTogether V4 USDC Ticket should resolve to approximately $1 (pegged to USDC)."""
     result = await magic.get_price(
         PT_USDC_TICKET, TEST_BLOCK, fail_to_None=True, skip_cache=True, sync=False
@@ -121,7 +124,7 @@ async def test_pool_together_v4_price():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_pool_together_v4_returns_price_result():
+async def test_pool_together_v4_returns_price_result() -> None:
     """PoolTogether V4 pricing should return a PriceResult with descriptive source."""
     result = await magic.get_price(
         PT_USDC_TICKET, TEST_BLOCK, fail_to_None=True, skip_cache=True, sync=False
@@ -137,7 +140,7 @@ async def test_pool_together_v4_returns_price_result():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_xpremia_bucket():
+async def test_xpremia_bucket() -> None:
     """xPREMIA should be bucketed as 'xpremia'."""
     bucket = await check_bucket(XPREMIA, sync=False)
     assert bucket == "xpremia", f"Expected 'xpremia' bucket for xPREMIA, got '{bucket}'"
@@ -145,9 +148,9 @@ async def test_xpremia_bucket():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_xpremia_price():
+async def test_xpremia_price() -> None:
     """Verify deployment identity and independently calculate backing per share."""
-    assert await dank_mids.eth.get_code(XPREMIA, block_identifier=TEST_BLOCK)
+    assert await dank_eth.get_code(convert.to_address(XPREMIA), block_identifier=TEST_BLOCK)
     assert (
         await raw_call(XPREMIA, "premia()", output="address", block=TEST_BLOCK, sync=False)
         == PREMIA
@@ -168,6 +171,7 @@ async def test_xpremia_price():
         * Decimal(str(float(child)))
     )
     result = await exotic_tokens.get_price_xpremia(XPREMIA, TEST_BLOCK, skip_cache=True, sync=False)
+    assert result is not None
     assert float(result) == pytest.approx(float(expected))
     assert result.path[0].token == XPREMIA
     assert result.path[1].token == PREMIA
@@ -175,7 +179,7 @@ async def test_xpremia_price():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_xpremia_returns_price_result():
+async def test_xpremia_returns_price_result() -> None:
     """xPREMIA pricing should return a PriceResult with descriptive source."""
     result = await magic.get_price(
         XPREMIA, TEST_BLOCK, fail_to_None=True, skip_cache=True, sync=False
@@ -191,7 +195,7 @@ async def test_xpremia_returns_price_result():
 
 @pytest.mark.skip(reason="Fantom-only")
 @pytest.mark.asyncio_cooperative
-async def test_xtarot_bucket():
+async def test_xtarot_bucket() -> None:
     """xTAROT should be bucketed as 'xtarot'."""
     bucket = await check_bucket(XTAROT, sync=False)
     assert bucket == "xtarot", f"Expected 'xtarot' bucket for xTAROT, got '{bucket}'"
@@ -199,7 +203,7 @@ async def test_xtarot_bucket():
 
 @pytest.mark.skip(reason="Fantom-only")
 @pytest.mark.asyncio_cooperative
-async def test_xtarot_price():
+async def test_xtarot_price() -> None:
     """xTAROT should resolve to a nonzero price related to the underlying TAROT token."""
     result = await magic.get_price(
         XTAROT, 25_000_000, fail_to_None=True, skip_cache=True, sync=False
@@ -217,7 +221,7 @@ async def test_xtarot_price():
 
 @pytest.mark.skip(reason="Fantom-only")
 @pytest.mark.asyncio_cooperative
-async def test_tarot_supply_vault_bucket():
+async def test_tarot_supply_vault_bucket() -> None:
     """A Tarot SupplyVault should be bucketed as 'tarot supply vault'."""
     bucket = await check_bucket(TAROT_SUPPLY_VAULT, sync=False)
     assert (
@@ -227,7 +231,7 @@ async def test_tarot_supply_vault_bucket():
 
 @pytest.mark.skip(reason="Fantom-only")
 @pytest.mark.asyncio_cooperative
-async def test_tarot_supply_vault_price():
+async def test_tarot_supply_vault_price() -> None:
     """A Tarot SupplyVault should resolve to a nonzero price."""
     result = await magic.get_price(
         TAROT_SUPPLY_VAULT, 25_000_000, fail_to_None=True, skip_cache=True, sync=False

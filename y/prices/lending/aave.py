@@ -26,30 +26,36 @@ from y.utils.raw_calls import raw_call
 logger = logging.getLogger(__name__)
 
 
-v1_pools = {
-    Network.Mainnet: ("0x398eC7346DcD622eDc5ae82352F02bE94C62d119",),
-}.get(chain.id, ())
+v1_pools = dict[int, tuple[str, ...]](
+    {
+        Network.Mainnet: ("0x398eC7346DcD622eDc5ae82352F02bE94C62d119",),
+    }
+).get(chain.id, ())
 
-v2_pools = {
-    Network.Mainnet: (
-        "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9",  # aave
-        "0x7937D4799803FbBe595ed57278Bc4cA21f3bFfCB",  # aave amm
-        "0xcE744a9BAf573167B2CF138114BA32ed7De274Fa",  # umee
-    ),
-    Network.Polygon: ("0x8dFf5E27EA6b7AC08EbFdf9eB090F32ee9a30fcf",),  # aave
-    Network.Avalanche: ("0x70BbE4A294878a14CB3CDD9315f5EB490e346163",),  # blizz
-}.get(chain.id, [])
+v2_pools = dict[int, tuple[str, ...]](
+    {
+        Network.Mainnet: (
+            "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9",  # aave
+            "0x7937D4799803FbBe595ed57278Bc4cA21f3bFfCB",  # aave amm
+            "0xcE744a9BAf573167B2CF138114BA32ed7De274Fa",  # umee
+        ),
+        Network.Polygon: ("0x8dFf5E27EA6b7AC08EbFdf9eB090F32ee9a30fcf",),  # aave
+        Network.Avalanche: ("0x70BbE4A294878a14CB3CDD9315f5EB490e346163",),  # blizz
+    }
+).get(chain.id, ())
 
-v3_pools = {
-    Network.Mainnet: ("0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2",),  # aave v3
-    Network.Optimism: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-    Network.Arbitrum: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-    Network.Harmony: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-    Network.Arbitrum: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-    Network.Fantom: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-    Network.Avalanche: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-    Network.Polygon: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-}.get(chain.id, ())
+v3_pools = dict[int, tuple[str, ...]](
+    {
+        Network.Mainnet: ("0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2",),  # aave v3
+        Network.Optimism: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+        Network.Arbitrum: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+        Network.Harmony: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+        Network.Arbitrum: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+        Network.Fantom: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+        Network.Avalanche: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+        Network.Polygon: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+    }
+).get(chain.id, ())
 
 
 class AaveMarketBase(ContractBase):
@@ -92,7 +98,8 @@ class AaveMarketBase(ContractBase):
             raise RuntimeError(
                 f"'self.asynchronous' must be False to use {cls}.__contains__.\nYou may wish to use {cls}.is_atoken instead."
             )
-        return convert.to_address(token) in self.atokens
+        address = convert.to_address(cast(AnyAddressType, token))
+        return any(atoken == address for atoken in self.__atokens__(sync=True))
 
     async def contains(self, token: object) -> bool:
         """
@@ -112,19 +119,20 @@ class AaveMarketBase(ContractBase):
             >>> await market.contains(token)
             True
         """
-        contains = await convert.to_address_async(token) in await self.__atokens__
+        address = await convert.to_address_async(cast(AnyAddressType, token))
+        contains = any(atoken == address for atoken in await self.__atokens__)
         logger.debug("%s contains %s: %s", self, token, contains)
         return contains
 
     async def get_reserves(self) -> list[Address]:
-        return await Call(self.address, [self._get_reserves_method])
+        return cast(list[Address], await Call(self.address, [self._get_reserves_method]))
 
-    async def get_reserve_data(self, reserve: AnyAddressType) -> tuple:
+    async def get_reserve_data(self, reserve: AnyAddressType) -> tuple[Any, ...]:
         return await self.contract.getReserveData.coroutine(reserve)
 
     @property
     @abstractmethod
-    async def atokens(self) -> Awaitable[list[ERC20]]:
+    def atokens(self) -> Awaitable[list[ERC20]]:
         """
         Get the aTokens of the market.
 
@@ -140,7 +148,7 @@ class AaveMarketBase(ContractBase):
             [<ERC20 '0xTokenAddress1'>, <ERC20 '0xTokenAddress2'>]
         """
 
-    __atokens__: HiddenMethodDescriptor[Self, list[ERC20]]
+    __atokens__: HiddenMethodDescriptor["AaveMarketBase", list[ERC20]]
 
     @abstractmethod
     async def underlying(self, atoken_address: AddressOrContract) -> ERC20:
@@ -225,8 +233,10 @@ class AaveMarketV2(AaveMarketBase):
             logger.warning("failed to load tokens for %s", self)
             return []
 
-    async def get_reserve_data(self, reserve: AnyAddressType) -> tuple:
-        return await Call(self.address, [_V2_RESERVE_DATA_METHOD, str(reserve)])
+    async def get_reserve_data(self, reserve: AnyAddressType) -> tuple[Any, ...]:
+        return cast(
+            tuple[Any, ...], await Call(self.address, [_V2_RESERVE_DATA_METHOD, str(reserve)])
+        )
 
     @a_sync.a_sync(ram_cache_maxsize=256)
     async def underlying(self, atoken_address: AddressOrContract) -> ERC20:
@@ -280,14 +290,13 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
 
     @a_sync.aka.cached_property
     async def pools(self) -> list[AaveMarket]:
-        v1, v2, v3 = await cgather(
-            self.__pools_v1__,
-            self.__pools_v2__,
-            self.__pools_v3__,
+        groups = await gather_owned(
+            cast(Awaitable[list[AaveMarket]], group)
+            for group in (self.__pools_v1__, self.__pools_v2__, self.__pools_v3__)
         )
-        return v1 + v2 + v3
+        return [pool for group in groups for pool in group]
 
-    __pools__: HiddenMethodDescriptor[Self, list[AaveMarket]]
+    __pools__: HiddenMethodDescriptor["AaveRegistry", list[AaveMarket]]
 
     @a_sync.aka.cached_property
     async def pools_v1(self) -> list[AaveMarketV1]:
@@ -295,7 +304,7 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
         logger.debug("AaveRegistry v1 pools %s", pools)
         return pools
 
-    __pools_v1__: HiddenMethodDescriptor[Self, list[AaveMarketV1]]
+    __pools_v1__: HiddenMethodDescriptor["AaveRegistry", list[AaveMarketV1]]
 
     @a_sync.aka.cached_property
     async def pools_v2(self) -> list[AaveMarketV2]:
@@ -303,7 +312,7 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
         logger.debug("AaveRegistry v2 pools %s", pools)
         return pools
 
-    __pools_v2__: HiddenMethodDescriptor[Self, list[AaveMarketV2]]
+    __pools_v2__: HiddenMethodDescriptor["AaveRegistry", list[AaveMarketV2]]
 
     @a_sync.aka.cached_property
     async def pools_v3(self) -> list[AaveMarketV3]:
@@ -311,7 +320,7 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
         logger.debug("AaveRegistry v3 pools %s", pools)
         return pools
 
-    __pools_v3__: HiddenMethodDescriptor[Self, list[AaveMarketV3]]
+    __pools_v3__: HiddenMethodDescriptor["AaveRegistry", list[AaveMarketV3]]
 
     async def pool_for_atoken(
         self, atoken_address: AnyAddressType
@@ -326,7 +335,7 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
             raise RuntimeError(
                 f"'self.asynchronous' must be False to use AaveRegistry.__contains__.\nYou may wish to use AaveRegistry.is_atoken instead."
             )
-        return any(__o in pool for pool in self.pools)
+        return any(__o in pool for pool in self.__pools__(sync=True))
 
     @a_sync.a_sync(cache_type="memory", ram_cache_maxsize=ENVS.CONTRACT_CACHE_MAXSIZE)
     async def is_atoken(self, atoken_address: AnyAddressType) -> bool:
@@ -362,10 +371,11 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
         )
 
     @a_sync.a_sync(cache_type="memory", ram_cache_maxsize=ENVS.CONTRACT_CACHE_MAXSIZE)
+    @stuck_coro_debugger
     async def underlying(self, atoken_address: AddressOrContract) -> ERC20:
-        pool: AaveMarketV1 | AaveMarketV2 | AaveMarketV3 = await self.pool_for_atoken(
-            atoken_address, sync=False
-        )
+        pool = await self.pool_for_atoken(atoken_address, sync=False)
+        if pool is None:
+            raise ValueError(f"No Aave market for {str(atoken_address)}")
         return await pool.underlying(atoken_address, sync=False)
 
     @stuck_coro_debugger
@@ -384,7 +394,7 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
         return derive_price(
             atoken_address,
             float(child),
-            f"Aave {atoken_address} underlying {underlying.address}",
+            f"Aave {str(atoken_address)} underlying {underlying.address}",
             child,
         )
 
@@ -433,13 +443,15 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
         except ContractLogicError:
             return None
         price_per_share /= Decimal(scale)
-        child = await ERC20(underlying, asynchronous=True).price(block, skip_cache=skip_cache)
+        child = await ERC20(underlying, asynchronous=True).price(
+            block, skip_cache=skip_cache, sync=False
+        )
         if child is None:
             return None
         return derive_price(
             atoken_address,
             price_per_share * Decimal(float(child)),
-            f"Aave wrapped {atoken_address} via {method}",
+            f"Aave wrapped {str(atoken_address)} via {method}",
             child,
         )
 

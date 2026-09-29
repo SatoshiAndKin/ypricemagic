@@ -212,11 +212,12 @@ async def main() -> int:
         ctoken = cast(Any, CToken(token, asynchronous=True))
         assert await ctoken.get_underlying_price(block.number) is None
         price = await ctoken.get_price(block.number)
+        assert price is not None and float(price) == 0.0014653492066322037
         return {
             "oracle": oracle,
             "feed": feed,
             "aggregator": aggregator,
-            "price": float(price) if price else None,
+            "price": float(price),
         }
 
     await record("Inverse retired Chainlink feed", 16_871_536, inverse)

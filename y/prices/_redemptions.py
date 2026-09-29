@@ -4,6 +4,9 @@ Unsupported versions and strategy-dependent or delayed exits return no quote.
 See docs/amount-quotes.rst for the support and limit matrix.
 """
 
+from typing import cast
+
+
 from collections.abc import AsyncGenerator
 from contextlib import aclosing
 from math import isqrt
@@ -352,9 +355,9 @@ async def _redeem_candidates(
         ), (token,)
         return
 
-    from y.prices.stable_swap.curve import curve
+    from y.prices.stable_swap.curve import CurveRegistry, curve
 
-    curve_pool = await curve.get_pool(token, sync=False) if curve else None
+    curve_pool = await cast(CurveRegistry, curve).get_pool(token, sync=False) if curve else None
     if curve_pool is not None:
         pool_address = address(curve_pool)
         if pool_address in ignored:

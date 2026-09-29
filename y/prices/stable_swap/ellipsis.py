@@ -5,6 +5,7 @@ import a_sync
 from a_sync import cgather
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20, WeiBalance
 from y.contracts import Contract, has_methods
 from y.datatypes import AddressOrContract, AnyAddressType, Block, UsdPrice
@@ -13,7 +14,12 @@ from y.utils.raw_calls import raw_call
 logger = logging.getLogger(__name__)
 
 
-@a_sync.a_sync(default="sync", cache_type="memory", ram_cache_ttl=5 * 60, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+@a_sync.a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=5 * 60,
+    ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE,
+)
 async def is_eps_rewards_pool(token_address: AnyAddressType) -> bool:
     """
     Check if a given token address is an EPS rewards pool.
@@ -47,6 +53,7 @@ async def is_eps_rewards_pool(token_address: AnyAddressType) -> bool:
 
 
 @a_sync.a_sync(default="sync")
+@stuck_coro_debugger
 async def get_price(
     token_address: AddressOrContract,
     block: Block | None = None,
@@ -76,22 +83,23 @@ async def get_price(
         - :func:`y.utils.raw_calls.raw_call`
     """
     minter = await raw_call(token_address, "minter()", output="address", block=block, sync=False)
-    minter = await Contract.coroutine(minter)
+    minter_contract = await Contract.coroutine(minter)
     balances: list[WeiBalance]
     i, balances = 0, []
     while True:
         try:
+            coin: str
+            balance: int
             coin, balance = await cgather(
-                minter.coins.coroutine(i, block_identifier=block),
-                minter.balances.coroutine(i, block_identifier=block),
+                minter_contract.coins.coroutine(i, block_identifier=block),
+                minter_contract.balances.coroutine(i, block_identifier=block),
             )
-            balance /= await ERC20._get_scale_for(coin)
             balances.append(WeiBalance(balance, coin, block, skip_cache=skip_cache))
             i += 1
         except:
             break
     tvl, total_supply = await cgather(
         WeiBalance.value_usd.sum(balances, sync=False),
-        ERC20(token_address, asynchronous=True).total_supply_readable(block),
+        ERC20(token_address, asynchronous=True).total_supply_readable(block, sync=False),
     )
     return UsdPrice(tvl / Decimal(total_supply))

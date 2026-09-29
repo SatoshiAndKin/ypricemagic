@@ -1,17 +1,19 @@
 from collections.abc import Callable
 from logging import DEBUG, getLogger
-from typing import Any
+from typing import Any, cast
+from importlib import import_module
 
 import eth_retry
 from brownie import chain, web3
 from requests import Session
 from requests.adapters import HTTPAdapter
 from web3 import HTTPProvider, Web3
+from web3.types import RPCEndpoint, RPCResponse
 
 try:
     from web3.middleware.geth_poa import geth_poa_middleware as _poa_middleware
 except ImportError:
-    from web3.middleware import ExtraDataToPOAMiddleware as _poa_middleware
+    _poa_middleware = getattr(import_module("web3.middleware"), "ExtraDataToPOAMiddleware")
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y.networks import Network
@@ -26,7 +28,7 @@ provider_specific_batch_sizes = {
     "ankr": 2_000,
 }
 
-chain_specific_max_batch_sizes = {
+chain_specific_max_batch_sizes: dict[int, int] = {
     Network.Mainnet: 10_000,  # 1.58 days
     Network.Gnosis: 20_000,  # 1.15 days
     Network.Fantom: 100_000,  # 1.03 days
@@ -64,7 +66,7 @@ def _get_batch_size() -> int:
     if batch_size := ENVS.GETLOGS_BATCH_SIZE:
         return batch_size
     for provider, size in provider_specific_batch_sizes.items():
-        if provider in web3.provider.endpoint_uri:
+        if provider in cast(str, getattr(web3.provider, "endpoint_uri")):
             return size
     return chain_specific_max_batch_sizes.get(chain.id, fallback_batch_size)
 
@@ -93,7 +95,9 @@ def should_cache(method: str, params: Any) -> bool:
     return method == "eth_getCode" and params[1] == "latest"
 
 
-def getcode_cache_middleware(make_request: Callable, web3: Web3) -> Callable:
+def getcode_cache_middleware(
+    make_request: Callable[[RPCEndpoint, Any], RPCResponse], web3: Web3
+) -> Callable[[RPCEndpoint, Any], RPCResponse]:
     """
     Middleware for caching eth_getCode calls.
 
@@ -115,13 +119,13 @@ def getcode_cache_middleware(make_request: Callable, web3: Web3) -> Callable:
     """
 
     @memory.cache
-    def make_request_cached(method: str, params: Any) -> Any:
+    def make_request_cached(method: RPCEndpoint, params: Any) -> RPCResponse:
         return make_request(method, params)
 
     if logger.isEnabledFor(DEBUG):
 
         @eth_retry.auto_retry
-        def middleware(method: str, params: Any) -> Any:
+        def middleware(method: RPCEndpoint, params: Any) -> RPCResponse:
             logger._log(DEBUG, "%s %s", (method, params))
             if should_cache(method, params):
                 return make_request_cached(method, params)
@@ -130,7 +134,7 @@ def getcode_cache_middleware(make_request: Callable, web3: Web3) -> Callable:
     else:
 
         @eth_retry.auto_retry
-        def middleware(method: str, params: Any) -> Any:
+        def middleware(method: RPCEndpoint, params: Any) -> RPCResponse:
             if should_cache(method, params):
                 return make_request_cached(method, params)
             return make_request(method, params)
@@ -155,14 +159,16 @@ def setup_getcode_cache_middleware() -> None:
     # patch web3 provider with more connections and higher timeout
     if web3.provider:
         try:
-            assert web3.provider.endpoint_uri.startswith(
+            assert cast(str, getattr(web3.provider, "endpoint_uri")).startswith(
                 "http"
             ), "only http and https providers are supported"
             adapter = HTTPAdapter(pool_connections=100, pool_maxsize=100)
             session = Session()
             session.mount("http://", adapter)
             session.mount("https://", adapter)
-            web3.provider = HTTPProvider(web3.provider.endpoint_uri, {"timeout": 600}, session)
+            web3.provider = HTTPProvider(
+                cast(str, getattr(web3.provider, "endpoint_uri")), {"timeout": 600}, session
+            )
         except AttributeError as e:
             if "'IPCProvider' object has no attribute 'endpoint_uri'" not in str(e):
                 raise

@@ -1,14 +1,22 @@
 from abc import abstractmethod
 from itertools import product
+from typing import cast
 
 import dank_mids
+from dank_mids.brownie_patch import dank_eth
 
+from y import convert
 from y._decorators import continue_on_revert, stuck_coro_debugger
-from y.datatypes import Address, Block, Pool
+from y.datatypes import Address, AddressOrContract, Block, Pool
 from y.exceptions import call_reverted
 from y.prices._candidates import gather_owned, pool_address
 from y.prices.dex.uniswap.v2 import Path, UniswapRouterV2, UniswapV2Pool
 from y.utils.cache import a_sync_ttl_cache
+
+Route = (
+    tuple[AddressOrContract, AddressOrContract, bool]
+    | tuple[AddressOrContract, AddressOrContract, bool, str]
+)
 
 
 class SolidlyRouterBase(UniswapRouterV2):
@@ -54,13 +62,16 @@ class SolidlyRouterBase(UniswapRouterV2):
             >>> print(quote)
         """
         if block is None:
-            block = await dank_mids.eth.block_number
+            block = await dank_eth.block_number
         variants = await self.get_routes_from_path(path, block, pools=pools, sync=False)
 
-        async def quote(routes):
+        async def quote(routes: list[Route]) -> tuple[int, ...] | None:
             try:
-                return await self.contract.getAmountsOut.coroutine(
-                    amount_in, routes, block_identifier=block
+                return cast(
+                    tuple[int, ...] | None,
+                    await self.contract.getAmountsOut.coroutine(
+                        amount_in, routes, block_identifier=block
+                    ),
                 )
             except Exception as exc:
                 strings = (
@@ -81,7 +92,9 @@ class SolidlyRouterBase(UniswapRouterV2):
             default=None,
         )
 
-    def _encode_route(self, start, end, stable):
+    def _encode_route(
+        self, start: AddressOrContract, end: AddressOrContract, stable: bool
+    ) -> Route:
         return (start, end, stable)
 
     @abstractmethod
@@ -92,12 +105,17 @@ class SolidlyRouterBase(UniswapRouterV2):
         raise NotImplementedError
 
     @stuck_coro_debugger
-    async def get_routes_from_path(self, path: Path, block: Block, pools: tuple[Pool, ...] = ()):
+    async def get_routes_from_path(
+        self, path: Path, block: Block, pools: tuple[Pool, ...] = ()
+    ) -> list[list[Route]]:
         """Return every eligible stable/volatile route for this path at this block."""
         choices = []
         for index, (start, end) in enumerate(zip(path, path[1:])):
+            start_address = await convert.to_address_async(start)
+            end_address = await convert.to_address_async(end)
             found = await gather_owned(
-                self.get_pool(start, end, stable, block, sync=False) for stable in (False, True)
+                self.get_pool(start_address, end_address, stable, block, sync=False)
+                for stable in (False, True)
             )
             routes = []
             for stable, pool in zip((False, True), found):

@@ -1,7 +1,9 @@
+from typing import cast
 from asyncio import iscoroutine
 from collections.abc import Awaitable, Callable
 from logging import DEBUG, getLogger
-from typing import Any
+from typing import Any, Literal, Protocol
+from eth_typing import ChecksumAddress
 
 import a_sync
 from brownie.exceptions import ContractNotFound
@@ -27,13 +29,13 @@ from y.prices import (
 )
 from y.prices._candidates import gather_owned
 from y.prices.band import band
-from y.prices.chainlink import chainlink
+from y.prices.chainlink import Chainlink, chainlink
 from y.prices.dex import mooniswap
 from y.prices.dex.balancer import balancer_multiplexer
 from y.prices.dex.genericamm import is_generic_amm
 from y.prices.dex.uniswap import uniswap_multiplexer
 from y.prices.eth_derivs import creth, wsteth
-from y.prices.gearbox import gearbox
+from y.prices.gearbox import Gearbox, gearbox
 from y.prices.lending import ib
 from y.prices.lending.aave import aave
 from y.prices.lending.compound import compound
@@ -45,10 +47,17 @@ from y.prices.stable_swap import (
     saddle,
     stargate,
 )
-from y.prices.stable_swap.curve import curve
-from y.prices.synthetix import synthetix
+from y.prices.stable_swap.curve import CurveRegistry, curve
+from y.prices.synthetix import Synthetix, synthetix
 from y.prices.tokenized_fund import basketdao, gelato, piedao, reserve, tokensets
 from y.utils.logging import get_price_logger
+
+
+class _BucketCheck(Protocol):
+    def __call__(
+        self, address: ChecksumAddress, /, *, sync: Literal[False]
+    ) -> Awaitable[object]: ...
+
 
 logger = getLogger(__name__)
 
@@ -99,7 +108,8 @@ async def check_bucket(token: AnyAddressType, block: int | None = None) -> str |
         # A category cached at an older block must not hide a subsequently added feed.
         if bucket in ("synthetix", "yearn or yearn-like", "curve lp") and chainlink:
             _, has_feed = await _safe_check_bucket(
-                "chainlink feed", chainlink.has_feed(token_address, block=block)
+                "chainlink feed",
+                cast(Chainlink, chainlink).has_feed(token_address, block=block, sync=False),
             )
             if has_feed:
                 bucket = "chainlink and band" if token_address in band else "chainlink feed"
@@ -142,12 +152,14 @@ async def check_bucket(token: AnyAddressType, block: int | None = None) -> str |
     # All checks run concurrently; the first match by priority wins.
     # Priority order preserves original semantics: "uni or uni-like lp"
     # beats "solidex" when both match.
-    heavy_checks: list[tuple[str, Awaitable[bool]]] = [
+    heavy_checks: list[tuple[str, Awaitable[object]]] = [
         ("solidex", solidex.is_solidex_deposit(token_address, sync=False)),
         ("uni or uni-like lp", uniswap_multiplexer.is_uniswap_pool(token_address, sync=False)),
     ]
     if gearbox:
-        heavy_checks.append(("gearbox", gearbox.is_diesel_token(token_address, sync=False)))
+        heavy_checks.append(
+            ("gearbox", cast(Gearbox, gearbox).is_diesel_token(token_address, sync=False))
+        )
     heavy_checks.extend(
         [
             ("wrapped atoken v2", aave.is_wrapped_atoken_v2(token_address, sync=False)),
@@ -160,13 +172,20 @@ async def check_bucket(token: AnyAddressType, block: int | None = None) -> str |
     )
     if chainlink:
         heavy_checks.append(
-            ("chainlink feed", chainlink.has_feed(token_address, block=block, sync=False))
+            (
+                "chainlink feed",
+                cast(Chainlink, chainlink).has_feed(token_address, block=block, sync=False),
+            )
         )
     if synthetix:
-        heavy_checks.append(("synthetix", synthetix.is_synth(token_address, sync=False)))
+        heavy_checks.append(
+            ("synthetix", cast(Synthetix, synthetix).is_synth(token_address, sync=False))
+        )
     heavy_checks.append(("yearn or yearn-like", yearn.is_yearn_vault(token_address, sync=False)))
     if curve:
-        heavy_checks.append(("curve lp", curve.get_pool(token_address, sync=False)))
+        heavy_checks.append(
+            ("curve lp", cast(CurveRegistry, curve).get_pool(token_address, sync=False))
+        )
 
     heavy_results = dict(
         await gather_owned(_safe_check_bucket(name, coro) for name, coro in heavy_checks)
@@ -193,7 +212,7 @@ async def check_bucket(token: AnyAddressType, block: int | None = None) -> str |
 
 
 # these require neither calls to the chain nor contract initialization, just string comparisons (pretty sure)
-string_matchers = {
+string_matchers: dict[str, Callable[[ChecksumAddress], object]] = {
     "wrapped gas coin": lambda address: address == "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
     "stable usd": lambda address: address in STABLECOINS,
     "one to one": one_to_one.is_one_to_one_token,
@@ -205,7 +224,7 @@ string_matchers = {
 }
 
 # these just require calls
-calls_only = {
+calls_only: dict[str, _BucketCheck] = {
     "convex": convex.is_convex_lp,
     "atoken": aave.is_atoken,
     "balancer pool": balancer_multiplexer.is_balancer_pool,
@@ -248,7 +267,7 @@ async def _safe_check_bucket(
         return name, False
 
 
-async def _chainlink_and_band(token_address, block) -> bool:
+async def _chainlink_and_band(token_address: ChecksumAddress, block: int | None) -> bool:
     """
     Check if a token is supported by both Chainlink and Band oracles.
 
@@ -268,13 +287,13 @@ async def _chainlink_and_band(token_address, block) -> bool:
     """
     return (
         bool(chainlink)
-        and await chainlink.has_feed(token_address, block=block, sync=False)
+        and await cast(Chainlink, chainlink).has_feed(token_address, block=block, sync=False)
         and token_address in band
     )
 
 
 async def _check_bucket_helper(
-    bucket: str, check: Callable[[Address], Awaitable[bool]], address: Address
+    bucket: str, check: _BucketCheck, address: ChecksumAddress
 ) -> tuple[str, bool]:
     """
     Asynchronously check if a token belongs to a specified bucket.
@@ -313,11 +332,11 @@ async def _check_bucket_helper(
     return bucket, result
 
 
-async def __log_bucket(token, bucket):
+async def __log_bucket(token: AnyAddressType, bucket: str | None) -> None:
     symbol = await ERC20(token, asynchronous=True).symbol
     logger._log(DEBUG, "%s %s bucket is %s", (symbol, token, bucket))
 
 
-async def __log_not_bucket(token, bucket):
+async def __log_not_bucket(token: AnyAddressType, bucket: str | None) -> None:
     symbol = await ERC20(token, asynchronous=True).symbol
     logger._log(DEBUG, "%s %s bucket is not %s", (symbol, token, bucket))

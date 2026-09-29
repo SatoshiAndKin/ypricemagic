@@ -1,3 +1,5 @@
+from typing import cast
+from y.datatypes import PriceResult
 import logging
 from decimal import Decimal
 
@@ -134,6 +136,8 @@ async def _get_price(
 
     if not total_supply or price0 is None or price1 is None:
         return None
+    scale0, scale1 = cast(int, scale0), cast(int, scale1)
+    price0, price1 = cast(PriceResult, price0), cast(PriceResult, price1)
     total_value = Decimal(balance0) / scale0 * Decimal(str(float(price0))) + Decimal(
         balance1
     ) / scale1 * Decimal(str(float(price1)))

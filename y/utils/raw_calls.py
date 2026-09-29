@@ -1,14 +1,18 @@
 import logging
 from collections.abc import Callable
 from contextlib import suppress
-from typing import Any, Final, Union
+from typing import Any, Final, Literal, Protocol, cast, overload
 
 import a_sync
 import brownie
 import dank_mids
+from dank_mids.brownie_patch import dank_eth
 from a_sync import cgather
 from brownie import ZERO_ADDRESS, chain, convert
 from brownie.convert.datatypes import EthAddress
+from eth_typing import ChecksumAddress, HexStr
+from hexbytes import HexBytes
+from web3.types import TxParams
 from dank_mids._eth_utils import encode_hex
 from dank_mids.helpers import lru_cache_lite_nonull
 from faster_eth_utils import function_signature_to_4byte_selector
@@ -16,8 +20,12 @@ from faster_eth_utils import function_signature_to_4byte_selector
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y._decorators import stuck_coro_debugger
 from y.contracts import Contract, proxy_implementation
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from y.classes.common import ERC20
 from y.convert import to_address, to_address_async
-from y.datatypes import Address, AddressOrContract, Block
+from y.datatypes import Address, AddressOrContract, AnyAddressType, Block
 from y.exceptions import (
     CalldataPreparationError,
     ContractNotVerified,
@@ -26,6 +34,13 @@ from y.exceptions import (
     call_reverted,
 )
 from y.networks import Network
+
+
+class _IntegerView(Protocol):
+    """Read-only ERC20 ABI methods decoded by Brownie's dynamic method factory."""
+
+    def __call__(self, *args: Any, block_identifier: Block | None = None) -> int: ...
+
 
 logger: Final = logging.getLogger(__name__)
 
@@ -36,7 +51,7 @@ We use raw calls for commonly used functions because its much faster than using 
 
 fourbyte: Final = lru_cache_lite_nonull(function_signature_to_4byte_selector)
 
-_KNOWN_DECIMALS: Final[dict[Network, dict[str, int]]] = {
+_KNOWN_DECIMALS: Final[dict[int, dict[str, int]]] = {
     Network.Mainnet: {
         # old Synthetix sUSD proxy – non-standard decimals method
         "0x57Ab1E02fEE23774580C119740129eAC7081e9D3": 18,
@@ -47,11 +62,11 @@ _KNOWN_DECIMALS: Final[dict[Network, dict[str, int]]] = {
 # yLazyLogger(logger)
 @a_sync.a_sync(cache_type="memory", ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
 async def _cached_call_fn(
-    func: Callable,
+    func: Callable[..., Any],
     contract_address: AddressOrContract,
     # Only supports one required arg besides contract_address for now
     block: Block | None,
-    required_arg=None,
+    required_arg: Any = None,
 ) -> Any:
     if required_arg is None:
         return await func(contract_address, block=block)
@@ -59,18 +74,51 @@ async def _cached_call_fn(
         return await func(contract_address, required_arg, block=block)
 
 
-@a_sync.a_sync(default="sync")
+@overload
+async def decimals(
+    contract_address: AddressOrContract,
+    block: Block | None = None,
+    return_None_on_failure: Literal[False] = False,
+) -> int: ...
+
+
+@overload
 async def decimals(
     contract_address: AddressOrContract,
     block: Block | None = None,
     return_None_on_failure: bool = False,
-) -> int:
+) -> int | None: ...
+
+
+@a_sync.a_sync(default="sync")
+@stuck_coro_debugger
+async def decimals(
+    contract_address: AddressOrContract,
+    block: Block | None = None,
+    return_None_on_failure: bool = False,
+) -> int | None:
     if block is None or return_None_on_failure:
         return await _decimals(
-            contract_address, block=block, return_None_on_failure=return_None_on_failure
+            contract_address, block=block, return_None_on_failure=return_None_on_failure, sync=False
         )
     else:
-        return await _cached_call_fn(_decimals, contract_address, block)
+        return cast(int | None, await _cached_call_fn(_decimals, contract_address, block))
+
+
+@overload
+async def _decimals(
+    contract_address: AddressOrContract,
+    block: Block | None = None,
+    return_None_on_failure: Literal[False] = False,
+) -> int: ...
+
+
+@overload
+async def _decimals(
+    contract_address: AddressOrContract,
+    block: Block | None = None,
+    return_None_on_failure: bool = False,
+) -> int | None: ...
 
 
 @a_sync.a_sync(default="sync", cache_type="memory", ram_cache_maxsize=ENVS.CONTRACT_CACHE_MAXSIZE)
@@ -109,9 +157,10 @@ async def _decimals(
             # we got a response from the chain but brownie can't find `DECIMALS` method,
             # maybe our cached contract definition is messed up. let's repull it
             with suppress(AttributeError):
-                decimals = brownie.Contract.from_explorer(contract_address).decimals(
-                    block_identifier=block
-                )
+                decimals = cast(
+                    _IntegerView,
+                    brownie.Contract.from_explorer(to_address(contract_address)).decimals,
+                )(block_identifier=block)
 
     if decimals is not None:
         return decimals
@@ -142,9 +191,10 @@ async def _decimals(
             # we got a response from the chain but brownie can't find `DECIMALS` method,
             # maybe our cached contract definition is messed up. let's repull it
             with suppress(AttributeError):
-                decimals = brownie.Contract.from_explorer(contract_address).DECIMALS(
-                    block_identifier=block
-                )
+                decimals = cast(
+                    _IntegerView,
+                    brownie.Contract.from_explorer(to_address(contract_address)).DECIMALS,
+                )(block_identifier=block)
 
     if decimals is not None:
         return decimals
@@ -175,9 +225,10 @@ async def _decimals(
             # we got a response from the chain but brownie can't find `DECIMALS` method,
             # maybe our cached contract definition is messed up. let's repull it
             with suppress(AttributeError):
-                decimals = brownie.Contract.from_explorer(contract_address).getDecimals(
-                    block_identifier=block
-                )
+                decimals = cast(
+                    _IntegerView,
+                    brownie.Contract.from_explorer(to_address(contract_address)).getDecimals,
+                )(block_identifier=block)
 
     if decimals is not None:
         return decimals
@@ -194,16 +245,32 @@ async def _decimals(
     if await proxy_implementation(contract_address, block) == ZERO_ADDRESS:
         raise NoProxyImplementation(
             f"""
-            Contract {contract_address} is a proxy contract, and had no implementation at block {block}."""
+            Contract {str(contract_address)} is a proxy contract, and had no implementation at block {block}."""
         )
 
     raise NonStandardERC20(
         f"""
-        Unable to fetch `decimals` for {contract_address} on {Network.printable()}
+        Unable to fetch `decimals` for {str(contract_address)} on {Network.printable()}
         If the contract is verified, please check to see if it has a strangely named
         `decimals` method and create an issue on https://github.com/BobTheBuidler/ypricemagic
         with the contract address and correct method name so we can keep things going smoothly :)"""
     )
+
+
+@overload
+async def _totalSupply(
+    contract_address: AddressOrContract,
+    block: Block | None = None,
+    return_None_on_failure: Literal[False] = False,
+) -> int: ...
+
+
+@overload
+async def _totalSupply(
+    contract_address: AddressOrContract,
+    block: Block | None = None,
+    return_None_on_failure: bool = False,
+) -> int | None: ...
 
 
 @a_sync.a_sync(default="sync")
@@ -239,9 +306,10 @@ async def _totalSupply(
             # we got a response from the chain but brownie can't find `totalSupply` method,
             # maybe our cached contract definition is messed up. let's repull it
             with suppress(AttributeError):
-                total_supply = brownie.Contract.from_explorer(contract_address).totalSupply(
-                    block_identifier=block
-                )
+                total_supply = cast(
+                    _IntegerView,
+                    brownie.Contract.from_explorer(to_address(contract_address)).totalSupply,
+                )(block_identifier=block)
 
     if total_supply is not None:
         return total_supply
@@ -250,7 +318,7 @@ async def _totalSupply(
         return None
     raise NonStandardERC20(
         f"""
-        Unable to fetch `totalSupply` for {contract_address} on {Network.printable()}
+        Unable to fetch `totalSupply` for {str(contract_address)} on {Network.printable()}
         If the contract is verified, please check to see if it has a strangely named
         `totalSupply` method and create an issue on https://github.com/BobTheBuidler/ypricemagic
         with the contract address and correct method name so we can keep things going smoothly :)"""
@@ -260,10 +328,29 @@ async def _totalSupply(
 _BALANCEOF_FAILURES: Final[set[AddressOrContract]] = set()
 
 
-@a_sync.a_sync(default="sync")
+@overload
 async def balanceOf(
     call_address: AddressOrContract,
-    input_address: AddressOrContract,
+    input_address: AnyAddressType,
+    block: Block | None = None,
+    return_None_on_failure: Literal[False] = False,
+) -> int: ...
+
+
+@overload
+async def balanceOf(
+    call_address: AddressOrContract,
+    input_address: AnyAddressType,
+    block: Block | None = None,
+    return_None_on_failure: bool = False,
+) -> int | None: ...
+
+
+@a_sync.a_sync(default="sync")
+@stuck_coro_debugger
+async def balanceOf(
+    call_address: AddressOrContract,
+    input_address: AnyAddressType,
     block: Block | None = None,
     return_None_on_failure: bool = False,
 ) -> int | None:
@@ -271,7 +358,7 @@ async def balanceOf(
         # method 1
         # NOTE: this will almost always work, you will rarely proceed to further methods
         try:
-            return await raw_call(
+            balance = await raw_call(
                 call_address,
                 "balanceOf(address)",
                 block=block,
@@ -280,6 +367,8 @@ async def balanceOf(
                 return_None_on_failure=True,
                 sync=False,
             )
+            if balance is not None:
+                return balance
         except OverflowError:
             # OverflowError means the call didn't revert, but we can't decode it correctly
             # the contract might not comply with standards, so we can possibly fetch balanceOf
@@ -295,12 +384,14 @@ async def balanceOf(
                     # we got a response from the chain but brownie can't find `balanceOf` method,
                     # maybe our cached contract definition is messed up. let's repull it
                     try:
-                        contract = brownie.Contract.from_explorer(call_address)
+                        fallback_contract = brownie.Contract.from_explorer(to_address(call_address))
                     except ValueError:
                         pass
                     else:
                         try:
-                            return contract.balanceOf(input_address, block_identifier=block)
+                            return cast(_IntegerView, fallback_contract.balanceOf)(
+                                input_address, block_identifier=block
+                            )
                         except AttributeError:
                             _BALANCEOF_FAILURES.add(call_address)
 
@@ -309,7 +400,7 @@ async def balanceOf(
         return None
     raise NonStandardERC20(
         f"""
-        Unable to fetch `balanceOf` for token: {call_address} holder: {input_address} on {Network.printable()}
+        Unable to fetch `balanceOf` for token: {str(call_address)} holder: {input_address} on {Network.printable()}
         If the contract is verified, please check to see if it has a strangely named
         `totalSupply` method and create an issue on https://github.com/BobTheBuidler/ypricemagic
         with the contract address and correct function name so we can keep things going smoothly :)"""
@@ -317,9 +408,10 @@ async def balanceOf(
 
 
 # yLazyLogger(logger)
+@stuck_coro_debugger
 async def _balanceOfReadable(
     call_address: AddressOrContract,
-    input_address: AddressOrContract,
+    input_address: AnyAddressType,
     block: Block | None = None,
     return_None_on_failure: bool = False,
 ) -> float | None:
@@ -332,10 +424,12 @@ async def _balanceOfReadable(
             return_None_on_failure=return_None_on_failure,
             sync=False,
         ),
-        _decimals(call_address, block=block, return_None_on_failure=return_None_on_failure),
+        _decimals(
+            call_address, block=block, return_None_on_failure=return_None_on_failure, sync=False
+        ),
     )
     if balance is not None and decimals is not None:
-        return balance / 10**decimals
+        return cast(float, balance / 10**decimals)
 
     # we've failed to fetch
     if return_None_on_failure:
@@ -343,12 +437,106 @@ async def _balanceOfReadable(
     else:
         raise NonStandardERC20(
             f"""Unable to fetch `balanceOfReadable` for
-        token: {call_address} holder: {input_address} on {Network.printable()}
+        token: {str(call_address)} holder: {input_address} on {Network.printable()}
         balanceOf: {balance} decimals: {decimals}
         If the contract is verified, please check to see if it has a strangely named `balanceOf` or
         `decimals` method and create an issue on https://github.com/BobTheBuidler/ypricemagic
         with the contract address and correct function name so we can keep things going smoothly :)"""
         )
+
+
+@overload
+async def raw_call(
+    contract_address: AddressOrContract,
+    method: str,
+    block: Block | None = None,
+    inputs: AddressOrContract | int | None = None,
+    *,
+    output: Literal["int", "uint", "uint256"] | type[int],
+    return_None_on_failure: Literal[False] = False,
+) -> int: ...
+
+
+@overload
+async def raw_call(
+    contract_address: AddressOrContract,
+    method: str,
+    block: Block | None = None,
+    inputs: AddressOrContract | int | None = None,
+    *,
+    output: Literal["int", "uint", "uint256"] | type[int],
+    return_None_on_failure: bool,
+) -> int | None: ...
+
+
+@overload
+async def raw_call(
+    contract_address: AddressOrContract,
+    method: str,
+    block: Block | None = None,
+    inputs: AddressOrContract | int | None = None,
+    *,
+    output: Literal["address"],
+    return_None_on_failure: Literal[False] = False,
+) -> ChecksumAddress: ...
+
+
+@overload
+async def raw_call(
+    contract_address: AddressOrContract,
+    method: str,
+    block: Block | None = None,
+    inputs: AddressOrContract | int | None = None,
+    *,
+    output: Literal["address"],
+    return_None_on_failure: bool,
+) -> ChecksumAddress | None: ...
+
+
+@overload
+async def raw_call(
+    contract_address: AddressOrContract,
+    method: str,
+    block: Block | None = None,
+    inputs: AddressOrContract | int | None = None,
+    *,
+    output: Literal["str"] | type[str],
+    return_None_on_failure: Literal[False] = False,
+) -> str: ...
+
+
+@overload
+async def raw_call(
+    contract_address: AddressOrContract,
+    method: str,
+    block: Block | None = None,
+    inputs: AddressOrContract | int | None = None,
+    *,
+    output: Literal["str"] | type[str],
+    return_None_on_failure: bool,
+) -> str | None: ...
+
+
+@overload
+async def raw_call(
+    contract_address: AddressOrContract,
+    method: str,
+    block: Block | None = None,
+    inputs: AddressOrContract | int | None = None,
+    output: None = None,
+    return_None_on_failure: Literal[False] = False,
+) -> HexBytes: ...
+
+
+@overload
+async def raw_call(
+    contract_address: AddressOrContract,
+    method: str,
+    block: Block | None = None,
+    inputs: AddressOrContract | int | None = None,
+    output: str | type[int] | type[str] | None = None,
+    return_None_on_failure: bool = False,
+) -> int | str | HexBytes | None: ...
 
 
 @a_sync.a_sync(default="sync")
@@ -357,8 +545,8 @@ async def raw_call(
     contract_address: AddressOrContract,
     method: str,
     block: Block | None = None,
-    inputs=None,
-    output: str = None,
+    inputs: AddressOrContract | int | None = None,
+    output: str | type[int] | type[str] | None = None,
     return_None_on_failure: bool = False,
 ) -> Any | None:
     """
@@ -396,13 +584,13 @@ async def raw_call(
     if type(contract_address) != str:
         contract_address = str(contract_address)
 
-    data = {
+    data: TxParams = {
         "to": await to_address_async(contract_address),
         "data": prepare_data(method, inputs),
     }
 
     try:
-        response = await dank_mids.eth.call(data, block_identifier=block)
+        response = await dank_eth.call(data, block_identifier=block)
     except Exception as e:
         if return_None_on_failure and (call_reverted(e) or "invalid opcode" in str(e)):
             return None
@@ -438,9 +626,9 @@ async def raw_call(
 
 # yLazyLogger(logger)
 def prepare_data(
-    method,
-    inputs=Union[None, bytes, int, str, Address, EthAddress, brownie.Contract, Contract],
-) -> str:
+    method: str,
+    inputs: AddressOrContract | int | None = None,
+) -> HexStr:
     """
     Prepare data for a raw contract call by encoding the method signature and input data.
 
@@ -474,10 +662,10 @@ def prepare_data(
         - :func:`raw_call` for making the contract call.
         - :func:`prepare_input` for preparing individual inputs.
     """
-    method = encode_hex(fourbyte(method))
+    method = cast(str, encode_hex(fourbyte(method)))
 
     if inputs is None:
-        return method
+        return HexStr(method)
 
     elif type(inputs) in [
         bytes,
@@ -488,11 +676,11 @@ def prepare_data(
         brownie.Contract,
         Contract,
     ]:
-        return method + prepare_input(inputs)
+        return HexStr(method + prepare_input(inputs))
 
     raise CalldataPreparationError(f"""
         Supported types are: Union[None, bytes, int, str, Address, EthAddress, brownie.Contract, y.Contract]
-        You passed {type(inputs)} {inputs}""")
+        You passed {type(inputs)} {str(inputs)}""")
 
     # these don't work yet, wip
     """
@@ -511,17 +699,7 @@ def prepare_data(
 
 # yLazyLogger(logger)
 def prepare_input(
-    input: (
-        bytes  # for bytes input
-        | int  # for int input
-        |
-        # for address input
-        str
-        | Address
-        | EthAddress
-        | brownie.Contract
-        | Contract
-    ),
+    input: AddressOrContract | int,
 ) -> str:
     """
     Prepare input data for a raw contract call by encoding it to a hexadecimal string.
@@ -559,7 +737,7 @@ def prepare_input(
     input_type = type(input)
 
     if input_type == bytes:
-        return input.hex()
+        return cast(bytes, input).hex()
 
     if input_type == int:
         return convert.to_bytes(input).hex()

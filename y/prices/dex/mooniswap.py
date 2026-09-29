@@ -1,11 +1,15 @@
 import logging
 from decimal import Decimal
+from typing import cast
+from brownie.network.contract import Contract as BrownieContract
 
 import dank_mids
+from dank_mids.brownie_patch import dank_eth
 from a_sync import a_sync, cgather
 from brownie import ZERO_ADDRESS, chain
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._decorators import stuck_coro_debugger
 from y import convert
 from y.classes.common import ERC20
 from y.constants import weth
@@ -15,6 +19,9 @@ from y.prices import magic
 from y.utils import gather_methods
 
 logger = logging.getLogger(__name__)
+
+router: Contract | None
+gas_coin: BrownieContract | None
 
 if chain.id == 1:
     router = Contract("0xbAF9A5d4b0052359326A6CDAb54BABAa3a3A9643")
@@ -57,11 +64,12 @@ async def is_mooniswap_pool(token: AnyAddressType) -> bool:
 
 
 @a_sync(default="sync")
+@stuck_coro_debugger
 async def get_pool_price(
     token: AnyAddressType,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
-) -> UsdPrice:
+) -> Decimal:
     """
     Get the price of the given Mooniswap pool token.
 
@@ -69,8 +77,7 @@ async def get_pool_price(
     `token0` and `token1` methods, and then obtains the corresponding token balances
     and USD prices via asynchronous calls. It computes the total USD value of the pool
     by multiplying each token balance with its USD price, sums these values, and divides
-    by the total supply of pool tokens. Although the return type is declared as
-    UsdPrice, the function returns a Decimal value.
+    by the total supply of pool tokens, retaining a Decimal result.
 
     Args:
         token: The address of the pool token.
@@ -78,8 +85,7 @@ async def get_pool_price(
         skip_cache: Whether to skip using the cache for price retrieval. Defaults to :obj:`ENVS.SKIP_CACHE`.
 
     Returns:
-        The computed USD price of the pool token as a Decimal. Note that this differs from the
-        documented UsdPrice type.
+        The computed USD price of the pool token as a Decimal.
 
     Examples:
         >>> price = get_pool_price("0x1234567890abcdef1234567890abcdef12345678")
@@ -96,26 +102,26 @@ async def get_pool_price(
     token0, token1 = await gather_methods(address, ("token0", "token1"))
     bal0, bal1, price0, price1, total_supply = await cgather(
         (
-            dank_mids.eth.get_balance(address, block_identifier=block)
+            dank_eth.get_balance(address, block_identifier=block)
             if token0 == ZERO_ADDRESS
-            else ERC20(token0, asynchronous=True).balance_of_readable(address, block)
+            else ERC20(token0, asynchronous=True).balance_of_readable(address, block, sync=False)
         ),
         (
-            dank_mids.eth.get_balance(address, block_identifier=block)
+            dank_eth.get_balance(address, block_identifier=block)
             if token1 == ZERO_ADDRESS
-            else ERC20(token1, asynchronous=True).balance_of_readable(address, block)
+            else ERC20(token1, asynchronous=True).balance_of_readable(address, block, sync=False)
         ),
         (
-            magic.get_price(gas_coin, block, skip_cache=skip_cache, sync=False)
+            magic.get_price(str(gas_coin), block, skip_cache=skip_cache, sync=False)
             if token0 == ZERO_ADDRESS
             else magic.get_price(token0, block, skip_cache=skip_cache, sync=False)
         ),
         (
-            magic.get_price(gas_coin, block, skip_cache=skip_cache, sync=False)
+            magic.get_price(str(gas_coin), block, skip_cache=skip_cache, sync=False)
             if token1 == ZERO_ADDRESS
             else magic.get_price(token1, block, skip_cache=skip_cache, sync=False)
         ),
-        ERC20(address, asynchronous=True).total_supply_readable(block),
+        ERC20(address, asynchronous=True).total_supply_readable(block, sync=False),
     )
 
     if token0 == ZERO_ADDRESS:
@@ -124,4 +130,4 @@ async def get_pool_price(
         bal1 = Decimal(bal1) / 10**18
 
     totalVal = bal0 * Decimal(float(price0)) + bal1 * Decimal(float(price1))
-    return totalVal / Decimal(total_supply)
+    return cast(Decimal, totalVal / Decimal(total_supply))

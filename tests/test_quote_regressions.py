@@ -172,7 +172,7 @@ async def test_cached_fallback_bucket_respects_oracle_history(
     monkeypatch.setattr(db, "get_bucket", AsyncMock(return_value=cached))
     persisted = AsyncMock()
     monkeypatch.setattr(db, "set_bucket", persisted)
-    feed = AsyncMock(side_effect=lambda token, *, block: block == 200)
+    feed = AsyncMock(side_effect=lambda token, *, block, sync: block == 200)
     monkeypatch.setattr(buckets, "chainlink", SimpleNamespace(has_feed=feed))
     monkeypatch.setattr(buckets, "band", {token} if band_supported else set())
     for block in (100, 200, 300):
@@ -180,7 +180,9 @@ async def test_cached_fallback_bucket_respects_oracle_history(
         if block == 200:
             expected = "chainlink and band" if band_supported else "chainlink feed"
         assert await buckets.check_bucket(token, block, sync=False) == expected
-    assert feed.await_args_list == [call(token, block=block) for block in (100, 200, 300)]
+    assert feed.await_args_list == [
+        call(token, block=block, sync=False) for block in (100, 200, 300)
+    ]
     persisted.assert_not_called()
 
 

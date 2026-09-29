@@ -1,3 +1,5 @@
+from typing import cast
+from y._typing import a_sync_property
 import a_sync
 from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
@@ -12,12 +14,12 @@ from y.exceptions import UnsupportedNetwork
 from y.networks import Network
 from y.prices._rpc import BlockRef
 
-addresses = {
+addresses: dict[int, str] = {
     # https://docs.fantom.foundation/tutorials/band-protocol-standard-dataset
     Network.Fantom: "0x56E2898E0ceFF0D1222827759B56B28Ad812f92F"
 }
 
-supported_assets = {
+supported_assets: dict[int, list[str]] = {
     # https://docs.fantom.foundation/tutorials/band-protocol-standard-dataset#supported-tokens
     Network.Fantom: [
         "0xaf319E5789945197e365E7f7fbFc56B130523B33",  # FRAX
@@ -92,7 +94,7 @@ class Band(a_sync.ASyncGenericSingleton):
         """
         return CHAINID in addresses and asset in supported_assets[CHAINID]
 
-    @a_sync.aka.property
+    @a_sync_property
     async def oracle(self) -> Contract:
         """
         Get the Band Protocol oracle contract for the current network.
@@ -103,7 +105,7 @@ class Band(a_sync.ASyncGenericSingleton):
         """
         return await Contract.coroutine(addresses[CHAINID])
 
-    __oracle__: HiddenMethodDescriptor[Self, Contract]
+    __oracle__: HiddenMethodDescriptor["Band", Contract]
 
     async def get_price(
         self, asset: Address, block: Block | BlockRef | None = None
@@ -132,10 +134,10 @@ class Band(a_sync.ASyncGenericSingleton):
             ERC20(asset, asynchronous=True).symbol,
         )
         try:
-            reference_data = await oracle.getReferenceData.coroutine(
-                asset_symbol, "USDC", block_identifier=resolved.identifier
-            )
-            return reference_data[0] / 10**18
+            reference_data: tuple[int, int, int] = await cast(
+                Contract, oracle
+            ).getReferenceData.coroutine(asset_symbol, "USDC", block_identifier=resolved.identifier)
+            return float(reference_data[0] / 10**18)
         except ValueError:
             return None
         except VirtualMachineError:
@@ -143,6 +145,6 @@ class Band(a_sync.ASyncGenericSingleton):
 
 
 try:
-    band = Band(asynchronous=True)
+    band: Band | set[str] = Band(asynchronous=True)
 except UnsupportedNetwork:
     band = set()

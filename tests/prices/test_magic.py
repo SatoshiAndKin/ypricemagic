@@ -26,7 +26,7 @@ NUM_ITERATIONS = 10
 INCREMENT = (chain.height - START_TESTS_AT_BLOCK) // NUM_ITERATIONS
 BLOCKS = [START_TESTS_AT_BLOCK + INCREMENT * i for i in range(NUM_ITERATIONS)]
 
-ALL_TOKENS: list = V1_TOKENS + V2_TOKENS + ATOKENS + CTOKENS + FEEDS + POPSICLES + SYNTHS
+ALL_TOKENS: list[str] = V1_TOKENS + V2_TOKENS + ATOKENS + CTOKENS + FEEDS + POPSICLES + SYNTHS
 
 # subtraction underflow, not relevant to point of test
 ALL_TOKENS.remove("0x892B14321a4FCba80669aE30Bd0cd99a7ECF6aC0")
@@ -120,9 +120,11 @@ async def relevant_tokens(tokens: Iterable[AnyAddressType], block: int) -> list[
         for token in tokens
         if token not in chainlink_identifiers_not_tokens
     )
-    deployments: a_sync.TaskMapping[ChecksumAddress, int] = a_sync.map(
-        contract_creation_block_async, addresses
-    )
+
+    async def deployment(address: ChecksumAddress) -> int:
+        return await contract_creation_block_async(address)
+
+    deployments: a_sync.TaskMapping[ChecksumAddress, int] = a_sync.map(deployment, addresses)
     try:
         return [
             token

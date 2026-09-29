@@ -91,7 +91,7 @@ class BalancerABC(a_sync.ASyncGenericBase, Generic[_B]):
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
-    ) -> UsdPrice:
+    ) -> UsdPrice | None:
         """
         Get the price of a Balancer pool.
 
@@ -109,7 +109,7 @@ class BalancerABC(a_sync.ASyncGenericBase, Generic[_B]):
             100.0
         """
         return await self._pool_type(pool_address, asynchronous=True).get_pool_price(
-            block=block, skip_cache=skip_cache, ignore_pools=ignore_pools
+            block=block, skip_cache=skip_cache, ignore_pools=ignore_pools, sync=False
         )
 
     @property
@@ -127,7 +127,7 @@ class BalancerABC(a_sync.ASyncGenericBase, Generic[_B]):
 
     @property
     @abc.abstractmethod
-    def _check_methods(self) -> tuple[str]:
+    def _check_methods(self) -> tuple[str, ...]:
         """
         The methods to check for identifying a Balancer pool.
 

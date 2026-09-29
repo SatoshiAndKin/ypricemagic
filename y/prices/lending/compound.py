@@ -1,5 +1,7 @@
 import logging
 from typing import Any, Optional, cast
+from collections.abc import Callable, Iterable
+from asyncio import gather
 
 import a_sync
 from a_sync import cgather
@@ -26,46 +28,48 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.INFO)
 
-TROLLERS = {
-    Network.Mainnet: {
-        "comp": "0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B",
-        "cream": "0x3d5BC3c8d13dcB8bF317092d84783c2697AE9258",
-        "ironbank": "0xAB1c342C7bf5Ec5F02ADEA1c2270670bCa144CbB",
-        "inverse": "0x4dCf7407AE5C07f8681e1659f626E114A7667339",
-        "unfederalreserve": "0x3105D328c66d8d55092358cF595d54608178E9B5",
-        "flux": "0x95Af143a021DF745bc78e845b54591C53a8B3A51",
-        "venus": "0x687a01ecF6d3907658f7A7c714749fAC32336D1B",
-    },
-    Network.BinanceSmartChain: {
-        "venus": "0xfD36E2c2a6789Db23113685031d7F16329158384",
-    },
-    Network.Polygon: {
-        "easyfi": "0xcb3fA413B23b12E402Cfcd8FA120f983FB70d8E8",
-        "apple": "0x46220a07F071D1a821D68fA7C769BCcdA3C65430",
-        "chumhum": "0x1D43f6DA91e9EF6614dCe95bCef43E4d7b2bcFB5",
-        "cream": "0x20CA53E2395FA571798623F1cFBD11Fe2C114c24",
-    },
-    Network.Fantom: {
-        "cream": "0x4250A6D3BD57455d7C6821eECb6206F507576cD2",
-        "scream": "0x260E596DAbE3AFc463e75B6CC05d8c46aCAcFB09",
-        "ola": "0xD65eB596cFb5DE402678a12df651E0e588Dc3A81",
-    },
-    Network.Avalanche: {
-        "vee": "0xA67DFeD73025b0d61F2515c531dd8D25D4Cfd0Db",
-        "vee2": "0x43AAd7d8Bc661dfA70120865239529ED92Faa054",
-        "vee3": "0xeEf69Cab52480D2BD2D4A3f3E8F5CcfF2923f6eF",
-        "cream": "0x2eE80614Ccbc5e28654324a66A396458Fa5cD7Cc",
-    },
-    Network.Arbitrum: {
-        "cream": "0xbadaC56c9aca307079e8B8FC699987AAc89813ee",
-        "neku": "0xD5B649c7d27C13a2b80425daEe8Cb6023015Dc6B",
-        "channels": "0x3C13b172bf8BE5b873EB38553feC50F78c826284",
-        "hund": "0x0F390559F258eB8591C8e31Cf0905E97cf36ACE2",
-    },
-    Network.Optimism: {
-        "ironbank": "0xE0B57FEEd45e7D908f2d0DaCd26F113Cf26715BF",
-    },
-}.get(chain.id, {})
+TROLLERS = dict[int, dict[str, str]](
+    {
+        Network.Mainnet: {
+            "comp": "0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B",
+            "cream": "0x3d5BC3c8d13dcB8bF317092d84783c2697AE9258",
+            "ironbank": "0xAB1c342C7bf5Ec5F02ADEA1c2270670bCa144CbB",
+            "inverse": "0x4dCf7407AE5C07f8681e1659f626E114A7667339",
+            "unfederalreserve": "0x3105D328c66d8d55092358cF595d54608178E9B5",
+            "flux": "0x95Af143a021DF745bc78e845b54591C53a8B3A51",
+            "venus": "0x687a01ecF6d3907658f7A7c714749fAC32336D1B",
+        },
+        Network.BinanceSmartChain: {
+            "venus": "0xfD36E2c2a6789Db23113685031d7F16329158384",
+        },
+        Network.Polygon: {
+            "easyfi": "0xcb3fA413B23b12E402Cfcd8FA120f983FB70d8E8",
+            "apple": "0x46220a07F071D1a821D68fA7C769BCcdA3C65430",
+            "chumhum": "0x1D43f6DA91e9EF6614dCe95bCef43E4d7b2bcFB5",
+            "cream": "0x20CA53E2395FA571798623F1cFBD11Fe2C114c24",
+        },
+        Network.Fantom: {
+            "cream": "0x4250A6D3BD57455d7C6821eECb6206F507576cD2",
+            "scream": "0x260E596DAbE3AFc463e75B6CC05d8c46aCAcFB09",
+            "ola": "0xD65eB596cFb5DE402678a12df651E0e588Dc3A81",
+        },
+        Network.Avalanche: {
+            "vee": "0xA67DFeD73025b0d61F2515c531dd8D25D4Cfd0Db",
+            "vee2": "0x43AAd7d8Bc661dfA70120865239529ED92Faa054",
+            "vee3": "0xeEf69Cab52480D2BD2D4A3f3E8F5CcfF2923f6eF",
+            "cream": "0x2eE80614Ccbc5e28654324a66A396458Fa5cD7Cc",
+        },
+        Network.Arbitrum: {
+            "cream": "0xbadaC56c9aca307079e8B8FC699987AAc89813ee",
+            "neku": "0xD5B649c7d27C13a2b80425daEe8Cb6023015Dc6B",
+            "channels": "0x3C13b172bf8BE5b873EB38553feC50F78c826284",
+            "hund": "0x0F390559F258eB8591C8e31Cf0905E97cf36ACE2",
+        },
+        Network.Optimism: {
+            "ironbank": "0xE0B57FEEd45e7D908f2d0DaCd26F113Cf26715BF",
+        },
+    }
+).get(chain.id, {})
 
 
 def _oracle_unavailable(exc: Exception) -> bool:
@@ -179,7 +183,7 @@ class CToken(ERC20):
             underlying = EEE_ADDRESS
         return ERC20(underlying, asynchronous=self.asynchronous)
 
-    __underlying__: HiddenMethodDescriptor[Self, ERC20]
+    __underlying__: HiddenMethodDescriptor["CToken", ERC20]
 
     async def underlying_per_ctoken(self, block: Block | None = None) -> float:
         """
@@ -200,12 +204,12 @@ class CToken(ERC20):
             - :meth:`exchange_rate`
         """
         underlying: ERC20
-        exchange_rate, decimals, underlying = await cgather(
+        exchange_rate, decimals, underlying = await gather(
             self.exchange_rate(block=block, sync=False),
             self.__decimals__,
             self.__underlying__,
         )
-        return exchange_rate * 10 ** (decimals - await underlying.__decimals__)
+        return cast(float, exchange_rate * 10 ** (decimals - await underlying.__decimals__))
 
     # yLazyLogger(logger)
     @stuck_coro_debugger
@@ -232,7 +236,7 @@ class CToken(ERC20):
             contract = await Contract.coroutine(self.address)
             exchange_rate = await contract.exchangeRateCurrent.coroutine(block_identifier=block)
 
-        return exchange_rate / 10**18
+        return cast(float, exchange_rate / 10**18)
 
     @stuck_coro_debugger
     async def get_underlying_price(
@@ -302,7 +306,7 @@ class CToken(ERC20):
             if eth_price is None:
                 return None
             price *= float(eth_price)
-        return price
+        return cast(float, price)
 
 
 class Comptroller(ContractBase):
@@ -335,7 +339,7 @@ class Comptroller(ContractBase):
         else:
             key = [key for key in TROLLERS if address == TROLLERS[key]][0]
 
-        super().__init__(address, asynchronous=asynchronous)
+        super().__init__(cast(AnyAddressType, address), asynchronous=asynchronous)
         self.key = key
 
     def __repr__(self) -> str:
@@ -357,10 +361,10 @@ class Comptroller(ContractBase):
         """
         if self.asynchronous:
             raise RuntimeError("'self.asynchronous' must be False to use Comptroller.__contains__")
-        return token_address in self.markets
+        return any(market == token_address for market in self.__markets__(sync=True))
 
     @a_sync.aka.cached_property
-    async def markets(self) -> tuple[CToken]:
+    async def markets(self) -> tuple[CToken, ...]:
         """
         Get the markets associated with this Comptroller.
 
@@ -377,12 +381,13 @@ class Comptroller(ContractBase):
             logger.warning("had trouble loading markets for %s", self)
             response = set()
         markets = tuple(
-            CToken(market, comptroller=self, asynchronous=self.asynchronous) for market in response
+            CToken(market, comptroller=self, asynchronous=self.asynchronous)
+            for market in cast(Iterable[AddressOrContract], response)
         )
         logger.info("loaded %s markets for %s", len(markets), self)
         return markets
 
-    __markets__ = HiddenMethodDescriptor[Self, tuple[CToken]]
+    __markets__: HiddenMethodDescriptor["Comptroller", tuple[CToken, ...]]
 
     async def oracle(self, block: Block | None = None) -> Contract:
         """
@@ -397,17 +402,17 @@ class Comptroller(ContractBase):
         """
         contract = await Contract.coroutine(self.address)
         try:
-            oracle = await contract.oracle.coroutine(block_identifier=block)
+            oracle: AddressOrContract = await contract.oracle.coroutine(block_identifier=block)
         except Exception as e:
             # TODO debug why this occurs and refactor. only found on arbitrum cream
             if not call_reverted(e):
                 raise
-            oracle = contract.oracle(block_identifier=block)
+            oracle = cast(Callable[..., AddressOrContract], contract.oracle)(block_identifier=block)
         try:
             return await Contract.coroutine(oracle)
         except ContractNotVerified:
             raise ContractNotVerified(
-                f"{self} oracle {oracle} at block {block} is not verified"
+                f"{self} oracle {str(oracle)} at block {block} is not verified"
             ) from None
 
 
@@ -447,9 +452,9 @@ class Compound(a_sync.ASyncGenericSingleton):
             raise RuntimeError(
                 "'self.asynchronous' must be False and the event loop must not be running"
             )
-        return self.is_compound_market(token_address)
+        return self.is_compound_market(token_address, sync=True)
 
-    async def get_troller(self, token_address: AddressOrContract) -> Comptroller | None:
+    async def get_troller(self, token_address: AnyAddressType) -> Comptroller | None:
         """
         Get the Comptroller associated with a token address.
 
@@ -513,9 +518,9 @@ class Compound(a_sync.ASyncGenericSingleton):
             >>> price = await compound.get_price("0x1234567890abcdef1234567890abcdef12345678")
             >>> price_at_block = await compound.get_price("0x1234567890abcdef1234567890abcdef12345678", block=12345678)
         """
-        troller = await self.get_troller(token_address)
+        troller = await self.get_troller(token_address, sync=False)
         return await CToken(token_address, comptroller=troller, asynchronous=True).get_price(
-            block=block, skip_cache=skip_cache
+            block=block, skip_cache=skip_cache, sync=False
         )
 
     async def __notify_if_unknown_comptroller(self, token_address: AddressOrContract) -> None:

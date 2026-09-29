@@ -1,5 +1,9 @@
 """Quote policy and native-adapter regressions with controlled RPC responses."""
 
+from y.datatypes import AnyAddressType
+
+from tests.fixtures import async_result
+
 import asyncio
 import importlib
 from collections.abc import AsyncIterator
@@ -210,8 +214,8 @@ async def test_multiplexer_includes_slipstream(monkeypatch: Any, scenario: str) 
         rates["slipstream"] = 0
     _, seen, _ = multiplexer_graph(monkeypatch, pools, rates)
     ignored = ("slipstream",) if scenario == "excluded" else ()
-    result = await uniswap_multiplexer.get_price(
-        TOKEN, BLOCK.number, ignore_pools=ignored, skip_cache=True
+    result = await async_result(
+        uniswap_multiplexer.get_price(TOKEN, BLOCK.number, ignore_pools=ignored, skip_cache=True)
     )
     fallback = scenario in ("excluded", "unavailable")
     assert result is not None and float(result) == (9 if fallback else 2)
@@ -231,7 +235,7 @@ async def test_multiplexer_normalizes_supported_addresses(monkeypatch: Any, kind
     from y.prices.dex.uniswap import uniswap_multiplexer
 
     token = f"0x{0xABCD:040x}"
-    inputs = {
+    inputs: dict[str, AnyAddressType] = {
         "integer": int(token, 16),
         "hexbytes": HexBytes(token),
         "bytes": bytes.fromhex(token[2:]),
@@ -240,7 +244,9 @@ async def test_multiplexer_normalizes_supported_addresses(monkeypatch: Any, kind
         "erc20": ERC20(token, asynchronous=True),
     }
     _, seen, discovery = multiplexer_graph(monkeypatch, [market("pool", first=token)], {"pool": 2})
-    result = await uniswap_multiplexer.get_price(inputs[kind], BLOCK.number, skip_cache=True)
+    result = await async_result(
+        uniswap_multiplexer.get_price(inputs[kind], BLOCK.number, skip_cache=True)
+    )
     assert result is not None and float(result) == 2
     assert seen == [("pool", token, 10**6, USD)]
     discovery.assert_awaited_once_with(
@@ -257,7 +263,7 @@ async def test_multiplexer_rejects_invalid_address_before_rpc(monkeypatch: Any) 
     rpc = AsyncMock(return_value=None)
     monkeypatch.setattr(_routing, "liquidity_price", rpc)
     with pytest.raises(ValueError, match="not a valid ETH address"):
-        await uniswap_multiplexer.get_price("not-an-address", BLOCK.number)
+        await async_result(uniswap_multiplexer.get_price("not-an-address", BLOCK.number))
     rpc.assert_not_awaited()
 
 

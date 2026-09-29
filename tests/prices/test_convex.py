@@ -45,42 +45,34 @@ TEST_BLOCK_3CRV = 14_000_000
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_hardcoded_token_is_convex():
+async def test_hardcoded_token_is_convex() -> None:
     """A token in the hardcoded MAPPING should be detected as 'convex'."""
     bucket = await check_bucket(CVX3CRV, sync=False)
-    assert bucket == "convex", (
-        f"Expected 'convex' bucket for {CVX3CRV}, got '{bucket}'"
-    )
+    assert bucket == "convex", f"Expected 'convex' bucket for {CVX3CRV}, got '{bucket}'"
 
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_dynamic_token_is_convex():
+async def test_dynamic_token_is_convex() -> None:
     """A Convex token NOT in the hardcoded MAPPING should be detected dynamically."""
     result = await convex.is_convex_lp(CVXSTECRV, sync=False)
-    assert result is True, (
-        f"cvxsteCRV {CVXSTECRV} should be detected as a Convex LP token"
-    )
+    assert result is True, f"cvxsteCRV {CVXSTECRV} should be detected as a Convex LP token"
 
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_dynamic_token_bucket():
+async def test_dynamic_token_bucket() -> None:
     """A dynamically detected Convex token should be bucketed as 'convex'."""
     bucket = await check_bucket(CVXSTECRV, sync=False)
-    assert bucket == "convex", (
-        f"Expected 'convex' bucket for cvxsteCRV {CVXSTECRV}, got '{bucket}'"
-    )
+    assert bucket == "convex", f"Expected 'convex' bucket for cvxsteCRV {CVXSTECRV}, got '{bucket}'"
 
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_non_convex_not_detected():
+async def test_non_convex_not_detected() -> None:
     """A non-Convex token (DAI) should NOT be detected as Convex."""
     result = await convex.is_convex_lp(DAI, sync=False)
-    assert result is False, (
-        f"DAI should not be detected as a Convex LP token"
-    )
+    assert result is False, f"DAI should not be detected as a Convex LP token"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -90,36 +82,30 @@ async def test_non_convex_not_detected():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_hardcoded_underlying_lp():
+async def test_hardcoded_underlying_lp() -> None:
     """A hardcoded token should resolve its underlying LP from the static MAPPING."""
     lp = await convex.get_underlying_lp(CVX3CRV, sync=False)
     assert lp is not None, "get_underlying_lp should return an address for hardcoded tokens"
-    assert lp.lower() == CVX3CRV_UNDERLYING.lower(), (
-        f"Expected underlying LP {CVX3CRV_UNDERLYING}, got {lp}"
-    )
+    assert (
+        lp.lower() == CVX3CRV_UNDERLYING.lower()
+    ), f"Expected underlying LP {CVX3CRV_UNDERLYING}, got {lp}"
 
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_dynamic_underlying_lp():
+async def test_dynamic_underlying_lp() -> None:
     """A dynamically detected token should resolve its underlying Curve LP."""
     lp = await convex.get_underlying_lp(CVXSTECRV, sync=False)
-    assert lp is not None, (
-        f"get_underlying_lp should return an address for cvxsteCRV {CVXSTECRV}"
-    )
-    assert lp.lower() == STECRV_LP.lower(), (
-        f"Expected underlying LP {STECRV_LP}, got {lp}"
-    )
+    assert lp is not None, f"get_underlying_lp should return an address for cvxsteCRV {CVXSTECRV}"
+    assert lp.lower() == STECRV_LP.lower(), f"Expected underlying LP {STECRV_LP}, got {lp}"
 
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_non_convex_underlying_lp_is_none():
+async def test_non_convex_underlying_lp_is_none() -> None:
     """A non-Convex token should return None from get_underlying_lp."""
     lp = await convex.get_underlying_lp(DAI, sync=False)
-    assert lp is None, (
-        f"DAI should not have an underlying LP, got {lp}"
-    )
+    assert lp is None, f"DAI should not have an underlying LP, got {lp}"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -129,14 +115,12 @@ async def test_non_convex_underlying_lp_is_none():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_hardcoded_convex_price():
+async def test_hardcoded_convex_price() -> None:
     """A hardcoded Convex token should resolve to a non-None price."""
     result = await magic.get_price(
         CVX3CRV, TEST_BLOCK_3CRV, fail_to_None=True, skip_cache=True, sync=False
     )
-    assert result is not None, (
-        f"cvx3crv {CVX3CRV} should resolve to a non-None price"
-    )
+    assert result is not None, f"cvx3crv {CVX3CRV} should resolve to a non-None price"
 
     price = float(result.price if isinstance(result, PriceResult) else result)
     assert price > 0, f"cvx3crv price should be positive, got {price}"
@@ -144,14 +128,12 @@ async def test_hardcoded_convex_price():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_dynamic_convex_price():
+async def test_dynamic_convex_price() -> None:
     """A dynamically detected Convex token should resolve to a non-None price."""
     result = await magic.get_price(
         CVXSTECRV, TEST_BLOCK, fail_to_None=True, skip_cache=True, sync=False
     )
-    assert result is not None, (
-        f"cvxsteCRV {CVXSTECRV} should resolve to a non-None price"
-    )
+    assert result is not None, f"cvxsteCRV {CVXSTECRV} should resolve to a non-None price"
 
     price = float(result.price if isinstance(result, PriceResult) else result)
     assert price > 0, f"cvxsteCRV price should be positive, got {price}"
@@ -159,7 +141,7 @@ async def test_dynamic_convex_price():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_convex_price_matches_underlying():
+async def test_convex_price_matches_underlying() -> None:
     """Convex price should match the underlying Curve LP price (within 0.1%)."""
     convex_result = await magic.get_price(
         CVX3CRV, TEST_BLOCK_3CRV, fail_to_None=True, skip_cache=True, sync=False
@@ -174,9 +156,7 @@ async def test_convex_price_matches_underlying():
     convex_price = float(
         convex_result.price if isinstance(convex_result, PriceResult) else convex_result
     )
-    lp_price = float(
-        lp_result.price if isinstance(lp_result, PriceResult) else lp_result
-    )
+    lp_price = float(lp_result.price if isinstance(lp_result, PriceResult) else lp_result)
 
     assert convex_price > 0, f"Convex price should be positive, got {convex_price}"
 
@@ -190,18 +170,14 @@ async def test_convex_price_matches_underlying():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_convex_returns_price_result():
+async def test_convex_returns_price_result() -> None:
     """Convex pricing should return a PriceResult with descriptive source."""
     result = await magic.get_price(
         CVX3CRV, TEST_BLOCK_3CRV, fail_to_None=True, skip_cache=True, sync=False
     )
     assert result is not None
-    assert isinstance(result, PriceResult), (
-        f"Expected PriceResult, got {type(result)}"
-    )
+    assert isinstance(result, PriceResult), f"Expected PriceResult, got {type(result)}"
     assert result.path, "PriceResult should have at least one step in path"
     # Source should mention Convex
     source = result.path[0].source
-    assert "Convex" in source, (
-        f"Source string should mention Convex, got '{source}'"
-    )
+    assert "Convex" in source, f"Source string should mention Convex, got '{source}'"

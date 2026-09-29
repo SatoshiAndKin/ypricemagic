@@ -1,6 +1,9 @@
 from asyncio import Task, sleep
-from logging import DEBUG, Logger, StreamHandler, _lock, getLogger
-from typing import Final, TypeVar, final
+import logging
+from contextlib import AbstractContextManager
+from logging import DEBUG, Logger, StreamHandler, getLogger
+from typing import Final, Protocol, TypeVar, cast, final
+from collections.abc import Callable
 from weakref import ref as weak_ref
 
 import a_sync
@@ -16,10 +19,22 @@ P = ParamSpec("P")
 
 
 NETWORK_NAME: Final = Network.name()
-yLazyLogger: Final = LazyLoggerFactory("YPRICEMAGIC")
+
+
+class _LoggingDecorator(Protocol):
+    def __call__(self, fn: Callable[P, T]) -> Callable[P, T]: ...
+
+
+class _LoggerFactory(Protocol):
+    def __call__(self, logger: Logger) -> _LoggingDecorator: ...
+
+
+# The dependency has no py.typed marker; the wrapper preserves call signatures.
+yLazyLogger: Final = cast(_LoggerFactory, LazyLoggerFactory("YPRICEMAGIC"))
 
 
 logger: Final = getLogger(__name__)
+_lock = cast(AbstractContextManager[object], getattr(logging, "_lock"))
 
 
 def enable_debug_logging(logger: str = "y") -> None:
@@ -32,10 +47,10 @@ def enable_debug_logging(logger: str = "y") -> None:
     Example:
         >>> enable_debug_logging("y")
     """
-    logger = getLogger(logger)
-    logger.setLevel(DEBUG)
-    if not logger.handlers:
-        logger.addHandler(StreamHandler())
+    target = getLogger(logger)
+    target.setLevel(DEBUG)
+    if not target.handlers:
+        target.addHandler(StreamHandler())
 
 
 @final
@@ -138,7 +153,9 @@ NETWORK_DESCRIPTOR_FOR_ISSUE_REQ: Final = (
 )
 
 
-def _gh_issue_request(issue_request_details: str | list[str], _logger=None) -> None:
+def _gh_issue_request(
+    issue_request_details: str | list[str], _logger: Logger | None = None
+) -> None:
     """
     Log a request for a GitHub issue or pull request.
 
@@ -151,10 +168,10 @@ def _gh_issue_request(issue_request_details: str | list[str], _logger=None) -> N
     """
     _logger = _logger or logger
 
-    if type(issue_request_details) == str:
+    if isinstance(issue_request_details, str):
         _logger.warning(issue_request_details)
 
-    elif type(issue_request_details) == list:
+    else:
         for message in issue_request_details:
             _logger.warning(message)
 

@@ -484,7 +484,7 @@ async def test_public_stablecoin_cached_classification_uses_historical_feed(
     from y.prices.utils import buckets
 
     monkeypatch.setattr(db, "get_bucket", AsyncMock(return_value="stable usd"))
-    check = buckets.check_bucket.__wrapped__
+    check = getattr(buckets.check_bucket, "__wrapped__")
     monkeypatch.setattr(utils, "check_bucket", lambda token, block, **kw: check(token, block))
     monkeypatch.setattr(magic, "ERC20", lambda *a, **kw: SimpleNamespace(symbol=Ready("USDC")))
     monkeypatch.setattr(magic, "_get_price_from_api", AsyncMock(return_value=None))

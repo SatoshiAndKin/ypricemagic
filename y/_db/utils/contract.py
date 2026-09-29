@@ -59,10 +59,11 @@ def get_deploy_block(address: str) -> int | None:
     token = get_token(address, sync=True)
     if token is None:
         raise ValueError(f"get_token('{address}', sync=True) returned 'None'")
-    if deploy_block := token.deploy_block:
-        _logger_debug("%s deploy block from cache: %s", address, deploy_block.number)
-        return deploy_block.number
+    if deployed_at := token.deploy_block:
+        _logger_debug("%s deploy block from cache: %s", address, deployed_at.number)
+        return deployed_at.number
     _logger_debug("%s deploy block not cached, fetching from chain", address)
+    return None
 
 
 @a_sync(default="async", executor=_deploy_block_write_executor)
@@ -84,23 +85,9 @@ def _set_deploy_block(address: str, deploy_block: int) -> None:
 
     ensure_block(deploy_block, sync=True)
     get_token = _get_get_token()
-    get_token(address, sync=True).deploy_block = (CHAINID, deploy_block)
+    # Pony accepts a composite key here and resolves it to the Block entity.
+    setattr(get_token(address, sync=True), "deploy_block", (CHAINID, deploy_block))
     _logger_debug("deploy block cached for %s: %s", address, deploy_block)
-
-
-def set_deploy_block(address: str, deploy_block: int) -> None:
-    """Set the deployment block number for a contract address in the database.
-
-    Args:
-        address: The contract address as a string.
-        deploy_block: The block number where the contract was deployed.
-
-    Examples:
-        >>> set_deploy_block("0x1234567890abcdef1234567890abcdef12345678", 12345678)
-
-    See Also:
-        - :func:`_set_deploy_block`
-    """
 
 
 set_deploy_block = ProcessingQueue(_set_deploy_block, num_workers=2, return_data=False)
@@ -110,7 +97,7 @@ set_deploy_block = ProcessingQueue(_set_deploy_block, num_workers=2, return_data
 
 @cached(TTLCache(maxsize=1, ttl=60 * 60), lock=threading.Lock())
 @log_result_count("deploy blocks")
-def known_deploy_blocks() -> dict[Address, Block]:
+def known_deploy_blocks() -> dict[str, int]:
     """Cache and return all known contract deploy blocks for this chain.
 
     This function minimizes database reads by caching the result for one hour.
@@ -129,6 +116,6 @@ def known_deploy_blocks() -> dict[Address, Block]:
         select(
             (c.address, c.deploy_block.number)
             for c in Contract
-            if c.chain.id == CHAINID and c.deploy_block.number
+            if c.chain.id == CHAINID and c.deploy_block is not None and c.deploy_block.number
         )
     )

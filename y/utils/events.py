@@ -1,20 +1,22 @@
 from abc import abstractmethod
-from asyncio import as_completed, get_event_loop, sleep
+from asyncio import AbstractEventLoop, as_completed, get_event_loop, sleep
 from collections import Counter, defaultdict
-from collections.abc import AsyncGenerator, Awaitable, Callable, Iterable
+from collections.abc import AsyncGenerator, Awaitable, Callable, Iterable, Mapping, Sequence
 from functools import cached_property, wraps
 from inspect import isawaitable
 from itertools import zip_longest
 from logging import getLogger
 from threading import current_thread, main_thread
-from typing import TYPE_CHECKING, Any, NoReturn, TypeVar
+from typing import TYPE_CHECKING, Any, NoReturn, TypeVar, cast
+from typing_extensions import TypeVar as DefaultTypeVar
 
 import a_sync
 import dank_mids
+from dank_mids.brownie_patch import dank_eth
 import eth_retry
 from a_sync import igather
 from a_sync.executor import _AsyncExecutorMixin
-from async_property import async_property  # type: ignore [import-untyped]
+from y._typing import async_property
 from brownie import web3
 from brownie.network.event import (
     EventDict,
@@ -23,12 +25,12 @@ from brownie.network.event import (
     _deployment_topics,
     _EventItem,
 )
-from eth_typing import ChecksumAddress
+from eth_typing import BlockNumber, ChecksumAddress
 from eth_utils.toolz import concat, groupby
 from evmspec import Log
 from msgspec.structs import force_setattr
 from web3.middleware.filter import block_ranges
-from web3.types import LogReceipt
+from web3.types import FilterParams, LogReceipt
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y._db.common import Filter, _clean_addresses, make_executor
@@ -42,6 +44,8 @@ if TYPE_CHECKING:
 
 
 T = TypeVar("T")
+_StoredLog = DefaultTypeVar("_StoredLog", default=Log)
+_StoredEvent = DefaultTypeVar("_StoredEvent", default=_EventItem[Any])
 
 logger = getLogger(__name__)
 
@@ -49,7 +53,7 @@ logger = getLogger(__name__)
 _decode_threads = make_executor(1, 1, "ypricemagic event decoder")
 
 
-def decode_logs(logs: Iterable[LogReceipt] | Iterable[Log]) -> EventDict:
+def decode_logs(logs: Iterable[LogReceipt | Log]) -> EventDict | list[_EventItem[Any]]:
     # NOTE: we want to ensure backward-compatability with LogReceipt
     """
     Decode logs to events and enrich them with additional info.
@@ -68,47 +72,43 @@ def decode_logs(logs: Iterable[LogReceipt] | Iterable[Log]) -> EventDict:
     See Also:
         - :class:`~brownie.network.event.EventDict`
     """
-    if not logs:
+    entries = list(logs)
+    if not entries:
         return EventDict()
 
-    logs = list(logs)
-
     from y.contracts import Contract
+    from y.convert import to_address
 
-    for log in logs:
-        if log.address not in _deployment_topics:
-            _add_deployment_topics(log.address, Contract(log.address).abi)
+    for log in entries:
+        address = to_address(log["address"])
+        if address not in _deployment_topics:
+            _add_deployment_topics(address, Contract(address).abi)
 
-    if logs_are_structs := isinstance(logs[0], Log):
-        # save these for later
-        orig_topics = [log.topics for log in logs]
-        for log in logs:
-            # these must support pop() for some reason
-            force_setattr(log, "topics", list(log.topics))
-
+    # Brownie's decoder mutates topics with pop(); restore immutable RPC logs
+    # even when decoding fails, since other readers can share these objects.
+    structs = [log for log in entries if isinstance(log, Log)]
+    original_topics = [log.topics for log in structs]
+    for log in structs:
+        force_setattr(log, "topics", list(log.topics))
     try:
-        decoded = _decode_logs(logs)
-    except Exception:
-        # let's find the specific log that caused our exception
-        decoded = []
-        for log in logs:
-            with reraise_excs_with_extra_context(log):
-                decoded.extend(_decode_logs([log]))
+        decoded: EventDict | list[_EventItem[Any]]
+        try:
+            decoded = _decode_logs(cast(list[Mapping[str, Any]], entries))
+        except Exception:
+            decoded = []
+            for log in entries:
+                with reraise_excs_with_extra_context(log):
+                    decoded.extend(_decode_logs(cast(list[Mapping[str, Any]], [log])))
 
-    with reraise_excs_with_extra_context(len(logs), decoded):
-        if logs_are_structs:
-            for i, (log, orig_topics) in enumerate(zip(logs, orig_topics)):
-                setattr(decoded[i], "block_number", log.blockNumber)
-                setattr(decoded[i], "transaction_hash", log.transactionHash)
-                setattr(decoded[i], "log_index", log.logIndex)
-                # put the log back to normal
-                force_setattr(log, "topics", orig_topics)
-        else:
-            for i, log in enumerate(logs):
+        with reraise_excs_with_extra_context(len(entries), decoded):
+            for i, log in enumerate(entries):
                 setattr(decoded[i], "block_number", log["blockNumber"])
                 setattr(decoded[i], "transaction_hash", log["transactionHash"])
                 setattr(decoded[i], "log_index", log["logIndex"])
         return decoded
+    finally:
+        for log, topics in zip(structs, original_topics):
+            force_setattr(log, "topics", topics)
 
 
 @a_sync.a_sync(default="sync")
@@ -152,9 +152,9 @@ async def get_logs_asap(
 
         from_block = 0 if address is None else await contract_creation_block_async(address, True)
     if to_block is None:
-        to_block = await dank_mids.eth.block_number
+        to_block = await dank_eth.block_number
 
-    ranges = list(block_ranges(from_block, to_block, BATCH_SIZE))
+    ranges = list(block_ranges(BlockNumber(from_block), BlockNumber(to_block), BATCH_SIZE))
     if verbose > 0:
         logger.info("fetching %d batches", len(ranges))
 
@@ -211,7 +211,7 @@ async def get_logs_asap_generator(
         else:
             from_block = await contract_creation_block_async(address, True)
     if to_block is None:
-        to_block = await dank_mids.eth.block_number
+        to_block = await dank_eth.block_number
     elif run_forever:
         raise TypeError("`to_block` must be None if `run_forever` is True.")
     if from_block > to_block:
@@ -219,7 +219,7 @@ async def get_logs_asap_generator(
             f"from_block must be <= to_block. You passed from_block: {from_block} to_block: {to_block}."
         )
     while True:
-        ranges = list(block_ranges(from_block, to_block, BATCH_SIZE))
+        ranges = list(block_ranges(BlockNumber(from_block), BlockNumber(to_block), BATCH_SIZE))
         if verbose > 0:
             logger.info("fetching %d batches", len(ranges))
         coros = [_get_logs_async(address, topics, start, end) for start, end in ranges]
@@ -244,15 +244,17 @@ async def get_logs_asap_generator(
         await sleep(run_forever_interval)
 
         # Find start and end block for next loop
-        current_block = await dank_mids.eth.block_number
+        current_block = await dank_eth.block_number
         while current_block <= to_block:
             await sleep(run_forever_interval)
-            current_block = await dank_mids.eth.block_number
+            current_block = await dank_eth.block_number
         from_block = to_block + 1 if to_block + 1 <= current_block else current_block
         to_block = current_block
 
 
-def logs_to_balance_checkpoints(logs) -> dict[ChecksumAddress, int]:
+def logs_to_balance_checkpoints(
+    logs: Iterable[LogReceipt | Log],
+) -> dict[ChecksumAddress, dict[Block, int]]:
     """
     Convert Transfer logs to `{address: {from_block: balance}}` checkpoints.
 
@@ -267,8 +269,8 @@ def logs_to_balance_checkpoints(logs) -> dict[ChecksumAddress, int]:
         >>> checkpoints = logs_to_balance_checkpoints(logs)
         >>> print(checkpoints)
     """
-    balances = Counter()
-    checkpoints = defaultdict(dict)
+    balances: Counter[ChecksumAddress] = Counter()
+    checkpoints: defaultdict[ChecksumAddress, dict[Block, int]] = defaultdict(dict)
     for block, block_logs in groupby("blockNumber", logs).items():
         events = decode_logs(block_logs)
         for log in events:
@@ -285,7 +287,9 @@ def logs_to_balance_checkpoints(logs) -> dict[ChecksumAddress, int]:
     return checkpoints
 
 
-def checkpoints_to_weight(checkpoints, start_block: Block, end_block: Block) -> float:
+def checkpoints_to_weight(
+    checkpoints: Mapping[Block, int], start_block: Block, end_block: Block
+) -> float:
     """
     Calculate the weight of checkpoints between two blocks.
 
@@ -302,9 +306,9 @@ def checkpoints_to_weight(checkpoints, start_block: Block, end_block: Block) -> 
         >>> weight = checkpoints_to_weight(checkpoints, 0, 10)
         >>> print(weight)
     """
-    total = 0
+    total: float = 0
     for a, b in zip_longest(list(checkpoints), list(checkpoints)[1:]):
-        if a < start_block or a > end_block:
+        if a is None or a < start_block or a > end_block:
             continue
         b = min(b, end_block) if b else end_block
         total += checkpoints[a] * (b - a) / (end_block - start_block)
@@ -313,11 +317,11 @@ def checkpoints_to_weight(checkpoints, start_block: Block, end_block: Block) -> 
 
 @a_sync.a_sync
 def _get_logs(
-    address: ChecksumAddress | None,
+    address: Address | None,
     topics: list[str] | None,
     start: Block,
     end: Block,
-) -> list[Log]:
+) -> list[LogReceipt]:
     """
     Get logs for a given address, topics, and block range.
 
@@ -341,11 +345,11 @@ def _get_logs(
     if address:
         """I have this due to a corrupt cache on my local box that I would prefer not to lose."""
         """ It will not impact your scripts. """
-        response = [log for log in response if log.address == address]
+        response = [log for log in response if log["address"] == str(address)]
     return response
 
 
-get_logs_semaphore = defaultdict(
+get_logs_semaphore: defaultdict[AbstractEventLoop, dank_mids.BlockSemaphore] = defaultdict(
     lambda: dank_mids.BlockSemaphore(
         int(ENVS.GETLOGS_DOP),
         # We need to do this in case users use the sync api in a multithread context
@@ -354,7 +358,9 @@ get_logs_semaphore = defaultdict(
 )
 
 
-async def _get_logs_async(address, topics, start, end) -> list[Log]:
+async def _get_logs_async(
+    address: Address | None, topics: list[str] | None, start: Block, end: Block
+) -> list[LogReceipt]:
     """
     Get logs for a given address, topics, and block range.
 
@@ -378,7 +384,12 @@ async def _get_logs_async(address, topics, start, end) -> list[Log]:
 
 
 @eth_retry.auto_retry
-async def _get_logs_async_no_cache(address, topics, start, end) -> list[Log]:
+async def _get_logs_async_no_cache(
+    address: AnyAddressType | Iterable[AnyAddressType] | None,
+    topics: Sequence[str | Sequence[str] | None] | None,
+    start: Block,
+    end: Block,
+) -> list[Log]:
     """
     Get logs for a given address, topics, and block range.
 
@@ -397,7 +408,7 @@ async def _get_logs_async_no_cache(address, topics, start, end) -> list[Log]:
         >>> logs = await _get_logs_async_no_cache("0x1234...", ["0x5678..."], 1000000, 1000100)
         >>> print(logs)
     """
-    args = {"fromBlock": hex(start), "toBlock": hex(end)}
+    args: dict[str, Any] = {"fromBlock": hex(start), "toBlock": hex(end)}
     if address is None:
         args["topics"] = topics
 
@@ -409,7 +420,7 @@ async def _get_logs_async_no_cache(address, topics, start, end) -> list[Log]:
         args["topics"] = topics
 
     try:
-        return await dank_mids.eth.get_logs(args)
+        return await dank_eth.get_logs(args)
     except Exception as e:
         errs = [
             "Service Unavailable for url:",
@@ -440,11 +451,11 @@ async def _get_logs_async_no_cache(address, topics, start, end) -> list[Log]:
 
 @eth_retry.auto_retry
 def _get_logs_no_cache(
-    address: ChecksumAddress | None,
+    address: Address | None,
     topics: list[str] | None,
     start: Block,
     end: Block,
-) -> list[Log]:
+) -> list[LogReceipt]:
     """
     Get logs without using the disk cache.
 
@@ -464,17 +475,24 @@ def _get_logs_no_cache(
     logger.debug("fetching logs %s to %s", start, end)
     try:
         if address is None:
-            response = web3.eth.get_logs({"topics": topics, "fromBlock": start, "toBlock": end})
+            response = web3.eth.get_logs(
+                cast(FilterParams, {"topics": topics, "fromBlock": start, "toBlock": end})
+            )
         elif topics is None:
-            response = web3.eth.get_logs({"address": address, "fromBlock": start, "toBlock": end})
+            response = web3.eth.get_logs(
+                cast(FilterParams, {"address": address, "fromBlock": start, "toBlock": end})
+            )
         else:
             response = web3.eth.get_logs(
-                {
-                    "address": address,
-                    "topics": topics,
-                    "fromBlock": start,
-                    "toBlock": end,
-                }
+                cast(
+                    FilterParams,
+                    {
+                        "address": address,
+                        "topics": topics,
+                        "fromBlock": start,
+                        "toBlock": end,
+                    },
+                )
             )
     except Exception as e:
         errs = (
@@ -507,8 +525,8 @@ def _get_logs_no_cache(
 
 @memory.cache()
 def _get_logs_batch_cached(
-    address: str | None, topics: list[str] | None, start: Block, end: Block
-) -> list[Log]:
+    address: Address | None, topics: list[str] | None, start: Block, end: Block
+) -> list[LogReceipt]:
     """
     Get logs from the disk cache, or fetch and cache them if not available.
 
@@ -528,7 +546,7 @@ def _get_logs_batch_cached(
     return _get_logs_no_cache(address, topics, start, end)
 
 
-class LogFilter(Filter[Log, "LogCache"]):
+class LogFilter(Filter[_StoredLog, "LogCache", Log]):
     """
     A filter for fetching and processing event logs.
 
@@ -540,8 +558,8 @@ class LogFilter(Filter[Log, "LogCache"]):
     def __init__(
         self,
         *,
-        addresses=[],
-        topics=[],
+        addresses: AnyAddressType | Iterable[AnyAddressType] | None = [],
+        topics: Sequence[str | Sequence[str] | None] = [],
         from_block: Block | None = None,
         chunk_size: int = BATCH_SIZE,
         chunks_per_batch: int | None = None,
@@ -602,7 +620,7 @@ class LogFilter(Filter[Log, "LogCache"]):
             self._semaphore = semaphore
         return semaphore
 
-    def logs(self, to_block: Block | None) -> a_sync.ASyncIterator[Log]:
+    def logs(self, to_block: Block | None) -> a_sync.ASyncIterator[_StoredLog]:
         """
         Get logs up to a given block.
 
@@ -647,8 +665,8 @@ class LogFilter(Filter[Log, "LogCache"]):
         executor = self.executor
 
         @wraps(bulk_insert)
-        async def bulk_insert_wrapped(*args, **kwargs) -> None:
-            return await bulk_insert(*args, **kwargs, executor=executor)
+        async def bulk_insert_wrapped(logs: list[Log]) -> None:
+            return await bulk_insert(logs, executor=executor)
 
         return bulk_insert_wrapped
 
@@ -721,7 +739,7 @@ class LogFilter(Filter[Log, "LogCache"]):
     __slots__ = "addresses", "topics", "from_block"
 
 
-class Events(LogFilter):
+class Events(LogFilter[_StoredEvent]):
     """
     A class for fetching and processing events.
 
@@ -731,8 +749,8 @@ class Events(LogFilter):
     obj_type = _EventItem
 
     def events(
-        self, to_block: Block, from_block: Block | None = None
-    ) -> a_sync.ASyncIterator[_EventItem]:
+        self, to_block: Block | None, from_block: Block | None = None
+    ) -> a_sync.ASyncIterator[_StoredEvent]:
         """
         Get events up to a given block.
 
@@ -764,9 +782,9 @@ class Events(LogFilter):
             decoded = await _decode_threads.run(decode_logs, logs)
             # let the event loop run once since the previous and next lines are potentially blocking
             await sleep(0)
-            self._objects.extend(decoded)
+            self._objects.extend(cast(Iterable[_StoredEvent], decoded))
 
-    def _get_block_for_obj(self, obj: _EventItem) -> Block:
+    def _get_block_for_obj(self, obj: _StoredEvent) -> Block:
         """
         Get the block number for a given event.
 
@@ -781,19 +799,19 @@ class Events(LogFilter):
             >>> block_number = events._get_block_for_obj(event)
             >>> print(block_number)
         """
-        return obj.block_number
+        return cast(Block, getattr(obj, "block_number"))
 
-    __slots__ = []
+    __slots__: tuple[()] = ()
 
 
-class ProcessedEvents(Events, a_sync.ASyncIterable[T]):
+class ProcessedEvents(Events[T], a_sync.ASyncIterable[T]):
     """
     A class for fetching, processing, and iterating over events.
 
     This class extends :class:`Events` to provide additional functionality for processing events.
     """
 
-    def _include_event(self, event: _EventItem) -> bool | Awaitable[bool]:
+    def _include_event(self, event: _EventItem[Any]) -> bool | Awaitable[bool]:
         """
         Determine whether to include a given event in this container.
 
@@ -813,7 +831,7 @@ class ProcessedEvents(Events, a_sync.ASyncIterable[T]):
         return True
 
     @abstractmethod
-    def _process_event(self, event: _EventItem) -> T:
+    def _process_event(self, event: _EventItem[Any]) -> T:
         """
         Process a given event and return the result.
 
@@ -830,8 +848,8 @@ class ProcessedEvents(Events, a_sync.ASyncIterable[T]):
         """
 
     def objects(
-        self, to_block: Block, from_block: Block | None = None
-    ) -> a_sync.ASyncIterator[_EventItem]:
+        self, to_block: Block | None, from_block: Block | None = None
+    ) -> a_sync.ASyncIterator[T]:
         """
         Get an :class:`~a_sync.ASyncIterator` that yields all events up to a given block.
 
@@ -889,7 +907,7 @@ class ProcessedEvents(Events, a_sync.ASyncIterable[T]):
                     # Let the event loop run once in case we've been blocking for too long
                     await sleep(0)
 
-    __slots__ = []
+    __slots__: tuple[()] = ()
 
 
 async def _lowest_deploy_block(
@@ -912,8 +930,10 @@ async def _lowest_deploy_block(
     """
     from y.contracts import contract_creation_block_async
 
-    return await a_sync.map(
-        contract_creation_block_async,
-        addresses,
-        when_no_history_return_0=when_no_history_return_0,
-    ).min(sync=False)
+    return cast(
+        Block,
+        await contract_creation_block_async.map(
+            addresses,
+            when_no_history_return_0=when_no_history_return_0,
+        ).min(sync=False),
+    )

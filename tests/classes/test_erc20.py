@@ -1,9 +1,10 @@
-import dank_mids
+from tests.fixtures import async_result
+from dank_mids.brownie_patch import dank_eth
 import pytest
 from brownie import ZERO_ADDRESS, chain
 from multicall import Call
 
-from tests.fixtures import blocks_for_contract
+from tests.fixtures import blocks_for_contract, sync_result
 from tests.test_constants import STABLECOINS
 from y.classes.common import ERC20
 from y.constants import WRAPPED_GAS_COIN, wbtc
@@ -11,7 +12,9 @@ from y.contracts import Contract
 from y.exceptions import NoProxyImplementation, call_reverted
 from y.networks import Network
 
-TOKENS = list(STABLECOINS) + [WRAPPED_GAS_COIN, wbtc.address]
+TOKENS: list[str] = [str(token) for token in STABLECOINS] + [str(WRAPPED_GAS_COIN)]
+if wbtc is not None:
+    TOKENS.append(wbtc.address)
 
 if chain.id == Network.Mainnet:
     # MKR symbol and name methods return bytes, we want to test that our code returns strings
@@ -24,7 +27,7 @@ TOKENS_BY_BLOCK = [(token, block) for token in TOKENS for block in blocks_for_co
 
 
 @pytest.mark.parametrize("token", TOKENS)
-def test_erc20_sync(token):
+def test_erc20_sync(token: str | ERC20) -> None:
     """
     Test the synchronous functionality of the :class:`~y.classes.common.ERC20` class.
 
@@ -55,16 +58,18 @@ def test_erc20_sync(token):
     assert isinstance(token.build_name, str), f"Cannot fetch build name for token {token}"
     assert isinstance(token.symbol, str), f"Cannot fetch symbol for token {token}"
     assert isinstance(token.name, str), f"Cannot fetch name for token {token}"
-    assert 10**token.decimals == token.scale, f"Incorrect scale fetched for token {token}"
-    assert token.total_supply(block) / token.scale == token.total_supply_readable(
-        block
+    assert 10 ** sync_result(token.decimals) == sync_result(
+        token.scale
+    ), f"Incorrect scale fetched for token {token}"
+    assert sync_result(token.total_supply(block)) / sync_result(token.scale) == sync_result(
+        token.total_supply_readable(block)
     ), f"Incorrect total supply readable for token {token}"
     assert token.price(), f"Cannot fetch price for token {token}"
 
 
 @pytest.mark.parametrize("token", TOKENS)
 @pytest.mark.asyncio_cooperative
-async def test_erc20_async(token):
+async def test_erc20_async(token: str | ERC20) -> None:
     """
     Test the asynchronous functionality of the :class:`~y.classes.common.ERC20` class.
 
@@ -91,7 +96,7 @@ async def test_erc20_async(token):
     if token.address == OLD_SUSD:
         pytest.skip("Not applicable to deprecated sUSD.")
 
-    block = await dank_mids.eth.block_number
+    block = await dank_eth.block_number
     assert isinstance(token.contract, Contract), f"Cannot fetch contract for token {token}"
     assert isinstance(await token.build_name, str), f"Cannot fetch build name for token {token}"
     assert isinstance(await token.symbol, str), f"Cannot fetch symbol for token {token}"
@@ -99,15 +104,17 @@ async def test_erc20_async(token):
     assert (
         10 ** await token.decimals == await token.scale
     ), f"Incorrect scale fetched for token {token}"
-    assert await token.total_supply(block) / await token.scale == await token.total_supply_readable(
-        block
+    assert await async_result(token.total_supply(block)) / await async_result(
+        token.scale
+    ) == await async_result(
+        token.total_supply_readable(block)
     ), f"Incorrect total supply readable for token {token}"
-    assert await token.price(), f"Cannot fetch price for token {token}"
+    assert await async_result(token.price()), f"Cannot fetch price for token {token}"
 
 
 @pytest.mark.parametrize("token,block", TOKENS_BY_BLOCK)
 @pytest.mark.asyncio_cooperative
-async def test_erc20_at_block(token, block):
+async def test_erc20_at_block(token: str | ERC20, block: int) -> None:
     """
     Test the :class:`~y.classes.common.ERC20` class at specific blocks.
 
@@ -152,10 +159,10 @@ async def test_erc20_at_block(token, block):
     # NOTE We've validated token is not problematic proxy, proceed with test.
     try:
         # NOTE also tests ERC20._decimals
-        assert await token.total_supply(block) / await token._scale(
-            block
-        ) == await token.total_supply_readable(
-            block
+        assert await async_result(token.total_supply(block)) / await async_result(
+            token._scale(block)
+        ) == await async_result(
+            token.total_supply_readable(block)
         ), f"Incorrect total supply readable for token {token}"
     except NoProxyImplementation:
         pass
@@ -169,6 +176,6 @@ async def test_erc20_at_block(token, block):
         ("0x6c3ea9036406852006290770bedfcabA0e23a0e8".lower(), 15_931_958),
     }
     if (token.address.lower(), block) in unavailable:
-        assert await token.price(block, return_None_on_failure=True) is None
+        assert await async_result(token.price(block, return_None_on_failure=True)) is None
     else:
-        assert await token.price(block), f"Cannot fetch price for token {token}"
+        assert await async_result(token.price(block)), f"Cannot fetch price for token {token}"

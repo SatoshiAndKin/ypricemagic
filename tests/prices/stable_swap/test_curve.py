@@ -3,7 +3,7 @@ from y.prices import magic
 
 
 @mainnet_only
-def test_curve():
+def test_curve() -> None:
     """Test the Curve price fetching functionality.
 
     This test checks the price fetching for specific Curve pool tokens

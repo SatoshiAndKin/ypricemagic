@@ -22,15 +22,26 @@ requires = [
 ]
 
 [tool.mypy]
-plugins = ["typed_envs.mypy_plugin", "a_sync_mypy_plugin"]
-files = ["y", "tests", "tools/validation"]
+plugins = ["typed_envs.mypy_plugin", "tools/mypy_plugin.py"]
+files = ["y", "tests", "tools/validation", "tools/mypy_plugin.py", "tools/typing_probes.py"]
 exclude = ["^build/", "^cache/", "^env/", "^[.]worktrees/"]
 strict = true
 pretty = true
 show_error_codes = true
 show_error_context = true
+show_traceback = true
 incremental = false
 follow_imports = "silent"
+
+# These dependency namespaces intentionally expose plain imports as their public
+# API without __all__. Preserve their inferred types when importing those names.
+[[tool.mypy.overrides]]
+module = ["eth_utils", "eth_utils.toolz", "faster_eth_utils", "brownie.convert", "brownie.network", "faster_eth_abi", "eth_event"]
+implicit_reexport = true
+
+[[tool.mypy.overrides]]
+module = ["a_sync_mypy_plugin", "asyncpg"]
+follow_untyped_imports = true
 
 [[tool.mypy.overrides]]
 module = ["y._db.brownie", "y._db.config", "y._db.decorators", "y._db.utils.stringify", "y.ENVIRONMENT_VARIABLES", "y.convert", "y.exceptions", "y.networks", "y.prices.utils.sense_check", "y.utils.gather"]
@@ -68,6 +79,10 @@ slow_erc20_cases = [
   { token = "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8", block = 18465234 },
 ]
 focused_tests = [
+  "tests/test_trace_interfaces.py",
+  "tests/test_time.py",
+  "tests/test_typed_interfaces.py",
+  "tests/test_rpc_state_retry.py",
   "tests/test_historical_price_repairs.py",
   "tests/test_constants.py",
   "tests/test_misc_fixes.py",

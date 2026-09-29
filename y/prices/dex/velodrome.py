@@ -1,7 +1,11 @@
 import logging
+from collections.abc import Collection
+from typing import Any, cast
+from eth_typing import ABIElement
 
 import a_sync
 import dank_mids
+from dank_mids.brownie_patch import dank_eth
 import eth_retry
 from a_sync import cgather
 from a_sync.a_sync.property import HiddenMethodDescriptor
@@ -10,13 +14,14 @@ from multicall.call import Call
 from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
+from y import convert
 from y._decorators import stuck_coro_debugger
 from y.contracts import Contract, contract_creation_block_async
-from y.datatypes import Address, AnyAddressType, Block
+from y.datatypes import Address, AddressOrContract, AnyAddressType, Block
 from y.interfaces.uniswap.velov2 import VELO_V2_FACTORY_ABI
 from y.networks import Network
 from y.prices._quote import bounded_map
-from y.prices.dex.solidly import SolidlyRouterBase
+from y.prices.dex.solidly import Route, SolidlyRouterBase
 from y.prices.dex.uniswap.v2 import UniswapV2Pool
 from y.utils import gather_methods
 from y.utils.cache import a_sync_ttl_cache
@@ -31,7 +36,7 @@ class NoReservesError(Exception):
     pass
 
 
-default_factory = {
+default_factory: dict[int, str] = {
     Network.Optimism: "0xF1046053aa5682b4F9a81b5481394DA16BE5FF5a",
     Network.Base: "0x420DD381b31aEf6683db6B902084cB0FFECe40Da",
 }
@@ -83,10 +88,12 @@ class VelodromePool(UniswapV2Pool):
 class VelodromeRouterV2(SolidlyRouterBase):
     _supports_uniswap_helper = False
 
-    def _encode_route(self, start, end, stable):
+    def _encode_route(
+        self, start: AddressOrContract, end: AddressOrContract, stable: bool
+    ) -> Route:
         return (start, end, stable, self.factory)
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """
         Initialize a :class:`VelodromeRouterV2` instance.
 
@@ -179,7 +186,7 @@ class VelodromeRouterV2(SolidlyRouterBase):
 
     @a_sync.aka.cached_property
     @stuck_coro_debugger
-    async def pools(self) -> set[VelodromePool]:
+    async def pools(self) -> Collection[UniswapV2Pool]:
         """
         Fetch all Velodrome pools.
 
@@ -202,14 +209,16 @@ class VelodromeRouterV2(SolidlyRouterBase):
             self.label,
             Network.printable(),
         )
-        to_block = await dank_mids.eth.block_number
+        to_block = await dank_eth.block_number
         all_pools_len = await raw_call(
             self.factory, "allPoolsLength()", output="int", block=to_block, sync=False
         )
         factory = await Contract.coroutine(self.factory)
         if "PoolCreated" not in factory.topics:
             # the etherscan proxy detection is borked here, need this to decode properly
-            factory = Contract.from_abi("PoolFactory", self.factory, VELO_V2_FACTORY_ABI)
+            factory = Contract.from_abi(
+                "PoolFactory", self.factory, cast(list[ABIElement], VELO_V2_FACTORY_ABI)
+            )
 
         pools = {
             VelodromePool(
@@ -251,7 +260,7 @@ class VelodromeRouterV2(SolidlyRouterBase):
         )
         return pools
 
-    __pools__: HiddenMethodDescriptor[Self, set[VelodromePool]]
+    __pools__: HiddenMethodDescriptor["VelodromeRouterV2", Collection[UniswapV2Pool]]
 
     @stuck_coro_debugger
     async def _init_pool_from_poolid(self, poolid: int, block: Block) -> VelodromePool:
@@ -313,12 +322,13 @@ async def is_contract(pool_address: Address) -> bool:
         >>> print(result)
         True
     """
+    pool_address = await convert.to_address_async(pool_address)
     if pool_address in __pools:
         return True
-    if result := await dank_mids.eth.get_code(pool_address) not in ("0x", b""):
+    if result := await dank_eth.get_code(pool_address) not in ("0x", b""):
         __pools_append(pool_address)
     return result
 
 
-__pools = []
+__pools: list[Address] = []
 __pools_append = __pools.append

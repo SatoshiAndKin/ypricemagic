@@ -20,10 +20,11 @@ registry = "0xA50d4E7D8946a7c90652339CDBd262c375d54D99"
 
 class DieselPool(ContractBase):
     @a_sync.aka.cached_property
-    async def contract(self) -> Contract:
+    async def contract(self) -> Contract:  # type: ignore[override]
+        # This legacy public property is dual-mode; ContractBase.contract is synchronous.
         return await Contract.coroutine(self.address)
 
-    __contract__: HiddenMethodDescriptor[Self, Contract]
+    __contract__: HiddenMethodDescriptor["DieselPool", Contract]
 
     @a_sync.aka.cached_property
     async def diesel_token(self) -> ERC20:
@@ -35,21 +36,21 @@ class DieselPool(ContractBase):
         ):  # NOTE: there could be better ways of doing this with hueristics, not sure yet
             return ERC20(self.address, asynchronous=self.asynchronous)
 
-    __diesel_token__: HiddenMethodDescriptor[Self, ERC20]
+    __diesel_token__: HiddenMethodDescriptor["DieselPool", ERC20]
 
     @a_sync.aka.cached_property
     async def underlying(self) -> ERC20:
         contract = await self.__contract__
         return ERC20(await contract.underlyingToken, asynchronous=self.asynchronous)
 
-    __underlying__: HiddenMethodDescriptor[Self, ERC20]
+    __underlying__: HiddenMethodDescriptor["DieselPool", ERC20]
 
     async def exchange_rate(self, block: Block) -> Decimal:
         # `__contract__` and `__underlying__` are both cached after the first call, so we will await them without gather
         pool = await self.__contract__
         underlying = await self.__underlying__
         scale = await underlying.__scale__
-        converted = await pool.fromDiesel.coroutine(scale, block_identifier=block)
+        converted: int = await pool.fromDiesel.coroutine(scale, block_identifier=block)
         return Decimal(converted) / scale
 
     @stuck_coro_debugger
@@ -113,11 +114,13 @@ class Gearbox(a_sync.ASyncGenericBase):
     async def get_price(
         self, token: Address, block: Block, skip_cache: bool = ENVS.SKIP_CACHE
     ) -> PriceResult | None:
-        dtokens = await self.diesel_tokens()
-        return await dtokens[token].get_price(block, skip_cache=skip_cache, sync=False)
+        dtokens = await self.diesel_tokens(sync=False)
+        return await dtokens[ERC20(token, asynchronous=self.asynchronous)].get_price(
+            block, skip_cache=skip_cache, sync=False
+        )
 
 
 try:
-    gearbox = Gearbox(asynchronous=True)
+    gearbox: Gearbox | set[str] = Gearbox(asynchronous=True)
 except:
     gearbox = set()

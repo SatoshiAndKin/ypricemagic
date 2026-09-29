@@ -1,8 +1,9 @@
+from y._typing import a_sync_property
 from collections import defaultdict
-from collections.abc import AsyncIterator, Callable
+from collections.abc import AsyncIterator, Callable, Sequence
 from functools import cached_property, lru_cache
 from logging import DEBUG, getLogger
-from typing import Any, DefaultDict, Final, cast
+from typing import Any, DefaultDict, Final, TypedDict, cast
 
 import a_sync
 from a_sync.a_sync import HiddenMethodDescriptor
@@ -32,8 +33,15 @@ UNISWAP_V3_QUOTER: Final = "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6"
 
 logger: Final = getLogger(__name__)
 
+
+class _Deployment(TypedDict):
+    factory: str
+    quoter: str
+    fee_tiers: tuple[int, ...]
+
+
 # same addresses on all networks
-addresses: Final = {
+addresses: Final[dict[int, _Deployment]] = {
     Network.Mainnet: {
         "factory": UNISWAP_V3_FACTORY,
         "quoter": UNISWAP_V3_QUOTER,
@@ -56,7 +64,7 @@ addresses: Final = {
     },
 }
 
-forked_deployments: Final = {
+forked_deployments: Final[dict[int, list[_Deployment]]] = {
     Network.Optimism: [
         {
             # Velodrome slipstream
@@ -137,7 +145,7 @@ class UniswapV3Pool(ContractBase):
         self.fee = fee
         self._deploy_block = deploy_block
 
-    def __contains__(self, token: Address) -> bool:
+    def __contains__(self, token: AnyAddressType) -> bool:
         """
         Check if a token is part of the pool.
 
@@ -158,7 +166,7 @@ class UniswapV3Pool(ContractBase):
         # force token to string in case it is Contract or EthAddress etc
         return str(token) in (self.token0.address, self.token1.address)
 
-    def __getitem__(self, token: Address) -> ERC20:
+    def __getitem__(self, token: AnyAddressType) -> ERC20:
         """
         Get the ERC20 token object for a given token address.
 
@@ -183,7 +191,7 @@ class UniswapV3Pool(ContractBase):
         return ERC20(token, asynchronous=self.asynchronous)
 
     @a_sync.a_sync(ram_cache_maxsize=100_000, ram_cache_ttl=60 * 60)
-    async def check_liquidity(self, token: AnyAddressType, block: Block) -> int | None:
+    async def check_liquidity(self, token: AnyAddressType, block: Block) -> int:
         """
         Check the liquidity of a token in the pool at a specific block.
 
@@ -300,9 +308,9 @@ class UniswapV3(a_sync.ASyncGenericBase):
 
     def __init__(
         self,
-        factory: HexAddress,
-        quoter: HexAddress,
-        fee_tiers: list[int],
+        factory: Address,
+        quoter: Address,
+        fee_tiers: Sequence[int],
         asynchronous: bool = True,
     ) -> None:
         """
@@ -327,12 +335,12 @@ class UniswapV3(a_sync.ASyncGenericBase):
         self._quoter = convert.to_address(quoter)
         self.fee_tiers = fee_tiers
         self.loading = False
-        self._pools = {}
+        self._pools: dict[str, UniswapV3Pool] = {}
 
     def __repr__(self) -> str:
         return f"<{type(self).__name__} factory={self._factory} quoter={self._quoter}>"
 
-    def __contains__(self, asset) -> bool:
+    def __contains__(self, asset: object) -> bool:
         """
         Check if Uniswap V3 pricing functionality is available on the current network.
 
@@ -369,7 +377,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
         """
         return a_sync.Event(name=str(self))
 
-    @a_sync.aka.property
+    @a_sync_property
     async def factory(self) -> Contract:
         """
         Get the factory contract for the Uniswap V3 protocol.
@@ -386,7 +394,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
         """
         return await Contract.coroutine(self._factory)
 
-    __factory__: HiddenMethodDescriptor[Self, Contract]
+    __factory__: HiddenMethodDescriptor["UniswapV3", Contract]
 
     @a_sync.aka.cached_property
     async def quoter(self) -> Contract:
@@ -405,11 +413,11 @@ class UniswapV3(a_sync.ASyncGenericBase):
         """
         return await load_quoter(self._quoter)
 
-    __quoter__: HiddenMethodDescriptor[Self, Contract]
+    __quoter__: HiddenMethodDescriptor["UniswapV3", Contract]
 
     @a_sync.aka.cached_property
     @stuck_coro_debugger
-    async def pools(self) -> list[UniswapV3Pool]:
+    async def pools(self) -> "UniV3Pools":
         """
         Get the list of Uniswap V3 pools.
 
@@ -436,7 +444,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
             return SlipstreamPools(factory, asynchronous=self.asynchronous)
         return UniV3Pools(factory, asynchronous=self.asynchronous)
 
-    __pools__: HiddenMethodDescriptor[Self, "UniV3Pools"]
+    __pools__: HiddenMethodDescriptor["UniswapV3", "UniV3Pools"]
 
     async def pools_for_token(self, token: Address, block: Block) -> AsyncIterator[UniswapV3Pool]:
         """
@@ -475,7 +483,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
 
         async for pool in pools.objects(to_block=block, from_block=loaded_through + 1):
             if token in pool:
-                entries = cache[pool._deploy_block]
+                entries = cache[cast(int, pool._deploy_block)]
                 if pool not in entries:
                     entries.append(pool)
                 if pool not in seen:
@@ -547,7 +555,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
                 logger._log(DEBUG, "block %s is before %s deploy block", (block, quoter))
             return 0
 
-        if token == weth.address:
+        if weth is not None and usdc is not None and token == weth.address:
             # NOTE: we need to filter these or else we will be fetching every pool
             #       for now, we only focus on weth/usdc pools
             filter_fn = (
@@ -625,7 +633,7 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
 
     __slots__ = "asynchronous", "_pools_by_token_cache", "_pools_loaded_through"
 
-    def __init__(self, factory: Contract, asynchronous: bool = False):
+    def __init__(self, factory: Contract, asynchronous: bool = False) -> None:
         """
         Initialize a UniV3Pools instance.
 
@@ -645,7 +653,7 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
         self._pools_by_token_cache = defaultdict(lambda: defaultdict(list))
         self._pools_loaded_through = {}
 
-    def _process_event(self, event: _EventItem) -> UniswapV3Pool:
+    def _process_event(self, event: _EventItem[Any]) -> UniswapV3Pool:
         """
         Process a PoolCreated event and return a UniswapV3Pool instance.
 
@@ -673,7 +681,7 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
             token1=token1,
             tick_spacing=tick_spacing,
             fee=fee,
-            deploy_block=event.block_number,
+            deploy_block=cast(BlockNumber, getattr(event, "block_number")),
             asynchronous=self.asynchronous,
         )
 
@@ -691,7 +699,7 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
             >>> pools = UniV3Pools(...)
             >>> block_number = pools._get_block_for_obj(pool)
         """
-        return obj._deploy_block
+        return cast(int, obj._deploy_block)
 
 
 class SlipstreamPool(UniswapV3Pool):
@@ -701,7 +709,7 @@ class SlipstreamPool(UniswapV3Pool):
 
 
 class SlipstreamPools(UniV3Pools):
-    def _process_event(self, event: _EventItem) -> UniswapV3Pool:
+    def _process_event(self, event: _EventItem[Any]) -> UniswapV3Pool:
         token0, token1, tick_spacing, pool = event.values()
         return SlipstreamPool(
             address=pool,
@@ -710,11 +718,12 @@ class SlipstreamPools(UniV3Pools):
             tick_spacing=tick_spacing,
             # The native Slipstream quoter includes the pool's dynamic fee.
             fee=0,
-            deploy_block=event.block_number,
+            deploy_block=cast(BlockNumber, getattr(event, "block_number")),
             asynchronous=self.asynchronous,
         )
 
 
+uniswap_v3: UniswapV3 | None
 if CHAINID in addresses:
     uniswap_v3 = UniswapV3(
         addresses[CHAINID]["factory"],
@@ -731,7 +740,9 @@ forks = [
 ]
 
 
-async def log_liquidity(market, token, block, liquidity) -> None:
+async def log_liquidity(
+    market: object, token: AnyAddressType, block: Block, liquidity: int
+) -> None:
     __logger_log(
         DEBUG,
         "%s liquidity for %s %s at %s: %s",

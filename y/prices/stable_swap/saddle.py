@@ -1,10 +1,12 @@
 import logging
 
+from asyncio import gather
 from a_sync import a_sync, cgather
 from web3.exceptions import ContractLogicError
 from web3.middleware.validation import is_not_null
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._decorators import stuck_coro_debugger
 from y import convert
 from y.classes.common import ERC20
 from y.constants import CONNECTED_TO_MAINNET
@@ -18,7 +20,12 @@ logger = logging.getLogger(__name__)
 _GET_TOKEN_INPUTS = tuple(range(8))
 
 
-@a_sync(default="sync", cache_type="memory", ram_cache_ttl=5 * 60, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+@a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=5 * 60,
+    ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE,
+)
 async def is_saddle_lp(token_address: AnyAddressType) -> bool:
     """
     Determine if a given token is a Saddle LP token.
@@ -47,7 +54,7 @@ async def is_saddle_lp(token_address: AnyAddressType) -> bool:
 
 
 @a_sync(default="sync", ram_cache_ttl=ENVS.CACHE_TTL, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
-async def get_pool(token_address: AnyAddressType) -> Address:
+async def get_pool(token_address: AnyAddressType) -> Address | None:
     """
     Retrieve the pool address for a given Saddle LP token.
 
@@ -85,6 +92,7 @@ async def get_pool(token_address: AnyAddressType) -> Address:
 
 
 @a_sync(default="sync")
+@stuck_coro_debugger
 async def get_price(token_address: AddressOrContract, block: Block | None = None) -> UsdPrice:
     """
     Calculate the price of a Saddle LP token in USD.
@@ -102,14 +110,15 @@ async def get_price(token_address: AddressOrContract, block: Block | None = None
     See Also:
         - :func:`get_tvl`
     """
-    tvl, total_supply = await cgather(
+    tvl, total_supply = await gather(
         get_tvl(token_address, block, sync=False),
-        ERC20(token_address, asynchronous=True).total_supply_readable(block),
+        ERC20(token_address, asynchronous=True).total_supply_readable(block, sync=False),
     )
     return UsdPrice(tvl / total_supply)
 
 
 @a_sync(default="sync")
+@stuck_coro_debugger
 async def get_tvl(
     token_address: AnyAddressType,
     block: Block | None = None,
@@ -134,17 +143,19 @@ async def get_tvl(
         - :func:`get_price`
     """
     tokens: list[ERC20]
-    pool, tokens = await cgather(
+    pool, tokens = await gather(
         get_pool(token_address, sync=False),
         get_tokens(token_address, block, sync=False),
     )
+    if pool is None:
+        raise ValueError(f"No Saddle pool for {str(token_address)}")
     balances = await multicall_same_func_same_contract_different_inputs(
         pool,
         "getTokenBalance(uint8)(uint)",
         inputs=range(len(tokens)),
         sync=False,
     )
-    scales, prices = await cgather(
+    scales, prices = await gather(
         ERC20.scale.map(tokens).values(pop=True),
         magic.get_prices(tokens, block, skip_cache=skip_cache, silent=True, sync=False),
     )
@@ -154,6 +165,7 @@ async def get_tvl(
 
 
 @a_sync(default="sync")
+@stuck_coro_debugger
 async def get_tokens(token_address: AnyAddressType, block: Block | None = None) -> list[ERC20]:
     """
     Retrieve the list of tokens in a Saddle LP token pool.
@@ -171,15 +183,15 @@ async def get_tokens(token_address: AnyAddressType, block: Block | None = None) 
     See Also:
         - :func:`get_pool`
     """
-    pool, tokens = await cgather(
-        get_pool(token_address, sync=False),
-        multicall_same_func_same_contract_different_inputs(
-            pool,
-            "getToken(uint8)(address)",
-            inputs=_GET_TOKEN_INPUTS,
-            block=block,
-            return_None_on_failure=True,
-            sync=False,
-        ),
+    pool = await get_pool(token_address, sync=False)
+    if pool is None:
+        raise ValueError(f"No Saddle pool for {str(token_address)}")
+    tokens = await multicall_same_func_same_contract_different_inputs(
+        pool,
+        "getToken(uint8)(address)",
+        inputs=_GET_TOKEN_INPUTS,
+        block=block,
+        return_None_on_failure=True,
+        sync=False,
     )
     return list(map(ERC20, filter(is_not_null, tokens)))

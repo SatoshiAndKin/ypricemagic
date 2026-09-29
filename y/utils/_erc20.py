@@ -1,12 +1,13 @@
 import logging
-from collections.abc import Callable, KeysView
-from typing import Any
+from collections.abc import Iterable, KeysView
+from typing import Any, Literal, TypeVar, cast, overload
 
 import a_sync
 import brownie
 from a_sync import cgather
 from brownie.convert.datatypes import EthAddress
 
+from y._decorators import stuck_coro_debugger
 from y.contracts import Contract
 from y.datatypes import Address, AddressOrContract, Block
 from y.utils.multicall import multicall_decimals, multicall_totalSupply
@@ -14,20 +15,42 @@ from y.utils.raw_calls import _decimals, _totalSupply
 
 logger = logging.getLogger(__name__)
 
+_Addresses = AddressOrContract | list[AddressOrContract] | tuple[AddressOrContract, ...]
+_IntResult = int | None | list[int] | list[int | None]
+_FloatResult = float | None | list[float | None]
+_Fn = TypeVar("_Fn")
+
 SUPPORTED_INPUT_TYPES = str, Address, EthAddress, brownie.Contract, Contract
 
 # These helpers can be used to fetch values for one or more tokens at once.
 # NOTE You shoulnd't use these, they will likely be deleted soon for a cleaner alternative.
 
 
+@overload
+async def decimals(
+    contract_address_or_addresses: AddressOrContract,
+    block: Block | None = None,
+    return_None_on_failure: Literal[False] = False,
+) -> int: ...
+
+
+@overload
+async def decimals(
+    contract_address_or_addresses: _Addresses,
+    block: Block | None = None,
+    return_None_on_failure: bool = False,
+) -> _IntResult: ...
+
+
 @a_sync.a_sync(default="sync")
+@stuck_coro_debugger
 async def decimals(
     contract_address_or_addresses: (
-        AddressOrContract | list[AddressOrContract] | tuple[AddressOrContract]
+        AddressOrContract | list[AddressOrContract] | tuple[AddressOrContract, ...]
     ),
     block: Block | None = None,
     return_None_on_failure: bool = False,
-):
+) -> _IntResult:
     """
     Fetch the decimals for one or more ERC20 tokens.
 
@@ -56,23 +79,46 @@ async def decimals(
         - :func:`y.utils.raw_calls._decimals`
         - :func:`y.utils.multicall.multicall_decimals`
     """
-    func = _choose_appropriate_fn(contract_address_or_addresses, _decimals, multicall_decimals)
-    return await func(
-        contract_address_or_addresses,
+    if _input_type(contract_address_or_addresses) == "single":
+        return await _decimals(
+            cast(AddressOrContract, contract_address_or_addresses),
+            block=block,
+            return_None_on_failure=return_None_on_failure,
+            sync=False,
+        )
+    return await multicall_decimals(
+        cast(Iterable[AddressOrContract], contract_address_or_addresses),
         block=block,
         return_None_on_failure=return_None_on_failure,
         sync=False,
     )
 
 
+@overload
+async def totalSupply(
+    contract_address_or_addresses: AddressOrContract,
+    block: Block | None = None,
+    return_None_on_failure: Literal[False] = False,
+) -> int: ...
+
+
+@overload
+async def totalSupply(
+    contract_address_or_addresses: _Addresses,
+    block: Block | None = None,
+    return_None_on_failure: bool = False,
+) -> _IntResult: ...
+
+
 @a_sync.a_sync(default="sync")
+@stuck_coro_debugger
 async def totalSupply(
     contract_address_or_addresses: (
-        AddressOrContract | list[AddressOrContract] | tuple[AddressOrContract]
+        AddressOrContract | list[AddressOrContract] | tuple[AddressOrContract, ...]
     ),
     block: Block | None = None,
     return_None_on_failure: bool = False,
-):
+) -> _IntResult:
     """
     Fetch the total supply for one or more ERC20 tokens.
 
@@ -101,11 +147,15 @@ async def totalSupply(
         - :func:`y.utils.raw_calls._totalSupply`
         - :func:`y.utils.multicall.multicall_totalSupply`
     """
-    func = _choose_appropriate_fn(
-        contract_address_or_addresses, _totalSupply, multicall_totalSupply
-    )
-    return await func(
-        contract_address_or_addresses,
+    if _input_type(contract_address_or_addresses) == "single":
+        return await _totalSupply(
+            cast(AddressOrContract, contract_address_or_addresses),
+            block=block,
+            return_None_on_failure=return_None_on_failure,
+            sync=False,
+        )
+    return await multicall_totalSupply(
+        cast(Iterable[AddressOrContract], contract_address_or_addresses),
         block=block,
         return_None_on_failure=return_None_on_failure,
         sync=False,
@@ -113,13 +163,14 @@ async def totalSupply(
 
 
 @a_sync.a_sync(default="sync")
+@stuck_coro_debugger
 async def totalSupplyReadable(
     contract_address_or_addresses: (
-        AddressOrContract | list[AddressOrContract] | tuple[AddressOrContract]
+        AddressOrContract | list[AddressOrContract] | tuple[AddressOrContract, ...]
     ),
     block: Block | None = None,
     return_None_on_failure: bool = False,
-):
+) -> _FloatResult:
     """
     Fetch the total supply for one or more ERC20 tokens and convert it to a human-readable format.
 
@@ -163,14 +214,19 @@ async def totalSupplyReadable(
         ),
     )
 
-    if type(token_supplys) == brownie.Wei:  # if only fetching totalSupply for one token
-        supply = token_supplys
-        decimal = token_decimals
-        return supply / 10**decimal
-    return [supply / 10**decimal for supply, decimal in zip(token_supplys, token_decimals)]
+    if token_supplys is None or token_decimals is None:
+        return None
+    if isinstance(token_supplys, int):
+        assert isinstance(token_decimals, int)
+        return cast(float, token_supplys / 10**token_decimals)
+    assert isinstance(token_decimals, list)
+    return [
+        None if supply is None or decimal is None else supply / 10**decimal
+        for supply, decimal in zip(token_supplys, token_decimals)
+    ]
 
 
-def _choose_appropriate_fn(input: Any, singlecall_fn: Callable, multicall_fn: Callable):
+def _choose_appropriate_fn(input: Any, singlecall_fn: _Fn, multicall_fn: _Fn) -> _Fn:
     """
     Choose the appropriate function based on the input type.
 
@@ -203,7 +259,7 @@ def _choose_appropriate_fn(input: Any, singlecall_fn: Callable, multicall_fn: Ca
         return multicall_fn
 
 
-def _input_type(input: Any) -> str:
+def _input_type(input: Any) -> Literal["single", "multi"]:
     """
     Determine the input type (single or multiple).
 
@@ -235,7 +291,7 @@ def _input_type(input: Any) -> str:
         return "single"
 
 
-def _check_if_supported(input: Any) -> bool:
+def _check_if_supported(input: Any) -> None:
     """
     Check if the input type is supported.
 

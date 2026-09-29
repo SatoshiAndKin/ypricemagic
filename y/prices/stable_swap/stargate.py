@@ -1,3 +1,4 @@
+from typing import cast
 import logging
 from decimal import Decimal
 
@@ -30,7 +31,7 @@ _POOL_METHODS = (
     "totalSupply()(uint256)",
 )
 
-SEED_POOLS = {
+SEED_POOLS: dict[int, tuple[str, ...]] = {
     Network.Mainnet: (
         # S*USDC (USD Coin-LP)
         "0xdf0770dF86a8034b3EFEf0A1Bb3c889B8332FF56",
@@ -85,7 +86,7 @@ async def _prime_factory_cache() -> None:
     if chain.id in _seeds_loaded:
         return
     _seeds_loaded.add(chain.id)
-    for pool in SEED_POOLS.get(chain.id, ()):  # type: ignore[arg-type]
+    for pool in SEED_POOLS.get(chain.id, ()):
         factory = await _factory_from_pool(pool)
         if factory:
             await _load_factory_pools(factory)
@@ -149,7 +150,8 @@ class StargateFactory(a_sync.ASyncGenericBase):
             range(all_pools_len),
             name=f"load {self} poolId",
         )
-        await pool_map._init_loader
+        if pool_map._init_loader is not None:
+            await pool_map._init_loader
         pools = await pool_map.values(pop=True)
         return {pool for pool in pools if pool and pool != ZERO_ADDRESS}
 
@@ -167,7 +169,8 @@ class StargateFactory(a_sync.ASyncGenericBase):
 
 class StargatePool(ERC20):
     @a_sync.aka.cached_property
-    async def contract(self) -> Contract:
+    async def contract(self) -> Contract:  # type: ignore[override]
+        # Preserve the existing dual-mode property on this ERC20 subclass.
         return await Contract.coroutine(self.address)
 
     __contract__: HiddenMethodDescriptor["StargatePool", Contract]
@@ -195,7 +198,7 @@ class StargatePool(ERC20):
             return None
 
     @stuck_coro_debugger
-    async def price(
+    async def price(  # type: ignore[override]
         self,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
@@ -205,23 +208,25 @@ class StargatePool(ERC20):
         except ValueError:
             return None
 
-        amount_ld = await self.amount_lp_to_ld(lp_scale, block=block)
+        lp_scale = cast(int, lp_scale)
+        underlying = cast(ERC20, underlying)
+        amount_ld = await self.amount_lp_to_ld(lp_scale, block=block, sync=False)
         if amount_ld is None:
             return None
 
         underlying_scale, underlying_price = await gather_owned(
             [
-                underlying.__scale__,
+                underlying.__scale__(sync=False),
                 underlying.price(block, skip_cache=skip_cache, sync=False),
             ]
         )
         if underlying_price is None:
             return None
 
-        ratio = Decimal(amount_ld) / Decimal(underlying_scale)
+        ratio = Decimal(amount_ld) / Decimal(cast(int, underlying_scale))
         return derive_price(
             self.address,
-            ratio * Decimal(float(underlying_price)),
+            ratio * Decimal(float(cast(PriceResult, underlying_price))),
             f"Stargate {self.address} via amountLPtoLD",
             underlying_price,
         )

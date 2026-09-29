@@ -25,7 +25,17 @@ stuck_coro_debugger: Final = cast(
 )
 
 
-def continue_on_revert(func: Callable[P, T]) -> Callable[P, T]:
+@overload
+def continue_on_revert(
+    func: Callable[P, Awaitable[T]],
+) -> Callable[P, Coroutine[Any, Any, T | None]]: ...
+
+
+@overload
+def continue_on_revert(func: Callable[P, T]) -> Callable[P, T | None]: ...
+
+
+def continue_on_revert(func: Callable[P, Any]) -> Callable[P, Any]:
     """
     Decorates a call-making function. If the call reverts, it attempts to continue
     by calling the standalone function :func:`continue_if_call_reverted` from the
@@ -64,21 +74,26 @@ def continue_on_revert(func: Callable[P, T]) -> Callable[P, T]:
     if iscoroutinefunction(func):
 
         @wraps(func)
-        async def continue_on_revert_wrap(*args: P.args, **kwargs: P.kwargs) -> T | None:
+        async def continue_on_revert_async(*args: P.args, **kwargs: P.kwargs) -> Any:
             try:
                 return await func(*args, **kwargs)
             except Exception as e:
                 continue_if_call_reverted(e)
+                return None
+
+        return continue_on_revert_async
 
     elif callable(func):
 
         @wraps(func)
-        def continue_on_revert_wrap(*args: P.args, **kwargs: P.kwargs) -> T | None:
+        def continue_on_revert_sync(*args: P.args, **kwargs: P.kwargs) -> Any:
             try:
                 return func(*args, **kwargs)
             except Exception as e:
                 continue_if_call_reverted(e)
+                return None
+
+        return continue_on_revert_sync
 
     else:
         raise NotImplementedError(f"Unable to decorate {func}")
-    return continue_on_revert_wrap

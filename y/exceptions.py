@@ -1,4 +1,5 @@
 import logging
+from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, Final, final
 
@@ -68,7 +69,7 @@ class PriceError(Exception):
     Raised when a queried price is not found.
     """
 
-    def __init__(self, logger: "PriceLogger", symbol: str):
+    def __init__(self, logger: "PriceLogger", symbol: str | None) -> None:
         super().__init__(f"No price found for {symbol} {logger.address} at block {logger.block}")
 
 
@@ -96,7 +97,7 @@ class TokenError(ValueError):
     """Raised when a token contract is not the correct contract type for the desired operation."""
 
     def __init__(self, token: AnyAddressType, desired_type: str, *optional_extra_args: Any):
-        super().__init__(f"{token} is not a {desired_type}", *optional_extra_args)
+        super().__init__(f"{str(token)} is not a {desired_type}", *optional_extra_args)
 
 
 # Explorer Exceptions
@@ -226,7 +227,7 @@ class TokenNotFound(ValueError):
     This is usually used when searching for a token in a liquidity pool.
     """
 
-    def __init__(self, token, container):
+    def __init__(self, token: object, container: object) -> None:
         super().__init__(f"{token} is not in {container}")
 
 
@@ -289,7 +290,7 @@ class NodeNotSynced(Exception):
 
 
 @contextmanager
-def reraise_excs_with_extra_context(*extra_context: Any, after: bool = True):
+def reraise_excs_with_extra_context(*extra_context: Any, after: bool = True) -> Iterator[None]:
     try:
         yield
     except Exception as e:

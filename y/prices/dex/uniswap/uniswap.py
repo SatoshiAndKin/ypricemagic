@@ -1,3 +1,5 @@
+from typing import cast
+from dank_mids.brownie_patch import dank_eth
 import logging
 import threading
 from contextlib import suppress
@@ -17,7 +19,8 @@ from y.exceptions import NonStandardERC20, contract_not_verified
 from y.prices.dex.solidly import SolidlyRouter
 from y.prices.dex.uniswap import v3
 from y.prices.dex.uniswap.v1 import UniswapV1
-from y.prices.dex.uniswap.v2 import NotAUniswapV2Pool, UniswapRouterV2, UniswapV2Pool
+from y.exceptions import NotAUniswapV2Pool
+from y.prices.dex.uniswap.v2 import UniswapRouterV2, UniswapV2Pool
 from y.prices.dex.uniswap.v2_forks import UNISWAPS
 from y.prices.dex.uniswap.v3 import UniswapV3, uniswap_v3
 from y.prices.dex.velodrome import VelodromeRouterV2
@@ -63,12 +66,13 @@ class UniswapMultiplexer(ASyncGenericSingleton):
     def __init__(self, *, asynchronous: bool = False) -> None:
         super().__init__()
         self.asynchronous = asynchronous
-        self.v2_routers = {}
+        self.v2_routers: dict[str, UniswapRouterV2] = {}
         for name in UNISWAPS:
             router_cls = _special_routers.get(name, UniswapRouterV2)
             try:
-                self.v2_routers[name] = router_cls(
-                    UNISWAPS[name]["router"], asynchronous=self.asynchronous
+                self.v2_routers[name] = cast(
+                    UniswapRouterV2,
+                    router_cls(UNISWAPS[name]["router"], asynchronous=self.asynchronous),
                 )
             except ValueError as e:  # TODO do this better
                 if not contract_not_verified(e):
@@ -114,9 +118,9 @@ class UniswapMultiplexer(ASyncGenericSingleton):
                 factory = await pool.__factory__
                 if factory not in self.v2_factories and factory != ZERO_ADDRESS:
                     _gh_issue_request(
-                        f"UniClone Factory {factory} is unknown to ypricemagic.", logger
+                        f"UniClone Factory {str(factory)} is unknown to ypricemagic.", logger
                     )
-                    self.v2_factories.append(factory)
+                    self.v2_factories.append(str(factory))
                 return True
         return False
 
@@ -178,6 +182,8 @@ class UniswapMultiplexer(ASyncGenericSingleton):
             >>> print(routers)
         """
         token_in = await convert.to_address_async(token_in)
+        if block is None:
+            block = await dank_eth.block_number
         liquidity = await igather(
             uniswap.check_liquidity(token_in, block, ignore_pools=ignore_pools, sync=False)
             for uniswap in self.uniswaps

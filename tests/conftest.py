@@ -1,8 +1,11 @@
 import os
+from pathlib import Path
 
 import brownie
 
-brownie.network.connect(os.environ["BROWNIE_NETWORK"])
+from brownie.network.main import connect
+
+connect(os.environ["BROWNIE_NETWORK"])
 brownie._config.CONFIG.settings["autofetch_sources"] = False
 
 pytest_plugins = ["tests.fixtures"]
@@ -19,7 +22,7 @@ import brownie.test.managers.base as _btmb
 _orig_get_ast_hash = _bps._get_ast_hash
 
 
-def _safe_get_ast_hash(path):
+def _safe_get_ast_hash(path: str | Path) -> str:
     path_str = str(path)
     if path_str.endswith((".so", ".pyd", ".o", ".dylib")):
         from hashlib import sha1
@@ -35,4 +38,4 @@ def _safe_get_ast_hash(path):
 
 # Patch both the source module AND the already-imported reference in base.py
 _bps._get_ast_hash = _safe_get_ast_hash
-_btmb._get_ast_hash = _safe_get_ast_hash
+setattr(_btmb, "_get_ast_hash", _safe_get_ast_hash)

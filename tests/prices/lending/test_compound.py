@@ -1,3 +1,4 @@
+from tests.fixtures import async_result
 import pytest
 
 from typing import Any, cast
@@ -16,7 +17,7 @@ CTOKENS = [
 
 
 @pytest.mark.parametrize("token", CTOKENS)
-def test_compound_pricing_sync(token):
+def test_compound_pricing_sync(token: str) -> None:
     """
     Test the synchronous pricing of Compound tokens.
 
@@ -56,7 +57,7 @@ def test_compound_pricing_sync(token):
 
 @pytest.mark.parametrize("token", CTOKENS)
 @pytest.mark.asyncio_cooperative
-async def test_compound_pricing_async(token):
+async def test_compound_pricing_async(token: str) -> None:
     """
     Test the asynchronous pricing of Compound tokens.
 
@@ -74,9 +75,9 @@ async def test_compound_pricing_async(token):
     print(token)
     ctoken = CToken(token, asynchronous=True)
     for block in blocks_for_contract(token):
-        price = await compound.get_price(token, block)
+        price = await async_result(compound.get_price(token, block))
         if token.lower() == "0x1dd7950c266fb1be96180a8fdb0591f70200e018" and block == 16_531_121:
-            assert await ctoken.total_supply(block) == 0
+            assert await async_result(ctoken.total_supply(block)) == 0
             assert (
                 await Call(
                     "0x95Af143a021DF745bc78e845b54591C53a8B3A51",
@@ -88,7 +89,7 @@ async def test_compound_pricing_async(token):
             assert price is None
         elif token.lower() == "0x892b14321a4fcba80669ae30bd0cd99a7ecf6ac0" and price is None:
             with pytest.raises(Exception) as exc:
-                await ctoken.exchange_rate(block)
+                await async_result(ctoken.exchange_rate(block))
             assert call_reverted(exc.value)
         else:
             assert price, f"Failed to fetch price at {block}."

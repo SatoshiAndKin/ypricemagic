@@ -178,7 +178,9 @@ async def get_underlying_lp(token_address: AnyAddressType) -> ChecksumAddress | 
     token_address_lower = token_address.lower()
     for i in range(num_pools):
         try:
-            pool_info = await booster_contract.poolInfo.coroutine(i)
+            pool_info: tuple[str, str, str, str, str, bool] = (
+                await booster_contract.poolInfo.coroutine(i)
+            )
         except Exception:
             continue
 

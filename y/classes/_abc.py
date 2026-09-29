@@ -89,7 +89,11 @@ class LiquidityPool(Wrapper):
                 self.total_supply_readable(block=block, sync=False),
             ]
         )
-        return None if tvl is None else UsdPrice(Decimal(tvl) / Decimal(total_supply))
+        return (
+            None
+            if tvl is None or total_supply is None
+            else UsdPrice(Decimal(tvl) / Decimal(total_supply))
+        )
 
     @abc.abstractmethod
     async def get_tvl(
@@ -97,7 +101,7 @@ class LiquidityPool(Wrapper):
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
-    ) -> UsdValue | None:
+    ) -> UsdValue | Decimal | None:
         """
         Get the Total Value Locked (TVL) in the liquidity pool.
 
@@ -109,7 +113,8 @@ class LiquidityPool(Wrapper):
             skip_cache: If True, bypasses ypricemagic's local caching mechanisms and forces a fresh calculation.
 
         Returns:
-            The Total Value Locked (TVL) in the pool as a :class:`~y.datatypes.UsdValue` object.
+            The Total Value Locked (TVL) as a :class:`~y.datatypes.UsdValue` or
+            :class:`~decimal.Decimal`, or None when unavailable.
 
         Note:
             The specific implementation of this method will depend on the type of liquidity pool.

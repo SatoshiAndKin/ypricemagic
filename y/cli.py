@@ -2,6 +2,8 @@
 A Python CLI tool for managing the database and debugging price retrieval.
 """
 
+from y._db.typing import db_session
+
 __all__ = ["db_nuke", "db_clear", "db_info", "db_vacuum", "db_select", "main"]
 
 import argparse
@@ -9,11 +11,12 @@ import os
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any, cast
 from pprint import pprint
 
 from cchecksum import to_checksum_address
 from faster_eth_utils import is_address
-from pony.orm import commit, count, db_session, delete, select
+from pony.orm import commit, count, select
 
 from y.prices.utils.debug import debug_price
 
@@ -29,7 +32,7 @@ def db_info() -> None:
 
     provider = connection_settings["provider"]
 
-    def get_size(entity) -> str:
+    def get_size(entity: Any) -> str:
         """
         Returns storage size in bytes for the given entity's table.
         For PostgreSQL returns pg_total_relation_size; for SQLite returns the database file size; otherwise 'N/A'.
@@ -55,9 +58,9 @@ def db_info() -> None:
                 num = count(e for e in entity)
                 print(f"  Table {entity.__name__}: {num} rows")
             db_file = connection_settings.get("filename", "")
-            size = os.path.getsize(db_file)
+            file_size = os.path.getsize(cast(str, db_file))
             print("-------------------------")
-            print(f"  Total Size {size} bytes")
+            print(f"  Total Size {file_size} bytes")
 
     try:
         print_info()
@@ -81,7 +84,7 @@ def db_vacuum() -> None:
             import sqlite3
 
             db_file = connection_settings["filename"]
-            conn = sqlite3.connect(db_file)
+            conn = sqlite3.connect(cast(str, db_file))
             conn.execute("VACUUM;")
             conn.close()
         else:
@@ -121,7 +124,7 @@ def db_nuke(force: bool = False) -> None:
         print("All tables dropped; database cleared.")
 
 
-def db_clear(token: str = None, block: str = None) -> None:
+def db_clear(token: str | None = None, block: str | None = None) -> None:
     # sourcery skip: simplify-generator
     """
     Clears the 'Price' table rows based on token or block criteria.
@@ -145,8 +148,8 @@ def db_clear(token: str = None, block: str = None) -> None:
             print(f"Deleting prices for {token}")
             deleted = 0
             if is_address(token):
-                token = to_checksum_address(token)
-                for t in select(t for t in Token if t.chain.id == CHAINID and t.address == token):
+                address = to_checksum_address(token)
+                for t in select(t for t in Token if t.chain.id == CHAINID and t.address == address):
                     for p in select(p for p in Price if p.token == t and p.block):
                         print(f"Deleting {t.symbol} block {p.block.number} price {p.price}")
                         p.delete()
@@ -167,10 +170,11 @@ def db_clear(token: str = None, block: str = None) -> None:
             return deleted
         else:
             try:
-                block_number = int(block)
+                block_number = int(cast(str, block))
             except ValueError:
                 raise ValueError("Block must be an integer value.")
-            deleted = delete(p for p in Price if p.block.number == block_number)
+            # Delete rows directly: entity loading omits lazy composite-key fields.
+            deleted = select(p for p in Price if p.block.number == block_number).delete(bulk=True)
             return deleted
 
     total_deleted = clear_prices()
@@ -197,7 +201,7 @@ def db_select(target: str) -> None:
         else:
             details = {}
             # Extract token details from the entity's columns
-            for col in token.__class__._columns_:
+            for col in cast(list[str], getattr(token.__class__, "_columns_")):
                 try:
                     details[col] = getattr(token, col)
                 except AttributeError:
@@ -355,7 +359,10 @@ def main() -> None:
 
             network = env.get("BROWNIE_NETWORK_ID")
             script = "debug-curve"
-            subprocess.run(["brownie", "run", script, "--network", network], env=env)
+            command = ["brownie", "run", script]
+            if network is not None:
+                command.extend(["--network", network])
+            subprocess.run(command, env=env)
         else:
             print("Unknown debug command.")
             sys.exit(1)

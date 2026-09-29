@@ -1,5 +1,8 @@
 """Immutable pool snapshots and native, fee-inclusive exact-input swaps."""
 
+from typing import cast
+
+
 from collections.abc import AsyncIterator, Awaitable, Callable
 from dataclasses import dataclass
 from functools import lru_cache
@@ -105,7 +108,7 @@ async def discover(
     from y.prices.dex.uniswap import uniswap_multiplexer
     from y.prices.dex.uniswap.v3 import SlipstreamPool
     from y.prices.dex.velodrome import VelodromeRouterV2
-    from y.prices.stable_swap.curve import curve
+    from y.prices.stable_swap.curve import CurveRegistry, curve
 
     if token == address(EEE_ADDRESS):
         # Native ETH needs a sale exit before historical ETH/USD feeds existed.
@@ -245,7 +248,7 @@ async def discover(
         markets.extend(m for m in await bounded_map(lambda p: safely(v3_snapshot, p), pools) if m)
 
     if curve and allowed("Curve", ""):
-        pools = (await loaded(curve.__coin_to_pools__, {})).get(checksum, ())
+        pools = (await loaded(cast(CurveRegistry, curve).__coin_to_pools__, {})).get(checksum, ())
 
         async def curve_snapshot(pool: Any) -> Market | None:
             if not await deployed(address(pool), block):
@@ -387,7 +390,7 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
         )
         if pool_key is None:
             raise ValueError(f"missing pool key for {protocol} {pool}")
-        quoted = await quoter.quoteExactInput.coroutine(
+        quoted: int | tuple[int, ...] = await quoter.quoteExactInput.coroutine(
             encode_packed(["address", index_type, "address"], [token, pool_key, output]),
             amount,
             block_identifier=block.identifier,
@@ -401,7 +404,7 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
         # Exact-output callbacks enforce delivery of the entire requested output;
         # a revert or a cheaper next atom cannot prove a full sale.
         try:
-            required = await quoter.quoteExactOutput.coroutine(
+            required: int | tuple[int, ...] = await quoter.quoteExactOutput.coroutine(
                 encode_packed(["address", index_type, "address"], [output, pool_key, token]),
                 result + 1,
                 block_identifier=block.identifier,
@@ -473,7 +476,7 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
         quoted = await optional_read(pool, method + "(uint256)", block, amount)
         if quoted is None:
             return None
-        result = int(quoted)
+        result = int(cast(int, quoted))
     else:
         raise ValueError(f"unknown swap protocol {protocol}")
     if result <= 0:

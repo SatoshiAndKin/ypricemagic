@@ -1,6 +1,6 @@
 import logging
 from collections.abc import Iterable, Sequence
-from typing import Any
+from typing import Any, cast
 
 from a_sync import a_sync
 from pony.orm import Database, DatabaseError, commit
@@ -100,6 +100,8 @@ def insert(
     if not items:
         return
     entity_name = entity_type.__name__.lower()
-    sql, parameters = build_query(db.provider_name, entity_name, columns, items)
+    sql, parameters = build_query(
+        cast(str, getattr(db, "provider_name")), entity_name, columns, items
+    )
     execute(sql, parameters, db=db)
     _logger_debug("inserted %s %ss to ydb", len(items), entity_name)

@@ -1,5 +1,10 @@
 """Tests for misc bug fixes: NonStandardERC20 catch, stablecoins, Chainlink feed resolution."""
 
+from collections.abc import AsyncIterator
+from y import convert
+from typing import Any
+
+
 import asyncio
 from types import SimpleNamespace
 from typing import Any
@@ -19,16 +24,16 @@ from y.constants import STABLECOINS
 # ---------------------------------------------------------------------------
 
 
-def test_crvusd_address_is_correct():
+def test_crvusd_address_is_correct() -> None:
     """VAL-MISC-003: crvUSD address is the actual crvUSD token, not the ERC-1155 NFT."""
     correct_address = "0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E"
     wrong_nft_address = "0xf939E0A03FB57F7cc3E4655C5262C496284665DC"
     assert correct_address in STABLECOINS, "crvUSD should be in STABLECOINS"
     assert wrong_nft_address not in STABLECOINS, "ERC-1155 NFT address should NOT be in STABLECOINS"
-    assert STABLECOINS[correct_address] == "crvusd"
+    assert STABLECOINS[convert.to_address(correct_address)] == "crvusd"
 
 
-def test_new_stablecoins_present():
+def test_new_stablecoins_present() -> None:
     """VAL-MISC-004: crvUSD, FRAX, PYUSD, GHO are in STABLECOINS dict."""
     expected = {
         "0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E": "crvusd",
@@ -38,10 +43,10 @@ def test_new_stablecoins_present():
     }
     for address, name in expected.items():
         assert address in STABLECOINS, f"{name} ({address}) should be in STABLECOINS"
-        assert STABLECOINS[address] == name
+        assert STABLECOINS[convert.to_address(address)] == name
 
 
-def test_chainlink_get_feed_falls_back_to_static_feeds(monkeypatch):
+def test_chainlink_get_feed_falls_back_to_static_feeds(monkeypatch: pytest.MonkeyPatch) -> None:
     """A registry event for another asset must not replace this asset's static feed."""
     import importlib
     from types import SimpleNamespace
@@ -60,7 +65,7 @@ def test_chainlink_get_feed_falls_back_to_static_feeds(monkeypatch):
     chainlink.registry = "0x0000000000000000000000000000000000000100"
     block = BlockRef(1, 20_000_000, "0x" + "12" * 32, 1_700_000_000)
 
-    async def events(to_block):
+    async def events(to_block: int) -> AsyncIterator[Any]:
         assert to_block == 20_000_000
         yield SimpleNamespace(asset="0x0000000000000000000000000000000000000001", start_block=1)
 

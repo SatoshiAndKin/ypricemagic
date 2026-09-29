@@ -3,7 +3,7 @@ from y.prices import magic
 
 
 @mainnet_only
-def test_piedao_get_price():
+def test_piedao_get_price() -> None:
     """Test the `get_price` function from the `magic` module for a specific token.
 
     This test checks the price of a specific token at a given block number

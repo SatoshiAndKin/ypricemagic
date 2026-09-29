@@ -20,7 +20,9 @@ class DankMidsImportOrderError(RuntimeError):
 def import_dank_w3() -> Any:
     """Import dank_mids.dank_web3 and wrap init-order failures with actionable guidance."""
     try:
-        from dank_mids import dank_web3 as dank_w3
+        import dank_mids
+
+        dank_w3 = getattr(dank_mids, "dank_web3")
     except BrowniePatchNotInitializedError as exc:
         raise DankMidsImportOrderError() from exc
     return dank_w3

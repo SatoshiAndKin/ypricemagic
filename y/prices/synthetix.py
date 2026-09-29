@@ -1,3 +1,4 @@
+from y._typing import a_sync_property
 import logging
 from typing import Any, Final, final
 
@@ -21,7 +22,7 @@ from y.utils import a_sync_ttl_cache
 
 logger: Final = logging.getLogger(__name__)
 
-addresses: Final = {
+addresses: Final[dict[int, str]] = {
     Network.Mainnet: "0x823bE81bbF96BEc0e25CA13170F5AaCb5B79ba83",
     Network.Optimism: "0x95A6a3f44a70172E7d50a9e28c85Dfd712756B8C",
 }
@@ -64,7 +65,7 @@ class Synthetix(a_sync.ASyncGenericSingleton):
         self.asynchronous = asynchronous
         super().__init__()
 
-    @a_sync.aka.property
+    @a_sync_property
     async def address_resolver(self) -> Contract:
         """Get the address resolver contract.
 
@@ -78,10 +79,10 @@ class Synthetix(a_sync.ASyncGenericSingleton):
         """
         return await Contract.coroutine(addresses[CHAINID])
 
-    __address_resolver__: HiddenMethodDescriptor[Self, Contract]
+    __address_resolver__: HiddenMethodDescriptor["Synthetix", Contract]
 
     @a_sync.a_sync(ram_cache_maxsize=512)
-    async def get_address(self, name: str, block: Block = None) -> Contract | None:
+    async def get_address(self, name: str, block: Block | None = None) -> Contract | None:
         """Get contract from Synthetix registry.
 
         Args:
@@ -101,7 +102,7 @@ class Synthetix(a_sync.ASyncGenericSingleton):
             <Contract object at 0x...>
         """
         address_resolver = await self.__address_resolver__
-        address = await address_resolver.getAddress.coroutine(
+        address: str = await address_resolver.getAddress.coroutine(
             encode_bytes(name), block_identifier=block
         )
         if address == ZERO_ADDRESS:
@@ -114,6 +115,7 @@ class Synthetix(a_sync.ASyncGenericSingleton):
         return await Contract.coroutine(target)
 
     @a_sync.aka.cached_property
+    @stuck_coro_debugger
     async def synths(self) -> list[ChecksumAddress]:
         """Get target addresses of all synths.
 
@@ -121,12 +123,14 @@ class Synthetix(a_sync.ASyncGenericSingleton):
             A list of target addresses for all synths.
 
         Examples:
-            >>> synths = await synthetix.synths
+            >>> synths = await self.synths
             >>> print(synths)
             ['0x...', '0x...', ...]
         """
         proxy_erc20 = await self.get_address("ProxyERC20", sync=False)
-        synth_count = await proxy_erc20.availableSynthCount
+        if proxy_erc20 is None:
+            raise ValueError("ProxyERC20 is not registered in the Synthetix resolver")
+        synth_count: int = await proxy_erc20.availableSynthCount.coroutine()
         # Force the addresses to strings so we aren't forced to use brownie's comparison functionality
         synths = [
             ChecksumAddress(synth)
@@ -157,13 +161,12 @@ class Synthetix(a_sync.ASyncGenericSingleton):
         """
         token = await convert.to_address_async(token)
         try:
-            if await synthetix.get_currency_key(token, sync=False):
+            if await self.get_currency_key(token, sync=False):
                 return True
             if await has_method(token, "target()(address)", sync=False):
                 target = await Call(token, "target()(address)")
                 return (
-                    target in await synthetix.synths
-                    and await Call(target, "proxy()(address)") == token
+                    target in await self.synths and await Call(target, "proxy()(address)") == token
                 )
             return False
         except Exception as e:
@@ -182,10 +185,11 @@ class Synthetix(a_sync.ASyncGenericSingleton):
             The currency key as a hex string, or `None` if not found.
 
         Examples:
-            >>> currency_key = await synthetix.get_currency_key("0x...")
+            >>> currency_key = await self.get_currency_key("0x...")
             >>> print(currency_key)
             '0x...'
         """
+        token = await convert.to_address_async(token)
         target = (
             await Call(token, "target()(address)")
             if await has_method(token, "target()(address)", sync=False)
@@ -245,4 +249,4 @@ class Synthetix(a_sync.ASyncGenericSingleton):
                 raise
 
 
-synthetix = Synthetix(asynchronous=True) if CHAINID in addresses else set()
+synthetix: Synthetix | set[str] = Synthetix(asynchronous=True) if CHAINID in addresses else set()

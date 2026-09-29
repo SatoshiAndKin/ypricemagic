@@ -13,6 +13,7 @@ These tests do NOT require an RPC connection.
 
 import ast
 import asyncio
+from collections.abc import Hashable
 import os
 import re
 
@@ -23,12 +24,12 @@ import pytest
 class TestCacheboxImport:
     """Verify cachebox is installed and importable."""
 
-    def test_cachebox_importable(self):
+    def test_cachebox_importable(self) -> None:
         assert hasattr(cachebox, "LRUCache")
         assert hasattr(cachebox, "TTLCache")
         assert hasattr(cachebox, "cached")
 
-    def test_cachebox_version(self):
+    def test_cachebox_version(self) -> None:
         version = cachebox.__version__
         major = int(version.split(".")[0])
         assert major >= 4, f"Expected cachebox >= 4.x, got {version}"
@@ -37,8 +38,8 @@ class TestCacheboxImport:
 class TestLRUCacheBounds:
     """Verify LRUCache respects maxsize bounds."""
 
-    def test_lru_cache_maxsize_respected(self):
-        cache = cachebox.LRUCache(3)
+    def test_lru_cache_maxsize_respected(self) -> None:
+        cache: cachebox.LRUCache[int, str] = cachebox.LRUCache(3)
         cache[1] = "a"
         cache[2] = "b"
         cache[3] = "c"
@@ -51,8 +52,8 @@ class TestLRUCacheBounds:
         assert 1 not in cache
         assert 4 in cache
 
-    def test_lru_cache_access_updates_recency(self):
-        cache = cachebox.LRUCache(3)
+    def test_lru_cache_access_updates_recency(self) -> None:
+        cache: cachebox.LRUCache[int, str] = cachebox.LRUCache(3)
         cache[1] = "a"
         cache[2] = "b"
         cache[3] = "c"
@@ -69,8 +70,8 @@ class TestLRUCacheBounds:
 class TestTTLCacheBounds:
     """Verify TTLCache respects maxsize bounds."""
 
-    def test_ttl_cache_maxsize_respected(self):
-        cache = cachebox.TTLCache(3, ttl=60)
+    def test_ttl_cache_maxsize_respected(self) -> None:
+        cache: cachebox.TTLCache[int, str] = cachebox.TTLCache(3, ttl=60)
         cache[1] = "a"
         cache[2] = "b"
         cache[3] = "c"
@@ -83,12 +84,12 @@ class TestTTLCacheBounds:
 class TestCachedDecoratorSync:
     """Verify cachebox.cached works with sync functions."""
 
-    def test_cached_sync_function(self):
+    def test_cached_sync_function(self) -> None:
         call_count = 0
-        cache = cachebox.LRUCache(128)
+        cache: cachebox.LRUCache[Hashable, int] = cachebox.LRUCache(128)
 
         @cachebox.cached(cache)
-        def add(a, b):
+        def add(a: int, b: int) -> int:
             nonlocal call_count
             call_count += 1
             return a + b
@@ -104,11 +105,11 @@ class TestCachedDecoratorSync:
         assert add(3, 4) == 7
         assert call_count == 2
 
-    def test_cached_sync_maxsize_eviction(self):
-        cache = cachebox.LRUCache(2)
+    def test_cached_sync_maxsize_eviction(self) -> None:
+        cache: cachebox.LRUCache[Hashable, int] = cachebox.LRUCache(2)
 
         @cachebox.cached(cache)
-        def square(x):
+        def square(x: int) -> int:
             return x * x
 
         square(1)
@@ -122,12 +123,12 @@ class TestCachedDecoratorSync:
 class TestCachedDecoratorAsync:
     """Verify cachebox.cached works with async functions."""
 
-    def test_cached_async_function(self):
+    def test_cached_async_function(self) -> None:
         call_count = 0
-        cache = cachebox.LRUCache(128)
+        cache: cachebox.LRUCache[Hashable, int] = cachebox.LRUCache(128)
 
         @cachebox.cached(cache)
-        async def async_add(a, b):
+        async def async_add(a: int, b: int) -> int:
             nonlocal call_count
             call_count += 1
             return a + b
@@ -145,11 +146,11 @@ class TestCachedDecoratorAsync:
         finally:
             loop.close()
 
-    def test_cached_async_maxsize_eviction(self):
-        cache = cachebox.LRUCache(2)
+    def test_cached_async_maxsize_eviction(self) -> None:
+        cache: cachebox.LRUCache[Hashable, int] = cachebox.LRUCache(2)
 
         @cachebox.cached(cache)
-        async def async_square(x):
+        async def async_square(x: int) -> int:
             return x * x
 
         loop = asyncio.new_event_loop()
@@ -167,11 +168,11 @@ class TestCachedDecoratorAsync:
 class TestCachedDecoratorTTL:
     """Verify cachebox.cached with TTLCache."""
 
-    def test_ttl_cache_decorator(self):
-        cache = cachebox.TTLCache(128, ttl=3600)
+    def test_ttl_cache_decorator(self) -> None:
+        cache: cachebox.TTLCache[Hashable, str] = cachebox.TTLCache(128, ttl=3600)
 
         @cachebox.cached(cache)
-        def get_value(key):
+        def get_value(key: str) -> str:
             return f"value_{key}"
 
         result = get_value("test")
@@ -185,7 +186,7 @@ class TestCachedDecoratorTTL:
 class TestNoAlruCacheImports:
     """Verify no alru_cache or async_lru imports remain in the y/ package."""
 
-    def test_no_alru_cache_in_source(self):
+    def test_no_alru_cache_in_source(self) -> None:
         """Scan all .py files in y/ for alru_cache or async_lru imports."""
         y_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "y")
         violations = []
@@ -211,13 +212,13 @@ class TestNoAlruCacheImports:
 class TestCacheboxInDependencies:
     """Verify cachebox appears in dependency files."""
 
-    def test_cachebox_in_requirements_txt(self):
+    def test_cachebox_in_requirements_txt(self) -> None:
         req_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "requirements.txt")
         with open(req_file) as f:
             content = f.read()
         assert "cachebox" in content, "cachebox not found in requirements.txt"
 
-    def test_cachebox_in_pyproject_toml(self):
+    def test_cachebox_in_pyproject_toml(self) -> None:
         pyproject = os.path.join(os.path.dirname(os.path.dirname(__file__)), "pyproject.toml")
         with open(pyproject) as f:
             content = f.read()
@@ -227,7 +228,7 @@ class TestCacheboxInDependencies:
 class TestAllMemoryCachesBounded:
     """Verify all a_sync cache_type='memory' decorators have ram_cache_maxsize."""
 
-    def test_no_unbounded_memory_caches(self):
+    def test_no_unbounded_memory_caches(self) -> None:
         """Scan y/ for cache_type='memory' without ram_cache_maxsize."""
         y_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "y")
         violations = []
@@ -248,7 +249,7 @@ class TestAllMemoryCachesBounded:
             violations == []
         ), f"Found cache_type='memory' without ram_cache_maxsize:\n" + "\n".join(violations)
 
-    def test_no_unbounded_ram_cache_maxsize(self):
+    def test_no_unbounded_ram_cache_maxsize(self) -> None:
         """Scan y/ for ram_cache_maxsize=None (explicitly unbounded)."""
         y_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "y")
         violations = []

@@ -2,6 +2,7 @@ import logging
 from decimal import Decimal
 
 import a_sync
+from asyncio import gather
 from a_sync import cgather
 from multicall import Call
 
@@ -14,7 +15,12 @@ from y.utils.cache import optional_async_diskcache
 logger = logging.getLogger(__name__)
 
 
-@a_sync.a_sync(default="sync", cache_type="memory", ram_cache_ttl=5 * 60, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+@a_sync.a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=5 * 60,
+    ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE,
+)
 @optional_async_diskcache
 async def is_token_set(token: AnyAddressType) -> bool:
     """Check if a given token is a TokenSet.
@@ -78,7 +84,9 @@ async def get_price(
     See Also:
         - :class:`TokenSet`
     """
-    return await TokenSet(token, asynchronous=True).get_price(block=block, skip_cache=skip_cache)
+    return await TokenSet(token, asynchronous=True).get_price(
+        block=block, skip_cache=skip_cache, sync=False
+    )
 
 
 class TokenSet(ERC20):
@@ -119,7 +127,7 @@ class TokenSet(ERC20):
             >>> components = tokenset.components()
         """
         contract = await Contract.coroutine(self.address)
-        components = await contract.getComponents.coroutine(block_identifier=block)
+        components: list[str] = await contract.getComponents.coroutine(block_identifier=block)
         return [ERC20(component, asynchronous=self.asynchronous) for component in components]
 
     async def balances(
@@ -146,7 +154,7 @@ class TokenSet(ERC20):
         See Also:
             - :class:`WeiBalance`
         """
-        contract, components = await cgather(
+        contract, components = await gather(
             Contract.coroutine(self.address),
             self.components(block=block, sync=False),
         )

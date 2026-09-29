@@ -1,3 +1,4 @@
+from typing import cast
 import logging
 
 import a_sync
@@ -83,11 +84,11 @@ async def get_price(
             ERC20._get_scale_for(address),
         ]
     )
-    ratio = ratio[0] / scale
+    ratio_value = cast(tuple[int, ...], ratio)[0] / scale
     underlying_price = await magic.get_price(masset, block, skip_cache=skip_cache, sync=False)
     return derive_price(
         address,
-        float(underlying_price) * ratio,
+        float(underlying_price) * ratio_value,
         f"mStable feeder pool {address} via {masset}",
         underlying_price,
     )

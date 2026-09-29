@@ -1,3 +1,4 @@
+from typing import cast
 import logging
 
 from a_sync import a_sync
@@ -62,14 +63,16 @@ async def get_price_creth(
         - :class:`y.classes.common.ERC20`
     """
     address = await convert.to_address_async(token)
+    assert weth is not None
     total_balance, total_supply, weth_price = await gather_owned(
         [
             raw_call(address, "accumulated()", output="int", block=block, sync=False),
-            ERC20(address, asynchronous=True).total_supply(block),
+            ERC20(address, asynchronous=True).total_supply(block, sync=False),
             magic.get_price(weth, block, skip_cache=skip_cache, sync=False),
         ]
     )
-    per_share = total_balance / total_supply
+    per_share = cast(int, total_balance) / cast(int, total_supply)
+    weth_price = cast(PriceResult, weth_price)
     return derive_price(
         address, per_share * float(weth_price), f"crETH {address} backing per share", weth_price
     )

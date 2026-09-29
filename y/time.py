@@ -2,18 +2,23 @@ import asyncio
 import datetime
 import logging
 import time
-from typing import Final, NewType, Union, final
+from typing import Final, NewType, Union, cast, final
+from importlib import import_module
 
 import cachebox
 import dank_mids
+from dank_mids.brownie_patch import dank_eth
 import eth_retry
 from brownie import chain, web3
 from eth_typing import BlockNumber
+from web3.types import RPCEndpoint
 
 try:
-    from dank_mids.ENVIRONMENT_VARIABLES import GANACHE_FORK
+    from dank_mids.ENVIRONMENT_VARIABLES import GANACHE_FORK as _GANACHE_FORK
+
+    GANACHE_FORK = bool(_GANACHE_FORK)
 except ImportError:
-    from dank_mids._config import GANACHE_FORK
+    GANACHE_FORK = getattr(import_module("dank_mids._config"), "GANACHE_FORK")
 
 from y.exceptions import NodeNotSynced
 from y.networks import CHAINID, NETWORK_NAME, Network
@@ -40,7 +45,7 @@ class NoBlockFound(Exception):
         timestamp: The timestamp for which no block was found.
     """
 
-    def __init__(self, timestamp: Timestamp):
+    def __init__(self, timestamp: Timestamp | int) -> None:
         super().__init__(f"No block found after timestamp {timestamp}")
 
 
@@ -68,11 +73,11 @@ def get_block_timestamp(height: int) -> int:
     import y._db.utils.utils as db
 
     if ts := db.get_block_timestamp(height, sync=True):
-        return ts
+        return int(ts)
     client = get_ethereum_client()
     if client in ("tg", "erigon") and CHAINID not in (Network.Polygon,):
         # NOTE: polygon erigon does not support this method
-        header = web3.manager.request_blocking(f"{client}_getHeaderByNumber", [height])
+        header = web3.manager.request_blocking(RPCEndpoint(f"{client}_getHeaderByNumber"), [height])
         if isinstance(header.timestamp, str):
             ts = (
                 int(header.timestamp, 16)
@@ -81,9 +86,9 @@ def get_block_timestamp(height: int) -> int:
             )
         else:
             ts = int(header.timestamp)
-        db.set_block_timestamp(height, ts, sync=True)
-        return ts
-    return chain[height].timestamp
+        db._set_block_timestamp(height, ts, sync=True)
+        return int(ts)
+    return int(chain[BlockNumber(height)]["timestamp"])
 
 
 @a_sync_ttl_cache
@@ -109,11 +114,13 @@ async def get_block_timestamp_async(height: int) -> int:
     import y._db.utils.utils as db
 
     if ts := await db.get_block_timestamp(height, sync=False):
-        return ts
+        return int(ts)
     client = await get_ethereum_client_async()
     if client in ("tg", "erigon") and CHAINID not in (Network.Polygon,):
         # NOTE: polygon erigon does not support this method
-        header = await dank_mids.web3.manager.coro_request(f"{client}_getHeaderByNumber", [height])
+        header = await dank_mids.web3.manager.coro_request(
+            RPCEndpoint(f"{client}_getHeaderByNumber"), [height]
+        )
         if isinstance(header.timestamp, str):
             ts = (
                 int(header.timestamp, 16)
@@ -123,14 +130,14 @@ async def get_block_timestamp_async(height: int) -> int:
         else:
             ts = int(header.timestamp)
     else:
-        ts = await dank_mids.eth.get_block_timestamp(height)
+        ts = await dank_eth.get_block_timestamp(height)
     db.set_block_timestamp(height, ts)
-    return ts
+    return int(ts)
 
 
 # TODO: deprecate
 @memory.cache()
-def last_block_on_date(date: str | datetime.date) -> BlockNumber:
+def last_block_on_date(date: str | datetime.date) -> BlockNumber | None:
     """
     Returns the last block on a given date. You can pass either a `datetime.date` object or a date string formatted as 'YYYY-MM-DD'.
 
@@ -162,7 +169,7 @@ def last_block_on_date(date: str | datetime.date) -> BlockNumber:
         date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
 
     height = chain.height
-    lo, hi = 0, height
+    lo, hi = 0, int(height)
     while hi - lo > 1:
         mid = lo + (hi - lo) // 2
         log_debug("block: %s", str(mid))
@@ -175,7 +182,7 @@ def last_block_on_date(date: str | datetime.date) -> BlockNumber:
         else:
             lo = mid
     hi = hi - 1
-    block = hi if hi != height else None
+    block = BlockNumber(hi) if hi != height else None
     log_debug("last %s block on date %s -> %s", NETWORK_NAME, date, block)
     return block
 
@@ -208,7 +215,7 @@ async def get_block_at_timestamp(timestamp: datetime.datetime) -> BlockNumber:
 
     # TODO: invert this and use this fn inside of closest_block_after_timestamp for backwards compatibility before deprecating closest_block_after_timestamp
     block_after_timestamp = await closest_block_after_timestamp_async(timestamp)
-    block_at_timestamp = block_after_timestamp - 1
+    block_at_timestamp = BlockNumber(block_after_timestamp - 1)
     db.set_block_at_timestamp(timestamp, block_at_timestamp)
     return block_at_timestamp
 
@@ -233,7 +240,7 @@ def _parse_timestamp(timestamp: Timestamp) -> UnixTimestamp:
         1672531200
     """
     if isinstance(timestamp, datetime.datetime):
-        timestamp = int(timestamp.timestamp())
+        return UnixTimestamp(int(timestamp.timestamp()))
     elif not isinstance(timestamp, int):
         raise TypeError("You may only pass in a unix timestamp or a datetime object.")
     return UnixTimestamp(timestamp)
@@ -308,14 +315,14 @@ async def closest_block_after_timestamp_async(
                 datetime.datetime.fromtimestamp(timestamp, tz=datetime.timezone.utc),
                 sync=False,
             )
-            return block_at_ts + 1
+            return BlockNumber(block_at_ts + 1)
         except NoBlockFound:
             await asyncio.sleep(0.2)
 
     await check_node_async()
 
-    height = await dank_mids.eth.block_number
-    lo, hi = 0, height
+    height = await dank_eth.block_number
+    lo, hi = 0, int(height)
     while hi - lo > 1:
         mid = lo + (hi - lo) // 2
         if await get_block_timestamp_async(mid) > timestamp:
@@ -324,13 +331,13 @@ async def closest_block_after_timestamp_async(
             lo = mid
     if hi == height:
         raise NoBlockFound(timestamp)
-    return hi
+    return BlockNumber(hi)
 
 
 @memory.cache()
 def _closest_block_after_timestamp_cached(timestamp: int) -> BlockNumber:
     height = chain.height
-    lo, hi = 0, height
+    lo, hi = 0, int(height)
     while hi - lo > 1:
         mid = lo + (hi - lo) // 2
         if get_block_timestamp(mid) > timestamp:
@@ -339,7 +346,7 @@ def _closest_block_after_timestamp_cached(timestamp: int) -> BlockNumber:
             lo = mid
     if hi == height:
         raise NoBlockFound(timestamp)
-    return hi
+    return BlockNumber(hi)
 
 
 @cachebox.cached(cachebox.TTLCache(1, ttl=300))
@@ -357,7 +364,7 @@ def check_node() -> None:
     if GANACHE_FORK:
         return
     current_time = now()
-    node_timestamp = web3.eth.get_block("latest").timestamp
+    node_timestamp = web3.eth.get_block("latest")["timestamp"]
     if current_time - node_timestamp > 5 * 60:
         raise NodeNotSynced(
             f"current time: {current_time}  latest block time: {node_timestamp}  discrepancy: {round((current_time - node_timestamp) / 60, 2)} minutes"
@@ -379,7 +386,7 @@ async def check_node_async() -> None:
     if GANACHE_FORK:
         return
     current_time = now()
-    node_timestamp = await dank_mids.eth.get_block_timestamp("latest")
+    node_timestamp = await dank_eth.get_block_timestamp(await dank_eth.block_number)
     if current_time - node_timestamp > 5 * 60:
         raise NodeNotSynced(
             f"current time: {current_time}  latest block time: {node_timestamp}  discrepancy: {round((current_time - node_timestamp) / 60, 2)} minutes"

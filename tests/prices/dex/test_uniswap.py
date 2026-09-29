@@ -8,6 +8,11 @@ See Also:
     :class:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer`
 """
 
+from y.datatypes import Address
+from y.prices.dex.uniswap.v1 import UniswapV1
+
+from tests.fixtures import async_result
+
 from typing import Any
 
 import pytest
@@ -25,46 +30,50 @@ from y.prices._rpc import BlockRef
 from y.prices.dex.uniswap import v3
 from y.prices.dex.uniswap.uniswap import uniswap_multiplexer
 
-V1_TOKENS = {
-    Network.Mainnet: [
-        "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-        "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
-        "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-    ],
-}.get(chain.id, [])
+V1_TOKENS = dict[int, list[str]](
+    {
+        Network.Mainnet: [
+            "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+            "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
+            "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+        ],
+    }
+).get(chain.id, [])
 
-V2_TOKENS = {
-    Network.Mainnet: [
-        "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
-        "0xBA11D00c5f74255f56a5E366F4F77f5A186d7f55",
-        "0xc00e94Cb662C3520282E6f5717214004A7f26888",
-        "0xD533a949740bb3306d119CC777fa900bA034cd52",
-        "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-        "0x6810e776880C02933D47DB1b9fc05908e5386b96",
-        "0xc944E90C64B2c07662A292be6244BDf05Cda44a7",
-        "0x514910771AF9Ca656af840dff83E8264EcF986CA",
-        "0x0F5D2fB29fb7d3CFeE444a200298f468908cC942",
-        "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
-        "0xec67005c4E498Ec7f55E092bd1d35cbC47C91892",
-        "0x4fE83213D56308330EC302a8BD641f1d0113A4Cc",
-        "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",
-        "0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828",
-        "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
-        "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-        "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-        "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
-        "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-        "0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e",
-        "0xE41d2489571d322189246DaFA5ebDe1F4699F498",
-    ],
-}.get(chain.id, [])
+V2_TOKENS = dict[int, list[str]](
+    {
+        Network.Mainnet: [
+            "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+            "0xBA11D00c5f74255f56a5E366F4F77f5A186d7f55",
+            "0xc00e94Cb662C3520282E6f5717214004A7f26888",
+            "0xD533a949740bb3306d119CC777fa900bA034cd52",
+            "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+            "0x6810e776880C02933D47DB1b9fc05908e5386b96",
+            "0xc944E90C64B2c07662A292be6244BDf05Cda44a7",
+            "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+            "0x0F5D2fB29fb7d3CFeE444a200298f468908cC942",
+            "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
+            "0xec67005c4E498Ec7f55E092bd1d35cbC47C91892",
+            "0x4fE83213D56308330EC302a8BD641f1d0113A4Cc",
+            "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",
+            "0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828",
+            "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+            "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+            "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+            "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+            "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+            "0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e",
+            "0xE41d2489571d322189246DaFA5ebDe1F4699F498",
+        ],
+    }
+).get(chain.id, [])
 
 V2_TOKENS = mutate_addresses(V2_TOKENS)
 
 
 @pytest.mark.parametrize("token", V1_TOKENS)
 @pytest.mark.asyncio_cooperative
-async def test_uniswap_v1(token, async_uni_v1):
+async def test_uniswap_v1(token: Address, async_uni_v1: UniswapV1) -> None:
     """Test Uniswap V1 price fetching.
 
     This test concurrently retrieves the price using an asynchronous Uniswap V1 caller and the generic
@@ -81,7 +90,7 @@ async def test_uniswap_v1(token, async_uni_v1):
     block = await BlockRef.resolve(None)
     lookup: Any = magic.get_price  # a_sync supplies the runtime sync flag.
     price, alt_price = await cgather(
-        async_uni_v1.get_price(token, block.number),
+        async_result(async_uni_v1.get_price(token, block.number)),
         lookup(token, block.number, skip_cache=True, sync=False),
     )
     print(token, block, price, alt_price, price.path if price is not None else None)
@@ -107,8 +116,8 @@ async def test_uniswap_v2(monkeypatch: pytest.MonkeyPatch, scenario: str) -> Non
         rates = {"a": 2, "b": 9}
     _, seen, _ = multiplexer_graph(monkeypatch, pools, rates)
     ignored = ("deep",) if scenario == "excluded" else ()
-    result = await uniswap_multiplexer.get_price(
-        TOKEN, BLOCK.number, ignore_pools=ignored, skip_cache=True
+    result = await async_result(
+        uniswap_multiplexer.get_price(TOKEN, BLOCK.number, ignore_pools=ignored, skip_cache=True)
     )
     expected = None if scenario == "exhausted" else 2 if scenario in ("deep", "tie") else 9
     assert (float(result) if result is not None else None) == expected
@@ -125,7 +134,7 @@ async def test_uniswap_v2(monkeypatch: pytest.MonkeyPatch, scenario: str) -> Non
 
 @pytest.mark.parametrize("token", V2_TOKENS)
 @pytest.mark.asyncio_cooperative
-async def test_uniswap_v3(token):
+async def test_uniswap_v3(token: Address) -> None:
     """Replay full-token native quotes instead of comparing them with spot oracles."""
     # Pin independent native replay to the investigated canonical historical state.
     from eth_abi.packed import encode_packed
@@ -134,6 +143,7 @@ async def test_uniswap_v3(token):
     from y.prices.dex.uniswap.v3 import load_quoter
 
     block = await BlockRef.resolve(26_063_967)
+    assert v3.uniswap_v3 is not None
     price = await v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False)
     quoter = await load_quoter(v3.uniswap_v3._quoter)
     if price is None:
@@ -156,10 +166,10 @@ async def test_uniswap_v3(token):
         else:
             # MLN exhausts liquidity: 0.01 and 1 MLN return the same WETH amount.
             # A full-token sale must be unavailable.
-            small = await quoter.quoteExactInput.coroutine(
+            small: int = await quoter.quoteExactInput.coroutine(
                 path, 10**16, block_identifier=block.identifier
             )
-            large = await quoter.quoteExactInput.coroutine(
+            large: int = await quoter.quoteExactInput.coroutine(
                 path, 10**18, block_identifier=block.identifier
             )
             assert small == large == 3838826218858
@@ -187,7 +197,7 @@ async def test_uniswap_v3(token):
             path = encode_packed(
                 ["address", "uint24", "address"], [step.input.token, fee, step.outputs[0].token]
             )
-            native = await native_quoter.quoteExactInput.coroutine(
+            native: int | tuple[int, ...] = await native_quoter.quoteExactInput.coroutine(
                 path, step.input.amount, block_identifier=block.identifier
             )
             assert step.outputs[0].amount == (native if isinstance(native, int) else native[0])

@@ -1,8 +1,12 @@
 """Block-scoped contract reads for sale estimates."""
 
+import asyncio
+import re
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Any
+from logging import getLogger
+from typing import Any, TypeVar
 
 from brownie import chain
 from dank_mids.brownie_patch import dank_web3
@@ -13,6 +17,42 @@ from y._decorators import stuck_coro_debugger
 from y.exceptions import call_reverted
 from y.prices._candidates import _UNAVAILABLE
 from y.prices._quote import SharedCache
+
+_T = TypeVar("_T")
+
+
+@stuck_coro_debugger
+async def _retry_state_read(request: Callable[[], Awaitable[_T]]) -> _T:
+    """Retry archive-state misses at the unchanged hash, for at most 121.5s of backoff.
+
+    Failures during concurrent historical reads can outlast a short retry burst.
+    Keep a bounded recovery window while propagating a persistent archive miss.
+    """
+    for attempt in range(10):
+        try:
+            return await request()
+        except ValueError as exc:
+            error = exc.args[0] if exc.args else None
+            if (
+                attempt == 9
+                or not isinstance(error, dict)
+                or error.get("code") != -32000
+                or not isinstance(error.get("message"), str)
+                or re.fullmatch(
+                    r"historical state (?:0x)?[0-9a-fA-F]{64} is not available",
+                    error["message"],
+                )
+                is None
+            ):
+                raise
+            delay = min(0.5 * 2**attempt, 30.0)
+            getLogger(__name__).debug(
+                "Archive state unavailable; retrying the same block hash in %ss (%s/9)",
+                delay,
+                attempt + 1,
+            )
+            await asyncio.sleep(delay)
+    raise AssertionError("unreachable")
 
 
 @dataclass(frozen=True)
@@ -54,8 +94,10 @@ def unavailable(exc: Exception) -> bool:
 async def read(address: str, signature: str, block: BlockRef, *args: Any) -> Any:
     """Use the repository's native call path; never send a transaction."""
     call = Call(address, [signature, *args])
-    output = await dank_web3.eth.call(
-        {"to": call.target, "data": call.data}, block_identifier=block.identifier
+    output = await _retry_state_read(
+        lambda: dank_web3.eth.call(
+            {"to": call.target, "data": call.data}, block_identifier=block.identifier
+        )
     )
     return Call.decode_output(output, call.signature, call.returns)
 
@@ -70,8 +112,9 @@ async def deployed(address: str, block: BlockRef) -> bool:
     async def code() -> bool:
         from y import convert
 
+        target = await convert.to_address_async(address)
         return bool(
-            await dank_web3.eth.get_code(await convert.to_address_async(address), block.identifier)
+            await _retry_state_read(lambda: dank_web3.eth.get_code(target, block.identifier))
         )
 
     return bool(await state_cache().get((block.chain, block.hash, address.lower(), "code"), code))

@@ -3,13 +3,13 @@
 import pytest
 
 from tests.fixtures import blocks_for_contract
-from y.constants import CHAINID, STABLECOINS
+from y.constants import CHAINID, STABLECOINS as STABLECOINS
 from y.prices import magic
 from y.prices._usdc import fixed_usdc_price
 
 
 @pytest.mark.parametrize("token,name", STABLECOINS.items())
-def test_stablecoins(token, name):
+def test_stablecoins(token: str, name: str) -> None:
     expected_fixed = name in ("usdc", "usdc.e", "usdbc")
     fixed = fixed_usdc_price(token, CHAINID)
     assert (fixed is not None) == expected_fixed

@@ -3,11 +3,12 @@ import logging
 from brownie import chain
 
 import y
+from y.datatypes import PriceResult
 
 y_logger = logging.getLogger("y")
 
 
-def debug_price(token: str, block: int | None = None) -> float:
+def debug_price(token: str, block: int | None = None) -> PriceResult:
     """
     Debug token price retrieval.
 

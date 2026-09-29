@@ -41,8 +41,7 @@ if ENVS.SENSE_CHECK_FILE:
 # This module is far from perfect, but provides an acceptable way to validate some of the prices returned by `get_price`
 
 acceptable_all_chains: Final[set[ChecksumAddress]] = {
-    weth.address,
-    wbtc.address,
+    token.address for token in (weth, wbtc) if token is not None
 }
 
 ACCEPTABLE_HIGH_PRICES: Final[set[ChecksumAddress]] = {  # type: ignore [call-overload]

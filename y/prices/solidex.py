@@ -1,3 +1,4 @@
+from typing import cast
 import a_sync
 import cachebox
 from brownie.convert.datatypes import EthAddress
@@ -79,12 +80,13 @@ async def get_price(
     pool = await _get_pool(str(token))  # force to string for cache key
     child = await magic.get_price(pool, block, skip_cache=skip_cache, sync=False)
     if child is not None:
-        return derive_price(token, float(child), f"Solidex {token} via pool {pool}", child)
+        return derive_price(token, float(child), f"Solidex {str(token)} via pool {pool}", child)
     return None
 
 
 @cachebox.cached(cachebox.LRUCache(ENVS.DEFAULT_CACHE_MAXSIZE))
-async def _get_pool(token) -> EthAddress:
+@stuck_coro_debugger
+async def _get_pool(token: str) -> EthAddress:
     """
     Retrieve the pool address from a token contract.
 
@@ -102,4 +104,4 @@ async def _get_pool(token) -> EthAddress:
         - :func:`y.contracts.Contract`
     """
     contract = await Contract.coroutine(token)
-    return await contract.pool
+    return cast(EthAddress, await contract.pool.coroutine())

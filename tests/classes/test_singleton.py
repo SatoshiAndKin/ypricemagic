@@ -1,3 +1,4 @@
+from y.datatypes import AnyAddressType
 from brownie.convert.datatypes import EthAddress
 
 from y import convert
@@ -6,7 +7,7 @@ from y.constants import WRAPPED_GAS_COIN
 from y.contracts import Contract
 
 
-def test_contract_singleton():
+def test_contract_singleton() -> None:
     """
     Test the singleton behavior of the `ContractBase` class.
 
@@ -30,7 +31,7 @@ def test_contract_singleton():
         - :data:`y.constants.WRAPPED_GAS_COIN`
     """
     token = WRAPPED_GAS_COIN
-    variations = [
+    variations: list[AnyAddressType] = [
         token.lower(),
         token.upper(),
         convert.to_address(token),

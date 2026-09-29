@@ -1,19 +1,24 @@
+"""
+This module provides utility functions to retrieve the `get_block` and `get_token`
+functions from either the `eth_portfolio` or `ypricemagic` database utilities,
+depending on the availability of the `eth_portfolio` module.
+
+These functions are used to ensure that the correct version of the database
+utilities is used, allowing for extended functionality if `eth_portfolio` is installed.
+"""
+
+from typing import cast
+from importlib import import_module
+from a_sync.a_sync.function import ASyncFunctionAsyncDefault
+from y._db.entities import Block, Token
+
 from functools import lru_cache
 
 from y._db.utils.utils import ensure_chain
 
-"""
-This module provides utility functions to retrieve the `get_block` and `get_token` 
-functions from either the `eth_portfolio` or `ypricemagic` database utilities, 
-depending on the availability of the `eth_portfolio` module.
-
-These functions are used to ensure that the correct version of the database 
-utilities is used, allowing for extended functionality if `eth_portfolio` is installed.
-"""
-
 
 @lru_cache(maxsize=1)
-def _get_get_block():
+def _get_get_block() -> ASyncFunctionAsyncDefault[[int], Block]:
     """Retrieve the `get_block` function from the appropriate module.
 
     This function first ensures that the chain object for the connected chain
@@ -33,14 +38,17 @@ def _get_get_block():
     """
     ensure_chain()
     try:
-        from eth_portfolio._db.utils import get_block
+        get_block = cast(
+            ASyncFunctionAsyncDefault[[int], Block],
+            import_module("eth_portfolio._db.utils").get_block,
+        )
     except ModuleNotFoundError:
         from y._db.utils import get_block
     return get_block
 
 
 @lru_cache(maxsize=1)
-def _get_get_token():
+def _get_get_token() -> ASyncFunctionAsyncDefault[[str], Token]:
     """Retrieve the `get_token` function from the appropriate module.
 
     This function first ensures that the chain object for the connected chain
@@ -63,7 +71,10 @@ def _get_get_token():
     """
     ensure_chain()
     try:
-        from eth_portfolio._db.utils import get_token
+        get_token = cast(
+            ASyncFunctionAsyncDefault[[str], Token],
+            import_module("eth_portfolio._db.utils").get_token,
+        )
     except ModuleNotFoundError:
         from y._db.utils.token import get_token
     # force imports to run in main thread

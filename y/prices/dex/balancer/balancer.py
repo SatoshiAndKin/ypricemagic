@@ -1,8 +1,10 @@
+from y._typing import a_sync_property
 import logging
 from typing import Final, final
 
 import a_sync
 import dank_mids
+from dank_mids.brownie_patch import dank_eth
 from a_sync.a_sync.property import HiddenMethodDescriptor
 from typing_extensions import Self
 
@@ -54,7 +56,7 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
         super().__init__()
         self.asynchronous: Final = asynchronous
 
-    @a_sync.aka.property
+    @a_sync_property
     async def versions(self) -> list[BalancerV1 | BalancerV2]:
         """
         Get the available Balancer versions.
@@ -67,7 +69,7 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
         """
         return [v for v in await gather_owned([self.__v1__, self.__v2__]) if v]
 
-    __versions__: HiddenMethodDescriptor[Self, list[BalancerV1 | BalancerV2]]
+    __versions__: HiddenMethodDescriptor["BalancerMultiplexer", list[BalancerV1 | BalancerV2]]
 
     @a_sync.aka.cached_property
     async def v1(self) -> BalancerV1 | None:
@@ -85,7 +87,7 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
         except ImportError:
             return None
 
-    __v1__: HiddenMethodDescriptor[Self, BalancerV1 | None]
+    __v1__: HiddenMethodDescriptor["BalancerMultiplexer", BalancerV1 | None]
 
     @a_sync.aka.cached_property
     async def v2(self) -> BalancerV2 | None:
@@ -103,7 +105,7 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
         except ImportError:
             return None
 
-    __v2__: HiddenMethodDescriptor[Self, BalancerV2 | None]
+    __v2__: HiddenMethodDescriptor["BalancerMultiplexer", BalancerV2 | None]
 
     @stuck_coro_debugger
     @optional_async_diskcache
@@ -121,7 +123,7 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
             >>> is_pool = await multiplexer.is_balancer_pool(token_address)
         """
         try:
-            await self.get_version(token_address)
+            await self.get_version(token_address, sync=False)
             return True
         except exceptions.TokenError:
             return False
@@ -148,7 +150,7 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
         Examples:
             >>> price = await multiplexer.get_pool_price(token_address, block=12345678)
         """
-        balancer: BalancerABC = await self.get_version(token_address)
+        balancer: BalancerV1 | BalancerV2 = await self.get_version(token_address, sync=False)
         logger.debug("pool %s is from %s", token_address, balancer)
         price = await balancer.get_pool_price(
             token_address, block, skip_cache=skip_cache, ignore_pools=ignore_pools, sync=False
@@ -178,7 +180,7 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
             >>> price = await multiplexer.get_price(token_address, block=12345678)
         """
         if block is None:
-            block = await dank_mids.eth.block_number
+            block = await dank_eth.block_number
         if await self.is_balancer_pool(token_address, sync=False):
             price = await self.get_pool_price(
                 token_address,
@@ -204,7 +206,7 @@ class BalancerMultiplexer(a_sync.ASyncGenericBase):
     @a_sync.a_sync(
         cache_type="memory", ram_cache_ttl=None, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE
     )
-    async def get_version(self, token_address: AnyAddressType) -> BalancerABC:
+    async def get_version(self, token_address: AnyAddressType) -> BalancerV1 | BalancerV2:
         """
         Determine the Balancer version for a given token address.
 

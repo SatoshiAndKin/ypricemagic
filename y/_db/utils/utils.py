@@ -1,7 +1,8 @@
 from datetime import datetime, timezone
 from functools import lru_cache
 from logging import getLogger
-from typing import Callable
+from typing import Callable, cast
+from a_sync.a_sync.function import ASyncFunctionAsyncDefault
 
 from a_sync import ProcessingQueue, a_sync
 from brownie import chain
@@ -9,7 +10,7 @@ from dateutil import parser
 from eth_typing import BlockNumber
 from pony.orm import TransactionIntegrityError, commit, select
 
-from y._db.common import make_executor
+from y._db.common import make_executor as make_executor
 from y._db.decorators import (
     a_sync_read_db_session,
     db_session_cached,
@@ -28,13 +29,14 @@ del chain
 _block_executor = make_executor(2, 8, "ypricemagic db executor [block]")
 _timestamp_executor = make_executor(1, 4, "ypricemagic db executor [timestamp]")
 
-_get_get_block: Callable[..., Block] | None = None
+_get_get_block: Callable[[], ASyncFunctionAsyncDefault[[int], Block]] | None = None
 
 
-def _import_get_get_block() -> None:
+def _import_get_get_block() -> Callable[[], ASyncFunctionAsyncDefault[[int], Block]]:
     # this helper resolves a goofy interplay between ypricemagic and eth-portfolio
     global _get_get_block
     import y._db.utils._ep
+
     _get_get_block = y._db.utils._ep._get_get_block
     return _get_get_block
 
@@ -130,7 +132,7 @@ def ensure_block(number: int) -> None:
 
 
 @a_sync_read_db_session
-def get_block_timestamp(number: int) -> int | None:
+def get_block_timestamp(number: int) -> float | None:
     """Retrieve the timestamp for a given block number.
 
     If the timestamp is not known, it retrieves and caches the block's timestamp.
@@ -180,7 +182,8 @@ def get_block_at_timestamp(timestamp: datetime) -> BlockNumber | None:
     if entity := BlockAtTimestamp.get(chainid=CHAINID, timestamp=timestamp):
         block = entity.block
         _logger_debug("found block %s for %s in ydb", block, timestamp)
-        return block
+        return BlockNumber(block)
+    return None
 
 
 @a_sync(default="async", executor=_timestamp_executor)
@@ -200,25 +203,10 @@ def _set_block_timestamp(block: int, timestamp: int) -> None:
     """
     get_get_block = _get_get_block or _import_get_get_block()
     get_block = get_get_block()
-    block = get_block(block, sync=True)
-    timestamp = datetime.fromtimestamp(timestamp, tz=timezone.utc)
-    block.timestamp = timestamp
-    _logger_debug("cached %s.timestamp %s", block, timestamp)
-
-
-def set_block_timestamp(block: int, timestamp: int) -> None:
-    """Set the timestamp for a specific block in the database.
-
-    Args:
-        block: The block number to set the timestamp for.
-        timestamp: The timestamp to set for the block.
-
-    Examples:
-        >>> _set_block_timestamp(123456, 1609459200)
-
-    See Also:
-        - :func:`get_block`
-    """
+    entity = get_block(block, sync=True)
+    dt = datetime.fromtimestamp(timestamp, tz=timezone.utc)
+    entity.timestamp = dt
+    _logger_debug("cached %s.timestamp %s", entity, dt)
 
 
 set_block_timestamp = ProcessingQueue(_set_block_timestamp, num_workers=2, return_data=False)

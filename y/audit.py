@@ -1,5 +1,8 @@
 """Historical comparison reports. DeFiLlama is never a production price source."""
 
+from typing import cast
+
+
 import asyncio
 import csv
 import json
@@ -128,6 +131,7 @@ class AuditClient:
     async def boundaries(self, tokens: list[str], latest: int) -> list[dict[str, Any]]:
         from y.contracts import contract_creation_block_async
         from y.prices import chainlink
+        from y.prices.chainlink import Chainlink
 
         samples: list[dict[str, Any]] = []
         for token in tokens:
@@ -137,9 +141,9 @@ class AuditClient:
                 for b in (deployed - 1, deployed)
                 if b >= 0
             )
-        if chainlink and chainlink._feeds_from_events:
+        if chainlink and cast(Chainlink, chainlink)._feeds_from_events:
             tokens_lower = {t.lower() for t in tokens}
-            events: Any = chainlink._feeds_from_events
+            events: Any = cast(Chainlink, chainlink)._feeds_from_events
             async for feed in events.objects(to_block=latest):
                 if str(feed.asset).lower() in tokens_lower:
                     samples.extend(

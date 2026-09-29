@@ -20,6 +20,7 @@ from decimal import Decimal
 
 import a_sync
 import dank_mids
+from dank_mids.brownie_patch import dank_eth
 from brownie import ZERO_ADDRESS
 
 from y import ENVIRONMENT_VARIABLES as ENVS
@@ -320,7 +321,7 @@ async def get_price_xpremia(
     token_address = await convert.to_address_async(token_address)
 
     if block is None:
-        block = await dank_mids.eth.block_number
+        block = await dank_eth.block_number
     premia_address = await raw_call(
         token_address,
         "premia()",

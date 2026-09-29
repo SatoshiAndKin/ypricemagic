@@ -1,4 +1,5 @@
-from typing import Final, final
+from typing import Final, final, cast
+from asyncio import gather
 
 import a_sync
 from a_sync import cgather
@@ -36,7 +37,7 @@ async def is_generic_amm(lp_token_address: AnyAddressType) -> bool:
     """
     try:
         contract = await Contract.coroutine(lp_token_address, require_success=False)
-        return contract.verified and hasall(contract, _CHECK_METHODS)
+        return bool(contract.verified) and hasall(contract, _CHECK_METHODS)
     except ContractNotFound:
         return False
     except MessedUpBrownieContract:
@@ -68,7 +69,7 @@ class GenericAmm(a_sync.ASyncGenericBase):
         lp_token: AnyAddressType,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice:
+    ) -> UsdPrice | int | None:
         """
         Get the price of the LP token in USD.
 
@@ -92,9 +93,11 @@ class GenericAmm(a_sync.ASyncGenericBase):
             - :meth:`ERC20.total_supply_readable`
         """
         lp_token_address = to_address(lp_token)
-        tvl, total_supply = await cgather(
+        tvl, total_supply = await gather(
             self.get_tvl(lp_token_address, block=block, skip_cache=skip_cache, sync=False),
-            ERC20(lp_token_address, asynchronous=True).total_supply_readable(block=block),
+            ERC20(lp_token_address, asynchronous=True).total_supply_readable(
+                block=block, sync=False
+            ),
         )
         if total_supply is None:
             return None
@@ -125,13 +128,16 @@ class GenericAmm(a_sync.ASyncGenericBase):
             - :class:`ERC20`
         """
         tokens = await gather_methods(lp_token_address, _TOKEN_METHODS)
-        return tuple(ERC20(token, asynchronous=self.asynchronous) for token in tokens)
+        return cast(
+            tuple[ERC20, ERC20],
+            tuple(ERC20(token, asynchronous=self.asynchronous) for token in tokens),
+        )
 
     @stuck_coro_debugger
     async def get_tvl(
         self,
         lp_token_address: ChecksumAddress,
-        block: BlockNumber | None = None,
+        block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
     ) -> UsdValue:
         """
@@ -156,15 +162,16 @@ class GenericAmm(a_sync.ASyncGenericBase):
             - :meth:`get_price`
         """
         lp_token_contract = await Contract.coroutine(lp_token_address)
-        tokens, reserves = await cgather(
+        reserves: tuple[int, int, int]
+        tokens, reserves = await gather(
             self.get_tokens(lp_token_address, sync=False),
             lp_token_contract.getReserves.coroutine(block_identifier=block),
         )
-        reserves = (
+        balances = (
             WeiBalance(reserve, token, block=block, skip_cache=skip_cache)
             for token, reserve in zip(tokens, reserves)
         )
-        return UsdValue(await WeiBalance.value_usd.sum(reserves, sync=False))
+        return UsdValue(await WeiBalance.value_usd.map(balances).sum(sync=False))
 
 
 generic_amm = GenericAmm(asynchronous=True)

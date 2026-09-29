@@ -1,3 +1,4 @@
+from typing import cast
 import logging
 from decimal import Decimal
 
@@ -51,11 +52,14 @@ class wstEth(a_sync.ASyncGenericBase):
         """
         super().__init__()
         self.asynchronous = asynchronous
+        self.address: str | None
         try:
-            self.address = {Network.Mainnet: "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"}[CHAINID]
-            self.wrapped_for_curve = {
-                Network.Mainnet: "0xb82CFa4325568748506dC7cF267857Ff1e3b8d39"
-            }[CHAINID]
+            self.address = dict[int, str](
+                {Network.Mainnet: "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"}
+            )[CHAINID]
+            self.wrapped_for_curve = dict[int, str](
+                {Network.Mainnet: "0xb82CFa4325568748506dC7cF267857Ff1e3b8d39"}
+            )[CHAINID]
         except KeyError:
             self.address = None
 
@@ -87,16 +91,18 @@ class wstEth(a_sync.ASyncGenericBase):
             - :func:`y.utils.raw_calls.raw_call`
             - :func:`y.prices.magic.get_price`
         """
+        assert self.address is not None and weth is not None
         share_price, weth_price = await gather_owned(
             [
                 raw_call(self.address, "stEthPerToken()", output="int", block=block, sync=False),
                 magic.get_price(weth, block, skip_cache=skip_cache, sync=False),
             ]
         )
-        share_price /= Decimal(10**18)
+        rate = Decimal(cast(int, share_price)) / Decimal(10**18)
+        weth_price = cast(PriceResult, weth_price)
         return derive_price(
             self.address,
-            share_price * Decimal(float(weth_price)),
+            rate * Decimal(float(weth_price)),
             "Lido wstETH via stEthPerToken",
             weth_price,
         )

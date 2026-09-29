@@ -7,7 +7,8 @@ from decimal import Decimal
 from functools import wraps
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Any, Generic, ParamSpec, TypeVar
+from y.utils.logging import PriceLogger
+from typing import Any, cast, Generic, ParamSpec, TypeVar
 from unittest.mock import AsyncMock
 
 import a_sync
@@ -93,12 +94,11 @@ async def test_price_block_is_a_plain_integer(
         pass
 
     block = RpcBlockNumber(BLOCK)
-    monkeypatch.setattr(
-        magic, "dank_mids", SimpleNamespace(eth=SimpleNamespace(block_number=Ready(block)))
-    )
+    monkeypatch.setattr(magic, "dank_eth", SimpleNamespace(block_number=Ready(block)))
     lookup = AsyncMock(return_value=PriceResult(UsdPrice(1), []))
     monkeypatch.setattr(magic, "_get_price", lookup)
     assert await magic.get_price(TOKEN, block if explicit else None, sync=False)
+    assert lookup.await_args is not None
     assert lookup.await_args.args == (TOKEN, BLOCK)
     assert type(lookup.await_args.args[1]) is int
 
@@ -137,6 +137,7 @@ async def test_xpremia_backing(
     if expected is None:
         assert result is None
     else:
+        assert result is not None
         assert float(result) == expected
     if not balance or not supply:
         child_price.assert_not_awaited()
@@ -219,13 +220,9 @@ async def test_chainlink_replacements_removals_and_cache(monkeypatch: pytest.Mon
     ]
     assert await chainlink.get_feed(TOKEN.lower(), 200, sync=False) is newer
     assert scanned.count(200) == 1
-    monkeypatch.setattr(
-        module, "dank_mids", SimpleNamespace(eth=SimpleNamespace(block_number=Ready(199)))
-    )
+    monkeypatch.setattr(module, "dank_eth", SimpleNamespace(block_number=Ready(199)))
     assert await chainlink.get_feed(TOKEN, sync=False) is old
-    monkeypatch.setattr(
-        module, "dank_mids", SimpleNamespace(eth=SimpleNamespace(block_number=Ready(301)))
-    )
+    monkeypatch.setattr(module, "dank_eth", SimpleNamespace(block_number=Ready(301)))
     assert await chainlink.get_feed(TOKEN, sync=False) is None
     assert module.FeedsFromEvents._include_event(
         {"denomination": module.DENOMINATIONS["USD"], "latestAggregator": module.ZERO_ADDRESS}
@@ -326,6 +323,7 @@ async def test_conversion_preserves_exact_child_path(monkeypatch: pytest.MonkeyP
     monkeypatch.setattr(convex, "get_underlying_lp", AsyncMock(return_value=CHILD))
     monkeypatch.setattr(magic, "get_price", AsyncMock(return_value=child))
     result = await convex.get_price(TOKEN, BLOCK, skip_cache=True, sync=False)
+    assert result is not None
     assert result.path == [
         PriceStep(TOKEN, UsdPrice(4), f"Convex wrapping Curve LP {CHILD}"),
         *child.path,
@@ -442,7 +440,7 @@ async def test_xtarot_actual_calldata_and_zero_decoding(
         ] + (10**18).to_bytes(32, "big")
         return HexBytes(response)
 
-    monkeypatch.setattr(raw_calls, "dank_mids", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
+    monkeypatch.setattr(raw_calls, "dank_eth", SimpleNamespace(call=rpc))
     address = f"0x{(2000 + len(response)):040x}"
     assert await exotic_tokens.is_xtarot(address, sync=False) is expected
 
@@ -521,7 +519,7 @@ async def test_v2_discovery_uses_one_block_and_drains_loader(
             return Ready(BLOCK + self.reads - 1)
 
     head = Head()
-    monkeypatch.setattr(module, "dank_mids", SimpleNamespace(eth=head))
+    monkeypatch.setattr(module, "dank_eth", head)
 
     class Pool:
         token0: Any = SimpleNamespace(get_cache_value=lambda pool: pool.token0)
@@ -684,6 +682,7 @@ async def test_conversion_ratios_keep_child_steps(monkeypatch: pytest.MonkeyPatc
     wrapper = instance(module.wstEth)
     wrapper.address = TOKEN
     result = await wrapper.get_price(BLOCK, sync=False)
+    assert result is not None
     assert result.path == [
         PriceStep(TOKEN, UsdPrice(15), "Lido wstETH via stEthPerToken"),
         child.path[0],
@@ -691,6 +690,7 @@ async def test_conversion_ratios_keep_child_steps(monkeypatch: pytest.MonkeyPatc
     assert result.path[1] is not child.path[0]
     monkeypatch.setattr(curve_gauge, "_get_lp_token", AsyncMock(return_value=CHILD))
     gauge = await curve_gauge.get_price(TOKEN, BLOCK, sync=False)
+    assert gauge is not None
     assert gauge.path == [
         PriceStep(TOKEN, UsdPrice(10), f"Curve gauge for LP {CHILD}"),
         child.path[0],
@@ -809,8 +809,9 @@ async def test_erc4626_ratio_and_wrapped_gas_paths(
     with monkeypatch.context() as patch:
         patch.setattr(magic, "get_price", child_call)
         result = await erc4626.get_price(TOKEN, BLOCK, sync=False)
+    assert result is not None
     assert float(result) == 12
-    assert result.path[0].token == TOKEN and result.path[0].price == 12
+    assert result.path[0].token == TOKEN and float(result.path[0].price) == 12
     assert result.path[1] == child.path[0] and result.path[1] is not child.path[0]
     assert result.path[0].source == (
         f"ERC4626 vault VAULT ({TOKEN}) underlying ASSET ({CHILD}) via {via}"
@@ -853,7 +854,7 @@ async def test_solidly_compares_stable_and_volatile_routes(
 
     async def amounts(
         amount: int, routes: list[tuple[object, ...]], block_identifier: int | None
-    ) -> list[int]:
+    ) -> tuple[int, int]:
         assert amount == 10**18 and block_identifier == BLOCK
         quoted.append(routes)
         assert len(routes[0]) == (4 if velodrome else 3)
@@ -891,7 +892,7 @@ async def test_velodrome_discovery_uses_one_block(
             return Ready(BLOCK + self.reads - 1)
 
     head = Head()
-    monkeypatch.setattr(module, "dank_mids", SimpleNamespace(eth=head))
+    monkeypatch.setattr(module, "dank_eth", head)
 
     async def count(factory: str, method: str, **kwargs: Any) -> int:
         calls.append((method, kwargs["block"]))
@@ -984,6 +985,10 @@ async def test_balancer_lp_forwards_exclusions_to_underlying_prices(
         CHILD, BLOCK, skip_cache=True, ignore_pools=("excluded",), sync=False
     )
     assert float(result) == 1.5
+    if version == 1:
+        tvl = await pool.get_tvl(BLOCK, skip_cache=True, ignore_pools=("excluded",), sync=False)
+        assert type(tvl) is Decimal
+        assert tvl == Decimal(6)
 
 
 @run_async_test
@@ -996,7 +1001,11 @@ async def test_balancer_bucket_uses_lp_valuation_before_dex_comparison(
     )
     monkeypatch.setattr(magic, "balancer_multiplexer", adapter)
     result, source = await magic._exit_early_for_known_tokens(
-        TOKEN, BLOCK, logging.getLogger(__name__), skip_cache=True, ignore_pools=("excluded",)
+        TOKEN,
+        BLOCK,
+        cast(PriceLogger, logging.getLogger(__name__)),
+        skip_cache=True,
+        ignore_pools=("excluded",),
     )
     assert result == 0
     adapter.get_pool_price.assert_awaited_once_with(

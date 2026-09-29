@@ -5,7 +5,7 @@ from y.datatypes import UsdPrice
 
 @async_test
 @mainnet_only
-async def test_balancer_v2_pool_price():
+async def test_balancer_v2_pool_price() -> None:
     """
     Test the price of a Balancer V2 pool.
 
@@ -27,7 +27,7 @@ async def test_balancer_v2_pool_price():
 
 @async_test
 @mainnet_only
-async def test_balancer_v2_token_price():
+async def test_balancer_v2_token_price() -> None:
     """
     Test the price of a Balancer V2 token.
 
