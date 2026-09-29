@@ -27,7 +27,7 @@ class PlatformTests(unittest.TestCase):
             lambda: common.set_alarm(0),
         )
         for platform in ("win32", "darwin"):
-            with self.subTest(platform=platform), patch.object(common.sys, "platform", platform):
+            with self.subTest(platform=platform), patch.object(sys, "platform", platform):
                 for function in operations:
                     with self.assertRaisesRegex(RuntimeError, "Linux validation container"):
                         function()
@@ -36,7 +36,7 @@ class PlatformTests(unittest.TestCase):
         from types import SimpleNamespace
 
         with (
-            patch.object(common.sys, "platform", "linux"),
+            patch.object(sys, "platform", "linux"),
             patch("resource.getrusage", return_value=SimpleNamespace(ru_maxrss=32768)) as usage,
             patch("os.sysconf", return_value=4096) as sysconf,
         ):
@@ -47,7 +47,7 @@ class PlatformTests(unittest.TestCase):
 
     def test_linux_signals_preserve_group_deadline_and_stack_dump(self) -> None:
         with (
-            patch.object(common.sys, "platform", "linux"),
+            patch.object(sys, "platform", "linux"),
             patch("os.killpg") as killpg,
             patch("signal.signal") as install,
             patch("signal.alarm", return_value=17) as alarm,
