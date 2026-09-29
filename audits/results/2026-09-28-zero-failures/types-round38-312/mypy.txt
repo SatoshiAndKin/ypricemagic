@@ -1,0 +1,6 @@
+y/prices/stable_swap/ellipsis.py:85: error: Expected 'except' or 'finally'
+block  [syntax]
+            balance: int
+             ^
+Warning: unused section(s) in pyproject.toml: module = ['a_sync_mypy_plugin', 'asyncpg', 'brownie.convert', 'brownie.network', 'eth_event', 'eth_utils', 'eth_utils.toolz', 'faster_eth_abi', 'faster_eth_utils', 'y.ENVIRONMENT_VARIABLES', 'y.convert', 'y.exceptions', 'y.networks', 'y.prices.utils.sense_check', 'y.utils.gather']
+Found 1 error in 1 file (errors prevented further checking)

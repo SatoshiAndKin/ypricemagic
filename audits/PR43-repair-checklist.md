@@ -174,3 +174,17 @@ full run nor the failed pytest recheck is relabelled as passing.
 The repairs are delivered, but the PR remains draft. The full-suite provider
 failures, baseline mypy failures, and earlier source-specific audit limitations
 remain visible; successful targeted/native checks do not make those runs green.
+
+
+## Zero-failure follow-up
+
+The remaining provider and static-check failures are addressed in `0771c206`.
+The reviewed-source focused matrix passes 661 tests on each of Python 3.11,
+3.12, and 3.13, with zero strict-mypy diagnostics and ten compiled extensions
+verified on each version. The committed Python 3.12 focused recheck also passes
+all 661 tests. The required full suite and final GitHub checks remain in progress.
+
+The [follow-up checklist and evidence](results/2026-09-28-zero-failures/README.md)
+track each repair, original-source regression control, immutable validation
+attempt, and remaining delivery gate. Earlier failed and interrupted results
+above retain their original status. The PR remains draft until the new gates pass.

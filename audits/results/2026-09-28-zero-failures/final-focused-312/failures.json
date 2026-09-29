@@ -1,0 +1,25 @@
+[
+  {
+    "phase": "call",
+    "elapsed_seconds": 35.03520940098679,
+    "rss_peak_bytes": 262025216,
+    "live_tasks": 187,
+    "test": "tests/test_typed_interfaces.py::test_db_clear_uses_requested_selector[block]",
+    "outcome": "failed",
+    "duration": 0.0007890609558671713,
+    "error": "event_database = <module 'event_cache_test_entities' from '/work/y/_db/entities.py'>\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe98d9c370380>\nselector = 'block'\n\n    @pytest.mark.parametrize(\"selector\", [\"address\", \"symbol\", \"block\"])\n    def test_db_clear_uses_requested_selector(\n        event_database: ModuleType,\n        monkeypatch: pytest.MonkeyPatch,\n        selector: str,\n    ) -> None:\n        from pony.orm import db_session, select\n        from y import cli\n        from y._db import entities\n        from y.constants import CHAINID\n    \n        isolated = event_database\n        monkeypatch.setattr(entities, \"Token\", isolated.Token)\n        monkeypatch.setattr(entities, \"Price\", isolated.Price)\n        with db_session:\n            chain = isolated.Chain(id=CHAINID)\n            token = isolated.Token(chain=chain, address=TOKEN, symbol=\"TOK\")\n            other = isolated.Token(chain=chain, address=CHILD, symbol=\"OTHER\")\n            block = isolated.Block(chain=chain, number=BLOCK)\n            later = isolated.Block(chain=chain, number=BLOCK + 1)\n            isolated.Price(token=token, block=block, price=2)\n            isolated.Price(token=token, block=later, price=3)\n            isolated.Price(token=other, block=later, price=4)\n        if selector == \"block\":\n>           cli.db_clear(block=str(BLOCK))\n\ntests/test_typed_interfaces.py:263: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \ny/cli.py:180: in db_clear\n    total_deleted = clear_prices()\n<string>:2: in clear_prices\n    ???\n/usr/local/lib/python3.12/site-packages/pony/orm/core.py:852: in new_func\n    result = func(*args, **kwargs)\ny/cli.py:177: in clear_prices\n    deleted = int(delete(p for p in Price if p.block.number == block_number))\n/usr/local/lib/python3.12/site-packages/pony/orm/core.py:8182: in delete\n    return make_query(args, frame_depth=cut_traceback_depth + 1).delete()\n/usr/local/lib/python3.12/site-packages/pony/orm/core.py:8726: in delete\n    objects = self._actual_fetch()\n/usr/local/lib/python3.12/site-packages/pony/orm/core.py:8545: in _actual_fetch\n    items = entity._fetch_objects(\n/usr/local/lib/python3.12/site-packages/pony/orm/core.py:6378: in _fetch_objects\n    real_entity_subclass, pkval, avdict = cls._parse_row_(row, attr_offsets)\n/usr/local/lib/python3.12/site-packages/pony/orm/core.py:6435: in _parse_row_\n    pkval = tuple(avdict.pop(attr) for attr in cls._pk_attrs_)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\n.0 = <tuple_iterator object at 0xe98d9c3982e0>\n\n>   pkval = tuple(avdict.pop(attr) for attr in cls._pk_attrs_)\nE   KeyError: Price.token\n\n/usr/local/lib/python3.12/site-packages/pony/orm/core.py:6435: KeyError",
+    "error_message": "KeyError: Price.token",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 920,
+      "multicall_uid": 26,
+      "request_uid": 23,
+      "jsonrpc_batch_uid": 97
+    }
+  }
+]

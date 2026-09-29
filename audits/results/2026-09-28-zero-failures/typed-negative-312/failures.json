@@ -1,0 +1,290 @@
+[
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.16233725502388552,
+    "rss_peak_bytes": 208269312,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_prepare_data_without_inputs",
+    "outcome": "failed",
+    "duration": 0.00013362598838284612,
+    "error": "def test_prepare_data_without_inputs() -> None:\n>       assert raw_calls.prepare_data(\"decimals()\") == \"0x313ce567\"\n\ntests/test_typed_interfaces.py:13: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nmethod = '0x313ce567'\ninputs = typing.Union[NoneType, bytes, int, str, hexbytes.main.HexBytes, evmspec.data._main.Address, brownie.convert.datatypes.EthAddress, brownie.network.contract.Contract, y.contracts.Contract]\n\n    def prepare_data(\n        method,\n        inputs=Union[None, bytes, int, str, Address, EthAddress, brownie.Contract, Contract],\n    ) -> str:\n        \"\"\"\n        Prepare data for a raw contract call by encoding the method signature and input data.\n    \n        This function takes a method signature and input data, and returns a hexadecimal string\n        that can be used as the data field in a raw contract call.\n    \n        Args:\n            method: The method signature as a string (e.g., \"transfer(address,uint256)\").\n            inputs: The input data for the method. Can be None, bytes, int, str, Address,\n                    EthAddress, brownie.Contract, or Contract.\n    \n        Returns:\n            A hexadecimal string representing the encoded method call data.\n    \n        Raises:\n            CalldataPreparationError: If the input type is not supported.\n    \n        Note:\n            - The method signature is encoded to its 4-byte function selector.\n            - If inputs is None, only the method selector is returned.\n            - For other input types, the input is prepared and appended to the method selector.\n    \n        Examples:\n            >>> prepare_data(\"transfer(address,uint256)\", inputs=(\"0xRecipientAddress\", 1000))\n            '0xa9059cbb000000000000000000000000RecipientAddress00000000000000000000000000000000000003e8'\n    \n            >>> prepare_data(\"decimals()\")\n            '0x313ce567'\n    \n        See Also:\n            - :func:`raw_call` for making the contract call.\n            - :func:`prepare_input` for preparing individual inputs.\n        \"\"\"\n        method = encode_hex(fourbyte(method))\n    \n        if inputs is None:\n            return method\n    \n        elif type(inputs) in [\n            bytes,\n            int,\n            str,\n            Address,\n            EthAddress,\n            brownie.Contract,\n            Contract,\n        ]:\n            return method + prepare_input(inputs)\n    \n>       raise CalldataPreparationError(f\"\"\"\n            Supported types are: Union[None, bytes, int, str, Address, EthAddress, brownie.Contract, y.Contract]\n            You passed {type(inputs)} {inputs}\"\"\")\nE       y.exceptions.CalldataPreparationError: \nE               Supported types are: Union[None, bytes, int, str, Address, EthAddress, brownie.Contract, y.Contract]\nE               You passed <class 'typing._UnionGenericAlias'> typing.Union[NoneType, bytes, int, str, hexbytes.main.HexBytes, evmspec.data._main.Address, brownie.convert.datatypes.EthAddress, brownie.network.contract.Contract, y.contracts.Contract]\n\ny/utils/raw_calls.py:677: CalldataPreparationError",
+    "error_message": "y.exceptions.CalldataPreparationError: \n        Supported types are: Union[None, bytes, int, str, Address, EthAddress, brownie.Contract, y.Contract]\n        You passed <class 'typing._UnionGenericAlias'> typing.Union[NoneType, bytes, int, str, hexbytes.main.HexBytes, evmspec.data._main.Address, brownie.convert.datatypes.EthAddress, brownie.network.contract.Contract, y.contracts.Contract]",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.16715021600248292,
+    "rss_peak_bytes": 208269312,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_readable_supply_accepts_decoded_integer_and_batch[False]",
+    "outcome": "failed",
+    "duration": 0.0004615460056811571,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd903d9f40>\nmultiple = False\n\n    @run_async_test\n    @pytest.mark.parametrize(\"multiple\", [False, True])\n    async def test_readable_supply_accepts_decoded_integer_and_batch(\n        monkeypatch: pytest.MonkeyPatch,\n        multiple: bool,\n    ) -> None:\n        supply = AsyncMock(return_value=[1234567, 987654321] if multiple else 1234567)\n        decimals = AsyncMock(return_value=[6, 8] if multiple else 6)\n        monkeypatch.setattr(_erc20, \"multicall_totalSupply\" if multiple else \"_totalSupply\", supply)\n        monkeypatch.setattr(_erc20, \"multicall_decimals\" if multiple else \"_decimals\", decimals)\n        addresses: Any = [TOKEN, CHILD] if multiple else TOKEN\n>       result = await _erc20.totalSupplyReadable(addresses, BLOCK, sync=False)\n\ntests/test_typed_interfaces.py:27: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\ncontract_address_or_addresses = '0x0000000000000000000000000000000000000101'\nblock = 15000000, return_None_on_failure = False\n\n    @a_sync.a_sync(default=\"sync\")\n    async def totalSupplyReadable(\n        contract_address_or_addresses: (\n            AddressOrContract | list[AddressOrContract] | tuple[AddressOrContract]\n        ),\n        block: Block | None = None,\n        return_None_on_failure: bool = False,\n    ):\n        \"\"\"\n        Fetch the total supply for one or more ERC20 tokens and convert it to a human-readable format.\n    \n        This function fetches the total supply and decimals for the given tokens and returns\n        the total supply divided by 10^decimals.\n    \n        NOTE: You shouldn't use this function, it will likely be deleted soon for a cleaner alternative.\n    \n        Args:\n            contract_address_or_addresses: A single address or a list/tuple of addresses of ERC20 tokens.\n            block: The block number at which to fetch the total supply. Defaults to the latest block.\n            return_None_on_failure: If True, return None on failure instead of raising an exception.\n    \n        Examples:\n            Fetch human-readable total supply for a single token:\n    \n            >>> totalSupplyReadable(\"0x6B175474E89094C44Da98b954EedeAC495271d0F\")\n            1000000.0\n    \n            Fetch human-readable total supply for multiple tokens:\n    \n            >>> totalSupplyReadable([\"0x6B175474E89094C44Da98b954EedeAC495271d0F\", \"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\"])\n            [1000000.0, 500000.0]\n    \n        See Also:\n            - :func:`totalSupply`\n            - :func:`decimals`\n        \"\"\"\n        token_supplys, token_decimals = await cgather(\n            totalSupply(\n                contract_address_or_addresses,\n                block=block,\n                return_None_on_failure=return_None_on_failure,\n                sync=False,\n            ),\n            decimals(\n                contract_address_or_addresses,\n                block=block,\n                return_None_on_failure=return_None_on_failure,\n                sync=False,\n            ),\n        )\n    \n        if type(token_supplys) == brownie.Wei:  # if only fetching totalSupply for one token\n            supply = token_supplys\n            decimal = token_decimals\n            return supply / 10**decimal\n>       return [supply / 10**decimal for supply, decimal in zip(token_supplys, token_decimals)]\nE       TypeError: 'int' object is not iterable\n\ny/utils/_erc20.py:220: TypeError",
+    "error_message": "TypeError: 'int' object is not iterable",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.17198238603305072,
+    "rss_peak_bytes": 208269312,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_readable_supply_preserves_unavailable_batch_members",
+    "outcome": "failed",
+    "duration": 0.0002075850497931242,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd902a62d0>\n\n    @run_async_test\n    async def test_readable_supply_preserves_unavailable_batch_members(\n        monkeypatch: pytest.MonkeyPatch,\n    ) -> None:\n        monkeypatch.setattr(_erc20, \"multicall_totalSupply\", AsyncMock(return_value=[1234567, None]))\n        monkeypatch.setattr(_erc20, \"multicall_decimals\", AsyncMock(return_value=[6, 8]))\n>       assert await _erc20.totalSupplyReadable(\n            [TOKEN, CHILD],\n            BLOCK,\n            return_None_on_failure=True,\n            sync=False,\n        ) == [1.234567, None]\n\ntests/test_typed_interfaces.py:44: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\ncontract_address_or_addresses = ['0x0000000000000000000000000000000000000101', '0x0000000000000000000000000000000000000102']\nblock = 15000000, return_None_on_failure = True\n\n    @a_sync.a_sync(default=\"sync\")\n    async def totalSupplyReadable(\n        contract_address_or_addresses: (\n            AddressOrContract | list[AddressOrContract] | tuple[AddressOrContract]\n        ),\n        block: Block | None = None,\n        return_None_on_failure: bool = False,\n    ):\n        \"\"\"\n        Fetch the total supply for one or more ERC20 tokens and convert it to a human-readable format.\n    \n        This function fetches the total supply and decimals for the given tokens and returns\n        the total supply divided by 10^decimals.\n    \n        NOTE: You shouldn't use this function, it will likely be deleted soon for a cleaner alternative.\n    \n        Args:\n            contract_address_or_addresses: A single address or a list/tuple of addresses of ERC20 tokens.\n            block: The block number at which to fetch the total supply. Defaults to the latest block.\n            return_None_on_failure: If True, return None on failure instead of raising an exception.\n    \n        Examples:\n            Fetch human-readable total supply for a single token:\n    \n            >>> totalSupplyReadable(\"0x6B175474E89094C44Da98b954EedeAC495271d0F\")\n            1000000.0\n    \n            Fetch human-readable total supply for multiple tokens:\n    \n            >>> totalSupplyReadable([\"0x6B175474E89094C44Da98b954EedeAC495271d0F\", \"0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48\"])\n            [1000000.0, 500000.0]\n    \n        See Also:\n            - :func:`totalSupply`\n            - :func:`decimals`\n        \"\"\"\n        token_supplys, token_decimals = await cgather(\n            totalSupply(\n                contract_address_or_addresses,\n                block=block,\n                return_None_on_failure=return_None_on_failure,\n                sync=False,\n            ),\n            decimals(\n                contract_address_or_addresses,\n                block=block,\n                return_None_on_failure=return_None_on_failure,\n                sync=False,\n            ),\n        )\n    \n        if type(token_supplys) == brownie.Wei:  # if only fetching totalSupply for one token\n            supply = token_supplys\n            decimal = token_decimals\n            return supply / 10**decimal\n>       return [supply / 10**decimal for supply, decimal in zip(token_supplys, token_decimals)]\nE       TypeError: unsupported operand type(s) for /: 'NoneType' and 'int'\n\ny/utils/_erc20.py:220: TypeError",
+    "error_message": "TypeError: unsupported operand type(s) for /: 'NoneType' and 'int'",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.1749022460426204,
+    "rss_peak_bytes": 208269312,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_balance_missing_result_obeys_failure_option[False]",
+    "outcome": "failed",
+    "duration": 0.0001775010023266077,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd902a5be0>\noptional = False\n\n    @run_async_test\n    @pytest.mark.parametrize(\"optional\", [False, True])\n    async def test_balance_missing_result_obeys_failure_option(\n        monkeypatch: pytest.MonkeyPatch,\n        optional: bool,\n    ) -> None:\n        from y.exceptions import NonStandardERC20\n    \n        response = AsyncMock(return_value=None)\n        monkeypatch.setattr(raw_calls, \"raw_call\", response)\n        if optional:\n            assert await raw_calls.balanceOf(TOKEN, CHILD, BLOCK, True, sync=False) is None\n        else:\n>           with pytest.raises(NonStandardERC20, match=\"Unable to fetch `balanceOf`\"):\nE           Failed: DID NOT RAISE <class 'y.exceptions.NonStandardERC20'>\n\ntests/test_typed_interfaces.py:65: Failed",
+    "error_message": "Failed: DID NOT RAISE <class 'y.exceptions.NonStandardERC20'>",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.18918071204097942,
+    "rss_peak_bytes": 208400384,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_multicall_no_input_decodes_named_results[False]",
+    "outcome": "failed",
+    "duration": 0.0008387579582631588,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd902a4b00>\ntransform = False\n\n    @run_async_test\n    @pytest.mark.parametrize(\"transform\", [False, True])\n    async def test_multicall_no_input_decodes_named_results(\n        monkeypatch: pytest.MonkeyPatch,\n        transform: bool,\n    ) -> None:\n        from eth_abi.abi import encode\n        from multicall import Call\n        from y.utils import multicall\n    \n        async def response(self: Call) -> Any:\n            assert self.block_id == BLOCK\n            amount = 7 if self.target.lower() == TOKEN.lower() else 11\n            return Call.decode_output(encode([\"uint256\"], [amount]), self.signature, self.returns)\n    \n        monkeypatch.setattr(Call, \"coroutine\", response)\n>       assert await multicall.multicall_same_func_no_input(\n            [TOKEN, CHILD],\n            \"totalSupply()(uint256)\",\n            block=BLOCK,\n            apply_func=(lambda value: value * 3) if transform else None,\n            sync=False,\n        ) == ([21, 33] if transform else [7, 11])\n\ntests/test_typed_interfaces.py:100: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/utils/multicall.py:80: in multicall_same_func_no_input\n    results: list[dict] = await igather(\n/usr/local/lib/python3.12/asyncio/tasks.py:684: in _wrap_awaitable\n    return await awaitable\ntests/test_typed_interfaces.py:97: in response\n    return Call.decode_output(encode([\"uint256\"], [amount]), self.signature, self.returns)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\noutput = b'\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x07'\nsignature = <multicall.signature.Signature object at 0xf7fd8bd12c80>\nreturns = ('0x0000000000000000000000000000000000000101', None), success = None\n\n    @staticmethod\n    def decode_output(\n        output: Decodable,\n        signature: Signature,\n        returns: Sequence[tuple[Any, Callable | None]] | None = None,\n        success: bool | None = None,\n    ) -> Any:\n    \n        if success is None:\n            apply_handler = lambda handler, value: handler(value)\n        else:\n            apply_handler = lambda handler, value: handler(success, value)\n    \n        if success is None or success:\n            try:\n                decoded = signature.decode_data(output)\n            except:\n                success, decoded = False, [None] * (len(returns) if returns else 1)\n        else:\n            decoded = [None] * (len(returns) if returns else 1)\n    \n        if returns:\n            return {\n                ident: apply_handler(handler, value) if handler else value\n>               for (ident, handler), value in zip(returns, decoded)\n            }\nE           ValueError: too many values to unpack (expected 2)\n\n/usr/local/lib/python3.12/site-packages/multicall/call.py:100: ValueError",
+    "error_message": "ValueError: too many values to unpack (expected 2)",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.20142028399277478,
+    "rss_peak_bytes": 208400384,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_multicall_no_input_decodes_named_results[True]",
+    "outcome": "failed",
+    "duration": 0.0002045850269496441,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd90328cb0>\ntransform = True\n\n    @run_async_test\n    @pytest.mark.parametrize(\"transform\", [False, True])\n    async def test_multicall_no_input_decodes_named_results(\n        monkeypatch: pytest.MonkeyPatch,\n        transform: bool,\n    ) -> None:\n        from eth_abi.abi import encode\n        from multicall import Call\n        from y.utils import multicall\n    \n        async def response(self: Call) -> Any:\n            assert self.block_id == BLOCK\n            amount = 7 if self.target.lower() == TOKEN.lower() else 11\n            return Call.decode_output(encode([\"uint256\"], [amount]), self.signature, self.returns)\n    \n        monkeypatch.setattr(Call, \"coroutine\", response)\n>       assert await multicall.multicall_same_func_no_input(\n            [TOKEN, CHILD],\n            \"totalSupply()(uint256)\",\n            block=BLOCK,\n            apply_func=(lambda value: value * 3) if transform else None,\n            sync=False,\n        ) == ([21, 33] if transform else [7, 11])\n\ntests/test_typed_interfaces.py:100: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/utils/multicall.py:80: in multicall_same_func_no_input\n    results: list[dict] = await igather(\n/usr/local/lib/python3.12/asyncio/tasks.py:684: in _wrap_awaitable\n    return await awaitable\ntests/test_typed_interfaces.py:97: in response\n    return Call.decode_output(encode([\"uint256\"], [amount]), self.signature, self.returns)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\noutput = b'\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x07'\nsignature = <multicall.signature.Signature object at 0xf7fd8bd12c80>\nreturns = ('0x0000000000000000000000000000000000000101', <function test_multicall_no_input_decodes_named_results.<locals>.<lambda> at 0xf7fd902fea20>)\nsuccess = None\n\n    @staticmethod\n    def decode_output(\n        output: Decodable,\n        signature: Signature,\n        returns: Sequence[tuple[Any, Callable | None]] | None = None,\n        success: bool | None = None,\n    ) -> Any:\n    \n        if success is None:\n            apply_handler = lambda handler, value: handler(value)\n        else:\n            apply_handler = lambda handler, value: handler(success, value)\n    \n        if success is None or success:\n            try:\n                decoded = signature.decode_data(output)\n            except:\n                success, decoded = False, [None] * (len(returns) if returns else 1)\n        else:\n            decoded = [None] * (len(returns) if returns else 1)\n    \n        if returns:\n            return {\n                ident: apply_handler(handler, value) if handler else value\n>               for (ident, handler), value in zip(returns, decoded)\n            }\nE           ValueError: too many values to unpack (expected 2)\n\n/usr/local/lib/python3.12/site-packages/multicall/call.py:100: ValueError",
+    "error_message": "ValueError: too many values to unpack (expected 2)",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.20558528101537377,
+    "rss_peak_bytes": 208400384,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_saddle_resolves_pool_before_loading_tokens",
+    "outcome": "failed",
+    "duration": 0.0003421700093895197,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd91941610>\n\n    @run_async_test\n    async def test_saddle_resolves_pool_before_loading_tokens(monkeypatch: pytest.MonkeyPatch) -> None:\n        from y.prices.stable_swap import saddle\n    \n        pool = AsyncMock(return_value=CHILD)\n        tokens = AsyncMock(return_value=[TOKEN, None, CHILD])\n        monkeypatch.setattr(saddle, \"get_pool\", pool)\n        monkeypatch.setattr(saddle, \"multicall_same_func_same_contract_different_inputs\", tokens)\n>       result = await saddle.get_tokens(TOKEN, BLOCK, sync=False)\n\ntests/test_typed_interfaces.py:117: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\ntoken_address = '0x0000000000000000000000000000000000000101', block = 15000000\n\n    @a_sync(default=\"sync\")\n    async def get_tokens(token_address: AnyAddressType, block: Block | None = None) -> list[ERC20]:\n        \"\"\"\n        Retrieve the list of tokens in a Saddle LP token pool.\n    \n        This function retrieves the pool and then uses multicall to get the tokens in the pool.\n    \n        Args:\n            token_address: The address of the token to get the tokens for.\n            block: The block number to query. Defaults to the latest block.\n    \n        Examples:\n            >>> await get_tokens(\"0x1234567890abcdef1234567890abcdef12345678\")\n            [ERC20('0xToken1'), ERC20('0xToken2')]\n    \n        See Also:\n            - :func:`get_pool`\n        \"\"\"\n        pool, tokens = await cgather(\n            get_pool(token_address, sync=False),\n            multicall_same_func_same_contract_different_inputs(\n>               pool,\n                \"getToken(uint8)(address)\",\n                inputs=_GET_TOKEN_INPUTS,\n                block=block,\n                return_None_on_failure=True,\n                sync=False,\n            ),\n        )\nE       UnboundLocalError: cannot access local variable 'pool' where it is not associated with a value\n\ny/prices/stable_swap/saddle.py:188: UnboundLocalError",
+    "error_message": "UnboundLocalError: cannot access local variable 'pool' where it is not associated with a value",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.20934260700596496,
+    "rss_peak_bytes": 208400384,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_saddle_missing_pool_does_not_request_tokens",
+    "outcome": "failed",
+    "duration": 0.00024262798251584172,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd902a5040>\n\n    @run_async_test\n    async def test_saddle_missing_pool_does_not_request_tokens(monkeypatch: pytest.MonkeyPatch) -> None:\n        from y.prices.stable_swap import saddle\n    \n        monkeypatch.setattr(saddle, \"get_pool\", AsyncMock(return_value=None))\n        tokens = AsyncMock()\n        monkeypatch.setattr(saddle, \"multicall_same_func_same_contract_different_inputs\", tokens)\n        with pytest.raises(ValueError, match=\"No Saddle pool\"):\n>           await saddle.get_tokens(TOKEN, BLOCK, sync=False)\n\ntests/test_typed_interfaces.py:138: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\ntoken_address = '0x0000000000000000000000000000000000000101', block = 15000000\n\n    @a_sync(default=\"sync\")\n    async def get_tokens(token_address: AnyAddressType, block: Block | None = None) -> list[ERC20]:\n        \"\"\"\n        Retrieve the list of tokens in a Saddle LP token pool.\n    \n        This function retrieves the pool and then uses multicall to get the tokens in the pool.\n    \n        Args:\n            token_address: The address of the token to get the tokens for.\n            block: The block number to query. Defaults to the latest block.\n    \n        Examples:\n            >>> await get_tokens(\"0x1234567890abcdef1234567890abcdef12345678\")\n            [ERC20('0xToken1'), ERC20('0xToken2')]\n    \n        See Also:\n            - :func:`get_pool`\n        \"\"\"\n        pool, tokens = await cgather(\n            get_pool(token_address, sync=False),\n            multicall_same_func_same_contract_different_inputs(\n>               pool,\n                \"getToken(uint8)(address)\",\n                inputs=_GET_TOKEN_INPUTS,\n                block=block,\n                return_None_on_failure=True,\n                sync=False,\n            ),\n        )\nE       UnboundLocalError: cannot access local variable 'pool' where it is not associated with a value\n\ny/prices/stable_swap/saddle.py:188: UnboundLocalError",
+    "error_message": "UnboundLocalError: cannot access local variable 'pool' where it is not associated with a value",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.21396931703202426,
+    "rss_peak_bytes": 208400384,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_ellipsis_keeps_reserves_in_native_units",
+    "outcome": "failed",
+    "duration": 0.0007041739881969988,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd90329f70>\n\n    @run_async_test\n    async def test_ellipsis_keeps_reserves_in_native_units(monkeypatch: pytest.MonkeyPatch) -> None:\n        from decimal import Decimal\n        from types import SimpleNamespace\n        from y.prices.stable_swap import ellipsis\n    \n        coins = AsyncMock(side_effect=[CHILD, ValueError(\"end of coins\")])\n        balances = AsyncMock(side_effect=[1234567, ValueError(\"end of coins\")])\n        contract = SimpleNamespace(\n            coins=SimpleNamespace(coroutine=coins),\n            balances=SimpleNamespace(coroutine=balances),\n        )\n        monkeypatch.setattr(ellipsis, \"raw_call\", AsyncMock(return_value=TOKEN))\n        monkeypatch.setattr(\n            ellipsis, \"Contract\", SimpleNamespace(coroutine=AsyncMock(return_value=contract))\n        )\n        observed = []\n    \n        class Balance:\n            def __init__(self, amount: int, token: str, block: int, *, skip_cache: bool) -> None:\n                observed.append((amount, token, block, skip_cache))\n    \n            @staticmethod\n            async def total(items: Any, *, sync: bool) -> Decimal:\n                assert len(items) == 1\n                return Decimal(6)\n    \n            value_usd = SimpleNamespace(sum=total)\n    \n        supply = AsyncMock(return_value=3)\n        monkeypatch.setattr(ellipsis, \"WeiBalance\", Balance)\n        monkeypatch.setattr(\n            ellipsis, \"ERC20\", lambda *a, **kw: SimpleNamespace(total_supply_readable=supply)\n        )\n>       result = await ellipsis.get_price(TOKEN, BLOCK, skip_cache=True, sync=False)\n\ntests/test_typed_interfaces.py:313: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \ny/prices/stable_swap/ellipsis.py:99: in get_price\n    tvl, total_supply = await cgather(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nitems = []\n\n    @staticmethod\n    async def total(items: Any, *, sync: bool) -> Decimal:\n>       assert len(items) == 1\nE       assert 0 == 1\nE         +0\nE         -1\n\ntests/test_typed_interfaces.py:303: AssertionError",
+    "error_message": "assert 0 == 1\n  +0\n  -1",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.28800567000871524,
+    "rss_peak_bytes": 238022656,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_db_clear_uses_requested_selector[address]",
+    "outcome": "failed",
+    "duration": 0.002394396986346692,
+    "error": "event_database = <module 'event_cache_test_entities' from '/work/y/_db/entities.py'>\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd902f9340>\nselector = 'address'\n\n    @pytest.mark.parametrize(\"selector\", [\"address\", \"symbol\", \"block\"])\n    def test_db_clear_uses_requested_selector(\n        event_database: ModuleType,\n        monkeypatch: pytest.MonkeyPatch,\n        selector: str,\n    ) -> None:\n        from pony.orm import db_session, select\n        from y import cli\n        from y._db import entities\n        from y.constants import CHAINID\n    \n        isolated = event_database\n        monkeypatch.setattr(entities, \"Token\", isolated.Token)\n        monkeypatch.setattr(entities, \"Price\", isolated.Price)\n        with db_session:\n            chain = isolated.Chain(id=CHAINID)\n            token = isolated.Token(chain=chain, address=TOKEN, symbol=\"TOK\")\n            other = isolated.Token(chain=chain, address=CHILD, symbol=\"OTHER\")\n            block = isolated.Block(chain=chain, number=BLOCK)\n            later = isolated.Block(chain=chain, number=BLOCK + 1)\n            isolated.Price(token=token, block=block, price=2)\n            isolated.Price(token=token, block=later, price=3)\n            isolated.Price(token=other, block=later, price=4)\n            isolated.Price(token=other, block=block, price=5)\n        if selector == \"block\":\n            cli.db_clear(block=str(BLOCK))\n        else:\n>           cli.db_clear(token=TOKEN if selector == \"address\" else \"tok\")\n\ntests/test_typed_interfaces.py:266: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \ny/cli.py:180: in db_clear\n    total_deleted = clear_prices()\n<string>:2: in clear_prices\n    ???\n/usr/local/lib/python3.12/site-packages/pony/orm/core.py:852: in new_func\n    result = func(*args, **kwargs)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\n    @db_session\n    def clear_prices() -> int:\n>       if token is not None:\nE       UnboundLocalError: cannot access local variable 'token' where it is not associated with a value\n\ny/cli.py:148: UnboundLocalError",
+    "error_message": "UnboundLocalError: cannot access local variable 'token' where it is not associated with a value",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.35848657303722575,
+    "rss_peak_bytes": 238768128,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_db_clear_uses_requested_selector[symbol]",
+    "outcome": "failed",
+    "duration": 0.0005381720256991684,
+    "error": "event_database = <module 'event_cache_test_entities' from '/work/y/_db/entities.py'>\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd902f8950>\nselector = 'symbol'\n\n    @pytest.mark.parametrize(\"selector\", [\"address\", \"symbol\", \"block\"])\n    def test_db_clear_uses_requested_selector(\n        event_database: ModuleType,\n        monkeypatch: pytest.MonkeyPatch,\n        selector: str,\n    ) -> None:\n        from pony.orm import db_session, select\n        from y import cli\n        from y._db import entities\n        from y.constants import CHAINID\n    \n        isolated = event_database\n        monkeypatch.setattr(entities, \"Token\", isolated.Token)\n        monkeypatch.setattr(entities, \"Price\", isolated.Price)\n        with db_session:\n            chain = isolated.Chain(id=CHAINID)\n            token = isolated.Token(chain=chain, address=TOKEN, symbol=\"TOK\")\n            other = isolated.Token(chain=chain, address=CHILD, symbol=\"OTHER\")\n            block = isolated.Block(chain=chain, number=BLOCK)\n            later = isolated.Block(chain=chain, number=BLOCK + 1)\n            isolated.Price(token=token, block=block, price=2)\n            isolated.Price(token=token, block=later, price=3)\n            isolated.Price(token=other, block=later, price=4)\n            isolated.Price(token=other, block=block, price=5)\n        if selector == \"block\":\n            cli.db_clear(block=str(BLOCK))\n        else:\n>           cli.db_clear(token=TOKEN if selector == \"address\" else \"tok\")\n\ntests/test_typed_interfaces.py:266: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \ny/cli.py:180: in db_clear\n    total_deleted = clear_prices()\n<string>:2: in clear_prices\n    ???\n/usr/local/lib/python3.12/site-packages/pony/orm/core.py:852: in new_func\n    result = func(*args, **kwargs)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\n    @db_session\n    def clear_prices() -> int:\n>       if token is not None:\nE       UnboundLocalError: cannot access local variable 'token' where it is not associated with a value\n\ny/cli.py:148: UnboundLocalError",
+    "error_message": "UnboundLocalError: cannot access local variable 'token' where it is not associated with a value",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.4243951420066878,
+    "rss_peak_bytes": 239427584,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_db_clear_uses_requested_selector[block]",
+    "outcome": "failed",
+    "duration": 0.0004716289695352316,
+    "error": "event_database = <module 'event_cache_test_entities' from '/work/y/_db/entities.py'>\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd9032ad80>\nselector = 'block'\n\n    @pytest.mark.parametrize(\"selector\", [\"address\", \"symbol\", \"block\"])\n    def test_db_clear_uses_requested_selector(\n        event_database: ModuleType,\n        monkeypatch: pytest.MonkeyPatch,\n        selector: str,\n    ) -> None:\n        from pony.orm import db_session, select\n        from y import cli\n        from y._db import entities\n        from y.constants import CHAINID\n    \n        isolated = event_database\n        monkeypatch.setattr(entities, \"Token\", isolated.Token)\n        monkeypatch.setattr(entities, \"Price\", isolated.Price)\n        with db_session:\n            chain = isolated.Chain(id=CHAINID)\n            token = isolated.Token(chain=chain, address=TOKEN, symbol=\"TOK\")\n            other = isolated.Token(chain=chain, address=CHILD, symbol=\"OTHER\")\n            block = isolated.Block(chain=chain, number=BLOCK)\n            later = isolated.Block(chain=chain, number=BLOCK + 1)\n            isolated.Price(token=token, block=block, price=2)\n            isolated.Price(token=token, block=later, price=3)\n            isolated.Price(token=other, block=later, price=4)\n            isolated.Price(token=other, block=block, price=5)\n        if selector == \"block\":\n>           cli.db_clear(block=str(BLOCK))\n\ntests/test_typed_interfaces.py:264: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \ny/cli.py:180: in db_clear\n    total_deleted = clear_prices()\n<string>:2: in clear_prices\n    ???\n/usr/local/lib/python3.12/site-packages/pony/orm/core.py:852: in new_func\n    result = func(*args, **kwargs)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\n    @db_session\n    def clear_prices() -> int:\n>       if token is not None:\nE       UnboundLocalError: cannot access local variable 'token' where it is not associated with a value\n\ny/cli.py:148: UnboundLocalError",
+    "error_message": "UnboundLocalError: cannot access local variable 'token' where it is not associated with a value",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.42904672701843083,
+    "rss_peak_bytes": 239427584,
+    "live_tasks": 0,
+    "test": "tests/test_typed_interfaces.py::test_curve_debug_command_uses_optional_network[None]",
+    "outcome": "failed",
+    "duration": 0.0010127590503543615,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd902db1a0>\nnetwork = None\n\n    @pytest.mark.parametrize(\"network\", [None, \"mainnet\"])\n    def test_curve_debug_command_uses_optional_network(\n        monkeypatch: pytest.MonkeyPatch,\n        network: str | None,\n    ) -> None:\n        from unittest.mock import Mock\n        from y import cli\n        import sys\n        import subprocess\n    \n        monkeypatch.setattr(\n            sys, \"argv\", [\"y\", \"debug\", \"curve\", \"--token\", TOKEN, \"--block\", str(BLOCK)]\n        )\n        if network is None:\n            monkeypatch.delenv(\"BROWNIE_NETWORK_ID\", raising=False)\n        else:\n            monkeypatch.setenv(\"BROWNIE_NETWORK_ID\", network)\n        run = Mock()\n        monkeypatch.setattr(subprocess, \"run\", run)\n        cli.main()\n        command = [\"brownie\", \"run\", \"debug-curve\"]\n        if network is not None:\n            command.extend([\"--network\", network])\n        assert run.call_args is not None\n>       assert run.call_args.args == (command,)\nE       AssertionError: assert (['brownie', ...work', None],) == (['brownie', ...ebug-curve'],)\nE         At index 0 diff: ['brownie', 'run', 'debug-curve', '--network', None] != ['brownie', 'run', 'debug-curve']\nE         Full diff:\nE         - (['brownie', 'run', 'debug-curve'],)\nE         + (['brownie', 'run', 'debug-curve', '--network', None],)\nE         ?                                  +++++++++++++++++++\n\ntests/test_typed_interfaces.py:230: AssertionError",
+    "error_message": "AssertionError: assert (['brownie', ...work', None],) == (['brownie', ...ebug-curve'],)\n  At index 0 diff: ['brownie', 'run', 'debug-curve', '--network', None] != ['brownie', 'run', 'debug-curve']\n  Full diff:\n  - (['brownie', 'run', 'debug-curve'],)\n  + (['brownie', 'run', 'debug-curve', '--network', None],)\n  ?                                  +++++++++++++++++++",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.45169652003096417,
+    "rss_peak_bytes": 239427584,
+    "live_tasks": 0,
+    "test": "tests/test_event_decode_executor.py::test_decode_empty_iterator",
+    "outcome": "failed",
+    "duration": 4.962499951943755e-05,
+    "error": "def test_decode_empty_iterator() -> None:\n>       assert len(events.decode_logs(iter(()))) == 0\n\ntests/test_event_decode_executor.py:59: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nlogs = []\n\n    def decode_logs(logs: Iterable[LogReceipt] | Iterable[Log]) -> EventDict:\n        # NOTE: we want to ensure backward-compatability with LogReceipt\n        \"\"\"\n        Decode logs to events and enrich them with additional info.\n    \n        Args:\n            logs: An iterable of :class:`~web3.types.LogReceipt` or :class:`~evmspec.Log` objects.\n    \n        Returns:\n            An :class:`~brownie.network.event.EventDict` containing decoded events.\n    \n        Examples:\n            >>> logs = [LogReceipt(...), LogReceipt(...)]\n            >>> events = decode_logs(logs)\n            >>> print(events)\n    \n        See Also:\n            - :class:`~brownie.network.event.EventDict`\n        \"\"\"\n        if not logs:\n            return EventDict()\n    \n        logs = list(logs)\n    \n        from y.contracts import Contract\n    \n        for log in logs:\n            if log.address not in _deployment_topics:\n                _add_deployment_topics(log.address, Contract(log.address).abi)\n    \n>       if logs_are_structs := isinstance(logs[0], Log):\nE       IndexError: list index out of range\n\ny/utils/events.py:86: IndexError",
+    "error_message": "IndexError: list index out of range",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.457373240031302,
+    "rss_peak_bytes": 239427584,
+    "live_tasks": 0,
+    "test": "tests/test_event_decode_executor.py::test_decode_transfer_preserves_metadata_and_topics[False]",
+    "outcome": "failed",
+    "duration": 0.00015045999316498637,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd902d8170>\nstruct = False\n\n    @pytest.mark.parametrize(\"struct\", [False, True])\n    def test_decode_transfer_preserves_metadata_and_topics(\n        monkeypatch: pytest.MonkeyPatch,\n        struct: bool,\n    ) -> None:\n        import eth_event\n        from evmspec import Log\n        from evmspec.data._main import _decode_hook\n        from msgspec import json\n        from y.convert import to_address\n    \n        address = to_address(\"0x0000000000000000000000000000000000000001\")\n        sender = \"0x0000000000000000000000000000000000000002\"\n        receiver = \"0x0000000000000000000000000000000000000003\"\n        abi = [\n            {\n                \"type\": \"event\",\n                \"name\": \"Transfer\",\n                \"anonymous\": False,\n                \"inputs\": [\n                    {\"name\": \"from\", \"type\": \"address\", \"indexed\": True},\n                    {\"name\": \"to\", \"type\": \"address\", \"indexed\": True},\n                    {\"name\": \"value\", \"type\": \"uint256\", \"indexed\": False},\n                ],\n            }\n        ]\n        topic_map = eth_event.get_topic_map(cast(list[ABIElement], abi))\n        monkeypatch.setitem(_deployment_topics, address, topic_map)\n        payload = {\n            \"address\": address,\n            \"topics\": [\n                next(iter(topic_map)),\n                \"0x\" + sender[2:].zfill(64),\n                \"0x\" + receiver[2:].zfill(64),\n            ],\n            \"data\": \"0x\" + hex(1234567)[2:].zfill(64),\n            \"blockNumber\": \"0x1234\",\n            \"blockHash\": \"0x\" + \"ab\" * 32,\n            \"transactionHash\": \"0x\" + \"cd\" * 32,\n            \"logIndex\": \"0x2\",\n            \"transactionIndex\": \"0x3\",\n            \"removed\": False,\n        }\n        entry: Any = (\n            json.decode(json.encode(payload), type=Log, dec_hook=_decode_hook) if struct else payload\n        )\n        original = entry.topics if struct else list(entry[\"topics\"])\n>       decoded = events.decode_logs(iter([entry]))\n\ntests/test_event_decode_executor.py:109: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nlogs = [{'address': '0x0000000000000000000000000000000000000001', 'blockHash': '0xabababababababababababababababababababababa...abababab', 'blockNumber': '0x1234', 'data': '0x000000000000000000000000000000000000000000000000000000000012d687', ...}]\n\n    def decode_logs(logs: Iterable[LogReceipt] | Iterable[Log]) -> EventDict:\n        # NOTE: we want to ensure backward-compatability with LogReceipt\n        \"\"\"\n        Decode logs to events and enrich them with additional info.\n    \n        Args:\n            logs: An iterable of :class:`~web3.types.LogReceipt` or :class:`~evmspec.Log` objects.\n    \n        Returns:\n            An :class:`~brownie.network.event.EventDict` containing decoded events.\n    \n        Examples:\n            >>> logs = [LogReceipt(...), LogReceipt(...)]\n            >>> events = decode_logs(logs)\n            >>> print(events)\n    \n        See Also:\n            - :class:`~brownie.network.event.EventDict`\n        \"\"\"\n        if not logs:\n            return EventDict()\n    \n        logs = list(logs)\n    \n        from y.contracts import Contract\n    \n        for log in logs:\n>           if log.address not in _deployment_topics:\nE           AttributeError: 'dict' object has no attribute 'address'\n\ny/utils/events.py:83: AttributeError",
+    "error_message": "AttributeError: 'dict' object has no attribute 'address'",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 0.4604876440134831,
+    "rss_peak_bytes": 239427584,
+    "live_tasks": 0,
+    "test": "tests/test_event_decode_executor.py::test_decode_failure_restores_shared_log_topics",
+    "outcome": "failed",
+    "duration": 0.00031167000997811556,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7fd902d80e0>\n\n    def test_decode_failure_restores_shared_log_topics(monkeypatch: pytest.MonkeyPatch) -> None:\n        from evmspec import Log\n        from evmspec.data._main import _decode_hook\n        from msgspec import json\n        from y.convert import to_address\n    \n        address = to_address(\"0x0000000000000000000000000000000000000001\")\n        entry = json.decode(\n            json.encode(\n                {\n                    \"address\": address,\n                    \"topics\": [\"0x\" + \"ab\" * 32],\n                    \"data\": \"0x\",\n                    \"blockNumber\": \"0x1\",\n                    \"blockHash\": \"0x\" + \"ab\" * 32,\n                    \"transactionHash\": \"0x\" + \"cd\" * 32,\n                    \"logIndex\": \"0x0\",\n                    \"transactionIndex\": \"0x0\",\n                    \"removed\": False,\n                }\n            ),\n            type=Log,\n            dec_hook=_decode_hook,\n        )\n        monkeypatch.setitem(_deployment_topics, address, {})\n        topics = entry.topics\n        failure = ValueError(\"decoder failed\")\n    \n        def fail(logs: Any) -> Any:\n            assert isinstance(logs[0].topics, list)\n            raise failure\n    \n        monkeypatch.setattr(events, \"_decode_logs\", fail)\n        with pytest.raises(ValueError, match=\"decoder failed\") as caught:\n            events.decode_logs([entry])\n        assert caught.value is failure\n>       assert entry.topics is topics\nE       AssertionError: assert [Topic(0xabababababababababababababababababababababababababababababababab)] is (Topic(0xabababababababababababababababababababababababababababababababab),)\nE        +  where [Topic(0xabababababababababababababababababababababababababababababababab)] = Log(topics=[Topic(0xabababababababababababababababababababababababababababababababab)], address='0x0000000000000000000...dcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd), logIndex=LogIndex(0), transactionIndex=TransactionIndex(0)).topics\n\ntests/test_event_decode_executor.py:154: AssertionError",
+    "error_message": "AssertionError: assert [Topic(0xabababababababababababababababababababababababababababababababab)] is (Topic(0xabababababababababababababababababababababababababababababababab),)\n +  where [Topic(0xabababababababababababababababababababababababababababababababab)] = Log(topics=[Topic(0xabababababababababababababababababababababababababababababababab)], address='0x0000000000000000000...dcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd), logIndex=LogIndex(0), transactionIndex=TransactionIndex(0)).topics",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  }
+]

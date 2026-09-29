@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m mypy > /reports/mypy.txt 2>&1"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1790658527.819925,
+  "source_sha": "9ff4162254b802f532d8f6d04d8e64d1d88fb86a",
+  "source_revision": "worktree",
+  "source_archive_sha256": "9393438fa90038f2f3099960e8b43cb458a73433dc483e732c48f88df1cb8ba4",
+  "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 37.917742013931274
+}

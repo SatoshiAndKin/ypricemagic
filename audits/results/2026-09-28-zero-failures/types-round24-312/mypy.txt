@@ -1,0 +1,5 @@
+y/_db/__init__.py:28: error: Invalid syntax  [syntax]
+            db.bind(**connection_settings: Any)
+                                          ^
+Warning: unused section(s) in pyproject.toml: module = ['a_sync_mypy_plugin', 'brownie.convert', 'eth_utils', 'eth_utils.toolz', 'faster_eth_utils', 'y.ENVIRONMENT_VARIABLES', 'y._db.brownie', 'y._db.config', 'y._db.decorators', 'y._db.utils.stringify', 'y.convert', 'y.exceptions', 'y.networks', 'y.prices.utils.sense_check', 'y.utils.gather']
+Found 1 error in 1 file (errors prevented further checking)

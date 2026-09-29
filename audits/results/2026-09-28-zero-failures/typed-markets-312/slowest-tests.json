@@ -1,0 +1,52 @@
+[
+  {
+    "test": "tests/prices/test_gearbox.py::test_get_price",
+    "outcome": "passed",
+    "duration": 32.12901329994202
+  },
+  {
+    "test": "tests/prices/test_gearbox.py::test_is_dtoken",
+    "outcome": "passed",
+    "duration": 15.445751905441284
+  },
+  {
+    "test": "tests/test_memory_release.py::test_database_worker_reuses_connection_and_allows_process_exit[closed_default]",
+    "outcome": "passed",
+    "duration": 4.001384442031849
+  },
+  {
+    "test": "tests/test_topic_memory.py::test_topic_lookup_releases_state_and_preserves_results[sync]",
+    "outcome": "passed",
+    "duration": 3.9657118460163474
+  },
+  {
+    "test": "tests/test_topic_memory.py::test_topic_lookup_releases_state_and_preserves_results[async]",
+    "outcome": "passed",
+    "duration": 3.9621500539942645
+  },
+  {
+    "test": "tests/test_topic_memory.py::test_topic_lookup_releases_state_and_preserves_results[failure]",
+    "outcome": "passed",
+    "duration": 3.95023299602326
+  },
+  {
+    "test": "tests/test_topic_memory.py::test_topic_lookup_releases_state_and_preserves_results[cancellation]",
+    "outcome": "passed",
+    "duration": 3.9386229799711145
+  },
+  {
+    "test": "tests/test_memory_release.py::test_database_worker_reuses_connection_and_allows_process_exit[asyncio_run]",
+    "outcome": "passed",
+    "duration": 3.887566189048812
+  },
+  {
+    "test": "tests/test_memory_release.py::test_database_worker_reuses_connection_and_allows_process_exit[open]",
+    "outcome": "passed",
+    "duration": 3.8869012250215746
+  },
+  {
+    "test": "tests/test_routing_scaling.py::test_cached_sushi_topology_bounds_tasks_and_shares_block_data",
+    "outcome": "passed",
+    "duration": 3.1132900929660536
+  }
+]

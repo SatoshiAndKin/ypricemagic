@@ -1,0 +1,84 @@
+[
+  {
+    "phase": "call",
+    "elapsed_seconds": 48.32799096102826,
+    "rss_peak_bytes": 236544000,
+    "live_tasks": 160,
+    "test": "tests/test_rpc_state_retry.py::test_archive_state_retry_preserves_hash_and_decodes[call]",
+    "outcome": "failed",
+    "duration": 0.0004959999932907522,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe0cdcbe76360>\nmethod = 'call'\n\n    @run_async_test\n    @pytest.mark.parametrize(\"method\", [\"call\", \"get_code\"])\n    async def test_archive_state_retry_preserves_hash_and_decodes(\n        monkeypatch: pytest.MonkeyPatch, method: str\n    ) -> None:\n        response = HexBytes(encode([\"uint256\"], [123456789])) if method == \"call\" else HexBytes(\"0x6000\")\n        rpc = AsyncMock(side_effect=[state_error(), state_error(), response])\n        monkeypatch.setattr(_rpc, \"dank_web3\", SimpleNamespace(eth=SimpleNamespace(**{method: rpc})))\n        sleep = AsyncMock()\n        monkeypatch.setattr(asyncio, \"sleep\", sleep)\n        monkeypatch.setattr(_rpc, \"state_cache\", lambda: _rpc.SharedCache(8))\n        if method == \"call\":\n>           assert await _rpc.read(TOKEN, \"totalSupply()(uint256)\", BLOCK) == 123456789\n\ntests/test_rpc_state_retry.py:34: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/_rpc.py:57: in read\n    output = await dank_web3.eth.call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <AsyncMock id='247174435052080'>\nargs = ({'data': b'\\x18\\x16\\r\\xdd', 'to': '0x0000000000000000000000000000000000000101'},)\nkwargs = {'block_identifier': {'blockHash': '0xabababababababababababababababababababababababababababababababab', 'requireCanonical': True}}\n_call = call({'to': '0x0000000000000000000000000000000000000101', 'data': b'\\x18\\x16\\r\\xdd'}, block_identifier={'blockHash': '0xabababababababababababababababababababababababababababababababab', 'requireCanonical': True})\neffect = <list_iterator object at 0xe0cdc85a5270>\nresult = ValueError({'code': -32000, 'message': 'historical state abababababababababababababababababababababababababababababababab is not available'})\n\n    async def _execute_mock_call(self, /, *args, **kwargs):\n        # This is nearly just like super(), except for special handling\n        # of coroutines\n    \n        _call = _Call((args, kwargs), two=True)\n        self.await_count += 1\n        self.await_args = _call\n        self.await_args_list.append(_call)\n    \n        effect = self.side_effect\n        if effect is not None:\n            if _is_exception(effect):\n                raise effect\n            elif not _callable(effect):\n                try:\n                    result = next(effect)\n                except StopIteration:\n                    # It is impossible to propagate a StopIteration\n                    # through coroutines because of PEP 479\n                    raise StopAsyncIteration\n                if _is_exception(result):\n>                   raise result\nE                   ValueError: {'code': -32000, 'message': 'historical state abababababababababababababababababababababababababababababababab is not available'}\n\n/usr/local/lib/python3.12/unittest/mock.py:2300: ValueError",
+    "error_message": "ValueError: {'code': -32000, 'message': 'historical state abababababababababababababababababababababababababababababababab is not available'}",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 717,
+      "multicall_uid": 26,
+      "request_uid": 23,
+      "jsonrpc_batch_uid": 99
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 48.34711991599761,
+    "rss_peak_bytes": 237051904,
+    "live_tasks": 150,
+    "test": "tests/test_rpc_state_retry.py::test_archive_state_retry_preserves_hash_and_decodes[get_code]",
+    "outcome": "failed",
+    "duration": 0.0011996660032309592,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe0cdc85832c0>\nmethod = 'get_code'\n\n    @run_async_test\n    @pytest.mark.parametrize(\"method\", [\"call\", \"get_code\"])\n    async def test_archive_state_retry_preserves_hash_and_decodes(\n        monkeypatch: pytest.MonkeyPatch, method: str\n    ) -> None:\n        response = HexBytes(encode([\"uint256\"], [123456789])) if method == \"call\" else HexBytes(\"0x6000\")\n        rpc = AsyncMock(side_effect=[state_error(), state_error(), response])\n        monkeypatch.setattr(_rpc, \"dank_web3\", SimpleNamespace(eth=SimpleNamespace(**{method: rpc})))\n        sleep = AsyncMock()\n        monkeypatch.setattr(asyncio, \"sleep\", sleep)\n        monkeypatch.setattr(_rpc, \"state_cache\", lambda: _rpc.SharedCache(8))\n        if method == \"call\":\n            assert await _rpc.read(TOKEN, \"totalSupply()(uint256)\", BLOCK) == 123456789\n            assert rpc.await_args_list[0].kwargs[\"block_identifier\"] == BLOCK.identifier\n        else:\n>           assert await _rpc.deployed(TOKEN, BLOCK) is True\n\ntests/test_rpc_state_retry.py:37: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/_rpc.py:77: in deployed\n    return bool(await state_cache().get((block.chain, block.hash, address.lower(), \"code\"), code))\ny/prices/_quote.py:106: in get\n    result = await asyncio.shield(flight.task)\ny/prices/_rpc.py:74: in code\n    await dank_web3.eth.get_code(await convert.to_address_async(address), block.identifier)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <AsyncMock id='247174434129344'>\nargs = ('0x0000000000000000000000000000000000000101', {'blockHash': '0xabababababababababababababababababababababababababababababababab', 'requireCanonical': True})\nkwargs = {}\n_call = call('0x0000000000000000000000000000000000000101', {'blockHash': '0xabababababababababababababababababababababababababababababababab', 'requireCanonical': True})\neffect = <list_iterator object at 0xe0cdc9046140>\nresult = ValueError({'code': -32000, 'message': 'historical state abababababababababababababababababababababababababababababababab is not available'})\n\n    async def _execute_mock_call(self, /, *args, **kwargs):\n        # This is nearly just like super(), except for special handling\n        # of coroutines\n    \n        _call = _Call((args, kwargs), two=True)\n        self.await_count += 1\n        self.await_args = _call\n        self.await_args_list.append(_call)\n    \n        effect = self.side_effect\n        if effect is not None:\n            if _is_exception(effect):\n                raise effect\n            elif not _callable(effect):\n                try:\n                    result = next(effect)\n                except StopIteration:\n                    # It is impossible to propagate a StopIteration\n                    # through coroutines because of PEP 479\n                    raise StopAsyncIteration\n                if _is_exception(result):\n>                   raise result\nE                   ValueError: {'code': -32000, 'message': 'historical state abababababababababababababababababababababababababababababababab is not available'}\n\n/usr/local/lib/python3.12/unittest/mock.py:2300: ValueError",
+    "error_message": "ValueError: {'code': -32000, 'message': 'historical state abababababababababababababababababababababababababababababababab is not available'}",
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 717,
+      "multicall_uid": 26,
+      "request_uid": 23,
+      "jsonrpc_batch_uid": 99
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 48.34945229103323,
+    "rss_peak_bytes": 237051904,
+    "live_tasks": 144,
+    "test": "tests/test_rpc_state_retry.py::test_archive_state_retry_is_bounded_and_never_optional",
+    "outcome": "failed",
+    "duration": 0.000461542047560215,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe0cdc9029220>\n\n    @run_async_test\n    async def test_archive_state_retry_is_bounded_and_never_optional(\n        monkeypatch: pytest.MonkeyPatch,\n    ) -> None:\n        error = state_error()\n        rpc = AsyncMock(side_effect=error)\n        monkeypatch.setattr(_rpc, \"dank_web3\", SimpleNamespace(eth=SimpleNamespace(call=rpc)))\n        sleep = AsyncMock()\n        monkeypatch.setattr(asyncio, \"sleep\", sleep)\n        with pytest.raises(ValueError) as raised:\n            await _rpc.optional_read(TOKEN, \"totalSupply()(uint256)\", BLOCK)\n        assert raised.value is error\n>       assert rpc.await_count == 5\nE       assert 1 == 5\nE         +1\nE         -5\n\ntests/test_rpc_state_retry.py:56: AssertionError",
+    "error_message": "assert 1 == 5\n  +1\n  -5",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 717,
+      "multicall_uid": 26,
+      "request_uid": 23,
+      "jsonrpc_batch_uid": 99
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 48.371006288041826,
+    "rss_peak_bytes": 237301760,
+    "live_tasks": 143,
+    "test": "tests/test_rpc_state_retry.py::test_archive_state_retry_cancellation_during_backoff",
+    "outcome": "failed",
+    "duration": 0.00021187501261010766,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xe0cdc863a7e0>\n\n    @run_async_test\n    async def test_archive_state_retry_cancellation_during_backoff(\n        monkeypatch: pytest.MonkeyPatch,\n    ) -> None:\n        rpc = AsyncMock(side_effect=state_error())\n        monkeypatch.setattr(_rpc, \"dank_web3\", SimpleNamespace(eth=SimpleNamespace(call=rpc)))\n        cancelled = asyncio.CancelledError()\n        sleep = AsyncMock(side_effect=cancelled)\n        monkeypatch.setattr(asyncio, \"sleep\", sleep)\n        with pytest.raises(asyncio.CancelledError) as raised:\n>           await _rpc.read(TOKEN, \"totalSupply()(uint256)\", BLOCK)\n\ntests/test_rpc_state_retry.py:96: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/_rpc.py:57: in read\n    output = await dank_web3.eth.call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <AsyncMock id='247174434538896'>\nargs = ({'data': b'\\x18\\x16\\r\\xdd', 'to': '0x0000000000000000000000000000000000000101'},)\nkwargs = {'block_identifier': {'blockHash': '0xabababababababababababababababababababababababababababababababab', 'requireCanonical': True}}\n_call = call({'to': '0x0000000000000000000000000000000000000101', 'data': b'\\x18\\x16\\r\\xdd'}, block_identifier={'blockHash': '0xabababababababababababababababababababababababababababababababab', 'requireCanonical': True})\neffect = ValueError({'code': -32000, 'message': 'historical state abababababababababababababababababababababababababababababababab is not available'})\n\n    async def _execute_mock_call(self, /, *args, **kwargs):\n        # This is nearly just like super(), except for special handling\n        # of coroutines\n    \n        _call = _Call((args, kwargs), two=True)\n        self.await_count += 1\n        self.await_args = _call\n        self.await_args_list.append(_call)\n    \n        effect = self.side_effect\n        if effect is not None:\n            if _is_exception(effect):\n>               raise effect\nE               ValueError: {'code': -32000, 'message': 'historical state abababababababababababababababababababababababababababababababab is not available'}\n\n/usr/local/lib/python3.12/unittest/mock.py:2291: ValueError",
+    "error_message": "ValueError: {'code': -32000, 'message': 'historical state abababababababababababababababababababababababababababababababab is not available'}",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 717,
+      "multicall_uid": 26,
+      "request_uid": 23,
+      "jsonrpc_batch_uid": 99
+    }
+  }
+]

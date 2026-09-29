@@ -1,0 +1,52 @@
+[
+  {
+    "test": "tests/test_historical_price_repairs.py::test_popsicle_historical_supply_scale",
+    "outcome": "failed",
+    "duration": 0.08574895199853927
+  },
+  {
+    "test": "tests/test_historical_price_repairs.py::test_compound_unavailable_exchange_rate",
+    "outcome": "failed",
+    "duration": 0.008938209997722879
+  },
+  {
+    "test": "tests/test_historical_price_repairs.py::test_missing_child_uses_parent_fallback[True-True]",
+    "outcome": "failed",
+    "duration": 0.008824791992083192
+  },
+  {
+    "test": "tests/test_historical_price_repairs.py::test_historical_guni_bucket_uses_production_collector",
+    "outcome": "failed",
+    "duration": 0.006737199000781402
+  },
+  {
+    "test": "tests/test_historical_price_repairs.py::test_partial_fill_falls_back_to_later_pool[True]",
+    "outcome": "failed",
+    "duration": 0.0011159639980178326
+  },
+  {
+    "test": "tests/test_historical_price_repairs.py::test_aave_sync_default_registry_async_dispatch[1]",
+    "outcome": "failed",
+    "duration": 0.0010098799830302596
+  },
+  {
+    "test": "tests/test_historical_price_repairs.py::test_partial_fill_falls_back_to_later_pool[False]",
+    "outcome": "failed",
+    "duration": 0.0007506700058002025
+  },
+  {
+    "test": "tests/test_historical_price_repairs.py::test_piedao_values_each_token_in_its_pool",
+    "outcome": "failed",
+    "duration": 0.0006320029788184911
+  },
+  {
+    "test": "tests/test_historical_price_repairs.py::test_aave_sync_default_registry_async_dispatch[2]",
+    "outcome": "failed",
+    "duration": 0.0006013779784552753
+  },
+  {
+    "test": "tests/test_historical_price_repairs.py::test_v3_requires_full_input[1000001-scalar-Slipstream]",
+    "outcome": "failed",
+    "duration": 0.0005300860211718827
+  }
+]

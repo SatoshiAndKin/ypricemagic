@@ -1,0 +1,10 @@
+tests/test_typed_interfaces.py: note: In function "test_curve_debug_command_uses_optional_network":
+tests/test_typed_interfaces.py:215: error: Module "y.cli" does not explicitly
+export attribute "sys"  [attr-defined]
+            cli.sys, "argv", ["y", "debug", "curve", "--token", TOKEN, "--...
+            ^~~~~~~
+tests/test_typed_interfaces.py:222: error: Module "y.cli" does not explicitly
+export attribute "subprocess"  [attr-defined]
+        monkeypatch.setattr(cli.subprocess, "run", run)
+                            ^~~~~~~~~~~~~~
+Found 2 errors in 1 file (checked 230 source files)

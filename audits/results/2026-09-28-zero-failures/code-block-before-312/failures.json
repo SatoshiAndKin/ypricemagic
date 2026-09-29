@@ -1,0 +1,48 @@
+[
+  {
+    "phase": "call",
+    "elapsed_seconds": 48.99156219698489,
+    "rss_peak_bytes": 231616512,
+    "live_tasks": 173,
+    "test": "tests/test_rpc_state_retry.py::test_contract_code_forwards_block_identifier[None]",
+    "outcome": "failed",
+    "duration": 0.00010216701775789261,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xec96c0243980>\nblock = None\n\n    @run_async_test\n    @pytest.mark.parametrize(\"block\", [None, 10_100_000])\n    async def test_contract_code_forwards_block_identifier(\n        monkeypatch: pytest.MonkeyPatch, block: int | None\n    ) -> None:\n        from y import contracts\n    \n        contract = object.__new__(contracts.Contract)\n        object.__setattr__(contract, \"address\", TOKEN)\n        seen: list[tuple[str, int | None]] = []\n        expected = HexBytes(\"0x60006000\")\n    \n        async def get_code(address: str, block_identifier: int | None = None) -> HexBytes:\n            seen.append((address, block_identifier))\n            return expected\n    \n        monkeypatch.setattr(contracts, \"get_code\", get_code)\n>       assert await contract.get_code(block) == expected\n\ntests/test_rpc_state_retry.py:119: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <[RecursionError('maximum recursion depth exceeded') raised in repr()] Contract object at 0xec96c012c320>\nblock = None\n\n    async def get_code(self, block: Block | None = None) -> HexBytes:\n        \"\"\"\n        Get the bytecode of the contract at a specific block.\n    \n        Args:\n            block (optional): The block number at which to get the bytecode. Defaults to latest block.\n    \n        Example:\n            >>> contract = Contract(\"0x6B175474E89094C44Da98b954EedeAC495271d0F\")\n            >>> await contract.get_code()\n            HexBytes('0x...')\n        \"\"\"\n>       return await get_code(self.address, block=block)\nE       TypeError: test_contract_code_forwards_block_identifier.<locals>.get_code() got an unexpected keyword argument 'block'\n\ny/contracts.py:713: TypeError",
+    "error_message": "TypeError: test_contract_code_forwards_block_identifier.<locals>.get_code() got an unexpected keyword argument 'block'",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 895,
+      "multicall_uid": 26,
+      "request_uid": 23,
+      "jsonrpc_batch_uid": 99
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 48.99978868395556,
+    "rss_peak_bytes": 231747584,
+    "live_tasks": 170,
+    "test": "tests/test_rpc_state_retry.py::test_contract_code_forwards_block_identifier[10100000]",
+    "outcome": "failed",
+    "duration": 0.00013912603026255965,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xec96c01113a0>\nblock = 10100000\n\n    @run_async_test\n    @pytest.mark.parametrize(\"block\", [None, 10_100_000])\n    async def test_contract_code_forwards_block_identifier(\n        monkeypatch: pytest.MonkeyPatch, block: int | None\n    ) -> None:\n        from y import contracts\n    \n        contract = object.__new__(contracts.Contract)\n        object.__setattr__(contract, \"address\", TOKEN)\n        seen: list[tuple[str, int | None]] = []\n        expected = HexBytes(\"0x60006000\")\n    \n        async def get_code(address: str, block_identifier: int | None = None) -> HexBytes:\n            seen.append((address, block_identifier))\n            return expected\n    \n        monkeypatch.setattr(contracts, \"get_code\", get_code)\n>       assert await contract.get_code(block) == expected\n\ntests/test_rpc_state_retry.py:119: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <[RecursionError('maximum recursion depth exceeded') raised in repr()] Contract object at 0xec96c0113bf0>\nblock = 10100000\n\n    async def get_code(self, block: Block | None = None) -> HexBytes:\n        \"\"\"\n        Get the bytecode of the contract at a specific block.\n    \n        Args:\n            block (optional): The block number at which to get the bytecode. Defaults to latest block.\n    \n        Example:\n            >>> contract = Contract(\"0x6B175474E89094C44Da98b954EedeAC495271d0F\")\n            >>> await contract.get_code()\n            HexBytes('0x...')\n        \"\"\"\n>       return await get_code(self.address, block=block)\nE       TypeError: test_contract_code_forwards_block_identifier.<locals>.get_code() got an unexpected keyword argument 'block'\n\ny/contracts.py:713: TypeError",
+    "error_message": "TypeError: test_contract_code_forwards_block_identifier.<locals>.get_code() got an unexpected keyword argument 'block'",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 895,
+      "multicall_uid": 26,
+      "request_uid": 23,
+      "jsonrpc_batch_uid": 99
+    }
+  }
+]
