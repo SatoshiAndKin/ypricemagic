@@ -3,14 +3,12 @@ import warnings
 from asyncio import Lock, TimerHandle, get_running_loop
 from collections import defaultdict
 from collections.abc import Callable, Coroutine, Iterable
-import cachebox
 from logging import getLogger
 from os import getenv
-from typing import TYPE_CHECKING, Any, Final, Literal, cast, overload
+from typing import TYPE_CHECKING, Any, Final, Literal, Self, cast, overload
 from urllib.parse import urlparse
 
-from dank_mids.brownie_patch import dank_eth
-from dank_mids.brownie_patch.contract import Contract as DankContract
+import cachebox
 import eth_retry
 from a_sync import SmartProcessingQueue, ThreadsafeSemaphore, a_sync, cgather, igather
 from aiohttp import ClientSession
@@ -18,8 +16,8 @@ from aiolimiter import AsyncLimiter
 from brownie import ZERO_ADDRESS, chain, web3
 from brownie._config import CONFIG, REQUEST_HEADERS
 from brownie.exceptions import BrownieEnvironmentWarning, ContractNotFound
+from brownie.network.contract import ContractEvents as BrownieContractEvents
 from brownie.network.contract import (
-    ContractEvents as BrownieContractEvents,
     _ContractBase,
     _DeployedContractBase,
     _fetch_from_explorer,
@@ -29,15 +27,15 @@ from brownie.network.state import _add_deployment
 from brownie.network.web3 import _resolve_address
 from brownie.typing import AccountsType, ContractBuildJson
 from brownie.utils import color
-
 from checksum_dict import ChecksumAddressSingletonMeta
-from eth_typing import ABIElement, ChecksumAddress
 from dank_mids._block import StateBlockIdentifier
+from dank_mids.brownie_patch import dank_eth
+from dank_mids.brownie_patch.contract import Contract as DankContract
+from eth_typing import ABIElement, ChecksumAddress
 from hexbytes import HexBytes
 from msgspec import ValidationError
 from msgspec.json import Decoder
 from multicall import Call
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS

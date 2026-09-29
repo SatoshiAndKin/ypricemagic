@@ -1,13 +1,14 @@
 from typing import cast
-from tests.fixtures import async_result
+
 import pytest
 from brownie import ZERO_ADDRESS, chain
 
-from tests.fixtures import mainnet_only
+from tests.fixtures import async_result, mainnet_only
 from y.contracts import contract_creation_block_async
 from y.networks import Network
 from y.prices._rpc import BlockRef, optional_read
-from y.prices.chainlink import Chainlink, FEEDS as STATIC_FEEDS, chainlink
+from y.prices.chainlink import FEEDS as STATIC_FEEDS
+from y.prices.chainlink import Chainlink, chainlink
 
 feeds = set(STATIC_FEEDS.keys())
 feeds.update(

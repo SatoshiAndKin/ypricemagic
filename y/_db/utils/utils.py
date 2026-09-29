@@ -1,22 +1,17 @@
+from collections.abc import Callable
 from datetime import datetime, timezone
 from functools import lru_cache
 from logging import getLogger
-from typing import Callable, cast
-from a_sync.a_sync.function import ASyncFunctionAsyncDefault
 
 from a_sync import ProcessingQueue, a_sync
+from a_sync.a_sync.function import ASyncFunctionAsyncDefault
 from brownie import chain
 from dateutil import parser
 from eth_typing import BlockNumber
-from pony.orm import TransactionIntegrityError, commit, select
+from pony.orm import TransactionIntegrityError, commit
 
 from y._db.common import make_executor as make_executor
-from y._db.decorators import (
-    a_sync_read_db_session,
-    db_session_cached,
-    db_session_retry_locked,
-    log_result_count,
-)
+from y._db.decorators import a_sync_read_db_session, db_session_cached, db_session_retry_locked
 from y._db.entities import Block, BlockAtTimestamp, Chain, insert
 
 logger = getLogger(__name__)

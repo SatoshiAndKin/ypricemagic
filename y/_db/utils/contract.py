@@ -10,7 +10,6 @@ from y._db.entities import Contract
 from y._db.utils._ep import _get_get_token
 from y._db.utils.utils import ensure_block, make_executor
 from y.constants import CHAINID
-from y.datatypes import Address, Block
 
 logger = logging.getLogger(__name__)
 _logger_debug = logger.debug

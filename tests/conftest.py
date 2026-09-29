@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 import brownie
-
 from brownie.network.main import connect
 
 connect(os.environ["BROWNIE_NETWORK"])

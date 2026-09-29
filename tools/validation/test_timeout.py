@@ -44,9 +44,7 @@ class TimeoutTests(unittest.TestCase):
             )
             tests = root / "tests"
             tests.mkdir()
-            (tests / "conftest.py").write_text(
-                textwrap.dedent(
-                    """
+            (tests / "conftest.py").write_text(textwrap.dedent("""
                     import asyncio
                     import json
                     from pathlib import Path
@@ -62,12 +60,8 @@ class TimeoutTests(unittest.TestCase):
                         path.write_text(json.dumps(["setup"]))
                         yield path
                         path.write_text(json.dumps(json.loads(path.read_text()) + ["teardown"]))
-                    """
-                )
-            )
-            (tests / "test_deadline.py").write_text(
-                textwrap.dedent(
-                    """
+                    """))
+            (tests / "test_deadline.py").write_text(textwrap.dedent("""
                     import asyncio
                     import json
                     import time
@@ -95,9 +89,7 @@ class TimeoutTests(unittest.TestCase):
                         path = Path("lifecycle.json")
                         assert json.loads(path.read_text()) == ["setup", "finally", "teardown"]
                         path.write_text(json.dumps(["setup", "finally", "teardown", "next"]))
-                    """
-                )
-            )
+                    """))
             result = subprocess.run(
                 [sys.executable, "-m", "pytest"],
                 cwd=root,

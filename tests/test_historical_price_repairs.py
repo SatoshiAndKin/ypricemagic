@@ -10,7 +10,6 @@ from unittest.mock import AsyncMock
 import pytest
 from eth_abi.packed import encode_packed
 from eth_typing import BlockNumber, ChecksumAddress
-from y.prices._rpc import BlockRef
 from multicall import Call
 from web3.exceptions import ContractLogicError
 
@@ -20,13 +19,14 @@ from y.constants import EEE_ADDRESS
 from y.datatypes import QuoteAsset
 from y.prices import _markets
 from y.prices._markets import Market
+from y.prices._rpc import BlockRef
 
 
 @run_async_test
 async def test_historical_guni_bucket_uses_production_collector(monkeypatch: Any) -> None:
-    from y.prices.utils import buckets
-    from y.prices.tokenized_fund import gelato
     import y._db.utils.token as db
+    from y.prices.tokenized_fund import gelato
+    from y.prices.utils import buckets
 
     monkeypatch.setattr(db, "get_bucket", AsyncMock(return_value=None))
     monkeypatch.setattr(db, "set_bucket", lambda *a: None)
@@ -51,9 +51,10 @@ async def test_historical_guni_bucket_uses_production_collector(monkeypatch: Any
 @pytest.mark.parametrize("available", [True, False])
 async def test_v1_native_discovery_and_exclusions(monkeypatch: Any, available: bool) -> None:
     from dank_mids import brownie_patch
+
     from y import constants
-    from y.prices.dex.uniswap import uniswap_multiplexer
     from y.prices import _routing
+    from y.prices.dex.uniswap import uniswap_multiplexer
 
     eth = EEE_ADDRESS.lower()
     monkeypatch.setattr(constants, "usdc", USD)
@@ -133,8 +134,8 @@ async def test_partial_fill_falls_back_to_later_pool(monkeypatch: Any, viable: b
         assert result is None
     assert calls == ["deep", "later"]
     if not viable:
-        from y.prices import magic
         from y.exceptions import yPriceMagicError
+        from y.prices import magic
 
         monkeypatch.setattr(_routing, "quote_service", lambda: service)
         monkeypatch.setattr(BlockRef, "resolve", AsyncMock(return_value=BLOCK))
@@ -156,8 +157,8 @@ async def test_partial_fill_falls_back_to_later_pool(monkeypatch: Any, viable: b
 async def test_missing_child_uses_parent_fallback(
     monkeypatch: Any, viable: bool, fail_soft: bool
 ) -> None:
-    from y.prices import magic, utils
     from y.exceptions import NonStandardERC20, yPriceMagicError
+    from y.prices import magic, utils
 
     monkeypatch.setattr(magic, "ERC20", lambda *a, **kw: SimpleNamespace(symbol=Ready("TEST")))
     monkeypatch.setattr(magic, "_get_price_from_api", AsyncMock(return_value=None))

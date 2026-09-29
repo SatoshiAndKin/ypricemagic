@@ -86,11 +86,7 @@
       "address": "0x5c6Ee304399DBdB9C8Ef030aB642B10820DB8F56"
     }
   ],
-  "usd_amounts": [
-    10,
-    1000,
-    100000
-  ],
+  "usd_amounts": [10, 1000, 100000],
   "samples": [
     {
       "timestamp": "2023-03-10T12:00:00Z",

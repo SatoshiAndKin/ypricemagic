@@ -5,18 +5,17 @@ from decimal import Decimal
 from typing import Any, Union, cast
 
 import a_sync
-from a_sync import cgather, igather
+from a_sync import igather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import chain
 from multicall import Call
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20, ContractBase
-from y.contracts import Contract, has_methods
+from y.contracts import has_methods
 from y.datatypes import Address, AddressOrContract, AnyAddressType, Block, PriceResult
 from y.networks import Network
 from y.prices._candidates import derive_price, gather_owned

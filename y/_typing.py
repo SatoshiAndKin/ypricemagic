@@ -50,7 +50,8 @@ class _IteratorDecorator(Protocol):
 async_iterator = cast(_IteratorDecorator, getattr(ASyncIterator, "wrap"))
 
 
-from a_sync.a_sync.property import ASyncPropertyDescriptor, a_sync_property as _a_sync_property
+from a_sync.a_sync.property import ASyncPropertyDescriptor
+from a_sync.a_sync.property import a_sync_property as _a_sync_property
 
 
 class _DualPropertyDecorator(Protocol):

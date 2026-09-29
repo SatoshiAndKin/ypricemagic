@@ -14,8 +14,8 @@ from y.constants import EEE_ADDRESS
 from y.datatypes import QuoteAsset
 from y.prices._markets import Market, discover, swap
 from y.prices._rpc import BlockRef, deployed, read
-from y.prices.synthetix import synthetix
 from y.prices.lending.compound import CToken
+from y.prices.synthetix import synthetix
 
 USDC = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
 WETH = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"

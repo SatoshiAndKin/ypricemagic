@@ -13,9 +13,9 @@ These tests do NOT require an RPC connection.
 
 import ast
 import asyncio
-from collections.abc import Hashable
 import os
 import re
+from collections.abc import Hashable
 
 import cachebox
 import pytest

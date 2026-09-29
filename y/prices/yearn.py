@@ -1,14 +1,13 @@
+from collections.abc import Awaitable
 from decimal import Decimal
 from logging import DEBUG, getLogger
 from typing import Any, Protocol, cast
-from collections.abc import Awaitable
 
 import a_sync
-from a_sync import ASyncCachedPropertyDescriptor, cgather
+from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
 from dank_mids.exceptions import Revert
 from multicall.call import Call
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS

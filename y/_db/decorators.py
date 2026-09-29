@@ -1,4 +1,3 @@
-from y._db.typing import db_session
 import logging
 import time
 from collections.abc import Callable, Iterable, Sized
@@ -8,16 +7,11 @@ from typing import Final, TypeVar
 from a_sync import PruningThreadPoolExecutor, a_sync
 from a_sync.a_sync.function import ASyncFunctionAsyncDefault
 from brownie import chain
-from pony.orm import (
-    CommitException,
-    OperationalError,
-    TransactionError,
-    UnexpectedError,
-    commit,
-)
+from pony.orm import CommitException, OperationalError, TransactionError, UnexpectedError, commit
 from typing_extensions import ParamSpec
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._db.typing import db_session
 
 _T = TypeVar("_T")
 _S = TypeVar("_S", bound=Sized)

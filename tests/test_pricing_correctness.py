@@ -7,8 +7,7 @@ from decimal import Decimal
 from functools import wraps
 from pathlib import Path
 from types import SimpleNamespace
-from y.utils.logging import PriceLogger
-from typing import Any, cast, Generic, ParamSpec, TypeVar
+from typing import Any, Generic, ParamSpec, TypeVar, cast
 from unittest.mock import AsyncMock
 
 import a_sync
@@ -20,6 +19,7 @@ from y.classes.common import ERC20
 from y.datatypes import PriceResult, PriceStep, UsdPrice
 from y.prices import exotic_tokens, magic, solidex, utils, yearn
 from y.prices.dex import mooniswap
+from y.utils.logging import PriceLogger
 
 TOKEN = ChecksumAddress(HexAddress(HexStr("0x0000000000000000000000000000000000000101")))
 CHILD = "0x0000000000000000000000000000000000000102"

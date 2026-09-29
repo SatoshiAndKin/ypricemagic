@@ -1,11 +1,7 @@
 """Tests for misc bug fixes: NonStandardERC20 catch, stablecoins, Chainlink feed resolution."""
 
-from collections.abc import AsyncIterator
-from y import convert
-from typing import Any
-
-
 import asyncio
+from collections.abc import AsyncIterator
 from types import SimpleNamespace
 from typing import Any
 from unittest.mock import AsyncMock
@@ -17,6 +13,7 @@ from eth_utils.crypto import keccak
 from web3.exceptions import ContractLogicError
 
 from tests.test_pricing_correctness import run_async_test
+from y import convert
 from y.constants import STABLECOINS
 
 # ---------------------------------------------------------------------------

@@ -8,15 +8,13 @@ This module tests the following exotic token types:
 - Tarot SupplyVault: Fantom-only (skipped on mainnet)
 """
 
-from y import convert
-
-
 from decimal import Decimal
 
-from dank_mids.brownie_patch import dank_eth
 import pytest
+from dank_mids.brownie_patch import dank_eth
 
 from tests.fixtures import mainnet_only
+from y import convert
 from y.datatypes import PriceResult
 from y.prices import exotic_tokens, magic
 from y.prices.exotic_tokens import _XPREMIA_ADDRESS

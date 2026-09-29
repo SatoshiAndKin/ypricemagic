@@ -1,6 +1,7 @@
 """Static contracts for the public sync/async price API."""
 
 from typing import assert_type
+
 from y.datatypes import PriceResult
 from y.prices.magic import get_price, get_prices
 
@@ -21,6 +22,7 @@ async def asynchronous(flag: bool) -> None:
 # The upstream plugin only handles explicitly declared metaclasses. Inherited
 # async classes must retain their arguments and mode-dependent result types too.
 import a_sync
+
 from y._decorators import stuck_coro_debugger
 
 
@@ -109,6 +111,7 @@ async def specialized_result() -> None:
 
 
 from collections.abc import AsyncIterator
+
 from tests.fixtures import async_result, sync_result
 
 

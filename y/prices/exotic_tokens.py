@@ -19,9 +19,8 @@ import logging
 from decimal import Decimal
 
 import a_sync
-import dank_mids
-from dank_mids.brownie_patch import dank_eth
 from brownie import ZERO_ADDRESS
+from dank_mids.brownie_patch import dank_eth
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert

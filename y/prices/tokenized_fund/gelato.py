@@ -1,7 +1,6 @@
-from typing import cast
-from y.datatypes import PriceResult
 import logging
 from decimal import Decimal
+from typing import cast
 
 import a_sync
 from a_sync import cgather
@@ -12,10 +11,10 @@ from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
-from y.datatypes import AnyAddressType, Block, UsdPrice
-from y.utils.cache import optional_async_diskcache
+from y.datatypes import AnyAddressType, Block, PriceResult, UsdPrice
 from y.prices._candidates import gather_owned
 from y.prices._rpc import unavailable
+from y.utils.cache import optional_async_diskcache
 from y.utils.raw_calls import raw_call
 
 logger = logging.getLogger(__name__)

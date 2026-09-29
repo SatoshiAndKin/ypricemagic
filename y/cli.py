@@ -11,8 +11,8 @@ import os
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, cast
 from pprint import pprint
+from typing import Any, cast
 
 from cchecksum import to_checksum_address
 from faster_eth_utils import is_address

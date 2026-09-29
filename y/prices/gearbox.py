@@ -3,7 +3,6 @@ from decimal import Decimal
 import a_sync
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import chain
-from typing_extensions import Self
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y._decorators import stuck_coro_debugger

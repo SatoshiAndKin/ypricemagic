@@ -2,9 +2,9 @@ import functools
 import os
 from collections.abc import Awaitable, Callable
 from importlib import import_module
-from typing import Any, Protocol, TypeVar, cast, overload
 from inspect import iscoroutinefunction
 from logging import DEBUG, getLogger
+from typing import Protocol, TypeVar, cast, overload
 
 import a_sync
 import eth_retry

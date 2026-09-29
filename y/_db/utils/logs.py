@@ -1,9 +1,7 @@
-from collections.abc import Sequence
-from operator import getitem
-from y._db.typing import db_session
 import itertools
 import logging
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
+from operator import getitem
 from typing import Any, cast
 
 import cachebox
@@ -12,6 +10,7 @@ from a_sync.executor import _AsyncExecutorMixin
 from brownie.network.event import _EventItem
 from eth_typing import HexStr
 from eth_utils.toolz import concat
+from evmspec import Log as RpcLog
 from evmspec.data import Address, HexBytes32, uint
 from evmspec.structs.log import Topic
 from hexbytes import HexBytes
@@ -27,7 +26,7 @@ from y._db.entities import Block, Hashes
 from y._db.entities import Log as DbLog
 from y._db.entities import LogCacheInfo, LogTopic
 from y._db.log import Log
-from evmspec import Log as RpcLog
+from y._db.typing import db_session
 from y._db.utils._ep import _get_get_block
 from y._db.utils.bulk import insert as _bulk_insert
 from y.constants import CHAINID

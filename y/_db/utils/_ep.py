@@ -7,13 +7,13 @@ These functions are used to ensure that the correct version of the database
 utilities is used, allowing for extended functionality if `eth_portfolio` is installed.
 """
 
-from typing import cast
-from importlib import import_module
-from a_sync.a_sync.function import ASyncFunctionAsyncDefault
-from y._db.entities import Block, Token
-
 from functools import lru_cache
+from importlib import import_module
+from typing import cast
 
+from a_sync.a_sync.function import ASyncFunctionAsyncDefault
+
+from y._db.entities import Block, Token
 from y._db.utils.utils import ensure_chain
 
 

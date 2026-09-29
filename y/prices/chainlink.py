@@ -4,10 +4,9 @@ from typing import Any, cast
 
 import a_sync
 import cachebox
-import dank_mids
-from dank_mids.brownie_patch import dank_eth
 from brownie import ZERO_ADDRESS
 from brownie.network.event import _EventItem
+from dank_mids.brownie_patch import dank_eth
 from eth_abi.exceptions import InsufficientDataBytes
 
 from y import ENVIRONMENT_VARIABLES as ENVS

@@ -8,11 +8,10 @@ from logging import getLogger
 from typing import Any, Literal, Protocol, TypeVar, cast, overload
 
 import a_sync
-import dank_mids
-from dank_mids.brownie_patch import dank_eth
 from brownie import ZERO_ADDRESS
 from brownie.exceptions import ContractNotFound
 from cachetools import TTLCache
+from dank_mids.brownie_patch import dank_eth
 from eth_typing import BlockNumber, ChecksumAddress, HexAddress
 
 from y import ENVIRONMENT_VARIABLES as ENVS
@@ -34,10 +33,10 @@ from y.prices import (
     utils,
     yearn,
 )
-from y.prices.band import Band, band
-from y.prices.chainlink import Chainlink, chainlink
 from y.prices._candidates import derive_price, pool_address, valid_price
 from y.prices._usdc import USDC_VALUATION, fixed_usdc_price
+from y.prices.band import Band, band
+from y.prices.chainlink import Chainlink, chainlink
 from y.prices.dex import *
 from y.prices.dex.uniswap import UniswapV2Pool
 from y.prices.eth_derivs import *

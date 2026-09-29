@@ -4,12 +4,10 @@ Unsupported versions and strategy-dependent or delayed exits return no quote.
 See docs/amount-quotes.rst for the support and limit matrix.
 """
 
-from typing import cast
-
-
 from collections.abc import AsyncGenerator
 from contextlib import aclosing
 from math import isqrt
+from typing import cast
 
 from brownie import ZERO_ADDRESS
 from eth_abi.abi import encode

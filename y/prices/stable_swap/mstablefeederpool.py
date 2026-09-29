@@ -1,5 +1,5 @@
-from typing import cast
 import logging
+from typing import cast
 
 import a_sync
 

@@ -5,7 +5,8 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from tests.test_pricing_correctness import BLOCK, TOKEN, CHILD, run_async_test
+from tests.test_log_cache import event_database as event_database  # noqa: F401
+from tests.test_pricing_correctness import BLOCK, CHILD, TOKEN, run_async_test
 from y.utils import _erc20, raw_calls
 
 
@@ -26,6 +27,7 @@ def test_special_swap_path_preserves_configured_tuple() -> None:
 async def test_mooniswap_preserves_decimal_price(monkeypatch: pytest.MonkeyPatch) -> None:
     from decimal import Decimal
     from types import SimpleNamespace
+
     from y.prices import magic
     from y.prices.dex import mooniswap
 
@@ -125,6 +127,7 @@ async def test_multicall_no_input_decodes_named_results(
 ) -> None:
     from eth_abi.abi import encode
     from multicall import Call
+
     from y.utils import multicall
 
     async def response(self: Call) -> Any:
@@ -210,6 +213,7 @@ async def test_curve_partial_balances_are_unavailable(
     balances: list[int | None],
 ) -> None:
     from types import SimpleNamespace
+
     from tests.test_pricing_correctness import Ready
     from y.prices.stable_swap.curve import CurvePool
 
@@ -226,7 +230,9 @@ async def test_curve_partial_balances_are_unavailable(
 def test_token_insert_propagates_unrelated_integrity_error(monkeypatch: pytest.MonkeyPatch) -> None:
     from types import SimpleNamespace
     from unittest.mock import Mock
+
     from pony.orm import TransactionIntegrityError
+
     from y._db.utils import token
 
     error = TransactionIntegrityError("unrelated constraint")
@@ -244,10 +250,11 @@ def test_curve_debug_command_uses_optional_network(
     monkeypatch: pytest.MonkeyPatch,
     network: str | None,
 ) -> None:
-    from unittest.mock import Mock
-    from y import cli
-    import sys
     import subprocess
+    import sys
+    from unittest.mock import Mock
+
+    from y import cli
 
     monkeypatch.setattr(
         sys, "argv", ["y", "debug", "curve", "--token", TOKEN, "--block", str(BLOCK)]
@@ -269,7 +276,6 @@ def test_curve_debug_command_uses_optional_network(
 
 
 from types import ModuleType
-from tests.test_log_cache import event_database as event_database
 
 
 @pytest.mark.parametrize("selector", ["address", "symbol", "block"])
@@ -279,6 +285,7 @@ def test_db_clear_uses_requested_selector(
     selector: str,
 ) -> None:
     from pony.orm import db_session, select
+
     from y import cli
     from y._db import entities
     from y.constants import CHAINID
@@ -316,6 +323,7 @@ def test_db_clear_uses_requested_selector(
 async def test_ellipsis_keeps_reserves_in_native_units(monkeypatch: pytest.MonkeyPatch) -> None:
     from decimal import Decimal
     from types import SimpleNamespace
+
     from y.prices.stable_swap import ellipsis
 
     coins = AsyncMock(side_effect=[CHILD, ValueError("end of coins")])

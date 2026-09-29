@@ -1,0 +1,2 @@
+# Captured source snapshots are part of immutable validation evidence.
+exclude = ["audits/results/**"]

@@ -11,10 +11,7 @@ from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.contracts import Contract, contract_creation_block_async
 from y.datatypes import Address, Block, Pool, PriceResult
-from y.exceptions import (
-    ContractNotVerified,
-    UnsupportedNetwork,
-)
+from y.exceptions import ContractNotVerified, UnsupportedNetwork
 from y.networks import Network
 
 logger = getLogger(__name__)

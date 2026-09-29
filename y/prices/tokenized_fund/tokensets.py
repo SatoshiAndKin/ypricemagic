@@ -1,8 +1,8 @@
 import logging
+from asyncio import gather
 from decimal import Decimal
 
 import a_sync
-from asyncio import gather
 from a_sync import cgather
 from multicall import Call
 

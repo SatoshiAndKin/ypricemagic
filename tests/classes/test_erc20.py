@@ -1,10 +1,9 @@
-from tests.fixtures import async_result
-from dank_mids.brownie_patch import dank_eth
 import pytest
 from brownie import ZERO_ADDRESS, chain
+from dank_mids.brownie_patch import dank_eth
 from multicall import Call
 
-from tests.fixtures import blocks_for_contract, sync_result
+from tests.fixtures import async_result, blocks_for_contract, sync_result
 from tests.test_constants import STABLECOINS
 from y.classes.common import ERC20
 from y.constants import WRAPPED_GAS_COIN, wbtc

@@ -5,7 +5,7 @@ from types import ModuleType
 import pytest
 from pony.orm import db_session
 
-from tests.test_log_cache import event_database as event_database
+from tests.test_log_cache import event_database as event_database  # noqa: F401
 from y._db.utils import traces, utils
 
 

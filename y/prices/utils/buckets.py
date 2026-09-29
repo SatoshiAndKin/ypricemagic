@@ -1,19 +1,18 @@
-from typing import cast
 from asyncio import iscoroutine
 from collections.abc import Awaitable, Callable
 from logging import DEBUG, getLogger
-from typing import Any, Literal, Protocol
-from eth_typing import ChecksumAddress
+from typing import Any, Literal, Protocol, cast
 
 import a_sync
 from brownie.exceptions import ContractNotFound
+from eth_typing import ChecksumAddress
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import STABLECOINS
-from y.datatypes import Address, AnyAddressType
+from y.datatypes import AnyAddressType
 from y.exceptions import ContractNotVerified, NonStandardERC20, call_reverted
 from y.prices import (
     convex,
@@ -39,14 +38,7 @@ from y.prices.gearbox import Gearbox, gearbox
 from y.prices.lending import ib
 from y.prices.lending.aave import aave
 from y.prices.lending.compound import compound
-from y.prices.stable_swap import (
-    belt,
-    ellipsis,
-    froyo,
-    mstablefeederpool,
-    saddle,
-    stargate,
-)
+from y.prices.stable_swap import belt, ellipsis, froyo, mstablefeederpool, saddle, stargate
 from y.prices.stable_swap.curve import CurveRegistry, curve
 from y.prices.synthetix import Synthetix, synthetix
 from y.prices.tokenized_fund import basketdao, gelato, piedao, reserve, tokensets

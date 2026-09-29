@@ -8,11 +8,6 @@ See Also:
     :class:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer`
 """
 
-from y.datatypes import Address
-from y.prices.dex.uniswap.v1 import UniswapV1
-
-from tests.fixtures import async_result
-
 from typing import Any
 
 import pytest
@@ -20,15 +15,17 @@ from a_sync import cgather
 from brownie import chain
 from web3.exceptions import ContractLogicError
 
-from tests.fixtures import mutate_addresses
+from tests.fixtures import async_result, mutate_addresses
 from tests.test_amount_quotes import BLOCK, TOKEN, USD, market
 from tests.test_pricing_correctness import run_async_test
 from tests.test_quote_repairs import multiplexer_graph
+from y.datatypes import Address
 from y.networks import Network
 from y.prices import magic
 from y.prices._rpc import BlockRef
 from y.prices.dex.uniswap import v3
 from y.prices.dex.uniswap.uniswap import uniswap_multiplexer
+from y.prices.dex.uniswap.v1 import UniswapV1
 
 V1_TOKENS = dict[int, list[str]](
     {
@@ -138,6 +135,7 @@ async def test_uniswap_v3(token: Address) -> None:
     """Replay full-token native quotes instead of comparing them with spot oracles."""
     # Pin independent native replay to the investigated canonical historical state.
     from eth_abi.packed import encode_packed
+
     from y.prices._routing import liquidity_price
     from y.prices._rpc import read
     from y.prices.dex.uniswap.v3 import load_quoter

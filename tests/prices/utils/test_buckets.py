@@ -1,9 +1,9 @@
 from typing import cast
-from tests.fixtures import async_result
+
 import pytest
 from brownie import chain
 
-from tests.fixtures import mainnet_only, mutate_address, mutate_contract
+from tests.fixtures import async_result, mainnet_only, mutate_address, mutate_contract
 from tests.prices.lending.test_aave import ATOKENS
 from tests.prices.lending.test_compound import CTOKENS
 from tests.prices.test_chainlink import FEEDS

@@ -23,7 +23,13 @@ requires = [
 
 [tool.mypy]
 plugins = ["typed_envs.mypy_plugin", "tools/mypy_plugin.py"]
-files = ["y", "tests", "tools/validation", "tools/mypy_plugin.py", "tools/typing_probes.py"]
+files = [
+  "y",
+  "tests",
+  "tools/validation",
+  "tools/mypy_plugin.py",
+  "tools/typing_probes.py",
+]
 exclude = ["^build/", "^cache/", "^env/", "^[.]worktrees/"]
 strict = true
 pretty = true
@@ -36,7 +42,15 @@ follow_imports = "silent"
 # These dependency namespaces intentionally expose plain imports as their public
 # API without __all__. Preserve their inferred types when importing those names.
 [[tool.mypy.overrides]]
-module = ["eth_utils", "eth_utils.toolz", "faster_eth_utils", "brownie.convert", "brownie.network", "faster_eth_abi", "eth_event"]
+module = [
+  "eth_utils",
+  "eth_utils.toolz",
+  "faster_eth_utils",
+  "brownie.convert",
+  "brownie.network",
+  "faster_eth_abi",
+  "eth_event",
+]
 implicit_reexport = true
 
 [[tool.mypy.overrides]]
@@ -44,11 +58,38 @@ module = ["a_sync_mypy_plugin", "asyncpg"]
 follow_untyped_imports = true
 
 [[tool.mypy.overrides]]
-module = ["y._db.brownie", "y._db.config", "y._db.decorators", "y._db.utils.stringify", "y.ENVIRONMENT_VARIABLES", "y.convert", "y.exceptions", "y.networks", "y.prices.utils.sense_check", "y.utils.gather"]
-disable_error_code = ["import-not-found", "no-untyped-def", "no-untyped-call", "unused-ignore"]
+module = [
+  "y._db.brownie",
+  "y._db.config",
+  "y._db.decorators",
+  "y._db.utils.stringify",
+  "y.ENVIRONMENT_VARIABLES",
+  "y.convert",
+  "y.exceptions",
+  "y.networks",
+  "y.prices.utils.sense_check",
+  "y.utils.gather",
+]
+disable_error_code = [
+  "import-not-found",
+  "no-untyped-def",
+  "no-untyped-call",
+  "unused-ignore",
+]
 
 [tool.mypyc]
-files = ["y/_db/brownie.py", "y/_db/config.py", "y/_db/decorators.py", "y/_db/utils/stringify.py", "y/ENVIRONMENT_VARIABLES.py", "y/convert.py", "y/exceptions.py", "y/networks.py", "y/prices/utils/sense_check.py", "y/utils/gather.py"]
+files = [
+  "y/_db/brownie.py",
+  "y/_db/config.py",
+  "y/_db/decorators.py",
+  "y/_db/utils/stringify.py",
+  "y/ENVIRONMENT_VARIABLES.py",
+  "y/convert.py",
+  "y/exceptions.py",
+  "y/networks.py",
+  "y/prices/utils/sense_check.py",
+  "y/utils/gather.py",
+]
 
 [tool.pytest.ini_options]
 addopts = "-W ignore -s -p no:pytest_ethereum"
@@ -63,6 +104,10 @@ asyncio_task_timeout = 3600
 [tool.black]
 line-length = 100
 
+[tool.isort]
+profile = "black"
+line_length = 100
+
 [tool.validation]
 repair_tests = [
   "tests/test_historical_price_repairs.py",
@@ -71,7 +116,9 @@ repair_tests = [
 memory_tests = ["tests/prices/dex/test_uniswap.py"]
 topic_tests = ["tests/test_topic_memory.py"]
 fixture_tests = ["tests/prices/dex/test_uniswap.py::test_uniswap_v1"]
-chainlink_fixture_tests = ["tests/prices/test_chainlink.py::test_chainlink_latest"]
+chainlink_fixture_tests = [
+  "tests/prices/test_chainlink.py::test_chainlink_latest",
+]
 inventory_cache_tests = ["tests/test_inventory_cache.py"]
 v3_inventory_tests = ["tests/test_v3_inventory_cache.py"]
 slow_erc20_cases = [

@@ -1,17 +1,15 @@
 import logging
 from collections.abc import Collection
 from typing import Any, cast
-from eth_typing import ABIElement
 
 import a_sync
-import dank_mids
-from dank_mids.brownie_patch import dank_eth
 import eth_retry
 from a_sync import cgather
 from a_sync.a_sync.property import HiddenMethodDescriptor
 from brownie import chain
+from dank_mids.brownie_patch import dank_eth
+from eth_typing import ABIElement
 from multicall.call import Call
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import convert

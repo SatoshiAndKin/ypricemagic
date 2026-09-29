@@ -1,9 +1,8 @@
-from tests.fixtures import async_result, sync_result
 import pytest
 from brownie import chain
 from multicall.utils import await_awaitable
 
-from tests.fixtures import mainnet_only
+from tests.fixtures import async_result, mainnet_only, sync_result
 from y.networks import Network
 from y.prices.lending.aave import AaveRegistry
 

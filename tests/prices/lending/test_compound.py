@@ -1,10 +1,10 @@
-from tests.fixtures import async_result
-import pytest
-
 from typing import Any, cast
-from tests.fixtures import blocks_for_contract
-from multicall import Call
+
+import pytest
 from brownie import ZERO_ADDRESS
+from multicall import Call
+
+from tests.fixtures import async_result, blocks_for_contract
 from y.exceptions import call_reverted
 from y.prices.lending.compound import CToken, compound
 

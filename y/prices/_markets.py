@@ -1,12 +1,9 @@
 """Immutable pool snapshots and native, fee-inclusive exact-input swaps."""
 
-from typing import cast
-
-
 from collections.abc import AsyncIterator, Awaitable, Callable
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Any
+from typing import Any, cast
 
 from brownie import ZERO_ADDRESS
 
@@ -15,15 +12,7 @@ from y._decorators import stuck_coro_debugger
 from y.constants import EEE_ADDRESS
 from y.datatypes import QuoteAsset, QuoteStep
 from y.prices._quote import bounded_map
-from y.prices._rpc import (
-    BlockRef,
-    deployed,
-    optional_read,
-    read,
-    state,
-    state_cache,
-    unavailable,
-)
+from y.prices._rpc import BlockRef, deployed, optional_read, read, state, state_cache, unavailable
 
 
 @dataclass(frozen=True, slots=True)
@@ -113,8 +102,9 @@ async def discover(
     if token == address(EEE_ADDRESS):
         # Native ETH needs a sale exit before historical ETH/USD feeds existed.
         # V1 has no ETH exchange: buy USDC from its token exchange directly.
-        from y.constants import usdc
         from dank_mids.brownie_patch import dank_web3
+
+        from y.constants import usdc
 
         v1 = uniswap_multiplexer.v1
         if not v1 or (first_markets and "Uniswap V1" not in first_markets):

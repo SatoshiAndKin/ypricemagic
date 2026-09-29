@@ -8,15 +8,12 @@ from itertools import zip_longest
 from logging import getLogger
 from threading import current_thread, main_thread
 from typing import TYPE_CHECKING, Any, NoReturn, TypeVar, cast
-from typing_extensions import TypeVar as DefaultTypeVar
 
 import a_sync
 import dank_mids
-from dank_mids.brownie_patch import dank_eth
 import eth_retry
 from a_sync import igather
 from a_sync.executor import _AsyncExecutorMixin
-from y._typing import async_property
 from brownie import web3
 from brownie.network.event import (
     EventDict,
@@ -25,15 +22,18 @@ from brownie.network.event import (
     _deployment_topics,
     _EventItem,
 )
+from dank_mids.brownie_patch import dank_eth
 from eth_typing import BlockNumber, ChecksumAddress
 from eth_utils.toolz import concat, groupby
 from evmspec import Log
 from msgspec.structs import force_setattr
+from typing_extensions import TypeVar as DefaultTypeVar
 from web3.middleware.filter import block_ranges
 from web3.types import FilterParams, LogReceipt
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y._db.common import Filter, _clean_addresses, make_executor
+from y._typing import async_property
 from y.datatypes import Address, AnyAddressType, Block
 from y.exceptions import reraise_excs_with_extra_context
 from y.utils.cache import memory

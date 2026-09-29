@@ -1,15 +1,13 @@
 import logging
-from typing import Any, Optional, cast
-from collections.abc import Callable, Iterable
 from asyncio import gather
+from collections.abc import Callable, Iterable
+from typing import Any, Optional, cast
 
 import a_sync
-from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import ZERO_ADDRESS, chain
 from brownie.exceptions import VirtualMachineError
 from multicall import Call
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS

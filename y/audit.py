@@ -1,8 +1,5 @@
 """Historical comparison reports. DeFiLlama is never a production price source."""
 
-from typing import cast
-
-
 import asyncio
 import csv
 import json
@@ -11,7 +8,7 @@ from datetime import datetime, timezone
 from decimal import ROUND_DOWN, Decimal, InvalidOperation, localcontext
 from pathlib import Path
 from time import perf_counter
-from typing import Any, Literal
+from typing import Any, Literal, cast
 from urllib.request import urlopen
 
 from y._decorators import stuck_coro_debugger

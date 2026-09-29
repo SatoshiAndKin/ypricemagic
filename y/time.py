@@ -2,14 +2,14 @@ import asyncio
 import datetime
 import logging
 import time
-from typing import Final, NewType, Union, cast, final
 from importlib import import_module
+from typing import Final, NewType, Union, final
 
 import cachebox
 import dank_mids
-from dank_mids.brownie_patch import dank_eth
 import eth_retry
 from brownie import chain, web3
+from dank_mids.brownie_patch import dank_eth
 from eth_typing import BlockNumber
 from web3.types import RPCEndpoint
 
@@ -312,7 +312,7 @@ async def closest_block_after_timestamp_async(
     while wait_for_block_if_needed:
         try:
             block_at_ts = await get_block_at_timestamp(
-                datetime.datetime.fromtimestamp(timestamp, tz=datetime.timezone.utc),
+                datetime.datetime.fromtimestamp(timestamp, tz=datetime.UTC),
                 sync=False,
             )
             return BlockNumber(block_at_ts + 1)

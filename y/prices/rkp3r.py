@@ -1,6 +1,6 @@
 import logging
-from typing import cast
 from decimal import Decimal
+from typing import cast
 
 import a_sync
 

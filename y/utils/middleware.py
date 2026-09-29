@@ -1,7 +1,7 @@
 from collections.abc import Callable
+from importlib import import_module
 from logging import DEBUG, getLogger
 from typing import Any, cast
-from importlib import import_module
 
 import eth_retry
 from brownie import chain, web3

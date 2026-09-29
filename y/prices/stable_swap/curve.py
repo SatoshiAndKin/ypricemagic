@@ -5,7 +5,6 @@ from functools import cached_property
 from itertools import filterfalse
 from logging import DEBUG, getLogger
 from typing import Any, Generic, NoReturn, TypeVar, cast
-from eth_typing import ABIElement
 
 import a_sync
 import brownie
@@ -17,7 +16,7 @@ from brownie.exceptions import ContractNotFound, EventLookupError
 from brownie.network.event import _EventItem
 from dank_mids.exceptions import Revert
 from eth_abi.exceptions import InsufficientDataBytes, InvalidPointer
-from typing_extensions import Self
+from eth_typing import ABIElement
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS

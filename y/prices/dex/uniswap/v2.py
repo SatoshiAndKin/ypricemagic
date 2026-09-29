@@ -13,32 +13,23 @@ from typing import Any, cast
 import a_sync
 import a_sync.exceptions
 import brownie
-import dank_mids
-from dank_mids.brownie_patch import dank_eth
 from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie.network.event import _EventItem
+from brownie.typing import ContractName
+from dank_mids.brownie_patch import dank_eth
 from dank_mids.exceptions import Revert
 from eth_typing import ABIElement, HexAddress, HexStr
-from brownie.typing import ContractName
 from eth_utils.toolz import concat
 from faster_eth_abi.exceptions import DecodingError
 from multicall import Call
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._decorators import continue_on_revert, stuck_coro_debugger
 from y.classes.common import ERC20, ContractBase, WeiBalance
-from y.constants import (
-    CHAINID,
-    STABLECOINS,
-    WRAPPED_GAS_COIN,
-    sushi,
-    usdc,
-    weth,
-)
+from y.constants import CHAINID, STABLECOINS, WRAPPED_GAS_COIN, sushi, usdc, weth
 from y.contracts import Contract, contract_creation_block_async
 from y.datatypes import (
     Address,
@@ -60,15 +51,9 @@ from y.exceptions import (
 )
 from y.interfaces.uniswap.factoryv2 import UNIV2_FACTORY_ABI
 from y.networks import Network
-from y.prices._candidates import (
-    pool_is_ignored,
-)
+from y.prices._candidates import pool_is_ignored
 from y.prices._quote import bounded_map
-from y.prices.dex.uniswap.v2_forks import (
-    ROUTER_TO_FACTORY,
-    ROUTER_TO_PROTOCOL,
-    special_paths,
-)
+from y.prices.dex.uniswap.v2_forks import ROUTER_TO_FACTORY, ROUTER_TO_PROTOCOL, special_paths
 from y.utils.cache import memory
 from y.utils.events import ProcessedEvents
 from y.utils.raw_calls import raw_call

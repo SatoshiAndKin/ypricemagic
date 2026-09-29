@@ -3,7 +3,8 @@
 import pytest
 
 from tests.fixtures import blocks_for_contract
-from y.constants import CHAINID, STABLECOINS as STABLECOINS
+from y.constants import CHAINID
+from y.constants import STABLECOINS as STABLECOINS
 from y.prices import magic
 from y.prices._usdc import fixed_usdc_price
 

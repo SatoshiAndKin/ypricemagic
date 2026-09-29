@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       fake_tag:
-        description: 'Fake tag name to use for dry run (e.g. v2.3.4)'
+        description: "Fake tag name to use for dry run (e.g. v2.3.4)"
         required: true
 
 jobs:

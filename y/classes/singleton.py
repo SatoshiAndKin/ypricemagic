@@ -1,11 +1,12 @@
 import threading
 from collections import defaultdict
-from typing import Any, Generic, Protocol, TypeVar, cast
 from collections.abc import Callable
+from typing import Any, Generic, Protocol, TypeVar, cast
 
 from a_sync.a_sync._meta import ASyncMeta
-from eth_typing import HexAddress, HexStr
 from checksum_dict import ChecksumAddressDict
+from eth_typing import HexAddress, HexStr
+
 from y.datatypes import AnyAddressType
 
 

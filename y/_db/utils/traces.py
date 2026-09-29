@@ -1,12 +1,12 @@
 import logging
-from collections.abc import AsyncIterator, Mapping, Iterable
+from collections.abc import AsyncIterator, Iterable, Mapping
 from typing import Any, cast
 
 import a_sync
 import dank_mids
 import msgspec.json
 import pony.orm
-from a_sync import AsyncThreadPoolExecutor, PruningThreadPoolExecutor
+from a_sync import AsyncThreadPoolExecutor
 from eth_utils.toolz import concat
 from evmspec import FilterTrace
 

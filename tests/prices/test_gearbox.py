@@ -1,12 +1,10 @@
-from typing import cast
-from y.prices.gearbox import Gearbox
-from tests.fixtures import async_result
 from decimal import Decimal
+from typing import cast
 
 import pytest
 
-from tests.fixtures import mainnet_only
-from y.prices.gearbox import gearbox
+from tests.fixtures import async_result, mainnet_only
+from y.prices.gearbox import Gearbox, gearbox
 
 ddai = "0x6CFaF95457d7688022FC53e7AbE052ef8DFBbdBA"
 

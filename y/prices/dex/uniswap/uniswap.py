@@ -1,12 +1,11 @@
-from typing import cast
-from dank_mids.brownie_patch import dank_eth
 import logging
 import threading
 from contextlib import suppress
-from typing import Union
+from typing import Union, cast
 
 from a_sync import ASyncGenericSingleton, igather
 from brownie import ZERO_ADDRESS
+from dank_mids.brownie_patch import dank_eth
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
@@ -15,11 +14,10 @@ from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import CONNECTED_TO_MAINNET
 from y.datatypes import Address, AnyAddressType, Block, Pool, PriceResult
-from y.exceptions import NonStandardERC20, contract_not_verified
+from y.exceptions import NonStandardERC20, NotAUniswapV2Pool, contract_not_verified
 from y.prices.dex.solidly import SolidlyRouter
 from y.prices.dex.uniswap import v3
 from y.prices.dex.uniswap.v1 import UniswapV1
-from y.exceptions import NotAUniswapV2Pool
 from y.prices.dex.uniswap.v2 import UniswapRouterV2, UniswapV2Pool
 from y.prices.dex.uniswap.v2_forks import UNISWAPS
 from y.prices.dex.uniswap.v3 import UniswapV3, uniswap_v3

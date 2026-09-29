@@ -1,20 +1,19 @@
 import logging
 from decimal import Decimal
 from typing import cast
-from brownie.network.contract import Contract as BrownieContract
 
-import dank_mids
-from dank_mids.brownie_patch import dank_eth
 from a_sync import a_sync, cgather
 from brownie import ZERO_ADDRESS, chain
+from brownie.network.contract import Contract as BrownieContract
+from dank_mids.brownie_patch import dank_eth
 
 from y import ENVIRONMENT_VARIABLES as ENVS
-from y._decorators import stuck_coro_debugger
 from y import convert
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import weth
 from y.contracts import Contract
-from y.datatypes import AnyAddressType, Block, UsdPrice
+from y.datatypes import AnyAddressType, Block
 from y.prices import magic
 from y.utils import gather_methods
 

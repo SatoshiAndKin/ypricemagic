@@ -1,12 +1,12 @@
 from typing import cast
-from y._typing import a_sync_property
+
 import a_sync
 from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie.exceptions import VirtualMachineError
-from typing_extensions import Self
 
 from y import Contract
+from y._typing import a_sync_property
 from y.classes.common import ERC20
 from y.constants import CHAINID
 from y.datatypes import Address, AddressOrContract, Block

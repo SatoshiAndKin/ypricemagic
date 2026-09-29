@@ -1,7 +1,7 @@
 from functools import lru_cache
+from typing import Any
 
 from dictstruct import DictStruct as _DictStruct
-from typing import Any
 from inflection import underscore
 
 

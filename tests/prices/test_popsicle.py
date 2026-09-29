@@ -1,12 +1,11 @@
-from y.datatypes import UsdPrice
-from tests.fixtures import async_result
-from y.classes.common import ERC20
 import a_sync
 import pytest
 from brownie import chain
 
-from tests.fixtures import blocks_for_contract
+from tests.fixtures import async_result, blocks_for_contract
+from y.classes.common import ERC20
 from y.constants import WRAPPED_GAS_COIN
+from y.datatypes import UsdPrice
 from y.networks import Network
 from y.prices import popsicle
 

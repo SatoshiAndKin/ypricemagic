@@ -1,23 +1,17 @@
 # sourcery skip: merge-assign-and-aug-assign
-import asyncio
 import logging
 import os
-from json import JSONDecodeError
 from http import HTTPStatus
+from json import JSONDecodeError
 from random import randint
 from time import time
 from typing import Any, Final, cast, final
 
 import cachebox
 import dank_mids
-from dank_mids.brownie_patch import dank_eth
 from aiohttp import ClientResponse, ClientSession, ClientTimeout, TCPConnector
-from aiohttp.client_exceptions import (
-    ClientConnectorSSLError,
-    ClientError,
-    ContentTypeError,
-)
-from dank_mids.helpers._session import HTTPStatusExtended
+from aiohttp.client_exceptions import ClientConnectorSSLError, ClientError, ContentTypeError
+from dank_mids.brownie_patch import dank_eth
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y.constants import CHAINID, NETWORK_NAME
@@ -229,7 +223,7 @@ async def get_price(token: Address, block: Block | None) -> UsdPrice | None:
                     ):
                         raise
                     tries += 1
-        except asyncio.TimeoutError:
+        except TimeoutError:
             logger.warning(f"ypriceAPI timed out for {str(token)} at {block}.{FALLBACK_STR}")
         except ContentTypeError:
             raise

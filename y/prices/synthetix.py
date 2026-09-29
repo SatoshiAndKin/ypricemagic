@@ -1,4 +1,3 @@
-from y._typing import a_sync_property
 import logging
 from typing import Any, Final, final
 
@@ -8,10 +7,10 @@ from brownie import ZERO_ADDRESS
 from eth_typing import ChecksumAddress, HexStr
 from faster_eth_abi import encode
 from multicall import Call
-from typing_extensions import Self
 
 from y import convert
 from y._decorators import stuck_coro_debugger
+from y._typing import a_sync_property
 from y.constants import CHAINID
 from y.contracts import Contract, has_method
 from y.datatypes import AnyAddressType, Block, UsdPrice

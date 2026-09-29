@@ -1,10 +1,9 @@
-from typing import Final, final, cast
 from asyncio import gather
+from typing import Final, cast, final
 
 import a_sync
-from a_sync import cgather
 from brownie.exceptions import ContractNotFound
-from eth_typing import BlockNumber, ChecksumAddress
+from eth_typing import ChecksumAddress
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import Contract

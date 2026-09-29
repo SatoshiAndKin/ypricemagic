@@ -8,14 +8,7 @@ from typing import Any
 
 from y._decorators import stuck_coro_debugger
 from y.constants import EEE_ADDRESS, STABLECOINS, WRAPPED_GAS_COIN
-from y.datatypes import (
-    PriceResult,
-    PriceStep,
-    QuoteAsset,
-    QuoteDetails,
-    QuoteStep,
-    UsdPrice,
-)
+from y.datatypes import PriceResult, PriceStep, QuoteAsset, QuoteDetails, QuoteStep, UsdPrice
 from y.prices._candidates import valid_price
 from y.prices._markets import Market, address, discover, swap
 from y.prices._quote import SharedCache, to_base_units

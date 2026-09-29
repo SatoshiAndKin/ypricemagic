@@ -4,12 +4,12 @@ Utility functions for retrieving Ethereum client information.
 
 import logging
 from typing import cast
-from web3.manager import RequestManager
 
 import cachebox
 from brownie import web3
 from dank_mids.brownie_patch import dank_web3
 from web3._utils.rpc_abi import RPC
+from web3.manager import RequestManager
 
 from y.utils.logging import yLazyLogger
 

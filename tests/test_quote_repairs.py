@@ -1,9 +1,5 @@
 """Quote policy and native-adapter regressions with controlled RPC responses."""
 
-from y.datatypes import AnyAddressType
-
-from tests.fixtures import async_result
-
 import asyncio
 import importlib
 from collections.abc import AsyncIterator
@@ -17,11 +13,12 @@ import pytest
 from eth_abi.exceptions import InsufficientDataBytes
 from web3.exceptions import ContractLogicError
 
+from tests.fixtures import async_result
 from tests.test_amount_quotes import BLOCK, CHILD, TOKEN, USD, graph, market
 from tests.test_pricing_correctness import Ready, instance, run_async_test
 from y import constants
 from y.contracts import Contract
-from y.datatypes import QuoteAsset
+from y.datatypes import AnyAddressType, QuoteAsset
 from y.exceptions import ContractNotVerified, yPriceMagicError
 from y.prices import _markets, _redemptions, _routing, magic, utils
 from y.prices._routing import QuoteService

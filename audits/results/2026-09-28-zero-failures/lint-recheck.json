@@ -1,0 +1,18 @@
+{
+  "source_commit": "618614e70f04de737078a068e0c2042e7f86a376",
+  "tools": {
+    "pyupgrade": "3.21.2",
+    "isort": "8.0.0",
+    "black": "26.1.0",
+    "autoflake": "2.3.3",
+    "prettier": "3.8.0",
+    "taplo": "0.7.0"
+  },
+  "second_pipeline_changed_files": [],
+  "python_review": "Imports and whitespace, plus Python 3.11 aliases datetime.UTC and built-in TimeoutError. Pytest fixture imports retain noqa F401.",
+  "configuration_review": "Existing TOML values unchanged; added isort black profile and 100-character line length. YAML formatting preserves workflow behavior and permissions.",
+  "captured_artifacts": "Audit results, captured chain fixtures, and agent metadata remain byte-identical.",
+  "generated_c_sha256": "099f4992d9c8404dc31bc761d0fcfb5aeef32cd9f582688dc1b9f73646104506",
+  "failed_workflow": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36529209972",
+  "failure": "Formatter push denied because GitHub App lacks workflows permission; local formatting avoids requesting broader app permissions."
+}

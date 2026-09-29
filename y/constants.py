@@ -2,8 +2,8 @@ from typing import Final
 
 from brownie import Contract as _Contract
 from brownie import chain
-from eth_typing import ChecksumAddress, HexAddress, HexStr
 from brownie.typing import ContractName
+from eth_typing import ChecksumAddress, HexAddress, HexStr
 
 from y.contracts import Contract
 from y.interfaces.ERC20 import ERC20ABI

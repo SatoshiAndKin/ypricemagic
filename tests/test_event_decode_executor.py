@@ -4,11 +4,11 @@ import asyncio
 import threading
 from types import SimpleNamespace
 from typing import Any, cast
-from eth_typing import ABIElement
-from brownie.network.event import _deployment_topics
 
 import pytest
 from a_sync.executor import AsyncThreadPoolExecutor
+from brownie.network.event import _deployment_topics
+from eth_typing import ABIElement
 
 from tests.test_pricing_correctness import run_async_test
 from y.utils import events
@@ -68,6 +68,7 @@ def test_decode_transfer_preserves_metadata_and_topics(
     from evmspec import Log
     from evmspec.data._main import _decode_hook
     from msgspec import json
+
     from y.convert import to_address
 
     address = to_address("0x0000000000000000000000000000000000000001")
@@ -119,6 +120,7 @@ def test_decode_failure_restores_shared_log_topics(monkeypatch: pytest.MonkeyPat
     from evmspec import Log
     from evmspec.data._main import _decode_hook
     from msgspec import json
+
     from y.convert import to_address
 
     address = to_address("0x0000000000000000000000000000000000000001")

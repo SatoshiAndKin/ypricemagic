@@ -1,15 +1,13 @@
 import logging
-from typing import Any, Literal, cast
 from decimal import Decimal
+from typing import Any, Literal, cast
 
 import a_sync
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import chain
-from brownie.network.contract import Contract as BrownieContract
-from brownie.convert.datatypes import EthAddress
 from brownie.exceptions import VirtualMachineError
+from brownie.network.contract import Contract as BrownieContract
 from eth_abi.exceptions import InvalidPointer
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
@@ -17,23 +15,10 @@ from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import dai, usdc, wbtc, weth
 from y.contracts import Contract
-from y.datatypes import (
-    Address,
-    AddressOrContract,
-    AnyAddressType,
-    Block,
-    Pool,
-    PriceResult,
-    UsdValue,
-)
+from y.datatypes import Address, AddressOrContract, AnyAddressType, Block, Pool, PriceResult
 from y.networks import Network
 from y.prices import magic
-from y.prices._candidates import (
-    derive_price,
-    gather_owned,
-    pool_is_ignored,
-    valid_price,
-)
+from y.prices._candidates import derive_price, gather_owned, pool_is_ignored, valid_price
 from y.prices.dex.balancer._abc import BalancerABC, BalancerPool
 
 EXCHANGE_PROXY = dict[int, str](

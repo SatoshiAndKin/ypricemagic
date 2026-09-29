@@ -1,4 +1,3 @@
-from y._typing import a_sync_property
 from abc import abstractmethod
 from asyncio import Future, ensure_future, get_event_loop, shield
 from collections.abc import Awaitable, Generator
@@ -11,27 +10,20 @@ from typing import TYPE_CHECKING, Any, Final, Literal, NoReturn, Union, cast, fi
 import a_sync
 from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
-from a_sync.a_sync.method import ASyncBoundMethod
 from brownie import chain, web3
 from brownie.convert.datatypes import HexString
 from brownie.exceptions import ContractNotFound
 from eth_retry import auto_retry
 from eth_typing import ChecksumAddress
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._decorators import stuck_coro_debugger
+from y._typing import a_sync_property
 from y.classes.singleton import ChecksumASyncSingletonMeta
 from y.constants import EEE_ADDRESS
-from y.contracts import (
-    Contract,
-    build_name,
-    contract_creation_block_async,
-    has_method,
-    probe,
-)
+from y.contracts import Contract, build_name, contract_creation_block_async, has_method, probe
 from y.datatypes import AnyAddressType, Block, Pool, PriceResult
 from y.exceptions import ContractNotVerified, MessedUpBrownieContract, NonStandardERC20
 from y.networks import Network

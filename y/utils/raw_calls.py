@@ -5,25 +5,20 @@ from typing import Any, Final, Literal, Protocol, cast, overload
 
 import a_sync
 import brownie
-import dank_mids
-from dank_mids.brownie_patch import dank_eth
 from a_sync import cgather
 from brownie import ZERO_ADDRESS, chain, convert
 from brownie.convert.datatypes import EthAddress
+from dank_mids._eth_utils import encode_hex
+from dank_mids.brownie_patch import dank_eth
+from dank_mids.helpers import lru_cache_lite_nonull
 from eth_typing import ChecksumAddress, HexStr
+from faster_eth_utils import function_signature_to_4byte_selector
 from hexbytes import HexBytes
 from web3.types import TxParams
-from dank_mids._eth_utils import encode_hex
-from dank_mids.helpers import lru_cache_lite_nonull
-from faster_eth_utils import function_signature_to_4byte_selector
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y._decorators import stuck_coro_debugger
 from y.contracts import Contract, proxy_implementation
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from y.classes.common import ERC20
 from y.convert import to_address, to_address_async
 from y.datatypes import Address, AddressOrContract, AnyAddressType, Block
 from y.exceptions import (

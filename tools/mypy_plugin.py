@@ -12,26 +12,25 @@ from typing import cast
 from a_sync_mypy_plugin import (
     ASYNC_BASE_FULLNAMES,
     ASYNC_FUNCTION_FULLNAMES,
-    PROPERTY_DECORATOR_FULLNAMES,
     CACHED_PROPERTY_DECORATOR_FULLNAMES,
+    PROPERTY_DECORATOR_FULLNAMES,
     ASyncPlugin,
     _a_sync_function_hook,
+    _analyzed_callable_from_node,
+    _get_fullname,
+    _is_async_return_type,
     _parameters_from_callable,
     _unwrap_awaitable,
-    _wrap_async_class as _upstream_wrap_async_class,
-    _analyzed_callable_from_node,
-    _is_async_return_type,
-    _get_fullname,
 )
+from a_sync_mypy_plugin import _wrap_async_class as _upstream_wrap_async_class
 from mypy.nodes import (
-    COVARIANT,
     ARG_NAMED,
     ARG_NAMED_OPT,
+    COVARIANT,
     CallExpr,
     Decorator,
     FuncDef,
     NameExpr,
-    OverloadedFuncDef,
     TypeInfo,
     Var,
 )
@@ -39,8 +38,8 @@ from mypy.plugin import (
     ClassDefContext,
     FunctionContext,
     FunctionSigContext,
-    MethodSigContext,
     MethodContext,
+    MethodSigContext,
     Plugin,
 )
 from mypy.types import (
@@ -51,9 +50,9 @@ from mypy.types import (
     NoneType,
     Overloaded,
     Parameters,
+    Type,
     TypeOfAny,
     TypeVarType,
-    Type,
     UnionType,
     get_proper_type,
 )

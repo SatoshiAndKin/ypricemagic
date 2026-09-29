@@ -1,9 +1,9 @@
-from asyncio import Task, sleep
 import logging
+from asyncio import Task, sleep
+from collections.abc import Callable
 from contextlib import AbstractContextManager
 from logging import DEBUG, Logger, StreamHandler, getLogger
 from typing import Final, Protocol, TypeVar, cast, final
-from collections.abc import Callable
 from weakref import ref as weak_ref
 
 import a_sync

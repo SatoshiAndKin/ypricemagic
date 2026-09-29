@@ -1,12 +1,11 @@
-from y._db.typing import db_session
 import logging
+from builtins import type as Type
 from collections.abc import Callable
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
 from typing import TYPE_CHECKING, Any
 from typing import Optional as typing_Optional
 from typing import TypeVar
-from builtins import type as Type
 
 from pony.orm import (
     Database,
@@ -22,6 +21,7 @@ from pony.orm import (
 from typing_extensions import ParamSpec
 
 from y._db.decorators import retry_locked, ydb_write_threads
+from y._db.typing import db_session
 
 db = Database()
 

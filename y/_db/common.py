@@ -1,4 +1,3 @@
-from y._db.typing import db_session
 from abc import ABCMeta, abstractmethod
 from asyncio import (
     FIRST_COMPLETED,
@@ -19,19 +18,11 @@ from itertools import groupby, islice
 from logging import DEBUG, getLogger
 from typing import TYPE_CHECKING, Any, Generic, NoReturn, Optional, TypeVar, cast, final
 
-import dank_mids
-from dank_mids.brownie_patch import dank_eth
 import eth_retry
-from a_sync import (
-    ASyncIterable,
-    ASyncIterator,
-    AsyncThreadPoolExecutor,
-    CounterLock,
-    PruningThreadPoolExecutor,
-)
-from y._typing import async_property, async_iterator
+from a_sync import ASyncIterable, AsyncThreadPoolExecutor, CounterLock, PruningThreadPoolExecutor
 from brownie import ZERO_ADDRESS
 from dank_mids import BlockSemaphore
+from dank_mids.brownie_patch import dank_eth
 from evmspec.data import Address, HexBytes32
 from hexbytes import HexBytes
 from pony.orm import OptimisticCheckError, TransactionIntegrityError
@@ -42,16 +33,20 @@ from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._db.decorators import retry_locked
 from y._db.exceptions import CacheNotPopulatedError
+from y._db.typing import db_session
 from y._decorators import stuck_coro_debugger
+from y._typing import async_iterator, async_property
 from y.exceptions import reraise_excs_with_extra_context
 from y.utils.middleware import BATCH_SIZE
 
 if TYPE_CHECKING:
     from y.datatypes import Block
-from y.datatypes import AnyAddressType
+
+from a_sync.executor import _AsyncExecutorMixin
 from eth_typing import BlockNumber
 from typing_extensions import TypeVar as DefaultTypeVar
-from a_sync.executor import _AsyncExecutorMixin
+
+from y.datatypes import AnyAddressType
 
 T = TypeVar("T")
 S = TypeVar("S")

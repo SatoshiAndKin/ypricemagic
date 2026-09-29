@@ -1,9 +1,8 @@
 import logging
-from operator import getitem
 import threading
 import time
 from functools import lru_cache
-from typing import cast
+from operator import getitem
 
 import a_sync
 from cachetools import TTLCache, cached

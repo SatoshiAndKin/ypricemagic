@@ -1,4 +1,5 @@
 from typing import cast
+
 import a_sync
 import cachebox
 from brownie.convert.datatypes import EthAddress

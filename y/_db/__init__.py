@@ -1,5 +1,5 @@
-from typing import Any
 import os
+from typing import Any
 
 from pony.orm import BindingError, Database, DatabaseError, TransactionError
 

@@ -1,19 +1,16 @@
-from y._typing import a_sync_property
 import logging
 from typing import Final, final
 
 import a_sync
-import dank_mids
-from dank_mids.brownie_patch import dank_eth
 from a_sync.a_sync.property import HiddenMethodDescriptor
-from typing_extensions import Self
+from dank_mids.brownie_patch import dank_eth
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import exceptions
 from y._decorators import stuck_coro_debugger
+from y._typing import a_sync_property
 from y.datatypes import AnyAddressType, Block, Pool, PriceResult, UsdPrice
 from y.prices._candidates import derive_price, gather_owned, valid_price
-from y.prices.dex.balancer._abc import BalancerABC
 from y.prices.dex.balancer.v1 import BalancerV1
 from y.prices.dex.balancer.v2 import BalancerV2
 from y.utils.cache import optional_async_diskcache

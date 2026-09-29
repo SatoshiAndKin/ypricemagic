@@ -5,12 +5,11 @@ from typing import Any, cast
 
 import a_sync
 import brownie
-import dank_mids
-from dank_mids.brownie_patch import dank_eth
 from a_sync import igather
 from brownie.typing import ContractName
-from eth_typing import ABIElement, HexAddress, HexStr
+from dank_mids.brownie_patch import dank_eth
 from eth_abi.exceptions import InsufficientDataBytes
+from eth_typing import ABIElement, HexAddress, HexStr
 from multicall import Call
 from web3.exceptions import CannotHandleRequest
 

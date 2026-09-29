@@ -1,8 +1,7 @@
-from tests.fixtures import async_result
 import pytest
 from multicall.utils import await_awaitable
 
-from tests.fixtures import mainnet_only, sync_result
+from tests.fixtures import async_result, mainnet_only, sync_result
 from y.exceptions import UnsupportedNetwork
 from y.prices.synthetix import Synthetix
 

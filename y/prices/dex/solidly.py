@@ -2,7 +2,6 @@ from abc import abstractmethod
 from itertools import product
 from typing import cast
 
-import dank_mids
 from dank_mids.brownie_patch import dank_eth
 
 from y import convert

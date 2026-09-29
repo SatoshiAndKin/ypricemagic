@@ -16,7 +16,7 @@ from functools import lru_cache
 from brownie import chain
 
 from y.constants import dai, usdc, usdt, wbtc, weth
-from y.datatypes import Address, AddressOrContract
+from y.datatypes import AddressOrContract
 from y.networks import Network
 
 logger = logging.getLogger(__name__)
