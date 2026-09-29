@@ -1,17 +1,15 @@
 """Profile the synchronous Compound case active during the contained baseline OOM."""
 
 import argparse
-import faulthandler
 import gc
 import os
-import signal
 import threading
 import time
 import tracemalloc
 from pathlib import Path
 from typing import Any
 
-from common import write_json
+from common import register_stack_dump, write_json
 from profile_state import capture, sample
 
 
@@ -69,7 +67,7 @@ def main(blocks: list[int] | None) -> None:
 
 
 if __name__ == "__main__":
-    faulthandler.register(signal.SIGUSR1, all_threads=True)
+    register_stack_dump()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--blocks", type=int, nargs=5)
     main(parser.parse_args().blocks)

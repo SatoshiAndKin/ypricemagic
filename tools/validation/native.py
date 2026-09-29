@@ -1,15 +1,14 @@
 """Fixed-block native checks retained from PR 43 validation."""
 
 import asyncio
-import faulthandler
 import json
 import os
-import signal
 from contextlib import aclosing
 from pathlib import Path
 from typing import Any
 
 from brownie import web3
+from common import register_stack_dump
 from eth_abi.abi import decode, encode
 from eth_abi.packed import encode_packed
 from eth_utils.address import to_checksum_address
@@ -273,5 +272,5 @@ async def main() -> int:
     return int(any(row["status"] != "pass" for row in results))
 
 
-faulthandler.register(signal.SIGUSR1, all_threads=True)
+register_stack_dump()
 raise SystemExit(asyncio.get_event_loop().run_until_complete(main()))

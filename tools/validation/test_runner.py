@@ -6,12 +6,65 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from collections.abc import Callable
 from pathlib import Path
 from unittest.mock import patch
 
+import common
 import run
 from common import ConsoleLog
 from compare import type_diagnostics
+
+
+class PlatformTests(unittest.TestCase):
+    def test_unsupported_platforms_fail_before_measurements_or_signals(self) -> None:
+        operations: tuple[Callable[[], object], ...] = (
+            common.peak_rss_bytes,
+            common.page_size,
+            common.register_stack_dump,
+            lambda: common.signal_process_group(123, 15),
+            lambda: common.configure_alarm(lambda *_: None),
+            lambda: common.set_alarm(0),
+        )
+        for platform in ("win32", "darwin"):
+            with self.subTest(platform=platform), patch.object(common.sys, "platform", platform):
+                for function in operations:
+                    with self.assertRaisesRegex(RuntimeError, "Linux validation container"):
+                        function()
+
+    def test_linux_measurements_preserve_units_and_page_size(self) -> None:
+        from types import SimpleNamespace
+
+        with (
+            patch.object(common.sys, "platform", "linux"),
+            patch("resource.getrusage", return_value=SimpleNamespace(ru_maxrss=32768)) as usage,
+            patch("os.sysconf", return_value=4096) as sysconf,
+        ):
+            self.assertEqual(common.peak_rss_bytes(), 33554432)
+            self.assertEqual(common.page_size(), 4096)
+            usage.assert_called_once_with(0)
+            sysconf.assert_called_once_with("SC_PAGE_SIZE")
+
+    def test_linux_signals_preserve_group_deadline_and_stack_dump(self) -> None:
+        with (
+            patch.object(common.sys, "platform", "linux"),
+            patch("os.killpg") as killpg,
+            patch("signal.signal") as install,
+            patch("signal.alarm", return_value=17) as alarm,
+            patch("signal.SIGALRM", 14),
+            patch("signal.SIGUSR1", 10),
+            patch("faulthandler.register") as register,
+        ):
+            common.signal_process_group(123, 15)
+            handler = lambda *_: None
+            common.configure_alarm(handler)
+            self.assertEqual(common.set_alarm(60), 17)
+            self.assertEqual(common.set_alarm(0), 17)
+            common.register_stack_dump()
+            killpg.assert_called_once_with(123, 15)
+            install.assert_called_once_with(14, handler)
+            self.assertEqual([call.args for call in alarm.call_args_list], [(60,), (0,)])
+            register.assert_called_once_with(10, all_threads=True)
 
 
 class LogTests(unittest.TestCase):

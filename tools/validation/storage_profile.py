@@ -5,12 +5,12 @@ import gc
 import hashlib
 import json
 import os
-import resource
 import time
 import tracemalloc
 from pathlib import Path
 from typing import Any
 
+from common import peak_rss_bytes
 from multicall import Call
 from pony.orm import db_session
 
@@ -21,7 +21,7 @@ from y.prices.dex.uniswap.v2 import UniswapV2Pool
 def memory() -> dict[str, Any]:
     current, peak = tracemalloc.get_traced_memory()
     return {
-        "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+        "rss_peak_bytes": peak_rss_bytes(),
         "python_current_bytes": current if tracemalloc.is_tracing() else None,
         "python_peak_bytes": peak if tracemalloc.is_tracing() else None,
         "profiler": "tracemalloc; exclude timings" if tracemalloc.is_tracing() else None,

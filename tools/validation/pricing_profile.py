@@ -2,18 +2,15 @@
 
 import argparse
 import asyncio
-import faulthandler
 import json
 import os
-import resource
-import signal
 import tracemalloc
 from dataclasses import asdict
 from pathlib import Path
 from time import perf_counter
 from typing import Any
 
-from common import write_json
+from common import peak_rss_bytes, register_stack_dump, write_json
 from profile_state import capture
 
 
@@ -77,7 +74,7 @@ async def main(allocations: bool) -> None:
             complete = True
         finally:
             elapsed = perf_counter() - started
-            rss_peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024
+            rss_peak = peak_rss_bytes()
             current, peak = tracemalloc.get_traced_memory()
             if allocations:
                 capture(report, "after")
@@ -104,7 +101,7 @@ async def main(allocations: bool) -> None:
 
 
 if __name__ == "__main__":
-    faulthandler.register(signal.SIGUSR1, all_threads=True)
+    register_stack_dump()
     parser = argparse.ArgumentParser()
     parser.add_argument("--allocations", action="store_true")
     asyncio.get_event_loop().run_until_complete(main(parser.parse_args().allocations))

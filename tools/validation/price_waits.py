@@ -4,13 +4,12 @@ import argparse
 import asyncio
 import json
 import os
-import signal
 import time
 from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from common import write_json
+from common import configure_alarm, set_alarm, write_json
 
 BUCKET_LABELS = frozenset(
     {
@@ -160,13 +159,13 @@ def main() -> int:
     def deadline(signum: int, frame: Any) -> None:
         raise TimeoutError(f"pricing exceeded diagnostic deadline {args.deadline}s")
 
-    signal.signal(signal.SIGALRM, deadline)
+    configure_alarm(deadline)
     try:
         token: Any = CToken(args.token)
         for block in args.blocks:
             row: dict[str, Any] = {"token": args.token, "block": block}
             call_started = time.monotonic()
-            signal.alarm(args.deadline)
+            set_alarm(args.deadline)
             try:
                 row["underlying_per_ctoken"] = token.underlying_per_ctoken(block)
                 price = token.get_price(block)
@@ -175,7 +174,7 @@ def main() -> int:
             except Exception as exc:
                 row.update(status="failure", error=f"{type(exc).__name__}: {exc}")
             finally:
-                signal.alarm(0)
+                set_alarm(0)
             row["elapsed_seconds"] = time.monotonic() - call_started
             rows.append(row)
             write_json(directory / "price-waits.json", rows)

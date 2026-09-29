@@ -4,14 +4,13 @@ import argparse
 import asyncio
 import hashlib
 import os
-import resource
 import time
 import tracemalloc
 from pathlib import Path
 from typing import Any
 
 import cachebox
-from common import write_json
+from common import peak_rss_bytes, write_json
 from profile_state import capture
 
 
@@ -37,7 +36,7 @@ def memory() -> dict[str, Any]:
     current, peak = tracemalloc.get_traced_memory()
     return {
         "rss_current_bytes": rss,
-        "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+        "rss_peak_bytes": peak_rss_bytes(),
         "python_current_bytes": current if tracemalloc.is_tracing() else None,
         "python_peak_bytes": peak if tracemalloc.is_tracing() else None,
     }

@@ -5,12 +5,12 @@ import gc
 import importlib.util
 import json
 import os
-import resource
 import tempfile
 import tracemalloc
 from pathlib import Path
 from time import perf_counter
 
+from common import peak_rss_bytes
 from pytest import MonkeyPatch
 
 
@@ -33,7 +33,7 @@ def main(allocations: bool) -> None:
     current, peak = tracemalloc.get_traced_memory()
     result.update(
         elapsed_seconds=perf_counter() - started,
-        rss_peak_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+        rss_peak_bytes=peak_rss_bytes(),
         python_retained_bytes=current if allocations else None,
         python_peak_bytes=peak if allocations else None,
         profiler="tracemalloc; exclude timings" if allocations else None,

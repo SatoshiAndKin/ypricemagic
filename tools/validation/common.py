@@ -1,8 +1,61 @@
 """Small, bounded report writers shared by the host and container."""
 
 import json
+import sys
+from collections.abc import Callable
 from pathlib import Path
+from types import FrameType
 from typing import Any
+
+
+def peak_rss_bytes() -> int:
+    """Read Linux's KiB peak RSS without inventing metrics on another platform."""
+    if sys.platform != "linux":
+        raise RuntimeError("Run resource measurements inside the Linux validation container")
+    import resource
+
+    return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024
+
+
+def page_size() -> int:
+    if sys.platform != "linux":
+        raise RuntimeError("Run resource measurements inside the Linux validation container")
+    import os
+
+    return os.sysconf("SC_PAGE_SIZE")
+
+
+def register_stack_dump() -> None:
+    if sys.platform != "linux":
+        raise RuntimeError("Run signal diagnostics inside the Linux validation container")
+    import faulthandler
+    import signal
+
+    faulthandler.register(signal.SIGUSR1, all_threads=True)
+
+
+def signal_process_group(pid: int, signum: int) -> None:
+    if sys.platform != "linux":
+        raise RuntimeError("Run process supervision inside the Linux validation container")
+    import os
+
+    os.killpg(pid, signum)
+
+
+def configure_alarm(handler: Callable[[int, FrameType | None], object]) -> None:
+    if sys.platform != "linux":
+        raise RuntimeError("Run diagnostic deadlines inside the Linux validation container")
+    import signal
+
+    signal.signal(signal.SIGALRM, handler)
+
+
+def set_alarm(seconds: int) -> int:
+    if sys.platform != "linux":
+        raise RuntimeError("Run diagnostic deadlines inside the Linux validation container")
+    import signal
+
+    return signal.alarm(seconds)
 
 
 def write_json(path: Path, value: Any) -> None:

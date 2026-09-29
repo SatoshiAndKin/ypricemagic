@@ -2,7 +2,6 @@
 
 import gc
 import logging
-import resource
 import sys
 import tracemalloc
 from asyncio import Task
@@ -14,7 +13,7 @@ from threading import Event
 from types import FunctionType
 from typing import Any
 
-from common import write_json
+from common import peak_rss_bytes, write_json
 
 
 def original_function(value: Any) -> str:
@@ -209,7 +208,7 @@ def capture(directory: Path, phase: str) -> None:
             "pony_adapted_sql_cache": sql_cache_state,
             "python_current_bytes": current,
             "python_peak_bytes": peak,
-            "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+            "rss_peak_bytes": peak_rss_bytes(),
             "top_allocations": [
                 {"traceback": str(item.traceback), "bytes": item.size, "count": item.count}
                 for item in snapshot.statistics("traceback")[:50]

@@ -4,7 +4,6 @@ import argparse
 import asyncio
 import hashlib
 import os
-import resource
 import time
 import tracemalloc
 from collections import Counter
@@ -12,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 import a_sync
-from common import write_json
+from common import page_size, peak_rss_bytes, write_json
 
 from y.audit import AuditClient
 from y.prices.dex.uniswap.v2 import UniswapRouterV2, UniswapV2Pool
@@ -21,9 +20,8 @@ from y.prices.dex.uniswap.v2 import UniswapRouterV2, UniswapV2Pool
 def memory() -> dict[str, Any]:
     current, peak = tracemalloc.get_traced_memory()
     return {
-        "rss_current_bytes": int(Path("/proc/self/statm").read_text().split()[1])
-        * os.sysconf("SC_PAGE_SIZE"),
-        "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+        "rss_current_bytes": int(Path("/proc/self/statm").read_text().split()[1]) * page_size(),
+        "rss_peak_bytes": peak_rss_bytes(),
         "python_current_bytes": current if tracemalloc.is_tracing() else None,
         "python_peak_bytes": peak if tracemalloc.is_tracing() else None,
     }

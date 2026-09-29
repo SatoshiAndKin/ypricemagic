@@ -5,7 +5,6 @@ import asyncio
 import hashlib
 import json
 import os
-import resource
 import time
 import tracemalloc
 from dataclasses import dataclass
@@ -14,6 +13,7 @@ from types import SimpleNamespace
 from typing import Any
 from weakref import ref
 
+from common import peak_rss_bytes
 from pytest import MonkeyPatch
 
 from tests.test_event_memory import Entry, Reader
@@ -91,7 +91,7 @@ async def workload() -> dict[str, Any]:
         "persisted_sha256": reader.digest.hexdigest(),
         "final_block": reader._lock.value,
         "elapsed_seconds": elapsed,
-        "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+        "rss_peak_bytes": peak_rss_bytes(),
         "python_current_bytes": current if tracemalloc.is_tracing() else None,
         "python_peak_bytes": peak if tracemalloc.is_tracing() else None,
         "profiler": "tracemalloc; exclude timings" if tracemalloc.is_tracing() else None,

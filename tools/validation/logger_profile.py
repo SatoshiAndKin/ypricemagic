@@ -6,11 +6,12 @@ import gc
 import json
 import logging
 import os
-import resource
 import tracemalloc
 from pathlib import Path
 from time import perf_counter
 from weakref import ref
+
+from common import peak_rss_bytes
 
 
 async def main(allocations: bool) -> None:
@@ -49,7 +50,7 @@ async def main(allocations: bool) -> None:
         "live_tasks": len(asyncio.all_tasks()),
         "python_retained_bytes": current - initial if allocations else None,
         "python_peak_bytes": peak if allocations else None,
-        "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+        "rss_peak_bytes": peak_rss_bytes(),
         "profiler": (
             "tracemalloc; exclude this run from timing comparisons" if allocations else None
         ),

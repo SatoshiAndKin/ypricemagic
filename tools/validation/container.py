@@ -1,7 +1,6 @@
 """Supervise one command and persist cgroup data before the container exits."""
 
 import argparse
-import os
 import platform
 import signal
 import subprocess
@@ -10,7 +9,7 @@ import sysconfig
 import time
 from pathlib import Path
 
-from common import write_json
+from common import signal_process_group, write_json
 
 
 def cgroup() -> dict[str, object]:
@@ -78,7 +77,7 @@ def main() -> int:
         nonlocal interrupted
         interrupted = True
         try:
-            os.killpg(child.pid, signum)
+            signal_process_group(child.pid, signum)
         except ProcessLookupError:
             pass
 
