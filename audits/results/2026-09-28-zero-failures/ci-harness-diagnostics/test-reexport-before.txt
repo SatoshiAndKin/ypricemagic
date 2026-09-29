@@ -1,0 +1,28 @@
+2026-09-29T06:35:17.0503740Z ##[group]Run mypy
+2026-09-29T06:35:17.0503973Z mypy
+2026-09-29T06:35:17.0777215Z shell: /usr/bin/bash -e {0}
+2026-09-29T06:35:17.0777478Z env:
+2026-09-29T06:35:17.0777740Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-09-29T06:35:17.0778113Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib/pkgconfig
+2026-09-29T06:35:17.0778467Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-09-29T06:35:17.0778796Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-09-29T06:35:17.0779107Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.14/x64
+2026-09-29T06:35:17.0779423Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.14/x64/lib
+2026-09-29T06:35:17.0779698Z ##[endgroup]
+2026-09-29T06:35:47.6908089Z tools/validation/test_runner.py: note: In member "test_unsupported_platforms_fail_before_measurements_or_signals" of class "PlatformTests":
+2026-09-29T06:35:47.6909693Z tools/validation/test_runner.py:30: error: Module "common" does not explicitly
+2026-09-29T06:35:47.6910219Z export attribute "sys"  [attr-defined]
+2026-09-29T06:35:47.6910687Z     ...th self.subTest(platform=platform), patch.object(common.sys, "platform...
+2026-09-29T06:35:47.6911044Z                                                         ^~~~~~~~~~
+2026-09-29T06:35:47.6911521Z tools/validation/test_runner.py: note: In member "test_linux_measurements_preserve_units_and_page_size" of class "PlatformTests":
+2026-09-29T06:35:47.6912057Z tools/validation/test_runner.py:39: error: Module "common" does not explicitly
+2026-09-29T06:35:47.6912393Z export attribute "sys"  [attr-defined]
+2026-09-29T06:35:47.6912671Z                 patch.object(common.sys, "platform", "linux"),
+2026-09-29T06:35:47.6912936Z                              ^~~~~~~~~~
+2026-09-29T06:35:47.6913393Z tools/validation/test_runner.py: note: In member "test_linux_signals_preserve_group_deadline_and_stack_dump" of class "PlatformTests":
+2026-09-29T06:35:47.6913933Z tools/validation/test_runner.py:50: error: Module "common" does not explicitly
+2026-09-29T06:35:47.6914264Z export attribute "sys"  [attr-defined]
+2026-09-29T06:35:47.6914523Z                 patch.object(common.sys, "platform", "linux"),
+2026-09-29T06:35:47.6914771Z                              ^~~~~~~~~~
+2026-09-29T06:36:28.5639516Z Found 3 errors in 1 file (checked 230 source files)
+2026-09-29T06:36:28.5933318Z ##[error]Process completed with exit code 1.

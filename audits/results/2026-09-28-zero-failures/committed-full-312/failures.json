@@ -1,0 +1,64 @@
+[
+  {
+    "phase": "call",
+    "elapsed_seconds": 74.37647641595686,
+    "rss_peak_bytes": 420696064,
+    "live_tasks": 5932,
+    "test": "tests/prices/test_gearbox.py::test_get_price",
+    "outcome": "failed",
+    "duration": 1.4490745067596436,
+    "error": "@mainnet_only\n    @pytest.mark.asyncio_cooperative\n    async def test_get_price() -> None:\n        # At this block, Chainlink's DAI/USD feed (round 17128) reports 99970000\n        # with eight decimals. The USD value includes this historical feed price.\n        dai_per_share = Decimal(\"1.007850150784062913\")\n        dai_usd = Decimal(\"0.9997\")\n        result = await async_result(cast(Gearbox, gearbox).get_price(ddai, 16980000))\n        assert result is not None\n        assert result == dai_per_share * dai_usd\n>       assert result.path[-1].price == float(dai_usd)\nE       assert 1.0075477957388277 == 0.9997\nE         +1.0075477957388277\nE         -0.9997\n\ntests/prices/test_gearbox.py:30: AssertionError",
+    "error_message": "assert 1.0075477957388277 == 0.9997\n  +1.0075477957388277\n  -0.9997",
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 0,
+        "flights": 9
+      },
+      "result_cache": {
+        "values": 0,
+        "flights": 9
+      },
+      "state_cache": {
+        "values": 259,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 5406,
+      "multicall_uid": 494,
+      "request_uid": 306,
+      "jsonrpc_batch_uid": 375
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 2777.440336989006,
+    "rss_peak_bytes": 3190190080,
+    "live_tasks": 3635,
+    "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0x250Fb308199FE8C5220509C1bf83D21d60b7f74A]",
+    "outcome": "failed",
+    "duration": 1538.3772780895233,
+    "error": "token = '0x250Fb308199FE8C5220509C1bf83D21d60b7f74A'\n\n    @pytest.mark.parametrize(\"token\", CTOKENS)\n    @pytest.mark.asyncio_cooperative\n    async def test_compound_pricing_async(token: str) -> None:\n        \"\"\"\n        Test the asynchronous pricing of Compound tokens.\n    \n        This test iterates over a list of CToken addresses, retrieves the price\n        for each token at various block heights asynchronously, and asserts that\n        a price is returned.\n    \n        Args:\n            token: The address of the CToken to test.\n    \n        See Also:\n            - :class:`~y.prices.lending.compound.CToken`\n            - :func:`~y.prices.lending.compound.CToken.get_price`\n        \"\"\"\n        print(token)\n        ctoken = CToken(token, asynchronous=True)\n        for block in blocks_for_contract(token):\n>           price = await async_result(compound.get_price(token, block))\n\ntests/prices/lending/test_compound.py:78: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/lending/compound.py:522: in get_price\n    return await CToken(token_address, comptroller=troller, asynchronous=True).get_price(\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/lending/compound.py:135: in get_price\n    underlying_per_ctoken = await self.underlying_per_ctoken(block=block, asynchronous=True)\ny/prices/lending/compound.py:207: in underlying_per_ctoken\n    exchange_rate, decimals, underlying = await gather(\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/lending/compound.py:228: in exchange_rate\n    exchange_rate = await self.exchange_rate_current(block_id=block)\n/usr/local/lib/python3.12/site-packages/eth_retry/eth_retry.py:135: in auto_retry_wrap_async\n    return await func(*args, **kwargs)  # type: ignore\n/usr/local/lib/python3.12/site-packages/multicall/call.py:150: in coroutine\n    output = await get_async_w3(_w3).eth.call(  # type: ignore [misc]\n/usr/local/lib/python3.12/site-packages/dank_mids/eth.py:110: in call\n    return await super().call(\n/usr/local/lib/python3.12/site-packages/web3/eth/async_eth.py:268: in call\n    return await self._durin_call(transaction, block_identifier, state_override)\n/usr/local/lib/python3.12/site-packages/web3/eth/async_eth.py:287: in _durin_call\n    return await self._call(transaction, block_identifier, state_override)\n/usr/local/lib/python3.12/site-packages/web3/module.py:118: in caller\n    result = await async_w3.manager.coro_request(\n/usr/local/lib/python3.12/site-packages/web3/manager.py:336: in coro_request\n    return self.formatted_response(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nresponse = {'error': {'code': -32000, 'dankmids_added_context': Request(method='eth_call', id=1452496, params=({'to': '0x250Fb308...d')), 'message': 'historical state 1235ab32b37a553df2f44b445c29c8f2a78643797af9791f1df1e8b0f07dc0f3 is not available'}}\nparams = ({'data': '0xbd6d894d', 'to': '0x250Fb308199FE8C5220509C1bf83D21d60b7f74A'}, '0x18df7fd')\nerror_formatters = <function raise_contract_logic_error_on_revert at 0xffb23a689ee0>\nnull_result_formatters = <function return_as_is at 0xffb229d7f880>\n\n    @staticmethod\n    def formatted_response(\n        response: RPCResponse,\n        params: Any,\n        error_formatters: Optional[Callable[..., Any]] = None,\n        null_result_formatters: Optional[Callable[..., Any]] = None,\n    ) -> Any:\n        # jsonrpc is not enforced (as per the spec) but if present, it must be 2.0\n        if \"jsonrpc\" in response and response[\"jsonrpc\"] != \"2.0\":\n            _raise_bad_response_format(\n                response, 'The \"jsonrpc\" field must be present with a value of \"2.0\"'\n            )\n    \n        # id is not enforced (as per the spec) but if present, it must be a\n        # string or integer\n        # TODO: v7 - enforce id per the spec\n        if \"id\" in response:\n            response_id = response[\"id\"]\n            # id is always None for errors\n            if response_id is None and \"error\" not in response:\n                _raise_bad_response_format(\n                    response, '\"id\" must be None when an error is present'\n                )\n            elif not isinstance(response_id, (str, int, type(None))):\n                _raise_bad_response_format(response, '\"id\" must be a string or integer')\n    \n        # Response may not include both \"error\" and \"result\"\n        if \"error\" in response and \"result\" in response:\n            _raise_bad_response_format(\n                response, 'Response cannot include both \"error\" and \"result\"'\n            )\n    \n        # Format and validate errors\n        elif \"error\" in response:\n            error = response.get(\"error\")\n            # Raise the error when the value is a string\n            if error is None or isinstance(error, str):\n                raise ValueError(error)\n    \n            # Errors must include an integer code\n            code = error.get(\"code\")\n            if not isinstance(code, int):\n                _raise_bad_response_format(response, \"error['code'] must be an integer\")\n            elif code == METHOD_NOT_FOUND:\n                raise MethodUnavailable(error)\n    \n            # Errors must include a message\n            if not isinstance(error.get(\"message\"), str):\n                _raise_bad_response_format(\n                    response, \"error['message'] must be a string\"\n                )\n    \n            apply_error_formatters(error_formatters, response)\n    \n>           raise ValueError(error)\nE           ValueError: {'code': -32000, 'message': 'historical state 1235ab32b37a553df2f44b445c29c8f2a78643797af9791f1df1e8b0f07dc0f3 is not available', 'dankmids_added_context': Request(method='eth_call', id=1452496, params=({'to': '0x250Fb308199FE8C5220509C1bf83D21d60b7f74A', 'data': '0xbd6d894d'}, '0x18df7fd'))}\n\n/usr/local/lib/python3.12/site-packages/web3/manager.py:284: ValueError",
+    "error_message": "ValueError: {'code': -32000, 'message': 'historical state 1235ab32b37a553df2f44b445c29c8f2a78643797af9791f1df1e8b0f07dc0f3 is not available', 'dankmids_added_context': Request(method='eth_call', id=1452496, params=({'to': '0x250Fb308199FE8C5220509C1bf83D21d60b7f74A', 'data': '0xbd6d894d'}, '0x18df7fd'))}",
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 959,
+        "flights": 44
+      },
+      "result_cache": {
+        "values": 227,
+        "flights": 27
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 1299
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 1453388,
+      "multicall_uid": 152329,
+      "request_uid": 88638,
+      "jsonrpc_batch_uid": 89554
+    }
+  }
+]

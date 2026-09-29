@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "PYTHONPATH=tools/validation python -m unittest discover -s tools/validation -p test_runner.py > /reports/runner-unittests.txt 2>&1 && python -m mypy > /reports/mypy.txt 2>&1 && python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python tools/validation/focused.py && python tools/validation/native_historical.py"
+  ],
+  "docker_context": "colima-rpc-tune",
+  "builder": "ypricemagic-validation-4168ea425aa6",
+  "complete": true,
+  "started_unix": 1790666008.190937,
+  "source_sha": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+  "source_revision": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+  "source_archive_sha256": "92b467579d47fa63a9a09e4ec2f381b70ee769f1c5fc30c9964378013be4a438",
+  "image": "sha256:5a7b0df3d3255bfb910604ff75ee0bfb6594c056ab27fe7233123517167ffb33",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 938.6608300209045
+}

@@ -1,0 +1,471 @@
+mypy (windows-latest, 3.11)	Run MyPy	﻿2026-09-29T06:28:51.8391866Z ##[group]Run mypy
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:28:51.8392198Z ^[[36;1mmypy^[[0m
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:28:51.8471781Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:28:51.8472202Z env:
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:28:51.8472490Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.11.9\x64
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:28:51.8472959Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.11.9\x64/lib/pkgconfig
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:28:51.8473889Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:28:51.8474530Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:28:51.8474937Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:28:51.8475706Z ##[endgroup]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:16.0814735Z tools\validation\container.py: note: In function "main":
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:16.0815535Z tools\validation\container.py:81: error: Module has no attribute "killpg"
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:16.0816113Z [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:16.0816430Z                 os.killpg(child.pid, signum)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:16.0816888Z                 ^~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:23.0998655Z tools\validation\profile_state.py: note: In function "capture":
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:23.0999233Z tools\validation\profile_state.py:212: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:23.0999630Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:23.0999954Z                 "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF)...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:23.1000327Z                                   ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:23.1000731Z tools\validation\profile_state.py:212: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:23.1001094Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:23.1001410Z                 "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF)...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:23.1001786Z                                                      ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:29.8335709Z tools\validation\cache_profile.py: note: In function "memory":
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:29.8336551Z tools\validation\cache_profile.py:40: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:29.8337211Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:29.8337747Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:29.8338361Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:29.8338964Z tools\validation\cache_profile.py:40: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:29.8339563Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:29.8340053Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:29.8340615Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:35.8665553Z tools\validation\scaling_profile.py: note: In function "main":
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:35.8666200Z tools\validation\scaling_profile.py:36: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:35.8666695Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:35.8667127Z             rss_peak_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_max...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:35.8667611Z                            ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:35.8668045Z tools\validation\scaling_profile.py:36: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:35.8668488Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:35.8668889Z             rss_peak_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_max...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:35.8669342Z                                               ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8275048Z tools\validation\price_waits.py: note: In function "main":
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8275711Z tools\validation\price_waits.py:163: error: Module has no attribute "SIGALRM"
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8276172Z [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8276475Z         signal.signal(signal.SIGALRM, deadline)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8276834Z                       ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8277297Z tools\validation\price_waits.py:169: error: Module has no attribute "alarm"
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8277839Z [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8278124Z                 signal.alarm(args.deadline)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8280743Z                 ^~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8281181Z tools\validation\price_waits.py:178: error: Module has no attribute "alarm"
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8281632Z [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8281898Z                     signal.alarm(0)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8282207Z                     ^~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8813776Z tools\validation\native_reviewed.py:176: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8814710Z "register"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8815107Z     faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8815507Z     ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8815915Z tools\validation\native_reviewed.py:176: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8816363Z "SIGUSR1"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8816720Z     faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:52.8817121Z                           ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0029902Z tools\validation\native.py:276: error: Module has no attribute "register"
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0030742Z [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0031542Z     faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0032747Z     ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0033443Z tools\validation\native.py:276: error: Module has no attribute "SIGUSR1"
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0034122Z [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0034582Z     faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0035167Z                           ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0339119Z tools\validation\logger_profile.py: note: In function "main":
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0339752Z tools\validation\logger_profile.py:52: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0340210Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0340670Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0341113Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0341582Z tools\validation\logger_profile.py:52: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0342018Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0342413Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:53.0342850Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2621723Z tools\validation\pytest_report.py: note: In member "pytest_sessionstart" of class "Report":
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2623217Z tools\validation\pytest_report.py:29: error: Module has no attribute "register"
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2624249Z  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2624909Z             faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2625676Z             ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2626493Z tools\validation\pytest_report.py:29: error: Module has no attribute "SIGUSR1"
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2627346Z [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2628025Z             faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2628810Z                                   ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2629648Z tools\validation\pytest_report.py: note: In member "event" of class "Report":
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2630666Z tools\validation\pytest_report.py:51: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2631472Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2632195Z                 "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF)...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2633060Z                                   ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2633882Z tools\validation\pytest_report.py:51: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2634694Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2635433Z                 "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF)...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.2636255Z                                                      ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.9462839Z tools\validation\storage_profile.py: note: In function "memory":
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.9465177Z tools\validation\storage_profile.py:24: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.9465893Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.9466445Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.9467107Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.9467683Z tools\validation\storage_profile.py:24: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.9468312Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.9469172Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:54.9470121Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.0630593Z tools\validation\compound_profile.py:72: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.0631157Z "register"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.0631537Z         faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.0631930Z         ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.0632366Z tools\validation\compound_profile.py:72: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.0632821Z "SIGUSR1"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.0633163Z         faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.0633553Z                               ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6377651Z tools\validation\pricing_profile.py: note: In function "main":
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6378291Z tools\validation\pricing_profile.py:80: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6378787Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6379203Z                 rss_peak = resource.getrusage(resource.RUSAGE_SELF).ru_max...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6379654Z                            ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6380063Z tools\validation\pricing_profile.py:80: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6380480Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6380856Z                 rss_peak = resource.getrusage(resource.RUSAGE_SELF).ru_max...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6381288Z                                               ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6381696Z tools\validation\pricing_profile.py: note: At top level:
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6382171Z tools\validation\pricing_profile.py:107: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6382605Z "register"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6382985Z         faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6383359Z         ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6383742Z tools\validation\pricing_profile.py:107: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6384147Z "SIGUSR1"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6384502Z         faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6384883Z                               ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6780820Z tools\validation\pool_discovery_profile.py: note: In function "memory":
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6781777Z tools\validation\pool_discovery_profile.py:25: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6782535Z "sysconf"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6782857Z             * os.sysconf("SC_PAGE_SIZE"),
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6783188Z               ^~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6783773Z tools\validation\pool_discovery_profile.py:26: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6784235Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6784793Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6785246Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6785712Z tools\validation\pool_discovery_profile.py:26: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6786169Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6786595Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.6787223Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.8427167Z tools\validation\event_profile.py: note: In function "workload":
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.8428115Z tools\validation\event_profile.py:94: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.8428574Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.8428987Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.8429458Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.8429878Z tools\validation\event_profile.py:94: error: Module has no attribute
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.8430312Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.8430881Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:29:55.8431335Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:30:20.3115470Z Found 33 errors in 14 files (checked 230 source files)
+mypy (windows-latest, 3.11)	Run MyPy	2026-09-29T06:30:20.4508830Z ##[error]Process completed with exit code 1.
+mypy (windows-latest, 3.13)	Run MyPy	﻿2026-09-29T06:28:43.0228311Z ##[group]Run mypy
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:28:43.0228759Z ^[[36;1mmypy^[[0m
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:28:43.0353620Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:28:43.0354443Z env:
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:28:43.0354883Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.13.15\x64
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:28:43.0355697Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.13.15\x64/lib/pkgconfig
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:28:43.0356498Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.13.15\x64
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:28:43.0357211Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.13.15\x64
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:28:43.0357922Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.13.15\x64
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:28:43.0358475Z ##[endgroup]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:08.6850768Z tools\validation\container.py: note: In function "main":
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:08.6854524Z tools\validation\container.py:81: error: Module has no attribute "killpg"
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:08.6855286Z [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:08.6855627Z                 os.killpg(child.pid, signum)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:08.6856283Z                 ^~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:16.7538277Z tools\validation\profile_state.py: note: In function "capture":
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:16.7539344Z tools\validation\profile_state.py:212: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:16.7541923Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:16.7542558Z                 "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF)...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:16.7543289Z                                   ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:16.7544082Z tools\validation\profile_state.py:212: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:16.7544845Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:16.7545434Z                 "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF)...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:16.7546128Z                                                      ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:27.5563069Z tools\validation\cache_profile.py: note: In function "memory":
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:27.5563751Z tools\validation\cache_profile.py:40: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:27.5564277Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:27.5564724Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:27.5565215Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:27.5565682Z tools\validation\cache_profile.py:40: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:27.5566157Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:27.5566587Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:27.5567092Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:34.2503345Z tools\validation\scaling_profile.py: note: In function "main":
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:34.2503907Z tools\validation\scaling_profile.py:36: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:34.2504307Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:34.2504666Z             rss_peak_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_max...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:34.2505084Z                            ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:34.2505459Z tools\validation\scaling_profile.py:36: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:34.2505831Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:34.2506173Z             rss_peak_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_max...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:34.2506561Z                                               ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7076849Z tools\validation\price_waits.py: note: In function "main":
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7077904Z tools\validation\price_waits.py:163: error: Module has no attribute "SIGALRM"
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7078734Z [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7079246Z         signal.signal(signal.SIGALRM, deadline)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7080198Z                       ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7081242Z tools\validation\price_waits.py:169: error: Module has no attribute "alarm"
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7082119Z [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7082606Z                 signal.alarm(args.deadline)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7086362Z                 ^~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7087382Z tools\validation\price_waits.py:178: error: Module has no attribute "alarm"
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7088152Z [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7088557Z                     signal.alarm(0)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7088977Z                     ^~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7646019Z tools\validation\native_reviewed.py:176: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7646696Z "register"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7647135Z     faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7647615Z     ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7648072Z tools\validation\native_reviewed.py:176: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7648587Z "SIGUSR1"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7648984Z     faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.7649432Z                           ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.8814159Z tools\validation\native.py:276: error: Module has no attribute "register"
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.8814847Z [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.8815237Z     faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.8815712Z     ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.8816172Z tools\validation\native.py:276: error: Module has no attribute "SIGUSR1"
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.8816691Z [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.8817058Z     faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.8817513Z                           ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.9132552Z tools\validation\logger_profile.py: note: In function "main":
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.9133750Z tools\validation\logger_profile.py:52: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.9134475Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.9134943Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.9135494Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.9136039Z tools\validation\logger_profile.py:52: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.9136565Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.9137027Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:49.9137554Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1401493Z tools\validation\pytest_report.py: note: In member "pytest_sessionstart" of class "Report":
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1402517Z tools\validation\pytest_report.py:29: error: Module has no attribute "register"
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1403120Z  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1403556Z             faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1404062Z             ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1404608Z tools\validation\pytest_report.py:29: error: Module has no attribute "SIGUSR1"
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1405193Z [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1405605Z             faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1406141Z                                   ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1406716Z tools\validation\pytest_report.py: note: In member "event" of class "Report":
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1407506Z tools\validation\pytest_report.py:51: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1407996Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1408435Z                 "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF)...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1408931Z                                   ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1409426Z tools\validation\pytest_report.py:51: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1409921Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1410355Z                 "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF)...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.1410863Z                                                      ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.8393609Z tools\validation\storage_profile.py: note: In function "memory":
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.8395319Z tools\validation\storage_profile.py:24: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.8396090Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.8396559Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.8397075Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.8397587Z tools\validation\storage_profile.py:24: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.8398103Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.8398565Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.8399089Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.9550766Z tools\validation\compound_profile.py:72: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.9551681Z "register"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.9552401Z         faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.9552922Z         ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.9553454Z tools\validation\compound_profile.py:72: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.9554025Z "SIGUSR1"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.9554458Z         faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:51.9554916Z                               ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5015149Z tools\validation\pricing_profile.py: note: In function "main":
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5016347Z tools\validation\pricing_profile.py:80: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5017295Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5017980Z                 rss_peak = resource.getrusage(resource.RUSAGE_SELF).ru_max...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5018704Z                            ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5019463Z tools\validation\pricing_profile.py:80: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5020362Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5021059Z                 rss_peak = resource.getrusage(resource.RUSAGE_SELF).ru_max...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5021892Z                                               ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5022637Z tools\validation\pricing_profile.py: note: At top level:
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5023593Z tools\validation\pricing_profile.py:107: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5024815Z "register"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5025482Z         faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5026158Z         ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5026806Z tools\validation\pricing_profile.py:107: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5027693Z "SIGUSR1"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5028351Z         faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5029098Z                               ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5436795Z tools\validation\pool_discovery_profile.py: note: In function "memory":
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5437555Z tools\validation\pool_discovery_profile.py:25: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5438055Z "sysconf"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5438390Z             * os.sysconf("SC_PAGE_SIZE"),
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5438718Z               ^~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5439129Z tools\validation\pool_discovery_profile.py:26: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5439630Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5440026Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5440452Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5440892Z tools\validation\pool_discovery_profile.py:26: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5441343Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5441726Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.5442166Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.7178175Z tools\validation\event_profile.py: note: In function "workload":
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.7179380Z tools\validation\event_profile.py:94: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.7180108Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.7180604Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.7181166Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.7181708Z tools\validation\event_profile.py:94: error: Module has no attribute
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.7182259Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.7182755Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:29:52.7183356Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:30:18.6083206Z Found 33 errors in 14 files (checked 230 source files)
+mypy (windows-latest, 3.13)	Run MyPy	2026-09-29T06:30:18.7417080Z ##[error]Process completed with exit code 1.
+mypy (windows-latest, 3.12)	Run MyPy	﻿2026-09-29T06:28:29.4615900Z ##[group]Run mypy
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:28:29.4616359Z ^[[36;1mmypy^[[0m
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:28:29.4729860Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:28:29.4730486Z env:
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:28:29.4730924Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.12.10\x64
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:28:29.4731742Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.12.10\x64/lib/pkgconfig
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:28:29.4732534Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:28:29.4733246Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:28:29.4733961Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:28:29.4734540Z ##[endgroup]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:00.6230593Z tools\validation\container.py: note: In function "main":
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:00.6233729Z tools\validation\container.py:81: error: Module has no attribute "killpg"
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:00.6234426Z [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:00.6234812Z                 os.killpg(child.pid, signum)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:00.6235350Z                 ^~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:08.0729076Z tools\validation\profile_state.py: note: In function "capture":
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:08.0729959Z tools\validation\profile_state.py:212: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:08.0730597Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:08.0731170Z                 "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF)...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:08.0731813Z                                   ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:08.0732443Z tools\validation\profile_state.py:212: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:08.0733104Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:08.0733678Z                 "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF)...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:08.0734224Z                                                      ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:18.7203549Z tools\validation\cache_profile.py: note: In function "memory":
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:18.7204136Z tools\validation\cache_profile.py:40: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:18.7204551Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:18.7204892Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:18.7205276Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:18.7205640Z tools\validation\cache_profile.py:40: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:18.7206009Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:18.7206354Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:18.7206738Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:26.1838627Z tools\validation\scaling_profile.py: note: In function "main":
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:26.1839210Z tools\validation\scaling_profile.py:36: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:26.1839623Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:26.1839986Z             rss_peak_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_max...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:26.1840695Z                            ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:26.1841176Z tools\validation\scaling_profile.py:36: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:26.1841659Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:26.1842077Z             rss_peak_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_max...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:26.1842553Z                                               ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9657183Z tools\validation\price_waits.py: note: In function "main":
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9658073Z tools\validation\price_waits.py:163: error: Module has no attribute "SIGALRM"
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9658548Z [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9658856Z         signal.signal(signal.SIGALRM, deadline)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9659199Z                       ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9659622Z tools\validation\price_waits.py:169: error: Module has no attribute "alarm"
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9660054Z [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9660343Z                 signal.alarm(args.deadline)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9663219Z                 ^~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9663697Z tools\validation\price_waits.py:178: error: Module has no attribute "alarm"
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9664148Z [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9664407Z                     signal.alarm(0)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:43.9664709Z                     ^~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.0204154Z tools\validation\native_reviewed.py:176: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.0204853Z "register"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.0205323Z     faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.0205825Z     ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.0206679Z tools\validation\native_reviewed.py:176: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.0207252Z "SIGUSR1"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.0207693Z     faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.0208199Z                           ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1451485Z tools\validation\native.py:276: error: Module has no attribute "register"
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1452061Z [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1452426Z     faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1452849Z     ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1453312Z tools\validation\native.py:276: error: Module has no attribute "SIGUSR1"
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1453794Z [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1454153Z     faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1454598Z                           ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1769717Z tools\validation\logger_profile.py: note: In function "main":
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1770441Z tools\validation\logger_profile.py:52: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1771017Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1771531Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1772053Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1772536Z tools\validation\logger_profile.py:52: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1772994Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1773413Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:44.1773875Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4682917Z tools\validation\pytest_report.py: note: In member "pytest_sessionstart" of class "Report":
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4684366Z tools\validation\pytest_report.py:29: error: Module has no attribute "register"
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4685338Z  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4686017Z             faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4686836Z             ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4687630Z tools\validation\pytest_report.py:29: error: Module has no attribute "SIGUSR1"
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4688396Z [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4688914Z             faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4689581Z                                   ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4690740Z tools\validation\pytest_report.py: note: In member "event" of class "Report":
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4691786Z tools\validation\pytest_report.py:51: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4692556Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4693186Z                 "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF)...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4694301Z                                   ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4695105Z tools\validation\pytest_report.py:51: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4695932Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4696603Z                 "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF)...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:45.4697346Z                                                      ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.1934455Z tools\validation\storage_profile.py: note: In function "memory":
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.1936741Z tools\validation\storage_profile.py:24: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.1937497Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.1938183Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.1938976Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.1939757Z tools\validation\storage_profile.py:24: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.1940594Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.1941340Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.1942333Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.3134547Z tools\validation\compound_profile.py:72: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.3135108Z "register"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.3135497Z         faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.3135908Z         ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.3136387Z tools\validation\compound_profile.py:72: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.3136854Z "SIGUSR1"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.3137222Z         faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.3137633Z                               ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9091103Z tools\validation\pricing_profile.py: note: In function "main":
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9092114Z tools\validation\pricing_profile.py:80: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9092681Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9093143Z                 rss_peak = resource.getrusage(resource.RUSAGE_SELF).ru_max...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9093766Z                            ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9094331Z tools\validation\pricing_profile.py:80: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9094892Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9095406Z                 rss_peak = resource.getrusage(resource.RUSAGE_SELF).ru_max...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9095973Z                                               ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9096524Z tools\validation\pricing_profile.py: note: At top level:
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9097131Z tools\validation\pricing_profile.py:107: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9097968Z "register"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9098411Z         faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9098901Z         ^~~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9099390Z tools\validation\pricing_profile.py:107: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9099925Z "SIGUSR1"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9100360Z         faulthandler.register(signal.SIGUSR1, all_threads=True)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9100876Z                               ^~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9532617Z tools\validation\pool_discovery_profile.py: note: In function "memory":
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9533487Z tools\validation\pool_discovery_profile.py:25: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9534131Z "sysconf"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9534519Z             * os.sysconf("SC_PAGE_SIZE"),
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9534882Z               ^~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9535353Z tools\validation\pool_discovery_profile.py:26: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9535900Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9536355Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9537209Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9537736Z tools\validation\pool_discovery_profile.py:26: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9538279Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9538730Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:46.9539275Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:47.1377704Z tools\validation\event_profile.py: note: In function "workload":
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:47.1378910Z tools\validation\event_profile.py:94: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:47.1379385Z "getrusage"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:47.1379810Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:47.1380276Z                               ^~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:47.1380722Z tools\validation\event_profile.py:94: error: Module has no attribute
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:47.1381192Z "RUSAGE_SELF"  [attr-defined]
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:47.1381632Z             "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_...
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:29:47.1382098Z                                                  ^~~~~~~~~~~~~~~~~~~~
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:30:11.6748461Z Found 33 errors in 14 files (checked 230 source files)
+mypy (windows-latest, 3.12)	Run MyPy	2026-09-29T06:30:11.7992227Z ##[error]Process completed with exit code 1.

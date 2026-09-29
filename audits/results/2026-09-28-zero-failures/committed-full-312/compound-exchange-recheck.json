@@ -1,0 +1,12 @@
+{
+  "number": 26081277,
+  "hash": "0x81c7c1b4feb7b185ea4592be62622b8cc34b70c405247cfadde7c946d6d7401d",
+  "state_root": "0x1235ab32b37a553df2f44b445c29c8f2a78643797af9791f1df1e8b0f07dc0f3",
+  "reported_unavailable_state": "0x1235ab32b37a553df2f44b445c29c8f2a78643797af9791f1df1e8b0f07dc0f3",
+  "token": "0x250Fb308199FE8C5220509C1bf83D21d60b7f74A",
+  "code_available": true,
+  "raw_exchange_rate": 200000000000000000000000000,
+  "scaled_exchange_rate": 200000000.0,
+  "status": "pass",
+  "source": "0771c206"
+}

@@ -1,0 +1,52 @@
+[
+  {
+    "test": "tests/test_rpc_state_retry.py::test_archive_state_retry_preserves_hash_and_decodes[call]",
+    "outcome": "passed",
+    "duration": 0.0006283780094236135
+  },
+  {
+    "test": "tests/test_rpc_state_retry.py::test_compound_oracle_retries_only_failed_native_request",
+    "outcome": "failed",
+    "duration": 0.0005244200001470745
+  },
+  {
+    "test": "tests/test_rpc_state_retry.py::test_archive_state_retry_is_bounded_and_never_optional",
+    "outcome": "passed",
+    "duration": 0.0004210019833408296
+  },
+  {
+    "test": "tests/test_rpc_state_retry.py::test_archive_state_retry_preserves_hash_and_decodes[get_code]",
+    "outcome": "passed",
+    "duration": 0.0003905019839294255
+  },
+  {
+    "test": "tests/test_rpc_state_retry.py::test_compound_exchange_rate_retries_real_call_decoding",
+    "outcome": "failed",
+    "duration": 0.00037058599991723895
+  },
+  {
+    "test": "tests/test_rpc_state_retry.py::test_compound_contract_fallback_retries_same_block",
+    "outcome": "failed",
+    "duration": 0.0003524600178934634
+  },
+  {
+    "test": "tests/test_rpc_state_retry.py::test_compound_exchange_rate_propagates_exhaustion_errors_and_cancellation[error0]",
+    "outcome": "failed",
+    "duration": 0.00032966898288577795
+  },
+  {
+    "test": "tests/test_rpc_state_retry.py::test_archive_state_retry_recovers_after_short_burst",
+    "outcome": "passed",
+    "duration": 0.0003074190462939441
+  },
+  {
+    "test": "tests/test_rpc_state_retry.py::test_archive_state_retry_cancellation_during_backoff",
+    "outcome": "passed",
+    "duration": 0.00020929198944941163
+  },
+  {
+    "test": "tests/test_rpc_state_retry.py::test_compound_exchange_rate_propagates_exhaustion_errors_and_cancellation[error1]",
+    "outcome": "passed",
+    "duration": 0.00019283400615677238
+  }
+]

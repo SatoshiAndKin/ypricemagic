@@ -1,0 +1,21 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "export VALIDATION_WAITS=1; PYTHONPATH=tools/validation python -m unittest discover -s tools/validation -p test_runner.py > /reports/runner-unittests.txt 2>&1 && python -m mypy > /reports/mypy.txt 2>&1 && python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python tools/validation/focused.py && cp /reports/pytest-summary.json /reports/focused-summary.json && cp /reports/pytest-events.jsonl /reports/focused-events.jsonl && PYTEST_ADDOPTS=\"-p no:pytest_ethereum\" BROWNIE_NETWORK=mainnet make test && python /runner/check_compiled.py"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": false,
+  "started_unix": 1790664144.1871612,
+  "source_sha": "18a70eb1e249b5eb53d53ecf6ff7f5deb16e1be4",
+  "source_revision": "18a70eb1e249b5eb53d53ecf6ff7f5deb16e1be4",
+  "source_archive_sha256": "8be948dd40c1377b67c08862c033c8c1395754472d3f135379535d835216e52f",
+  "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [
+    "focused-summary.json"
+  ],
+  "elapsed_seconds": 253.49268889427185
+}

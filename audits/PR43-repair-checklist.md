@@ -6,28 +6,28 @@ another PR snapshot did not establish that they were all pre-existing.
 
 The investigation accounted for every reported failure:
 
-| Cause | Cases |
-| --- | ---: |
-| Missing V1 native ETH continuation | 9 |
-| MLN partial V3 fills | 4 |
-| CRV/YFI sale-versus-oracle assertions | 8 |
-| Unsupported or uninitialized historical samples | 7 |
-| Popsicle zero supply | 2 |
-| Compound unavailable-feed exception representations | 7 |
-| Historical Synthetix resolver / stable synth fallback | 2 |
-| GUNI metadata and missing child valuation | 2 |
-| Retired ATOM feed | 1 |
-| Unverified Aave wrapper implementation | 1 |
-| Wrapped USDT fixed-dollar expectation | 1 |
-| Aave async dispatch | 2 |
-| Standalone Compound historical oracle / initialization | 4 |
-| Native Compound exchange-rate underflow | 1 |
-| Optional sense-check metadata | 1 |
-| Yearn Decimal-versus-float expectations | 2 |
-| Balancer and Curve literals | 2 |
-| PieDAO call encoding | 1 |
-| Historical-state provider errors | 11 |
-| **Total** | **68** |
+| Cause                                                  |  Cases |
+| ------------------------------------------------------ | -----: |
+| Missing V1 native ETH continuation                     |      9 |
+| MLN partial V3 fills                                   |      4 |
+| CRV/YFI sale-versus-oracle assertions                  |      8 |
+| Unsupported or uninitialized historical samples        |      7 |
+| Popsicle zero supply                                   |      2 |
+| Compound unavailable-feed exception representations    |      7 |
+| Historical Synthetix resolver / stable synth fallback  |      2 |
+| GUNI metadata and missing child valuation              |      2 |
+| Retired ATOM feed                                      |      1 |
+| Unverified Aave wrapper implementation                 |      1 |
+| Wrapped USDT fixed-dollar expectation                  |      1 |
+| Aave async dispatch                                    |      2 |
+| Standalone Compound historical oracle / initialization |      4 |
+| Native Compound exchange-rate underflow                |      1 |
+| Optional sense-check metadata                          |      1 |
+| Yearn Decimal-versus-float expectations                |      2 |
+| Balancer and Curve literals                            |      2 |
+| PieDAO call encoding                                   |      1 |
+| Historical-state provider errors                       |     11 |
+| **Total**                                              | **68** |
 
 The original full-run evidence is retained in
 `results/2026-09-26-mergeability/full-v3-inventory-312/`. The twelve-case master
@@ -43,9 +43,9 @@ termination do not establish that the PR's failures were pre-existing.
 - [x] Require V3 and Slipstream quotes to prove the full input can be sold.
 - [x] Resolve standalone Compound controllers at the requested block.
 - [x] Recognize six verified unavailable Compound oracle revert reasons, including
-  request-context and Brownie exception representations.
+      request-context and Brownie exception representations.
 - [x] Verify Inverse's retired zero-aggregator feed before treating its blank
-  oracle revert as unavailable; preserve unexplained blank reverts.
+      oracle revert as unavailable; preserve unexplained blank reverts.
 - [x] Convert the verified legacy Cream ETH-denominated oracle to historical USD.
 - [x] Treat unavailable Compound exchange rates as unavailable candidates.
 - [x] Resolve Synthetix keys and ExchangeRates through the historical synth resolver.
@@ -67,11 +67,11 @@ termination do not establish that the PR's failures were pre-existing.
 - [x] Further expanded original-source control: 58 failures and nine passing checks.
 - [x] Final original-source control: 65 failures and nine passing checks, 74 total.
 - [x] Eleven sequential native checks passed, adding both legacy Cream oracle
-  denominations and IronBank EUR.
+      denominations and IronBank EUR.
 - [x] Final fourteen sequential native checks passed, including Venus, Inverse's
-  verified retired feed and successful fallback, and PieDAO's reconstructed value.
+      verified retired feed and successful fallback, and PieDAO's reconstructed value.
 - [x] Replay all three unique requests behind the eleven provider-state failures
-  successfully at their original canonical block hashes.
+      successfully at their original canonical block hashes.
 - [x] Correct Yearn Decimal expectations and independently verified Balancer/Curve values.
 - [x] Reconstruct PieDAO's historical value from native balances and feeds.
 - [x] Enable the 199 previously unmarked Compound async cases.
@@ -84,18 +84,18 @@ termination do not establish that the PR's failures were pre-existing.
 - [x] First repaired focused run: 563 passed, all ten compiled extensions verified.
 - [x] Latest Python 3.12 focused run: 613 passed, with all ten compiled extensions.
 - [x] Final frozen focused matrix: 613 passed on each of Python 3.11, 3.12, 3.13;
-  all ten compiled extensions verified on every version.
+      all ten compiled extensions verified on every version.
 - [x] Configured formatting and mypy diagnostic comparison: 1,772 diagnostics
-  versus 1,788 baseline on each version. The sole added message replaces the
-  existing Gelato decorator diagnostic after its return annotation gained None.
-  GitHub's Ubuntu/Python 3.13 job similarly records 1,775 versus 1,791 baseline;
-  the three diagnostics beyond the frozen local count concern unchanged missing
-  click/numpy imports and their consequence. CI remains failing.
+      versus 1,788 baseline on each version. The sole added message replaces the
+      existing Gelato decorator diagnostic after its return annotation gained None.
+      GitHub's Ubuntu/Python 3.13 job similarly records 1,775 versus 1,791 baseline;
+      the three diagnostics beyond the frozen local count concern unchanged missing
+      click/numpy imports and their consequence. CI remains failing.
 - [x] Required Python 3.12 full command, unchanged; record provider failures explicitly.
 - [x] Same-block provider replays and subsequent public-price validation: 29
-  affected pytest cases passed; all nine remaining provider-failed prices passed
-  sequential native calls at their exact failed canonical blocks. Preserve the
-  failing pytest runs separately.
+      affected pytest cases passed; all nine remaining provider-failed prices passed
+      sequential native calls at their exact failed canonical blocks. Preserve the
+      failing pytest runs separately.
 - [x] Record source/archive hashes, memory peaks, missing reports and interruptions.
 
 All heavy jobs use 8 GiB RAM, no swap, four CPUs and 512 processes/threads,
@@ -158,33 +158,45 @@ verified. The native-only runner, inputs, source identity proof, exact prices,
 and resource measurements are retained in `native-provider-312/`. Neither failed
 full run nor the failed pytest recheck is relabelled as passing.
 
-## Delivery
+## Earlier delivery checkpoint
 
 - [x] Inspect scoped diff and preserved generated C hash:
-  `099f4992d9c8404dc31bc761d0fcfb5aeef32cd9f582688dc1b9f73646104506`.
+      `099f4992d9c8404dc31bc761d0fcfb5aeef32cd9f582688dc1b9f73646104506`.
 - [x] Commit and push scoped changes: `17c08dda9796994ea755699032975dc4b91fd06e`.
 - [x] Rerun focused checks against committed source: 613 passed on Python 3.12,
-  all ten compiled extensions verified. The following bot commit `bd1302d1`
-  changes only generated C files; Python source and tests are identical.
+      all ten compiled extensions verified. The following bot commit `bd1302d1`
+      changes only generated C files; Python source and tests are identical.
 - [x] Update PR Summary, Rationale and Details; keep draft while gaps remain.
 - [x] Verify remote alignment and preserved generated C hash; the local C file
-  remains the sole unrelated working-tree change. Retain the bot's generated C
-  commit separately from the pricing repair and validation evidence commits.
+      remains the sole unrelated working-tree change. Retain the bot's generated C
+      commit separately from the pricing repair and validation evidence commits.
 
-The repairs are delivered, but the PR remains draft. The full-suite provider
-failures, baseline mypy failures, and earlier source-specific audit limitations
-remain visible; successful targeted/native checks do not make those runs green.
-
+At this checkpoint, the repairs were pushed and the PR remained draft. The
+full-suite provider failures, baseline mypy failures, and earlier source-specific
+audit limitations remain visible; later successful checks do not make those
+historical runs green.
 
 ## Zero-failure follow-up
 
-The remaining provider and static-check failures are addressed in `0771c206`.
-The reviewed-source focused matrix passes 661 tests on each of Python 3.11,
-3.12, and 3.13, with zero strict-mypy diagnostics and ten compiled extensions
-verified on each version. The committed Python 3.12 focused recheck also passes
-all 661 tests. The required full suite and final GitHub checks remain in progress.
+The remaining provider and static-check failures are repaired through `619e23a2`,
+including Compound direct-call retries and portable validation-harness typing.
+
+- [x] Required Python 3.12 full command: **2,132 passed, 22 intentionally skipped,
+      zero failures**, exit 0.
+- [x] Frozen focused matrix: **667 passed on each of Python 3.11, 3.12, and 3.13**.
+- [x] All ten compiled extensions verified and strict mypy clean on each version.
+- [x] All 15 sequential historical native checks passed.
+- [x] All 13 GitHub checks passed on the validated source.
+- [x] Preserve exact failed controls, earlier incomplete runs, source/archive
+      identities, resource limits, peak memory, and report hashes.
+- [x] Preserve the unrelated generated C hash shown above.
+
+The final full run used 4,536,238,080 peak cgroup bytes. Its longest test passed
+in 3,044.269 seconds; the 3,600-second deadline was not increased. All final jobs
+completed without OOM or missing reports. Final delivery adds evidence and
+documentation without changing the validated source.
 
 The [follow-up checklist and evidence](results/2026-09-28-zero-failures/README.md)
 track each repair, original-source regression control, immutable validation
-attempt, and remaining delivery gate. Earlier failed and interrupted results
-above retain their original status. The PR remains draft until the new gates pass.
+attempt, and final acceptance gates. Earlier failed and interrupted results
+above retain their original status; they are not relabelled as passing.

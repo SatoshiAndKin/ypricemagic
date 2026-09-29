@@ -1,0 +1,97 @@
+{
+  "head": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+  "captured_utc": "2026-09-29T07:06:48.086037+00:00",
+  "checks": [
+    {
+      "completedAt": "2026-09-29T06:54:50Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/runs/109292517708",
+      "name": "CodeQL",
+      "state": "SUCCESS",
+      "workflow": ""
+    },
+    {
+      "completedAt": "2026-09-29T06:55:04Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36533485996/job/109292185552",
+      "name": "mypy (macos-latest, 3.13)",
+      "state": "SUCCESS",
+      "workflow": "MyPy"
+    },
+    {
+      "completedAt": "2026-09-29T06:54:52Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36533485996/job/109292186038",
+      "name": "mypy (macos-latest, 3.11)",
+      "state": "SUCCESS",
+      "workflow": "MyPy"
+    },
+    {
+      "completedAt": "2026-09-29T06:54:50Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36533485996/job/109292185542",
+      "name": "mypy (macos-latest, 3.12)",
+      "state": "SUCCESS",
+      "workflow": "MyPy"
+    },
+    {
+      "completedAt": "2026-09-29T06:53:50Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36533486134/job/109292186135",
+      "name": "build-ubuntu",
+      "state": "SUCCESS",
+      "workflow": "Compile"
+    },
+    {
+      "completedAt": "2026-09-29T06:54:56Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36533486138/job/109292186151",
+      "name": "Analyze (python)",
+      "state": "SUCCESS",
+      "workflow": "CodeQL"
+    },
+    {
+      "completedAt": "2026-09-29T06:55:38Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36533485996/job/109292185546",
+      "name": "mypy (windows-latest, 3.12)",
+      "state": "SUCCESS",
+      "workflow": "MyPy"
+    },
+    {
+      "completedAt": "2026-09-29T06:55:47Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36533485996/job/109292185583",
+      "name": "mypy (ubuntu-latest, 3.13)",
+      "state": "SUCCESS",
+      "workflow": "MyPy"
+    },
+    {
+      "completedAt": "2026-09-29T06:55:22Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36533485996/job/109292185516",
+      "name": "mypy (ubuntu-latest, 3.11)",
+      "state": "SUCCESS",
+      "workflow": "MyPy"
+    },
+    {
+      "completedAt": "2026-09-29T06:56:32Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36533485996/job/109292185556",
+      "name": "mypy (windows-latest, 3.11)",
+      "state": "SUCCESS",
+      "workflow": "MyPy"
+    },
+    {
+      "completedAt": "2026-09-29T06:55:53Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36533485996/job/109292185568",
+      "name": "mypy (ubuntu-latest, 3.12)",
+      "state": "SUCCESS",
+      "workflow": "MyPy"
+    },
+    {
+      "completedAt": "2026-09-29T06:56:35Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36533485996/job/109292185545",
+      "name": "mypy (windows-latest, 3.13)",
+      "state": "SUCCESS",
+      "workflow": "MyPy"
+    },
+    {
+      "completedAt": "2026-09-29T06:54:28Z",
+      "link": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36533485977/job/109292185102",
+      "name": "lint-all-the-things",
+      "state": "SUCCESS",
+      "workflow": "Lint All The Things"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "export VALIDATION_WAITS=1; python -m mypy > /reports/mypy.txt 2>&1 && python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python tools/validation/focused.py && cp /reports/pytest-summary.json /reports/focused-summary.json && cp /reports/pytest-events.jsonl /reports/focused-events.jsonl && PYTEST_ADDOPTS=\"-p no:pytest_ethereum\" BROWNIE_NETWORK=mainnet make test && python /runner/check_compiled.py && python tools/validation/native_historical.py"
+  ],
+  "docker_context": "colima-rpc-tune",
+  "builder": "ypricemagic-validation-4168ea425aa6",
+  "complete": false,
+  "started_unix": 1790661100.234951,
+  "source_sha": "0771c206b4cf1df396543dd4397c7c230bad9da7",
+  "source_revision": "0771c206",
+  "source_archive_sha256": "6a297110514ab34455c9e3d99f3214f1044edd3252b41bacba9f0466a45d73d6",
+  "image": "sha256:4e638397b0f7820ee48560e2b2199d06d519ba410890c207b9409d5d1978eed6",
+  "exit_code": 2,
+  "oom_killed": false,
+  "missing_reports": [
+    "native-historical.json"
+  ],
+  "elapsed_seconds": 4612.672952890396
+}

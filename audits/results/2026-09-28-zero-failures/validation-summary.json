@@ -145,6 +145,36 @@
     "native_counts": null
   },
   {
+    "attempt": "committed-full-312",
+    "source_commit": "0771c206b4cf1df396543dd4397c7c230bad9da7",
+    "source_archive_sha256": "6a297110514ab34455c9e3d99f3214f1044edd3252b41bacba9f0466a45d73d6",
+    "complete": false,
+    "exit_code": 2,
+    "elapsed_seconds": 4612.672952890396,
+    "memory_peak_bytes": 4522295296,
+    "oom_killed": false,
+    "missing_reports": [
+      "native-historical.json"
+    ],
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 2142,
+        "call:skipped": 16,
+        "teardown:passed": 2142,
+        "call:passed": 2124,
+        "call:failed": 2,
+        "setup:skipped": 6,
+        "teardown:skipped": 6
+      },
+      "collected": 2148
+    },
+    "test_report_complete": true,
+    "mypy_errors": 0,
+    "mypy_report_complete": true,
+    "native_counts": null
+  },
+  {
     "attempt": "events-interfaces-312",
     "source_commit": "9ff4162254b802f532d8f6d04d8e64d1d88fb86a",
     "source_archive_sha256": "ff6f5d0e7d94b147c1e83e2582eec7ec80ea1c1560c58feb7d186dfa46e11e23",
@@ -251,6 +281,136 @@
     "test_report_complete": true,
     "mypy_errors": null,
     "mypy_report_complete": null,
+    "native_counts": null
+  },
+  {
+    "attempt": "release-compound-negative-312",
+    "source_commit": "18a70eb1e249b5eb53d53ecf6ff7f5deb16e1be4",
+    "source_archive_sha256": "c24a3a1dad091406d9a04c40fb357fb995f1ad71cb9f108a77ee1c53c51b285d",
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 133.26018404960632,
+    "memory_peak_bytes": 1167302656,
+    "oom_killed": false,
+    "missing_reports": [],
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 19,
+        "call:passed": 15,
+        "teardown:passed": 19,
+        "call:failed": 4
+      },
+      "collected": 19
+    },
+    "test_report_complete": true,
+    "mypy_errors": null,
+    "mypy_report_complete": null,
+    "native_counts": null
+  },
+  {
+    "attempt": "release-focused-311",
+    "source_commit": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+    "source_archive_sha256": "92b467579d47fa63a9a09e4ec2f381b70ee769f1c5fc30c9964378013be4a438",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 285.45304918289185,
+    "memory_peak_bytes": 1135165440,
+    "oom_killed": false,
+    "missing_reports": [],
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 667,
+        "call:passed": 667,
+        "teardown:passed": 667
+      },
+      "collected": 667
+    },
+    "test_report_complete": true,
+    "mypy_errors": 0,
+    "mypy_report_complete": true,
+    "native_counts": null
+  },
+  {
+    "attempt": "release-focused-native-313",
+    "source_commit": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+    "source_archive_sha256": "92b467579d47fa63a9a09e4ec2f381b70ee769f1c5fc30c9964378013be4a438",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 938.6608300209045,
+    "memory_peak_bytes": 3482857472,
+    "oom_killed": false,
+    "missing_reports": [],
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 667,
+        "call:passed": 667,
+        "teardown:passed": 667
+      },
+      "collected": 667
+    },
+    "test_report_complete": true,
+    "mypy_errors": 0,
+    "mypy_report_complete": true,
+    "native_counts": {
+      "pass": 15,
+      "failure": 0
+    }
+  },
+  {
+    "attempt": "release-full-312",
+    "source_commit": "18a70eb1e249b5eb53d53ecf6ff7f5deb16e1be4",
+    "source_archive_sha256": "8be948dd40c1377b67c08862c033c8c1395754472d3f135379535d835216e52f",
+    "complete": false,
+    "exit_code": 1,
+    "elapsed_seconds": 253.49268889427185,
+    "memory_peak_bytes": 1184919552,
+    "oom_killed": false,
+    "missing_reports": [
+      "focused-summary.json"
+    ],
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 661,
+        "call:passed": 659,
+        "teardown:passed": 661,
+        "call:failed": 2
+      },
+      "collected": 661
+    },
+    "test_report_complete": true,
+    "mypy_errors": 0,
+    "mypy_report_complete": true,
+    "native_counts": null
+  },
+  {
+    "attempt": "release2-full-312",
+    "source_commit": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+    "source_archive_sha256": "92b467579d47fa63a9a09e4ec2f381b70ee769f1c5fc30c9964378013be4a438",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 4527.07473897934,
+    "memory_peak_bytes": 4536238080,
+    "oom_killed": false,
+    "missing_reports": [],
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 2148,
+        "call:skipped": 16,
+        "teardown:passed": 2148,
+        "call:passed": 2132,
+        "setup:skipped": 6,
+        "teardown:skipped": 6
+      },
+      "collected": 2154
+    },
+    "test_report_complete": true,
+    "mypy_errors": 0,
+    "mypy_report_complete": true,
     "native_counts": null
   },
   {
@@ -1280,6 +1440,36 @@
     "mypy_errors": 0,
     "mypy_report_complete": true,
     "native_counts": null
+  },
+  {
+    "attempt": "zero2-full-312",
+    "source_commit": "9ff4162254b802f532d8f6d04d8e64d1d88fb86a",
+    "source_archive_sha256": "7a78521199afde9a43479b265cfdfb77037bd3d9e01357c24ea7376bd38c1e38",
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 4880.8804540634155,
+    "memory_peak_bytes": 3988103168,
+    "oom_killed": false,
+    "missing_reports": [],
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 2140,
+        "call:passed": 2124,
+        "teardown:passed": 2140,
+        "call:skipped": 16,
+        "setup:skipped": 6,
+        "teardown:skipped": 6
+      },
+      "collected": 2146
+    },
+    "test_report_complete": true,
+    "mypy_errors": 0,
+    "mypy_report_complete": true,
+    "native_counts": {
+      "pass": 14,
+      "failure": 0
+    }
   },
   {
     "attempt": "zero3-focused-312",
