@@ -252,24 +252,6 @@ typedef struct {
 typedef struct {
     PyObject_HEAD
     CPyVTableItem *vtable;
-    vectorcallfunc vectorcall;
-} y____db___decorators_____mypyc_lambda__0_objObject;
-
-typedef struct {
-    PyObject_HEAD
-    CPyVTableItem *vtable;
-    vectorcallfunc vectorcall;
-} y____db___decorators_____mypyc_lambda__1_objObject;
-
-typedef struct {
-    PyObject_HEAD
-    CPyVTableItem *vtable;
-    vectorcallfunc vectorcall;
-} y____db___decorators_____mypyc_lambda__2_objObject;
-
-typedef struct {
-    PyObject_HEAD
-    CPyVTableItem *vtable;
     PyObject *___mypyc_self__;
     PyObject *_name;
     PyObject *_arg_names;
