@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="CLI Tools" href="cli.html" />
+    <link rel="next" title="Liquidity-based price estimation" href="amount-quotes.html" />
     <link rel="prev" title="Environment Variables" href="environment.html" /> 
 </head>
 
@@ -64,8 +64,10 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#summary-table">Summary Table</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#price-selection-and-invalidation">Price selection and invalidation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="amount-quotes.html">Liquidity-based price estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">CLI Tools</a></li>
 </ul>
 
@@ -264,6 +266,31 @@ y/prices/yearn.py</p></td>
 <li><p><code class="docutils literal notranslate"><span class="pre">y/prices/utils/ypriceapi.py</span></code></p></li>
 </ul>
 </section>
+<section id="price-selection-and-invalidation">
+<h2>Price selection and invalidation<a class="headerlink" href="#price-selection-and-invalidation" title="Link to this heading"></a></h2>
+<p>A positive, finite API or known-token valuation takes priority over DEX fallback.
+DEX fallback uses liquidity-based price estimation across Uniswap, Curve, and
+Balancer. It tries the deepest eligible pool in input-token units, then falls
+back after quote failures or dead ends. Protocol and pool address resolve ties.
+It does not guarantee the highest possible route price. Bounded discovery
+workers share immutable block data. Caller cancellation drains owned tasks;
+shared registry loaders remain available to other lookups. No selection deadline
+is added. See <a class="reference internal" href="amount-quotes.html"><span class="doc">Liquidity-based price estimation</span></a> for native amount quotes and redemption limits.</p>
+<p><code class="docutils literal notranslate"><span class="pre">skip_cache=True</span></code> bypasses the final price caches. Recursive calls inherit this
+setting and pool exclusions. Restricted or dependent calculations do not read or
+write the unrestricted price cache. Price conversion steps precede copied child
+paths. Numeric-only SQL cache hits have an empty path.</p>
+<p>After a pricing correction, stop every process that writes to the selected
+database. Run <code class="docutils literal notranslate"><span class="pre">ypricemagic</span> <span class="pre">db</span> <span class="pre">reset-prices</span> <span class="pre">--chain</span> <span class="pre">CHAIN_ID</span> <span class="pre">--backup</span> <span class="pre">BACKUP_PATH</span></code>
+with the same database configuration. The command creates and checks a complete
+SQLite backup, reports the affected row count, and deletes only that chain’s
+price rows. It preserves other chains, token metadata, events, and pool discovery
+data. Restart the writers to clear their memory caches. Prices rebuild on demand.</p>
+<p>Enable <code class="docutils literal notranslate"><span class="pre">logging.getLogger(&quot;y.stuck?&quot;).setLevel(logging.DEBUG)</span></code> to receive
+<code class="docutils literal notranslate"><span class="pre">still</span> <span class="pre">executing</span></code> messages every five minutes for long-running async calls.
+The messages are DEBUG-only. Structured amount quotes record the selected swap
+and redemption steps.</p>
+</section>
 </section>
 
 
@@ -271,7 +298,7 @@ y/prices/yearn.py</p></td>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="environment.html" class="btn btn-neutral float-left" title="Environment Variables" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="cli.html" class="btn btn-neutral float-right" title="CLI Tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="amount-quotes.html" class="btn btn-neutral float-right" title="Liquidity-based price estimation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Caching in ypricemagic" href="caching.html" /> 
+    <link rel="prev" title="Liquidity-based price estimation" href="amount-quotes.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,6 +46,7 @@
 <li class="toctree-l1"><a class="reference internal" href="source/modules.html">y</a></li>
 <li class="toctree-l1"><a class="reference internal" href="environment.html">Environment Variables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="caching.html">Caching in ypricemagic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="amount-quotes.html">Liquidity-based price estimation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CLI Tools</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#debugging">Debugging</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#debug-price">debug price</a></li>
@@ -58,8 +59,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#db-clear">db clear</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#db-nuke">db nuke</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#db-select">db select</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db-reset-prices">db reset-prices</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#historical-price-audit">Historical price audit</a></li>
 </ul>
 </li>
 </ul>
@@ -93,15 +96,21 @@
 <p>The y/cli.py module provides command-line tools for debugging and database management.</p>
 <section id="debugging">
 <h2>Debugging<a class="headerlink" href="#debugging" title="Link to this heading"></a></h2>
-<p>The CLI includes two debugging commands that leverage Brownie’s run command to execute dedicated debugging scripts. They are designed to simplify the process of investigating price retrieval and Curve pool operations without manually setting environment variables.</p>
+<p>The CLI includes commands to inspect price retrieval and Curve pool operations.</p>
 <section id="debug-price">
 <h3>debug price<a class="headerlink" href="#debug-price" title="Link to this heading"></a></h3>
-<dl class="simple">
-<dt>Description:</dt><dd><p>Debug token price retrieval. This command runs the Brownie script “debug-price” using the specified token address and, optionally, a block number. The token is passed via the –token flag and the block number via –block.</p>
+<dl>
+<dt>Description:</dt><dd><p>Debug token price retrieval with the specified token address and an optional
+block number. This operation enables DEBUG logging for <code class="docutils literal notranslate"><span class="pre">y</span></code>. It reuses an
+available handler, or adds a stream handler if none is available. Importing
+the CLI and running <code class="docutils literal notranslate"><span class="pre">audit-prices</span></code> or database commands preserve the
+configured logging level and handlers.</p>
+<p>Long-running calls emit DEBUG-only <code class="docutils literal notranslate"><span class="pre">y.stuck?</span></code> messages every five minutes
+when that logger is enabled. See <a class="reference internal" href="caching.html"><span class="doc">Caching in ypricemagic</span></a> for diagnostic guidance.</p>
 </dd>
 <dt>Usage:</dt><dd><p>ypricemagic debug price –token &lt;token_address&gt; [–block &lt;block_number&gt;]</p>
 </dd>
-<dt>Example:</dt><dd><p>ypricemagic debug price –token 0xABCdef… –block 1234567</p>
+<dt>Example:</dt><dd><p>ypricemagic debug price –token 0x6B3595068778DD592e39A122f4f5a5cF09C90fE2 –block 18000000</p>
 </dd>
 </dl>
 </section>
@@ -187,6 +196,29 @@ ypricemagic db select MOON)</p>
 </dd>
 </dl>
 </section>
+<section id="db-reset-prices">
+<h3>db reset-prices<a class="headerlink" href="#db-reset-prices" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>Description:</dt><dd><p>Back up the configured SQLite database and remove one chain’s cached prices.
+Stop all writers before this command. The backup path must not exist.
+The command checks the backup, reports deleted rows, and preserves metadata,
+events, discovery data, and prices for other chains. Restart writers after
+the command to clear memory caches. Prices rebuild on demand.</p>
+</dd>
+</dl>
+<p>Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BROWNIE_NETWORK_ID</span><span class="o">=</span><span class="n">mainnet</span> <span class="n">ypricemagic</span> <span class="n">db</span> <span class="n">reset</span><span class="o">-</span><span class="n">prices</span> <span class="o">--</span><span class="n">chain</span> <span class="mi">1</span> <span class="o">--</span><span class="n">backup</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">backup</span><span class="o">.</span><span class="n">sqlite</span>
+</pre></div>
+</div>
+<p>The command uses <code class="docutils literal notranslate"><span class="pre">YPRICEMAGIC_SQLITE_PATH</span></code> when set, or the default database at
+<code class="docutils literal notranslate"><span class="pre">~/.ypricemagic/ypricemagic.sqlite</span></code>. It does not stop or restart other processes.</p>
+</section>
+</section>
+<section id="historical-price-audit">
+<h2>Historical price audit<a class="headerlink" href="#historical-price-audit" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ypricemagic</span> <span class="pre">audit-prices</span> <span class="pre">MANIFEST</span> <span class="pre">--json</span> <span class="pre">REPORT.json</span> <span class="pre">--csv</span> <span class="pre">REPORT.csv</span></code>
+compares historical public prices against DeFiLlama with a 5% spot tolerance.
+See <a class="reference internal" href="amount-quotes.html"><span class="doc">Liquidity-based price estimation</span></a> for the manifest, coverage rules, and exit codes.</p>
 </section>
 </section>
 
@@ -194,7 +226,7 @@ ypricemagic db select MOON)</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="caching.html" class="btn btn-neutral float-left" title="Caching in ypricemagic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="amount-quotes.html" class="btn btn-neutral float-left" title="Liquidity-based price estimation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
