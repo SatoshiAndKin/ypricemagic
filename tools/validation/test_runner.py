@@ -1,19 +1,43 @@
 """Small runner checks use the standard library and need no RPC or project imports."""
 
+import asyncio
 import hashlib
 import json
 import subprocess
 import sys
 import tempfile
 import unittest
+from collections import Counter
 from collections.abc import Callable
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import common
+import price_waits
 import run
 from common import ConsoleLog
 from compare import type_diagnostics
+
+
+class SamplerTests(unittest.IsolatedAsyncioTestCase):
+    async def test_retry_sleep_patch_cannot_spin_or_fail_diagnostic_sampler(self) -> None:
+        real_sleep = asyncio.sleep
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with patch.object(
+                asyncio, "sleep", AsyncMock(side_effect=AssertionError("retry clock used"))
+            ) as retry_sleep:
+                sampler = asyncio.create_task(price_waits._sample(root, 0, {}, Counter()))
+                try:
+                    await real_sleep(0)
+                    self.assertFalse(sampler.done())
+                    retry_sleep.assert_not_called()
+                    rows = (root / "waits.jsonl").read_text().splitlines()
+                    self.assertEqual(len(rows), 1)
+                    self.assertEqual(json.loads(rows[0])["logical_rpc_counts"]["call_uid"], 0)
+                finally:
+                    sampler.cancel()
+                    await asyncio.gather(sampler, return_exceptions=True)
 
 
 class PlatformTests(unittest.TestCase):

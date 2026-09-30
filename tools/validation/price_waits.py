@@ -5,6 +5,7 @@ import asyncio
 import json
 import os
 import time
+from asyncio import sleep as diagnostic_sleep
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -139,7 +140,9 @@ async def _sample(directory: Path, started: float, instances: Any, retries: Coun
                 + "\n"
             )
             stream.flush()
-            await asyncio.sleep(30)
+            # Retry tests replace asyncio.sleep. Diagnostics must still yield
+            # on the real clock while those tests execute.
+            await diagnostic_sleep(30)
 
 
 def main() -> int:
