@@ -13,6 +13,7 @@ from y._decorators import stuck_coro_debugger
 from y.datatypes import QuoteAsset, QuoteStep
 from y.prices._rpc import BlockRef, _retry_state_read
 from y.prices.chainlink import FEEDS, registries
+from y.prices.dex.uniswap.v2_forks import ROUTER_TO_FACTORY
 
 USD_DENOMINATION = "0x0000000000000000000000000000000000000348"
 REVIEW_BLOCK_HASH = "0xb70aaad0284471dfe63bac8acd9b3690445e79fe1fcbafd19c1b08a63e465817"
@@ -100,3 +101,35 @@ async def assert_native_weth_redemption(step: QuoteStep, block: BlockRef) -> Non
     backing = await dank_web3.eth.get_balance(to_checksum_address(weth), block.identifier)
     assert await native_read(weth, "totalSupply()(uint256)", block) == backing
     assert backing >= step.input.amount
+
+
+@stuck_coro_debugger
+async def assert_native_v2_swap(step: QuoteStep, block: BlockRef) -> None:
+    """Replay a later V2 leg against its native factory and router."""
+    assert step.kind == "swap" and step.protocol == "Uniswap V2"
+    assert step.method == "getAmountsOut(uint256,address[])"
+    assert len(step.outputs) == 1
+    output = step.outputs[0]
+    assert output.decimals == await native_read(output.token, "decimals()(uint8)", block)
+    factory = await native_read(step.contract, "factory()(address)", block)
+    pool = await native_read(
+        factory, "getPair(address,address)(address)", block, step.input.token, output.token
+    )
+    assert str(pool).lower() == step.contract.lower()
+    router = next(
+        router
+        for router, configured_factory in ROUTER_TO_FACTORY.items()
+        if configured_factory.lower() == str(factory).lower()
+    )
+    assert (
+        str(await native_read(router, "factory()(address)", block)).lower() == str(factory).lower()
+    )
+    path = [step.input.token, output.token]
+    amounts = await native_read(
+        router, "getAmountsOut(uint256,address[])(uint256[])", block, step.input.amount, path
+    )
+    assert tuple(amounts) == (step.input.amount, output.amount) and output.amount > 0
+    required = await native_read(
+        router, "getAmountsIn(uint256,address[])(uint256[])", block, output.amount + 1, path
+    )
+    assert required[0] > step.input.amount and required[1] == output.amount + 1

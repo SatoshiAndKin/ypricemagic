@@ -19,6 +19,7 @@ from web3.exceptions import ContractLogicError
 from tests.fixtures import async_result, mutate_addresses
 from tests.price_expectations import (
     REVIEW_BLOCK_HASH,
+    assert_native_v2_swap,
     assert_native_weth_redemption,
     expected_feed,
     expected_feed_price,
@@ -202,6 +203,11 @@ async def test_uniswap_v3(token: Address) -> None:
             assert step.input == current
             if step.kind == "redemption":
                 await assert_native_weth_redemption(step, block)
+                current = step.outputs[0]
+                continue
+            if step.protocol == "Uniswap V2":
+                assert index > 0, "the first swap must use the requested V3 factory"
+                await assert_native_v2_swap(step, block)
                 current = step.outputs[0]
                 continue
             assert step.kind == "swap" and step.protocol == "Uniswap V3"
