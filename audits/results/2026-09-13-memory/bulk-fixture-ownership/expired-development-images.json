@@ -1,0 +1,241 @@
+{
+  "reason": "Reclaim disk from superseded task development images; final and matched comparison images retained",
+  "images": [
+    {
+      "Id": "sha256:76c196313c114b21d4d5a95223cfee6b303c4b8241332791d82632b528415c3f",
+      "RepoTags": [
+        "ypricemagic-validation:py3.12-7c4f582eea1048bdc0ca"
+      ],
+      "RepoDigests": [
+        "ypricemagic-validation@sha256:76c196313c114b21d4d5a95223cfee6b303c4b8241332791d82632b528415c3f"
+      ],
+      "Created": "2026-09-13T19:25:58.396518303Z",
+      "Size": 505850293,
+      "RootFS": {
+        "Type": "layers",
+        "Layers": [
+          "sha256:13a56b6535801be2adde694dabaf1c2df1d862a390661907dac821c42cd565cc",
+          "sha256:811200da0061220a3e28b9142728f858e7618bade93ea61d53c34f3f2aa629d5",
+          "sha256:b739482d4a4cf250868e13640bca1d6d54ddc6ae5a3676a2986d5f08ed226f61",
+          "sha256:568932e4ff4c0815486f1de32df754ed0e9a43c713bed5be7e5c5abf65a068e0",
+          "sha256:e7c9be81cb75780dc803d4d8eb7fb2337b262bec3be80e240c79c85a3ce61dd0",
+          "sha256:9627887fecd6b00fa77b7536e5b25d3caf2adf8456ea0ced56a56b7af074be61",
+          "sha256:62ab484e9383d25c592b6e3e0aa738a688a8aafb1ecf6a66eceb4e55cc7833a6",
+          "sha256:1d3b6ce8c1984f3a7d8b4b48c62e4dc645a90bc14779aa109e42f09df57ad9ca",
+          "sha256:8677c6c756b0da1fb55a059de79472c1f1265a7cee4340623729cefcc01d8d00",
+          "sha256:189692e08757678196f82c48237752c5d4b8e74c3febf04a359d3b115a42b145",
+          "sha256:bc5c469d9bcf2b3f36f09fceb057a23f30d63aab02bfe61f882ed636cce6b611",
+          "sha256:e4af2d4f64cb2c078c19c59cbb7db9b10ae219e21678cbdf16823fe9b46517f7",
+          "sha256:687dcefe65f5675c8cd83b2474fa78795b23e41e3354d1a6c565075803251b0c",
+          "sha256:7515b2076c052b54ae31feb21b5532441e3c98785a9d600fd16ecd2f35609c02",
+          "sha256:5e5dd7b72bd2b810b7307c9576566b056fb3131a10099da1fe63d86324ed37b6",
+          "sha256:6d7fe8546564a160dfc84d24509e4a7fedb4add099e0bcfbd288e2a63de90f2e",
+          "sha256:5af2777ffc480597a7c7b13135c2a3450dcf2613870c65c6825e0bfe09f77cf9",
+          "sha256:49d9397f34bb4dedf0ce16a837feeb7cf323f4fd335ca25f9bc8252f37a1947e",
+          "sha256:36f8a596d009684169eecb1221642e3d1f46bf8c59c5caa3cb5225dcdb49644a",
+          "sha256:10ce39a9a126d18a6d84706bb7d655f76ee60977ade7bf8c9723bcd8e0d136d2",
+          "sha256:46f17f218cb522f602da54e469b60027c5e67b44fd9173861d0eb31a661b6a4d",
+          "sha256:fd0b117ae53eea50b560bfa40a0d0a62d51776d39c98941a479354509ea2f3b4"
+        ]
+      }
+    },
+    {
+      "Id": "sha256:e487016395eccb9355b67a670cb79d2abaf0ce0d7fa8f69fab1a877df4c34785",
+      "RepoTags": [
+        "ypricemagic-validation:py3.12-a22e22d4b5396cce76c5"
+      ],
+      "RepoDigests": [
+        "ypricemagic-validation@sha256:e487016395eccb9355b67a670cb79d2abaf0ce0d7fa8f69fab1a877df4c34785"
+      ],
+      "Created": "2026-09-13T19:16:38.096308953Z",
+      "Size": 505849590,
+      "RootFS": {
+        "Type": "layers",
+        "Layers": [
+          "sha256:13a56b6535801be2adde694dabaf1c2df1d862a390661907dac821c42cd565cc",
+          "sha256:811200da0061220a3e28b9142728f858e7618bade93ea61d53c34f3f2aa629d5",
+          "sha256:b739482d4a4cf250868e13640bca1d6d54ddc6ae5a3676a2986d5f08ed226f61",
+          "sha256:568932e4ff4c0815486f1de32df754ed0e9a43c713bed5be7e5c5abf65a068e0",
+          "sha256:e7c9be81cb75780dc803d4d8eb7fb2337b262bec3be80e240c79c85a3ce61dd0",
+          "sha256:9627887fecd6b00fa77b7536e5b25d3caf2adf8456ea0ced56a56b7af074be61",
+          "sha256:62ab484e9383d25c592b6e3e0aa738a688a8aafb1ecf6a66eceb4e55cc7833a6",
+          "sha256:1d3b6ce8c1984f3a7d8b4b48c62e4dc645a90bc14779aa109e42f09df57ad9ca",
+          "sha256:8677c6c756b0da1fb55a059de79472c1f1265a7cee4340623729cefcc01d8d00",
+          "sha256:189692e08757678196f82c48237752c5d4b8e74c3febf04a359d3b115a42b145",
+          "sha256:bc5c469d9bcf2b3f36f09fceb057a23f30d63aab02bfe61f882ed636cce6b611",
+          "sha256:e4af2d4f64cb2c078c19c59cbb7db9b10ae219e21678cbdf16823fe9b46517f7",
+          "sha256:687dcefe65f5675c8cd83b2474fa78795b23e41e3354d1a6c565075803251b0c",
+          "sha256:7515b2076c052b54ae31feb21b5532441e3c98785a9d600fd16ecd2f35609c02",
+          "sha256:17b7bdd5e49979ad57ac50a9d221b7b9df844dd9cb1f15da7955aef1f5c7b011",
+          "sha256:62f7e758cef0b662bad9bfd6fb3de073fe302d267f04a1077fb301664e3a7315",
+          "sha256:0e21e445423e44a9de004d74eac36d86577f434ba148fd244961e7e941218665",
+          "sha256:30ef18188d4a85973617fbc6a1fb364d1bcb35701779ab8dcc85ef96871b333e",
+          "sha256:ab6b6ca6b25b7c19fbe4893386eae46075f5e4bb14e78fb0baad9ad8225bab7a",
+          "sha256:e78ccb8b4077ba0bd7ef0f3b08d6bdcad7c364e8704722e2dbea4fcb919b2668",
+          "sha256:c2a31a1497fb991f60bd10d865cb8b43c3845c864821fe746b8af16984dbf3a6",
+          "sha256:8957b22fae1d809c0a3cfcad80be022643e8ed70a7edd55fcd084fd8995ffe24"
+        ]
+      }
+    },
+    {
+      "Id": "sha256:eab9a4e4fb394d911593ccb89e8dd5876c4f1fd32d47967f2ef264a18b547e7e",
+      "RepoTags": [
+        "ypricemagic-validation:py3.12-bd600041922d40098d8d"
+      ],
+      "RepoDigests": [
+        "ypricemagic-validation@sha256:eab9a4e4fb394d911593ccb89e8dd5876c4f1fd32d47967f2ef264a18b547e7e"
+      ],
+      "Created": "2026-09-13T18:54:41.362546303Z",
+      "Size": 337749644,
+      "RootFS": {
+        "Type": "layers",
+        "Layers": [
+          "sha256:13a56b6535801be2adde694dabaf1c2df1d862a390661907dac821c42cd565cc",
+          "sha256:811200da0061220a3e28b9142728f858e7618bade93ea61d53c34f3f2aa629d5",
+          "sha256:b739482d4a4cf250868e13640bca1d6d54ddc6ae5a3676a2986d5f08ed226f61",
+          "sha256:568932e4ff4c0815486f1de32df754ed0e9a43c713bed5be7e5c5abf65a068e0",
+          "sha256:e7c9be81cb75780dc803d4d8eb7fb2337b262bec3be80e240c79c85a3ce61dd0",
+          "sha256:9627887fecd6b00fa77b7536e5b25d3caf2adf8456ea0ced56a56b7af074be61",
+          "sha256:62ab484e9383d25c592b6e3e0aa738a688a8aafb1ecf6a66eceb4e55cc7833a6",
+          "sha256:1d3b6ce8c1984f3a7d8b4b48c62e4dc645a90bc14779aa109e42f09df57ad9ca",
+          "sha256:8677c6c756b0da1fb55a059de79472c1f1265a7cee4340623729cefcc01d8d00",
+          "sha256:252783653f518a0e7ca0d33426dbc0669316c705b39e4f9e41852bc97ea6f971",
+          "sha256:1660a4fac7ff7c6e872d690c980e642e1395db2dfa37245e78e9b2eb7d540200",
+          "sha256:1bcf29421c99b7c44083840a2e16cbc1f1f550259f7abcab0696f21ea768929c",
+          "sha256:2629cba2c30621f3c02bdbe8dd2283ea3c333821519260c3a8db1486533d1c42",
+          "sha256:7e9c8f041f9ed5a5246508ded5ca72798f3d24d9ea88729ec1d30a637cd19508"
+        ]
+      }
+    },
+    {
+      "Id": "sha256:173dc404535db57282b3465097be36a2319e46b3edc2e4fdefe08f121a955ea5",
+      "RepoTags": [
+        "ypricemagic-validation:py3.12-60679dbad0a57a470b55"
+      ],
+      "RepoDigests": [
+        "ypricemagic-validation@sha256:173dc404535db57282b3465097be36a2319e46b3edc2e4fdefe08f121a955ea5"
+      ],
+      "Created": "2026-09-13T18:49:39.671598915Z",
+      "Size": 337947669,
+      "RootFS": {
+        "Type": "layers",
+        "Layers": [
+          "sha256:13a56b6535801be2adde694dabaf1c2df1d862a390661907dac821c42cd565cc",
+          "sha256:811200da0061220a3e28b9142728f858e7618bade93ea61d53c34f3f2aa629d5",
+          "sha256:b739482d4a4cf250868e13640bca1d6d54ddc6ae5a3676a2986d5f08ed226f61",
+          "sha256:568932e4ff4c0815486f1de32df754ed0e9a43c713bed5be7e5c5abf65a068e0",
+          "sha256:e7c9be81cb75780dc803d4d8eb7fb2337b262bec3be80e240c79c85a3ce61dd0",
+          "sha256:9627887fecd6b00fa77b7536e5b25d3caf2adf8456ea0ced56a56b7af074be61",
+          "sha256:62ab484e9383d25c592b6e3e0aa738a688a8aafb1ecf6a66eceb4e55cc7833a6",
+          "sha256:1d3b6ce8c1984f3a7d8b4b48c62e4dc645a90bc14779aa109e42f09df57ad9ca",
+          "sha256:8677c6c756b0da1fb55a059de79472c1f1265a7cee4340623729cefcc01d8d00",
+          "sha256:c23510aa8a30310cfd91c1be3e39bea75121e48cb20fe29df0bf5f150d3c95d8",
+          "sha256:6b9db0b392cba0cd19881e9cc938443782e0d454266cbab3413760c420cb03da",
+          "sha256:25f2ffe551431e4d09cc7908626e39077f153de9211ca0a1eeed5e58e1163133",
+          "sha256:ed09392f6d5537d471eb4443b7ba0e7e4700049a4d3ba49f023131a2cd7fd640",
+          "sha256:53eaa377af97b9b0a2573489b4c23e1102141cefdda4c833241cd0ecabf33d45"
+        ]
+      }
+    },
+    {
+      "Id": "sha256:915f84eec40d2c4460f4e4896b996878b73a0b6eb688039df86b71daa622badc",
+      "RepoTags": [
+        "ypricemagic-validation:py3.12-f4f49dfb888dc83629ad"
+      ],
+      "RepoDigests": [
+        "ypricemagic-validation@sha256:915f84eec40d2c4460f4e4896b996878b73a0b6eb688039df86b71daa622badc"
+      ],
+      "Created": "2026-09-13T10:31:10.745797574Z",
+      "Size": 282843184,
+      "RootFS": {
+        "Type": "layers",
+        "Layers": [
+          "sha256:13a56b6535801be2adde694dabaf1c2df1d862a390661907dac821c42cd565cc",
+          "sha256:811200da0061220a3e28b9142728f858e7618bade93ea61d53c34f3f2aa629d5",
+          "sha256:b739482d4a4cf250868e13640bca1d6d54ddc6ae5a3676a2986d5f08ed226f61",
+          "sha256:568932e4ff4c0815486f1de32df754ed0e9a43c713bed5be7e5c5abf65a068e0",
+          "sha256:e7c9be81cb75780dc803d4d8eb7fb2337b262bec3be80e240c79c85a3ce61dd0",
+          "sha256:9627887fecd6b00fa77b7536e5b25d3caf2adf8456ea0ced56a56b7af074be61",
+          "sha256:8a2ba65705e5d0f7ae918f3619ceed251b898f09c410b22ce77249fbd0423ef1",
+          "sha256:469b9bea42fe7e2652dca47243470016f534f6169bf2dd25e16c5df482220f9e",
+          "sha256:00925a1c1b8605276034ac0ad9bccca377b4aeedc31f29ad835132b9fe533651"
+        ]
+      }
+    },
+    {
+      "Id": "sha256:13ede8d5bcd05223ba959b2ad06302a3be19f2c487de8a797d94ff8c4f6c1775",
+      "RepoTags": [
+        "ypricemagic-validation:py3.13-62c261090e1f904f9519"
+      ],
+      "RepoDigests": [
+        "ypricemagic-validation@sha256:13ede8d5bcd05223ba959b2ad06302a3be19f2c487de8a797d94ff8c4f6c1775"
+      ],
+      "Created": "2026-09-13T07:20:25.040526089Z",
+      "Size": 282886022,
+      "RootFS": {
+        "Type": "layers",
+        "Layers": [
+          "sha256:13a56b6535801be2adde694dabaf1c2df1d862a390661907dac821c42cd565cc",
+          "sha256:e768ad7c531711e886b0fb43de5d0aeb924a20a204f546120b60cf8d6159b4cb",
+          "sha256:f3d0adb45e3563b173da6251d9d3b24925f1ae0c6e2f17a5ef5c78a0557745bb",
+          "sha256:d21a265ccf0833ec8b966745c090151c265e454ce9e713b7a3a0c6114f9e117b",
+          "sha256:a6763b7c65194e7a28f88a2312aeb0c871cd2b3eb25dd41b03e85ba423a6d121",
+          "sha256:105a6d3d93f00fe8c8ce90493dcdfa61482543f0aefe3e1d395b8800f0296836",
+          "sha256:06c76ba9496b4c2b929f731e81bd918258f1a128f7cdf6fe55c8d74a90f3ab87",
+          "sha256:0f50019e9de1144d636fa24eb1af4e241db4d86ff1695618c71569657b5b706c",
+          "sha256:8d85ce1cb821107a9d990fde4d8a908889999bc8b503d3fbc9c09f26a7d382ff"
+        ]
+      }
+    },
+    {
+      "Id": "sha256:d3b380f50c5fcc44d4bc7a5370eed47aed449fc90e607e326dde7dc391da57bd",
+      "RepoTags": [
+        "ypricemagic-validation:py3.11-56e21366c7351fe86c16"
+      ],
+      "RepoDigests": [
+        "ypricemagic-validation@sha256:d3b380f50c5fcc44d4bc7a5370eed47aed449fc90e607e326dde7dc391da57bd"
+      ],
+      "Created": "2026-09-13T07:09:08.085251628Z",
+      "Size": 286589638,
+      "RootFS": {
+        "Type": "layers",
+        "Layers": [
+          "sha256:13a56b6535801be2adde694dabaf1c2df1d862a390661907dac821c42cd565cc",
+          "sha256:ab572df6837be6857de90b1d7be42def092443efcaccbe3b86a0c856beaf08ad",
+          "sha256:c242b6b10836ffb297a145e0e872e2bb8dabd9799e8725da430f4ece0dc4df81",
+          "sha256:c15521fcafac097c10b8f10af015e6656a9dd75835bad8925b3061ecc6888791",
+          "sha256:13d2e307bdbbaabb6f041e45eb39dc2ab08abd6b6e299ced0934167a866f58e3",
+          "sha256:4fd32dfb2a440d6a05d8058b40071fc1ed7d04a777d122a969ef8df40200dee9",
+          "sha256:34f616b92d5b82674a4400addcc7f7eb68a484e754bf1a1ed72467e6ff1f7f9c",
+          "sha256:df5a66585878b07a064687bc656c30ce2e308bdbcc705546ad94eebf071685cd",
+          "sha256:2e9b014b5faf459c734ab4cb4251076615167786168b3b939e50c3088ce9e23a"
+        ]
+      }
+    },
+    {
+      "Id": "sha256:2fe46c86dd882f4aa70f6bd44fd8f812d65ca8e4c98e4061fc3819938b48c97e",
+      "RepoTags": [
+        "ypricemagic-validation:py3.12-a1af40e125ae36be3244"
+      ],
+      "RepoDigests": [
+        "ypricemagic-validation@sha256:2fe46c86dd882f4aa70f6bd44fd8f812d65ca8e4c98e4061fc3819938b48c97e"
+      ],
+      "Created": "2026-09-13T06:22:02.857158202Z",
+      "Size": 282616312,
+      "RootFS": {
+        "Type": "layers",
+        "Layers": [
+          "sha256:13a56b6535801be2adde694dabaf1c2df1d862a390661907dac821c42cd565cc",
+          "sha256:811200da0061220a3e28b9142728f858e7618bade93ea61d53c34f3f2aa629d5",
+          "sha256:b739482d4a4cf250868e13640bca1d6d54ddc6ae5a3676a2986d5f08ed226f61",
+          "sha256:568932e4ff4c0815486f1de32df754ed0e9a43c713bed5be7e5c5abf65a068e0",
+          "sha256:9aeaeab62e73796ff9d8a8dbd0e123f09760d2c3e5370614b3d9a8f20f4c8bbc",
+          "sha256:62dc6329f58a26e30e1599227a89bd33f8c7f6609c9814380e2e77a7e0978c05",
+          "sha256:400aa8bcb5a8884864c9071a1c5e99cee8cb26e68c56f123660663b047a34ee1",
+          "sha256:6ee13fe4164a08a734b3749206a8a93597f04fbc59a89f2446268c97195c1183",
+          "sha256:8f4aafff636f383106c21c8dedcba33d6ea6121b441ccaf22f71576dcab6d86c"
+        ]
+      }
+    }
+  ]
+}

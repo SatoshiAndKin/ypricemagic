@@ -1,0 +1,11 @@
+{
+  "before_revision": "643aadf4",
+  "changed_revision": "011062cd plus cache-test input annotations",
+  "reported_errors_before": 1958,
+  "reported_errors_after": 1958,
+  "rendered_diagnostics_before": 1953,
+  "rendered_diagnostics_after": 1953,
+  "added": [],
+  "removed": [],
+  "method": "Compare complete wrapped rendered Python diagnostic messages by file, excluding source line numbers and preserving duplicate counts. Record mypy summary totals separately."
+}

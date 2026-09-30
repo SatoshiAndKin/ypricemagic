@@ -1,26 +1,27 @@
 import logging
-from typing import Final, final
+from typing import Any, Final, final
 
 import a_sync
-from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import ZERO_ADDRESS
 from eth_typing import ChecksumAddress, HexStr
 from faster_eth_abi import encode
 from multicall import Call
-from typing_extensions import Self
 
 from y import convert
+from y._decorators import stuck_coro_debugger
+from y._typing import a_sync_property
 from y.constants import CHAINID
 from y.contracts import Contract, has_method
 from y.datatypes import AnyAddressType, Block, UsdPrice
 from y.exceptions import UnsupportedNetwork, call_reverted
 from y.networks import Network
+from y.prices._rpc import unavailable
 from y.utils import a_sync_ttl_cache
 
 logger: Final = logging.getLogger(__name__)
 
-addresses: Final = {
+addresses: Final[dict[int, str]] = {
     Network.Mainnet: "0x823bE81bbF96BEc0e25CA13170F5AaCb5B79ba83",
     Network.Optimism: "0x95A6a3f44a70172E7d50a9e28c85Dfd712756B8C",
 }
@@ -28,6 +29,16 @@ addresses: Final = {
 
 def encode_bytes(s: str) -> bytes:
     return encode(["bytes32"], [s.encode()])
+
+
+@stuck_coro_debugger
+async def _optional_call(token: str, signature: str, block: Block | None) -> Any:
+    try:
+        return await Call(token, signature, block_id=block)
+    except Exception as exc:
+        if not unavailable(exc):
+            raise
+        return None
 
 
 @final
@@ -53,7 +64,7 @@ class Synthetix(a_sync.ASyncGenericSingleton):
         self.asynchronous = asynchronous
         super().__init__()
 
-    @a_sync.aka.property
+    @a_sync_property
     async def address_resolver(self) -> Contract:
         """Get the address resolver contract.
 
@@ -67,10 +78,10 @@ class Synthetix(a_sync.ASyncGenericSingleton):
         """
         return await Contract.coroutine(addresses[CHAINID])
 
-    __address_resolver__: HiddenMethodDescriptor[Self, Contract]
+    __address_resolver__: HiddenMethodDescriptor["Synthetix", Contract]
 
     @a_sync.a_sync(ram_cache_maxsize=512)
-    async def get_address(self, name: str, block: Block = None) -> Contract | None:
+    async def get_address(self, name: str, block: Block | None = None) -> Contract | None:
         """Get contract from Synthetix registry.
 
         Args:
@@ -90,7 +101,7 @@ class Synthetix(a_sync.ASyncGenericSingleton):
             <Contract object at 0x...>
         """
         address_resolver = await self.__address_resolver__
-        address = await address_resolver.getAddress.coroutine(
+        address: str = await address_resolver.getAddress.coroutine(
             encode_bytes(name), block_identifier=block
         )
         if address == ZERO_ADDRESS:
@@ -103,6 +114,7 @@ class Synthetix(a_sync.ASyncGenericSingleton):
         return await Contract.coroutine(target)
 
     @a_sync.aka.cached_property
+    @stuck_coro_debugger
     async def synths(self) -> list[ChecksumAddress]:
         """Get target addresses of all synths.
 
@@ -110,12 +122,14 @@ class Synthetix(a_sync.ASyncGenericSingleton):
             A list of target addresses for all synths.
 
         Examples:
-            >>> synths = await synthetix.synths
+            >>> synths = await self.synths
             >>> print(synths)
             ['0x...', '0x...', ...]
         """
         proxy_erc20 = await self.get_address("ProxyERC20", sync=False)
-        synth_count = await proxy_erc20.availableSynthCount
+        if proxy_erc20 is None:
+            raise ValueError("ProxyERC20 is not registered in the Synthetix resolver")
+        synth_count: int = await proxy_erc20.availableSynthCount.coroutine()
         # Force the addresses to strings so we aren't forced to use brownie's comparison functionality
         synths = [
             ChecksumAddress(synth)
@@ -146,13 +160,12 @@ class Synthetix(a_sync.ASyncGenericSingleton):
         """
         token = await convert.to_address_async(token)
         try:
-            if await synthetix.get_currency_key(token, sync=False):
+            if await self.get_currency_key(token, sync=False):
                 return True
             if await has_method(token, "target()(address)", sync=False):
                 target = await Call(token, "target()(address)")
                 return (
-                    target in await synthetix.synths
-                    and await Call(target, "proxy()(address)") == token
+                    target in await self.synths and await Call(target, "proxy()(address)") == token
                 )
             return False
         except Exception as e:
@@ -171,10 +184,11 @@ class Synthetix(a_sync.ASyncGenericSingleton):
             The currency key as a hex string, or `None` if not found.
 
         Examples:
-            >>> currency_key = await synthetix.get_currency_key("0x...")
+            >>> currency_key = await self.get_currency_key("0x...")
             >>> print(currency_key)
             '0x...'
         """
+        token = await convert.to_address_async(token)
         target = (
             await Call(token, "target()(address)")
             if await has_method(token, "target()(address)", sync=False)
@@ -186,6 +200,7 @@ class Synthetix(a_sync.ASyncGenericSingleton):
             else None
         )
 
+    @stuck_coro_debugger
     async def get_price(self, token: AnyAddressType, block: Block | None = None) -> UsdPrice | None:
         """Get the price of a synth in dollars.
 
@@ -208,19 +223,29 @@ class Synthetix(a_sync.ASyncGenericSingleton):
             - :meth:`get_currency_key`
         """
         token = await convert.to_address_async(token)
-        rates, key = await cgather(
-            self.get_address("ExchangeRates", block=block, sync=False),
-            self.get_currency_key(token, sync=False),
+        target = await _optional_call(token, "target()(address)", block)
+        target = target if target and target != ZERO_ADDRESS else token
+        key = await _optional_call(target, "currencyKey()(bytes32)", block)
+        if not key:
+            return None
+        resolver = await _optional_call(target, "resolver()(address)", block)
+        if not resolver or resolver == ZERO_ADDRESS:
+            return None
+        rates = await Call(
+            resolver,
+            ["getAddress(bytes32)(address)", encode_bytes("ExchangeRates")],
+            block_id=block,
         )
-        if rates is None or await rates.rateIsStale.coroutine(key, block_identifier=block):
+        if not rates or rates == ZERO_ADDRESS:
             return None
         try:
-            return UsdPrice(
-                await rates.rateForCurrency.coroutine(key, block_identifier=block, decimals=18)
-            )
+            if await Call(rates, ["rateIsStale(bytes32)(bool)", key], block_id=block):
+                return None
+            rate = await Call(rates, ["rateForCurrency(bytes32)(uint256)", key], block_id=block)
+            return UsdPrice(rate / 10**18) if rate is not None else None
         except Exception as e:
             if not call_reverted(e):
                 raise
 
 
-synthetix = Synthetix(asynchronous=True) if CHAINID in addresses else set()
+synthetix: Synthetix | set[str] = Synthetix(asynchronous=True) if CHAINID in addresses else set()

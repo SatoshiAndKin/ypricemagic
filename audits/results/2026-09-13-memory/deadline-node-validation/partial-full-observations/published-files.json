@@ -1,0 +1,20 @@
+[
+  {
+    "file": "analyze_partial.py.txt",
+    "private_original_sha256": "969d3c233a09d27adf4d060826c8f4fdbb4190729fa17fb06a1b2661febc39fb",
+    "published_sha256": "969d3c233a09d27adf4d060826c8f4fdbb4190729fa17fb06a1b2661febc39fb",
+    "private_values_removed": false
+  },
+  {
+    "file": "original.json",
+    "private_original_sha256": "a25cc9b5aa98017c4c1a9cd2b0e42bb51845d99b47685954309da4a6ae8b7073",
+    "published_sha256": "a25cc9b5aa98017c4c1a9cd2b0e42bb51845d99b47685954309da4a6ae8b7073",
+    "private_values_removed": false
+  },
+  {
+    "file": "preoptimization.json",
+    "private_original_sha256": "1526b841f7d5d036f7adda7da64b8d5b9a92f4444a8d530dc188b6367524f2c1",
+    "published_sha256": "1526b841f7d5d036f7adda7da64b8d5b9a92f4444a8d530dc188b6367524f2c1",
+    "private_values_removed": false
+  }
+]

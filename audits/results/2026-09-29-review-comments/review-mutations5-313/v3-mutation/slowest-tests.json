@@ -1,0 +1,52 @@
+[
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc00e94Cb662C3520282E6f5717214004A7f268880]",
+    "outcome": "failed",
+    "duration": 0.7219274044036865
+  },
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xdac17f958d2ee523a2206206994597c13d831ec7]",
+    "outcome": "failed",
+    "duration": 0.7150998115539551
+  },
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e0]",
+    "outcome": "failed",
+    "duration": 0.7145960330963135
+  },
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9]",
+    "outcome": "failed",
+    "duration": 0.5818524360656738
+  },
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc00e94Cb662C3520282E6f5717214004A7f268881]",
+    "outcome": "failed",
+    "duration": 0.5713047981262207
+  },
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xd533a949740bb3306d119cc777fa900ba034cd52]",
+    "outcome": "failed",
+    "duration": 0.5709474086761475
+  },
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE90]",
+    "outcome": "failed",
+    "duration": 0.5708880424499512
+  },
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x7FC66500C84A76AD7E9C93437BFC5AC33E2DDAE9]",
+    "outcome": "failed",
+    "duration": 0.5708866119384766
+  },
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xD533A949740BB3306D119CC777FA900BA034CD52]",
+    "outcome": "failed",
+    "duration": 0.5708727836608887
+  },
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6b175474e89094c44da98b954eedeac495271d0f]",
+    "outcome": "failed",
+    "duration": 0.5708339214324951
+  }
+]

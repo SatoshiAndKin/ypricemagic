@@ -1,0 +1,69 @@
+{
+  "diagnostic_only": true,
+  "not_in_pricing_process_counters": true,
+  "requests": [
+    {
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 910000,
+        "method": "eth_call",
+        "params": [
+          {
+            "to": "0x6810e776880C02933D47DB1b9fc05908e5386b96",
+            "data": "0xdbd06c85"
+          },
+          "0x112a880"
+        ]
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 910000,
+        "error": {
+          "code": -32003,
+          "message": "EVM error: InvalidFEOpcode"
+        }
+      }
+    },
+    {
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 910001,
+        "method": "eth_call",
+        "params": [
+          {
+            "to": "0x6810e776880C02933D47DB1b9fc05908e5386b96",
+            "data": "0xdbd06c85"
+          },
+          "latest"
+        ]
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 910001,
+        "error": {
+          "code": -32003,
+          "message": "EVM error: InvalidFEOpcode"
+        }
+      }
+    },
+    {
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 910002,
+        "method": "eth_call",
+        "params": [
+          {
+            "to": "0x6810e776880C02933D47DB1b9fc05908e5386b96",
+            "data": "0x313ce567"
+          },
+          "0x112a880"
+        ]
+      },
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 910002,
+        "result": "0x0000000000000000000000000000000000000000000000000000000000000012"
+      }
+    }
+  ]
+}

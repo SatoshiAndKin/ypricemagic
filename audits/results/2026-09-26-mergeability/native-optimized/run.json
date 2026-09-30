@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; set +e; python /runner/native.py; a=$?; python /runner/native_reviewed.py; b=$?; test \"$a$b\" = 00"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1790461688.445154,
+  "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+  "source_revision": "worktree",
+  "source_archive_sha256": "df86368cc0ff9210f9a29084043d65d80687e6b6c3f833de6975f7be80c04858",
+  "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 2287.0466980934143
+}

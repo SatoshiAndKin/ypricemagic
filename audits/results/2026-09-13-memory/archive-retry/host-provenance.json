@@ -1,0 +1,11 @@
+{
+  "command": [
+    "env/bin/python",
+    "/private/tmp/yprice-memory/retry-archive-host.py"
+  ],
+  "script_sha256": "8adb4c0d7889547a7615a12c27abd9b8ef87cdab1921ffc8d26688f6f66b5ad2",
+  "source_sha": "850d7506d554209738cc2c471f82fbb951845d29",
+  "report_mtime_unix": 1789319368.5439677,
+  "exit_code": 0,
+  "scope": "Two bounded standard-library HTTP requests. No project imports, builds, or host test execution."
+}

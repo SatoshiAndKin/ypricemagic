@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "export VALIDATION_WAITS=1; PYTHONPATH=tools/validation python -m unittest discover -s tools/validation -p test_runner.py > /reports/runner-unittests.txt 2>&1 && python -m mypy > /reports/mypy.txt 2>&1 && python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python tools/validation/focused.py && cp /reports/pytest-summary.json /reports/focused-summary.json && cp /reports/pytest-events.jsonl /reports/focused-events.jsonl && PYTEST_ADDOPTS=\"-p no:pytest_ethereum\" BROWNIE_NETWORK=mainnet make test && python /runner/check_compiled.py"
+  ],
+  "docker_context": "colima-rpc-tune",
+  "builder": "ypricemagic-validation-4168ea425aa6",
+  "complete": true,
+  "started_unix": 1790743908.1634822,
+  "source_sha": "7d5074c0b31fa61b59a1a79ad9aaeccdeafb51ad",
+  "source_revision": "7d5074c0",
+  "source_archive_sha256": "e1f8334142780b7a9ea4b6d38de9f429a95a5b66117700c0fc9c124c7e24251a",
+  "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 4772.368354797363
+}

@@ -1,0 +1,6 @@
+tests/test_misc_fixes.py: note: In function "test_latest_feed_validation_handles_legacy_and_removed_aggregators":
+tests/test_misc_fixes.py:103: error: Module "tests.price_expectations" does not
+explicitly export attribute "registries"  [attr-defined]
+        registry = reference.registries[1]
+                   ^~~~~~~~~~~~~~~~~~~~
+Found 1 error in 1 file (checked 231 source files)

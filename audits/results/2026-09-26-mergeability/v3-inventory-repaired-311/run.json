@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; python -m mypy > /reports/mypy.txt 2>&1 || true; python tools/validation/focused.py"
+  ],
+  "docker_context": "colima-rpc-tune",
+  "builder": "ypricemagic-validation-4168ea425aa6",
+  "complete": true,
+  "started_unix": 1790495731.44541,
+  "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+  "source_revision": "worktree",
+  "source_archive_sha256": "f37b2a6bf2184c74cfbf0f886690e6148b2c5b5d0400bac12317936f90c538d5",
+  "image": "sha256:34a2b2ed9f6d2e4729a72d6b81abdf2c7484647df17c7a7f5742675288ba5c7b",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 207.2165651321411
+}

@@ -1,22 +1,26 @@
 import logging
+from collections.abc import Collection
+from typing import Any, cast
 
 import a_sync
-import dank_mids
 import eth_retry
 from a_sync import cgather
 from a_sync.a_sync.property import HiddenMethodDescriptor
 from brownie import chain
+from dank_mids.brownie_patch import dank_eth
+from eth_typing import ABIElement
 from multicall.call import Call
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
+from y import convert
 from y._decorators import stuck_coro_debugger
 from y.contracts import Contract, contract_creation_block_async
-from y.datatypes import Address, AnyAddressType, Block
+from y.datatypes import Address, AddressOrContract, AnyAddressType, Block
 from y.interfaces.uniswap.velov2 import VELO_V2_FACTORY_ABI
 from y.networks import Network
-from y.prices.dex.solidly import SolidlyRouterBase
-from y.prices.dex.uniswap.v2 import Path, UniswapV2Pool
+from y.prices._quote import bounded_map
+from y.prices.dex.solidly import Route, SolidlyRouterBase
+from y.prices.dex.uniswap.v2 import UniswapV2Pool
 from y.utils import gather_methods
 from y.utils.cache import a_sync_ttl_cache
 from y.utils.raw_calls import raw_call
@@ -30,7 +34,7 @@ class NoReservesError(Exception):
     pass
 
 
-default_factory = {
+default_factory: dict[int, str] = {
     Network.Optimism: "0xF1046053aa5682b4F9a81b5481394DA16BE5FF5a",
     Network.Base: "0x420DD381b31aEf6683db6B902084cB0FFECe40Da",
 }
@@ -82,7 +86,12 @@ class VelodromePool(UniswapV2Pool):
 class VelodromeRouterV2(SolidlyRouterBase):
     _supports_uniswap_helper = False
 
-    def __init__(self, *args, **kwargs) -> None:
+    def _encode_route(
+        self, start: AddressOrContract, end: AddressOrContract, stable: bool
+    ) -> Route:
+        return (start, end, stable, self.factory)
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """
         Initialize a :class:`VelodromeRouterV2` instance.
 
@@ -175,7 +184,7 @@ class VelodromeRouterV2(SolidlyRouterBase):
 
     @a_sync.aka.cached_property
     @stuck_coro_debugger
-    async def pools(self) -> set[VelodromePool]:
+    async def pools(self) -> Collection[UniswapV2Pool]:
         """
         Fetch all Velodrome pools.
 
@@ -198,10 +207,16 @@ class VelodromeRouterV2(SolidlyRouterBase):
             self.label,
             Network.printable(),
         )
+        to_block = await dank_eth.block_number
+        all_pools_len = await raw_call(
+            self.factory, "allPoolsLength()", output="int", block=to_block, sync=False
+        )
         factory = await Contract.coroutine(self.factory)
         if "PoolCreated" not in factory.topics:
             # the etherscan proxy detection is borked here, need this to decode properly
-            factory = Contract.from_abi("PoolFactory", self.factory, VELO_V2_FACTORY_ABI)
+            factory = Contract.from_abi(
+                "PoolFactory", self.factory, cast(list[ABIElement], VELO_V2_FACTORY_ABI)
+            )
 
         pools = {
             VelodromePool(
@@ -212,12 +227,8 @@ class VelodromeRouterV2(SolidlyRouterBase):
                 deploy_block=event.block_number,
                 asynchronous=self.asynchronous,
             )
-            async for event in factory.events.PoolCreated.events(
-                to_block=await dank_mids.eth.block_number
-            )
+            async for event in factory.events.PoolCreated.events(to_block=to_block)
         }
-
-        all_pools_len = await raw_call(self.factory, "allPoolsLength()", output="int", sync=False)
 
         if len(pools) > all_pools_len:
             raise ValueError("wtf", len(pools), all_pools_len)
@@ -227,15 +238,14 @@ class VelodromeRouterV2(SolidlyRouterBase):
                 "Oh no! Looks like your node can't look back that far. Checking for the missing %s pools...",
                 all_pools_len - len(pools),
             )
-            pools_your_node_couldnt_get = a_sync.map(
-                self._init_pool_from_poolid,
-                range(all_pools_len - len(pools)),
-                name=f"load {self} poolId",
-            )
-            # we want the map populated with tasks for this logger
-            await pools_your_node_couldnt_get._init_loader
-            logger.debug("pools: %s", pools_your_node_couldnt_get)
-            pools.update(await pools_your_node_couldnt_get.values(pop=True))
+
+            async def missing_pool(poolid: int) -> VelodromePool:
+                return await self._init_pool_from_poolid(poolid, block=to_block)
+
+            pools.update(await bounded_map(missing_pool, range(all_pools_len - len(pools))))
+
+        if len(pools) != all_pools_len:
+            raise ValueError(f"Incomplete pool discovery for {self.factory} at {to_block}")
 
         tokens = set()
         for pool in pools:
@@ -248,100 +258,23 @@ class VelodromeRouterV2(SolidlyRouterBase):
         )
         return pools
 
-    __pools__: HiddenMethodDescriptor[Self, set[VelodromePool]]
+    __pools__: HiddenMethodDescriptor["VelodromeRouterV2", Collection[UniswapV2Pool]]
 
     @stuck_coro_debugger
-    async def get_routes_from_path(
-        self, path: Path, block: Block
-    ) -> list[tuple[Address, Address, bool]]:
-        """
-        Get the routes for a given path of tokens.
-
-        Args:
-            path: A list of token addresses representing the path.
-            block: The block number to consider.
-
-        Returns:
-            A list of tuples, each containing the input token, output token, and stability preference.
-
-        Raises:
-            NoReservesError: If no route is available for the given path.
-
-        Examples:
-            >>> router = VelodromeRouterV2()
-            >>> routes = await router.get_routes_from_path(["0xTokenA", "0xTokenB"], 12345678)
-            >>> print(routes)
-            [("0xTokenA", "0xTokenB", True)]
-
-        See Also:
-            - :meth:`get_pool`
-        """
-        routes = []
-        for i in range(len(path) - 1):
-            input_token, output_token = path[i], path[i + 1]
-            # Try for a stable pool first and use that if available
-            stable_pool: VelodromePool | None
-            unstable_pool: VelodromePool | None
-            stable_pool, unstable_pool = await cgather(
-                self.get_pool(input_token, output_token, True, block, sync=False),
-                self.get_pool(input_token, output_token, False, block, sync=False),
-            )
-
-            if stable_pool and unstable_pool:
-                # We have to find out which of these pools is deepest
-                stable_reserves, unstable_reserves = await cgather(
-                    stable_pool.reserves(block=block, sync=False),
-                    unstable_pool.reserves(block=block, sync=False),
-                )
-                if stable_reserves and unstable_reserves:
-                    stable_reserves = tuple(stable_reserves)
-                    unstable_reserves = tuple(unstable_reserves)
-
-                    # NOTE: using `__token0__` and `__token1__` is faster than `__tokens__` since they're already cached and return instantly
-                    #       it also creates 2 fewer tasks and 1 fewer future than `__tokens__` since there is no use of `asyncio.gather`.
-                    if (
-                        await stable_pool.__token0__ == await unstable_pool.__token0__
-                        and await stable_pool.__token1__ == await unstable_pool.__token1__
-                    ):
-                        stable_reserve = stable_reserves[0]
-                        unstable_reserve = unstable_reserves[0]
-                    else:  # Order of tokens is flip flopped in the pools
-                        stable_reserve = stable_reserves[0]
-                        unstable_reserve = unstable_reserves[1]
-                    if stable_reserve >= unstable_reserve:
-                        is_stable = True
-                    elif stable_reserve < unstable_reserve:
-                        is_stable = False
-                    routes.append([input_token, output_token, is_stable, self.factory])
-                elif stable_reserves:
-                    routes.append([input_token, output_token, True, self.factory])
-                elif unstable_reserves:
-                    routes.append([input_token, output_token, False, self.factory])
-                else:
-                    raise NoReservesError(f"No route available for path {path}")
-            elif stable_pool:
-                routes.append([input_token, output_token, True, self.factory])
-            elif unstable_pool:
-                routes.append([input_token, output_token, False, self.factory])
-            else:
-                raise ValueError("Not sure why this function is even running if no pool is found")
-
-        return routes
-
-    @stuck_coro_debugger
-    async def _init_pool_from_poolid(self, poolid: int) -> VelodromePool:
+    async def _init_pool_from_poolid(self, poolid: int, block: Block) -> VelodromePool:
         """
         Initialize a :class:`VelodromePool` from a pool ID.
 
         Args:
             poolid: The ID of the pool to initialize.
+            block: The captured block for this discovery pass.
 
         Returns:
             A :class:`VelodromePool` instance.
 
         Examples:
             >>> router = VelodromeRouterV2()
-            >>> pool = await router._init_pool_from_poolid(1)
+            >>> pool = await router._init_pool_from_poolid(1, block=12345678)
             >>> print(pool)
             <VelodromePool instance>
 
@@ -351,7 +284,7 @@ class VelodromeRouterV2(SolidlyRouterBase):
         logger.debug("initing poolid %s", poolid)
 
         try:
-            pool = await self._all_pools.coroutine([poolid])
+            pool = await self._all_pools.coroutine([poolid], block_id=block)
         except ContractLogicError:
             # sometimes a failure returns None above,
             # sometimes it raises ContractLogicError.
@@ -360,9 +293,9 @@ class VelodromeRouterV2(SolidlyRouterBase):
         if pool is None:
             # TODO: debug why this happens sometimes and why this if clause works to get back on track
             factory = await Contract.coroutine(self.factory)
-            pool = await factory.allPools.coroutine(poolid)
+            pool = await factory.allPools.coroutine(poolid, block_identifier=block)
 
-        token0, token1, stable = await gather_methods(pool, _INIT_METHODS)
+        token0, token1, stable = await gather_methods(pool, _INIT_METHODS, block=block)
         return VelodromePool(
             address=pool,
             token0=token0,
@@ -387,12 +320,13 @@ async def is_contract(pool_address: Address) -> bool:
         >>> print(result)
         True
     """
+    pool_address = await convert.to_address_async(pool_address)
     if pool_address in __pools:
         return True
-    if result := await dank_mids.eth.get_code(pool_address) not in ("0x", b""):
+    if result := await dank_eth.get_code(pool_address) not in ("0x", b""):
         __pools_append(pool_address)
     return result
 
 
-__pools = []
+__pools: list[Address] = []
 __pools_append = __pools.append

@@ -1,0 +1,143 @@
+{
+  "complete": true,
+  "validated_source": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+  "current_head": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+  "source_equivalent_except": [],
+  "rows": [
+    {
+      "attempt": "release-focused-311",
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "PYTHONPATH=tools/validation python -m unittest discover -s tools/validation -p test_runner.py > /reports/runner-unittests.txt 2>&1 && python -m mypy > /reports/mypy.txt 2>&1 && python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python tools/validation/focused.py"
+        ],
+        "docker_context": "colima-rpc-tune",
+        "builder": "ypricemagic-validation-4168ea425aa6",
+        "complete": true,
+        "started_unix": 1790665722.667868,
+        "source_sha": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+        "source_revision": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+        "source_archive_sha256": "92b467579d47fa63a9a09e4ec2f381b70ee769f1c5fc30c9964378013be4a438",
+        "image": "sha256:34a2b2ed9f6d2e4729a72d6b81abdf2c7484647df17c7a7f5742675288ba5c7b",
+        "exit_code": 0,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 285.45304918289185
+      },
+      "tests": {
+        "exit_code": 0,
+        "counts": {
+          "setup:passed": 667,
+          "call:passed": 667,
+          "teardown:passed": 667
+        },
+        "collected": 667
+      },
+      "focused": {
+        "exit_code": 0,
+        "counts": {
+          "setup:passed": 667,
+          "call:passed": 667,
+          "teardown:passed": 667
+        },
+        "collected": 667
+      },
+      "memory_peak_bytes": 1135165440,
+      "compiled_extensions": 10,
+      "mypy": "0 diagnostics"
+    },
+    {
+      "attempt": "release2-full-312",
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "export VALIDATION_WAITS=1; PYTHONPATH=tools/validation python -m unittest discover -s tools/validation -p test_runner.py > /reports/runner-unittests.txt 2>&1 && python -m mypy > /reports/mypy.txt 2>&1 && python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python tools/validation/focused.py && cp /reports/pytest-summary.json /reports/focused-summary.json && cp /reports/pytest-events.jsonl /reports/focused-events.jsonl && PYTEST_ADDOPTS=\"-p no:pytest_ethereum\" BROWNIE_NETWORK=mainnet make test && python /runner/check_compiled.py"
+        ],
+        "docker_context": "colima-ypricemagic",
+        "builder": "ypricemagic-validation-55871f24db8c",
+        "complete": true,
+        "started_unix": 1790664825.7480881,
+        "source_sha": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+        "source_revision": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+        "source_archive_sha256": "92b467579d47fa63a9a09e4ec2f381b70ee769f1c5fc30c9964378013be4a438",
+        "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+        "exit_code": 0,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 4527.07473897934
+      },
+      "tests": {
+        "exit_code": 0,
+        "counts": {
+          "setup:passed": 2148,
+          "call:skipped": 16,
+          "teardown:passed": 2148,
+          "call:passed": 2132,
+          "setup:skipped": 6,
+          "teardown:skipped": 6
+        },
+        "collected": 2154
+      },
+      "focused": {
+        "exit_code": 0,
+        "counts": {
+          "setup:passed": 667,
+          "call:passed": 667,
+          "teardown:passed": 667
+        },
+        "collected": 667
+      },
+      "memory_peak_bytes": 4536238080,
+      "compiled_extensions": 10,
+      "mypy": "0 diagnostics"
+    },
+    {
+      "attempt": "release-focused-native-313",
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "PYTHONPATH=tools/validation python -m unittest discover -s tools/validation -p test_runner.py > /reports/runner-unittests.txt 2>&1 && python -m mypy > /reports/mypy.txt 2>&1 && python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python tools/validation/focused.py && python tools/validation/native_historical.py"
+        ],
+        "docker_context": "colima-rpc-tune",
+        "builder": "ypricemagic-validation-4168ea425aa6",
+        "complete": true,
+        "started_unix": 1790666008.190937,
+        "source_sha": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+        "source_revision": "619e23a24ab0d7dc1cdd7d3004cc70df3583abb3",
+        "source_archive_sha256": "92b467579d47fa63a9a09e4ec2f381b70ee769f1c5fc30c9964378013be4a438",
+        "image": "sha256:5a7b0df3d3255bfb910604ff75ee0bfb6594c056ab27fe7233123517167ffb33",
+        "exit_code": 0,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 938.6608300209045
+      },
+      "tests": {
+        "exit_code": 0,
+        "counts": {
+          "setup:passed": 667,
+          "call:passed": 667,
+          "teardown:passed": 667
+        },
+        "collected": 667
+      },
+      "focused": {
+        "exit_code": 0,
+        "counts": {
+          "setup:passed": 667,
+          "call:passed": 667,
+          "teardown:passed": 667
+        },
+        "collected": 667
+      },
+      "memory_peak_bytes": 3482857472,
+      "compiled_extensions": 10,
+      "mypy": "0 diagnostics"
+    }
+  ]
+}

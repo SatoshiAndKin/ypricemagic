@@ -1,0 +1,11 @@
+{
+  "status": "complete",
+  "completed_cases": [
+    "cold",
+    "adjacent",
+    "repeat"
+  ],
+  "partial_reports": false,
+  "below_memory_target": false,
+  "note": "No OOM or missing reports; instrumented peak exceeded7GiB soft target but remained under8GiB cap. Adjacent inventory growth exposed a separate processed-event/V3 cache replay bug."
+}

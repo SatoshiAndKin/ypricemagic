@@ -1,0 +1,32 @@
+{
+  "312": {
+    "before_report": "cache-census-types-final",
+    "after_report": "cache-gc-application-312",
+    "before_rendered_errors": 1917,
+    "after_rendered_errors": 1917,
+    "raw_added": [],
+    "raw_removed": [],
+    "semantic_added": [],
+    "semantic_removed": []
+  },
+  "311": {
+    "before_report": "storage-final-311",
+    "after_report": "cache-gc-application-311",
+    "before_rendered_errors": 1917,
+    "after_rendered_errors": 1917,
+    "raw_added": [],
+    "raw_removed": [],
+    "semantic_added": [],
+    "semantic_removed": []
+  },
+  "313": {
+    "before_report": "storage-final-313",
+    "after_report": "cache-gc-application-313",
+    "before_rendered_errors": 1917,
+    "after_rendered_errors": 1917,
+    "raw_added": [],
+    "raw_removed": [],
+    "semantic_added": [],
+    "semantic_removed": []
+  }
+}

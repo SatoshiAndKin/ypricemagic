@@ -1,0 +1,82 @@
+{
+  "after": {
+    "finished": true,
+    "execution_complete": false,
+    "source_sha": "5f1e9476e7f5452691d378fc351e1807c5119f3f",
+    "image": "sha256:0fb5880df36df7c1c86b5772a5cb426fca4770df349007a069bea09bd4b8529d",
+    "exit_code": 2,
+    "elapsed_seconds": 1707.3464152812958,
+    "oom_killed": true,
+    "missing_reports": [
+      "pytest-summary.json"
+    ],
+    "collected": 1851,
+    "phase_counts": {
+      "sessionstart:": 1,
+      "collection:": 1,
+      "setup:passed": 430,
+      "call:passed": 314,
+      "teardown:passed": 433,
+      "call:skipped": 9,
+      "call:failed": 107,
+      "setup:failed": 3
+    },
+    "terminal_outcomes": 433,
+    "last_event": {
+      "phase": "teardown",
+      "test": "tests/prices/test_curve_gauge.py::test_hardcoded_gauge_still_resolves",
+      "outcome": "passed",
+      "live_tasks": 2396,
+      "rss_peak_bytes": 5671153664,
+      "logical_rpc_counts": {
+        "call_uid": 192506,
+        "multicall_uid": 13131,
+        "request_uid": 31680,
+        "jsonrpc_batch_uid": 10239
+      }
+    },
+    "cgroup": {
+      "memory.current": "15413248",
+      "memory.peak": "8589934592",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 1722\noom 1\noom_kill 1\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "descriptor_samples": 14,
+    "last_descriptor_sample": {
+      "unix_time": 1789363070.9897149,
+      "processes": [
+        {
+          "pid": 7,
+          "role": "python",
+          "fd_total": 3,
+          "fd_types": {
+            "file": 1,
+            "pipe": 2
+          },
+          "tcp_states": {},
+          "open_files_limit": "Max open files            1024                 524288               files     "
+        },
+        {
+          "pid": 190,
+          "role": "pytest",
+          "fd_total": 108,
+          "fd_types": {
+            "file": 34,
+            "pipe": 15,
+            "socket": 57,
+            "anonymous": 2
+          },
+          "tcp_states": {
+            "01": 53
+          },
+          "open_files_limit": "Max open files            1024                 524288               files     "
+        }
+      ]
+    },
+    "maximum_sampled_process_descriptors": 117
+  }
+}

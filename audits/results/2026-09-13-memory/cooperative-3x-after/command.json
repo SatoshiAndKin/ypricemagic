@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m pip install --no-deps . && sh /runner/repeat_cooperative.sh"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 8.1687997300005,
+  "peak_sampled_process_rss_bytes": 215203840,
+  "cgroup_before": {
+    "memory.current": "8142848",
+    "memory.peak": "8142848",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "20135936",
+    "memory.peak": "190676992",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

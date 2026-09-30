@@ -1,0 +1,23 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=/runner",
+    "python",
+    "-P",
+    "-c",
+    "import asyncio,hashlib,importlib,json,runpy,subprocess,sys\nfrom pathlib import Path\np=importlib.import_module('a_sync.a_sync.property')\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],text=True,capture_output=True)\nPath('/reports/mypy.txt').write_text(result.stdout+result.stderr)\nnamespace=runpy.run_path('tests/mypy/cached_property_contract.py')\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nPath('/reports/property-base.json').write_text(json.dumps({'runtime_bases':[b.__module__+'.'+b.__name__ for b in p.ASyncCachedPropertyDescriptor.__bases__],'native_path':p.__file__,'stub_sha256':hashlib.sha256(Path('a_sync/a_sync/property.pyi').read_bytes()).hexdigest(),'runtime_contract_passed':True,'exit_code':result.returncode},indent=2))\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789388314.2371762,
+  "source_sha": "000e4f24466ddc01abc6bb1a12cc429cbeea5813",
+  "source_revision": "worktree",
+  "source_archive_sha256": "cda6e754e809a9bd6fe7546277ec8c2f8c2d8bdcddfdeab716c9a1f966e98947",
+  "image": "sha256:822612ab4817cd020717f6771a3d78898b91c287c21b5ae8563c31dd60dcdd16",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 5.914076805114746
+}

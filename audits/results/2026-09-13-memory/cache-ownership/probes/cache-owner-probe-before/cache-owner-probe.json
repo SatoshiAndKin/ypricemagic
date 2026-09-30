@@ -1,0 +1,66 @@
+{
+  "complete": true,
+  "cachebox_version": "5.2.3",
+  "cache_capacity": 32,
+  "payload_bytes_per_key": 16384,
+  "sync_computations": 512,
+  "async_computations": 512,
+  "rounds": [
+    {
+      "calls_per_function": 128,
+      "sync_retained_keys": 64,
+      "async_retained_keys": 64,
+      "sync_entries": 32,
+      "async_entries": 32
+    },
+    {
+      "calls_per_function": 256,
+      "sync_retained_keys": 128,
+      "async_retained_keys": 128,
+      "sync_entries": 32,
+      "async_entries": 32
+    },
+    {
+      "calls_per_function": 384,
+      "sync_retained_keys": 192,
+      "async_retained_keys": 192,
+      "sync_entries": 32,
+      "async_entries": 32
+    },
+    {
+      "calls_per_function": 512,
+      "sync_retained_keys": 256,
+      "async_retained_keys": 256,
+      "sync_entries": 32,
+      "async_entries": 32
+    },
+    {
+      "calls_per_function": 640,
+      "sync_retained_keys": 320,
+      "async_retained_keys": 320,
+      "sync_entries": 32,
+      "async_entries": 32
+    },
+    {
+      "calls_per_function": 768,
+      "sync_retained_keys": 384,
+      "async_retained_keys": 384,
+      "sync_entries": 32,
+      "async_entries": 32
+    },
+    {
+      "calls_per_function": 896,
+      "sync_retained_keys": 448,
+      "async_retained_keys": 448,
+      "sync_entries": 32,
+      "async_entries": 32
+    },
+    {
+      "calls_per_function": 1024,
+      "sync_retained_keys": 512,
+      "async_retained_keys": 512,
+      "sync_entries": 32,
+      "async_entries": 32
+    }
+  ]
+}

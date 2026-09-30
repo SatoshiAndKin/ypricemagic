@@ -1,0 +1,17 @@
+{
+  "reason": "Superseded source: repeated successful 1200-1756 second historical cases prove the old deadline was too short, while wait samples identify V2 code probes of metadata-proven future pools. Current source avoids those probes. Retire this superseded full-suite attempt to run the required unchanged full-suite command on the repaired source. This baseline remains incomplete; no failure-equivalence or full-suite pass is claimed.",
+  "unix_time": 1790451930.440622,
+  "required_replacement": "full-optimized-312",
+  "deadline_seconds": 1800,
+  "resource_limits_unchanged": true,
+  "completed_call_outcomes": {
+    "passed": 1418,
+    "skipped": 16,
+    "failed": 153
+  },
+  "collected": 1973,
+  "missing_reports": [
+    "pytest-summary.json"
+  ],
+  "peak_bytes": 5258190848
+}

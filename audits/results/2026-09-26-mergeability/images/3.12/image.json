@@ -1,0 +1,7 @@
+{
+  "base": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+  "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+  "dank_revision": "1f76d99a9e727de7a6ed795f1cad9dbeb3db6cfa",
+  "context": "colima-ypricemagic",
+  "elapsed_seconds": 20.484265327453613
+}

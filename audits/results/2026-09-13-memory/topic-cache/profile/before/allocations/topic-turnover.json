@@ -1,0 +1,2473 @@
+{
+  "complete": true,
+  "topics": 131072,
+  "batch_size": 1024,
+  "concurrency": 64,
+  "configured_default_capacity": 50000,
+  "elapsed_seconds": 52.26691149610269,
+  "profiler": "tracemalloc; exclude timings",
+  "results_sha256": "eb707143e27626a7c35fa07442b96a2877ded8da6c20e1cd122143558e6000f5",
+  "rpc_calls_during_lookup": 0,
+  "boundary": "preseeded SQLite topic-ID lookup only; no log download or pricing",
+  "sync_cache": {
+    "hits": 1,
+    "misses": 131072,
+    "maxsize": null,
+    "currsize": 131072
+  },
+  "async_cache": {
+    "hits": 131201,
+    "misses": 131072,
+    "maxsize": null,
+    "currsize": 131072
+  },
+  "async_dispatch": {
+    "type": "async_lru._LRUCacheWrapper",
+    "forwards_sync_cache_info": false
+  },
+  "old_topic_revisit_added_database_lookups": 0,
+  "memory_before_lookup": {
+    "rss_current_bytes": 186847232,
+    "rss_peak_bytes": 186605568,
+    "python_current_bytes": 4301,
+    "python_peak_bytes": 10387
+  },
+  "rounds": [
+    {
+      "completed_topics": 1024,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 1024,
+        "maxsize": null,
+        "currsize": 1024
+      },
+      "async_cache": {
+        "hits": 1025,
+        "misses": 1024,
+        "maxsize": null,
+        "currsize": 1024
+      },
+      "rss_current_bytes": 191152128,
+      "rss_peak_bytes": 190799872,
+      "python_current_bytes": 1371003,
+      "python_peak_bytes": 1622536
+    },
+    {
+      "completed_topics": 2048,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 2048,
+        "maxsize": null,
+        "currsize": 2048
+      },
+      "async_cache": {
+        "hits": 2050,
+        "misses": 2048,
+        "maxsize": null,
+        "currsize": 2048
+      },
+      "rss_current_bytes": 194695168,
+      "rss_peak_bytes": 194338816,
+      "python_current_bytes": 2551905,
+      "python_peak_bytes": 2846080
+    },
+    {
+      "completed_topics": 3072,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 3072,
+        "maxsize": null,
+        "currsize": 3072
+      },
+      "async_cache": {
+        "hits": 3075,
+        "misses": 3072,
+        "maxsize": null,
+        "currsize": 3072
+      },
+      "rss_current_bytes": 197013504,
+      "rss_peak_bytes": 196567040,
+      "python_current_bytes": 3700071,
+      "python_peak_bytes": 3948058
+    },
+    {
+      "completed_topics": 4096,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 4096,
+        "maxsize": null,
+        "currsize": 4096
+      },
+      "async_cache": {
+        "hits": 4100,
+        "misses": 4096,
+        "maxsize": null,
+        "currsize": 4096
+      },
+      "rss_current_bytes": 199630848,
+      "rss_peak_bytes": 199057408,
+      "python_current_bytes": 4692445,
+      "python_peak_bytes": 4964074
+    },
+    {
+      "completed_topics": 5120,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 5120,
+        "maxsize": null,
+        "currsize": 5120
+      },
+      "async_cache": {
+        "hits": 5125,
+        "misses": 5120,
+        "maxsize": null,
+        "currsize": 5120
+      },
+      "rss_current_bytes": 203776000,
+      "rss_peak_bytes": 203382784,
+      "python_current_bytes": 5996407,
+      "python_peak_bytes": 6248602
+    },
+    {
+      "completed_topics": 6144,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 6144,
+        "maxsize": null,
+        "currsize": 6144
+      },
+      "async_cache": {
+        "hits": 6150,
+        "misses": 6144,
+        "maxsize": null,
+        "currsize": 6144
+      },
+      "rss_current_bytes": 206520320,
+      "rss_peak_bytes": 206135296,
+      "python_current_bytes": 7385428,
+      "python_peak_bytes": 7654854
+    },
+    {
+      "completed_topics": 7168,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 7168,
+        "maxsize": null,
+        "currsize": 7168
+      },
+      "async_cache": {
+        "hits": 7175,
+        "misses": 7168,
+        "maxsize": null,
+        "currsize": 7168
+      },
+      "rss_current_bytes": 209072128,
+      "rss_peak_bytes": 208756736,
+      "python_current_bytes": 8383363,
+      "python_peak_bytes": 8636500
+    },
+    {
+      "completed_topics": 8192,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 8192,
+        "maxsize": null,
+        "currsize": 8192
+      },
+      "async_cache": {
+        "hits": 8200,
+        "misses": 8192,
+        "maxsize": null,
+        "currsize": 8192
+      },
+      "rss_current_bytes": 211480576,
+      "rss_peak_bytes": 210984960,
+      "python_current_bytes": 9285702,
+      "python_peak_bytes": 9548048
+    },
+    {
+      "completed_topics": 9216,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 9216,
+        "maxsize": null,
+        "currsize": 9216
+      },
+      "async_cache": {
+        "hits": 9225,
+        "misses": 9216,
+        "maxsize": null,
+        "currsize": 9216
+      },
+      "rss_current_bytes": 218255360,
+      "rss_peak_bytes": 217800704,
+      "python_current_bytes": 10315006,
+      "python_peak_bytes": 10562601
+    },
+    {
+      "completed_topics": 10240,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 10240,
+        "maxsize": null,
+        "currsize": 10240
+      },
+      "async_cache": {
+        "hits": 10250,
+        "misses": 10240,
+        "maxsize": null,
+        "currsize": 10240
+      },
+      "rss_current_bytes": 220692480,
+      "rss_peak_bytes": 220422144,
+      "python_current_bytes": 11321577,
+      "python_peak_bytes": 11579193
+    },
+    {
+      "completed_topics": 11264,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 11264,
+        "maxsize": null,
+        "currsize": 11264
+      },
+      "async_cache": {
+        "hits": 11275,
+        "misses": 11264,
+        "maxsize": null,
+        "currsize": 11264
+      },
+      "rss_current_bytes": 224014336,
+      "rss_peak_bytes": 223567872,
+      "python_current_bytes": 12952101,
+      "python_peak_bytes": 13214634
+    },
+    {
+      "completed_topics": 12288,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 12288,
+        "maxsize": null,
+        "currsize": 12288
+      },
+      "async_cache": {
+        "hits": 12300,
+        "misses": 12288,
+        "maxsize": null,
+        "currsize": 12288
+      },
+      "rss_current_bytes": 226516992,
+      "rss_peak_bytes": 226058240,
+      "python_current_bytes": 13965414,
+      "python_peak_bytes": 14227885
+    },
+    {
+      "completed_topics": 13312,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 13312,
+        "maxsize": null,
+        "currsize": 13312
+      },
+      "async_cache": {
+        "hits": 13325,
+        "misses": 13312,
+        "maxsize": null,
+        "currsize": 13312
+      },
+      "rss_current_bytes": 228917248,
+      "rss_peak_bytes": 228548608,
+      "python_current_bytes": 14962054,
+      "python_peak_bytes": 15210682
+    },
+    {
+      "completed_topics": 14336,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 14336,
+        "maxsize": null,
+        "currsize": 14336
+      },
+      "async_cache": {
+        "hits": 14350,
+        "misses": 14336,
+        "maxsize": null,
+        "currsize": 14336
+      },
+      "rss_current_bytes": 231215104,
+      "rss_peak_bytes": 230907904,
+      "python_current_bytes": 15889700,
+      "python_peak_bytes": 16137671
+    },
+    {
+      "completed_topics": 15360,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 15360,
+        "maxsize": null,
+        "currsize": 15360
+      },
+      "async_cache": {
+        "hits": 15375,
+        "misses": 15360,
+        "maxsize": null,
+        "currsize": 15360
+      },
+      "rss_current_bytes": 233730048,
+      "rss_peak_bytes": 233267200,
+      "python_current_bytes": 16900357,
+      "python_peak_bytes": 17162797
+    },
+    {
+      "completed_topics": 16384,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 16384,
+        "maxsize": null,
+        "currsize": 16384
+      },
+      "async_cache": {
+        "hits": 16400,
+        "misses": 16384,
+        "maxsize": null,
+        "currsize": 16384
+      },
+      "rss_current_bytes": 236154880,
+      "rss_peak_bytes": 235626496,
+      "python_current_bytes": 17883622,
+      "python_peak_bytes": 18148453
+    },
+    {
+      "completed_topics": 17408,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 17408,
+        "maxsize": null,
+        "currsize": 17408
+      },
+      "async_cache": {
+        "hits": 17425,
+        "misses": 17408,
+        "maxsize": null,
+        "currsize": 17408
+      },
+      "rss_current_bytes": 238571520,
+      "rss_peak_bytes": 238247936,
+      "python_current_bytes": 18862696,
+      "python_peak_bytes": 19113833
+    },
+    {
+      "completed_topics": 18432,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 18432,
+        "maxsize": null,
+        "currsize": 18432
+      },
+      "async_cache": {
+        "hits": 18450,
+        "misses": 18432,
+        "maxsize": null,
+        "currsize": 18432
+      },
+      "rss_current_bytes": 249139200,
+      "rss_peak_bytes": 248733696,
+      "python_current_bytes": 19790936,
+      "python_peak_bytes": 20065784
+    },
+    {
+      "completed_topics": 19456,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 19456,
+        "maxsize": null,
+        "currsize": 19456
+      },
+      "async_cache": {
+        "hits": 19475,
+        "misses": 19456,
+        "maxsize": null,
+        "currsize": 19456
+      },
+      "rss_current_bytes": 250621952,
+      "rss_peak_bytes": 250306560,
+      "python_current_bytes": 22391635,
+      "python_peak_bytes": 22705822
+    },
+    {
+      "completed_topics": 20480,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 20480,
+        "maxsize": null,
+        "currsize": 20480
+      },
+      "async_cache": {
+        "hits": 20500,
+        "misses": 20480,
+        "maxsize": null,
+        "currsize": 20480
+      },
+      "rss_current_bytes": 252039168,
+      "rss_peak_bytes": 251748352,
+      "python_current_bytes": 23335295,
+      "python_peak_bytes": 23623525
+    },
+    {
+      "completed_topics": 21504,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 21504,
+        "maxsize": null,
+        "currsize": 21504
+      },
+      "async_cache": {
+        "hits": 21525,
+        "misses": 21504,
+        "maxsize": null,
+        "currsize": 21504
+      },
+      "rss_current_bytes": 253890560,
+      "rss_peak_bytes": 253583360,
+      "python_current_bytes": 24315975,
+      "python_peak_bytes": 24565590
+    },
+    {
+      "completed_topics": 22528,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 22528,
+        "maxsize": null,
+        "currsize": 22528
+      },
+      "async_cache": {
+        "hits": 22550,
+        "misses": 22528,
+        "maxsize": null,
+        "currsize": 22528
+      },
+      "rss_current_bytes": 258580480,
+      "rss_peak_bytes": 258170880,
+      "python_current_bytes": 27015478,
+      "python_peak_bytes": 27268781
+    },
+    {
+      "completed_topics": 23552,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 23552,
+        "maxsize": null,
+        "currsize": 23552
+      },
+      "async_cache": {
+        "hits": 23575,
+        "misses": 23552,
+        "maxsize": null,
+        "currsize": 23552
+      },
+      "rss_current_bytes": 260829184,
+      "rss_peak_bytes": 260399104,
+      "python_current_bytes": 27994804,
+      "python_peak_bytes": 28250840
+    },
+    {
+      "completed_topics": 24576,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 24576,
+        "maxsize": null,
+        "currsize": 24576
+      },
+      "async_cache": {
+        "hits": 24600,
+        "misses": 24576,
+        "maxsize": null,
+        "currsize": 24576
+      },
+      "rss_current_bytes": 262926336,
+      "rss_peak_bytes": 262496256,
+      "python_current_bytes": 28973564,
+      "python_peak_bytes": 29241203
+    },
+    {
+      "completed_topics": 25600,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 25600,
+        "maxsize": null,
+        "currsize": 25600
+      },
+      "async_cache": {
+        "hits": 25625,
+        "misses": 25600,
+        "maxsize": null,
+        "currsize": 25600
+      },
+      "rss_current_bytes": 265003008,
+      "rss_peak_bytes": 264593408,
+      "python_current_bytes": 29934614,
+      "python_peak_bytes": 30203424
+    },
+    {
+      "completed_topics": 26624,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 26624,
+        "maxsize": null,
+        "currsize": 26624
+      },
+      "async_cache": {
+        "hits": 26650,
+        "misses": 26624,
+        "maxsize": null,
+        "currsize": 26624
+      },
+      "rss_current_bytes": 266989568,
+      "rss_peak_bytes": 266428416,
+      "python_current_bytes": 30848603,
+      "python_peak_bytes": 31100365
+    },
+    {
+      "completed_topics": 27648,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 27648,
+        "maxsize": null,
+        "currsize": 27648
+      },
+      "async_cache": {
+        "hits": 27675,
+        "misses": 27648,
+        "maxsize": null,
+        "currsize": 27648
+      },
+      "rss_current_bytes": 269152256,
+      "rss_peak_bytes": 268787712,
+      "python_current_bytes": 31859281,
+      "python_peak_bytes": 32159176
+    },
+    {
+      "completed_topics": 28672,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 28672,
+        "maxsize": null,
+        "currsize": 28672
+      },
+      "async_cache": {
+        "hits": 28700,
+        "misses": 28672,
+        "maxsize": null,
+        "currsize": 28672
+      },
+      "rss_current_bytes": 271257600,
+      "rss_peak_bytes": 270753792,
+      "python_current_bytes": 32871298,
+      "python_peak_bytes": 33121490
+    },
+    {
+      "completed_topics": 29696,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 29696,
+        "maxsize": null,
+        "currsize": 29696
+      },
+      "async_cache": {
+        "hits": 29725,
+        "misses": 29696,
+        "maxsize": null,
+        "currsize": 29696
+      },
+      "rss_current_bytes": 273379328,
+      "rss_peak_bytes": 272982016,
+      "python_current_bytes": 33814982,
+      "python_peak_bytes": 34102191
+    },
+    {
+      "completed_topics": 30720,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 30720,
+        "maxsize": null,
+        "currsize": 30720
+      },
+      "async_cache": {
+        "hits": 30750,
+        "misses": 30720,
+        "maxsize": null,
+        "currsize": 30720
+      },
+      "rss_current_bytes": 275451904,
+      "rss_peak_bytes": 274948096,
+      "python_current_bytes": 34829768,
+      "python_peak_bytes": 35083423
+    },
+    {
+      "completed_topics": 31744,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 31744,
+        "maxsize": null,
+        "currsize": 31744
+      },
+      "async_cache": {
+        "hits": 31775,
+        "misses": 31744,
+        "maxsize": null,
+        "currsize": 31744
+      },
+      "rss_current_bytes": 277483520,
+      "rss_peak_bytes": 277045248,
+      "python_current_bytes": 35723492,
+      "python_peak_bytes": 35971243
+    },
+    {
+      "completed_topics": 32768,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 32768,
+        "maxsize": null,
+        "currsize": 32768
+      },
+      "async_cache": {
+        "hits": 32800,
+        "misses": 32768,
+        "maxsize": null,
+        "currsize": 32768
+      },
+      "rss_current_bytes": 279601152,
+      "rss_peak_bytes": 279273472,
+      "python_current_bytes": 36734026,
+      "python_peak_bytes": 37016210
+    },
+    {
+      "completed_topics": 33792,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 33792,
+        "maxsize": null,
+        "currsize": 33792
+      },
+      "async_cache": {
+        "hits": 33825,
+        "misses": 33792,
+        "maxsize": null,
+        "currsize": 33792
+      },
+      "rss_current_bytes": 281788416,
+      "rss_peak_bytes": 281239552,
+      "python_current_bytes": 37749740,
+      "python_peak_bytes": 38027652
+    },
+    {
+      "completed_topics": 34816,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 34816,
+        "maxsize": null,
+        "currsize": 34816
+      },
+      "async_cache": {
+        "hits": 34850,
+        "misses": 34816,
+        "maxsize": null,
+        "currsize": 34816
+      },
+      "rss_current_bytes": 283889664,
+      "rss_peak_bytes": 283598848,
+      "python_current_bytes": 38728714,
+      "python_peak_bytes": 38978546
+    },
+    {
+      "completed_topics": 35840,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 35840,
+        "maxsize": null,
+        "currsize": 35840
+      },
+      "async_cache": {
+        "hits": 35875,
+        "misses": 35840,
+        "maxsize": null,
+        "currsize": 35840
+      },
+      "rss_current_bytes": 286056448,
+      "rss_peak_bytes": 285564928,
+      "python_current_bytes": 39689823,
+      "python_peak_bytes": 39958586
+    },
+    {
+      "completed_topics": 36864,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 36864,
+        "maxsize": null,
+        "currsize": 36864
+      },
+      "async_cache": {
+        "hits": 36900,
+        "misses": 36864,
+        "maxsize": null,
+        "currsize": 36864
+      },
+      "rss_current_bytes": 296611840,
+      "rss_peak_bytes": 304570368,
+      "python_current_bytes": 40686779,
+      "python_peak_bytes": 40936238
+    },
+    {
+      "completed_topics": 37888,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 37888,
+        "maxsize": null,
+        "currsize": 37888
+      },
+      "async_cache": {
+        "hits": 37925,
+        "misses": 37888,
+        "maxsize": null,
+        "currsize": 37888
+      },
+      "rss_current_bytes": 298795008,
+      "rss_peak_bytes": 304570368,
+      "python_current_bytes": 41647700,
+      "python_peak_bytes": 41905600
+    },
+    {
+      "completed_topics": 38912,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 38912,
+        "maxsize": null,
+        "currsize": 38912
+      },
+      "async_cache": {
+        "hits": 38950,
+        "misses": 38912,
+        "maxsize": null,
+        "currsize": 38912
+      },
+      "rss_current_bytes": 300879872,
+      "rss_peak_bytes": 304570368,
+      "python_current_bytes": 42585622,
+      "python_peak_bytes": 42855213
+    },
+    {
+      "completed_topics": 39936,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 39936,
+        "maxsize": null,
+        "currsize": 39936
+      },
+      "async_cache": {
+        "hits": 39975,
+        "misses": 39936,
+        "maxsize": null,
+        "currsize": 39936
+      },
+      "rss_current_bytes": 303124480,
+      "rss_peak_bytes": 304570368,
+      "python_current_bytes": 43604728,
+      "python_peak_bytes": 43856932
+    },
+    {
+      "completed_topics": 40960,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 40960,
+        "maxsize": null,
+        "currsize": 40960
+      },
+      "async_cache": {
+        "hits": 41000,
+        "misses": 40960,
+        "maxsize": null,
+        "currsize": 40960
+      },
+      "rss_current_bytes": 305328128,
+      "rss_peak_bytes": 305025024,
+      "python_current_bytes": 44566290,
+      "python_peak_bytes": 44831889
+    },
+    {
+      "completed_topics": 41984,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 41984,
+        "maxsize": null,
+        "currsize": 41984
+      },
+      "async_cache": {
+        "hits": 42025,
+        "misses": 41984,
+        "maxsize": null,
+        "currsize": 41984
+      },
+      "rss_current_bytes": 307482624,
+      "rss_peak_bytes": 307122176,
+      "python_current_bytes": 45562815,
+      "python_peak_bytes": 45810635
+    },
+    {
+      "completed_topics": 43008,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 43008,
+        "maxsize": null,
+        "currsize": 43008
+      },
+      "async_cache": {
+        "hits": 43050,
+        "misses": 43008,
+        "maxsize": null,
+        "currsize": 43008
+      },
+      "rss_current_bytes": 309694464,
+      "rss_peak_bytes": 309350400,
+      "python_current_bytes": 46506771,
+      "python_peak_bytes": 46790097
+    },
+    {
+      "completed_topics": 44032,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 44032,
+        "maxsize": null,
+        "currsize": 44032
+      },
+      "async_cache": {
+        "hits": 44075,
+        "misses": 44032,
+        "maxsize": null,
+        "currsize": 44032
+      },
+      "rss_current_bytes": 316702720,
+      "rss_peak_bytes": 316166144,
+      "python_current_bytes": 50631213,
+      "python_peak_bytes": 51756911
+    },
+    {
+      "completed_topics": 45056,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 45056,
+        "maxsize": null,
+        "currsize": 45056
+      },
+      "async_cache": {
+        "hits": 45100,
+        "misses": 45056,
+        "maxsize": null,
+        "currsize": 45056
+      },
+      "rss_current_bytes": 318361600,
+      "rss_peak_bytes": 317870080,
+      "python_current_bytes": 51593584,
+      "python_peak_bytes": 51870154
+    },
+    {
+      "completed_topics": 46080,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 46080,
+        "maxsize": null,
+        "currsize": 46080
+      },
+      "async_cache": {
+        "hits": 46125,
+        "misses": 46080,
+        "maxsize": null,
+        "currsize": 46080
+      },
+      "rss_current_bytes": 320565248,
+      "rss_peak_bytes": 319967232,
+      "python_current_bytes": 52606699,
+      "python_peak_bytes": 52863395
+    },
+    {
+      "completed_topics": 47104,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 47104,
+        "maxsize": null,
+        "currsize": 47104
+      },
+      "async_cache": {
+        "hits": 47150,
+        "misses": 47104,
+        "maxsize": null,
+        "currsize": 47104
+      },
+      "rss_current_bytes": 322711552,
+      "rss_peak_bytes": 322326528,
+      "python_current_bytes": 53585670,
+      "python_peak_bytes": 53840085
+    },
+    {
+      "completed_topics": 48128,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 48128,
+        "maxsize": null,
+        "currsize": 48128
+      },
+      "async_cache": {
+        "hits": 48175,
+        "misses": 48128,
+        "maxsize": null,
+        "currsize": 48128
+      },
+      "rss_current_bytes": 324833280,
+      "rss_peak_bytes": 324423680,
+      "python_current_bytes": 54529247,
+      "python_peak_bytes": 54811130
+    },
+    {
+      "completed_topics": 49152,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 49152,
+        "maxsize": null,
+        "currsize": 49152
+      },
+      "async_cache": {
+        "hits": 49200,
+        "misses": 49152,
+        "maxsize": null,
+        "currsize": 49152
+      },
+      "rss_current_bytes": 326967296,
+      "rss_peak_bytes": 326520832,
+      "python_current_bytes": 55525907,
+      "python_peak_bytes": 55780754
+    },
+    {
+      "completed_topics": 50176,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 50176,
+        "maxsize": null,
+        "currsize": 50176
+      },
+      "async_cache": {
+        "hits": 50225,
+        "misses": 50176,
+        "maxsize": null,
+        "currsize": 50176
+      },
+      "rss_current_bytes": 329097216,
+      "rss_peak_bytes": 328749056,
+      "python_current_bytes": 56487114,
+      "python_peak_bytes": 56744462
+    },
+    {
+      "completed_topics": 51200,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 51200,
+        "maxsize": null,
+        "currsize": 51200
+      },
+      "async_cache": {
+        "hits": 51250,
+        "misses": 51200,
+        "maxsize": null,
+        "currsize": 51200
+      },
+      "rss_current_bytes": 331153408,
+      "rss_peak_bytes": 330715136,
+      "python_current_bytes": 57446327,
+      "python_peak_bytes": 57706642
+    },
+    {
+      "completed_topics": 52224,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 52224,
+        "maxsize": null,
+        "currsize": 52224
+      },
+      "async_cache": {
+        "hits": 52275,
+        "misses": 52224,
+        "maxsize": null,
+        "currsize": 52224
+      },
+      "rss_current_bytes": 333340672,
+      "rss_peak_bytes": 332943360,
+      "python_current_bytes": 58462420,
+      "python_peak_bytes": 58716059
+    },
+    {
+      "completed_topics": 53248,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 53248,
+        "maxsize": null,
+        "currsize": 53248
+      },
+      "async_cache": {
+        "hits": 53300,
+        "misses": 53248,
+        "maxsize": null,
+        "currsize": 53248
+      },
+      "rss_current_bytes": 335478784,
+      "rss_peak_bytes": 335171584,
+      "python_current_bytes": 59441073,
+      "python_peak_bytes": 59689802
+    },
+    {
+      "completed_topics": 54272,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 54272,
+        "maxsize": null,
+        "currsize": 54272
+      },
+      "async_cache": {
+        "hits": 54325,
+        "misses": 54272,
+        "maxsize": null,
+        "currsize": 54272
+      },
+      "rss_current_bytes": 337645568,
+      "rss_peak_bytes": 337268736,
+      "python_current_bytes": 60402120,
+      "python_peak_bytes": 60681349
+    },
+    {
+      "completed_topics": 55296,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 55296,
+        "maxsize": null,
+        "currsize": 55296
+      },
+      "async_cache": {
+        "hits": 55350,
+        "misses": 55296,
+        "maxsize": null,
+        "currsize": 55296
+      },
+      "rss_current_bytes": 339771392,
+      "rss_peak_bytes": 339234816,
+      "python_current_bytes": 61381081,
+      "python_peak_bytes": 61658406
+    },
+    {
+      "completed_topics": 56320,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 56320,
+        "maxsize": null,
+        "currsize": 56320
+      },
+      "async_cache": {
+        "hits": 56375,
+        "misses": 56320,
+        "maxsize": null,
+        "currsize": 56320
+      },
+      "rss_current_bytes": 341860352,
+      "rss_peak_bytes": 341331968,
+      "python_current_bytes": 62342895,
+      "python_peak_bytes": 62608054
+    },
+    {
+      "completed_topics": 57344,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 57344,
+        "maxsize": null,
+        "currsize": 57344
+      },
+      "async_cache": {
+        "hits": 57400,
+        "misses": 57344,
+        "maxsize": null,
+        "currsize": 57344
+      },
+      "rss_current_bytes": 343932928,
+      "rss_peak_bytes": 343429120,
+      "python_current_bytes": 63298794,
+      "python_peak_bytes": 63543511
+    },
+    {
+      "completed_topics": 58368,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 58368,
+        "maxsize": null,
+        "currsize": 58368
+      },
+      "async_cache": {
+        "hits": 58425,
+        "misses": 58368,
+        "maxsize": null,
+        "currsize": 58368
+      },
+      "rss_current_bytes": 346177536,
+      "rss_peak_bytes": 345657344,
+      "python_current_bytes": 64282184,
+      "python_peak_bytes": 64561365
+    },
+    {
+      "completed_topics": 59392,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 59392,
+        "maxsize": null,
+        "currsize": 59392
+      },
+      "async_cache": {
+        "hits": 59450,
+        "misses": 59392,
+        "maxsize": null,
+        "currsize": 59392
+      },
+      "rss_current_bytes": 348315648,
+      "rss_peak_bytes": 347885568,
+      "python_current_bytes": 65278897,
+      "python_peak_bytes": 65555040
+    },
+    {
+      "completed_topics": 60416,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 60416,
+        "maxsize": null,
+        "currsize": 60416
+      },
+      "async_cache": {
+        "hits": 60475,
+        "misses": 60416,
+        "maxsize": null,
+        "currsize": 60416
+      },
+      "rss_current_bytes": 350461952,
+      "rss_peak_bytes": 349982720,
+      "python_current_bytes": 66257933,
+      "python_peak_bytes": 66543552
+    },
+    {
+      "completed_topics": 61440,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 61440,
+        "maxsize": null,
+        "currsize": 61440
+      },
+      "async_cache": {
+        "hits": 61500,
+        "misses": 61440,
+        "maxsize": null,
+        "currsize": 61440
+      },
+      "rss_current_bytes": 352550912,
+      "rss_peak_bytes": 352210944,
+      "python_current_bytes": 67236777,
+      "python_peak_bytes": 67498134
+    },
+    {
+      "completed_topics": 62464,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 62464,
+        "maxsize": null,
+        "currsize": 62464
+      },
+      "async_cache": {
+        "hits": 62525,
+        "misses": 62464,
+        "maxsize": null,
+        "currsize": 62464
+      },
+      "rss_current_bytes": 354713600,
+      "rss_peak_bytes": 354308096,
+      "python_current_bytes": 68180225,
+      "python_peak_bytes": 68464962
+    },
+    {
+      "completed_topics": 63488,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 63488,
+        "maxsize": null,
+        "currsize": 63488
+      },
+      "async_cache": {
+        "hits": 63550,
+        "misses": 63488,
+        "maxsize": null,
+        "currsize": 63488
+      },
+      "rss_current_bytes": 356818944,
+      "rss_peak_bytes": 356536320,
+      "python_current_bytes": 69194698,
+      "python_peak_bytes": 69450988
+    },
+    {
+      "completed_topics": 64512,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 64512,
+        "maxsize": null,
+        "currsize": 64512
+      },
+      "async_cache": {
+        "hits": 64575,
+        "misses": 64512,
+        "maxsize": null,
+        "currsize": 64512
+      },
+      "rss_current_bytes": 358932480,
+      "rss_peak_bytes": 358633472,
+      "python_current_bytes": 70080170,
+      "python_peak_bytes": 70364292
+    },
+    {
+      "completed_topics": 65536,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 65536,
+        "maxsize": null,
+        "currsize": 65536
+      },
+      "async_cache": {
+        "hits": 65600,
+        "misses": 65536,
+        "maxsize": null,
+        "currsize": 65536
+      },
+      "rss_current_bytes": 361041920,
+      "rss_peak_bytes": 360730624,
+      "python_current_bytes": 71109201,
+      "python_peak_bytes": 71379618
+    },
+    {
+      "completed_topics": 66560,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 66560,
+        "maxsize": null,
+        "currsize": 66560
+      },
+      "async_cache": {
+        "hits": 66625,
+        "misses": 66560,
+        "maxsize": null,
+        "currsize": 66560
+      },
+      "rss_current_bytes": 363220992,
+      "rss_peak_bytes": 362827776,
+      "python_current_bytes": 72112814,
+      "python_peak_bytes": 72372452
+    },
+    {
+      "completed_topics": 67584,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 67584,
+        "maxsize": null,
+        "currsize": 67584
+      },
+      "async_cache": {
+        "hits": 67650,
+        "misses": 67584,
+        "maxsize": null,
+        "currsize": 67584
+      },
+      "rss_current_bytes": 365346816,
+      "rss_peak_bytes": 364793856,
+      "python_current_bytes": 73091789,
+      "python_peak_bytes": 73343796
+    },
+    {
+      "completed_topics": 68608,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 68608,
+        "maxsize": null,
+        "currsize": 68608
+      },
+      "async_cache": {
+        "hits": 68675,
+        "misses": 68608,
+        "maxsize": null,
+        "currsize": 68608
+      },
+      "rss_current_bytes": 367484928,
+      "rss_peak_bytes": 367153152,
+      "python_current_bytes": 74070388,
+      "python_peak_bytes": 74326308
+    },
+    {
+      "completed_topics": 69632,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 69632,
+        "maxsize": null,
+        "currsize": 69632
+      },
+      "async_cache": {
+        "hits": 69700,
+        "misses": 69632,
+        "maxsize": null,
+        "currsize": 69632
+      },
+      "rss_current_bytes": 369598464,
+      "rss_peak_bytes": 369250304,
+      "python_current_bytes": 75031382,
+      "python_peak_bytes": 75285557
+    },
+    {
+      "completed_topics": 70656,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 70656,
+        "maxsize": null,
+        "currsize": 70656
+      },
+      "async_cache": {
+        "hits": 70725,
+        "misses": 70656,
+        "maxsize": null,
+        "currsize": 70656
+      },
+      "rss_current_bytes": 371761152,
+      "rss_peak_bytes": 371478528,
+      "python_current_bytes": 76010314,
+      "python_peak_bytes": 76301469
+    },
+    {
+      "completed_topics": 71680,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 71680,
+        "maxsize": null,
+        "currsize": 71680
+      },
+      "async_cache": {
+        "hits": 71750,
+        "misses": 71680,
+        "maxsize": null,
+        "currsize": 71680
+      },
+      "rss_current_bytes": 373882880,
+      "rss_peak_bytes": 373444608,
+      "python_current_bytes": 76989167,
+      "python_peak_bytes": 77234045
+    },
+    {
+      "completed_topics": 72704,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 72704,
+        "maxsize": null,
+        "currsize": 72704
+      },
+      "async_cache": {
+        "hits": 72775,
+        "misses": 72704,
+        "maxsize": null,
+        "currsize": 72704
+      },
+      "rss_current_bytes": 376008704,
+      "rss_peak_bytes": 375803904,
+      "python_current_bytes": 77967685,
+      "python_peak_bytes": 78223144
+    },
+    {
+      "completed_topics": 73728,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 73728,
+        "maxsize": null,
+        "currsize": 73728
+      },
+      "async_cache": {
+        "hits": 73800,
+        "misses": 73728,
+        "maxsize": null,
+        "currsize": 73728
+      },
+      "rss_current_bytes": 378134528,
+      "rss_peak_bytes": 377769984,
+      "python_current_bytes": 78850652,
+      "python_peak_bytes": 79140666
+    },
+    {
+      "completed_topics": 74752,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 74752,
+        "maxsize": null,
+        "currsize": 74752
+      },
+      "async_cache": {
+        "hits": 74825,
+        "misses": 74752,
+        "maxsize": null,
+        "currsize": 74752
+      },
+      "rss_current_bytes": 396976128,
+      "rss_peak_bytes": 412504064,
+      "python_current_bytes": 79861408,
+      "python_peak_bytes": 80135256
+    },
+    {
+      "completed_topics": 75776,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 75776,
+        "maxsize": null,
+        "currsize": 75776
+      },
+      "async_cache": {
+        "hits": 75850,
+        "misses": 75776,
+        "maxsize": null,
+        "currsize": 75776
+      },
+      "rss_current_bytes": 399179776,
+      "rss_peak_bytes": 412504064,
+      "python_current_bytes": 80886100,
+      "python_peak_bytes": 81131315
+    },
+    {
+      "completed_topics": 76800,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 76800,
+        "maxsize": null,
+        "currsize": 76800
+      },
+      "async_cache": {
+        "hits": 76875,
+        "misses": 76800,
+        "maxsize": null,
+        "currsize": 76800
+      },
+      "rss_current_bytes": 401362944,
+      "rss_peak_bytes": 412504064,
+      "python_current_bytes": 81865090,
+      "python_peak_bytes": 82121767
+    },
+    {
+      "completed_topics": 77824,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 77824,
+        "maxsize": null,
+        "currsize": 77824
+      },
+      "async_cache": {
+        "hits": 77900,
+        "misses": 77824,
+        "maxsize": null,
+        "currsize": 77824
+      },
+      "rss_current_bytes": 407355392,
+      "rss_peak_bytes": 412504064,
+      "python_current_bytes": 84924137,
+      "python_peak_bytes": 86701505
+    },
+    {
+      "completed_topics": 78848,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 78848,
+        "maxsize": null,
+        "currsize": 78848
+      },
+      "async_cache": {
+        "hits": 78925,
+        "misses": 78848,
+        "maxsize": null,
+        "currsize": 78848
+      },
+      "rss_current_bytes": 408547328,
+      "rss_peak_bytes": 412504064,
+      "python_current_bytes": 85903009,
+      "python_peak_bytes": 86701505
+    },
+    {
+      "completed_topics": 79872,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 79872,
+        "maxsize": null,
+        "currsize": 79872
+      },
+      "async_cache": {
+        "hits": 79950,
+        "misses": 79872,
+        "maxsize": null,
+        "currsize": 79872
+      },
+      "rss_current_bytes": 410017792,
+      "rss_peak_bytes": 412504064,
+      "python_current_bytes": 86899650,
+      "python_peak_bytes": 87171588
+    },
+    {
+      "completed_topics": 80896,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 80896,
+        "maxsize": null,
+        "currsize": 80896
+      },
+      "async_cache": {
+        "hits": 80975,
+        "misses": 80896,
+        "maxsize": null,
+        "currsize": 80896
+      },
+      "rss_current_bytes": 412151808,
+      "rss_peak_bytes": 412504064,
+      "python_current_bytes": 87860702,
+      "python_peak_bytes": 88110613
+    },
+    {
+      "completed_topics": 81920,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 81920,
+        "maxsize": null,
+        "currsize": 81920
+      },
+      "async_cache": {
+        "hits": 82000,
+        "misses": 81920,
+        "maxsize": null,
+        "currsize": 81920
+      },
+      "rss_current_bytes": 414334976,
+      "rss_peak_bytes": 413999104,
+      "python_current_bytes": 88839699,
+      "python_peak_bytes": 89114156
+    },
+    {
+      "completed_topics": 82944,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 82944,
+        "maxsize": null,
+        "currsize": 82944
+      },
+      "async_cache": {
+        "hits": 83025,
+        "misses": 82944,
+        "maxsize": null,
+        "currsize": 82944
+      },
+      "rss_current_bytes": 416370688,
+      "rss_peak_bytes": 415965184,
+      "python_current_bytes": 89774162,
+      "python_peak_bytes": 90027239
+    },
+    {
+      "completed_topics": 83968,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 83968,
+        "maxsize": null,
+        "currsize": 83968
+      },
+      "async_cache": {
+        "hits": 84050,
+        "misses": 83968,
+        "maxsize": null,
+        "currsize": 83968
+      },
+      "rss_current_bytes": 418713600,
+      "rss_peak_bytes": 418324480,
+      "python_current_bytes": 90813649,
+      "python_peak_bytes": 91082484
+    },
+    {
+      "completed_topics": 84992,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 84992,
+        "maxsize": null,
+        "currsize": 84992
+      },
+      "async_cache": {
+        "hits": 85075,
+        "misses": 84992,
+        "maxsize": null,
+        "currsize": 84992
+      },
+      "rss_current_bytes": 420835328,
+      "rss_peak_bytes": 420421632,
+      "python_current_bytes": 91756893,
+      "python_peak_bytes": 92012895
+    },
+    {
+      "completed_topics": 86016,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 86016,
+        "maxsize": null,
+        "currsize": 86016
+      },
+      "async_cache": {
+        "hits": 86100,
+        "misses": 86016,
+        "maxsize": null,
+        "currsize": 86016
+      },
+      "rss_current_bytes": 423022592,
+      "rss_peak_bytes": 422780928,
+      "python_current_bytes": 92735804,
+      "python_peak_bytes": 92999607
+    },
+    {
+      "completed_topics": 87040,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 87040,
+        "maxsize": null,
+        "currsize": 87040
+      },
+      "async_cache": {
+        "hits": 87125,
+        "misses": 87040,
+        "maxsize": null,
+        "currsize": 87040
+      },
+      "rss_current_bytes": 425205760,
+      "rss_peak_bytes": 424747008,
+      "python_current_bytes": 93697421,
+      "python_peak_bytes": 93981912
+    },
+    {
+      "completed_topics": 88064,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 88064,
+        "maxsize": null,
+        "currsize": 88064
+      },
+      "async_cache": {
+        "hits": 88150,
+        "misses": 88064,
+        "maxsize": null,
+        "currsize": 88064
+      },
+      "rss_current_bytes": 437153792,
+      "rss_peak_bytes": 436805632,
+      "python_current_bytes": 100967998,
+      "python_peak_bytes": 103191591
+    },
+    {
+      "completed_topics": 89088,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 89088,
+        "maxsize": null,
+        "currsize": 89088
+      },
+      "async_cache": {
+        "hits": 89175,
+        "misses": 89088,
+        "maxsize": null,
+        "currsize": 89088
+      },
+      "rss_current_bytes": 438370304,
+      "rss_peak_bytes": 437854208,
+      "python_current_bytes": 101964364,
+      "python_peak_bytes": 103191591
+    },
+    {
+      "completed_topics": 90112,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 90112,
+        "maxsize": null,
+        "currsize": 90112
+      },
+      "async_cache": {
+        "hits": 90200,
+        "misses": 90112,
+        "maxsize": null,
+        "currsize": 90112
+      },
+      "rss_current_bytes": 440549376,
+      "rss_peak_bytes": 440082432,
+      "python_current_bytes": 102907771,
+      "python_peak_bytes": 103205115
+    },
+    {
+      "completed_topics": 91136,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 91136,
+        "maxsize": null,
+        "currsize": 91136
+      },
+      "async_cache": {
+        "hits": 91225,
+        "misses": 91136,
+        "maxsize": null,
+        "currsize": 91136
+      },
+      "rss_current_bytes": 442671104,
+      "rss_peak_bytes": 442310656,
+      "python_current_bytes": 103904238,
+      "python_peak_bytes": 104169751
+    },
+    {
+      "completed_topics": 92160,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 92160,
+        "maxsize": null,
+        "currsize": 92160
+      },
+      "async_cache": {
+        "hits": 92250,
+        "misses": 92160,
+        "maxsize": null,
+        "currsize": 92160
+      },
+      "rss_current_bytes": 444772352,
+      "rss_peak_bytes": 444407808,
+      "python_current_bytes": 104883273,
+      "python_peak_bytes": 105131077
+    },
+    {
+      "completed_topics": 93184,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 93184,
+        "maxsize": null,
+        "currsize": 93184
+      },
+      "async_cache": {
+        "hits": 93275,
+        "misses": 93184,
+        "maxsize": null,
+        "currsize": 93184
+      },
+      "rss_current_bytes": 446816256,
+      "rss_peak_bytes": 446373888,
+      "python_current_bytes": 105823781,
+      "python_peak_bytes": 106074436
+    },
+    {
+      "completed_topics": 94208,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 94208,
+        "maxsize": null,
+        "currsize": 94208
+      },
+      "async_cache": {
+        "hits": 94300,
+        "misses": 94208,
+        "maxsize": null,
+        "currsize": 94208
+      },
+      "rss_current_bytes": 449048576,
+      "rss_peak_bytes": 448733184,
+      "python_current_bytes": 106839476,
+      "python_peak_bytes": 107116101
+    },
+    {
+      "completed_topics": 95232,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 95232,
+        "maxsize": null,
+        "currsize": 95232
+      },
+      "async_cache": {
+        "hits": 95325,
+        "misses": 95232,
+        "maxsize": null,
+        "currsize": 95232
+      },
+      "rss_current_bytes": 451174400,
+      "rss_peak_bytes": 450699264,
+      "python_current_bytes": 107818363,
+      "python_peak_bytes": 108072819
+    },
+    {
+      "completed_topics": 96256,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 96256,
+        "maxsize": null,
+        "currsize": 96256
+      },
+      "async_cache": {
+        "hits": 96350,
+        "misses": 96256,
+        "maxsize": null,
+        "currsize": 96256
+      },
+      "rss_current_bytes": 453308416,
+      "rss_peak_bytes": 452796416,
+      "python_current_bytes": 108779750,
+      "python_peak_bytes": 109056512
+    },
+    {
+      "completed_topics": 97280,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 97280,
+        "maxsize": null,
+        "currsize": 97280
+      },
+      "async_cache": {
+        "hits": 97375,
+        "misses": 97280,
+        "maxsize": null,
+        "currsize": 97280
+      },
+      "rss_current_bytes": 455446528,
+      "rss_peak_bytes": 455155712,
+      "python_current_bytes": 109758441,
+      "python_peak_bytes": 110034126
+    },
+    {
+      "completed_topics": 98304,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 98304,
+        "maxsize": null,
+        "currsize": 98304
+      },
+      "async_cache": {
+        "hits": 98400,
+        "misses": 98304,
+        "maxsize": null,
+        "currsize": 98304
+      },
+      "rss_current_bytes": 457568256,
+      "rss_peak_bytes": 457121792,
+      "python_current_bytes": 110737241,
+      "python_peak_bytes": 110996584
+    },
+    {
+      "completed_topics": 99328,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 99328,
+        "maxsize": null,
+        "currsize": 99328
+      },
+      "async_cache": {
+        "hits": 99425,
+        "misses": 99328,
+        "maxsize": null,
+        "currsize": 99328
+      },
+      "rss_current_bytes": 459714560,
+      "rss_peak_bytes": 459350016,
+      "python_current_bytes": 111698285,
+      "python_peak_bytes": 111990582
+    },
+    {
+      "completed_topics": 100352,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 100352,
+        "maxsize": null,
+        "currsize": 100352
+      },
+      "async_cache": {
+        "hits": 100450,
+        "misses": 100352,
+        "maxsize": null,
+        "currsize": 100352
+      },
+      "rss_current_bytes": 461836288,
+      "rss_peak_bytes": 461447168,
+      "python_current_bytes": 112676788,
+      "python_peak_bytes": 112943728
+    },
+    {
+      "completed_topics": 101376,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 101376,
+        "maxsize": null,
+        "currsize": 101376
+      },
+      "async_cache": {
+        "hits": 101475,
+        "misses": 101376,
+        "maxsize": null,
+        "currsize": 101376
+      },
+      "rss_current_bytes": 463994880,
+      "rss_peak_bytes": 463675392,
+      "python_current_bytes": 113655618,
+      "python_peak_bytes": 113958657
+    },
+    {
+      "completed_topics": 102400,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 102400,
+        "maxsize": null,
+        "currsize": 102400
+      },
+      "async_cache": {
+        "hits": 102500,
+        "misses": 102400,
+        "maxsize": null,
+        "currsize": 102400
+      },
+      "rss_current_bytes": 466063360,
+      "rss_peak_bytes": 465641472,
+      "python_current_bytes": 114635340,
+      "python_peak_bytes": 114887211
+    },
+    {
+      "completed_topics": 103424,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 103424,
+        "maxsize": null,
+        "currsize": 103424
+      },
+      "async_cache": {
+        "hits": 103525,
+        "misses": 103424,
+        "maxsize": null,
+        "currsize": 103424
+      },
+      "rss_current_bytes": 468238336,
+      "rss_peak_bytes": 467738624,
+      "python_current_bytes": 115614434,
+      "python_peak_bytes": 115882698
+    },
+    {
+      "completed_topics": 104448,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 104448,
+        "maxsize": null,
+        "currsize": 104448
+      },
+      "async_cache": {
+        "hits": 104550,
+        "misses": 104448,
+        "maxsize": null,
+        "currsize": 104448
+      },
+      "rss_current_bytes": 470249472,
+      "rss_peak_bytes": 469835776,
+      "python_current_bytes": 116551650,
+      "python_peak_bytes": 116805210
+    },
+    {
+      "completed_topics": 105472,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 105472,
+        "maxsize": null,
+        "currsize": 105472
+      },
+      "async_cache": {
+        "hits": 105575,
+        "misses": 105472,
+        "maxsize": null,
+        "currsize": 105472
+      },
+      "rss_current_bytes": 472477696,
+      "rss_peak_bytes": 472064000,
+      "python_current_bytes": 117570293,
+      "python_peak_bytes": 117825261
+    },
+    {
+      "completed_topics": 106496,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 106496,
+        "maxsize": null,
+        "currsize": 106496
+      },
+      "async_cache": {
+        "hits": 106600,
+        "misses": 106496,
+        "maxsize": null,
+        "currsize": 106496
+      },
+      "rss_current_bytes": 474636288,
+      "rss_peak_bytes": 474161152,
+      "python_current_bytes": 118531404,
+      "python_peak_bytes": 118775179
+    },
+    {
+      "completed_topics": 107520,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 107520,
+        "maxsize": null,
+        "currsize": 107520
+      },
+      "async_cache": {
+        "hits": 107625,
+        "misses": 107520,
+        "maxsize": null,
+        "currsize": 107520
+      },
+      "rss_current_bytes": 476762112,
+      "rss_peak_bytes": 476389376,
+      "python_current_bytes": 119510031,
+      "python_peak_bytes": 119781183
+    },
+    {
+      "completed_topics": 108544,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 108544,
+        "maxsize": null,
+        "currsize": 108544
+      },
+      "async_cache": {
+        "hits": 108650,
+        "misses": 108544,
+        "maxsize": null,
+        "currsize": 108544
+      },
+      "rss_current_bytes": 478908416,
+      "rss_peak_bytes": 478355456,
+      "python_current_bytes": 120488772,
+      "python_peak_bytes": 120760415
+    },
+    {
+      "completed_topics": 109568,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 109568,
+        "maxsize": null,
+        "currsize": 109568
+      },
+      "async_cache": {
+        "hits": 109675,
+        "misses": 109568,
+        "maxsize": null,
+        "currsize": 109568
+      },
+      "rss_current_bytes": 481021952,
+      "rss_peak_bytes": 480452608,
+      "python_current_bytes": 121467647,
+      "python_peak_bytes": 121721462
+    },
+    {
+      "completed_topics": 110592,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 110592,
+        "maxsize": null,
+        "currsize": 110592
+      },
+      "async_cache": {
+        "hits": 110700,
+        "misses": 110592,
+        "maxsize": null,
+        "currsize": 110592
+      },
+      "rss_current_bytes": 483188736,
+      "rss_peak_bytes": 482811904,
+      "python_current_bytes": 122446847,
+      "python_peak_bytes": 122708476
+    },
+    {
+      "completed_topics": 111616,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 111616,
+        "maxsize": null,
+        "currsize": 111616
+      },
+      "async_cache": {
+        "hits": 111725,
+        "misses": 111616,
+        "maxsize": null,
+        "currsize": 111616
+      },
+      "rss_current_bytes": 485298176,
+      "rss_peak_bytes": 485040128,
+      "python_current_bytes": 123407810,
+      "python_peak_bytes": 123682685
+    },
+    {
+      "completed_topics": 112640,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 112640,
+        "maxsize": null,
+        "currsize": 112640
+      },
+      "async_cache": {
+        "hits": 112750,
+        "misses": 112640,
+        "maxsize": null,
+        "currsize": 112640
+      },
+      "rss_current_bytes": 487456768,
+      "rss_peak_bytes": 487137280,
+      "python_current_bytes": 124368982,
+      "python_peak_bytes": 124669770
+    },
+    {
+      "completed_topics": 113664,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 113664,
+        "maxsize": null,
+        "currsize": 113664
+      },
+      "async_cache": {
+        "hits": 113775,
+        "misses": 113664,
+        "maxsize": null,
+        "currsize": 113664
+      },
+      "rss_current_bytes": 489570304,
+      "rss_peak_bytes": 489103360,
+      "python_current_bytes": 125365691,
+      "python_peak_bytes": 125632930
+    },
+    {
+      "completed_topics": 114688,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 114688,
+        "maxsize": null,
+        "currsize": 114688
+      },
+      "async_cache": {
+        "hits": 114800,
+        "misses": 114688,
+        "maxsize": null,
+        "currsize": 114688
+      },
+      "rss_current_bytes": 491724800,
+      "rss_peak_bytes": 491331584,
+      "python_current_bytes": 126326562,
+      "python_peak_bytes": 126622676
+    },
+    {
+      "completed_topics": 115712,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 115712,
+        "maxsize": null,
+        "currsize": 115712
+      },
+      "async_cache": {
+        "hits": 115825,
+        "misses": 115712,
+        "maxsize": null,
+        "currsize": 115712
+      },
+      "rss_current_bytes": 493809664,
+      "rss_peak_bytes": 493428736,
+      "python_current_bytes": 127305276,
+      "python_peak_bytes": 127552915
+    },
+    {
+      "completed_topics": 116736,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 116736,
+        "maxsize": null,
+        "currsize": 116736
+      },
+      "async_cache": {
+        "hits": 116850,
+        "misses": 116736,
+        "maxsize": null,
+        "currsize": 116736
+      },
+      "rss_current_bytes": 495935488,
+      "rss_peak_bytes": 495525888,
+      "python_current_bytes": 128226445,
+      "python_peak_bytes": 128493251
+    },
+    {
+      "completed_topics": 117760,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 117760,
+        "maxsize": null,
+        "currsize": 117760
+      },
+      "async_cache": {
+        "hits": 117875,
+        "misses": 117760,
+        "maxsize": null,
+        "currsize": 117760
+      },
+      "rss_current_bytes": 498016256,
+      "rss_peak_bytes": 497623040,
+      "python_current_bytes": 129238065,
+      "python_peak_bytes": 129499840
+    },
+    {
+      "completed_topics": 118784,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 118784,
+        "maxsize": null,
+        "currsize": 118784
+      },
+      "async_cache": {
+        "hits": 118900,
+        "misses": 118784,
+        "maxsize": null,
+        "currsize": 118784
+      },
+      "rss_current_bytes": 500219904,
+      "rss_peak_bytes": 499720192,
+      "python_current_bytes": 130241380,
+      "python_peak_bytes": 130510515
+    },
+    {
+      "completed_topics": 119808,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 119808,
+        "maxsize": null,
+        "currsize": 119808
+      },
+      "async_cache": {
+        "hits": 119925,
+        "misses": 119808,
+        "maxsize": null,
+        "currsize": 119808
+      },
+      "rss_current_bytes": 502353920,
+      "rss_peak_bytes": 501817344,
+      "python_current_bytes": 131237846,
+      "python_peak_bytes": 131495420
+    },
+    {
+      "completed_topics": 120832,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 120832,
+        "maxsize": null,
+        "currsize": 120832
+      },
+      "async_cache": {
+        "hits": 120950,
+        "misses": 120832,
+        "maxsize": null,
+        "currsize": 120832
+      },
+      "rss_current_bytes": 504487936,
+      "rss_peak_bytes": 504176640,
+      "python_current_bytes": 132198859,
+      "python_peak_bytes": 132458549
+    },
+    {
+      "completed_topics": 121856,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 121856,
+        "maxsize": null,
+        "currsize": 121856
+      },
+      "async_cache": {
+        "hits": 121975,
+        "misses": 121856,
+        "maxsize": null,
+        "currsize": 121856
+      },
+      "rss_current_bytes": 506634240,
+      "rss_peak_bytes": 506273792,
+      "python_current_bytes": 133159999,
+      "python_peak_bytes": 133445023
+    },
+    {
+      "completed_topics": 122880,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 122880,
+        "maxsize": null,
+        "currsize": 122880
+      },
+      "async_cache": {
+        "hits": 123000,
+        "misses": 122880,
+        "maxsize": null,
+        "currsize": 122880
+      },
+      "rss_current_bytes": 508739584,
+      "rss_peak_bytes": 508239872,
+      "python_current_bytes": 134120985,
+      "python_peak_bytes": 134404580
+    },
+    {
+      "completed_topics": 123904,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 123904,
+        "maxsize": null,
+        "currsize": 123904
+      },
+      "async_cache": {
+        "hits": 124025,
+        "misses": 123904,
+        "maxsize": null,
+        "currsize": 123904
+      },
+      "rss_current_bytes": 510898176,
+      "rss_peak_bytes": 510337024,
+      "python_current_bytes": 135099799,
+      "python_peak_bytes": 135388940
+    },
+    {
+      "completed_topics": 124928,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 124928,
+        "maxsize": null,
+        "currsize": 124928
+      },
+      "async_cache": {
+        "hits": 125050,
+        "misses": 124928,
+        "maxsize": null,
+        "currsize": 124928
+      },
+      "rss_current_bytes": 513011712,
+      "rss_peak_bytes": 512565248,
+      "python_current_bytes": 136096334,
+      "python_peak_bytes": 136373976
+    },
+    {
+      "completed_topics": 125952,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 125952,
+        "maxsize": null,
+        "currsize": 125952
+      },
+      "async_cache": {
+        "hits": 126075,
+        "misses": 125952,
+        "maxsize": null,
+        "currsize": 125952
+      },
+      "rss_current_bytes": 515117056,
+      "rss_peak_bytes": 514662400,
+      "python_current_bytes": 137074722,
+      "python_peak_bytes": 137319933
+    },
+    {
+      "completed_topics": 126976,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 126976,
+        "maxsize": null,
+        "currsize": 126976
+      },
+      "async_cache": {
+        "hits": 127100,
+        "misses": 126976,
+        "maxsize": null,
+        "currsize": 126976
+      },
+      "rss_current_bytes": 517308416,
+      "rss_peak_bytes": 516890624,
+      "python_current_bytes": 138035908,
+      "python_peak_bytes": 138306603
+    },
+    {
+      "completed_topics": 128000,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 128000,
+        "maxsize": null,
+        "currsize": 128000
+      },
+      "async_cache": {
+        "hits": 128125,
+        "misses": 128000,
+        "maxsize": null,
+        "currsize": 128000
+      },
+      "rss_current_bytes": 519409664,
+      "rss_peak_bytes": 518987776,
+      "python_current_bytes": 139032443,
+      "python_peak_bytes": 139283885
+    },
+    {
+      "completed_topics": 129024,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 129024,
+        "maxsize": null,
+        "currsize": 129024
+      },
+      "async_cache": {
+        "hits": 129150,
+        "misses": 129024,
+        "maxsize": null,
+        "currsize": 129024
+      },
+      "rss_current_bytes": 521564160,
+      "rss_peak_bytes": 521216000,
+      "python_current_bytes": 139975678,
+      "python_peak_bytes": 140286693
+    },
+    {
+      "completed_topics": 130048,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 130048,
+        "maxsize": null,
+        "currsize": 130048
+      },
+      "async_cache": {
+        "hits": 130175,
+        "misses": 130048,
+        "maxsize": null,
+        "currsize": 130048
+      },
+      "rss_current_bytes": 523657216,
+      "rss_peak_bytes": 523313152,
+      "python_current_bytes": 140972127,
+      "python_peak_bytes": 141220727
+    },
+    {
+      "completed_topics": 131072,
+      "sync_cache": {
+        "hits": 0,
+        "misses": 131072,
+        "maxsize": null,
+        "currsize": 131072
+      },
+      "async_cache": {
+        "hits": 131200,
+        "misses": 131072,
+        "maxsize": null,
+        "currsize": 131072
+      },
+      "rss_current_bytes": 525787136,
+      "rss_peak_bytes": 525410304,
+      "python_current_bytes": 141950782,
+      "python_peak_bytes": 142201688
+    }
+  ],
+  "rss_current_bytes": 525787136,
+  "rss_peak_bytes": 525410304,
+  "python_current_bytes": 141951137,
+  "python_peak_bytes": 142201688
+}

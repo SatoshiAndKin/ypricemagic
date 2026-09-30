@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import os; chunk = b'x' * 65536; [(os.write(1, chunk)) for _ in range(9600)]"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789299935.749362,
+  "source_sha": "fbe5a919ad4e75f58f722953ac721e83c69a8751",
+  "source_revision": "worktree",
+  "source_archive_sha256": "28e94a609a5ff0b005c66d25cd5969e0287e29c533fc28fd14016c4384ee07c8",
+  "image": "sha256:4ccb5b8063f29ecbd755ac2760da6364ee81d9f630af1a1f855ecfb83e34ae1b",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 2.9797260761260986
+}

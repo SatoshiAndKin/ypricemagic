@@ -1,0 +1,14 @@
+{
+  "rss_peak_bytes": 527966208,
+  "python_current_bytes": null,
+  "python_peak_bytes": null,
+  "profiler": null,
+  "elapsed_seconds": 0.5481303289998323,
+  "batches": 128,
+  "batch_size": 32,
+  "rows": 4096,
+  "payload_bytes_per_row": 16384,
+  "persisted_sha256": "9a0553e7efe82e2120f797715abb6daf540bbf7f8220bd0fdbc55e828f3d385c",
+  "retained_sql_characters": 134349962,
+  "boundary": "bulk persistence only; no real RPC timing"
+}

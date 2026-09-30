@@ -3,14 +3,15 @@ from decimal import Decimal
 import a_sync
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import chain
-from typing_extensions import Self
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20, ContractBase
 from y.contracts import Contract
-from y.datatypes import Address, Block
+from y.datatypes import Address, Block, PriceResult
 from y.exceptions import UnsupportedNetwork
 from y.networks import Network
+from y.prices._candidates import derive_price
 from y.utils.cache import a_sync_ttl_cache
 
 registry = "0xA50d4E7D8946a7c90652339CDBd262c375d54D99"
@@ -18,10 +19,11 @@ registry = "0xA50d4E7D8946a7c90652339CDBd262c375d54D99"
 
 class DieselPool(ContractBase):
     @a_sync.aka.cached_property
-    async def contract(self) -> Contract:
+    async def contract(self) -> Contract:  # type: ignore[override]
+        # This legacy public property is dual-mode; ContractBase.contract is synchronous.
         return await Contract.coroutine(self.address)
 
-    __contract__: HiddenMethodDescriptor[Self, Contract]
+    __contract__: HiddenMethodDescriptor["DieselPool", Contract]
 
     @a_sync.aka.cached_property
     async def diesel_token(self) -> ERC20:
@@ -33,29 +35,39 @@ class DieselPool(ContractBase):
         ):  # NOTE: there could be better ways of doing this with hueristics, not sure yet
             return ERC20(self.address, asynchronous=self.asynchronous)
 
-    __diesel_token__: HiddenMethodDescriptor[Self, ERC20]
+    __diesel_token__: HiddenMethodDescriptor["DieselPool", ERC20]
 
     @a_sync.aka.cached_property
     async def underlying(self) -> ERC20:
         contract = await self.__contract__
         return ERC20(await contract.underlyingToken, asynchronous=self.asynchronous)
 
-    __underlying__: HiddenMethodDescriptor[Self, ERC20]
+    __underlying__: HiddenMethodDescriptor["DieselPool", ERC20]
 
     async def exchange_rate(self, block: Block) -> Decimal:
         # `__contract__` and `__underlying__` are both cached after the first call, so we will await them without gather
         pool = await self.__contract__
         underlying = await self.__underlying__
         scale = await underlying.__scale__
-        converted = await pool.fromDiesel.coroutine(scale, block_identifier=block)
+        converted: int = await pool.fromDiesel.coroutine(scale, block_identifier=block)
         return Decimal(converted) / scale
 
-    async def get_price(self, block: Block, skip_cache: bool = ENVS.SKIP_CACHE) -> Decimal:
+    @stuck_coro_debugger
+    async def get_price(
+        self, block: Block, skip_cache: bool = ENVS.SKIP_CACHE
+    ) -> PriceResult | None:
         # `self.__underlying__` is cached after the first call, so we will await these without gather
         underlying = await self.__underlying__
         exchange_rate = await self.exchange_rate(block, sync=False)
         und_price = await underlying.price(block, skip_cache=skip_cache, sync=False)
-        return Decimal(float(und_price)) * exchange_rate
+        if und_price is None:
+            return None
+        return derive_price(
+            (await self.__diesel_token__).address,
+            Decimal(float(und_price)) * exchange_rate,
+            f"Gearbox {self.address} underlying",
+            und_price,
+        )
 
 
 class Gearbox(a_sync.ASyncGenericBase):
@@ -97,14 +109,17 @@ class Gearbox(a_sync.ASyncGenericBase):
     async def is_diesel_token(self, token: Address) -> bool:
         return token in await self.diesel_tokens(sync=False)
 
+    @stuck_coro_debugger
     async def get_price(
         self, token: Address, block: Block, skip_cache: bool = ENVS.SKIP_CACHE
-    ) -> Decimal:
-        dtokens = await self.diesel_tokens()
-        return await dtokens[token].get_price(block, skip_cache=skip_cache, sync=False)
+    ) -> PriceResult | None:
+        dtokens = await self.diesel_tokens(sync=False)
+        return await dtokens[ERC20(token, asynchronous=self.asynchronous)].get_price(
+            block, skip_cache=skip_cache, sync=False
+        )
 
 
 try:
-    gearbox = Gearbox(asynchronous=True)
+    gearbox: Gearbox | set[str] = Gearbox(asynchronous=True)
 except:
     gearbox = set()

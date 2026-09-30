@@ -1,0 +1,98 @@
+[
+  {
+    "file": "command.json",
+    "private_original_sha256": "14f04d6ed569bffc4a9cb969f5e38e7fcb2e6f4e38757ace6c7aa72971180e37",
+    "published_sha256": "14f04d6ed569bffc4a9cb969f5e38e7fcb2e6f4e38757ace6c7aa72971180e37",
+    "private_values_removed": false
+  },
+  {
+    "file": "compiled-modules.json",
+    "private_original_sha256": "f7c8033a81021cf5121a9f6f3a025fdb0d1c7d49a38813efb2d30f529dfd33f2",
+    "published_sha256": "f7c8033a81021cf5121a9f6f3a025fdb0d1c7d49a38813efb2d30f529dfd33f2",
+    "private_values_removed": false
+  },
+  {
+    "file": "console.retention.json",
+    "private_original_sha256": "16dee2258b7aa45f4d97500ac9ddf5f37f9273747cf9937040d5e35a0db325f1",
+    "published_sha256": "16dee2258b7aa45f4d97500ac9ddf5f37f9273747cf9937040d5e35a0db325f1",
+    "private_values_removed": false
+  },
+  {
+    "file": "container-state.json",
+    "private_original_sha256": "9a01b1aa7047e9f292961b085ea898ea5d2b30e0ffc0eb2b322eac1fa96eab8f",
+    "published_sha256": "9a01b1aa7047e9f292961b085ea898ea5d2b30e0ffc0eb2b322eac1fa96eab8f",
+    "private_values_removed": false
+  },
+  {
+    "file": "dependencies-after.txt",
+    "private_original_sha256": "d3fbced3d1d477edd5999705ff25101297a71c5a51808afe772394de110aad95",
+    "published_sha256": "d3fbced3d1d477edd5999705ff25101297a71c5a51808afe772394de110aad95",
+    "private_values_removed": false
+  },
+  {
+    "file": "dependencies.txt",
+    "private_original_sha256": "36efe52a7e3ce9e8cbf3c6fef3dc1cddd3fe6bbb4a965aab2e7d47c38df72657",
+    "published_sha256": "36efe52a7e3ce9e8cbf3c6fef3dc1cddd3fe6bbb4a965aab2e7d47c38df72657",
+    "private_values_removed": false
+  },
+  {
+    "file": "environment.json",
+    "private_original_sha256": "c481a104899d561f17a1d567a67280eccf00fe98fa7d522643ddc081d1d31c65",
+    "published_sha256": "c481a104899d561f17a1d567a67280eccf00fe98fa7d522643ddc081d1d31c65",
+    "private_values_removed": false
+  },
+  {
+    "file": "image-build-dependencies.txt",
+    "private_original_sha256": "36efe52a7e3ce9e8cbf3c6fef3dc1cddd3fe6bbb4a965aab2e7d47c38df72657",
+    "published_sha256": "36efe52a7e3ce9e8cbf3c6fef3dc1cddd3fe6bbb4a965aab2e7d47c38df72657",
+    "private_values_removed": false
+  },
+  {
+    "file": "progress.json",
+    "private_original_sha256": "aa92f1d2d500dca6e614063d7649512a0ad08055ed5cacf14e220772c80c9e3a",
+    "published_sha256": "aa92f1d2d500dca6e614063d7649512a0ad08055ed5cacf14e220772c80c9e3a",
+    "private_values_removed": false
+  },
+  {
+    "file": "pytest-events.jsonl",
+    "private_original_sha256": "a416ebec688769523dd39be849ea2bde850e04d613036858702691335f517143",
+    "published_sha256": "a416ebec688769523dd39be849ea2bde850e04d613036858702691335f517143",
+    "private_values_removed": false
+  },
+  {
+    "file": "pytest-summary.json",
+    "private_original_sha256": "a1345321dd20e381038cf14c30c821e8dcf2bc771a8017f0330bcc140ec5a65f",
+    "published_sha256": "a1345321dd20e381038cf14c30c821e8dcf2bc771a8017f0330bcc140ec5a65f",
+    "private_values_removed": false
+  },
+  {
+    "file": "rpc-probe.json",
+    "private_original_sha256": "0ab2b6c45701183c5d3d6b6039c73985cb78ba05d53bea3274c7b9632565137c",
+    "published_sha256": "0ab2b6c45701183c5d3d6b6039c73985cb78ba05d53bea3274c7b9632565137c",
+    "private_values_removed": false
+  },
+  {
+    "file": "run.json",
+    "private_original_sha256": "87759e0ef564c24d91e0ffe86858c21384656b58e535f93b1ba087a70c4bfb1a",
+    "published_sha256": "87759e0ef564c24d91e0ffe86858c21384656b58e535f93b1ba087a70c4bfb1a",
+    "private_values_removed": false
+  },
+  {
+    "file": "runner-files.json",
+    "private_original_sha256": "bbf9030d5bcdf4801648efe08fc3bedbbfcfbf9b01a526ec0d5f545a437b7008",
+    "published_sha256": "bbf9030d5bcdf4801648efe08fc3bedbbfcfbf9b01a526ec0d5f545a437b7008",
+    "private_values_removed": false
+  },
+  {
+    "file": "scaling.json",
+    "private_original_sha256": "96315e0dbc4ffecdd5857f2ea83684b16eeee0ea21d4e827e577d046b9848a50",
+    "published_sha256": "96315e0dbc4ffecdd5857f2ea83684b16eeee0ea21d4e827e577d046b9848a50",
+    "private_values_removed": false
+  },
+  {
+    "file": "workload-files.json",
+    "private_original_sha256": "6d73219c5dc9f8577890db2b04d08b85e249fffe475c732b79063768277b0a00",
+    "published_sha256": "6d73219c5dc9f8577890db2b04d08b85e249fffe475c732b79063768277b0a00",
+    "private_values_removed": false
+  }
+]

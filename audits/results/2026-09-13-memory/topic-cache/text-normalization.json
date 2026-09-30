@@ -1,0 +1,60 @@
+{
+  "normalization": "Remove trailing whitespace from copied text reports. Preserve private original files; record scrubbed hashes before and after formatting.",
+  "files": [
+    {
+      "file": "development/initial-helper-types/mypy.txt",
+      "scrubbed_output_sha256": "94d355e968c8dd76cdb04a340b75662c2c00195c2bfb5ccbaa855e6b6fa777b8",
+      "normalized_output_sha256": "1f88084639294fe2de5e600f5e2212e8064e3a3fd114285d046c15cb80c43d5c"
+    },
+    {
+      "file": "controls/before/mypy.txt",
+      "scrubbed_output_sha256": "d224459b19ec7295ba14a823d327ec87f30a185a5832030de78e0bfc5f865744",
+      "normalized_output_sha256": "4c7f788ecaf6b059d73ad872641e519b163ae24b05839460868641c2ce798ab3"
+    },
+    {
+      "file": "development/topic-profile-final-before/mypy.txt",
+      "scrubbed_output_sha256": "50a1774e55bebd289d278255d552efbb99ab20e05c5a1f99d9d18eee56194d95",
+      "normalized_output_sha256": "3d756588ec1e32a94a9f4b2ce461ee8169040107c1115c983c3da12c0172862e"
+    },
+    {
+      "file": "development/topic-final-312/mypy.txt",
+      "scrubbed_output_sha256": "8c18b896fccd180e524fc622ec5a56e78d8f594097c760d4ba4e1926dad0881b",
+      "normalized_output_sha256": "347c6ba5df4004c13bec3f2838dd2ea55e837459f88db1ba3e3b0e2482bb8e06"
+    },
+    {
+      "file": "development/topic-final-311/mypy.txt",
+      "scrubbed_output_sha256": "a73bf32ffc197dd4d7e33c2b1dd39dd4c6d1d9a2bf75e30709f43531bc0ed7d8",
+      "normalized_output_sha256": "8689e6e1a32ec6a97a7edc5a9976c640e17c9c3bd156aa43dab2ac47ef4cb453"
+    },
+    {
+      "file": "development/topic-final-313/mypy.txt",
+      "scrubbed_output_sha256": "c26db1258b5cb79633efebf18ee1cbfc8f45b901e54126a03cb38d11621f7977",
+      "normalized_output_sha256": "72d48caf9aa63dd4213e43b00aa6b76d29583a18eb9c491f3f7569d40fad3ca1"
+    },
+    {
+      "file": "profile/before/mypy.txt",
+      "scrubbed_output_sha256": "97b44615492b7a2c70de75005ab43109fb50385f63050bb2bf56c2556ad0e9b9",
+      "normalized_output_sha256": "8d7e58501c235f01a1ef777c17b001d3eec693fa1721dd945012113e69bbec16"
+    },
+    {
+      "file": "profile/after/mypy.txt",
+      "scrubbed_output_sha256": "d53b27aa35bb8b016d0db12c09a6a9b7df14be859a2c31a447576ec06d11eaae",
+      "normalized_output_sha256": "53651d0593608bc165e4e51cef7724cd061eae819a062a2be1600b711657fa1f"
+    },
+    {
+      "file": "matrix/312/mypy.txt",
+      "scrubbed_output_sha256": "d53b27aa35bb8b016d0db12c09a6a9b7df14be859a2c31a447576ec06d11eaae",
+      "normalized_output_sha256": "53651d0593608bc165e4e51cef7724cd061eae819a062a2be1600b711657fa1f"
+    },
+    {
+      "file": "matrix/311/mypy.txt",
+      "scrubbed_output_sha256": "a1b5749e97cac50bb79fc931ff92168d509bf7fe07754ef298121ff1502cc2bb",
+      "normalized_output_sha256": "eac5d001ffafc159927698ac5b30430547e10990cd5844b0d11b91c568637d5f"
+    },
+    {
+      "file": "matrix/313/mypy.txt",
+      "scrubbed_output_sha256": "b9a0785c35cb4022fc5ca23efb03db27fa7a3d9b29a4cad533efba8d417ac63e",
+      "normalized_output_sha256": "989cadb8c3bac61866ade1276ec01a492da20d1c3e48173d1036564839d6a6c3"
+    }
+  ]
+}

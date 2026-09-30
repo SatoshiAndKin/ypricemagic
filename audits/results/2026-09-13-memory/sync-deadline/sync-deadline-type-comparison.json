@@ -1,0 +1,23 @@
+{
+  "3.12": {
+    "before": 1836,
+    "after": 1836,
+    "added": [],
+    "removed": [],
+    "dependencies_equal": true
+  },
+  "3.11": {
+    "before": 1836,
+    "after": 1836,
+    "added": [],
+    "removed": [],
+    "dependencies_equal": true
+  },
+  "3.13": {
+    "before": 1836,
+    "after": 1836,
+    "added": [],
+    "removed": [],
+    "dependencies_equal": true
+  }
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "command": [
+      "env/bin/python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/validation",
+      "-p",
+      "test_runner.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "output": "test_build_failures_preserve_evidence_and_stop_before_image_use (test_runner.BuildTests.test_build_failures_preserve_evidence_and_stop_before_image_use) ... ok\ntest_frozen_helpers_execute_recorded_content_after_checkout_edits (test_runner.BuildTests.test_frozen_helpers_execute_recorded_content_after_checkout_edits) ... ok\ntest_dependency_drift_and_missing_reports_prevent_comparison (test_runner.ComparisonTests.test_dependency_drift_and_missing_reports_prevent_comparison) ... ok\ntest_rotation_retains_exact_tail_and_discloses_expired_output (test_runner.LogTests.test_rotation_retains_exact_tail_and_discloses_expired_output) ... ok\ntest_single_file_rotation_and_invalid_limits (test_runner.LogTests.test_single_file_rotation_and_invalid_limits) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.201s\n\nOK\n"
+  },
+  {
+    "command": [
+      "env/bin/black",
+      "--check",
+      "tools/validation/run.py"
+    ],
+    "exit_code": 0,
+    "output": "All done! \u2728 \ud83c\udf70 \u2728\n1 file would be left unchanged.\n"
+  }
+]

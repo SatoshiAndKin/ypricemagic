@@ -1,0 +1,36 @@
+{
+  "complete": true,
+  "endpoint": "nuc_reth",
+  "runs": [
+    {
+      "python": "3.12.14 (main, Aug 31 2026, 23:48:05) [GCC 12.2.0]",
+      "image": "sha256:4ccb5b8063f29ecbd755ac2760da6364ee81d9f630af1a1f855ecfb83e34ae1b",
+      "source_sha": "850d7506d554209738cc2c471f82fbb951845d29",
+      "passed": 244,
+      "compiled_modules": 10,
+      "container_peak_bytes": 1232060416,
+      "elapsed_seconds": 59.80630707740784,
+      "full_private_report": "/private/tmp/yprice-memory/final-recovered-312-focused"
+    },
+    {
+      "python": "3.11.16 (main, Aug 31 2026, 23:54:26) [GCC 12.2.0]",
+      "image": "sha256:4b31ed032261dfed0725fbb2b24d22081d4454dcd34d77ec2dacace144b97491",
+      "source_sha": "850d7506d554209738cc2c471f82fbb951845d29",
+      "passed": 244,
+      "compiled_modules": 10,
+      "container_peak_bytes": 1176903680,
+      "elapsed_seconds": 63.86404895782471,
+      "full_private_report": "/private/tmp/yprice-memory/final-recovered-311-focused"
+    },
+    {
+      "python": "3.13.15 (main, Aug 31 2026, 23:46:42) [GCC 12.2.0]",
+      "image": "sha256:62791c7240a042923012b5e6f2d610822bd00d227a145c4f852568768f43b064",
+      "source_sha": "850d7506d554209738cc2c471f82fbb951845d29",
+      "passed": 244,
+      "compiled_modules": 10,
+      "container_peak_bytes": 1221279744,
+      "elapsed_seconds": 76.06233406066895,
+      "full_private_report": "/private/tmp/yprice-memory/final-recovered-313-focused"
+    }
+  ]
+}

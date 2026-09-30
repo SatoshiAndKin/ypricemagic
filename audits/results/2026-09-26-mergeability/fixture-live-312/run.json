@@ -1,0 +1,21 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; python -c 'import pytest,tomllib; from pathlib import Path; raise SystemExit(pytest.main(tomllib.loads(Path(\"pyproject.toml\").read_text())[\"tool\"][\"validation\"][\"chainlink_fixture_tests\"]))'"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": false,
+  "started_unix": 1790475266.656192,
+  "source_sha": "2172c19fb334f89022b8027eb360d40cc7a37d23",
+  "source_revision": "worktree",
+  "source_archive_sha256": "a8e9dcd99a21a4c12e5e6cd6a9f987ba48cfa5d865152e287f9c2fae2512b8da",
+  "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [
+    "pytest-summary.json"
+  ],
+  "elapsed_seconds": 119.28338980674744
+}

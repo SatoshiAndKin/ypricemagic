@@ -3,19 +3,16 @@ from logging import DEBUG, getLogger
 from typing import Any
 
 import a_sync
-from a_sync import cgather
 from brownie import ZERO_ADDRESS, chain
 from dank_mids.exceptions import Revert
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
-from y.constants import usdc
 from y.contracts import Contract, contract_creation_block_async
-from y.datatypes import Address, Block, Pool, UsdPrice
-from y.exceptions import ContractNotVerified, UnsupportedNetwork, continue_if_call_reverted
+from y.datatypes import Address, Block, Pool, PriceResult
+from y.exceptions import ContractNotVerified, UnsupportedNetwork
 from y.networks import Network
-from y.utils.raw_calls import _decimals
 
 logger = getLogger(__name__)
 
@@ -66,7 +63,7 @@ class UniswapV1(a_sync.ASyncGenericBase):
         """
         factory = await Contract.coroutine(self.factory)
         try:
-            exchange = await factory.getExchange.coroutine(token_address)
+            exchange: str = await factory.getExchange.coroutine(token_address)
         except Revert:
             return None
         if exchange == ZERO_ADDRESS:
@@ -79,54 +76,19 @@ class UniswapV1(a_sync.ASyncGenericBase):
         self,
         token_address: Address,
         block: Block | None,
-        ignore_pools: tuple[Pool, ...] = (),  # unused
+        ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,  # unused
-    ) -> UsdPrice | None:
-        """
-        Get the price of a token in USD.
+    ) -> PriceResult | None:
+        """Use the native exchange quote and historical USD conversion."""
+        from y.prices._routing import liquidity_price
 
-        Args:
-            token_address: The address of the token to get the price for.
-            block: The block number at which to get the price.
-            ignore_pools: Unused parameter.
-            skip_cache: Unused parameter.
-
-        Returns:
-            The price of the token in USD, or None if the price cannot be determined.
-
-        Examples:
-            >>> uniswap_v1 = UniswapV1()
-            >>> price = await uniswap_v1.get_price("0xTokenAddress", 12345678)
-            >>> print(price)
-            1.23
-
-        See Also:
-            - :class:`~y.datatypes.UsdPrice`
-        """
-        exchange, usdc_exchange, decimals = await cgather(
-            self.get_exchange(token_address, sync=False),
-            self.get_exchange(usdc, sync=False),
-            _decimals(token_address, block, sync=False),
+        return await liquidity_price(
+            str(token_address),
+            block,
+            ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
+            first_markets=("Uniswap V1",),
         )
-        if exchange is None:
-            return None
-
-        try:
-            eth_bought = await exchange.getTokenToEthInputPrice.coroutine(
-                10**decimals, block_identifier=block
-            )
-            usdc_bought = (
-                await usdc_exchange.getEthToTokenInputPrice.coroutine(
-                    eth_bought, block_identifier=block
-                )
-                / 1e6
-            )
-            fees = 0.997**2
-            return UsdPrice(usdc_bought / fees)
-        except ValueError as e:
-            if "invalid jump destination" in str(e):
-                return None
-            continue_if_call_reverted(e)
 
     @stuck_coro_debugger
     @a_sync.a_sync(ram_cache_maxsize=100_000, ram_cache_ttl=60 * 60)
@@ -170,7 +132,9 @@ class UniswapV1(a_sync.ASyncGenericBase):
             if debug_logs_enabled:
                 log_debug("block %s prior to %s deploy block", block, exchange)
             return 0
-        liquidity = await ERC20(token_address, asynchronous=True).balance_of(exchange, block)
+        liquidity = await ERC20(token_address, asynchronous=True).balance_of(
+            exchange, block, sync=False
+        )
         if debug_logs_enabled:
             log_debug(
                 "Uniswap v1 liquidity for %s %s at %s is %s",

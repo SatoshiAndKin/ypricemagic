@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m mypy > /reports/mypy.txt 2>&1"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 35.02520230598748,
+  "peak_sampled_process_rss_bytes": 525017088,
+  "cgroup_before": {
+    "memory.current": "8896512",
+    "memory.peak": "8896512",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "146272256",
+    "memory.peak": "644587520",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

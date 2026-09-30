@@ -1,0 +1,34 @@
+{
+  "audit_source_archive_sha256": "682ccd70b2e6374ccbd18304e54010f2ae39a8d9244daca02f84c71746ab748a",
+  "current_source_archive_sha256": "2d9ceec58ea71c2847886f7e484faaeda0d12662464d8d8f439d1f264ad7ae27",
+  "audit_production_python_files_checked": 130,
+  "changes": [
+    {
+      "path": "y/exceptions.py",
+      "audit_sha256": "e5c8378ad57ae588d382ca7262a6e2b7408768d3a485df78344c7cb3c13721bd",
+      "current_sha256": "17b588b46d07d59ecdb8f723915f8599c3c13abf6626103c43f7b39bb98a5235"
+    },
+    {
+      "path": "y/prices/_markets.py",
+      "audit_sha256": "7f7d0c811755a0e5db0320af25ccf7cde5d7f2d398a4f2a1dc3eb4e3cde474ed",
+      "current_sha256": "108ccdb206c37a804c7ee52e517ff01438b578d45a6a3c315d216ba39202a12f"
+    },
+    {
+      "path": "y/prices/_routing.py",
+      "audit_sha256": "f5ed5e6c257c8eba4cbede5400e4fb99367b3d77b5479816ae3507c091d9aacb",
+      "current_sha256": "02e3723ffc3314fcd1833f7234265a946a4cede3a087af49af13ff8dfaa4d8e7"
+    },
+    {
+      "path": "y/prices/utils/buckets.py",
+      "audit_sha256": "745dc12be2eef72e20d6eb1887e226a60304a81b85a6df9588c0c4483f8ed139",
+      "current_sha256": "138d7fe4155aade04d052e8d4c701752b7b38fb2ba41f4fcf7f094a002851702"
+    }
+  ],
+  "later_changes": [
+    "Recognize exact InvalidJump contract execution failures.",
+    "Apply existing first-market restrictions before discovery and partition restricted market caches.",
+    "Treat unavailable V1 quotes through optional_read before integer conversion.",
+    "Remove the unnecessary sync option from the cached-bucket Chainlink feed check."
+  ],
+  "limit": "The audit is an earlier-source run, not an exact final-source audit. Later repairs are separately covered by the final focused regressions, native checks and required full-suite snapshot."
+}

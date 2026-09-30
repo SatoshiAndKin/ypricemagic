@@ -1,0 +1,7 @@
+{
+  "complete": false,
+  "cause": "Validation reporter assumed dank_mids.instances existed while the import-guard test used a stub module",
+  "error": "AttributeError: module dank_mids has no attribute instances",
+  "pytest_summary_missing": true,
+  "action": "Preserve this run as incomplete and rerun with the corrected reporter"
+}

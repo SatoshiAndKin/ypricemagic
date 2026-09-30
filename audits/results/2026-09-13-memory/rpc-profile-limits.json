@@ -1,0 +1,23 @@
+{
+  "docker_context": "colima-rpc-tune",
+  "effective_limits": {
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512"
+  },
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-13T07:04:39.912075502Z",
+    "FinishedAt": "2026-09-13T07:04:39.979905376Z"
+  },
+  "source": "small containment probe; no benchmark execution claimed"
+}

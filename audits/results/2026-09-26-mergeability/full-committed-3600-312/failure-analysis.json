@@ -1,0 +1,663 @@
+{
+  "source_archive_sha256": "efe6bf996d0e0bb62a42c07ab2c0ad291c801c28040b2befb05725a48d4251d2",
+  "complete_test_report": true,
+  "full_baseline_available": false,
+  "comparison_limit": "Prior completed run is a different repaired-source snapshot and runtime setting, not a pristine baseline. Dynamic block test IDs can differ. This does not prove source failure equivalence.",
+  "counts": {
+    "remaining assertion or contract/pricing failure": 45,
+    "legacy aggregator test probe repaired after snapshot": 5,
+    "V3 unavailable or native quote differs from alternate price": 16,
+    "configured deadline": 2,
+    "provider historical-state error": 4
+  },
+  "failures": [
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3-5761012]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.NonStandardERC20: \n        Unable to fetch `totalSupply` for 0x57Ab1E02fEE23774580C119740129eAC7081e9D3 on Mainnet\n        If the contract is verified, please check to see if it has a strangely named\n        `totalSupply` method and create an issue on https://github.com/BobTheBuidler/ypricemagic\n        with the contract address and correct method name so we can keep things going smoothly :)",
+      "duration": 14.064510583877563,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b]",
+      "phase": "call",
+      "category": "legacy aggregator test probe repaired after snapshot",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted",
+      "duration": 5.050321102142334,
+      "prior_completed_probe_outcome": "skipped",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x1776e1F26f98b1A5dF9cD347953a26dd3Cb46671]",
+      "phase": "call",
+      "category": "legacy aggregator test probe repaired after snapshot",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted",
+      "duration": 4.8716654777526855,
+      "prior_completed_probe_outcome": "skipped",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x408e41876cCCDC0F92210600ef50372656052a38]",
+      "phase": "call",
+      "category": "legacy aggregator test probe repaired after snapshot",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted",
+      "duration": 10.374191522598267,
+      "prior_completed_probe_outcome": "skipped",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x00000000000000000000000000000000000003Da]",
+      "phase": "call",
+      "category": "legacy aggregator test probe repaired after snapshot",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted",
+      "duration": 13.114742040634155,
+      "prior_completed_probe_outcome": "skipped",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0xe1aFe1Fd76Fd88f78cBf599ea1846231B8bA3B6B]",
+      "phase": "call",
+      "category": "legacy aggregator test probe repaired after snapshot",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted",
+      "duration": 14.407686948776245,
+      "prior_completed_probe_outcome": "skipped",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xbA38029806AbE4B45D5273098137DDb52dA8e62F]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "ZeroDivisionError: float division by zero",
+      "duration": 1166.7407689094543,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0xd2EF15af2649CC46e3E23B96563a3d44ef5E5A06]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "ZeroDivisionError: float division by zero",
+      "duration": 1167.6938874721527,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[23052048]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found",
+      "duration": 1181.8227999210358,
+      "prior_completed_probe_outcome": "no identical test ID",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[20039036]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found",
+      "duration": 1181.913539648056,
+      "prior_completed_probe_outcome": "no identical test ID",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[18532530]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found",
+      "duration": 1181.9124886989594,
+      "prior_completed_probe_outcome": "no identical test ID",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[21545542]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found",
+      "duration": 1181.9094350337982,
+      "prior_completed_probe_outcome": "no identical test ID",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[24558554]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found",
+      "duration": 1181.8179194927216,
+      "prior_completed_probe_outcome": "no identical test ID",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xD533a949740bb3306d119CC777fa900bA034cd521]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert 0.2691348483528 == 0.34601267 \u00b1 1.7e-02\n  +0.2691348483528\n  -0.34601267 \u00b1 1.7e-02",
+      "duration": 1301.6528706550598,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xD533A949740BB3306D119CC777FA900BA034CD52]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert 0.2691348483528 == 0.34601267 \u00b1 1.7e-02\n  +0.2691348483528\n  -0.34601267 \u00b1 1.7e-02",
+      "duration": 1302.9061453342438,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xD533a949740bb3306d119CC777fa900bA034cd520]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert 0.2691348483528 == 0.34601267 \u00b1 1.7e-02\n  +0.2691348483528\n  -0.34601267 \u00b1 1.7e-02",
+      "duration": 1302.9343948364258,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xd533a949740bb3306d119cc777fa900ba034cd52]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert 0.2691348483528 == 0.34601267 \u00b1 1.7e-02\n  +0.2691348483528\n  -0.34601267 \u00b1 1.7e-02",
+      "duration": 1303.056517124176,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert 1938.8735751892727 == 2479.02260748 \u00b1 1.2e+02\n  +1938.8735751892727\n  -2479.02260748 \u00b1 1.2e+02",
+      "duration": 24.05643105506897,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e0]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert 1938.8735751892727 == 2479.02260748 \u00b1 1.2e+02\n  +1938.8735751892727\n  -2479.02260748 \u00b1 1.2e+02",
+      "duration": 19.736818552017212,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0BC529C00C6401AEF6D220BE8C6EA1667F6AD93E]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert 1938.8735751892727 == 2479.02260748 \u00b1 1.2e+02\n  +1938.8735751892727\n  -2479.02260748 \u00b1 1.2e+02",
+      "duration": 19.73720359802246,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e1]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert 1938.8735751892727 == 2479.02260748 \u00b1 1.2e+02\n  +1938.8735751892727\n  -2479.02260748 \u00b1 1.2e+02",
+      "duration": 19.680871963500977,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_wrapped_atoken_v3",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "assert False",
+      "duration": 3.338289976119995,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_wrapped_atoken_v2",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "assert PriceResult(p...ath=[3 steps]) == 1.112026\n  +PriceResult(price=$1.11280275, path=[3 steps])\n  -1.112026",
+      "duration": 9.260841608047485,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-8938158]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet DAI 0x6B175474E89094C44Da98b954EedeAC495271d0F at block 8938158",
+      "duration": 3167.20831155777,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3-10837025]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet 0x57Ab1E02fEE23774580C119740129eAC7081e9D3 0x57Ab1E02fEE23774580C119740129eAC7081e9D3 at block 10837025",
+      "duration": 3167.561850786209,
+      "prior_completed_probe_outcome": "no identical test ID",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-4729568]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet WETH 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 at block 4729568",
+      "duration": 3167.7972621917725,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-4630855]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet MKR 0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2 at block 4630855",
+      "duration": 3169.7670226097107,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-4644748]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet USDT 0xdAC17F958D2ee523a2206206994597C13D831ec7 at block 4644748",
+      "duration": 3169.9343757629395,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-10063442]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet WETH 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 at block 10063442",
+      "duration": 3170.0265731811523,
+      "prior_completed_probe_outcome": "no identical test ID",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-6776284]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet WBTC 0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599 at block 6776284",
+      "duration": 3170.0872418880463,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[11000000]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "ValueError: ('0xe1aFe1Fd76Fd88f78cBf599ea1846231B8bA3B6B', 'No data was returned - the call likely reverted')",
+      "duration": 2244.362601995468,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-9989407]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet MKR 0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2 at block 9989407",
+      "duration": 3178.996220588684,
+      "prior_completed_probe_outcome": "no identical test ID",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[14013012]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "ValueError: ('0xCa5DFDABBfFD58cfD49A9f78Ca52eC8e0591a3C5', 'PriceError while fetching Mainnet G-UNI 0xD2eeC91055F07fE24C9cCB25828ecfEFd4be0c41 at block 14013012')",
+      "duration": 2491.3635215759277,
+      "prior_completed_probe_outcome": "no identical test ID",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-15931958]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet PYUSD 0x6c3ea9036406852006290770BEdFcAbA0e23A0e8 at block 15931958",
+      "duration": 3417.620037317276,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[15519518]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found",
+      "duration": 2597.1999855041504,
+      "prior_completed_probe_outcome": "no identical test ID",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-17708470]",
+      "phase": "call",
+      "category": "configured deadline",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (3600.00 s)",
+      "duration": 3599.982344865799,
+      "prior_completed_probe_outcome": "passed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-18465234]",
+      "phase": "call",
+      "category": "configured deadline",
+      "error_message": "asyncio.exceptions.CancelledError: Test took too long (3600.00 s)",
+      "duration": 3600.0583758354187,
+      "prior_completed_probe_outcome": "no identical test ID",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc21]",
+      "phase": "call",
+      "category": "provider historical-state error",
+      "error_message": "ValueError: {'code': -32000, 'message': 'historical state 2100297066dd7296ced18a869299eec96c0760090923e802d51a78ddddd29a85 is not available', 'dankmids_added_context': Request(method='eth_getCode', id=815333, params=('0xDa621780dE3B57b27FDe8dcF7a20Bc4e7c1BE094', {'blockHash': '0x2dae8321da4e0a72fc39cdf86aa01d48b9c4d47a2ea996f78dd28ab8e16fa4ed', 'requireCanonical': True}))}",
+      "duration": 1531.14444565773,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02AAA39B223FE8D0A0E5C4F27EAD9083C756CC2]",
+      "phase": "call",
+      "category": "provider historical-state error",
+      "error_message": "ValueError: {'code': -32000, 'message': 'historical state 2100297066dd7296ced18a869299eec96c0760090923e802d51a78ddddd29a85 is not available', 'dankmids_added_context': Request(method='eth_getCode', id=815333, params=('0xDa621780dE3B57b27FDe8dcF7a20Bc4e7c1BE094', {'blockHash': '0x2dae8321da4e0a72fc39cdf86aa01d48b9c4d47a2ea996f78dd28ab8e16fa4ed', 'requireCanonical': True}))}",
+      "duration": 1531.1444914340973,
+      "prior_completed_probe_outcome": "passed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc20]",
+      "phase": "call",
+      "category": "provider historical-state error",
+      "error_message": "ValueError: {'code': -32000, 'message': 'historical state 2100297066dd7296ced18a869299eec96c0760090923e802d51a78ddddd29a85 is not available', 'dankmids_added_context': Request(method='eth_getCode', id=815333, params=('0xDa621780dE3B57b27FDe8dcF7a20Bc4e7c1BE094', {'blockHash': '0x2dae8321da4e0a72fc39cdf86aa01d48b9c4d47a2ea996f78dd28ab8e16fa4ed', 'requireCanonical': True}))}",
+      "duration": 1531.144453048706,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2]",
+      "phase": "call",
+      "category": "provider historical-state error",
+      "error_message": "ValueError: {'code': -32000, 'message': 'historical state 2100297066dd7296ced18a869299eec96c0760090923e802d51a78ddddd29a85 is not available', 'dankmids_added_context': Request(method='eth_getCode', id=815333, params=('0xDa621780dE3B57b27FDe8dcF7a20Bc4e7c1BE094', {'blockHash': '0x2dae8321da4e0a72fc39cdf86aa01d48b9c4d47a2ea996f78dd28ab8e16fa4ed', 'requireCanonical': True}))}",
+      "duration": 1532.5079627037048,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[17026024]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found",
+      "duration": 3045.294839143753,
+      "prior_completed_probe_outcome": "no identical test ID",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x0A6172fb19E85DBae18898eA2f7a596B5681f1eE]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet ATOM 0xEa5A82B35244d9e5E48781F00b11B14E627D2951 at block 26065260",
+      "duration": 1994.208902835846,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xCa5DFDABBfFD58cfD49A9f78Ca52eC8e0591a3C5]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet G-UNI 0xD2eeC91055F07fE24C9cCB25828ecfEFd4be0c41 at block 26065260",
+      "duration": 1997.5374047756195,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xec67005c4E498Ec7f55E092bd1d35cbC47C918920]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert 0.010327287070496169 == 1.5403360453397585 \u00b1 7.7e-02\n  +0.010327287070496169\n  -1.5403360453397585 \u00b1 7.7e-02",
+      "duration": 2246.7999289035797,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xec67005c4E498Ec7f55E092bd1d35cbC47C918921]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert 0.010327287070496169 == 1.5403360453397585 \u00b1 7.7e-02\n  +0.010327287070496169\n  -1.5403360453397585 \u00b1 7.7e-02",
+      "duration": 2246.895434856415,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xec67005c4e498ec7f55e092bd1d35cbc47c91892]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert 0.010327287070496169 == 1.5403360453397585 \u00b1 7.7e-02\n  +0.010327287070496169\n  -1.5403360453397585 \u00b1 7.7e-02",
+      "duration": 2252.5796427726746,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xEC67005C4E498EC7F55E092BD1D35CBC47C91892]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert 0.010327287070496169 == 1.5403360453397585 \u00b1 7.7e-02\n  +0.010327287070496169\n  -1.5403360453397585 \u00b1 7.7e-02",
+      "duration": 2252.522656440735,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f551]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert (None is not None)",
+      "duration": 3348.996793985367,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xBA11D00C5F74255F56A5E366F4F77F5A186D7F55]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert (None is not None)",
+      "duration": 3348.99680519104,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xBA11D00c5f74255f56a5E366F4F77f5A186d7f550]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert (None is not None)",
+      "duration": 3348.9968526363373,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xba11d00c5f74255f56a5e366f4f77f5a186d7f55]",
+      "phase": "call",
+      "category": "V3 unavailable or native quote differs from alternate price",
+      "error_message": "assert (None is not None)",
+      "duration": 3349.1181106567383,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/dex/test_balancer.py::test_balancer_v2_token_price",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "assert PriceResult(p...ath=[7 steps]) == 12.522495269157522\n  +PriceResult(price=$12.33038229, path=[7 steps])\n  -12.522495269157522",
+      "duration": 3398.2695965766907,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/test_yearn.py::test_share_price_yearn_v1",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "AssertionError: assert Decimal('1.11...132096753979') == 1.111974132096754\n  +Decimal('1.111974132096753979')\n  -1.111974132096754",
+      "duration": 0.03988551700604148,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/test_yearn.py::test_share_price_yearn_v2",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "AssertionError: assert Decimal('1.096431') == 1.096431\n  +Decimal('1.096431')\n  -1.096431",
+      "duration": 0.051693583009182476,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_adai",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "a_sync.exceptions.SyncModeInAsyncContextError: (('(\"The event loop is already running, which means you\\'re trying to use an `ASyncFunction` synchronously from within an async context.\\\\nCheck your traceback to determine which, then try calling asynchronously instead with one of the following kwargs:\\\\n{\\'asynchronous\\', \\'sync\\'}\", \\'wrapped:<ASyncBoundMethodSyncDefault for function y.prices.lending.aave.AaveMarketV1.get_reserve_data bound to 0x398eC7346DcD622eDc5ae82352F02bE94C62d119>\\')',), {'property': <ASyncCachedPropertyDescriptor for <function AaveMarketV1.atokens at 0xe4aaaa2651c0>>, 'instance': <AaveMarketV1 '0x398eC7346DcD622eDc5ae82352F02bE94C62d119'>})",
+      "duration": 0.009646429010899737,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_AaveRegistry",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "a_sync.exceptions.SyncModeInAsyncContextError: (('(\"The event loop is already running, which means you\\'re trying to use an `ASyncFunction` synchronously from within an async context.\\\\nCheck your traceback to determine which, then try calling asynchronously instead with one of the following kwargs:\\\\n{\\'asynchronous\\', \\'sync\\'}\", \\'wrapped:<ASyncBoundMethodSyncDefault for function y.prices.lending.aave.AaveMarketV1.get_reserve_data bound to 0x398eC7346DcD622eDc5ae82352F02bE94C62d119>\\')',), {'property': <ASyncCachedPropertyDescriptor for <function AaveMarketV1.atokens at 0xe4aaaa2651c0>>, 'instance': <AaveMarketV1 '0x398eC7346DcD622eDc5ae82352F02bE94C62d119'>})",
+      "duration": 0.010445308987982571,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": false
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x6C8c6b02E7b2BE14d4fA6022Dfd6d75921D90E4E]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet BAT 0x0D8775F648430679A709E98d2b0Cb6250d2887EF at block 7720735",
+      "duration": 1.9438513640052406,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet DAI 0x6B175474E89094C44Da98b954EedeAC495271d0F at block 8993575",
+      "duration": 1.6163706010120222,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet WETH 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 at block 7720758",
+      "duration": 1.3260216310009127,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x158079Ee67Fce2f58472A96584A73C7Ab9AC95c1]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet REP 0x1985365e9f78359a9B6AD760e32412f4a445E862 at block 7720755",
+      "duration": 1.9091773690015543,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0xC11b1268C1A384e55C48c2391d8d480264A3A7F4]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet WBTC 0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599 at block 8173813",
+      "duration": 1.7890396839939058,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0xB3319f5D18Bc0D84dD1b4825Dcde5d5f7266d407]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet ZRX 0xE41d2489571d322189246DaFA5ebDe1F4699F498 at block 7720733",
+      "duration": 1.9231420190044446,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0xF5DCe57282A584D2746FaF1593d3121Fcac444dC]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet DAI 0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359 at block 7720752",
+      "duration": 2.079674394990434,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x892B14321a4FCba80669aE30Bd0cd99a7ECF6aC0]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "web3.exceptions.ContractLogicError: execution reverted: SafeMath: subtraction underflow",
+      "duration": 1.4764354849903611,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x7ea9C63E216D5565c3940A2B3d150e59C2907Db3]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet BBTC 0x9BE89D2a4cd102D8Fecc6BF9dA793be995C22541 at block 11212982",
+      "duration": 1.4932184899953427,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0xd5103AfcD0B3fA865997Ef2984C66742c51b2a8b]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet HFIL 0x9AFb950948c2370975fb91a441F36FDC02737cD4 at block 11297588",
+      "duration": 0.9775776850001421,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x2A867fd776B83e1bd4e13C6611AFd2F6af07EA6D]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.CantFetchParam: underlying for 0xc4E15973E6fF2A35cC804c2CF9D2a1b817a8b40F",
+      "duration": 4.7081956890033325,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x00e5c0774A5F065c285068170b20393925C84BF3]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet ibEUR 0x96E61422b6A9bA0e068B6c5ADd4fFaBC6a4aae27 at block 12867424",
+      "duration": 1.761190085002454,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_sync[0x1dD7950c266fB1be96180a8FDb0591F70200E018]",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet OUSG 0x1B19C19393e2d034D8Ff31ff34c81252FcBbee92 at block 16531121",
+      "duration": 6.811221262003528,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/stable_swap/test_curve.py::test_curve",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "assert PriceResult(p...ath=[1 steps]) == 1.0029303734731028\n  +PriceResult(price=$1.00293647, path=[1 steps])\n  -1.0029303734731028",
+      "duration": 7.789157609004178,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    },
+    {
+      "test": "tests/prices/tokenized_fund/test_piedao.py::test_piedao_get_price",
+      "phase": "call",
+      "category": "remaining assertion or contract/pricing failure",
+      "error_message": "IndexError: list index out of range",
+      "duration": 0.21909005699853878,
+      "prior_completed_probe_outcome": "failed",
+      "same_error_as_prior_completed_probe": true
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "case": "test_bulk_writes_do_not_retain_each_payload_in_sql_cache",
+    "status": "passed"
+  },
+  {
+    "case": "test_bulk_preserves_values_and_ignores_duplicate_keys",
+    "status": "passed"
+  },
+  {
+    "case": "test_failed_bulk_rolls_back_all_rows_and_allows_reuse",
+    "status": "passed"
+  },
+  {
+    "case": "test_empty_bulk_preserves_existing_rows",
+    "status": "passed"
+  }
+]

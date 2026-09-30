@@ -4,7 +4,7 @@ from enum import IntEnum
 from functools import cached_property
 from itertools import filterfalse
 from logging import DEBUG, getLogger
-from typing import Any, TypeVar
+from typing import Any, Generic, NoReturn, TypeVar, cast
 
 import a_sync
 import brownie
@@ -16,15 +16,24 @@ from brownie.exceptions import ContractNotFound, EventLookupError
 from brownie.network.event import _EventItem
 from dank_mids.exceptions import Revert
 from eth_abi.exceptions import InsufficientDataBytes, InvalidPointer
-from typing_extensions import Self
+from eth_typing import ABIElement
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20, WeiBalance, _EventsLoader, _Loader
 from y.constants import CHAINID, CONNECTED_TO_MAINNET
 from y.contracts import Contract, contract_creation_block_async
-from y.datatypes import Address, AddressOrContract, AnyAddressType, Block, Pool, UsdPrice, UsdValue
+from y.datatypes import (
+    Address,
+    AddressOrContract,
+    AnyAddressType,
+    Block,
+    Pool,
+    PriceResult,
+    UsdValue,
+)
 from y.exceptions import (
     ContractNotVerified,
     MessedUpBrownieContract,
@@ -35,7 +44,6 @@ from y.exceptions import (
 )
 from y.interfaces.curve.CurveRegistry import CURVE_REGISTRY_ABI
 from y.networks import Network
-from y.utils import a_sync_ttl_cache
 from y.utils.events import ProcessedEvents
 from y.utils.multicall import multicall_same_func_same_contract_different_inputs
 from y.utils.raw_calls import raw_call
@@ -50,11 +58,13 @@ _startup_logger_debug = startup_logger.debug
 ADDRESS_PROVIDER = "0x0000000022D53366457F9d5E68Ec105046FC4383"
 "Curve's address provider contract on all chains."
 
-DED_POOLS = {
-    Network.Mainnet: {
-        "0x8301AE4fc9c624d1D396cbDAa1ed877821D7C511": "0xEd4064f376cB8d68F770FB1Ff088a3d0F3FF5c4d",
-    },
-}.get(CHAINID, {})
+DED_POOLS = dict[int, dict[str, str]](
+    {
+        Network.Mainnet: {
+            "0x8301AE4fc9c624d1D396cbDAa1ed877821D7C511": "0xEd4064f376cB8d68F770FB1Ff088a3d0F3FF5c4d",
+        },
+    }
+).get(CHAINID, {})
 "The on chain registry no longer returns the lp token address for these dead pools, so we need to provide it manually."
 
 
@@ -90,43 +100,45 @@ _LT = TypeVar("_LT", bound=_Loader)
 
 
 class _CurveEventsLoader(_EventsLoader):
-    _events: "CurveEvents"
+    _events: "CurveEvents[Any]"
 
 
-class CurveEvents(ProcessedEvents[_EventItem]):
+class CurveEvents(ProcessedEvents[_EventItem[Any]], Generic[_LT]):
     __slots__ = ("_base",)
 
-    def __init__(self, base: _LT):
+    def __init__(self, base: _LT) -> None:
         super().__init__(addresses=base.address)
         self._base = base
 
 
-class AddressProviderEvents(CurveEvents):
+class AddressProviderEvents(CurveEvents["AddressProvider"]):
     @property
     def provider(self) -> "AddressProvider":
         return self._base
 
-    def _process_event(self, event) -> None:
+    def _process_event(self, event: _EventItem[Any]) -> _EventItem[Any]:
         if event.name == "NewAddressIdentifier" and event["addr"] != ZERO_ADDRESS:
             self.provider.identifiers[Ids(event["id"])].append(event["addr"])
         elif event.name == "AddressModified" and event["new_address"] != ZERO_ADDRESS:
             self.provider.identifiers[Ids(event["id"])].append(event["new_address"])
-        _startup_logger_debug("%s loaded event %s at block %s", self, event, event.block_number)
+        _startup_logger_debug(
+            "%s loaded event %s at block %s", self, event, getattr(event, "block_number")
+        )
         return event
 
 
-class RegistryEvents(CurveEvents):
+class RegistryEvents(CurveEvents["Registry"]):
     __slots__ = ("_tasks",)
 
-    def __init__(self, base: _LT):
+    def __init__(self, base: "Registry") -> None:
         super().__init__(base)
-        self._tasks: list["Task[EthAddress]"] = []
+        self._tasks: list[Task[None]] = []
 
     @property
     def registry(self) -> "Registry":
         return self._base
 
-    def _process_event(self, event: _EventItem) -> None:
+    def _process_event(self, event: _EventItem[Any]) -> _EventItem[Any]:
         if event.name == "PoolAdded":
             # TODO async this
             try:
@@ -139,19 +151,23 @@ class RegistryEvents(CurveEvents):
                     name=f"Registry._add_pool for pool {pool}",
                 )
             )
-            curve.registries[event.address].add(pool)
+            cast(CurveRegistry, curve).registries[cast(Address, event.address)].add(pool)
         elif event.name == "PoolRemoved":
-            curve.registries[event.address].discard(event["pool"])
-        _startup_logger_debug("%s loaded event %s at block %s", self, event, event.block_number)
+            cast(CurveRegistry, curve).registries[cast(Address, event.address)].discard(
+                event["pool"]
+            )
+        _startup_logger_debug(
+            "%s loaded event %s at block %s", self, event, getattr(event, "block_number")
+        )
         return event
 
-    async def _add_pool(self, pool: Address) -> EthAddress:
+    async def _add_pool(self, pool: Address) -> None:
         if pool in DED_POOLS:
             # The on chain registry no longer returns the lp token address for these dead pools, so we need to provide it manually.
-            lp_token = DED_POOLS[pool]
+            lp_token = DED_POOLS[str(pool)]
         else:
             lp_token = await self.registry.contract.get_lp_token.coroutine(pool)
-        curve.token_to_pool[lp_token] = pool
+        cast(CurveRegistry, curve).token_to_pool[lp_token] = pool
 
     async def _set_lock(self, block: int) -> None:
         await igather(self._tasks)
@@ -165,14 +181,15 @@ class AddressProvider(_CurveEventsLoader):
         "_events",
     )
 
-    def __init__(self, address: Address, *, asynchronous: bool = False):
-        super().__init__(address, asynchronous=asynchronous)
-        self.identifiers = defaultdict(list)
+    def __init__(self, address: Address, *, asynchronous: bool = False) -> None:
+        super().__init__(str(address), asynchronous=asynchronous)
+        self.identifiers: defaultdict[int, list[Address]] = defaultdict(list)
         self._events = AddressProviderEvents(self)
 
+    @stuck_coro_debugger
     async def get_registry(self) -> EthAddress:
         contract = await Contract.coroutine(self.address)
-        return await contract.get_registry
+        return await contract.get_registry.coroutine()
 
     async def _load_factories(self) -> None:
         # factory events are quite useless, so we use a different method
@@ -186,15 +203,15 @@ class AddressProvider(_CurveEventsLoader):
 
         async def _load_metapool_factories() -> None:
             if metapool_factories := [
-                Factory(factory, asynchronous=self.asynchronous)
+                Factory(str(factory), asynchronous=self.asynchronous)
                 for factories in map(self.identifiers.get, _METAPOOL_FACTORY_IDS)
                 for factory in factories or ()
             ]:
                 async for factory, pool_list in a_sync.map(Factory.read_pools, metapool_factories):
                     for pool in pool_list:
                         # for metpool factories pool is the same as lp token
-                        curve.token_to_pool[pool] = pool
-                        curve.factories[factory].add(pool)
+                        cast(CurveRegistry, curve).token_to_pool[pool] = pool
+                        cast(CurveRegistry, curve).factories[factory].add(pool)
 
         async def _load_cryptopool_factories() -> None:
             # if there are factories that haven't yet been added to the on-chain address provider,
@@ -213,8 +230,10 @@ class AddressProvider(_CurveEventsLoader):
 class Registry(_CurveEventsLoader):
     __slots__ = "_events"
 
-    def __init__(self, address: Address, curve: "CurveRegistry", *, asynchronous: bool = False):
-        super().__init__(address, asynchronous=asynchronous)
+    def __init__(
+        self, address: Address, curve: "CurveRegistry", *, asynchronous: bool = False
+    ) -> None:
+        super().__init__(str(address), asynchronous=asynchronous)
         self._events = RegistryEvents(self)
 
 
@@ -233,12 +252,14 @@ class Factory(_Loader):
             await Contract.coroutine(self.address)
         except ContractNotVerified:
             if CHAINID == Network.xDai:
-                Contract.from_abi("Vyper_contract", self.address, CURVE_REGISTRY_ABI)
+                Contract.from_abi(
+                    "Vyper_contract", self.address, cast(list[ABIElement], CURVE_REGISTRY_ABI)
+                )
             else:
                 # This happens sometimes, not sure why as the contract is verified.
                 brownie.Contract.from_explorer(self.address)
-        pool_count = await self.pool_count()
-        return await a_sync.map(self.get_pool, range(pool_count)).values(pop=True)
+        pool_count = await self.pool_count(sync=False)
+        return await self.get_pool.map(range(pool_count)).values(pop=True)
 
     async def _load(self) -> None:
         pool_list = await self.read_pools(sync=False)
@@ -246,7 +267,7 @@ class Factory(_Loader):
         await igather(
             self.__load_pool(pool, debug_logs)
             for pool in pool_list
-            if pool not in curve.factories[self.address]
+            if pool not in cast(CurveRegistry, curve).factories[self.address]
         )
         if debug_logs:
             _startup_logger_log_debug("loaded %s pools for %s", len(pool_list), self)
@@ -254,6 +275,7 @@ class Factory(_Loader):
     async def __load_pool(self, pool: Address, debug_logs: bool) -> None:
         factory = await Contract.coroutine(self.address)
         # for curve v5 pools, pool and lp token are separate
+        lp_token: Address
         if hasattr(factory, "get_token"):
             lp_token = await factory.get_token.coroutine(pool)
         elif hasattr(factory, "get_lp_token"):
@@ -266,8 +288,8 @@ class Factory(_Loader):
             raise NotImplementedError(
                 f"New factory {factory.address} is not yet supported. Please notify a ypricemagic maintainer."
             )
-        curve.token_to_pool[lp_token] = pool
-        curve.factories[factory.address].add(pool)
+        cast(CurveRegistry, curve).token_to_pool[lp_token] = pool
+        cast(CurveRegistry, curve).factories[factory.address].add(pool)
         if debug_logs:
             _startup_logger_log_debug("loaded %s pool %s", self, pool)
 
@@ -297,10 +319,10 @@ class CurvePool(ERC20):
     """
 
     @a_sync.aka.cached_property
-    async def factory(self) -> Contract:
-        return await curve.get_factory(self, sync=False)
+    async def factory(self) -> Contract | None:
+        return await cast(CurveRegistry, curve).get_factory(self, sync=False)
 
-    __factory__: HiddenMethodDescriptor[Self, Contract]
+    __factory__: HiddenMethodDescriptor["CurvePool", Contract | None]
 
     @a_sync.aka.cached_property
     async def coins(self) -> list[ERC20]:
@@ -320,10 +342,12 @@ class CurvePool(ERC20):
         if factory := await self.__factory__:
             lookup_contract = factory
         else:
-            lookup_contract = await curve.__registry__
+            lookup_contract = await cast(CurveRegistry, curve).__registry__
 
         try:
-            coins = await lookup_contract.get_coins.coroutine(self.address)
+            coins: list[Address] | tuple[Address, ...] = await lookup_contract.get_coins.coroutine(
+                self.address
+            )
         except (Revert, InsufficientDataBytes, InvalidPointer) as e:
             # I'm not sure if this means the pool was shut down (can that even happen?) or if the pool
             # is not in registry and the Exception is now handled differently by some dependency.
@@ -353,7 +377,7 @@ class CurvePool(ERC20):
             if coin not in {None, ZERO_ADDRESS}
         ]
 
-    __coins__: HiddenMethodDescriptor[Self, list[ERC20]]
+    __coins__: HiddenMethodDescriptor["CurvePool", list[ERC20]]
 
     @a_sync.a_sync(ram_cache_maxsize=10_000)
     async def get_coin_index(self, coin: AnyAddressType) -> int:
@@ -363,7 +387,7 @@ class CurvePool(ERC20):
     async def num_coins(self) -> int:
         return len(await self.__coins__)
 
-    __num_coins__: HiddenMethodDescriptor[Self, int]
+    __num_coins__: HiddenMethodDescriptor["CurvePool", int]
 
     async def get_dy(
         self,
@@ -379,7 +403,7 @@ class CurvePool(ERC20):
         amount_in = await token_in.__scale__
         contract = await Contract.coroutine(self.address)
         try:
-            amount_out = await contract.get_dy.coroutine(
+            amount_out: int = await contract.get_dy.coroutine(
                 coin_ix_in, coin_ix_out, amount_in, block_identifier=block
             )
             return WeiBalance(
@@ -397,8 +421,8 @@ class CurvePool(ERC20):
     @a_sync.aka.cached_property
     async def coins_decimals(self) -> list[int]:
         factory = await self.__factory__
-        source = factory or await curve.registry
-        coins_decimals = await source.get_decimals.coroutine(self.address)
+        source = factory or await cast(CurveRegistry, curve).registry
+        coins_decimals: list[int] = await source.get_decimals.coroutine(self.address)
 
         # pool not in registry
         if not any(coins_decimals):
@@ -406,10 +430,11 @@ class CurvePool(ERC20):
 
         return [dec for dec in coins_decimals if dec != 0]
 
-    __coins_decimals__: HiddenMethodDescriptor[Self, list[int]]
+    __coins_decimals__: HiddenMethodDescriptor["CurvePool", list[int]]
 
     @a_sync.aka.cached_property
     async def get_underlying_coins(self) -> list[ERC20]:
+        coins: list[Address] | tuple[Address, ...]
         factory = await self.__factory__
         if factory:
             # new factory reverts for non-meta pools
@@ -427,7 +452,7 @@ class CurvePool(ERC20):
                     )
                     coins = (ZERO_ADDRESS,)
         else:
-            registry = await curve.registry
+            registry = await cast(CurveRegistry, curve).registry
             coins = await registry.get_underlying_coins.coroutine(self.address)
 
         # pool not in registry, not checking for underlying_coins here
@@ -438,9 +463,10 @@ class CurvePool(ERC20):
             ERC20(coin, asynchronous=self.asynchronous) for coin in coins if coin != ZERO_ADDRESS
         ]
 
-    __get_underlying_coins__: HiddenMethodDescriptor[Self, list[ERC20]]
+    __get_underlying_coins__: HiddenMethodDescriptor["CurvePool", list[ERC20]]
 
     @a_sync.a_sync(ram_cache_maxsize=5000)
+    @stuck_coro_debugger
     async def get_balances(
         self, block: Block | None = None, skip_cache: bool = ENVS.SKIP_CACHE
     ) -> list[WeiBalance]:
@@ -462,8 +488,10 @@ class CurvePool(ERC20):
         coins = await self.__coins__
         try:
             factory = await self.__factory__
-            source = factory or await curve.__registry__
-            balances = await source.get_balances.coroutine(self.address, block_identifier=block)
+            source = factory or await cast(CurveRegistry, curve).__registry__
+            balances: list[int | None] = await source.get_balances.coroutine(
+                self.address, block_identifier=block
+            )
         except (ContractLogicError, ValueError, InsufficientDataBytes, InvalidPointer):
             # ContractLogicError in web3>=6.0, ValueError in <6.0,
             # InsufficientDataBytes sometimes too, not sure why.
@@ -475,11 +503,11 @@ class CurvePool(ERC20):
                 pop=True
             )
 
-        if not any(balances):
+        if not any(balances) or any(balance is None for balance in balances):
             raise ValueError(f"could not fetch balances {self.__str__()} at {block}")
 
         return [
-            WeiBalance(balance, coin, block, skip_cache=skip_cache)
+            WeiBalance(cast(int, balance), coin, block, skip_cache=skip_cache)
             for coin, balance in zip(coins, balances)
             if coin != ZERO_ADDRESS
         ]
@@ -568,16 +596,18 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
             else:
                 raise
 
-        self.registries = defaultdict(set)  # registry -> pools
-        self.factories = defaultdict(set)  # factory -> pools
-        self.pools = set()
-        self.token_to_pool = dict()  # lp_token -> pool
+        self.registries: defaultdict[Address, set[Address]] = defaultdict(set)  # registry -> pools
+        self.factories: defaultdict[Address | Factory, set[Address]] = defaultdict(
+            set
+        )  # factory -> pools
+        self.pools: set[Address] = set()
+        self.token_to_pool: dict[Address, Address] = dict()  # lp_token -> pool
 
     def __repr__(self) -> str:
         return "<CurveRegistry>"
 
     @property
-    def identifiers(self) -> list[EthAddress]:
+    def identifiers(self) -> defaultdict[int, list[Address]]:
         return self.address_provider.identifiers
 
     @a_sync.aka.cached_property
@@ -587,19 +617,19 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
         except IndexError:  # if we couldn't get the registry via logs
             return await Contract.coroutine(
                 await raw_call(
-                    self.address_provider,
+                    self.address_provider.address,
                     "get_registry()",
                     output="address",
                     sync=False,
                 )
             )
 
-    __registry__: HiddenMethodDescriptor[Self, Contract]
+    __registry__: HiddenMethodDescriptor["CurveRegistry", Contract]
 
     async def load_all(self) -> None:
         await self._done.wait()
 
-    async def get_factory(self, pool: AddressOrContract) -> Contract:
+    async def get_factory(self, pool: AddressOrContract) -> Contract | None:
         """
         Get metapool factory that has spawned a pool.
 
@@ -620,30 +650,32 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
                 for factory, factory_pools in self.factories.items()
                 if str(pool) in factory_pools
             )
-            return await Contract.coroutine(factory)
+            return await Contract.coroutine(str(factory))
         except StopIteration:
             return None
 
-    @a_sync_ttl_cache
+    @stuck_coro_debugger
     async def get_price(
         self,
         token: Address,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
     ) -> float | None:
-        pool: CurvePool = await self.get_pool(token, sync=False)
+        pool = await self.get_pool(token, sync=False)
         if pool is None:
             return None
         tvl = await pool.get_tvl(block=block, skip_cache=skip_cache, sync=False)
         if tvl is None:
             return None
         try:
-            return tvl / await ERC20(token, asynchronous=True).total_supply_readable(block)
+            return tvl / await ERC20(token, asynchronous=True).total_supply_readable(
+                block, sync=False
+            )
         except ZeroDivisionError:
             return None
 
     @a_sync.a_sync(cache_type="memory", ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
-    async def get_pool(self, token: AnyAddressType) -> CurvePool:
+    async def get_pool(self, token: AnyAddressType) -> CurvePool | None:
         """
         Get Curve pool (swap) address by LP token address. Supports factory pools.
 
@@ -658,112 +690,49 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
             >>> print(pool)
             <CurvePool '0x...'>
         """
-        await self.load_all()
+        await self.load_all(sync=False)
 
         token = await convert.to_address_async(token)
         if token in self.token_to_pool and token != ZERO_ADDRESS:
             return CurvePool(self.token_to_pool[token], asynchronous=self.asynchronous)
 
-    @a_sync.a_sync(cache_type="memory", ram_cache_maxsize=ENVS.PRICE_CACHE_MAXSIZE)
+    @stuck_coro_debugger
     async def get_price_for_underlying(
         self,
         token_in: Address,
         block: Block | None = None,
         ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice | None:
-        try:
-            pools = (await self.__coin_to_pools__)[token_in]
-        except KeyError:
-            return None
+    ) -> PriceResult | None:
+        """Use native quotes from liquidity-ranked Curve pools."""
+        from y.prices._routing import liquidity_price
 
-        for pool in ignore_pools:
-            try:
-                pools.remove(pool)
-            except ValueError:
-                continue
-
-        if pools and block is not None:
-            pools = [
-                pool
-                async for pool, deploy_block in CurvePool.deploy_block.map(
-                    pools, when_no_history_return_0=True
-                )
-                if deploy_block <= block
-            ]
-
-        if not pools:
-            return None
-        # Choose a pool to use for pricing `token_in`.
-        elif len(pools) == 1:
-            pool = pools[0]
-        else:
-            # Use the pool with deepest liquidity.
-            deepest_pool, deepest_bal = None, 0
-            async for pool, depth in CurvePool.check_liquidity.map(
-                pools, token=token_in, block=block
-            ).map():
-                if depth > deepest_bal:
-                    deepest_pool = pool
-                    deepest_bal = depth
-            pool = deepest_pool
-
-        if pool is None:
-            return None
-
-        if len(await pool.__coins__) != 2:
-            # TODO: handle this sitch if necessary
-            return
-
-        # Get the price for `token_in` using the selected pool.
-        # this works for most typical metapools
-
-        token_in_ix = await pool.get_coin_index(token_in, sync=False)
-        token_out_ix = 0 if token_in_ix == 1 else 1 if token_in_ix == 0 else None
-        dy: WeiBalance | None = await pool.get_dy(
-            token_in_ix,
-            token_out_ix,
-            block=block,
+        return await liquidity_price(
+            str(token_in),
+            block,
             ignore_pools=ignore_pools,
             skip_cache=skip_cache,
-            sync=False,
+            first_markets=("Curve",),
         )
-        if dy is None:
-            return None
-
-        try:
-            return await dy.__value_usd__
-        except yPriceMagicError as e:
-            logger.debug("%s for %s at block %s", type(e.exception).__name__, token_in, block)
-            if not isinstance(e.exception, PriceError):
-                raise
-
-            # try to get price from a different pool
-            return await self.get_price_for_underlying(
-                token_in,
-                block,
-                ignore_pools=(*ignore_pools, pool),
-                skip_cache=skip_cache,
-            )
 
     @a_sync.aka.cached_property
     async def coin_to_pools(self) -> dict[str, list[CurvePool]]:
         mapping = defaultdict(set)
-        await self.load_all()
+        await self.load_all(sync=False)
         for pool in {CurvePool(pool) for pools in self.factories.values() for pool in pools}:
             for coin in await pool.__coins__:
-                mapping[coin].add(pool)
+                mapping[coin.address].add(pool)
         return {coin: list(pools) for coin, pools in mapping.items()}
 
-    __coin_to_pools__: HiddenMethodDescriptor[Self, dict[str, list[CurvePool]]]
+    __coin_to_pools__: HiddenMethodDescriptor["CurveRegistry", dict[str, list[CurvePool]]]
 
     async def check_liquidity(
         self, token: Address, block: Block, ignore_pools: tuple[Pool, ...]
     ) -> int:
-        if pools_for_token := (await self.__coin_to_pools__).get(token):
+        if pools_for_token := (await self.__coin_to_pools__).get(str(token)):
             if pools := list(filterfalse(ignore_pools.__contains__, pools_for_token)):
-                return await CurvePool.check_liquidity.max(
-                    pools, token=token, block=block, sync=False
+                return await CurvePool.check_liquidity.map(pools, token=token, block=block).max(
+                    sync=False
                 )
         return 0
 
@@ -774,11 +743,11 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
         return a_sync.Event(name="curve")
 
     @cached_property
-    def _task(self) -> Task:
+    def _task(self) -> Task[NoReturn]:
         _startup_logger_debug("creating loader task for %s", self)
         task = create_task(coro=self._load_all(), name=f"{self}._load_all()")
 
-        def propagate_exceptions(t: Task) -> None:
+        def propagate_exceptions(t: Task[NoReturn]) -> None:
             """
             Propagate any Exception to all waiters, because it should not occur and we need to know about it ASAP.
             """
@@ -791,10 +760,10 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
                     for waiter in self._done._waiters:
                         waiter.set_exception(e)
 
-            elif e := t.exception():
+            elif failure := t.exception():
                 # Send it to the waiters
                 for waiter in self._done._waiters:
-                    waiter.set_exception(e)
+                    waiter.set_exception(failure)
 
             else:
                 # Success! Exit before task cleanup.
@@ -807,7 +776,7 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
         task.add_done_callback(propagate_exceptions)
         return task
 
-    async def _load_all(self) -> None:
+    async def _load_all(self) -> NoReturn:
         await self.address_provider
         _startup_logger_debug(
             "curve address provider events loaded, now loading factories and pools"
@@ -815,7 +784,7 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
         # NOTE: Gnosis chain's address provider fails to provide registry via events. Maybe other chains as well.
         if (
             not self.identifiers[Ids.Main_Registry]
-            and (registry := await self.address_provider.get_registry()) != ZERO_ADDRESS
+            and (registry := await self.address_provider.get_registry(sync=False)) != ZERO_ADDRESS
         ):
             self.identifiers[Ids.Main_Registry] = [registry]
         while True:
@@ -846,7 +815,7 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
 
 
 try:
-    curve: CurveRegistry = CurveRegistry(asynchronous=True)
+    curve: CurveRegistry | set[Address] = CurveRegistry(asynchronous=True)
 except UnsupportedNetwork:
     curve = set()
 

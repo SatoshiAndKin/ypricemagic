@@ -1,0 +1,11 @@
+{
+  "complete": false,
+  "reason": "The profiling server context waited for leaked control connections before final cleanup and report writing",
+  "evidence": {
+    "profile_fd_count": 537,
+    "established_tcp_endpoints": 512,
+    "listening_tcp_endpoints": 0,
+    "python_server_wait_closed": "waits for all active connections"
+  },
+  "action": "Stop owned profiling supervisor; move server shutdown after evidence and connection cleanup; keep this execution incomplete"
+}

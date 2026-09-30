@@ -1,0 +1,25 @@
+[
+  {
+    "method": "eth_getBlockByHash",
+    "status": "pass",
+    "result": {
+      "number": "0x112a880",
+      "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3"
+    },
+    "elapsed": 0.05281391693279147
+  },
+  {
+    "method": "eth_getCode",
+    "status": "pass",
+    "result": {
+      "bytes": 2186
+    },
+    "elapsed": 0.4361246251501143
+  },
+  {
+    "method": "eth_call",
+    "status": "pass",
+    "result": "0x0000000000000000000000000000000000000000000000000000000000000006",
+    "elapsed": 1.8246422922238708
+  }
+]

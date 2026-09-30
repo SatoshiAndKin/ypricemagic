@@ -1,0 +1,5 @@
+{
+  "file": "tests/test_memory_release.py",
+  "sha256": "b3f216ec71f3caf8ae0d5abc01e7be89378bae10c9145d43fe0fc67bc2bd3d60",
+  "scope": "current behavioral tests; production source remains the selected revision"
+}

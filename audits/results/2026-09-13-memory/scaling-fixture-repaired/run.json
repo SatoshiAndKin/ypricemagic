@@ -1,0 +1,17 @@
+{
+  "command": [
+    "sh",
+    "/runner/repeat_scaling.sh"
+  ],
+  "complete": true,
+  "started_unix": 1789281841.508906,
+  "source_sha": "e793c9fc6149c4dd377f7d4bef3b4073df7739b5",
+  "source_revision": "e793c9fc6149c4dd377f7d4bef3b4073df7739b5",
+  "source_archive_sha256": "da6508cd8bb026dc07ce3b860cdde8cd15a941e10e4efd70b477798fee6df084",
+  "image": "sha256:2fe46c86dd882f4aa70f6bd44fd8f812d65ca8e4c98e4061fc3819938b48c97e",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 100.202308177948
+}

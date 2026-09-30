@@ -1,0 +1,4 @@
+{
+  "exit_code": 0,
+  "source": "\n        from a_sync.a_sync._meta import ASyncMeta\n        from a_sync.a_sync.property import a_sync_property, a_sync_cached_property\n\n        class Thing(metaclass=ASyncMeta):\n            def compute(self, value: int) -> int:\n                return value\n\n            @a_sync_property\n            def value(self) -> int:\n                return 1\n\n            @a_sync_cached_property\n            def cached(self) -> int:\n                return 2\n\n        reveal_type(Thing.compute)\n        reveal_type(Thing().compute)\n        reveal_type(Thing.value)\n        reveal_type(Thing.cached)\n        reveal_type(Thing().value)\n        reveal_type(Thing().cached)\n        "
+}

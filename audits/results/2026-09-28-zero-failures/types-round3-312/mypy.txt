@@ -1,0 +1,36 @@
+tools/mypy_plugin.py: note: In member "get_method_signature_hook" of class "YPriceMagicPlugin":
+tools/mypy_plugin.py:57: error: Cannot infer type of lambda  [misc]
+                    return lambda ctx, default=default: _decorator_signatu...
+                           ^
+tests/conftest.py:5: error: Module "brownie.network" does not explicitly export
+attribute "connect"  [attr-defined]
+    brownie.network.connect(os.environ["BROWNIE_NETWORK"])
+    ^~~~~~~~~~~~~~~~~~~~~~~
+tests/conftest.py: note: In function "_safe_get_ast_hash":
+tests/conftest.py:22: error: Function is missing a type annotation 
+[no-untyped-def]
+    def _safe_get_ast_hash(path):
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/conftest.py: note: At top level:
+tests/conftest.py:38: error: Module "brownie.test.managers.base" does not
+explicitly export attribute "_get_ast_hash"  [attr-defined]
+    _btmb._get_ast_hash = _safe_get_ast_hash
+    ^~~~~~~~~~~~~~~~~~~
+y/__init__.py:130: error: Cannot find implementation or library stub for module named "eth_portfolio._db"  [import-not-found]
+        from eth_portfolio._db import entities as _db_entities
+    ^
+y/__init__.py:130: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+y/_db/utils/_ep.py:36: error: Cannot find implementation or library stub for module named "eth_portfolio._db.utils"  [import-not-found]
+            from eth_portfolio._db.utils import get_block
+    ^
+y/_db/utils/asyncpg.py:4: error: Skipping analyzing "asyncpg": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+    import asyncpg
+    ^
+y/time.py:16: error: Cannot find implementation or library stub for module named "dank_mids._config"  [import-not-found]
+        from dank_mids._config import GANACHE_FORK
+    ^
+/usr/local/lib/python3.12/site-packages/evmspec/data/_main.py:470: error: INTERNAL ERROR -- Please try using mypy master on GitHub:
+https://mypy.readthedocs.io/en/stable/common_issues.html#using-a-development-mypy-build
+If this issue continues with mypy master, please report a bug at https://github.com/python/mypy/issues
+version: 1.19.1+bytesrefcount1
+/usr/local/lib/python3.12/site-packages/evmspec/data/_main.py:470: : note: please use --show-traceback to print a traceback when reporting a bug

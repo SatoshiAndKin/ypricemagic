@@ -1,0 +1,38 @@
+{
+  "before": {
+    "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+    "image": "sha256:0fb5880df36df7c1c86b5772a5cb426fca4770df349007a069bea09bd4b8529d",
+    "work": {
+      "pools": 4771,
+      "input_pools": 75,
+      "peak_operations": 64,
+      "historical_blocks": 4128,
+      "final_market_entries": 4096,
+      "final_result_entries": 2048,
+      "total_liquidity_reads": 309675,
+      "total_quote_calls": 4131
+    },
+    "median_rss_peak_bytes": 424853504,
+    "median_elapsed_seconds": 2.6382355770037975,
+    "python_peak_bytes": 212564995,
+    "python_retained_bytes": 4568033
+  },
+  "after": {
+    "source_sha": "1fa82cf9cf7746b0d4169328a20f607a0262e4f4",
+    "image": "sha256:0fb5880df36df7c1c86b5772a5cb426fca4770df349007a069bea09bd4b8529d",
+    "work": {
+      "pools": 4771,
+      "input_pools": 75,
+      "peak_operations": 64,
+      "historical_blocks": 4128,
+      "final_market_entries": 4096,
+      "final_result_entries": 2048,
+      "total_liquidity_reads": 309675,
+      "total_quote_calls": 4131
+    },
+    "median_rss_peak_bytes": 276234240,
+    "median_elapsed_seconds": 2.6392753789987182,
+    "python_peak_bytes": 83515159,
+    "python_retained_bytes": 4595996
+  }
+}

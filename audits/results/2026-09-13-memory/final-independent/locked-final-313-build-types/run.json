@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m pip install --no-deps --no-build-isolation -e . && python -m mypy"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789300219.993697,
+  "source_sha": "fbe5a919ad4e75f58f722953ac721e83c69a8751",
+  "source_revision": "worktree",
+  "source_archive_sha256": "3aed8e5ec848e2dfd40073bd9f83182271863a4bef583d7aa7051725178d09bc",
+  "image": "sha256:62791c7240a042923012b5e6f2d610822bd00d227a145c4f852568768f43b064",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 590.0185952186584
+}

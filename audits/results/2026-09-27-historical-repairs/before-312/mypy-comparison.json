@@ -1,0 +1,8 @@
+{
+  "baseline_errors": 1788,
+  "candidate_errors": 1788,
+  "added": [],
+  "removed": [],
+  "baseline": "/private/tmp/yprice-mergeable/v3-inventory-final-312/mypy.txt",
+  "candidate": "/private/tmp/yprice-repairs/before-312/mypy.txt"
+}

@@ -1,0 +1,79 @@
+{
+  "progress": {
+    "elapsed_seconds": 2193.4760327719996,
+    "process_rss_bytes": 1158541312,
+    "cgroup": {
+      "memory.current": "900665344",
+      "memory.peak": "1238224896",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "28"
+    }
+  },
+  "pricing": {
+    "token": "0x6C8c6b02E7b2BE14d4fA6022Dfd6d75921D90E4E",
+    "block": 7720735,
+    "completed_blocks": []
+  },
+  "last_sample": "allocations-pending-40.json",
+  "top_allocations": [
+    {
+      "traceback": "/usr/local/lib/python3.12/asyncio/sslproto.py:278",
+      "bytes": 251450759,
+      "count": 1918
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/dank_mids/semaphores.py:78",
+      "bytes": 3996608,
+      "count": 16147
+    },
+    {
+      "traceback": "/work/y/contracts.py:1111",
+      "bytes": 1672809,
+      "count": 27120
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/ssl.py:876",
+      "bytes": 1648686,
+      "count": 26906
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/asyncio/sslproto.py:347",
+      "bytes": 1519056,
+      "count": 1918
+    },
+    {
+      "traceback": "<frozen importlib._bootstrap_external>:757",
+      "bytes": 1380143,
+      "count": 11116
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/aiohttp/client.py:1317",
+      "bytes": 1356560,
+      "count": 10940
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/dank_mids/brownie_patch/call.py:401",
+      "bytes": 1262274,
+      "count": 11407
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/asyncio/base_events.py:448",
+      "bytes": 1076880,
+      "count": 7483
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/aiohttp/client_proto.py:315",
+      "bytes": 939426,
+      "count": 6877
+    }
+  ],
+  "complete": false,
+  "cause": "Confirmed HTTP 408 retry retention: recursive awaits retain all failed attempt frames while the replacement request waits",
+  "regression_report": "/private/tmp/yprice-memory/dank-retry-before.log",
+  "failed_regressions": 2,
+  "action": "Stop this diagnostic to repair the owning dependency; do not count incomplete pricing as a successful workload"
+}

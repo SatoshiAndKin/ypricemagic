@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m venv /tmp/cache-tests-env && /tmp/cache-tests-env/bin/python -m pip install --no-deps -r /runner/cache-test-dependencies.lock /opt/validation/cachebox-wheels/*.whl && /tmp/cache-tests-env/bin/python /runner/cache_dependency_tests.py"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 3.2919849600002635,
+  "peak_sampled_process_rss_bytes": 102940672,
+  "cgroup_before": {
+    "memory.current": "8830976",
+    "memory.peak": "8830976",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "51703808",
+    "memory.peak": "106045440",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

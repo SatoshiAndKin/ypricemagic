@@ -1,0 +1,1460 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="30" skipped="1" tests="747" time="193.969" timestamp="2026-09-14T13:14:56.092696" hostname="dd825416deb7"><testcase classname="tests.test_smart" name="test_smart_future_init_loop_arg" time="0.000" /><testcase classname="tests.test_smart" name="test_smart_future_init_no_args" time="0.000" /><testcase classname="tests.test_smart" name="test_smart_task_name" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_async[4-TestInheritor]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[4-TestClass]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[4-TestMeta]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[4-TestSync]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[5-TestClass]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[4-TestInheritor]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_method_async[4-TestMeta]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[5-TestInheritor]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[5-TestClass]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[5-TestMeta]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[5-TestSync]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[6-TestClass]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[5-TestInheritor]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_method_async[5-TestMeta]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[6-TestInheritor]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[6-TestClass]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[6-TestMeta]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[6-TestSync]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[7-TestClass]" time="0.007" /><testcase classname="tests.test_smart" name="test_smart_future_await" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_method_async[6-TestInheritor]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[6-TestMeta]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_property_async[7-TestInheritor]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[7-TestClass]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_property_async[7-TestMeta]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[7-TestSync]" time="0.006" /><testcase classname="tests.test_smart" name="test_smart_future_await_cancelled" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[8-TestClass]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[7-TestInheritor]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[7-TestMeta]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_property_async[8-TestInheritor]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[8-TestClass]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_property_async[8-TestMeta]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[8-TestSync]" time="0.006" /><testcase classname="tests.test_smart" name="test_smart_future_await_exc" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[9-TestClass]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[8-TestInheritor]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[8-TestMeta]" time="0.006" /><testcase classname="tests.test_smart" name="test_smart_task_await_exc" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[9-TestInheritor]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[9-TestClass]" time="0.006" /><testcase classname="tests.test_smart" name="test_smart_task_await_cancelled" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[9-TestMeta]" time="0.007" /><testcase classname="tests.a_sync.test_base" name="test_method_async[9-TestSync]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[9-TestInheritor]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[9-TestMeta]" time="0.006" /><testcase classname="tests.test_smart" name="test_shield_exc" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[0-TestClass]" time="0.006" /><testcase classname="tests.test_smart" name="test_shield_cancel_inner" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[0-TestInheritor]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[0-TestClass]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[0-TestMeta]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[0-TestSync]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[1-TestClass]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[0-TestInheritor]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_method_async[0-TestMeta]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[1-TestInheritor]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[1-TestClass]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[1-TestMeta]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[1-TestSync]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[2-TestClass]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[1-TestInheritor]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_method_async[1-TestMeta]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[2-TestInheritor]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[2-TestClass]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[2-TestMeta]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[2-TestSync]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[3-TestClass]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[2-TestInheritor]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_method_async[2-TestMeta]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[3-TestInheritor]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[3-TestClass]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[3-TestMeta]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[3-TestSync]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[4-TestClass]" time="0.006" /><testcase classname="tests.a_sync.test_base" name="test_method_async[3-TestInheritor]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_method_async[3-TestMeta]" time="0.005" /><testcase classname="tests.a_sync.test_base" name="test_property_async[3-TestSync]" time="0.027" /><testcase classname="tests.a_sync.test_base" name="test_property_async[1-TestSync]" time="0.027" /><testcase classname="tests.a_sync.test_base" name="test_property_async[7-TestSync]" time="0.027" /><testcase classname="tests.a_sync.test_base" name="test_property_async[5-TestSync]" time="0.027" /><testcase classname="tests.a_sync.test_base" name="test_property_async[2-TestSync]" time="0.027" /><testcase classname="tests.a_sync.test_base" name="test_property_async[0-TestSync]" time="0.027" /><testcase classname="tests.a_sync.test_base" name="test_property_async[4-TestSync]" time="0.027" /><testcase classname="tests.a_sync.test_base" name="test_property_async[6-TestSync]" time="0.027" /><testcase classname="tests.a_sync.test_base" name="test_property_async[9-TestSync]" time="0.029" /><testcase classname="tests.a_sync.test_base" name="test_property_async[8-TestSync]" time="0.029" /><testcase classname="tests.test_smart" name="test_smart_task_await" time="0.112" /><testcase classname="tests.test_smart" name="test_shield" time="1.010" /><testcase classname="tests.test_smart" name="test_shield_cancel_outer" time="1.010" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[2-TestInheritor]" time="2.008" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[0-TestInheritor]" time="2.037" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[2-TestClass]" time="2.012" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[0-TestClass]" time="2.037" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[1-TestMeta]" time="2.033" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[0-TestMeta]" time="2.037" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[1-TestInheritor]" time="2.037" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[1-TestClass]" time="2.037" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[1-TestSync]" time="2.043" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[0-TestSync]" time="2.043" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[2-TestSync]" time="2.014" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[2-TestMeta]" time="2.009" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[3-TestClass]" time="2.011" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[3-TestSync]" time="2.013" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[3-TestInheritor]" time="2.011" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[3-TestMeta]" time="2.007" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[4-TestClass]" time="2.012" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[4-TestSync]" time="2.012" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[4-TestInheritor]" time="2.004" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[4-TestMeta]" time="2.014" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[5-TestClass]" time="2.014" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[5-TestSync]" time="2.006" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[5-TestInheritor]" time="2.013" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[5-TestMeta]" time="2.006" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[6-TestClass]" time="2.002" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[6-TestSync]" time="2.012" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[6-TestInheritor]" time="2.013" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[6-TestMeta]" time="2.007" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[7-TestClass]" time="2.012" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[7-TestSync]" time="2.003" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[7-TestInheritor]" time="2.005" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[7-TestMeta]" time="2.004" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[8-TestClass]" time="2.005" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[8-TestSync]" time="2.003" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[8-TestInheritor]" time="2.014" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[8-TestMeta]" time="2.013" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[9-TestClass]" time="2.012" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[9-TestSync]" time="2.013" /><testcase classname="tests.a_sync.test_base" name="test_asynchronous_context_manager" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_asynchronous_iteration" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_bound_generator_meta_async" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore[0]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore[1]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore[2]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore[3]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore[4]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore[5]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore[6]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore[7]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore[8]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore[9]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_property[0]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_property[1]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_property[2]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_property[3]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_property[4]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_property[5]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_property[6]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_property[7]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_property[8]" time="0.000" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_property[9]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[9-TestInheritor]" time="2.006" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_async[9-TestMeta]" time="2.008" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_cached_property[0]" time="2.010" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_cached_property[1]" time="2.010" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_cached_property[2]" time="2.009" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_cached_property[3]" time="2.012" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_cached_property[4]" time="2.013" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_cached_property[5]" time="2.003" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_cached_property[6]" time="2.007" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_cached_property[7]" time="2.006" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_cached_property[8]" time="2.005" /><testcase classname="tests.a_sync.test_limiter" name="test_semaphore_cached_property[9]" time="2.005" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[1-TestSingleton]" time="1.001" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[0-TestSingleton]" time="2.010" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[0-TestSingletonMeta]" time="2.003" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[1-TestSingletonMeta]" time="0.004" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[2-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[2-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[3-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[3-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[4-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[4-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[5-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[5-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[6-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[6-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[7-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[7-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[8-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[8-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[9-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_async[9-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_any_async" time="0.001" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_all_async" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_min_async" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_max_async" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_sum_async" time="0.000" /><testcase classname="tests.a_sync.modifiers.test_apply_semaphore" name="test_apply_semaphore_int" time="0.000" /><testcase classname="tests.a_sync.modifiers.test_apply_semaphore" name="test_apply_semaphore_asyncio_semaphore" time="0.000" /><testcase classname="tests.a_sync.modifiers.test_apply_semaphore" name="test_apply_semaphore_a_sync_semaphore" time="0.000" /><testcase classname="tests.a_sync.modifiers.test_apply_semaphore" name="test_apply_semaphore_failure_int" time="0.000" /><testcase classname="tests.a_sync.modifiers.test_apply_semaphore" name="test_apply_semaphore_failure_asyncio_semaphore" time="0.000" /><testcase classname="tests.a_sync.modifiers.test_apply_semaphore" name="test_apply_semaphore_failure_a_sync_semaphore" time="0.000" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_awaitables" time="0.014" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_awaitables_aiter" time="0.015" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_mapping" time="0.015" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_mapping_aiter" time="0.015" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_timeout" time="0.057" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_timeout_aiter" time="0.051" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_return_exceptions" time="0.000" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_return_exceptions_aiter" time="0.000" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_tqdm_disabled" time="0.010" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_tqdm_disabled_aiter" time="0.015" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_mapping_and_return_exceptions" time="0.016" /><testcase classname="tests.asyncio.test_as_completed" name="test_as_completed_with_mapping_and_return_exceptions_aiter" time="0.015" /><testcase classname="tests.asyncio.test_as_completed" name="test_return_exceptions_preserves_cancelled_child_and_other_results[False-False]" time="0.000" /><testcase classname="tests.asyncio.test_as_completed" name="test_return_exceptions_preserves_cancelled_child_and_other_results[False-True]" time="0.000" /><testcase classname="tests.asyncio.test_as_completed" name="test_return_exceptions_preserves_cancelled_child_and_other_results[True-False]" time="0.000" /><testcase classname="tests.asyncio.test_as_completed" name="test_return_exceptions_preserves_cancelled_child_and_other_results[True-True]" time="0.000" /><testcase classname="tests.asyncio.test_as_completed" name="test_exception_wrapper_propagates_its_own_cancellation[False]" time="0.000" /><testcase classname="tests.asyncio.test_as_completed" name="test_exception_wrapper_propagates_its_own_cancellation[True]" time="0.000" /><testcase classname="tests.asyncio.test_create_task" name="test_create_task_with_coroutine" time="0.000" /><testcase classname="tests.asyncio.test_create_task" name="test_create_task_with_future" time="0.000" /><testcase classname="tests.asyncio.test_create_task" name="test_create_task_with_name" time="0.000" /><testcase classname="tests.asyncio.test_create_task" name="test_create_task_skip_gc_until_done" time="0.000"><failure message="AssertionError: assert 1 == 0&#10; +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})">@pytest.mark.asyncio_cooperative
+    async def test_create_task_skip_gc_until_done():
+        async def sample_coroutine():
+            return "GC Test"
+
+        persisted_tasks = _get_persisted_tasks()
+
+        assert len(persisted_tasks) == 0
+        task = create_task(sample_coroutine(), skip_gc_until_done=True)
+        assert len(persisted_tasks) == 1
+        result = await task
+        assert next(iter(persisted_tasks)).done()
+        # create some junk task to trigger the pruning of the persisted task set
+        create_task(sleep(0))
+&gt;       assert len(persisted_tasks) == 0
+E       AssertionError: assert 1 == 0
+E        +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})
+
+tests/asyncio/test_create_task.py:53: AssertionError</failure></testcase><testcase classname="tests.asyncio.test_create_task" name="test_create_task_log_destroy_pending" time="0.000" /><testcase classname="tests.asyncio.test_create_task" name="test_create_task_handles_non_coroutine_awaitable" time="0.000" /><testcase classname="tests.asyncio.test_gather" name="test_gather_with_awaitables" time="0.106" /><testcase classname="tests.asyncio.test_gather" name="test_cgather_with_awaitables" time="0.103" /><testcase classname="tests.asyncio.test_gather" name="test_igather_with_awaitables" time="0.102" /><testcase classname="tests.asyncio.test_gather" name="test_gather_with_awaitables_and_tqdm" time="0.113" /><testcase classname="tests.asyncio.test_gather" name="test_gather_with_mapping_and_tqdm" time="0.104" /><testcase classname="tests.asyncio.test_gather" name="test_gather_with_exceptions" time="0.000" /><testcase classname="tests.asyncio.test_gather" name="test_cgather_with_exceptions" time="0.000" /><testcase classname="tests.asyncio.test_gather" name="test_igather_with_exceptions" time="0.000" /><testcase classname="tests.asyncio.test_gather" name="test_gather_with_return_exceptions" time="0.000" /><testcase classname="tests.asyncio.test_gather" name="test_cgather_with_return_exceptions" time="0.000" /><testcase classname="tests.asyncio.test_gather" name="test_igather_with_return_exceptions" time="0.000" /><testcase classname="tests.asyncio.test_gather" name="test_gather_with_return_exceptions_and_tqdm" time="0.000" /><testcase classname="tests.asyncio.test_igather" name="test_igather" time="0.000" /><testcase classname="tests.iter.test_asyncgenfunc" name="test_a_sync_generator_function_call_aiter" time="0.000" /><testcase classname="tests.iter.test_asyncgenfunc" name="test_a_sync_generator_method_call_aiter" time="0.000" /><testcase classname="tests.iter.test_asyncgenfunc" name="test_a_sync_generator_function_call_await" time="0.000" /><testcase classname="tests.iter.test_asyncgenfunc" name="test_a_sync_generator_method_call_await" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async_empty[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async_empty[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async_partial[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async_partial[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_stop_iteration_async[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_stop_iteration_async[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_aiterable_decorated_func_async" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_aiterator_decorated_func_async" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_aiterable_decorated_method_async" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_aiterator_decorated_method_async" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async_error_handling[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async_error_handling[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async_with_iterable[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async_with_iterable[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async_aiter_method" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async_iterator_aiter_method" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_counter_lock" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_counter_lock_with_name" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_counterlock_initialization" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_counterlock_set" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_counterlock_wait_for" time="0.102" /><testcase classname="tests.primitives.test_counter" name="test_counterlock_concurrent_waiters" time="0.107" /><testcase classname="tests.primitives.test_counter" name="test_counterlock_increment_only" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_counterlock_large_value" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_counterlock_zero_value" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_counterlock_exception_handling" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_simultaneous_set_and_wait" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_reentrant_set" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_immediate_set_and_wait" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_delayed_set" time="0.502" /><testcase classname="tests.primitives.test_counter" name="test_multiple_sets" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_custom_error_handling" time="0.000" /><testcase classname="tests.primitives.test_counter" name="test_external_interruptions" time="0.217" /><testcase classname="tests.primitives.test_event" name="test_event_basic_functionality" time="0.000" /><testcase classname="tests.primitives.test_event" name="test_event_wait" time="0.111" /><testcase classname="tests.primitives.test_event" name="test_event_multiple_waiters" time="0.109" /><testcase classname="tests.primitives.test_event" name="test_event_reset" time="0.106" /><testcase classname="tests.primitives.test_event" name="test_event_timeout" time="0.104" /><testcase classname="tests.primitives.test_event" name="test_event_cancellation" time="0.105" /><testcase classname="tests.primitives.test_event" name="test_event_set_already_set" time="0.000" /><testcase classname="tests.primitives.test_event" name="test_event_clear_already_cleared" time="0.000" /><testcase classname="tests.primitives.test_event" name="test_event_wait_after_set" time="0.000" /><testcase classname="tests.primitives.test_event" name="test_event_wait_after_clear" time="0.101" /><testcase classname="tests.primitives.test_event" name="test_simultaneous_set_and_wait" time="0.000" /><testcase classname="tests.primitives.test_event" name="test_reentrant_set" time="0.000" /><testcase classname="tests.primitives.test_event" name="test_large_number_of_waiters" time="0.006" /><testcase classname="tests.primitives.test_event" name="test_event_with_no_waiters" time="0.000" /><testcase classname="tests.primitives.test_event" name="test_immediate_set_and_wait" time="0.000" /><testcase classname="tests.primitives.test_event" name="test_event_with_exception_handling" time="0.000" /><testcase classname="tests.primitives.test_event" name="test_event_with_loop_reentrancy" time="0.000" /><testcase classname="tests.primitives.test_event" name="test_event_with_delayed_set" time="0.511" /><testcase classname="tests.primitives.test_event" name="test_event_with_multiple_clears" time="0.000" /><testcase classname="tests.primitives.test_prio_semaphore" name="test_prio_semaphore_count_waiters" time="1.011" /><testcase classname="tests.primitives.test_prio_semaphore" name="test_prio_semaphore_use" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_queue_initialization" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_put_and_get" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_put_nowait_and_get_nowait" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_get_all" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_get_all_nowait" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_get_multi" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_get_multi_nowait" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_queue_length" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_concurrent_access" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_empty_queue_behavior" time="0.111" /><testcase classname="tests.primitives.test_queue" name="test_cancellation" time="0.105" /><testcase classname="tests.primitives.test_queue" name="test_invalid_get_multi" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_type_consistency" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_stress_testing" time="0.001" /><testcase classname="tests.primitives.test_queue" name="test_order_preservation" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_edge_case_values" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_timeout_on_get" time="0.108" /><testcase classname="tests.primitives.test_queue" name="test_exception_handling_in_callbacks" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_memory_usage" time="0.001" /><testcase classname="tests.primitives.test_queue" name="test_thread_safety" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_custom_object_handling" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_queue_capacity" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_performance_under_load" time="0.009" /><testcase classname="tests.primitives.test_queue" name="test_state_persistence" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_unusual_data_types" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_processing_queue_initialization" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_processing_put_and_await" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_processing_put_nowait_and_await" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_processing_call" time="0.001" /><testcase classname="tests.primitives.test_queue" name="test_smart_processing_queue_initialization" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_priority_processing_queue_initialization" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_smart_processing_put_and_await" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_priority_processing_put_and_await" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_smart_processing_put_nowait_and_await" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_priority_processing_put_nowait_and_await" time="0.000" /><testcase classname="tests.primitives.test_queue" name="test_smart_processing_call" time="0.001" /><testcase classname="tests.primitives.test_queue" name="test_priority_processing_call" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore[0]" time="1.004" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore[1]" time="1.012" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore[2]" time="1.004" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore[3]" time="1.004"><failure message="assert (3 &lt; 3 or 1.0031242370605469 &gt; 3)">i = 3
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore(i: int):
+        start = time()
+        assert await instance.test_fn() == 1
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (3 &lt; 3 or 1.0031242370605469 &gt; 3)
+
+tests/primitives/test_semaphore.py:31: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore[4]" time="1.004"><failure message="assert (4 &lt; 3 or 1.0031888484954834 &gt; 4)">i = 4
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore(i: int):
+        start = time()
+        assert await instance.test_fn() == 1
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (4 &lt; 3 or 1.0031888484954834 &gt; 4)
+
+tests/primitives/test_semaphore.py:31: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore[5]" time="1.006"><failure message="assert (5 &lt; 3 or 1.005159854888916 &gt; 5)">i = 5
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore(i: int):
+        start = time()
+        assert await instance.test_fn() == 1
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (5 &lt; 3 or 1.005159854888916 &gt; 5)
+
+tests/primitives/test_semaphore.py:31: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore[6]" time="1.007"><failure message="assert (6 &lt; 3 or 1.0068235397338867 &gt; 6)">i = 6
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore(i: int):
+        start = time()
+        assert await instance.test_fn() == 1
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (6 &lt; 3 or 1.0068235397338867 &gt; 6)
+
+tests/primitives/test_semaphore.py:31: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore[7]" time="1.012"><failure message="assert (7 &lt; 3 or 1.0117847919464111 &gt; 7)">i = 7
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore(i: int):
+        start = time()
+        assert await instance.test_fn() == 1
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (7 &lt; 3 or 1.0117847919464111 &gt; 7)
+
+tests/primitives/test_semaphore.py:31: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore[8]" time="1.004"><failure message="assert (8 &lt; 3 or 1.003164529800415 &gt; 8)">i = 8
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore(i: int):
+        start = time()
+        assert await instance.test_fn() == 1
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (8 &lt; 3 or 1.003164529800415 &gt; 8)
+
+tests/primitives/test_semaphore.py:31: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore[9]" time="1.002"><failure message="assert (9 &lt; 3 or 1.001840591430664 &gt; 9)">i = 9
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore(i: int):
+        start = time()
+        assert await instance.test_fn() == 1
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (9 &lt; 3 or 1.001840591430664 &gt; 9)
+
+tests/primitives/test_semaphore.py:31: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_property[0]" time="1.007" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_property[1]" time="1.008" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_property[2]" time="1.007" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_property[3]" time="1.012"><failure message="assert (3 &lt; 3 or 1.0116784572601318 &gt; 3)">i = 3
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore_property(i: int):
+        start = time()
+        assert await instance.test_property == 2
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (3 &lt; 3 or 1.0116784572601318 &gt; 3)
+
+tests/primitives/test_semaphore.py:41: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_property[4]" time="1.011"><failure message="assert (4 &lt; 3 or 1.0107498168945312 &gt; 4)">i = 4
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore_property(i: int):
+        start = time()
+        assert await instance.test_property == 2
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (4 &lt; 3 or 1.0107498168945312 &gt; 4)
+
+tests/primitives/test_semaphore.py:41: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_property[5]" time="1.005"><failure message="assert (5 &lt; 3 or 1.004969835281372 &gt; 5)">i = 5
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore_property(i: int):
+        start = time()
+        assert await instance.test_property == 2
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (5 &lt; 3 or 1.004969835281372 &gt; 5)
+
+tests/primitives/test_semaphore.py:41: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_property[6]" time="1.005"><failure message="assert (6 &lt; 3 or 1.004399299621582 &gt; 6)">i = 6
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore_property(i: int):
+        start = time()
+        assert await instance.test_property == 2
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (6 &lt; 3 or 1.004399299621582 &gt; 6)
+
+tests/primitives/test_semaphore.py:41: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_property[7]" time="1.008"><failure message="assert (7 &lt; 3 or 1.0077755451202393 &gt; 7)">i = 7
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore_property(i: int):
+        start = time()
+        assert await instance.test_property == 2
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (7 &lt; 3 or 1.0077755451202393 &gt; 7)
+
+tests/primitives/test_semaphore.py:41: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_property[8]" time="1.008"><failure message="assert (8 &lt; 3 or 1.007375717163086 &gt; 8)">i = 8
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore_property(i: int):
+        start = time()
+        assert await instance.test_property == 2
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (8 &lt; 3 or 1.007375717163086 &gt; 8)
+
+tests/primitives/test_semaphore.py:41: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_property[9]" time="1.006"><failure message="assert (9 &lt; 3 or 1.0050849914550781 &gt; 9)">i = 9
+
+    @increment
+    @pytest.mark.asyncio_cooperative
+    async def test_semaphore_property(i: int):
+        start = time()
+        assert await instance.test_property == 2
+        duration = time() - start
+        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.
+&gt;       assert i &lt; 3 or duration &gt; i
+E       assert (9 &lt; 3 or 1.0050849914550781 &gt; 9)
+
+tests/primitives/test_semaphore.py:41: AssertionError</failure></testcase><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_cached_property[0]" time="1.005" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_cached_property[1]" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_cached_property[2]" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_cached_property[3]" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_cached_property[4]" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_cached_property[5]" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_cached_property[6]" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_cached_property[7]" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_cached_property[8]" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_cached_property[9]" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_acquire_release" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_blocking" time="0.158" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_multiple_tasks" time="0.215" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_with_zero_initial_value" time="0.110" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_releasing_without_acquiring" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_concurrent_acquire_release" time="0.544" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_max_integer_value" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_rapid_acquire_release" time="0.001" /><testcase classname="tests.primitives.test_semaphore" name="test_exception_handling_during_acquire" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_cancelled_acquire" time="0.504" /><testcase classname="tests.primitives.test_semaphore" name="test_delayed_release" time="1.004" /><testcase classname="tests.primitives.test_semaphore" name="test_invalid_release" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_custom_error_handling" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_dynamic_resizing" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_high_frequency_operations" time="0.006" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_as_context_manager" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_exception_in_release" time="0.000" /><testcase classname="tests.task.test_task" name="test_create_task" time="0.000" /><testcase classname="tests.task.test_task" name="test_persistent_task" time="2.005" /><testcase classname="tests.task.test_task" name="test_pruning" time="0.000" /><testcase classname="tests.task.test_task" name="test_task_mapping_init" time="0.000" /><testcase classname="tests.task.test_task" name="test_task_mapping" time="0.214" /><testcase classname="tests.task.test_task" name="test_task_mapping_map_with_sync_iter" time="0.210" /><testcase classname="tests.task.test_task" name="test_task_mapping_map_with_async_iter" time="0.224" /><testcase classname="tests.task.test_task" name="test_task_mapping_empty_iterable" time="0.001" /><testcase classname="tests.task.test_task" name="test_task_mapping_single_item" time="0.104" /><testcase classname="tests.task.test_task" name="test_task_mapping_error_handling" time="0.001" /><testcase classname="tests.task.test_task" name="test_task_mapping_concurrency" time="0.000" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[False-None-False]" time="0.001" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[False-None-True]" time="0.001" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[False-2-False]" time="0.000" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[False-2-True]" time="0.000" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[True-None-False]" time="0.000" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[True-None-True]" time="0.000" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[True-2-False]" time="0.000" /><testcase classname="tests.task.test_task" name="test_map_binds_constant_prefix[True-2-True]" time="0.000" /><testcase classname="tests.task.test_task" name="test_map_binds_prefix_of_bound_async_method" time="0.001" /><testcase classname="tests.task.test_task" name="test_map_does_not_retry_type_errors_from_callable_body" time="0.000" /><testcase classname="tests.task.test_task" name="test_map_bound_prefix_preserves_other_keywords_and_cancellation" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_taskmapping_views_async[TaskMappingKeys-expected0]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_taskmapping_views_async[TaskMappingValues-expected1]" time="0.101" /><testcase classname="tests.task.test_task_mapping_views" name="test_taskmapping_views_async[TaskMappingItems-expected2]" time="0.104" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_async[TaskMappingKeys]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_async[TaskMappingValues]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_async[TaskMappingItems]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_broken_mapping_async[TaskMappingKeys]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_broken_mapping_async[TaskMappingValues]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_broken_mapping_async[TaskMappingItems]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_single_item_taskmapping_views_async[TaskMappingKeys-expected0]" time="0.001" /><testcase classname="tests.task.test_task_mapping_views" name="test_single_item_taskmapping_views_async[TaskMappingValues-expected1]" time="0.102" /><testcase classname="tests.task.test_task_mapping_views" name="test_single_item_taskmapping_views_async[TaskMappingItems-expected2]" time="0.102" /><testcase classname="tests.utils.test_iterators" name="test_simple_merge" time="0.000" /><testcase classname="tests.utils.test_iterators" name="test_merge_with_empty" time="0.000" /><testcase classname="tests.utils.test_iterators" name="test_merge_slow_fast" time="0.105" /><testcase classname="tests.utils.test_iterators" name="test_error_in_iterator" time="0.000" /><testcase classname="tests.utils.test_iterators" name="test_single_iterator" time="0.000" /><testcase classname="tests.utils.test_iterators" name="test_all_empty_iterators" time="0.000" /><testcase classname="tests.utils.test_iterators" name="test_consumer_cancels_early" time="0.000" /><testcase classname="tests.test_executor" name="test_executor" time="12.028" /><testcase classname="tests.test_future" name="test_result" time="0.001" /><testcase classname="tests.test_future" name="test_await_protocol_uses_iterator" time="0.000" /><testcase classname="tests.test_future" name="test_add" time="0.001" /><testcase classname="tests.test_future" name="test_sum" time="0.004" /><testcase classname="tests.test_future" name="test_sub" time="0.001" /><testcase classname="tests.test_future" name="test_mul" time="0.000" /><testcase classname="tests.test_future" name="test_pow" time="0.001" /><testcase classname="tests.test_future" name="test_realdiv" time="0.000" /><testcase classname="tests.test_future" name="test_floordiv" time="0.001" /><testcase classname="tests.test_future" name="test_gt" time="0.000" /><testcase classname="tests.test_future" name="test_gte" time="0.000" /><testcase classname="tests.test_future" name="test_lt" time="0.000" /><testcase classname="tests.test_future" name="test_lte" time="0.000" /><testcase classname="tests.test_future" name="test_bool" time="0.000" /><testcase classname="tests.test_future" name="test_float" time="0.000" /><testcase classname="tests.test_future" name="test_str" time="0.000" /><testcase classname="tests.test_future" name="test_getitem" time="0.000" /><testcase classname="tests.test_future" name="test_setitem" time="0.000" /><testcase classname="tests.test_future" name="test_getattr" time="0.000" /><testcase classname="tests.test_future" name="test_multi_maths" time="0.001" /><testcase classname="tests.test_helpers" name="test_get_event_loop" time="0.000" /><testcase classname="tests.test_helpers" name="test_get_event_loop_in_thread" time="0.001" /><testcase classname="tests.test_smart" name="test_set_smart_task_factory" time="0.110" /><testcase classname="tests.test_smart" name="test_set_smart_task_factory_with_loop" time="0.110" /><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[success-future]" time="0.002"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec499e80&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec4983c0&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec499e80&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec4983c0&gt;)] = &lt;SmartTask pending name='Task-2280' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'future', outcome = 'success'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec499e80&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec4983c0&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec499e80&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec4983c0&gt;)] = &lt;SmartTask pending name='Task-2280' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[success-task]" time="0.001"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec498400&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; result=&lt;tests.test_s...xfc03ec63f200&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a180&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec498400&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; result=&lt;tests.test_s...xfc03ec63f200&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a180&gt;)] = &lt;SmartTask pending name='Task-2281' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...ntil_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartTask._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'task', outcome = 'success'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec498400&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; result=&lt;tests.test_s...xfc03ec63f200&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a180&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec498400&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; result=&lt;tests.test_s...xfc03ec63f200&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a180&gt;)] = &lt;SmartTask pending name='Task-2281' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...ntil_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartTask._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[success-shield]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec499fc0&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec4985c0&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec499fc0&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec4985c0&gt;)] = &lt;SmartTask pending name='Task-2283' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'shield', outcome = 'success'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec499fc0&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec4985c0&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec499fc0&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec4985c0&gt;)] = &lt;SmartTask pending name='Task-2283' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[failure-future]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec4984c0&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a040&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec4984c0&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a040&gt;)] = &lt;SmartTask pending name='Task-2285' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'future', outcome = 'failure'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec4984c0&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a040&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec4984c0&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a040&gt;)] = &lt;SmartTask pending name='Task-2285' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[failure-task]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec68ecc0&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; exception=ValueError('lookup failed')&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a1c0&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec68ecc0&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; exception=ValueError('lookup failed')&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a1c0&gt;)] = &lt;SmartTask pending name='Task-2286' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...ntil_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartTask._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'task', outcome = 'failure'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec68ecc0&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; exception=ValueError('lookup failed')&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a1c0&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec68ecc0&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; exception=ValueError('lookup failed')&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a1c0&gt;)] = &lt;SmartTask pending name='Task-2286' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...ntil_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartTask._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[failure-shield]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec498640&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec4985c0&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec498640&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec4985c0&gt;)] = &lt;SmartTask pending name='Task-2288' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'shield', outcome = 'failure'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec498640&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec4985c0&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec498640&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec4985c0&gt;)] = &lt;SmartTask pending name='Task-2288' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[cancel-future]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec6a0580&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec498240&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec6a0580&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec498240&gt;)] = &lt;SmartTask pending name='Task-2290' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'future', outcome = 'cancel'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec6a0580&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec498240&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec6a0580&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec498240&gt;)] = &lt;SmartTask pending name='Task-2290' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[cancel-task]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec498400&gt;), (&lt;bound metho...d at /tmp/smart-owner-full-tests/tests/test_smart_ownership.py:17&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a180&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec498400&gt;), (&lt;bound metho...d at /tmp/smart-owner-full-tests/tests/test_smart_ownership.py:17&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a180&gt;)] = &lt;SmartTask pending name='Task-2291' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...ntil_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartTask._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'task', outcome = 'cancel'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec498400&gt;), (&lt;bound metho...d at /tmp/smart-owner-full-tests/tests/test_smart_ownership.py:17&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a180&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec498400&gt;), (&lt;bound metho...d at /tmp/smart-owner-full-tests/tests/test_smart_ownership.py:17&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec49a180&gt;)] = &lt;SmartTask pending name='Task-2291' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...ntil_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartTask._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[cancel-shield]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec499e80&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec499b80&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec499e80&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec499b80&gt;)] = &lt;SmartTask pending name='Task-2293' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'shield', outcome = 'cancel'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec499e80&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec499b80&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xfc03f1876160&gt;, &lt;_contextvars.Context object at 0xfc03ec499e80&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xfc03ec499b80&gt;)] = &lt;SmartTask pending name='Task-2293' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.a_sync.test_abstract" name="test_abc_direct_init" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_base_direct_init" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_inheritance[True-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_inheritance[True-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_inheritance[True-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_inheritance[True-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_inheritance[False-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_inheritance[False-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_inheritance[False-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_inheritance[False-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[0-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[0-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[0-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[0-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[1-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[1-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[1-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[1-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[2-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[2-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[2-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[2-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[3-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[3-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[3-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[3-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[4-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[4-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[4-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[4-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[5-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[5-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[5-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[5-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[6-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[6-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[6-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[6-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[7-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[7-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[7-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[7-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[8-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[8-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[8-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[8-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[9-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[9-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[9-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_method_sync[9-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[0-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[0-TestSync]" time="0.001" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[0-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[0-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[1-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[1-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[1-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[1-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[2-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[2-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[2-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[2-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[3-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[3-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[3-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[3-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[4-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[4-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[4-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[4-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[5-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[5-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[5-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[5-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[6-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[6-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[6-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[6-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[7-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[7-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[7-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[7-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[8-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[8-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[8-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[8-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[9-TestClass]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[9-TestSync]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[9-TestInheritor]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_property_sync[9-TestMeta]" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[0-TestClass]" time="2.008" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[0-TestSync]" time="2.007" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[0-TestInheritor]" time="2.015" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[0-TestMeta]" time="2.012" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[1-TestClass]" time="2.015" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[1-TestSync]" time="2.013" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[1-TestInheritor]" time="2.015" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[1-TestMeta]" time="2.008" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[2-TestClass]" time="2.006" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[2-TestSync]" time="2.013" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[2-TestInheritor]" time="2.008" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[2-TestMeta]" time="2.015" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[3-TestClass]" time="2.009" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[3-TestSync]" time="2.008" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[3-TestInheritor]" time="2.005" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[3-TestMeta]" time="2.012" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[4-TestClass]" time="2.008" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[4-TestSync]" time="2.003" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[4-TestInheritor]" time="2.013" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[4-TestMeta]" time="2.014" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[5-TestClass]" time="2.010" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[5-TestSync]" time="2.014" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[5-TestInheritor]" time="2.007" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[5-TestMeta]" time="2.007" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[6-TestClass]" time="2.009" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[6-TestSync]" time="2.006" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[6-TestInheritor]" time="2.014" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[6-TestMeta]" time="2.010" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[7-TestClass]" time="2.014" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[7-TestSync]" time="2.008" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[7-TestInheritor]" time="2.016" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[7-TestMeta]" time="2.015" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[8-TestClass]" time="2.011" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[8-TestSync]" time="2.012" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[8-TestInheritor]" time="2.012" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[8-TestMeta]" time="2.015" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[9-TestClass]" time="2.012" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[9-TestSync]" time="2.005" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[9-TestInheritor]" time="2.009" /><testcase classname="tests.a_sync.test_base" name="test_cached_property_sync[9-TestMeta]" time="2.014" /><testcase classname="tests.a_sync.test_base" name="test_synchronous_context_manager" time="0.001" /><testcase classname="tests.a_sync.test_base" name="test_synchronous_iteration" time="0.000" /><testcase classname="tests.a_sync.test_base" name="test_bound_generator_meta_sync" time="0.001" /><testcase classname="tests.a_sync.test_cache" name="test_decorator_async_with_cache_type" time="0.001" /><testcase classname="tests.a_sync.test_cache" name="test_decorator_async_with_cache_maxsize" time="5.038" /><testcase classname="tests.a_sync.test_cache" name="test_decorator_async_with_cache_ttl" time="0.002" /><testcase classname="tests.a_sync.test_cache" name="test_decorator_sync_with_cache_type" time="1.005" /><testcase classname="tests.a_sync.test_cache" name="test_decorator_sync_with_cache_maxsize" time="0.001"><skipped type="pytest.skip" message="skipped manually">/tmp/smart-owner-full-tests/tests/a_sync/test_cache.py:63: skipped manually</skipped></testcase><testcase classname="tests.a_sync.test_cached_property_ownership" name="test_cached_loader_releases_instances_and_reuses_values[False-AsyncCachedPropertyDescriptor]" time="0.001"><failure message="AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2def30&gt; is None&#10; +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2def30&gt; = &lt;weakref at 0xfc03ec304d10; to 'Sample' at 0xfc03ec2def30&gt;()">descriptor_type = &lt;class 'a_sync.async_property.cached.AsyncCachedPropertyDescriptor'&gt;
+with_setter = False
+
+    @pytest.mark.parametrize(
+        "descriptor_type", [AsyncCachedPropertyDescriptor, ASyncCachedPropertyDescriptor]
+    )
+    @pytest.mark.parametrize("with_setter", [False, True])
+    def test_cached_loader_releases_instances_and_reuses_values(descriptor_type, with_setter):
+        calls, setters = {}, {}
+
+        async def value(instance):
+            calls[instance.key] = calls.get(instance.key, 0) + 1
+            return (instance.key, bytearray(1024))
+
+        def store(instance, result):
+            setters[instance.key] = result[0]
+
+        descriptor = descriptor_type(value, _fset=store if with_setter else None)
+
+        class Sample:
+            value = descriptor
+
+            def __init__(self, key):
+                self.key = key
+
+        async def check():
+            first, second = Sample("first"), Sample("second")
+            references = weakref.ref(first), weakref.ref(second)
+            first_value = await descriptor.get_loader(first)()
+            second_value = await descriptor.get_loader(second)()
+            assert first_value is await descriptor.get_loader(first)()
+            assert second_value is await descriptor.get_loader(second)()
+            assert first_value[0] == "first" and second_value[0] == "second"
+            assert first_value is not second_value
+            assert calls == {"first": 1, "second": 1}
+            assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+            del first, second
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            assert references[0]() is None
+            assert references[1]() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/a_sync/test_cached_property_ownership.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        first, second = Sample("first"), Sample("second")
+        references = weakref.ref(first), weakref.ref(second)
+        first_value = await descriptor.get_loader(first)()
+        second_value = await descriptor.get_loader(second)()
+        assert first_value is await descriptor.get_loader(first)()
+        assert second_value is await descriptor.get_loader(second)()
+        assert first_value[0] == "first" and second_value[0] == "second"
+        assert first_value is not second_value
+        assert calls == {"first": 1, "second": 1}
+        assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+        del first, second
+        await asyncio.sleep(0)
+        await asyncio.sleep(0)
+&gt;       assert references[0]() is None
+E       AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2def30&gt; is None
+E        +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2def30&gt; = &lt;weakref at 0xfc03ec304d10; to 'Sample' at 0xfc03ec2def30&gt;()
+
+tests/a_sync/test_cached_property_ownership.py:48: AssertionError</failure></testcase><testcase classname="tests.a_sync.test_cached_property_ownership" name="test_cached_loader_releases_instances_and_reuses_values[False-ASyncCachedPropertyDescriptor]" time="0.000"><failure message="AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2df2c0&gt; is None&#10; +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2df2c0&gt; = &lt;weakref at 0xfc03ec3071f0; to 'Sample' at 0xfc03ec2df2c0&gt;()">descriptor_type = &lt;class 'a_sync.a_sync.property.ASyncCachedPropertyDescriptor'&gt;
+with_setter = False
+
+    @pytest.mark.parametrize(
+        "descriptor_type", [AsyncCachedPropertyDescriptor, ASyncCachedPropertyDescriptor]
+    )
+    @pytest.mark.parametrize("with_setter", [False, True])
+    def test_cached_loader_releases_instances_and_reuses_values(descriptor_type, with_setter):
+        calls, setters = {}, {}
+
+        async def value(instance):
+            calls[instance.key] = calls.get(instance.key, 0) + 1
+            return (instance.key, bytearray(1024))
+
+        def store(instance, result):
+            setters[instance.key] = result[0]
+
+        descriptor = descriptor_type(value, _fset=store if with_setter else None)
+
+        class Sample:
+            value = descriptor
+
+            def __init__(self, key):
+                self.key = key
+
+        async def check():
+            first, second = Sample("first"), Sample("second")
+            references = weakref.ref(first), weakref.ref(second)
+            first_value = await descriptor.get_loader(first)()
+            second_value = await descriptor.get_loader(second)()
+            assert first_value is await descriptor.get_loader(first)()
+            assert second_value is await descriptor.get_loader(second)()
+            assert first_value[0] == "first" and second_value[0] == "second"
+            assert first_value is not second_value
+            assert calls == {"first": 1, "second": 1}
+            assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+            del first, second
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            assert references[0]() is None
+            assert references[1]() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/a_sync/test_cached_property_ownership.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        first, second = Sample("first"), Sample("second")
+        references = weakref.ref(first), weakref.ref(second)
+        first_value = await descriptor.get_loader(first)()
+        second_value = await descriptor.get_loader(second)()
+        assert first_value is await descriptor.get_loader(first)()
+        assert second_value is await descriptor.get_loader(second)()
+        assert first_value[0] == "first" and second_value[0] == "second"
+        assert first_value is not second_value
+        assert calls == {"first": 1, "second": 1}
+        assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+        del first, second
+        await asyncio.sleep(0)
+        await asyncio.sleep(0)
+&gt;       assert references[0]() is None
+E       AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2df2c0&gt; is None
+E        +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2df2c0&gt; = &lt;weakref at 0xfc03ec3071f0; to 'Sample' at 0xfc03ec2df2c0&gt;()
+
+tests/a_sync/test_cached_property_ownership.py:48: AssertionError</failure></testcase><testcase classname="tests.a_sync.test_cached_property_ownership" name="test_cached_loader_releases_instances_and_reuses_values[True-AsyncCachedPropertyDescriptor]" time="0.000"><failure message="AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2dfbc0&gt; is None&#10; +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2dfbc0&gt; = &lt;weakref at 0xfc03ec3222f0; to 'Sample' at 0xfc03ec2dfbc0&gt;()">descriptor_type = &lt;class 'a_sync.async_property.cached.AsyncCachedPropertyDescriptor'&gt;
+with_setter = True
+
+    @pytest.mark.parametrize(
+        "descriptor_type", [AsyncCachedPropertyDescriptor, ASyncCachedPropertyDescriptor]
+    )
+    @pytest.mark.parametrize("with_setter", [False, True])
+    def test_cached_loader_releases_instances_and_reuses_values(descriptor_type, with_setter):
+        calls, setters = {}, {}
+
+        async def value(instance):
+            calls[instance.key] = calls.get(instance.key, 0) + 1
+            return (instance.key, bytearray(1024))
+
+        def store(instance, result):
+            setters[instance.key] = result[0]
+
+        descriptor = descriptor_type(value, _fset=store if with_setter else None)
+
+        class Sample:
+            value = descriptor
+
+            def __init__(self, key):
+                self.key = key
+
+        async def check():
+            first, second = Sample("first"), Sample("second")
+            references = weakref.ref(first), weakref.ref(second)
+            first_value = await descriptor.get_loader(first)()
+            second_value = await descriptor.get_loader(second)()
+            assert first_value is await descriptor.get_loader(first)()
+            assert second_value is await descriptor.get_loader(second)()
+            assert first_value[0] == "first" and second_value[0] == "second"
+            assert first_value is not second_value
+            assert calls == {"first": 1, "second": 1}
+            assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+            del first, second
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            assert references[0]() is None
+            assert references[1]() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/a_sync/test_cached_property_ownership.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        first, second = Sample("first"), Sample("second")
+        references = weakref.ref(first), weakref.ref(second)
+        first_value = await descriptor.get_loader(first)()
+        second_value = await descriptor.get_loader(second)()
+        assert first_value is await descriptor.get_loader(first)()
+        assert second_value is await descriptor.get_loader(second)()
+        assert first_value[0] == "first" and second_value[0] == "second"
+        assert first_value is not second_value
+        assert calls == {"first": 1, "second": 1}
+        assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+        del first, second
+        await asyncio.sleep(0)
+        await asyncio.sleep(0)
+&gt;       assert references[0]() is None
+E       AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2dfbc0&gt; is None
+E        +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2dfbc0&gt; = &lt;weakref at 0xfc03ec3222f0; to 'Sample' at 0xfc03ec2dfbc0&gt;()
+
+tests/a_sync/test_cached_property_ownership.py:48: AssertionError</failure></testcase><testcase classname="tests.a_sync.test_cached_property_ownership" name="test_cached_loader_releases_instances_and_reuses_values[True-ASyncCachedPropertyDescriptor]" time="0.000"><failure message="AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2dedb0&gt; is None&#10; +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2dedb0&gt; = &lt;weakref at 0xfc03ec323740; to 'Sample' at 0xfc03ec2dedb0&gt;()">descriptor_type = &lt;class 'a_sync.a_sync.property.ASyncCachedPropertyDescriptor'&gt;
+with_setter = True
+
+    @pytest.mark.parametrize(
+        "descriptor_type", [AsyncCachedPropertyDescriptor, ASyncCachedPropertyDescriptor]
+    )
+    @pytest.mark.parametrize("with_setter", [False, True])
+    def test_cached_loader_releases_instances_and_reuses_values(descriptor_type, with_setter):
+        calls, setters = {}, {}
+
+        async def value(instance):
+            calls[instance.key] = calls.get(instance.key, 0) + 1
+            return (instance.key, bytearray(1024))
+
+        def store(instance, result):
+            setters[instance.key] = result[0]
+
+        descriptor = descriptor_type(value, _fset=store if with_setter else None)
+
+        class Sample:
+            value = descriptor
+
+            def __init__(self, key):
+                self.key = key
+
+        async def check():
+            first, second = Sample("first"), Sample("second")
+            references = weakref.ref(first), weakref.ref(second)
+            first_value = await descriptor.get_loader(first)()
+            second_value = await descriptor.get_loader(second)()
+            assert first_value is await descriptor.get_loader(first)()
+            assert second_value is await descriptor.get_loader(second)()
+            assert first_value[0] == "first" and second_value[0] == "second"
+            assert first_value is not second_value
+            assert calls == {"first": 1, "second": 1}
+            assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+            del first, second
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            assert references[0]() is None
+            assert references[1]() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/a_sync/test_cached_property_ownership.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        first, second = Sample("first"), Sample("second")
+        references = weakref.ref(first), weakref.ref(second)
+        first_value = await descriptor.get_loader(first)()
+        second_value = await descriptor.get_loader(second)()
+        assert first_value is await descriptor.get_loader(first)()
+        assert second_value is await descriptor.get_loader(second)()
+        assert first_value[0] == "first" and second_value[0] == "second"
+        assert first_value is not second_value
+        assert calls == {"first": 1, "second": 1}
+        assert setters == ({"first": "first", "second": "second"} if with_setter else {})
+        del first, second
+        await asyncio.sleep(0)
+        await asyncio.sleep(0)
+&gt;       assert references[0]() is None
+E       AssertionError: assert &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2dedb0&gt; is None
+E        +  where &lt;test_cached_property_ownership.test_cached_loader_releases_instances_and_reuses_values.&lt;locals&gt;.Sample object at 0xfc03ec2dedb0&gt; = &lt;weakref at 0xfc03ec323740; to 'Sample' at 0xfc03ec2dedb0&gt;()
+
+tests/a_sync/test_cached_property_ownership.py:48: AssertionError</failure></testcase><testcase classname="tests.a_sync.test_decorator" name="test_decorator_no_args" time="0.000" /><testcase classname="tests.a_sync.test_decorator" name="test_decorator_default_none_arg" time="0.000" /><testcase classname="tests.a_sync.test_decorator" name="test_decorator_default_none_kwarg" time="0.000" /><testcase classname="tests.a_sync.test_decorator" name="test_decorator_default_sync_arg" time="0.000" /><testcase classname="tests.a_sync.test_decorator" name="test_decorator_default_sync_kwarg" time="0.000" /><testcase classname="tests.a_sync.test_decorator" name="test_decorator_default_async_arg" time="0.000" /><testcase classname="tests.a_sync.test_decorator" name="test_decorator_default_async_kwarg" time="0.000" /><testcase classname="tests.a_sync.test_decorator" name="test_sync_decorator_no_args" time="0.001" /><testcase classname="tests.a_sync.test_decorator" name="test_sync_decorator_default_none_arg" time="0.000" /><testcase classname="tests.a_sync.test_decorator" name="test_sync_decorator_default_none_kwarg" time="0.000" /><testcase classname="tests.a_sync.test_decorator" name="test_sync_decorator_default_sync_arg" time="0.000" /><testcase classname="tests.a_sync.test_decorator" name="test_sync_decorator_default_sync_kwarg" time="0.000" /><testcase classname="tests.a_sync.test_decorator" name="test_sync_decorator_default_async_arg" time="0.000" /><testcase classname="tests.a_sync.test_decorator" name="test_sync_decorator_default_async_kwarg" time="0.001" /><testcase classname="tests.a_sync.test_function" name="test_im_a_fuckin_pro_dont_worry_suppresses_warnings" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[0-TestSingleton]" time="2.009" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[0-TestSingletonMeta]" time="2.007" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[1-TestSingleton]" time="0.001" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[1-TestSingletonMeta]" time="0.001" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[2-TestSingleton]" time="0.001" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[2-TestSingletonMeta]" time="0.001" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[3-TestSingleton]" time="0.001" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[3-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[4-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[4-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[5-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[5-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[6-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[6-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[7-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[7-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[8-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[8-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[9-TestSingleton]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_meta_sync[9-TestSingletonMeta]" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_unspecified" time="0.000" /><testcase classname="tests.a_sync.test_meta" name="test_singleton_switching" time="0.000" /><testcase classname="tests.a_sync.test_modified" name="test_sync_def_repr" time="0.000" /><testcase classname="tests.a_sync.test_modified" name="test_async_def_repr" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_any_sync" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_all_sync" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_min_sync" time="0.001" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_max_sync" time="0.001" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_sum_sync" time="0.000" /><testcase classname="tests.a_sync.test_singleton" name="test_flag_predefined" time="0.000" /><testcase classname="tests.asyncio.test_create_task" name="test_create_task_with_smart_task_factory" time="1.007" /><testcase classname="tests.iter.test_asyncgenfunc" name="test_a_sync_generator_function_init" time="0.001" /><testcase classname="tests.iter.test_asyncgenfunc" name="test_a_sync_generator_function_decorate_func" time="0.000" /><testcase classname="tests.iter.test_asyncgenfunc" name="test_a_sync_generator_function_decorate_method" time="0.001" /><testcase classname="tests.iter.test_asyncgenfunc" name="test_a_sync_generator_function_call_iter" time="0.001" /><testcase classname="tests.iter.test_asyncgenfunc" name="test_a_sync_generator_method_call_iter" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_wrap_types[ASyncIterable]" time="0.001" /><testcase classname="tests.iter.test_iterables" name="test_wrap_types[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_sync[ASyncIterable]" time="0.001" /><testcase classname="tests.iter.test_iterables" name="test_sync[ASyncIterator]" time="0.001" /><testcase classname="tests.iter.test_iterables" name="test_sync_empty[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_sync_empty[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_sync_partial[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_sync_partial[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_stop_iteration_sync[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_stop_iteration_sync[ASyncIterator]" time="0.001" /><testcase classname="tests.iter.test_iterables" name="test_aiterable_decorated_func_sync" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_aiterator_decorated_func_sync" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_aiterable_decorated_method_sync" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_aiterator_decorated_method_sync" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_sync_error_handling[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_sync_error_handling[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_sync_with_iterable[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_sync_with_iterable[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async_iterable_iter_method" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_async_iterator_iter_method" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_class_docstring_empty[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_class_docstring_empty[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_class_docstring_empty[ASyncFilter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_class_docstring_empty[ASyncSorter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_class_docstring_append[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_class_docstring_append[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_class_docstring_append[ASyncFilter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_class_docstring_append[ASyncSorter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_method_docstring_replacement[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_method_docstring_replacement[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_method_docstring_replacement[ASyncFilter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_method_docstring_replacement[ASyncSorter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_typevar_default[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_typevar_default[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_typevar_default[ASyncFilter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_typevar_default[ASyncSorter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_typevar_specified[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_typevar_specified[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_typevar_specified[ASyncFilter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_typevar_specified[ASyncSorter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_typevar_default_obj[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_typevar_default_obj[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_typevar_default_obj[ASyncFilter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_typevar_default_obj[ASyncSorter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_init_subclass_with_typevar[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_init_subclass_with_typevar[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_init_subclass_with_typevar[ASyncFilter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_init_subclass_with_typevar[ASyncSorter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_init_subclass_with_generic_alias[ASyncIterable]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_init_subclass_with_generic_alias[ASyncIterator]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_init_subclass_with_generic_alias[ASyncFilter]" time="0.000" /><testcase classname="tests.iter.test_iterables" name="test_init_subclass_with_generic_alias[ASyncSorter]" time="0.000" /><testcase classname="tests.mypy.test_mypy_plugin" name="test_proxy_and_future_attribute_typing" time="2.406" /><testcase classname="tests.mypy.test_mypy_plugin" name="test_proxy_and_future_missing_attribute_errors" time="2.412" /><testcase classname="tests.mypy.test_mypy_plugin" name="test_property_descriptor_typing" time="2.418" /><testcase classname="tests.mypy.test_mypy_plugin" name="test_a_sync_decorator_default_resolution" time="2.566" /><testcase classname="tests.mypy.test_mypy_plugin" name="test_flag_conflict_hook_reports_error" time="2.430" /><testcase classname="tests.mypy.test_mypy_plugin" name="test_metaclass_wraps_sync_methods_and_descriptors" time="2.445"><failure message="assert 0 == 2">tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_metaclass_wraps_sync_meth0')
+
+    def test_metaclass_wraps_sync_methods_and_descriptors(tmp_path: Path) -&gt; None:
+        output = _run_mypy(
+            tmp_path,
+            """
+            from a_sync.a_sync._meta import ASyncMeta
+            from a_sync.a_sync.property import a_sync_property, a_sync_cached_property
+
+            class Thing(metaclass=ASyncMeta):
+                def compute(self, value: int) -&gt; int:
+                    return value
+
+                @a_sync_property
+                def value(self) -&gt; int:
+                    return 1
+
+                @a_sync_cached_property
+                def cached(self) -&gt; int:
+                    return 2
+
+            reveal_type(Thing.compute)
+            reveal_type(Thing().compute)
+            reveal_type(Thing.value)
+            reveal_type(Thing.cached)
+            reveal_type(Thing().value)
+            reveal_type(Thing().cached)
+            """,
+        )
+        _assert_revealed_contains(
+            output,
+            "ASyncMethodDescriptor[",
+            "ASyncBoundMethod[",
+            "ASyncPropertyDescriptor[",
+            "ASyncCachedPropertyDescriptor[",
+        )
+&gt;       assert _reveal_types(output)['"typing.Awaitable[builtins.int]"'] == 2
+E       assert 0 == 2
+
+tests/mypy/test_mypy_plugin.py:277: AssertionError</failure></testcase><testcase classname="tests.mypy.test_mypy_plugin" name="test_metaclass_preserves_method_and_cached_property_body_checks" time="2.722"><failure message="AssertionError: assert 'INTERNAL ERROR' not in 'Warning: Un...p into pdb\n'&#10;  'INTERNAL ERROR' is contained here:&#10;    1: error: INTERNAL ERROR -- Please try using mypy master on GitHub:&#10;  ?           ++++++++++++++&#10;    https://mypy.readthedocs.io/en/stable/common_issues.html#using-a-development-mypy-build&#10;    Please report a bug at https://github.com/python/mypy/issues&#10;    version: 1.19.1+bytesrefcount1&#10;    /tmp/pytest-of-root/pytest-0/test_metaclass_preserves_metho0/snippet.py:11: : note: use --pdb to drop into pdb">tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_metaclass_preserves_metho0')
+
+    def test_metaclass_preserves_method_and_cached_property_body_checks(tmp_path: Path) -&gt; None:
+&gt;       output = _run_mypy(
+            tmp_path,
+            """
+            from a_sync.a_sync._meta import ASyncMeta
+            from a_sync.a_sync.property import a_sync_cached_property
+
+            class Thing(metaclass=ASyncMeta):
+                def compute(self, value: int) -&gt; int:
+                    return "incorrect method result"
+
+                @a_sync_cached_property
+                async def cached(self) -&gt; int:
+                    return "incorrect property result"
+
+            reveal_type(Thing().cached)
+            """,
+        )
+
+tests/mypy/test_mypy_plugin.py:282:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_metaclass_preserves_metho0')
+code = '\n        from a_sync.a_sync._meta import ASyncMeta\n        from a_sync.a_sync.property import a_sync_cached_propert...hed(self) -&gt; int:\n                return "incorrect property result"\n\n        reveal_type(Thing().cached)\n        '
+
+    def _run_mypy(
+        tmp_path: Path,
+        code: str,
+        *,
+        env_overrides: dict[str, str | None] | None = None,
+    ) -&gt; str:
+        source = tmp_path / "snippet.py"
+        source.write_text(dedent(code))
+        cache_dir = tmp_path / ".mypy_cache"
+        env = dict(os.environ)
+        env["MYPY_CACHE_DIR"] = str(cache_dir)
+        if env_overrides:
+            for key, value in env_overrides.items():
+                if value is None:
+                    env.pop(key, None)
+                else:
+                    env[key] = value
+        result = subprocess.run(
+            [sys.executable, "-m", "mypy", str(source)],
+            cwd=REPO_ROOT,
+            env=env,
+            text=True,
+            capture_output=True,
+        )
+        output = (result.stdout or "") + (result.stderr or "")
+&gt;       assert "INTERNAL ERROR" not in output
+E       AssertionError: assert 'INTERNAL ERROR' not in 'Warning: Un...p into pdb\n'
+E         'INTERNAL ERROR' is contained here:
+E           1: error: INTERNAL ERROR -- Please try using mypy master on GitHub:
+E         ?           ++++++++++++++
+E           https://mypy.readthedocs.io/en/stable/common_issues.html#using-a-development-mypy-build
+E           Please report a bug at https://github.com/python/mypy/issues
+E           version: 1.19.1+bytesrefcount1
+E           /tmp/pytest-of-root/pytest-0/test_metaclass_preserves_metho0/snippet.py:11: : note: use --pdb to drop into pdb
+
+tests/mypy/test_mypy_plugin.py:38: AssertionError</failure></testcase><testcase classname="tests.mypy.test_mypy_plugin" name="test_async_generator_descriptor_typing" time="2.456" /><testcase classname="tests.mypy.test_mypy_plugin" name="test_a_sync_decorator_in_conditional_scope_does_not_internal_error" time="2.469" /><testcase classname="tests.mypy.test_mypy_plugin_conditional_scope_sync_regression" name="test_a_sync_decorator_sync_literal_in_conditional_scope_no_internal_error" time="2.442" /><testcase classname="tests.mypy.test_mypy_plugin_sync_default_regression" name="test_a_sync_callable_sync_default_preserves_signature" time="2.465" /><testcase classname="tests.mypy.test_mypy_plugin_sync_default_syncfn_regression" name="test_a_sync_callable_sync_default_syncfn_preserves_signature" time="2.465" /><testcase classname="tests.primitives.test_counter" name="test_counterlock_invalid_start_value" time="0.000" /><testcase classname="tests.primitives.test_prio_semaphore" name="test_prio_semaphore_init" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_init" time="0.000" /><testcase classname="tests.primitives.test_semaphore" name="test_semaphore_negative_initial_value" time="0.000" /><testcase classname="tests.task.test_task" name="test_taskmapping_views_sync" time="0.111" /><testcase classname="tests.task.test_task" name="test_unwrap_basic" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_function_sync_def" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_function_async_def" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_function_sync_def_sync_default" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_function_async_def_sync_default" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_function_sync_def_async_default" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_function_async_def_async_default" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_method_sync_def" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_method_async_def" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_method_sync_def_sync_defult" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_method_async_def_sync_defult" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_method_sync_def_async_default" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_a_sync_method_async_def_async_default" time="0.000" /><testcase classname="tests.task.test_task" name="test_unwrap_does_not_retain_callable_or_its_captured_state" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_taskmapping_views_sync[TaskMappingKeys-expected0]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_taskmapping_views_sync[TaskMappingValues-expected1]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_taskmapping_views_sync[TaskMappingItems-expected2]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_sync[TaskMappingKeys]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_sync[TaskMappingValues]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_empty_taskmapping_views_sync[TaskMappingItems]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_single_item_taskmapping_views_sync[TaskMappingKeys-expected0]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_single_item_taskmapping_views_sync[TaskMappingValues-expected1]" time="0.000" /><testcase classname="tests.task.test_task_mapping_views" name="test_single_item_taskmapping_views_sync[TaskMappingItems-expected2]" time="0.000" /><testcase classname="tests.utils.test_iterators" name="test_done_repr_no_exception" time="0.000" /><testcase classname="tests.utils.test_iterators" name="test_done_repr_with_exception" time="0.000" /><testcase classname="tests.utils.test_iterators" name="test_done_tb_returns_exception_traceback" time="0.000" /><testcase classname="tests.utils.test_repr" name="test_repr_trunc_list" time="0.000" /><testcase classname="tests.utils.test_repr" name="test_repr_trunc_tuple" time="0.000" /><testcase classname="tests.utils.test_repr" name="test_repr_trunc_dict" time="0.000" /><testcase classname="tests.utils.test_repr" name="test_repr_trunc_dict_keys" time="0.000" /><testcase classname="tests.utils.test_repr" name="test_repr_trunc_dict_values" time="0.000" /><testcase classname="tests.utils.test_repr" name="test_repr_trunc_dict_items" time="0.000" /></testsuite></testsuites>

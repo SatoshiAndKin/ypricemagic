@@ -1,0 +1,236 @@
+[
+  {
+    "case": "Balancer V2 swap",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "input": {
+      "token": "0xba100000625a3754423978a60c9317c58a424e3d",
+      "amount": 100000000000000000000,
+      "decimals": 18
+    },
+    "status": "pass",
+    "expected": {
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": 207996606643336547
+    },
+    "quote": {
+      "kind": "swap",
+      "protocol": "Balancer V2",
+      "contract": "0x5c6ee304399dbdb9c8ef030ab642b10820db8f56",
+      "input": {
+        "token": "0xba100000625a3754423978a60c9317c58a424e3d",
+        "amount": 100000000000000000000,
+        "decimals": 18
+      },
+      "outputs": [
+        {
+          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "amount": 207996606643336547,
+          "decimals": 18
+        }
+      ],
+      "method": "queryBatchSwap(uint8,(bytes32,uint256,uint256,uint256,bytes)[],address[],(address,bool,address,bool))",
+      "fees": "DEX fees included in native quote",
+      "limits": "native quote limits; holder balance and allowance unverified"
+    }
+  },
+  {
+    "case": "Balancer V2 LP exit",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "input": {
+      "token": "0x5c6ee304399dbdb9c8ef030ab642b10820db8f56",
+      "amount": 1000000000000000000,
+      "decimals": 18
+    },
+    "status": "pass",
+    "expected": {
+      "0xba100000625a3754423978a60c9317c58a424e3d": 2320925666558924305,
+      "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": 1219061373711093
+    },
+    "quote": {
+      "kind": "redemption",
+      "protocol": "Balancer V2 proportional LP exit",
+      "contract": "0x5c6ee304399dbdb9c8ef030ab642b10820db8f56",
+      "input": {
+        "token": "0x5c6ee304399dbdb9c8ef030ab642b10820db8f56",
+        "amount": 1000000000000000000,
+        "decimals": 18
+      },
+      "outputs": [
+        {
+          "token": "0xba100000625a3754423978a60c9317c58a424e3d",
+          "amount": 2320925666558924305,
+          "decimals": 18
+        },
+        {
+          "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "amount": 1219061373711093,
+          "decimals": 18
+        }
+      ],
+      "method": "queryExit",
+      "fees": "fees included by pool queryExit",
+      "limits": "native query limits; holder balance unverified"
+    }
+  },
+  {
+    "case": "Compound cDAI",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "input": {
+      "token": "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643",
+      "amount": 10000000000,
+      "decimals": 8
+    },
+    "status": "pass",
+    "expected": {
+      "0x6b175474e89094c44da98b954eedeac495271d0f": 2237572854833239748
+    },
+    "quote": {
+      "kind": "redemption",
+      "protocol": "Compound V2 cToken",
+      "contract": "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643",
+      "input": {
+        "token": "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643",
+        "amount": 10000000000,
+        "decimals": 8
+      },
+      "outputs": [
+        {
+          "token": "0x6b175474e89094c44da98b954eedeac495271d0f",
+          "amount": 2237572854833239748,
+          "decimals": 18
+        }
+      ],
+      "method": "redeem(uint256) / exchangeRateCurrent()",
+      "fees": "none in Compound V2",
+      "limits": "cash=82255880397493388794297411; comptroller and holder eligibility unverified"
+    }
+  },
+  {
+    "case": "Aave V2 aUSDC",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "input": {
+      "token": "0xbcca60bb61934080951369a648fb03df4f96263c",
+      "amount": 1000000000,
+      "decimals": 6
+    },
+    "status": "pass",
+    "expected": {
+      "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": 1000000000
+    },
+    "quote": {
+      "kind": "redemption",
+      "protocol": "Aave V2",
+      "contract": "0xbcca60bb61934080951369a648fb03df4f96263c",
+      "input": {
+        "token": "0xbcca60bb61934080951369a648fb03df4f96263c",
+        "amount": 1000000000,
+        "decimals": 6
+      },
+      "outputs": [
+        {
+          "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "amount": 1000000000,
+          "decimals": 6
+        }
+      ],
+      "method": "withdraw(address,uint256,address)",
+      "fees": "none",
+      "limits": "active, unpaused reserve; cash=44155967175755; collateral and holder eligibility unverified"
+    }
+  },
+  {
+    "case": "Lido wstETH",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "input": {
+      "token": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "amount": 1000000000000000000,
+      "decimals": 18
+    },
+    "status": "pass",
+    "expected": {
+      "0xae7ab96520de3a18e5e111b5eaab095312d7fe84": 1137357913261124156
+    },
+    "quote": {
+      "kind": "redemption",
+      "protocol": "Lido wstETH",
+      "contract": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+      "input": {
+        "token": "0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0",
+        "amount": 1000000000000000000,
+        "decimals": 18
+      },
+      "outputs": [
+        {
+          "token": "0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
+          "amount": 1137357913261124156,
+          "decimals": 18
+        }
+      ],
+      "method": "unwrap(uint256) / getStETHByWstETH(uint256)",
+      "fees": "none",
+      "limits": "immediate stETH output; ETH exit is not modeled"
+    }
+  },
+  {
+    "case": "Curve steCRV gauge",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "input": {
+      "token": "0x182b723a58739a9c974cfdb385ceadb237453c28",
+      "amount": 1000000000000000000,
+      "decimals": 18
+    },
+    "status": "failure",
+    "error": "InvalidAPIKeyError: The block explorer for this network says your API key is invalid."
+  },
+  {
+    "case": "Convex cvx3crv",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "input": {
+      "token": "0x30d9410ed1d5da1f6c8391af5338c93ab8d4035c",
+      "amount": 1000000000000000000,
+      "decimals": 18
+    },
+    "status": "pass",
+    "expected": {
+      "0x6c3f90f043a72fa612cbac8115ee7e52bde6e490": 1000000000000000000
+    },
+    "quote": {
+      "kind": "redemption",
+      "protocol": "Convex Booster V1 deposit token",
+      "contract": "0x30d9410ed1d5da1f6c8391af5338c93ab8d4035c",
+      "input": {
+        "token": "0x30d9410ed1d5da1f6c8391af5338c93ab8d4035c",
+        "amount": 1000000000000000000,
+        "decimals": 18
+      },
+      "outputs": [
+        {
+          "token": "0x6c3f90f043a72fa612cbac8115ee7e52bde6e490",
+          "amount": 1000000000000000000,
+          "decimals": 18
+        }
+      ],
+      "method": "withdraw(9,uint256)",
+      "fees": "none",
+      "limits": "LP backing=7450457353283537170603123; holder balance unverified"
+    }
+  },
+  {
+    "case": "Curve 3crv withdrawal",
+    "block": 18000000,
+    "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "input": {
+      "token": "0x6c3f90f043a72fa612cbac8115ee7e52bde6e490",
+      "amount": 1000000000000000000000,
+      "decimals": 18
+    },
+    "status": "incomplete",
+    "error": "Repeated dependency RPC decoder error during Curve registry loading: Object missing required field try_again_in at $.error.data; check interrupted."
+  }
+]

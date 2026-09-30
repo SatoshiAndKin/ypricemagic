@@ -1,0 +1,1041 @@
+dank_mids/_debugging/_base.py:6: error: Library stubs not installed for
+"aiofiles"  [import-untyped]
+    import aiofiles
+    ^
+dank_mids/_debugging/_base.py:8: error: Library stubs not installed for
+"aiofiles.base"  [import-untyped]
+    from aiofiles.base import AiofilesContextManager
+    ^
+dank_mids/_debugging/_base.py:9: error: Library stubs not installed for
+"aiofiles.threadpool.text"  [import-untyped]
+    from aiofiles.threadpool.text import AsyncTextIOWrapper
+    ^
+dank_mids/_debugging/_base.py:9: note: Hint: "python3 -m pip install types-aiofiles"
+dank_mids/_debugging/_base.py:9: note: (or run "mypy --install-types" to install all missing stub packages)
+dank_mids/_debugging/_base.py:9: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+dank_mids/helpers/hashing.py:232: error: Incompatible types in assignment
+(expression has type
+"Callable[[dank_mids.helpers.hashing.AttributeDict[TKey, TValue] | Mapping[TKey, TValue]], dank_mids.helpers.hashing.AttributeDict[TKey, TValue]]",
+variable has type
+"Callable[[Mapping[TKey, TValue]], web3.datastructures.AttributeDict[TKey, TValue]]")
+ [assignment]
+    web3.datastructures.tupleize_lists_nested = tupleize_lists_nested
+                                                ^~~~~~~~~~~~~~~~~~~~~
+dank_mids/_web3/formatters.py:41: error: Argument 2 to "abi_request_formatters"
+has incompatible type "dict[str, Sequence[Any] | dict[str, str]]"; expected
+"dict[RPCEndpoint, list[Any] | dict[str, Any]]"  [arg-type]
+        abi_request_formatters(STANDARD_NORMALIZERS, RPC_ABIS)
+                                                     ^~~~~~~~
+dank_mids/_web3/method.py: note: In member "process_params" of class "MethodNoFormat":
+dank_mids/_web3/method.py:53: error: Argument 1 to "get_request_formatters" has
+incompatible type "RPCEndpoint | Callable[..., RPCEndpoint]"; expected
+"RPCEndpoint"  [arg-type]
+            request_formatters = get_request_formatters(method)
+                                                        ^~~~~~
+dank_mids/_web3/method.py:62: error: Incompatible types in assignment
+(expression has type "tuple[Any, str | Any]", variable has type "list[Any]") 
+[assignment]
+                    params = tx, hex(block) if isinstance(block, int) else...
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/_web3/method.py:68: error: Argument 1 to "get" of "dict" has
+incompatible type "RPCEndpoint | None"; expected "RPCEndpoint"  [arg-type]
+            return request, _response_formatters.get(self.json_rpc_method)...
+                                                     ^~~~~~~~~~~~~~~~~~~~
+dank_mids/_web3/method.py:69: error: Argument 1 to "_get_response_formatters"
+has incompatible type "RPCEndpoint | None"; expected "RPCEndpoint"  [arg-type]
+                self.json_rpc_method
+                ^~~~~~~~~~~~~~~~~~~~
+dank_mids/_web3/method.py: note: In function "bypass_chainid_formatter":
+dank_mids/_web3/method.py:88: error: "type[BaseEth]" has no attribute
+"_chain_id"  [attr-defined]
+        eth._chain_id = MethodNoFormat(RPC.eth_chainId)
+        ^~~~~~~~~~~~~
+dank_mids/_web3/method.py: note: In function "bypass_getbalance_formatter":
+dank_mids/_web3/method.py:97: error: "type[BaseEth]" has no attribute
+"_get_balance"  [attr-defined]
+        eth._get_balance = MethodNoFormat(RPC.eth_getBalance, mungers=[eth...
+        ^~~~~~~~~~~~~~~~
+dank_mids/_web3/method.py: note: In function "bypass_transaction_count_formatter":
+dank_mids/_web3/method.py:106: error: "type[BaseEth]" has no attribute
+"_get_transaction_count"  [attr-defined]
+        eth._get_transaction_count = MethodNoFormat(
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_web3/method.py: note: In function "bypass_log_formatter":
+dank_mids/_web3/method.py:117: error: "type[BaseEth]" has no attribute
+"_get_logs"  [attr-defined]
+        eth._get_logs = MethodNoFormat.default(RPC.eth_getLogs)
+        ^~~~~~~~~~~~~
+dank_mids/_web3/method.py:118: error: "type[BaseEth]" has no attribute
+"_get_logs_raw"  [attr-defined]
+        eth._get_logs_raw = MethodNoFormat.default(f"{RPC.eth_getLogs}_raw...
+        ^~~~~~~~~~~~~~~~~
+dank_mids/_web3/method.py:118: error: Argument 1 to "default" of
+"MethodNoFormat" has incompatible type "str"; expected "RPCEndpoint"  [arg-type]
+        eth._get_logs_raw = MethodNoFormat.default(f"{RPC.eth_getLogs}_raw...
+                                                   ^~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_web3/method.py:119: error: "type[BaseEth]" has no attribute
+"get_filter_logs"  [attr-defined]
+        eth.get_filter_logs = MethodNoFormat.default(RPC.eth_getFilterLogs...
+        ^~~~~~~~~~~~~~~~~~~
+dank_mids/_web3/method.py:120: error: "type[BaseEth]" has no attribute
+"get_filter_changes"  [attr-defined]
+        eth.get_filter_changes = MethodNoFormat.default(RPC.eth_getFilterC...
+        ^~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_web3/method.py: note: In function "bypass_transaction_receipt_formatter":
+dank_mids/_web3/method.py:129: error: Need type annotation for "method" 
+[var-annotated]
+        method = MethodNoFormat.default(RPC.eth_getTransactionReceipt)
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_web3/method.py:131: error: "type[BaseEth]" has no attribute
+"_transaction_receipt"  [attr-defined]
+            eth._transaction_receipt = method
+            ^~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_web3/method.py:133: error: "type[BaseEth]" has no attribute
+"_get_transaction_receipt"  [attr-defined]
+            eth._get_transaction_receipt = method
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_web3/method.py: note: In function "bypass_transaction_formatter":
+dank_mids/_web3/method.py:142: error: "type[BaseEth]" has no attribute
+"_get_transaction"  [attr-defined]
+        eth._get_transaction = MethodNoFormat.default(RPC.eth_getTransacti...
+        ^~~~~~~~~~~~~~~~~~~~
+dank_mids/_web3/method.py: note: In function "bypass_block_formatters":
+dank_mids/_web3/method.py:169: error: "type[BaseEth]" has no attribute
+"_get_block"  [attr-defined]
+        eth._get_block = MethodNoFormat(
+        ^~~~~~~~~~~~~~
+dank_mids/_web3/method.py: note: In function "bypass_eth_call_formatter":
+dank_mids/_web3/method.py:181: error: "type[BaseEth]" has no attribute "_call" 
+[attr-defined]
+        eth._call = MethodNoFormat(RPC.eth_call, mungers=[eth.call_munger]...
+        ^~~~~~~~~
+dank_mids/_web3/method.py: note: In function "bypass_get_code_formatter":
+dank_mids/_web3/method.py:190: error: "type[BaseEth]" has no attribute
+"_get_code"  [attr-defined]
+        eth._get_code = MethodNoFormat(RPC.eth_getCode, mungers=[eth.block...
+        ^~~~~~~~~~~~~
+dank_mids/helpers/_multicall.py:20: error: Cannot assign to final name
+"MULTICALL3_ADDRESSES"  [misc]
+        MULTICALL3_ADDRESSES = {}
+        ^~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/helpers/_multicall.py: note: In member "__needs_override_code_for_block" of class "MulticallContract":
+dank_mids/helpers/_multicall.py:80: error: Incompatible types in assignment
+(expression has type "int", variable has type
+"BlockNumber | Literal['latest'] | HexStr")  [assignment]
+                block = int(block, 16)
+                        ^~~~~~~~~~~~~~
+dank_mids/helpers/_multicall.py:81: error: Unsupported operand types for <
+("HexStr" and "BlockNumber")  [operator]
+            return block < self.deploy_block
+                           ^~~~~~~~~~~~~~~~~
+dank_mids/helpers/_multicall.py:81: note: Left operand is of type "BlockNumber | HexStr"
+dank_mids/helpers/_multicall.py: note: In function "_get_multicall2":
+dank_mids/helpers/_multicall.py:89: error: No overload variant of "get" of
+"dict" matches argument type "int"  [call-overload]
+                deploy_block=MULTICALL2_DEPLOY_BLOCKS.get(chainid),
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/helpers/_multicall.py:89: note: Possible overload variants:
+dank_mids/helpers/_multicall.py:89: note:     def get(self, Network, None = ..., /) -> BlockNumber | None
+dank_mids/helpers/_multicall.py:89: note:     def get(self, Network, BlockNumber, /) -> BlockNumber
+dank_mids/helpers/_multicall.py:89: note:     def [_T] get(self, Network, _T, /) -> BlockNumber | _T
+dank_mids/helpers/_multicall.py: note: In function "_get_multicall3":
+dank_mids/helpers/_multicall.py:99: error: No overload variant of "get" of
+"dict" matches argument type "int"  [call-overload]
+                deploy_block=MULTICALL3_DEPLOY_BLOCKS.get(chainid),
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/helpers/_multicall.py:99: note: Possible overload variants:
+dank_mids/helpers/_multicall.py:99: note:     def get(self, Network, None = ..., /) -> BlockNumber | None
+dank_mids/helpers/_multicall.py:99: note:     def get(self, Network, BlockNumber, /) -> BlockNumber
+dank_mids/helpers/_multicall.py:99: note:     def [_T] get(self, Network, _T, /) -> BlockNumber | _T
+dank_mids/__init__.py: note: In function "_configure_concurrent_future_work_queue_size":
+dank_mids/__init__.py:130: error: Module "multiprocessing.synchronize" has no
+attribute "SEM_VALUE_MAX"  [attr-defined]
+        from multiprocessing.synchronize import SEM_VALUE_MAX
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/__init__.py:133: error: Cannot assign to final name
+"EXTRA_QUEUED_CALLS"  [misc]
+        _cfp.EXTRA_QUEUED_CALLS = min(50_000, SEM_VALUE_MAX - max_workers_...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/semaphores.py: note: In member "__getitem__" of class "BlockSemaphore":
+dank_mids/semaphores.py:66: error: Argument 1 to "int" has incompatible type
+"str | bool"; expected "str | bytes | bytearray"  [arg-type]
+                priority = int(block["blockNumber"], 16) if "blockNumber" ...
+                               ^~~~~~~~~~~~~~~~~~~~
+dank_mids/types.py:57: error: Name "Multicall" is not defined  [name-defined]
+    Multicalls = dict[BlockId, "Multicall"]
+                               ^
+dank_mids/types.py: note: In class "PartialRequest":
+dank_mids/types.py:106: error: Frozen dataclass cannot inherit from a
+non-frozen dataclass  [misc]
+    class PartialRequest(DictStruct, frozen=True, omit_defaults=True, repr...
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/types.py:106: note: Error code "misc" not covered by "type: ignore" comment
+dank_mids/types.py: note: In class "Request":
+dank_mids/types.py:131: error: Non-frozen dataclass cannot inherit from a
+frozen dataclass  [misc]
+    class Request(PartialRequest):
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/types.py: note: In class "ChainstackRateLimitContext":
+dank_mids/types.py:155: error: Frozen dataclass cannot inherit from a
+non-frozen dataclass  [misc]
+    class ChainstackRateLimitContext(DictStruct, frozen=True):  # type: ig...
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/types.py:155: note: Error code "misc" not covered by "type: ignore" comment
+dank_mids/types.py: note: In class "Error":
+dank_mids/types.py:184: error: Frozen dataclass cannot inherit from a
+non-frozen dataclass  [misc]
+    class Error(DictStruct, frozen=True, omit_defaults=True, repr_omit_def...
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/types.py:184: note: Error code "misc" not covered by "type: ignore" comment
+dank_mids/types.py: note: In function "_decode_block":
+dank_mids/types.py:275: error: Incompatible types in assignment (expression has
+type "type[BaseBlock]", variable has type "type[ShanghaiCapellaBlock]") 
+[assignment]
+            typ = BaseBlock
+                  ^~~~~~~~~
+dank_mids/types.py:277: error: Incompatible types in assignment (expression has
+type "type[MinedBlock]", variable has type "type[ShanghaiCapellaBlock]") 
+[assignment]
+            typ = MinedBlock
+                  ^~~~~~~~~~
+dank_mids/types.py:279: error: Incompatible types in assignment (expression has
+type "type[Block]", variable has type "type[ShanghaiCapellaBlock]") 
+[assignment]
+            typ = Block
+                  ^~~~~
+dank_mids/types.py: note: In class "PartialResponse":
+dank_mids/types.py:283: error: Frozen dataclass cannot inherit from a
+non-frozen dataclass  [misc]
+    class PartialResponse(DictStruct, frozen=True, omit_defaults=True, rep...
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/types.py: note: In member "payload_too_large" of class "PartialResponse":
+dank_mids/types.py:330: error: Item "None" of "Error | None" has no attribute
+"message"  [union-attr]
+            return any(map(self.error.message.__contains__, constants.TOO_...
+                           ^~~~~~~~~~~~~~~~~~
+dank_mids/types.py: note: In member "to_dict" of class "PartialResponse":
+dank_mids/types.py:334: error: Incompatible types in assignment (expression has
+type
+"dict[str, faster_hexbytes.main.HexBytes | uint | AttributeDict[Any, Any] | str | Any]",
+variable has type "RPCResponse")  [assignment]
+            data: RPCResponse = {
+                                ^
+dank_mids/types.py: note: In member "decode_result" of class "PartialResponse":
+dank_mids/types.py:360: error: Argument "type" to "better_decode" has
+incompatible type "object"; expected "type[Never] | None"  [arg-type]
+    ...          return better_decode(self.result, type=typ, dec_hook=_decode...
+                                                        ^~~
+dank_mids/types.py:364: error: Need type annotation for "decoded" 
+[var-annotated]
+                    decoded = better_decode(self.result, type=typ, dec_hoo...
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/types.py:364: error: Argument "type" to "better_decode" has
+incompatible type "object"; expected "type[Never] | None"  [arg-type]
+    ...       decoded = better_decode(self.result, type=typ, dec_hook=_decode...
+                                                        ^~~
+dank_mids/types.py:366: error: Argument 1 to "log_validation_error" of
+"_StatsLogger" has incompatible type "PartialResponse"; expected "RPCEndpoint" 
+[arg-type]
+                    stats.logger.log_validation_error(self, e)
+                                                      ^~~~
+dank_mids/types.py:366: error: Argument 2 to "log_validation_error" of
+"_StatsLogger" has incompatible type "ValidationError | TypeError"; expected
+"ValidationError"  [arg-type]
+                    stats.logger.log_validation_error(self, e)
+                                                            ^
+dank_mids/types.py:385: error: Argument 2 to "log_validation_error" of
+"_StatsLogger" has incompatible type "ValidationError | TypeError"; expected
+"ValidationError"  [arg-type]
+                    stats.logger.log_validation_error(method, e)
+                                                              ^
+dank_mids/types.py:399: error: Incompatible return value type (got "list[Any]",
+expected
+"HexBytes | Wei | uint | ChainId | BlockNumber | AttributeDict[Any, Any] | str")
+ [return-value]
+                    return decoded
+                           ^~~~~~~
+dank_mids/types.py: note: In class "Response":
+dank_mids/types.py:405: error: Non-frozen dataclass cannot inherit from a
+frozen dataclass  [misc]
+    class Response(PartialResponse, omit_defaults=True, repr_omit_defaults...
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/types.py:405: note: Error code "misc" not covered by "type: ignore" comment
+dank_mids/types.py: note: In function "better_decode":
+dank_mids/types.py:431: error: Item "None" of "type[T] | None" has no attribute
+"__qualname__"  [union-attr]
+                f"type: {type.__module__}.{type.__qualname__}",
+                                          ^~~~~~~~~~~~~~~~~~
+dank_mids/eth.py: note: In member "call" of class "DankEth":
+dank_mids/eth.py:110: error: Incompatible return value type (got
+"hexbytes.main.HexBytes", expected "faster_hexbytes.main.HexBytes") 
+[return-value]
+            return await super().call(
+                   ^~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py: note: In member "get_block_timestamp" of class "DankEth":
+dank_mids/eth.py:130: error: Incompatible types in assignment (expression has
+type "str", variable has type "int")  [assignment]
+                block_identifier = hex(block_identifier)
+                                   ^~~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py: note: In member "get_balance" of class "DankEth":
+dank_mids/eth.py:136: error: Argument 1 of "get_balance" is incompatible with
+supertype "web3.eth.async_eth.AsyncEth"; supertype defines the argument type as
+"Address | ChecksumAddress | ENS"  [override]
+            self, account: ChecksumAddress, block_identifier: StateBlockId...
+                  ^~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py:136: note: This violates the Liskov substitution principle
+dank_mids/eth.py:136: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+dank_mids/eth.py:139: error: Argument 2 has incompatible type "str"; expected
+"Literal['latest', 'earliest', 'pending', 'safe', 'finalized'] | BlockNumber | Hash32 | HexStr | HexBytes | int | None"
+ [arg-type]
+    ...         return await self._get_balance(account, hex(block_identifier)...
+                                                        ^~~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py:141: error: Argument 2 has incompatible type
+"Literal['latest', 'earliest', 'pending', 'safe', 'finalized'] | Hash32 | HexStr | HexBytes | dict[str, str | bool] | None";
+expected
+"Literal['latest', 'earliest', 'pending', 'safe', 'finalized'] | BlockNumber | Hash32 | HexStr | HexBytes | int | None"
+ [arg-type]
+                return await self._get_balance(account, block_identifier)
+                                                        ^~~~~~~~~~~~~~~~
+dank_mids/eth.py: note: In member "get_transaction_count" of class "DankEth":
+dank_mids/eth.py:144: error: Argument 1 of "get_transaction_count" is
+incompatible with supertype "web3.eth.async_eth.AsyncEth"; supertype defines the
+argument type as "Address | ChecksumAddress | ENS"  [override]
+            self, account: ChecksumAddress, block_identifier: StateBlockId...
+                  ^~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py:144: note: This violates the Liskov substitution principle
+dank_mids/eth.py:144: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+dank_mids/eth.py:147: error: Argument 2 has incompatible type "str"; expected
+"Literal['latest', 'earliest', 'pending', 'safe', 'finalized'] | BlockNumber | Hash32 | HexStr | HexBytes | int | None"
+ [arg-type]
+    ...eturn await self._get_transaction_count(account, hex(block_identifier)...
+                                                        ^~~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py:149: error: Argument 2 has incompatible type
+"Literal['latest', 'earliest', 'pending', 'safe', 'finalized'] | Hash32 | HexStr | HexBytes | dict[str, str | bool] | None";
+expected
+"Literal['latest', 'earliest', 'pending', 'safe', 'finalized'] | BlockNumber | Hash32 | HexStr | HexBytes | int | None"
+ [arg-type]
+    ...   return await self._get_transaction_count(account, block_identifier)
+                                                            ^~~~~~~~~~~~~~~~
+dank_mids/eth.py: note: In member "get_code" of class "DankEth":
+dank_mids/eth.py:152: error: Argument 1 of "get_code" is incompatible with
+supertype "web3.eth.async_eth.AsyncEth"; supertype defines the argument type as
+"Address | ChecksumAddress | ENS"  [override]
+            self, account: ChecksumAddress, block_identifier: StateBlockId...
+                  ^~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py:152: note: This violates the Liskov substitution principle
+dank_mids/eth.py:152: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+dank_mids/eth.py:155: error: Argument 2 has incompatible type "str"; expected
+"Literal['latest', 'earliest', 'pending', 'safe', 'finalized'] | BlockNumber | Hash32 | HexStr | HexBytes | int | None"
+ [arg-type]
+                return await self._get_code(account, hex(block_identifier)...
+                                                     ^~~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py:157: error: Argument 2 has incompatible type
+"Literal['latest', 'earliest', 'pending', 'safe', 'finalized'] | Hash32 | HexStr | HexBytes | dict[str, str | bool] | None";
+expected
+"Literal['latest', 'earliest', 'pending', 'safe', 'finalized'] | BlockNumber | Hash32 | HexStr | HexBytes | int | None"
+ [arg-type]
+                return await self._get_code(account, block_identifier)
+                                                     ^~~~~~~~~~~~~~~~
+dank_mids/eth.py: note: In member "get_transaction_receipt" of class "DankEth":
+dank_mids/eth.py:193: error: Incompatible default for argument "decode_to"
+(default has type "type[TransactionReceipt]", argument has type "type[T]") 
+[assignment]
+            decode_to: type[T] = TransactionReceipt,
+                                 ^~~~~~~~~~~~~~~~~~
+dank_mids/eth.py: note: In member "trace_filter" of class "DankEth":
+dank_mids/eth.py:226: error: Incompatible return value type (implicitly returns
+"None", expected "T")  [return-value]
+        async def trace_filter(
+        ^~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py:229: error: Incompatible default for argument "decode_to"
+(default has type
+"type[list[evmspec.structs.trace.call.Trace | evmspec.structs.trace.create.Trace | evmspec.structs.trace.reward.Trace | evmspec.structs.trace.suicide.Trace]]",
+argument has type "type[T]")  [assignment]
+            decode_to: type[T] = list[FilterTrace],
+                                 ^~~~~~~~~~~~~~~~~
+dank_mids/eth.py:248: error: Value of "fromBlock" has incompatible type "str";
+expected
+"Literal['latest', 'earliest', 'pending', 'safe', 'finalized'] | Hash32 | HexStr | HexBytes | int"
+ [typeddict-item]
+                filter_params["fromBlock"] = hex(from_block)
+                                             ^~~~~~~~~~~~~~~
+dank_mids/eth.py:251: error: Value of "toBlock" has incompatible type "str";
+expected
+"Literal['latest', 'earliest', 'pending', 'safe', 'finalized'] | Hash32 | HexStr | HexBytes | int"
+ [typeddict-item]
+                filter_params["toBlock"] = hex(to_block)
+                                           ^~~~~~~~~~~~~
+dank_mids/eth.py:283: error: Argument 1 to "range" has incompatible type
+"Hash32 | HexBytes | int"; expected "SupportsIndex"  [arg-type]
+    ...       ranges = [[i, i + summand] for i in range(from_block, to_block,...
+                                                        ^~~~~~~~~~
+dank_mids/eth.py:283: error: Argument 2 to "range" has incompatible type
+"Hash32 | HexBytes | int"; expected "SupportsIndex"  [arg-type]
+    ...s = [[i, i + summand] for i in range(from_block, to_block, max_range_s...
+                                                        ^~~~~~~~
+dank_mids/eth.py:285: error: Incompatible types in assignment (expression has
+type "Hash32 | HexBytes | int", target has type "int")  [assignment]
+                        last_chunk[1] = min(last_chunk[1], to_block)
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py:290: error: Incompatible return value type (got "list[Any]",
+expected "T")  [return-value]
+                        return list(concat(traces))
+                               ^~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py: note: In member "get_transaction" of class "DankEth":
+dank_mids/eth.py:324: error: Return type
+"Coroutine[Any, Any, TransactionLegacy | Transaction2930 | Transaction1559 | Transaction4844 | Transaction7702 | TransactionRLP]"
+of "get_transaction" incompatible with return type "Coroutine[Any, Any, TxData]"
+in supertype "web3.eth.async_eth.AsyncEth"  [override]
+        async def get_transaction(self, transaction_hash: HexStr) -> AnyTr...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/eth.py:324: error: Argument 1 of "get_transaction" is incompatible
+with supertype "web3.eth.async_eth.AsyncEth"; supertype defines the argument
+type as "Hash32 | HexBytes | HexStr"  [override]
+        async def get_transaction(self, transaction_hash: HexStr) -> AnyTr...
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py:324: note: This violates the Liskov substitution principle
+dank_mids/eth.py:324: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+dank_mids/eth.py: note: In member "get_logs" of class "DankEth":
+dank_mids/eth.py:362: error: "DankEth" has no attribute "_get_logs_raw"; maybe
+"_get_block_raw" or "get_logs"?  [attr-defined]
+                await self._get_logs_raw(*args, **kwargs),
+                      ^~~~~~~~~~~~~~~~~~
+dank_mids/eth.py: note: In class "DankEth":
+dank_mids/eth.py:373: error: Need type annotation for
+"_get_transaction_receipt_raw"  [var-annotated]
+        _get_transaction_receipt_raw = MethodNoFormat.default(
+                                       ^~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py:383: error: Need type annotation for "_trace_filter" 
+[var-annotated]
+        _trace_filter = MethodNoFormat.default(cast(RPCEndpoint, f"{RPC.tr...
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/eth.py:384: error: Need type annotation for "_trace_transaction" 
+[var-annotated]
+        _trace_transaction = MethodNoFormat.default(RPC.trace_transaction)
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/eth.py: note: In function "_restore_eth_alias":
+dank_mids/eth.py:429: error: Module has no attribute "eth"  [attr-defined]
+        parent.eth = dank_eth
+        ^~~~~~~~~~
+dank_mids/helpers/_session.py: note: In member "post" of class "DankClientSession":
+dank_mids/helpers/_session.py:131: error: Signature of "post" incompatible with
+supertype "aiohttp.client.ClientSession"  [override]
+        async def post(
+        ^~~~~~~~~~~~~~~
+dank_mids/helpers/_session.py:131: note:      Superclass:
+dank_mids/helpers/_session.py:131: note:          def post(url: str | URL, *, params: str | Mapping[str, str | SupportsInt | float | Sequence[str | SupportsInt | float]] | Sequence[tuple[str, str | SupportsInt | float | Sequence[str | SupportsInt | float]]] | None = ..., data: Any = ..., json: Any = ..., cookies: Mapping[str, str | BaseCookie[str] | Morsel[Any]] | Iterable[tuple[str, str | BaseCookie[str] | Morsel[Any]]] | BaseCookie[str] | None = ..., headers: Mapping[str, str] | Mapping[istr, str] | CIMultiDict[str] | CIMultiDictProxy[str] | Iterable[tuple[str | istr, str]] | None = ..., skip_auto_headers: Iterable[str] | None = ..., auth: BasicAuth | None = ..., allow_redirects: bool = ..., max_redirects: int = ..., compress: str | bool | None = ..., chunked: bool | None = ..., expect100: bool = ..., raise_for_status: bool | Callable[[ClientResponse], Awaitable[None]] | None = ..., read_until_eof: bool = ..., proxy: str | URL | None = ..., proxy_auth: BasicAuth | None = ..., timeout: ClientTimeout | _SENTINEL | None = ..., ssl: SSLContext | bool | Fingerprint = ..., server_hostname: str | None = ..., proxy_headers: Mapping[str, str] | Mapping[istr, str] | CIMultiDict[str] | CIMultiDictProxy[str] | Iterable[tuple[str | istr, str]] | None = ..., trace_request_ctx: Mapping[str, Any] | None = ..., read_bufsize: int | None = ..., auto_decompress: bool | None = ..., max_line_size: int | None = ..., max_field_size: int | None = ..., middlewares: Sequence[Callable[[ClientRequest, Callable[[ClientRequest], Awaitable[ClientResponse]]], Awaitable[ClientResponse]]] | None = ...) -> _BaseRequestContextManager[ClientResponse]
+dank_mids/helpers/_session.py:131: note:      Subclass:
+dank_mids/helpers/_session.py:131: note:          def [T] post(self, endpoint: str, *args: Any, loads: Callable[[str], T] = ..., **kwargs: Any) -> Coroutine[Any, Any, T]
+dank_mids/helpers/_session.py: note: In member "_handle_too_many_requests" of class "DankClientSession":
+dank_mids/helpers/_session.py:231: error: Value of type
+"defaultdict[str, AsyncLimiter] | None" is not indexable  [index]
+            limiter = cast(AsyncLimiter, limiters[endpoint])
+                                         ^~~~~~~~~~~~~~~~~~
+dank_mids/helpers/_session.py:235: error: Unsupported operand types for >=
+("float" and "EnvironmentVariable_5f47441757")  [operator]
+                if new_rate >= ENVS.MIN_REQUESTS_PER_SECOND:
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/helpers/_session.py:247: error: Incompatible types in assignment
+(expression has type "float", variable has type "int")  [assignment]
+            self._last_rate_limited_at = now
+                                         ^~~
+dank_mids/helpers/_session.py:249: error: Item "None" of
+"MultiMapping[str] | None" has no attribute "get"  [union-attr]
+            retry_after = float(error.headers.get("Retry-After", secs_betw...
+                                ^~~~~~~~~~~~~~~~~
+dank_mids/helpers/_session.py:255: error: Incompatible types in assignment
+(expression has type "float", variable has type "int")  [assignment]
+            self._continue_requests_at = resume_at
+                                         ^~~~~~~~~
+dank_mids/helpers/_session.py: note: In function "_logger_is_enabled_for":
+dank_mids/helpers/_session.py:286: error: Incompatible return value type
+(implicitly returns "None", expected "bool")  [empty-body]
+    def _logger_is_enabled_for(level: int) -> bool: ...
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/helpers/_session.py: note: At top level:
+dank_mids/helpers/_session.py:293: error: Cannot redefine an existing name as
+final  [misc]
+    _logger_is_enabled_for: Final = logger.isEnabledFor
+    ^~~~~~~~~~~~~~~~~~~~~~
+dank_mids/helpers/_session.py:294: error: Cannot redefine an existing name as
+final  [misc]
+    _logger_warning: Final = logger.warning
+    ^~~~~~~~~~~~~~~
+dank_mids/helpers/_session.py:295: error: Cannot redefine an existing name as
+final  [misc]
+    _logger_info: Final = logger.info
+    ^~~~~~~~~~~~
+dank_mids/helpers/_session.py:296: error: Cannot redefine an existing name as
+final  [misc]
+    _logger_debug: Final = logger.debug
+    ^~~~~~~~~~~~~
+dank_mids/helpers/_session.py:297: error: Cannot redefine an existing name as
+final  [misc]
+    _logger_log: Final = logger._log
+    ^~~~~~~~~~~
+dank_mids/helpers/_errors.py: note: In function "format_with_errors":
+dank_mids/helpers/_errors.py:186: error: Value of "error" has incompatible type
+"dict[str, Any]"; expected "RPCError | str"  [typeddict-item]
+            response["error"] = dict(response["error"].items(), dankmids_a...
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/helpers/_errors.py:186: error: Item "str" of "RPCError | str" has no
+attribute "items"  [union-attr]
+            response["error"] = dict(response["error"].items(), dankmids_a...
+                                     ^~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/helpers/_helpers.py:164: error: Missing positional argument "value"
+in call to "apply_key_map"  [call-arg]
+    remap_geth_poa_fields = apply_key_map(
+                            ^~~~~~~~~~~~~~
+dank_mids/helpers/_helpers.py: note: In function "geth_poa_middleware":
+dank_mids/helpers/_helpers.py:196: error: Argument 1 to "apply_formatter_if"
+has incompatible type "Callable[[Any], bool]"; expected
+"Callable[[Any], TypeGuard[Any]]"  [arg-type]
+    ...      RPC.eth_getBlockByHash: apply_formatter_if(is_not_null, geth_poa...
+                                                        ^~~~~~~~~~~
+dank_mids/helpers/_helpers.py:197: error: Argument 1 to "apply_formatter_if"
+has incompatible type "Callable[[Any], bool]"; expected
+"Callable[[Any], TypeGuard[Any]]"  [arg-type]
+    ...    RPC.eth_getBlockByNumber: apply_formatter_if(is_not_null, geth_poa...
+                                                        ^~~~~~~~~~~
+dank_mids/helpers/_helpers.py: note: In function "__add_sync_attrdict_middleware":
+dank_mids/helpers/_helpers.py:313: error: Module "web3.middleware" has no
+attribute "AttributeDictMiddleware"  [attr-defined]
+            from web3.middleware import AttributeDictMiddleware as attrdic...
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/helpers/_helpers.py:313: error: Name "attrdict" already defined
+(possibly by an import)  [no-redef]
+            from web3.middleware import AttributeDictMiddleware as attrdic...
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/call.py: note: In function "_patch_call":
+dank_mids/brownie_patch/call.py:125: error: "ContractCall" has no attribute
+"_skip_decoder_proc_pool"  [attr-defined]
+        call._skip_decoder_proc_pool = call._address in _skip_proc_pool
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/call.py:126: error: "ContractCall" has no attribute
+"coroutine"  [attr-defined]
+        call.coroutine = MethodType(_get_coroutine_fn(w3, len(call.abi["in...
+        ^~~~~~~~~~~~~~
+dank_mids/brownie_patch/call.py:127: error: "ContractCall" has no attribute
+"__await__"  [attr-defined]
+        call.__await__ = MethodType(_call_no_args, call)
+        ^~~~~~~~~~~~~~
+dank_mids/brownie_patch/call.py: note: In function "_get_coroutine_fn":
+dank_mids/brownie_patch/call.py:158: error: "ContractCall" has no attribute
+"coroutine"  [attr-defined]
+                    return await self.coroutine(
+                                 ^~~~~~~~~~~~~~
+dank_mids/brownie_patch/call.py: note: In function "_call_no_args":
+dank_mids/brownie_patch/call.py:189: error: Item "ContractCall" of
+"ContractCall | ContractTx | OverloadedMethod" has no attribute "coroutine" 
+[union-attr]
+        return self.coroutine().__await__()
+               ^~~~~~~~~~~~~~
+dank_mids/brownie_patch/call.py:189: error: Item "ContractTx" of
+"ContractCall | ContractTx | OverloadedMethod" has no attribute "coroutine" 
+[union-attr]
+        return self.coroutine().__await__()
+               ^~~~~~~~~~~~~~
+dank_mids/brownie_patch/call.py:189: error: Item "OverloadedMethod" of
+"ContractCall | ContractTx | OverloadedMethod" has no attribute "coroutine" 
+[union-attr]
+        return self.coroutine().__await__()
+               ^~~~~~~~~~~~~~
+dank_mids/brownie_patch/call.py: note: In function "encode_input":
+dank_mids/brownie_patch/call.py:196: error: Argument 1 to "__encode_input" has
+incompatible type "ABIFunction"; expected "AbiDict"  [arg-type]
+            data = __encode_input(call.abi, call.signature, *args)
+                                  ^~~~~~~~
+dank_mids/brownie_patch/call.py:202: error: Argument 1 to "__encode_input" has
+incompatible type "ABIFunction"; expected "AbiDict"  [arg-type]
+                data = __encode_input(call.abi, call.signature, *args)
+                                      ^~~~~~~~
+dank_mids/brownie_patch/call.py:208: error: Argument 1 to "__encode_input" has
+incompatible type "ABIFunction"; expected "AbiDict"  [arg-type]
+                data = __encode_input(call.abi, call.signature, *args) if ...
+                                      ^~~~~~~~
+dank_mids/brownie_patch/call.py:210: error: Argument 1 to "__encode_input" has
+incompatible type "ABIFunction"; expected "AbiDict"  [arg-type]
+                data = __encode_input(call.abi, call.signature, *args) if ...
+                                      ^~~~~~~~
+dank_mids/brownie_patch/call.py: note: In function "decode_output":
+dank_mids/brownie_patch/call.py:225: error: Argument 1 to "__validate_output"
+has incompatible type "ABIFunction"; expected "AbiDict"  [arg-type]
+        __validate_output(call.abi, data)
+                          ^~~~~~~~
+dank_mids/brownie_patch/call.py:227: error: "ContractCall" has no attribute
+"_skip_decoder_proc_pool"  [attr-defined]
+            if call._skip_decoder_proc_pool or b"Unexpected error" in data...
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/call.py:229: error: Argument 2 to "__decode_output" has
+incompatible type "ABIFunction"; expected "AbiDict"  [arg-type]
+                decoded = __decode_output(data, call.abi)
+                                                ^~~~~~~~
+dank_mids/brownie_patch/call.py:238: error: Argument 2 to "__decode_output" has
+incompatible type "ABIFunction"; expected "AbiDict"  [arg-type]
+                    decoded = __decode_output(data, call.abi)
+                                                    ^~~~~~~~
+dank_mids/brownie_patch/call.py:252: error: "ContractCall" has no attribute
+"_skip_decoder_proc_pool"  [attr-defined]
+            call._skip_decoder_proc_pool = call._address in _skip_proc_poo...
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/call.py: note: In function "__encode_input":
+dank_mids/brownie_patch/call.py:270: error: Argument 1 has incompatible type
+"list[str]"; expected "list[TypeStr]"  [arg-type]
+            return signature + __eth_abi_encode(types_list, data).hex()  #...
+                                                ^~~~~~~~~~
+dank_mids/brownie_patch/call.py:270: note: Error code "arg-type" not covered by "type: ignore" comment
+dank_mids/brownie_patch/call.py: note: In function "__decode_output":
+dank_mids/brownie_patch/call.py:295: error: Argument 1 has incompatible type
+"list[str]"; expected "list[TypeStr]"  [arg-type]
+            result = __eth_abi_decode(types_list, HexBytes(hexstr))
+                                      ^~~~~~~~~~
+dank_mids/brownie_patch/call.py: note: At top level:
+dank_mids/brownie_patch/call.py:352: error: Incompatible types in assignment
+(expression has type
+"Callable[[AbiDict, list[Any] | tuple[Any, ...]], list[Any]]", variable has type
+"Callable[[ABIFunction, list[Any] | tuple[Any, ...]], list[Any]]")  [assignment]
+    brownie.network.contract.format_input = format_input_but_cache_checksu...
+                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/call.py:353: error: Incompatible types in assignment
+(expression has type
+"Callable[[AbiDict, list[Any] | tuple[Any, ...]], ReturnValue]", variable has
+type "Callable[[ABIFunction, list[Any] | tuple[Any, ...]], ReturnValue]") 
+[assignment]
+    brownie.network.contract.format_output = format_output_but_cache_check...
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/_requests.py: note: In member "__init__" of class "_RequestEvent":
+dank_mids/_requests.py:140: error: Attribute "_owner" already defined on line
+153  [no-redef]
+                self._owner: ProxyType[_RequestBase[_Response]] = weak_pro...
+                ^~~~~~~~~~~
+dank_mids/_requests.py: note: In member "__init__" of class "_RequestBase":
+dank_mids/_requests.py:168: error: Need type annotation for "controller" 
+[var-annotated]
+            self.controller: Final = controller
+                                     ^~~~~~~~~~
+dank_mids/_requests.py:171: error: Need type annotation for "uid" 
+[var-annotated]
+            self.uid: Final = controller.call_uid.next if uid is None else...
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/_requests.py:174: error: Cannot redefine an existing name as final 
+[misc]
+            self._fut: Final = DebuggableFuture(self, controller._loop) if...
+            ^~~~~~~~~
+dank_mids/_requests.py: note: In class "RPCRequest":
+dank_mids/_requests.py:211: error: Cannot override writable attribute "_fut"
+with a final one  [misc]
+        _fut: Final[DebuggableFuture[RPCResponse]]
+        ^~~~
+dank_mids/_requests.py:211: error: Final name must be initialized with a value 
+[misc]
+        _fut: Final[DebuggableFuture[RPCResponse]]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:213: error: Final name must be initialized with a value 
+[misc]
+        __dict__: Final[dict[str, Any]]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py: note: In member "__init__" of class "RPCRequest":
+dank_mids/_requests.py:227: error: Incompatible types in assignment (expression
+has type "str", variable has type "RPCEndpoint")  [assignment]
+                self.method = method[:-4]
+                              ^~~~~~~~~~~
+dank_mids/_requests.py:231: error: Cannot assign to final attribute "method" 
+[misc]
+                self.method = method
+                ^~~~~~~~~~~
+dank_mids/_requests.py:233: error: Cannot assign to final attribute "raw" 
+[misc]
+                self.raw = False
+                ^~~~~~~~
+dank_mids/_requests.py:257: error: "RPCRequest" has no attribute
+"_debug_daemon"  [attr-defined]
+                self._daemon = create_task(self._debug_daemon(), name="RPC...
+                                           ^~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py: note: In member "__eq__" of class "RPCRequest":
+dank_mids/_requests.py:263: error: "object" has no attribute "uid" 
+[attr-defined]
+            return (self.uid == __o.uid) if type(__o) is type(self) else F...
+                                ^~~~~~~
+dank_mids/_requests.py: note: In member "get_response_unbatched" of class "RPCRequest":
+dank_mids/_requests.py:424: error: Incompatible types in assignment (expression
+has type "RPCResponse", variable has type "RawResponse")  [assignment]
+            response: RawResponse = await self._fut
+                                    ^~~~~~~~~~~~~~~
+dank_mids/_requests.py: note: In member "spoof_response" of class "RPCRequest":
+dank_mids/_requests.py:438: error: Argument 1 to "set_result" of
+"DebuggableFuture" has incompatible type "RawResponse"; expected "RPCResponse" 
+[arg-type]
+                self._fut.set_result(data)
+                                     ^~~~
+dank_mids/_requests.py: note: In member "__init__" of class "eth_call":
+dank_mids/_requests.py:579: error: Argument 3 has incompatible type "str";
+expected "RPCEndpoint"  [arg-type]
+            _rpcrequest_init(self, controller, "eth_call", (call_dict, rpc...
+                                               ^~~~~~~~~~
+dank_mids/_requests.py: note: In class "_Batch":
+dank_mids/_requests.py:644: error: Value of type variable "_Response" of
+"_RequestBase" cannot be "list"  [type-var]
+    class _Batch(_RequestBase[list[_Response]], Iterable[_Request]):
+                              ^
+dank_mids/_requests.py:645: error: Final name declared in class body cannot
+depend on type variables  [misc]
+        calls: Final[WeakList[_Request]]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py: note: In member "__init__" of class "_Batch":
+dank_mids/_requests.py:654: error: Value of type variable "_Response" of
+function cannot be "list[list[Response]]"  [type-var]
+            _request_base_init(self, controller)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:654: error: Value of type variable "_Response" of
+function cannot be "list[list[RPCResponse]]"  [type-var]
+            _request_base_init(self, controller)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:654: error: Value of type variable "_Response" of
+function cannot be "list[RawResponse]"  [type-var]
+            _request_base_init(self, controller)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:658: error: Value of type variable "_Response" of
+"_RequestEvent" cannot be "list[list[Response]]"  [type-var]
+            self._done = _RequestEvent(self)
+                         ^~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:658: error: Value of type variable "_Response" of
+"_RequestEvent" cannot be "list[list[RPCResponse]]"  [type-var]
+            self._done = _RequestEvent(self)
+                         ^~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:658: error: Value of type variable "_Response" of
+"_RequestEvent" cannot be "list[RawResponse]"  [type-var]
+            self._done = _RequestEvent(self)
+                         ^~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py: note: In member "__await__" of class "_Batch":
+dank_mids/_requests.py:664: error: Return type
+"Generator[Any, None, _Response]" of "__await__" incompatible with return type
+"Generator[Any, None, list[_Response]]" in supertype "_RequestBase"  [override]
+        def __await__(self) -> Generator[Any, None, _Response]:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:665: error: Incompatible return value type (got
+"Generator[Any, None, None]", expected "Generator[Any, None, Response]") 
+[return-value]
+            return self._task.__await__()
+                   ^~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:665: error: Incompatible return value type (got
+"Generator[Any, None, None]", expected "Generator[Any, None, list[Response]]") 
+[return-value]
+            return self._task.__await__()
+                   ^~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:665: error: Incompatible return value type (got
+"Generator[Any, None, None]", expected "Generator[Any, None, RPCResponse]") 
+[return-value]
+            return self._task.__await__()
+                   ^~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:665: error: Incompatible return value type (got
+"Generator[Any, None, None]", expected
+"Generator[Any, None, list[RPCResponse]]")  [return-value]
+            return self._task.__await__()
+                   ^~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:665: error: Incompatible return value type (got
+"Generator[Any, None, None]", expected "Generator[Any, None, RawResponse]") 
+[return-value]
+            return self._task.__await__()
+                   ^~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py: note: In member "__task" of class "_Batch":
+dank_mids/_requests.py:688: error: Argument 1 to "create_batch_task" has
+incompatible type "Coroutine[Any, Any, list[Response]]"; expected
+"Awaitable[None]"  [arg-type]
+                self.get_response(), name=f"{type(self).__name__} {self.ui...
+                ^~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:688: error: Argument 1 to "create_batch_task" has
+incompatible type "Coroutine[Any, Any, list[list[Response]]]"; expected
+"Awaitable[None]"  [arg-type]
+                self.get_response(), name=f"{type(self).__name__} {self.ui...
+                ^~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:688: error: Argument 1 to "create_batch_task" has
+incompatible type "Coroutine[Any, Any, list[RPCResponse]]"; expected
+"Awaitable[None]"  [arg-type]
+                self.get_response(), name=f"{type(self).__name__} {self.ui...
+                ^~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:688: error: Argument 1 to "create_batch_task" has
+incompatible type "Coroutine[Any, Any, list[list[RPCResponse]]]"; expected
+"Awaitable[None]"  [arg-type]
+                self.get_response(), name=f"{type(self).__name__} {self.ui...
+                ^~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:688: error: Argument 1 to "create_batch_task" has
+incompatible type "Coroutine[Any, Any, list[RawResponse]]"; expected
+"Awaitable[None]"  [arg-type]
+                self.get_response(), name=f"{type(self).__name__} {self.ui...
+                ^~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py: note: In member "_dispatch_when_capacity_gate_hits" of class "_Batch":
+dank_mids/_requests.py:694: error: "_Batch[Response, _Request]" has no
+attribute "start"  [attr-defined]
+                self.start()
+                ^~~~~~~~~~
+dank_mids/_requests.py:694: note: Maybe you forgot to use "await"?
+dank_mids/_requests.py:694: error: "_Batch[list[Response], _Request]" has no
+attribute "start"  [attr-defined]
+                self.start()
+                ^~~~~~~~~~
+dank_mids/_requests.py:694: error: "_Batch[RPCResponse, _Request]" has no
+attribute "start"  [attr-defined]
+                self.start()
+                ^~~~~~~~~~
+dank_mids/_requests.py:694: error: "_Batch[list[RPCResponse], _Request]" has no
+attribute "start"  [attr-defined]
+                self.start()
+                ^~~~~~~~~~
+dank_mids/_requests.py:694: error: "_Batch[RawResponse, _Request]" has no
+attribute "start"  [attr-defined]
+                self.start()
+                ^~~~~~~~~~
+dank_mids/_requests.py: note: In member "_record_failure" of class "_Batch":
+dank_mids/_requests.py:751: error: Argument 6 to "record" has incompatible type
+"str"; expected "list[Request] | list[PartialRequest] | bytes"  [arg-type]
+                data,
+                ^~~~
+dank_mids/_requests.py: note: In member "_start_debug_daemon" of class "_Batch":
+dank_mids/_requests.py:760: error: Cannot infer type of lambda  [misc]
+                    waiter.add_done_callback(lambda: debug_daemon.cancel(c...
+                                             ^
+dank_mids/_requests.py:760: error: Argument 1 to "add_done_callback" of
+"Future" has incompatible type "Callable[[], bool]"; expected
+"Callable[[Task[Any]], object]"  [arg-type]
+                    waiter.add_done_callback(lambda: debug_daemon.cancel(c...
+                                             ^
+dank_mids/_requests.py: note: In member "__repr__" of class "Multicall":
+dank_mids/_requests.py:803: error: Incompatible types in assignment (expression
+has type "int", variable has type "str | HashBlock")  [assignment]
+                block = int(block, 16)
+                        ^~~~~~~~~~~~~~
+dank_mids/_requests.py: note: In member "params" of class "Multicall":
+dank_mids/_requests.py:887: error: Argument 1 to "append" of "list" has
+incompatible type "dict[ChecksumAddress, dict[str, str]]"; expected
+"dict[str, str] | str | dict[str, str | bool]"  [arg-type]
+                params.append({target: {"code": self.mcall.bytecode}})
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py: note: In member "needs_override_code" of class "Multicall":
+dank_mids/_requests.py:900: error: Argument 1 has incompatible type
+"int | str"; expected "BlockNumber | Literal['latest'] | HexStr"  [arg-type]
+    ... return self.mcall.needs_override_code_for_block(block_height(self.blo...
+                                                        ^~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py: note: In member "spoof_response" of class "Multicall":
+dank_mids/_requests.py:1037: error: Argument 2 to "zip" has incompatible type
+"list[bytes] | Exception"; expected "Iterable[bytes]"  [arg-type]
+                for call, result in zip(calls, mcall_decode(response)):
+                                               ^~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py: note: In member "bisect_and_retry" of class "Multicall":
+dank_mids/_requests.py:1091: error: Argument 1 to "start" of "JSONRPCBatch" has
+incompatible type "Multicall"; expected "DankBatch | None"  [arg-type]
+                batch.start(self, cleanup=False)
+                            ^~~~
+dank_mids/_requests.py: note: In member "start" of class "JSONRPCBatch":
+dank_mids/_requests.py:1236: error: Incompatible types in assignment
+(expression has type "DankBatch | JSONRPCBatch", variable has type
+"DankBatch | None")  [assignment]
+            batch = batch or self
+                    ^~~~~~~~~~~~~
+dank_mids/_requests.py:1242: error: Item "RPCRequest" of
+"Multicall | RPCRequest" has no attribute "start"  [union-attr]
+                            call.start(batch, cleanup=False)
+                            ^~~~~~~~~~
+dank_mids/_requests.py: note: In member "get_response" of class "JSONRPCBatch":
+dank_mids/_requests.py:1302: error: Argument 2 to "_record_failure" of "_Batch"
+has incompatible type "bytes | None"; expected "str"  [arg-type]
+                    self._record_failure(e, self.data)
+                                            ^~~~~~~~~
+dank_mids/_requests.py: note: In member "post" of class "JSONRPCBatch":
+dank_mids/_requests.py:1369: error: Incompatible return value type (got
+"PartialResponse | list[RawResponse]", expected "list[RawResponse]") 
+[return-value]
+                    return await fut
+                           ^~~~~~~~~
+dank_mids/_requests.py:1378: error: Item "None" of "bytes | None" has no
+attribute "decode"  [union-attr]
+                    self._record_failure(e, self.data.decode())
+                                            ^~~~~~~~~~~~~~~~
+dank_mids/_requests.py:1384: error: Item "None" of "bytes | None" has no
+attribute "decode"  [union-attr]
+                    self._record_failure(e, self.data.decode())
+                                            ^~~~~~~~~~~~~~~~
+dank_mids/_requests.py:1393: error: Item "None" of "Error | None" has no
+attribute "message"  [union-attr]
+            errmsg = response.error.message
+                     ^~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py:1401: error: Missing positional argument "data" in call
+to "_record_failure" of "_Batch"  [call-arg]
+                self._record_failure(response.exception)
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/_requests.py: note: In member "bisect_and_retry" of class "JSONRPCBatch":
+dank_mids/_requests.py:1511: error: Argument 1 to "start" of "JSONRPCBatch" has
+incompatible type "JSONRPCBatch"; expected "DankBatch | None"  [arg-type]
+                batch.start(self, cleanup=False)
+                            ^~~~
+dank_mids/brownie_patch/_method.py: note: In member "__init__" of class "_DankMethodMixin":
+dank_mids/brownie_patch/_method.py:38: error: Module has no attribute "_call" 
+[attr-defined]
+            self._call = dank_mids.eth._call
+                         ^~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/_method.py: note: In member "coroutine" of class "_DankMethod":
+dank_mids/brownie_patch/_method.py:188: error: Argument 1 has incompatible type
+"_DankMethod"; expected "ContractCall"  [arg-type]
+                self, self._len_inputs, self._prep_request_data, *args
+                ^~~~
+dank_mids/brownie_patch/_method.py:197: error: Argument 1 has incompatible type
+"_DankMethod"; expected "ContractCall"  [arg-type]
+    ...        decode_output_coro = self._decode_output(self, await output_co...
+                                                        ^~~~
+dank_mids/brownie_patch/types.py: note: In class "DankContractCall":
+dank_mids/brownie_patch/types.py:17: error: Cannot override writeable attribute
+"_input_sig" in base "_ContractMethod" with read-only property in base
+"_DankMethodMixin"  [override]
+    class DankContractCall(_DankMethod, ContractCall):  # type: ignore [mi...
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/types.py:17: note: Error code "override" not covered by "type: ignore" comment
+dank_mids/brownie_patch/types.py:17: error: Cannot override writeable attribute
+"abi" in base "_ContractMethod" with read-only property in base
+"_DankMethodMixin"  [override]
+    class DankContractCall(_DankMethod, ContractCall):  # type: ignore [mi...
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/types.py: note: In class "DankContractTx":
+dank_mids/brownie_patch/types.py:29: error: Cannot override writeable attribute
+"_input_sig" in base "_ContractMethod" with read-only property in base
+"_DankMethodMixin"  [override]
+    class DankContractTx(_DankMethod, ContractTx):  # type: ignore [misc]
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/types.py:29: note: Error code "override" not covered by "type: ignore" comment
+dank_mids/brownie_patch/types.py:29: error: Cannot override writeable attribute
+"abi" in base "_ContractMethod" with read-only property in base
+"_DankMethodMixin"  [override]
+    class DankContractTx(_DankMethod, ContractTx):  # type: ignore [misc]
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/types.py: note: In class "DankOverloadedMethod":
+dank_mids/brownie_patch/types.py:55: error: Incompatible types in assignment
+(expression has type "dict[tuple[str, ...], DankContractCall | DankContractTx]",
+base class "OverloadedMethod" defined the type as
+"dict[Any, ContractCall | ContractTx]")  [assignment]
+        methods: dict[tuple[str, ...], _NonOverloaded]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/types.py:55: error: Cannot assign to final name
+"methods"  [misc]
+        methods: dict[tuple[str, ...], _NonOverloaded]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/types.py: note: In member "coroutine" of class "DankOverloadedMethod":
+dank_mids/brownie_patch/types.py:75: error: Incompatible types in assignment
+(expression has type "_ContractMethod", variable has type
+"DankContractCall | DankContractTx")  [assignment]
+    ...       call: DankContractCall | DankContractTx = self._get_fn_from_arg...
+                                                        ^~~~~~~~~~~~~~~~~~~~~...
+dank_mids/brownie_patch/types.py: note: In member "_add_fn" of class "DankOverloadedMethod":
+dank_mids/brownie_patch/types.py:80: error: Argument 1 of "_add_fn" is
+incompatible with supertype "brownie.network.contract.OverloadedMethod";
+supertype defines the argument type as "ABIFunction"  [override]
+        def _add_fn(self, abi: dict, natspec: dict) -> None:  # type: igno...
+                          ^~~~~~~~~
+dank_mids/brownie_patch/types.py:80: note: Error code "override" not covered by "type: ignore" comment
+dank_mids/brownie_patch/types.py:80: note: This violates the Liskov substitution principle
+dank_mids/brownie_patch/types.py:80: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+dank_mids/controller.py: note: In member "__init__" of class "DankMiddlewareController":
+dank_mids/controller.py:159: error: Invalid index type "int" for
+"defaultdict[ChainId, list[DankMiddlewareController]]"; expected type "ChainId" 
+[index]
+            instances[chainid].append(self)
+                      ^~~~~~~
+dank_mids/controller.py: note: In member "make_request" of class "DankMiddlewareController":
+dank_mids/controller.py:284: error: Argument "params" has incompatible type
+"Sequence[Any]"; expected "list[Any] | None"  [arg-type]
+                method=method, params=params, id=request_id or self.call_u...
+                                      ^~~~~~
+dank_mids/brownie_patch/contract.py: note: In member "from_abi" of class "Contract":
+dank_mids/brownie_patch/contract.py:88: error: Argument 1 to "from_abi" of
+"Contract" has incompatible type "str"; expected "ContractName"  [arg-type]
+            persisted = brownie.Contract.from_abi(name, address, abi, owne...
+                                                  ^~~~
+dank_mids/brownie_patch/contract.py:88: error: Argument 2 to "from_abi" of
+"Contract" has incompatible type "str"; expected "HexAddress"  [arg-type]
+    ...     persisted = brownie.Contract.from_abi(name, address, abi, owner, ...
+                                                        ^~~~~~~
+dank_mids/brownie_patch/contract.py:88: error: Argument 3 to "from_abi" of
+"Contract" has incompatible type "list[dict[Any, Any]]"; expected
+"list[ABIFunction | ABIConstructor | ABIFallback | ABIReceive | ABIEvent | ABIError]"
+ [arg-type]
+    ...isted = brownie.Contract.from_abi(name, address, abi, owner, _check_pe...
+                                                        ^~~
+dank_mids/brownie_patch/contract.py: note: In member "from_ethpm" of class "Contract":
+dank_mids/brownie_patch/contract.py:117: error: "type[Contract]" has no
+attribute "from_ethpm"  [attr-defined]
+            persisted = brownie.Contract.from_ethpm(
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/contract.py: note: In member "from_explorer" of class "Contract":
+dank_mids/brownie_patch/contract.py:149: error: Argument 1 to "from_explorer"
+of "Contract" has incompatible type "str"; expected "HexAddress"  [arg-type]
+                address, as_proxy_for, owner, silent, _check_persist(persi...
+                ^~~~~~~
+dank_mids/brownie_patch/contract.py: note: In class "Contract":
+dank_mids/brownie_patch/contract.py:153: error: Incompatible types in
+assignment (expression has type "dict[str, str]", base class "_ContractBase"
+defined the type as "dict[str, HexStr]")  [assignment]
+        topics: dict[str, str]
+        ^~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/contract.py:153: error: Cannot assign to final name
+"topics"  [misc]
+        topics: dict[str, str]
+        ^~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/contract.py:156: error: Incompatible types in
+assignment (expression has type "dict[Method, Signature]", base class
+"_ContractBase" defined the type as "dict[FunctionName, Selector]") 
+[assignment]
+        signatures: dict[Method, Signature]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/contract.py:156: error: Cannot assign to final name
+"signatures"  [misc]
+        signatures: dict[Method, Signature]
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/contract.py: note: In member "__method_names__" of class "Contract":
+dank_mids/brownie_patch/contract.py:207: error: Need type annotation for "i" 
+[var-annotated]
+            yield from (i["name"] for i in filter(_is_function_abi, self.a...
+                       ^
+dank_mids/brownie_patch/contract.py:207: error: Argument 1 to "filter" has
+incompatible type "Callable[[dict[Any, Any]], bool]"; expected
+"Callable[[ABIFunction | ABIConstructor | ABIFallback | ABIReceive | ABIEvent | ABIError], TypeGuard[Never]]"
+ [arg-type]
+            yield from (i["name"] for i in filter(_is_function_abi, self.a...
+                                                  ^~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/contract.py: note: In member "__get_method_object__" of class "Contract":
+dank_mids/brownie_patch/contract.py:226: error: Need type annotation for "abi" 
+[var-annotated]
+            for abi in filter(_is_function_abi, self.abi):
+            ^
+dank_mids/brownie_patch/contract.py:226: error: Argument 1 to "filter" has
+incompatible type "Callable[[dict[Any, Any]], bool]"; expected
+"Callable[[ABIFunction | ABIConstructor | ABIFallback | ABIReceive | ABIEvent | ABIError], TypeGuard[Never]]"
+ [arg-type]
+            for abi in filter(_is_function_abi, self.abi):
+                              ^~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/contract.py:242: error: Incompatible types in
+assignment (expression has type "DankOverloadedMethod[Never]", variable has type
+"bool")  [assignment]
+                    overloaded = DankOverloadedMethod(self.address, full_n...
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+dank_mids/brownie_patch/contract.py:242: note: Error code "assignment" not covered by "type: ignore" comment
+dank_mids/brownie_patch/contract.py:242: note: Maybe you forgot to use "await"?
+dank_mids/brownie_patch/contract.py:244: error: "Literal[True]" has no
+attribute "_add_fn"  [attr-defined]
+                overloaded._add_fn(abi, natspec)
+                ^~~~~~~~~~~~~~~~~~
+dank_mids/brownie_patch/contract.py: note: In function "patch_contract":
+dank_mids/brownie_patch/contract.py:273: error: Argument 1 to "Contract" has
+incompatible type "str"; expected "HexAddress | ContractName"  [arg-type]
+            contract = brownie.Contract(contract)
+                                        ^~~~~~~~
+dank_mids/brownie_patch/contract.py: note: In function "_patch_if_method":
+dank_mids/brownie_patch/contract.py:294: error: Argument 1 to "_patch_call" has
+incompatible type "ContractCall | ContractTx"; expected "ContractCall" 
+[arg-type]
+            _patch_call(method, w3)
+                        ^~~~~~
+dank_mids/helpers/future.py: note: In member "__init__" of class "DebuggableFuture":
+dank_mids/helpers/future.py:51: error: Type variable
+"dank_mids._requests._Response" is unbound  [valid-type]
+                self._owner: ProxyType["_RequestBase[_Response]"] = proxy(...
+                                       ^
+dank_mids/helpers/future.py:51: note: (Hint: Use "Generic[_Response]" or "Protocol[_Response]" base class to bind "_Response" inside a class)
+dank_mids/helpers/future.py:51: note: (Hint: Use "_Response" in function signature to bind "_Response" inside a function)
+Found 205 errors in 19 files (checked 57 source files)

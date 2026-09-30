@@ -5,19 +5,13 @@ from functools import lru_cache, wraps
 from typing import Final, TypeVar
 
 from a_sync import PruningThreadPoolExecutor, a_sync
-from a_sync.a_sync import ASyncFunction
+from a_sync.a_sync.function import ASyncFunctionAsyncDefault
 from brownie import chain
-from pony.orm import (
-    CommitException,
-    OperationalError,
-    TransactionError,
-    UnexpectedError,
-    commit,
-    db_session,
-)
+from pony.orm import CommitException, OperationalError, TransactionError, UnexpectedError, commit
 from typing_extensions import ParamSpec
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._db.typing import db_session
 
 _T = TypeVar("_T")
 _S = TypeVar("_S", bound=Sized)
@@ -89,11 +83,14 @@ def retry_locked(callable: Callable[_P, _T]) -> Callable[_P, _T]:
     return retry_locked_wrap
 
 
-db_session_retry_locked: Final = lambda func: retry_locked(db_session(retry_locked(func)))
+def db_session_retry_locked(func: Callable[_P, _T]) -> Callable[_P, _T]:
+    return retry_locked(db_session(retry_locked(func)))
 
-a_sync_read_db_session: Final[Callable[[Callable[_P, _T]], ASyncFunction[_P, _T]]] = (
-    lambda fn: a_sync(default="async", executor=ydb_read_threads)(db_session_retry_locked(fn))
-)
+
+def a_sync_read_db_session(fn: Callable[_P, _T]) -> ASyncFunctionAsyncDefault[_P, _T]:
+    return a_sync(default="async", executor=ydb_read_threads)(db_session_retry_locked(fn))
+
+
 """Decorator for asynchronous read database sessions with retry logic.
 
 This decorator wraps a function with an asynchronous database session for read operations,
@@ -117,9 +114,8 @@ See Also:
 """
 
 
-db_session_cached: Final = lambda func: retry_locked(
-    lru_cache(maxsize=None)(db_session(retry_locked(func)))
-)
+def db_session_cached(func: Callable[_P, _T]) -> Callable[_P, _T]:
+    return retry_locked(lru_cache(maxsize=None)(db_session(retry_locked(func))))
 
 
 _result_count_logger: Final = logging.getLogger(f"{__name__}.result_count")

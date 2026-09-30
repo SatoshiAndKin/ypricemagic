@@ -1,0 +1,74 @@
+y/prices/lending/aave.py: note: In member "__contains__" of class "AaveRegistry":
+y/prices/lending/aave.py:336: error:
+"Awaitable[list[AaveMarketV1 | AaveMarketV2 | AaveMarketV3]]" has no attribute
+"__iter__" (not iterable)  [attr-defined]
+            return any(__o in pool for pool in self.pools)
+                                               ^~~~~~~~~~
+y/prices/lending/aave.py:336: note: Maybe you forgot to use "await"?
+y/prices/dex/uniswap/uniswap.py: note: In member "__init__" of class "UniswapMultiplexer":
+y/prices/dex/uniswap/uniswap.py:72: error: Incompatible types in assignment
+(expression has type "T", target has type "UniswapRouterV2")  [assignment]
+                    self.v2_routers[name] = router_cls(
+                                            ^~~~~~~~~~~
+tests/test_pricing_correctness.py: note: In function "test_erc4626_ratio_and_wrapped_gas_paths":
+tests/test_pricing_correctness.py:814: error: Non-overlapping equality check
+(left operand type: "UsdPrice", right operand type: "Literal[12]") 
+[comparison-overlap]
+        assert result.path[0].token == TOKEN and result.path[0].price == 1...
+                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/test_amount_quotes.py: note: In function "test_public_stablecoin_cached_classification_uses_historical_feed":
+tests/test_amount_quotes.py:487: error:
+"ASyncFunctionSyncDefault[[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, int | None], str | None]"
+has no attribute "__wrapped__"  [attr-defined]
+        check = buckets.check_bucket.__wrapped__
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/lending/test_aave.py: note: In function "test_AaveRegistry":
+tests/prices/lending/test_aave.py:137: error:
+"Awaitable[list[AaveMarketV1 | AaveMarketV2 | AaveMarketV3]]" has no attribute
+"__iter__" (not iterable)  [attr-defined]
+        for pool in aave.pools:
+                    ^~~~~~~~~~
+tests/prices/lending/test_aave.py:137: note: Maybe you forgot to use "await"?
+tests/test_quote_repairs.py: note: In function "test_multiplexer_normalizes_supported_addresses":
+tests/test_quote_repairs.py:245: error: Incompatible types in "await" (actual
+type "Coroutine[Any, Any, PriceResult | None] | PriceResult | None", expected
+type "Awaitable[Any]")  [misc]
+        result = await uniswap_multiplexer.get_price(inputs[kind], BLOCK.n...
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+tests/test_misc_fixes.py: note: In function "test_crvusd_address_is_correct":
+tests/test_misc_fixes.py:31: error: Argument 1 to "ChecksumAddress" has
+incompatible type "str"; expected "HexAddress"  [arg-type]
+        assert STABLECOINS[ChecksumAddress(correct_address)] == "crvusd"
+                                           ^~~~~~~~~~~~~~~
+tests/test_misc_fixes.py: note: In function "test_new_stablecoins_present":
+tests/test_misc_fixes.py:44: error: Argument 1 to "ChecksumAddress" has
+incompatible type "str"; expected "HexAddress"  [arg-type]
+            assert STABLECOINS[ChecksumAddress(address)] == name
+                                               ^~~~~~~
+tests/prices/dex/test_uniswap.py: note: In function "test_uniswap_v1":
+tests/prices/dex/test_uniswap.py:91: error: Argument 1 to "cgather" has
+incompatible type
+"Coroutine[Any, Any, PriceResult | None] | PriceResult | None"; expected
+"Awaitable[Any]"  [arg-type]
+            async_uni_v1.get_price(token, block.number),
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/dex/test_uniswap.py:91: error: Argument 1 to "__call__" of
+"ASyncBoundMethod" has incompatible type
+"str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int";
+expected "str | bytes | HexBytes | Address | EthAddress"  [arg-type]
+            async_uni_v1.get_price(token, block.number),
+                                   ^~~~~
+tests/prices/dex/test_uniswap.py: note: In function "test_uniswap_v3":
+tests/prices/dex/test_uniswap.py:145: error: No overload variant of "__call__"
+of "ASyncBoundMethod" matches argument types
+"str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int", "int",
+"bool", "bool"  [call-overload]
+        price = await v3.uniswap_v3.get_price(token, block.number, skip_ca...
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+tests/prices/dex/test_uniswap.py:145: note: Possible overload variants:
+tests/prices/dex/test_uniswap.py:145: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber | None = ..., ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., skip_cache: bool = ..., *, sync: Literal[True]) -> PriceResult | None
+tests/prices/dex/test_uniswap.py:145: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber | None = ..., ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., skip_cache: bool = ..., *, sync: Literal[False]) -> Coroutine[Any, Any, PriceResult | None]
+tests/prices/dex/test_uniswap.py:145: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber | None = ..., ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., skip_cache: bool = ..., *, asynchronous: Literal[False]) -> PriceResult | None
+tests/prices/dex/test_uniswap.py:145: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber | None = ..., ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., skip_cache: bool = ..., *, asynchronous: Literal[True]) -> Coroutine[Any, Any, PriceResult | None]
+tests/prices/dex/test_uniswap.py:145: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber | None = ..., ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., skip_cache: bool = ...) -> Coroutine[Any, Any, PriceResult | None] | PriceResult | None
+Found 11 errors in 8 files (checked 230 source files)

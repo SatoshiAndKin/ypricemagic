@@ -1,0 +1,355 @@
+{
+  "complete_test_reports": true,
+  "method": "Pair the five ascending blocks per ERC20 token and ten ascending batch-price blocks by their generated sample position.",
+  "source_references": [
+    "tests/fixtures.py:37",
+    "tests/classes/test_erc20.py:23",
+    "tests/prices/test_magic.py:24"
+  ],
+  "limitation": "Position equivalence is not same-block or source failure equivalence; chain height and provider responses changed. All exact blocks, outcomes and messages remain visible.",
+  "newly_failing_sample_positions": [],
+  "comparisons": [
+    {
+      "sample_group": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+      "zero_based_position": 0,
+      "prior": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-6776284]",
+        "block": 6776284,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet WBTC 0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599 at block 6776284"
+      },
+      "current": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-6776284]",
+        "block": 6776284,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet WBTC 0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599 at block 6776284"
+      },
+      "same_exact_block": true,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3",
+      "zero_based_position": 0,
+      "prior": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3-5761012]",
+        "block": 5761012,
+        "outcome": "failed",
+        "error_message": "y.exceptions.NonStandardERC20: \n        Unable to fetch `totalSupply` for 0x57Ab1E02fEE23774580C119740129eAC7081e9D3 on Mainnet\n        If the contract is verified, please check to see if it has a strangely named\n        `totalSupply` method and create an issue on https://github.com/BobTheBuidler/ypricemagic\n        with the contract address and correct method name so we can keep things going smoothly :)"
+      },
+      "current": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3-5761012]",
+        "block": 5761012,
+        "outcome": "failed",
+        "error_message": "y.exceptions.NonStandardERC20: \n        Unable to fetch `totalSupply` for 0x57Ab1E02fEE23774580C119740129eAC7081e9D3 on Mainnet\n        If the contract is verified, please check to see if it has a strangely named\n        `totalSupply` method and create an issue on https://github.com/BobTheBuidler/ypricemagic\n        with the contract address and correct method name so we can keep things going smoothly :)"
+      },
+      "same_exact_block": true,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3",
+      "zero_based_position": 1,
+      "prior": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3-10837348]",
+        "block": 10837348,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet 0x57Ab1E02fEE23774580C119740129eAC7081e9D3 0x57Ab1E02fEE23774580C119740129eAC7081e9D3 at block 10837348"
+      },
+      "current": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3-10837752]",
+        "block": 10837752,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet 0x57Ab1E02fEE23774580C119740129eAC7081e9D3 0x57Ab1E02fEE23774580C119740129eAC7081e9D3 at block 10837752"
+      },
+      "same_exact_block": false,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "zero_based_position": 0,
+      "prior": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-8938158]",
+        "block": 8938158,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet DAI 0x6B175474E89094C44Da98b954EedeAC495271d0F at block 8938158"
+      },
+      "current": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6B175474E89094C44Da98b954EedeAC495271d0F-8938158]",
+        "block": 8938158,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet DAI 0x6B175474E89094C44Da98b954EedeAC495271d0F at block 8938158"
+      },
+      "same_exact_block": true,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8",
+      "zero_based_position": 0,
+      "prior": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-15931958]",
+        "block": 15931958,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet PYUSD 0x6c3ea9036406852006290770BEdFcAbA0e23A0e8 at block 15931958"
+      },
+      "current": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-15931958]",
+        "block": 15931958,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet PYUSD 0x6c3ea9036406852006290770BEdFcAbA0e23A0e8 at block 15931958"
+      },
+      "same_exact_block": true,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
+      "zero_based_position": 0,
+      "prior": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-4630855]",
+        "block": 4630855,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet MKR 0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2 at block 4630855"
+      },
+      "current": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-4630855]",
+        "block": 4630855,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet MKR 0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2 at block 4630855"
+      },
+      "same_exact_block": true,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
+      "zero_based_position": 1,
+      "prior": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-9989730]",
+        "block": 9989730,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet MKR 0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2 at block 9989730"
+      },
+      "current": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-9990134]",
+        "block": 9990134,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet MKR 0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2 at block 9990134"
+      },
+      "same_exact_block": false,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+      "zero_based_position": 0,
+      "prior": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-4729568]",
+        "block": 4729568,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet WETH 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 at block 4729568"
+      },
+      "current": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-4729568]",
+        "block": 4729568,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet WETH 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 at block 4729568"
+      },
+      "same_exact_block": true,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+      "zero_based_position": 1,
+      "prior": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-10063765]",
+        "block": 10063765,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet WETH 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 at block 10063765"
+      },
+      "current": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-10064169]",
+        "block": 10064169,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet WETH 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 at block 10064169"
+      },
+      "same_exact_block": false,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "zero_based_position": 0,
+      "prior": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-4644748]",
+        "block": 4644748,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet USDT 0xdAC17F958D2ee523a2206206994597C13D831ec7 at block 4644748"
+      },
+      "current": {
+        "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-4644748]",
+        "block": 4644748,
+        "outcome": "failed",
+        "error_message": "y.exceptions.yPriceMagicError: PriceError while fetching Mainnet USDT 0xdAC17F958D2ee523a2206206994597C13D831ec7 at block 4644748"
+      },
+      "same_exact_block": true,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/prices/test_magic.py::test_get_prices",
+      "zero_based_position": 0,
+      "prior": {
+        "test": "tests/prices/test_magic.py::test_get_prices[11000000]",
+        "block": 11000000,
+        "outcome": "failed",
+        "error_message": "ValueError: ('0xe1aFe1Fd76Fd88f78cBf599ea1846231B8bA3B6B', 'No data was returned - the call likely reverted')"
+      },
+      "current": {
+        "test": "tests/prices/test_magic.py::test_get_prices[11000000]",
+        "block": 11000000,
+        "outcome": "failed",
+        "error_message": "ValueError: ('0xe1aFe1Fd76Fd88f78cBf599ea1846231B8bA3B6B', 'No data was returned - the call likely reverted')"
+      },
+      "same_exact_block": true,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/prices/test_magic.py::test_get_prices",
+      "zero_based_position": 2,
+      "prior": {
+        "test": "tests/prices/test_magic.py::test_get_prices[14013270]",
+        "block": 14013270,
+        "outcome": "failed",
+        "error_message": "ValueError: ('0xCa5DFDABBfFD58cfD49A9f78Ca52eC8e0591a3C5', 'PriceError while fetching Mainnet G-UNI 0xD2eeC91055F07fE24C9cCB25828ecfEFd4be0c41 at block 14013270')"
+      },
+      "current": {
+        "test": "tests/prices/test_magic.py::test_get_prices[14013594]",
+        "block": 14013594,
+        "outcome": "failed",
+        "error_message": "ValueError: ('0xCa5DFDABBfFD58cfD49A9f78Ca52eC8e0591a3C5', 'PriceError while fetching Mainnet G-UNI 0xD2eeC91055F07fE24C9cCB25828ecfEFd4be0c41 at block 14013594')"
+      },
+      "same_exact_block": false,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/prices/test_magic.py::test_get_prices",
+      "zero_based_position": 3,
+      "prior": {
+        "test": "tests/prices/test_magic.py::test_get_prices[15519905]",
+        "block": 15519905,
+        "outcome": "failed",
+        "error_message": "ValueError: ('0xCa5DFDABBfFD58cfD49A9f78Ca52eC8e0591a3C5', 'PriceError while fetching Mainnet G-UNI 0xD2eeC91055F07fE24C9cCB25828ecfEFd4be0c41 at block 15519905')"
+      },
+      "current": {
+        "test": "tests/prices/test_magic.py::test_get_prices[15520391]",
+        "block": 15520391,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "same_exact_block": false,
+      "same_error_except_block": false
+    },
+    {
+      "sample_group": "tests/prices/test_magic.py::test_get_prices",
+      "zero_based_position": 4,
+      "prior": {
+        "test": "tests/prices/test_magic.py::test_get_prices[17026540]",
+        "block": 17026540,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "current": {
+        "test": "tests/prices/test_magic.py::test_get_prices[17027188]",
+        "block": 17027188,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "same_exact_block": false,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/prices/test_magic.py::test_get_prices",
+      "zero_based_position": 5,
+      "prior": {
+        "test": "tests/prices/test_magic.py::test_get_prices[18533175]",
+        "block": 18533175,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "current": {
+        "test": "tests/prices/test_magic.py::test_get_prices[18533985]",
+        "block": 18533985,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "same_exact_block": false,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/prices/test_magic.py::test_get_prices",
+      "zero_based_position": 6,
+      "prior": {
+        "test": "tests/prices/test_magic.py::test_get_prices[20039810]",
+        "block": 20039810,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "current": {
+        "test": "tests/prices/test_magic.py::test_get_prices[20040782]",
+        "block": 20040782,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "same_exact_block": false,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/prices/test_magic.py::test_get_prices",
+      "zero_based_position": 7,
+      "prior": {
+        "test": "tests/prices/test_magic.py::test_get_prices[21546445]",
+        "block": 21546445,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "current": {
+        "test": "tests/prices/test_magic.py::test_get_prices[21547579]",
+        "block": 21547579,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "same_exact_block": false,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/prices/test_magic.py::test_get_prices",
+      "zero_based_position": 8,
+      "prior": {
+        "test": "tests/prices/test_magic.py::test_get_prices[23053080]",
+        "block": 23053080,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "current": {
+        "test": "tests/prices/test_magic.py::test_get_prices[23054376]",
+        "block": 23054376,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "same_exact_block": false,
+      "same_error_except_block": true
+    },
+    {
+      "sample_group": "tests/prices/test_magic.py::test_get_prices",
+      "zero_based_position": 9,
+      "prior": {
+        "test": "tests/prices/test_magic.py::test_get_prices[24559715]",
+        "block": 24559715,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "current": {
+        "test": "tests/prices/test_magic.py::test_get_prices[24561173]",
+        "block": 24561173,
+        "outcome": "failed",
+        "error_message": "web3.exceptions.ContractLogicError: execution reverted: Feed not found"
+      },
+      "same_exact_block": false,
+      "same_error_except_block": true
+    }
+  ]
+}

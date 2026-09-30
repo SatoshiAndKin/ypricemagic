@@ -1,0 +1,7 @@
+{
+  "complete": false,
+  "reason": "Required archive call timed out in the preceding full-control probe and in a contained startup probe; scaling has no compiled-module or workload result",
+  "action": "Terminate only the owned runner to preserve startup evidence",
+  "supervisor_pid": 82061,
+  "unix_time": 1789346043.82512
+}

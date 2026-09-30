@@ -47,11 +47,12 @@ def get_price(address: ChecksumAddress, block: BlockNumber) -> Decimal | None:
     if price := known_prices_at_block(block).pop(address, None):
         _logger_debug("found %s block %s price %s in ydb", address, block, price)
         return price
-    if (price := Price.get(token=(CHAINID, address), block=(CHAINID, block))) and (
-        price := price.price
+    if (entity := Price.get(token=(CHAINID, address), block=(CHAINID, block))) and (
+        price := entity.price
     ):
         _logger_debug("found %s block %s price %s in ydb", address, block, price)
         return price
+    return None
 
 
 @retry_locked
@@ -121,37 +122,12 @@ _set_price_func = (
 )
 
 
-def set_price(address: ChecksumAddress, block: BlockNumber, price: Decimal) -> None:
-    """
-    Set the price of a token at a specific block in the database.
-
-    This function ensures the block and token are present in the database and
-    inserts the price information. It handles large numbers by suppressing
-    `InvalidOperation` exceptions.
-
-    This function delegates to a threadpool without waiting for the job to complete.
-
-    Args:
-        address: The address of the token.
-        block: The block number.
-        price: The price of the token.
-
-    Examples:
-        >>> await _set_price("0xTokenAddress", 12345678, Decimal("123.45"))
-
-    See Also:
-        - :func:`ensure_block`
-        - :func:`ensure_token`
-        - :func:`insert`
-    """
-
-
 set_price = ProcessingQueue(_set_price_func, num_workers=50, return_data=False)
 
 
 @cached(TTLCache(maxsize=1_000, ttl=5 * 60), lock=threading.Lock())
 @log_result_count("prices", ("block",))
-def known_prices_at_block(number: BlockNumber) -> dict[ChecksumAddress, Decimal]:
+def known_prices_at_block(number: BlockNumber) -> dict[str, Decimal]:
     """
     Cache and return all known prices at a specific block to minimize database reads.
 

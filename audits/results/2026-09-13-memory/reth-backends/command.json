@@ -1,0 +1,31 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import json, os, time, urllib.request, urllib.error\nfrom pathlib import Path\nreport = Path(os.environ['VALIDATION_REPORT']) / 'reth-backends.json'\nrows = []\ntx = {'to': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 'data': '0x313ce567'}\ndef call(endpoint, url, label, method, params):\n    row = dict(endpoint=endpoint, label=label, method=method, params=params, timeout_seconds=75)\n    started = time.monotonic()\n    try:\n        body = json.dumps(dict(jsonrpc='2.0', id=1, method=method, params=params)).encode()\n        request = urllib.request.Request(url, body, {'Content-Type':'application/json'})\n        with urllib.request.urlopen(request, timeout=75) as response:\n            payload = json.load(response)\n        row['result'] = payload.get('result')\n        if 'error' in payload: row['rpc_error'] = payload['error']\n    except Exception as error:\n        row['error_type'] = type(error).__name__\n        if isinstance(error, urllib.error.HTTPError): row['http_status'] = error.code\n    row['elapsed_seconds'] = time.monotonic()-started\n    rows.append(row)\n    report.write_text(json.dumps(dict(complete=False, calls=rows), indent=2)+'\\n')\n    print(json.dumps({key:value for key,value in row.items() if key != 'result' or not isinstance(value,dict)}), flush=True)\n    return row.get('result')\nheaders = {}\nfor endpoint, variable in [('lambo_reth','VALIDATION_LAMBO_RETH_URL'), ('nuc_reth','VALIDATION_NUC_RETH_URL')]:\n    url = os.environ[variable]\n    client = call(endpoint, url, 'client', 'web3_clientVersion', [])\n    if client is None: continue\n    call(endpoint, url, 'chain', 'eth_chainId', [])\n    call(endpoint, url, 'syncing', 'eth_syncing', [])\n    call(endpoint, url, 'head', 'eth_blockNumber', [])\n    call(endpoint, url, 'latest', 'eth_call', [tx,'latest'])\n    for number in (16830000,18000000):\n        header = call(endpoint, url, f'header-{number}', 'eth_getBlockByNumber', [hex(number),False])\n        call(endpoint, url, f'number-{number}', 'eth_call', [tx,hex(number)])\n        if isinstance(header,dict):\n            headers[number] = header['hash']\n            call(endpoint, url, f'hash-{number}', 'eth_call', [tx,{'blockHash':header['hash'],'requireCanonical':True}])\nurl = os.environ['VALIDATION_RPC_URL']\ncall('proxy', url, 'client', 'web3_clientVersion', [])\nfor number, block_hash in headers.items():\n    call('proxy', url, f'hash-{number}', 'eth_call', [tx,{'blockHash':block_hash,'requireCanonical':True}])\nreport.write_text(json.dumps(dict(complete=True, calls=rows), indent=2)+'\\n')\n"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 496.8497591319974,
+  "peak_sampled_process_rss_bytes": 37654528,
+  "cgroup_before": {
+    "memory.current": "8790016",
+    "memory.peak": "8896512",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "13357056",
+    "memory.peak": "141205504",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

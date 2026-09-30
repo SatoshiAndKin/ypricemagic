@@ -1,0 +1,17 @@
+{
+  "complete": true,
+  "purpose": "Compile the owning cached-property loader retention repair with identical supporting dependencies",
+  "started_unix": 1789389807.7756312,
+  "application": {
+    "source_sha": "2ecb8c9659c6f08375623e17ed359b1c55c33e93",
+    "source_revision": "2ecb8c9659c6f08375623e17ed359b1c55c33e93",
+    "source_archive_sha256": "891e7b2ae55ad8cfd37fa115c39f65c2ea65ca28dc497e9760f846deda9cb5ad"
+  },
+  "owner": {
+    "source_sha": "000e4f24466ddc01abc6bb1a12cc429cbeea5813",
+    "source_revision": "worktree",
+    "source_archive_sha256": "5900c6cebbb1524a12d95fcda05d4efb2ebcdfec02861419e2a26089e0fe447b"
+  },
+  "image": "sha256:a44dd03ae137e5c1dba112967e0291b275252cac926ccae9c705bd66f13151d9",
+  "elapsed_seconds": 75.5044059753418
+}

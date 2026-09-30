@@ -1,0 +1,20 @@
+{
+  "local_configuration": "/Users/bryan/ethereum-node-tuning-20260910/dockerfiles/ethereum/web3-proxy/config/proxy.toml",
+  "configuration_sha256": "626a64600f72ccbda31f49de4aeeb4a163452fb9e65eb413e3260b79f84a07b5",
+  "configuration_checkout_sha": "65578102573d63288df92ae8482077a6d1e59192",
+  "routes": {
+    "lambo_geth": {
+      "port": 8545,
+      "block_data_limit": 128
+    },
+    "lambo_reth": {
+      "port": 8547,
+      "block_data_limit": "archive"
+    },
+    "nuc_reth": {
+      "port": 8545,
+      "block_data_limit": "archive"
+    }
+  },
+  "transport": "Direct HTTP over the full Tailscale hostnames used by local client configuration; private runtime files hold the URLs."
+}

@@ -1,10 +1,10 @@
 from abc import ABCMeta, abstractmethod
 from asyncio import (
     FIRST_COMPLETED,
+    Future,
     Task,
     TimeoutError,
     create_task,
-    ensure_future,
     gather,
     get_event_loop,
     shield,
@@ -12,28 +12,20 @@ from asyncio import (
     wait,
     wait_for,
 )
-from collections.abc import AsyncIterator, Awaitable, Callable, Container
+from collections.abc import AsyncIterator, Awaitable, Callable, Iterable, Iterator
 from copy import copy
-from itertools import dropwhile, groupby, islice
+from itertools import groupby, islice
 from logging import DEBUG, getLogger
-from typing import TYPE_CHECKING, Any, Generic, NoReturn, Optional, TypeVar, final
+from typing import TYPE_CHECKING, Any, Generic, NoReturn, Optional, TypeVar, cast, final
 
-import a_sync
-import dank_mids
 import eth_retry
-from a_sync import (
-    ASyncIterable,
-    ASyncIterator,
-    AsyncThreadPoolExecutor,
-    CounterLock,
-    PruningThreadPoolExecutor,
-)
-from async_property import async_property  # type: ignore [import-untyped]
+from a_sync import ASyncIterable, AsyncThreadPoolExecutor, CounterLock, PruningThreadPoolExecutor
 from brownie import ZERO_ADDRESS
 from dank_mids import BlockSemaphore
+from dank_mids.brownie_patch import dank_eth
 from evmspec.data import Address, HexBytes32
 from hexbytes import HexBytes
-from pony.orm import OptimisticCheckError, TransactionIntegrityError, db_session
+from pony.orm import OptimisticCheckError, TransactionIntegrityError
 from web3.datastructures import AttributeDict
 from web3.middleware.filter import block_ranges
 
@@ -41,12 +33,20 @@ from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._db.decorators import retry_locked
 from y._db.exceptions import CacheNotPopulatedError
+from y._db.typing import db_session
 from y._decorators import stuck_coro_debugger
+from y._typing import async_iterator, async_property
 from y.exceptions import reraise_excs_with_extra_context
 from y.utils.middleware import BATCH_SIZE
 
 if TYPE_CHECKING:
-    from y import Block
+    from y.datatypes import Block
+
+from a_sync.executor import _AsyncExecutorMixin
+from eth_typing import BlockNumber
+from typing_extensions import TypeVar as DefaultTypeVar
+
+from y.datatypes import AnyAddressType
 
 T = TypeVar("T")
 S = TypeVar("S")
@@ -55,13 +55,15 @@ M = TypeVar("M")
 Checkpoints = dict["Block", int]
 
 logger = getLogger(__name__)
-default_filter_threads = PruningThreadPoolExecutor(4)
+default_filter_threads = cast(
+    Callable[[int], PruningThreadPoolExecutor], PruningThreadPoolExecutor
+)(4)
 """
 The thread pool executor used for all :class:`Filter` objects without one provided, with a maximum of 4 threads.
 """
 
 
-def enc_hook(obj: Any) -> bytes:
+def enc_hook(obj: Any) -> object:
     """
     Encode hook for JSON serialization of special types.
 
@@ -127,7 +129,7 @@ def dec_hook(typ: type[T], obj: bytes) -> T:
         - :func:`enc_hook`
     """
     if typ is HexBytes:
-        return typ(obj)
+        return cast(T, HexBytes(obj))
     raise ValueError(f"{typ} is not a valid type for decoding")
 
 
@@ -261,10 +263,11 @@ class DiskCache(Generic[S, M], metaclass=ABCMeta):
     __slots__ = []
 
 
-C = TypeVar("C", bound=DiskCache)
+C = TypeVar("C", bound=DiskCache[Any, Any])
+_Raw = DefaultTypeVar("_Raw", default=T)
 
 
-class _DiskCachedMixin(ASyncIterable[T], Generic[T, C], metaclass=ABCMeta):
+class _DiskCachedMixin(ASyncIterable[T], Generic[T, C, _Raw], metaclass=ABCMeta):
     """
     Mixin that provides asynchronous features for data caches stored on disk.
     """
@@ -274,7 +277,7 @@ class _DiskCachedMixin(ASyncIterable[T], Generic[T, C], metaclass=ABCMeta):
 
     def __init__(
         self,
-        executor: AsyncThreadPoolExecutor | None = None,
+        executor: _AsyncExecutorMixin | None = None,
         is_reusable: bool = True,
     ):
         """
@@ -285,7 +288,7 @@ class _DiskCachedMixin(ASyncIterable[T], Generic[T, C], metaclass=ABCMeta):
             is_reusable: Whether data should be kept in memory for reuse.
         """
         self.is_reusable = is_reusable
-        self._cache = None
+        self._cache: C | None = None
         self._executor = executor
         self._objects: list[T] = []
         self._pruned = 0
@@ -298,7 +301,7 @@ class _DiskCachedMixin(ASyncIterable[T], Generic[T, C], metaclass=ABCMeta):
         """
 
     @property
-    def executor(self) -> AsyncThreadPoolExecutor:
+    def executor(self) -> _AsyncExecutorMixin:
         """
         Returns the executor used for disk operations, creating one if necessary.
         """
@@ -317,9 +320,10 @@ class _DiskCachedMixin(ASyncIterable[T], Generic[T, C], metaclass=ABCMeta):
 
     @property
     @abstractmethod
-    def insert_to_db(self) -> Callable[[T], None]: ...
+    def insert_to_db(self) -> Callable[[_Raw], Awaitable[None] | None]: ...
 
-    def bulk_insert(self) -> Callable[[list[T]], Awaitable[None]]:
+    @property
+    def bulk_insert(self) -> Callable[[list[_Raw]], Awaitable[None]]:
         """
         Function to bulk insert a list of objects into the database.
 
@@ -339,13 +343,17 @@ class _DiskCachedMixin(ASyncIterable[T], Generic[T, C], metaclass=ABCMeta):
         See Also:
             - :meth:`_load_cache`
         """
+        raise NotImplementedError
 
-    async def _extend(self, objs: Container[T]) -> None:
+    @abstractmethod
+    def _get_block_for_obj(self, obj: T) -> "Block": ...
+
+    async def _extend(self, objs: list[_Raw]) -> None:
         """
         Override this to pre-process objects before storing.
 
         Args:
-            objs ("Container[T]"): The objects to extend the list with.
+            objs: The objects to extend the list with.
 
         Example:
             >>> await instance._extend([obj1, obj2])
@@ -354,12 +362,13 @@ class _DiskCachedMixin(ASyncIterable[T], Generic[T, C], metaclass=ABCMeta):
             - :meth:`_load_cache`
         """
         if objs:
-            self._objects.extend(objs)
+            # The default transform is identity; decoded filters override this.
+            self._objects.extend(cast(list[T], objs))
             if self.is_reusable:
                 block = self._get_block_for_obj(self._objects[-1])
                 self._checkpoints[block] = len(self._objects)
 
-    async def _load_cache(self, from_block: "Block") -> "Block":
+    async def _load_cache(self, from_block: "Block") -> "Block | None":
         """
         Loads cached logs from disk.
 
@@ -408,7 +417,7 @@ class _DiskCachedMixin(ASyncIterable[T], Generic[T, C], metaclass=ABCMeta):
                 len(self._objects),
                 cached_thru,
             )
-            return cached_thru
+            return cast("Block", cached_thru)
         return None
 
 
@@ -424,7 +433,10 @@ def make_executor(small: int, big: int, name: str | None = None) -> PruningThrea
     Returns:
         A PruningThreadPoolExecutor instance based on the environment configuration.
     """
-    return PruningThreadPoolExecutor(big if ENVS.DB_PROVIDER == "postgres" else small, name)
+    constructor = cast(
+        Callable[[int, str | None], PruningThreadPoolExecutor], PruningThreadPoolExecutor
+    )
+    return constructor(big if ENVS.DB_PROVIDER == "postgres" else small, name)
 
 
 _E = TypeVar("_E", bound=AsyncThreadPoolExecutor)
@@ -434,16 +446,16 @@ _metadata_read_executor = make_executor(2, 3, "ypricemagic Filter read metadata"
 _metadata_write_executor = make_executor(1, 3, "ypricemagic Filter write metadata")
 
 
-class Filter(_DiskCachedMixin[T, C]):
+class Filter(_DiskCachedMixin[T, C, _Raw]):
     # defaults are stored as class vars to keep instance dicts smaller
     _chunk_size = BATCH_SIZE
-    _chunks_per_batch = None
+    _chunks_per_batch: int | None = None
     _exc = None
     _tb = None
-    _db_task = None
-    _sleep_fut = None
+    _db_task: Task[None] | None = None
+    _sleep_fut: Future[None] | None = None
     _sleep_time = 60
-    _task = None
+    _task: Task[NoReturn] | None = None
     _depth = 0
     _semaphore = None
     _verbose = False
@@ -457,13 +469,13 @@ class Filter(_DiskCachedMixin[T, C]):
 
     def __init__(
         self,
-        from_block: "Block",
+        from_block: "Block | None",
         *,
         chunk_size: int = BATCH_SIZE,
         chunks_per_batch: int | None = None,
         sleep_time: int = 60,
         semaphore: BlockSemaphore | None = None,
-        executor: AsyncThreadPoolExecutor | None = None,
+        executor: _AsyncExecutorMixin | None = None,
         is_reusable: bool = True,
         verbose: bool = False,
     ):
@@ -509,7 +521,7 @@ class Filter(_DiskCachedMixin[T, C]):
             self._task.cancel()
 
     @abstractmethod
-    async def _fetch_range(self, from_block: "Block", to_block: "Block") -> list[T]:
+    async def _fetch_range(self, from_block: "Block", to_block: "Block") -> list[_Raw]:
         """
         Fetches data for a given range of blocks from an on-chain or remote provider.
 
@@ -540,9 +552,9 @@ class Filter(_DiskCachedMixin[T, C]):
         Example:
             >>> block = instance._get_block_for_obj(some_obj)
         """
-        return obj.blockNumber
+        return cast("Block", getattr(obj, "blockNumber"))
 
-    @ASyncIterator.wrap
+    @async_iterator
     async def _objects_thru(
         self, block: Optional["Block"], from_block: Optional["Block"] = None
     ) -> AsyncIterator[T]:
@@ -561,58 +573,22 @@ class Filter(_DiskCachedMixin[T, C]):
         yielded = self._pruned
         done_thru = 0
         get_block_for_obj = self._get_block_for_obj
-        if self.is_reusable:
-            if from_block:
-                reached_from_block = False
-
-                def obj_out_of_range(obj) -> bool:
-                    if get_block_for_obj(obj) < from_block:
-                        return True
-                    nonlocal reached_from_block
-                    reached_from_block = True
-                    return False
-
-                def skip_too_early(objects):
-                    nonlocal yielded
-                    if checkpoints := self._checkpoints:
-                        start_checkpoint_index = _get_checkpoint_index(from_block, checkpoints)
-                        if start_checkpoint_index is not None:
-                            objects = objects[start_checkpoint_index:]
-                            yielded += start_checkpoint_index
-                    start_len = len(objects)
-                    objects = tuple(dropwhile(obj_out_of_range, objects))
-                    yielded += start_len - len(objs)
-                    return objects
-
-            if objs := self._objects:
-                if block is None:
-                    if from_block:
-                        objs = skip_too_early(objs)
-                    for obj in objs:
-                        yield obj
-                    yielded += len(objs)
-                    done_thru = get_block_for_obj(obj)
-                elif self._checkpoints:
-                    checkpoint_index = _get_checkpoint_index(block, self._checkpoints)
-                    if checkpoint_index is not None:
-                        objs = objs[:checkpoint_index]
-                        done_thru = get_block_for_obj(objs[-1])
-                        if from_block:
-                            objs = skip_too_early(objs)
-                        for obj in objs:
-                            yield obj
-                        yielded += len(objs)
-
-                elif from_block:
-                    skip_too_early(objs)
-
-        elif from_block:
-            raise RuntimeError(
-                f"You cannot pass a value for `from_block` unless the {type(self).__name__} is reusable"
-            )
+        if from_block:
+            if not self.is_reusable:
+                raise RuntimeError(
+                    f"You cannot pass a value for `from_block` unless the {type(self).__name__} is reusable"
+                )
+            # A checkpoint at the lower bound can include objects from that
+            # block. Start strictly before it, then test each object's block.
+            if self._checkpoints:
+                checkpoint_index = _get_checkpoint_index(from_block - 1, self._checkpoints)
+                if checkpoint_index is not None:
+                    yielded = max(yielded, checkpoint_index)
 
         while True:
-            if block is None or done_thru < block:
+            if (block is None or done_thru < block) and yielded >= self._pruned + len(
+                self._objects
+            ):
                 # TODO: extract this block to a helper method
                 while True:
                     self._wakeup()
@@ -626,42 +602,22 @@ class Filter(_DiskCachedMixin[T, C]):
                 # raise a copy of it so multiple waiters don't destroy the traceback
                 raise self._exc.with_traceback(self._tb) from self._exc.__cause__
             if to_yield := self._objects[yielded - self._pruned :]:
-                if from_block and not reached_from_block:
-                    objs = skip_too_early(to_yield)
-                    if block is None:
-                        for obj in objs:
-                            yield obj
-                    else:
-                        for obj in objs:
-                            if get_block_for_obj(obj) > block:
-                                return
-                            yield obj
-                    yielded += len(objs)
-
-                elif block:
-                    if self.is_reusable:
-                        for obj in to_yield:
-                            if get_block_for_obj(obj) > block:
-                                return
-                            yield obj
-                        yielded += len(to_yield)
-                    else:
-                        for obj in to_yield:
-                            if get_block_for_obj(obj) > block:
-                                self._prune(yielded - self._pruned)
-                                return
-                            yield obj
-                            yielded += 1
-
-                else:
-                    for obj in to_yield:
+                for obj in to_yield:
+                    obj_block = get_block_for_obj(obj)
+                    if block is not None and obj_block > block:
+                        if not self.is_reusable:
+                            self._prune(yielded - self._pruned)
+                        return
+                    if from_block is None or obj_block >= from_block:
                         yield obj
-                    yielded += len(to_yield)
+                    # Advance for every consumed object, including those below
+                    # the lower bound, so a later pass cannot replay the prefix.
+                    yielded += 1
 
                 if not self.is_reusable:
                     self._prune(len(to_yield))
 
-            elif block and done_thru >= block:
+            elif block is not None and done_thru >= block:
                 return
 
             done_thru = self._lock.value
@@ -686,6 +642,7 @@ class Filter(_DiskCachedMixin[T, C]):
     def _wakeup(self) -> None:
         """Wake up the Filter to query logs from blocks not yet loaded into memory."""
         # self._task should never be None here, it should be assigned by this point
+        assert self._task is not None
         _raise_if_exception(self._task)
         if (fut := self._sleep_fut) is not None:
             fut.set_result(None)
@@ -717,12 +674,12 @@ class Filter(_DiskCachedMixin[T, C]):
         See Also:
             - :meth:`_loop`
         """
-        await self._loop(self.from_block)
+        await self._loop(cast(Block, self.from_block))
 
     @stuck_coro_debugger
     async def _fetch_range_wrapped(
         self, i: int, range_start: "Block", range_end: "Block", debug_logs: bool
-    ) -> tuple[int, "Block", list[T]]:
+    ) -> tuple[int, "Block", list[_Raw]]:
         """
         Wraps the _fetch_range call with concurrency control.
 
@@ -777,13 +734,15 @@ class Filter(_DiskCachedMixin[T, C]):
         if debug_logs := logger.isEnabledFor(DEBUG):
             logger._log(DEBUG, "loading new objects for %s", (self,))
 
-        start = v + 1 if (v := self._lock.value) else start_from_block or self.from_block
+        start = cast(
+            "Block", v + 1 if (v := self._lock.value) else start_from_block or self.from_block
+        )
         if to_block:
             end = to_block
             if start > end:
                 raise ValueError(f"start {start} is bigger than end {end}, can't do that")
 
-            while end > (current_block := await dank_mids.eth.block_number):
+            while end > (current_block := await dank_eth.block_number):
                 logger.warning(
                     "You're trying to query a block range that has not fully completed:\n"
                     "range end: %s  current block: %s  Waiting 1s and trying again...",
@@ -793,7 +752,7 @@ class Filter(_DiskCachedMixin[T, C]):
                 await sleep(5.0)
 
         elif debug_logs:
-            while start > (end := await dank_mids.eth.block_number):
+            while start > (end := await dank_eth.block_number):
                 logger._log(
                     DEBUG,
                     "%s start %s is greater than end %s, sleeping...",
@@ -802,7 +761,7 @@ class Filter(_DiskCachedMixin[T, C]):
                 await sleep(SLEEP_TIME)
 
         else:
-            while start > (end := await dank_mids.eth.block_number):
+            while start > (end := await dank_eth.block_number):
                 await sleep(SLEEP_TIME)
 
         try:
@@ -831,60 +790,71 @@ class Filter(_DiskCachedMixin[T, C]):
         """
         if debug_logs := logger.isEnabledFor(DEBUG):
             logger._log(DEBUG, "loading block range %s to %s", (from_block, to_block))
-        ranges = enumerate(
-            islice(block_ranges(from_block, to_block, self._chunk_size), self._chunks_per_batch)
+        ranges: Iterator[tuple[int, tuple["Block", "Block"]]] = enumerate(
+            block_ranges(BlockNumber(from_block), BlockNumber(to_block), self._chunk_size)
         )
-        # Bound pending requests plus out-of-order results. Refill each consumed
-        # slot so network requests can overlap event processing without buffering
-        # the entire history behind an earlier missing range.
-        progress = None
-        if self._verbose:
-            from tqdm import tqdm
+        if self._chunks_per_batch is not None:
+            ranges = islice(ranges, max(0, self._chunks_per_batch))
 
-            total = max(0, (to_block - from_block) // self._chunk_size + 1)
-            if self._chunks_per_batch is not None:
-                total = min(total, self._chunks_per_batch)
-            progress = tqdm(total=total)
-        pending = {
-            ensure_future(self._fetch_range_wrapped(i, start, end, debug_logs))
-            for i, (start, end) in islice(ranges, max(1, int(ENVS.GETLOGS_DOP)))
-        }
-        completed: set[Task[tuple[int, "Block", list[T]]]] = set()
-        next_index = 0
-        done = {}
+        # Keep the existing fetch capacity. A completed chunk keeps its slot
+        # until processing and persistence release its raw objects.
+        # A semaphore with zero permits must still have a waiting fetch. An
+        # empty scheduling window would incorrectly report the range complete.
+        capacity = max(1, self.semaphore._capacity)
+        pending: set[Task[tuple[int, "Block", list[_Raw]]]] = set()
+        finished: set[Task[tuple[int, "Block", list[_Raw]]]] = set()
+        done: dict[int, tuple["Block", list[_Raw]]] = {}
+        chunks_yielded = 0
+        objs: list[_Raw] = []
+        task = None
+
+        def fill() -> None:
+            for _ in range(capacity - len(pending) - len(done)):
+                item = next(ranges, None)
+                if item is None:
+                    break
+                index, (start, end) = item
+                pending.add(create_task(self._fetch_range_wrapped(index, start, end, debug_logs)))
+
         try:
+            if self._db_task is not None:
+                await shield(self._db_task)
+            fill()
             while pending:
-                completed, pending = await wait(pending, return_when=FIRST_COMPLETED)
-                for task in completed:
-                    i, end, objs = task.result()
-                    done[i] = end, objs
-                if progress is not None:
-                    progress.update(len(completed))
-                completed.clear()
-                del task
-                progressed = False
-                while next_index in done:
-                    end, objs = done.pop(next_index)
-                    next_index += 1
-                    if next_range := next(ranges, None):
-                        i, (start, stop) = next_range
-                        pending.add(
-                            ensure_future(self._fetch_range_wrapped(i, start, stop, debug_logs))
-                        )
+                finished, pending = await wait(pending, return_when=FIRST_COMPLETED)
+                for task in finished:
+                    index, end, objs = task.result()
+                    done[index] = end, objs
+                task = None
+                objs = []
+                finished.clear()
+                while chunks_yielded in done:
+                    end, objs = done.pop(chunks_yielded)
                     self._insert_chunk(objs, from_block, end, debug_logs)
                     await self._extend(objs)
-                    progressed = True
-                if progressed:
+                    objs = []
+                    # Queued writes remain owned by the filter if this reader
+                    # is cancelled. No new chunk can add another write backlog.
+                    assert self._db_task is not None
+                    await shield(self._db_task)
                     await self._set_lock(end)
+                    chunks_yielded += 1
+                    fill()
+                    if self._verbose:
+                        logger.info(
+                            "%s loaded %s chunks thru block %s", str(self), chunks_yielded, end
+                        )
                     if debug_logs:
                         logger._log(DEBUG, "%s loaded thru block %s", (self, end))
         finally:
-            for task in pending | completed:
-                if not task.done():
-                    task.cancel()
-            await gather(*pending, *completed, return_exceptions=True)
-            if progress is not None:
-                progress.close()
+            for task in pending:
+                task.cancel()
+            await gather(*pending, *finished, return_exceptions=True)
+            pending.clear()
+            finished.clear()
+            done.clear()
+            task = None
+            objs = []
 
     @stuck_coro_debugger
     async def _set_lock(self, block: "Block") -> None:
@@ -903,7 +873,7 @@ class Filter(_DiskCachedMixin[T, C]):
         self._lock.set(block)
 
     def _insert_chunk(
-        self, objs: list[T], from_block: "Block", done_thru: "Block", debug_logs: bool
+        self, objs: list[_Raw], from_block: "Block", done_thru: "Block", debug_logs: bool
     ) -> None:
         """
         Queues the insertion of a chunk of objects into the database, and sets metadata.
@@ -940,7 +910,7 @@ class Filter(_DiskCachedMixin[T, C]):
         else:
             task = create_task(insert_coro)
 
-        task._depth = depth
+        setattr(task, "_depth", depth)
         self._db_task = task
 
     def _ensure_task(self) -> None:
@@ -953,16 +923,16 @@ class Filter(_DiskCachedMixin[T, C]):
             task = create_task(coro=self.__fetch(), name=f"{self}.__fetch")
             # NOTE: The task does not return and will be cancelled when this object is
             # garbage collected so there is no need to log the "destroy pending task" message.
-            task._log_destroy_pending = False
+            setattr(task, "_log_destroy_pending", False)
             self._task = task
         _raise_if_exception(task)
 
     async def __insert_chunk(
         self,
-        objs: list[T],
+        objs: list[_Raw],
         from_block: "Block",
         done_thru: "Block",
-        prev_chunk_task: Task | None,
+        prev_chunk_task: Task[None] | None,
         depth: int,
         debug_logs: bool,
     ) -> None:
@@ -1016,7 +986,9 @@ def _raise_if_exception(task: Task[Any]) -> None:
     raise copy(e).with_traceback(e.__traceback__) from e.__cause__
 
 
-def _clean_addresses(addresses: list | tuple) -> str | list[str]:
+def _clean_addresses(
+    addresses: AnyAddressType | Iterable[AnyAddressType] | None,
+) -> str | list[str] | tuple[AnyAddressType, ...] | None:
     """
     Converts addresses into a standardized format, raising an error if the zero address is encountered.
 
@@ -1032,14 +1004,15 @@ def _clean_addresses(addresses: list | tuple) -> str | list[str]:
     if addresses == ZERO_ADDRESS:
         raise ValueError("Cannot make a LogFilter for the zero address")
     if not addresses:
-        return addresses
+        return cast(str | list[str] | tuple[AnyAddressType, ...] | None, addresses)
     if isinstance(addresses, str):
         return convert.to_address(addresses)
     elif hasattr(addresses, "__iter__"):
-        if ZERO_ADDRESS in addresses:
+        address_items = cast(Iterable[AnyAddressType], addresses)
+        if ZERO_ADDRESS in address_items:
             raise ValueError("Cannot make a LogFilter for the zero address")
-        return list(map(convert.to_address, addresses))
-    return convert.to_address(addresses)
+        return list(map(convert.to_address, address_items))
+    return convert.to_address(cast(AnyAddressType, addresses))
 
 
 def _get_suitable_checkpoint(target_block: "Block", checkpoints: Checkpoints) -> Optional["Block"]:

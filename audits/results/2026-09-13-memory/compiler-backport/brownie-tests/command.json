@@ -1,0 +1,31 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import importlib.machinery,json,shutil,subprocess,sys\nfrom pathlib import Path\nfrom brownie.network.middlewares import caching\nassert any(caching.__file__.endswith(suffix) for suffix in importlib.machinery.EXTENSION_SUFFIXES),caching.__file__\nbase=Path('/reports/brownie-owner-tests')\nbase.mkdir()\nsource=Path('/opt/validation/brownie-source')\nshutil.copytree(source/'tests',base/'tests')\nfor name in ['pyproject.toml','setup.cfg','pytest_patched.py']:\n    shutil.copyfile(source/name,base/name)\nconfig=base/'pytest.ini'\nconfig.write_text('[pytest]\\ntestpaths = tests/network/rpc/test_bytecode_memory.py\\naddopts = -p no:pytest_ethereum -p no:pytest-brownie --junitxml=/reports/pytest.xml\\n')\nPath('/reports/brownie-compiled.json').write_text(json.dumps({'caching':caching.__file__})+'\\n')\nresult=subprocess.run([sys.executable,'pytest_patched.py'],cwd=base)\nraise SystemExit(result.returncode)\n"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 2.694743924002978,
+  "peak_sampled_process_rss_bytes": 257089536,
+  "cgroup_before": {
+    "memory.current": "8736768",
+    "memory.peak": "8839168",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "19189760",
+    "memory.peak": "285650944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

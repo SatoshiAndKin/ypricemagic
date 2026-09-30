@@ -1,0 +1,23 @@
+{
+  "complete": true,
+  "calls": 99,
+  "elapsed_seconds": 1739.0832109289768,
+  "rss_peak_bytes": 4065476608,
+  "live_tasks": 53,
+  "logical_rpc_counts": {
+    "block_rpc": 0,
+    "http": 0,
+    "call_uid": 161777,
+    "request_uid": 8512,
+    "multicall_uid": 10670,
+    "jsonrpc_batch_uid": 14210
+  },
+  "cache_entries": {
+    "markets": 33,
+    "results": 35,
+    "state": 16384
+  },
+  "python_retained_bytes": 1703254202,
+  "python_peak_bytes": 1711138456,
+  "profiler": "tracemalloc; exclude timings"
+}

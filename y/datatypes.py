@@ -1,25 +1,28 @@
 from dataclasses import dataclass
+from decimal import Decimal
 from typing import TYPE_CHECKING, Union
 
 import evmspec.data
 from brownie import Contract
-from brownie.convert.datatypes import EthAddress, HexBytes
-from eth_typing import AnyAddress, BlockNumber
+from brownie.convert.datatypes import EthAddress
+from eth_typing import BlockNumber
+from hexbytes import HexBytes
 
 if TYPE_CHECKING:
+    from y.classes.common import ERC20
     from y.prices.dex.balancer.v2 import BalancerV2Pool
     from y.prices.dex.uniswap.v2 import UniswapV2Pool
     from y.prices.stable_swap.curve import CurvePool
 
 
-Address = Union[str, HexBytes, AnyAddress, evmspec.data.Address, EthAddress]
+Address = Union[str, bytes, HexBytes, evmspec.data.Address, EthAddress]
 """
 A union of types used to represent Ethereum addresses.
 
 Examples:
     >>> address_str = "0x1234567890abcdef1234567890abcdef12345678"
     >>> address_hex = HexBytes("0x1234567890abcdef1234567890abcdef12345678")
-    >>> address_any = AnyAddress("0x1234567890abcdef1234567890abcdef12345678")
+    >>> address_bytes = bytes.fromhex("1234567890abcdef1234567890abcdef12345678")
     >>> address_eth = EthAddress("0x1234567890abcdef1234567890abcdef12345678")
 """
 
@@ -32,7 +35,7 @@ Examples:
     >>> block_number = BlockNumber(12345678)
 """
 
-AddressOrContract = Union[Address, Contract]
+AddressOrContract = Union[Address, Contract, "ERC20"]
 """
 A type alias representing either an Ethereum address or a contract object.
 This can be an :data:`Address`, a :class:`~brownie.network.contract.Contract`, or its subclasses such as
@@ -43,7 +46,7 @@ Examples:
     >>> contract = Contract.from_abi("MyContract", address, abi)
 """
 
-AnyAddressType = Union[Address, Contract, int]
+AnyAddressType = Union[AddressOrContract, int]
 """
 A type alias representing any valid representation of an Ethereum address.
 This can be an :data:`Address`, a :class:`~brownie.network.contract.Contract`, or an integer.
@@ -54,7 +57,7 @@ Examples:
     >>> any_address_int = 12345678
 """
 
-Pool = Union["UniswapV2Pool", "CurvePool", "BalancerV2Pool"]
+Pool = Union[AddressOrContract, "UniswapV2Pool", "CurvePool", "BalancerV2Pool"]
 """
 A union of types representing liquidity pools.
 
@@ -128,14 +131,48 @@ class PriceStep:
     def __repr__(self) -> str:
         """Return a concise string representation of the price step."""
         # Truncate long addresses for readability
-        tok = (
-            self.token[:6] + "..." + self.token[-4:]
-            if len(self.token) > 12
-            else self.token
-        )
-        return (
-            f"PriceStep(token='{tok}', price={self.price}, source='{self.source}')"
-        )
+        tok = self.token[:6] + "..." + self.token[-4:] if len(self.token) > 12 else self.token
+        return f"PriceStep(token='{tok}', price={self.price}, source='{self.source}')"
+
+
+@dataclass(frozen=True)
+class QuoteAsset:
+    """An exact token quantity. Amounts use token base units."""
+
+    token: str
+    amount: int
+    decimals: int
+
+    @property
+    def readable(self) -> Decimal:
+        return Decimal((0, tuple(map(int, str(self.amount))), -self.decimals))
+
+
+@dataclass(frozen=True)
+class QuoteStep:
+    """One native swap quote or supported redemption, including its limits."""
+
+    kind: str
+    protocol: str
+    contract: str
+    input: QuoteAsset
+    outputs: tuple[QuoteAsset, ...]
+    method: str
+    fees: str
+    limits: str
+
+
+@dataclass(frozen=True)
+class QuoteDetails:
+    """Wallet-independent sale estimate; holder eligibility is unverified."""
+
+    input: QuoteAsset
+    outputs: tuple[QuoteAsset, ...]
+    total_usd: Decimal
+    block_number: int
+    block_hash: str
+    steps: tuple[QuoteStep, ...]
+    holder_eligibility: str = "unverified"
 
 
 @dataclass(eq=False)
@@ -168,6 +205,7 @@ class PriceResult:
 
     price: UsdPrice
     path: list[PriceStep]
+    quote: QuoteDetails | None = None
 
     # ------------------------------------------------------------------
     # float backward-compatibility
@@ -204,7 +242,7 @@ class PriceResult:
         try:
             return float(self) == float(other)  # type: ignore[arg-type]
         except (TypeError, ValueError):
-            return NotImplemented  # type: ignore[return-value]
+            return NotImplemented
 
     def __hash__(self) -> int:
         """Hash based on price value (path is mutable, so not included)."""

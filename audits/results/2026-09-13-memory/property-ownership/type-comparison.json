@@ -1,0 +1,56 @@
+{
+  "312": {
+    "before_errors": 302,
+    "after_errors": 300,
+    "added": [],
+    "removed": [
+      {
+        "file": "tests/mypy/cached_property_contract.py",
+        "error": "Expression is of type \"Any\", not \"int\" [assert-type]",
+        "count": 1
+      },
+      {
+        "file": "tests/mypy/cached_property_contract.py",
+        "error": "Incompatible types in assignment (expression has type \"int\", variable has type \"Awaitable[int]\") [assignment]",
+        "count": 1
+      }
+    ],
+    "runtime_contract_passed_both": true
+  },
+  "311": {
+    "before_errors": 306,
+    "after_errors": 304,
+    "added": [],
+    "removed": [
+      {
+        "file": "tests/mypy/cached_property_contract.py",
+        "error": "Expression is of type \"Any\", not \"int\" [assert-type]",
+        "count": 1
+      },
+      {
+        "file": "tests/mypy/cached_property_contract.py",
+        "error": "Incompatible types in assignment (expression has type \"int\", variable has type \"Awaitable[int]\") [assignment]",
+        "count": 1
+      }
+    ],
+    "runtime_contract_passed_both": true
+  },
+  "313": {
+    "before_errors": 302,
+    "after_errors": 300,
+    "added": [],
+    "removed": [
+      {
+        "file": "tests/mypy/cached_property_contract.py",
+        "error": "Expression is of type \"Any\", not \"int\" [assert-type]",
+        "count": 1
+      },
+      {
+        "file": "tests/mypy/cached_property_contract.py",
+        "error": "Incompatible types in assignment (expression has type \"int\", variable has type \"Awaitable[int]\") [assignment]",
+        "count": 1
+      }
+    ],
+    "runtime_contract_passed_both": true
+  }
+}

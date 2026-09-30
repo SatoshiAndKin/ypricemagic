@@ -1,0 +1,27 @@
+{
+  "run": "full-singleton",
+  "historical_boundary": 15000000,
+  "factories": [
+    {
+      "factory": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+      "pools": 523049,
+      "known_creation": 523049,
+      "after_15000000": 445665,
+      "metadata_sha256": "45cf3a22e0609ce0e9c8dc678af2c6c269e5d1cc8369a289431e7e29cd8bcc79"
+    },
+    {
+      "factory": "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac",
+      "pools": 4776,
+      "known_creation": 4776,
+      "after_15000000": 1840,
+      "metadata_sha256": "90d689272949d833180c84ff14c343fd63c47f8f029c33531677c93bad734ae5"
+    },
+    {
+      "factory": "0x115934131916C8b277DD010Ee02de363c09d037c",
+      "pools": 1059,
+      "known_creation": 1059,
+      "after_15000000": 590,
+      "metadata_sha256": "97436ac24d1d3bac50dd675893b5c1b9b3695a1cae7517d4799034c5e1f09173"
+    }
+  ]
+}

@@ -2,39 +2,40 @@ import threading
 import warnings
 from asyncio import Lock, TimerHandle, get_running_loop
 from collections import defaultdict
-from collections.abc import Callable, Iterable
-import cachebox
+from collections.abc import Callable, Coroutine, Iterable
 from logging import getLogger
 from os import getenv
-from typing import TYPE_CHECKING, Any, Final, Literal, overload
+from typing import TYPE_CHECKING, Any, Final, Literal, Self, cast, overload
 from urllib.parse import urlparse
 
-import dank_mids
+import cachebox
 import eth_retry
 from a_sync import SmartProcessingQueue, ThreadsafeSemaphore, a_sync, cgather, igather
 from aiohttp import ClientSession
 from aiolimiter import AsyncLimiter
 from brownie import ZERO_ADDRESS, chain, web3
 from brownie._config import CONFIG, REQUEST_HEADERS
-from brownie.exceptions import BrownieEnvironmentWarning, CompilerError, ContractNotFound
+from brownie.exceptions import BrownieEnvironmentWarning, ContractNotFound
+from brownie.network.contract import ContractEvents as BrownieContractEvents
 from brownie.network.contract import (
-    ContractEvents,
-    _add_deployment,
     _ContractBase,
     _DeployedContractBase,
     _fetch_from_explorer,
-    _resolve_address,
     _unverified_addresses,
 )
-from brownie.typing import AccountsType
+from brownie.network.state import _add_deployment
+from brownie.network.web3 import _resolve_address
+from brownie.typing import AccountsType, ContractBuildJson
 from brownie.utils import color
-
 from checksum_dict import ChecksumAddressSingletonMeta
+from dank_mids._block import StateBlockIdentifier
+from dank_mids.brownie_patch import dank_eth
+from dank_mids.brownie_patch.contract import Contract as DankContract
+from eth_typing import ABIElement, ChecksumAddress
 from hexbytes import HexBytes
 from msgspec import ValidationError
 from msgspec.json import Decoder
 from multicall import Call
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
@@ -67,16 +68,18 @@ NETWORK_NAME: Final = Network.name()
 _CHAINID: Final = chain.id
 
 _brownie_deployments_db_lock: Final = threading.Lock()
-_contract_locks: Final = defaultdict(Lock)
+_contract_locks: Final[defaultdict[str, Lock]] = defaultdict(Lock)
 _decode_abi: Final = Decoder(type=list[dict[str, Any]]).decode
 
 # These tokens have trouble when resolving the implementation via the chain.
-FORCE_IMPLEMENTATION: Final = {
-    Network.Mainnet: {
-        "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": "0xa2327a938Febf5FEC13baCFb16Ae10EcBc4cbDCF",  # USDC as of 2022-08-10
-        "0x3d1E5Cf16077F349e999d6b21A4f646e83Cd90c5": "0xf51fC5ae556F5B8c6dCf50f70167B81ceb02a2b2",  # dETH as of 2024-02-15
-    },
-}.get(_CHAINID, {})
+FORCE_IMPLEMENTATION: Final = dict[int, dict[str, str]](
+    {
+        Network.Mainnet: {
+            "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": "0xa2327a938Febf5FEC13baCFb16Ae10EcBc4cbDCF",  # USDC as of 2022-08-10
+            "0x3d1E5Cf16077F349e999d6b21A4f646e83Cd90c5": "0xf51fC5ae556F5B8c6dCf50f70167B81ceb02a2b2",  # dETH as of 2024-02-15
+        },
+    }
+).get(_CHAINID, {})
 
 
 def Contract_erc20(address: AnyAddressType) -> "Contract":
@@ -97,7 +100,7 @@ def Contract_erc20(address: AnyAddressType) -> "Contract":
         'Dai Stablecoin'
     """
     address = convert.to_address(address)
-    return Contract.from_abi("ERC20", address, ERC20ABI)
+    return cast(Contract, Contract.from_abi("ERC20", address, ERC20ABI))
 
 
 def Contract_with_erc20_fallback(address: AnyAddressType) -> "Contract":
@@ -116,10 +119,10 @@ def Contract_with_erc20_fallback(address: AnyAddressType) -> "Contract":
         'DAI'
     """
     if isinstance(address, Contract):
-        return address
+        return cast(Contract, address)
     address = convert.to_address(address)
     try:
-        return Contract(address)
+        return cast(Contract, Contract(address))
     except ContractNotVerified:
         return Contract_erc20(address)
 
@@ -147,7 +150,7 @@ def contract_creation_block(address: AnyAddressType, when_no_history_return_0: b
     """
     address = convert.to_address(address)
     logger_debug("contract creation block %s", address)
-    height = chain.height
+    height = int(chain.height)
 
     if height == 0:
         raise NodeNotSynced(_NOT_SYNCED)
@@ -199,13 +202,24 @@ def contract_creation_block(address: AnyAddressType, when_no_history_return_0: b
     raise ValueError(f"Unable to find deploy block for {address} on {NETWORK_NAME}")
 
 
-get_code = eth_retry.auto_retry(dank_mids.eth.get_code)
+@stuck_coro_debugger
+@eth_retry.auto_retry
+async def get_code(
+    address: AnyAddressType, block_identifier: StateBlockIdentifier | None = None
+) -> HexBytes:
+    # DankEth decodes eth_getCode as HexBytes but does not annotate its return.
+    return cast(
+        HexBytes,
+        await dank_eth.get_code(
+            await convert.to_address_async(address), block_identifier=block_identifier
+        ),
+    )
 
 
 @memory.cache
 @eth_retry.auto_retry
 def _get_code(address: str, block: int) -> HexBytes:
-    return web3.eth.get_code(address, block)
+    return web3.eth.get_code(convert.to_address(address), block)
 
 
 creation_block_semaphore = ThreadsafeSemaphore(48)
@@ -241,7 +255,7 @@ async def contract_creation_block_async(
         return deploy_block
 
     logger_debug("contract creation block %s", address)
-    height = await dank_mids.eth.block_number
+    height = int(await dank_eth.block_number)
 
     if height == 0:
         raise NodeNotSynced(_NOT_SYNCED)
@@ -295,13 +309,15 @@ async def contract_creation_block_async(
     raise ValueError(f"Unable to find deploy block for {address} on {NETWORK_NAME}")
 
 
-class ContractEvents(ContractEvents):
-    def __getattr__(self, name: str) -> Events:
+class ContractEvents(BrownieContractEvents):
+    def __getattr__(self, name: str) -> Any:
+        # ABI names are dynamic: configured names hold Events streams, while
+        # Brownie's fallback can also return generated event classes.
         return super().__getattr__(name)
 
 
 class CompilerError(Exception):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             "y.Contract objects work best when we bypass compilers.\n"
             "In this case, it will *only* work when we bypass.\n"
@@ -312,7 +328,7 @@ class CompilerError(Exception):
 _add_deployment = eth_retry.auto_retry(_add_deployment)
 
 
-class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
+class Contract(DankContract, metaclass=ChecksumAddressSingletonMeta):
     """
     A :class:`~dank_mids.Contract` object with several modifications for enhanced functionality.
 
@@ -355,7 +371,7 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
     """
 
     # the default state for Contract objects
-    verified = True
+    verified: bool | None = True
     """True if the contract is verified on this network's block explorer. False otherwise."""
 
     events: ContractEvents
@@ -434,16 +450,16 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
             self.__post_init__(cache_ttl)
         except (ContractNotFound, ContractNotVerified) as e:
             if isinstance(e, ContractNotVerified):
-                _unverified_addresses.add(address)
+                _unverified_addresses.add(convert.to_address(address))
             if require_success:
                 raise
             try:
                 if isinstance(e, ContractNotVerified):
                     self.verified = False
-                    self._build = {"contractName": "Non-Verified Contract"}
+                    object.__setattr__(self, "_build", {"contractName": "Non-Verified Contract"})
                 else:
                     self.verified = None
-                    self._build = {"contractName": "Broken Contract"}
+                    object.__setattr__(self, "_build", {"contractName": "Broken Contract"})
             except AttributeError:
                 logger.warning(
                     f'`Contract("{address}").verified` property will not be usable due to the contract having a `verified` method in its ABI.'
@@ -455,7 +471,7 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
         cls,
         name: str,
         address: str,
-        abi: list,
+        abi: list[ABIElement],
         owner: AccountsType | None = None,
         persist: bool = True,
         cache_ttl: int | None = ENVS.CONTRACT_CACHE_TTL,  # units: seconds
@@ -514,8 +530,8 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
             'DAI'
         """
         address = str(address)
-        if contract := cls.get_instance(address):
-            return contract
+        if cached_contract := cast(Self | None, cls.get_instance(convert.to_address(address))):
+            return cached_contract
 
         # dict lookups faster than string comparisons, keep this behind the singleton check
         if address.lower() in [
@@ -530,7 +546,7 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
         if build:
             async with _contract_locks[address]:
                 # now that we're inside the lock, check and see if another coro populated the cache
-                if cache_value := cls.get_instance(address):
+                if cache_value := cast(Self | None, cls.get_instance(convert.to_address(address))):
                     return cache_value
 
                 # nope, continue
@@ -544,10 +560,10 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
         else:
             try:
                 # The contract does not exist in your local brownie deployments.db
-                name, abi = await _resolve_proxy_async(address)
+                name, abi = await _resolve_proxy_async_queue(address)
             except (ContractNotFound, ContractNotVerified) as e:
                 if not_verified := isinstance(e, ContractNotVerified):
-                    _unverified_addresses.add(address)
+                    _unverified_addresses.add(convert.to_address(address))
                 if require_success:
                     raise
                 try:
@@ -557,14 +573,22 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
                         '`Contract("%s").verified` property will not be usable due to the contract having a `verified` method in its ABI.',
                         address,
                     )
-                contract._build = {
-                    "contractName": ("Non-Verified Contract" if not_verified else "Broken Contract")
-                }
+                object.__setattr__(
+                    contract,
+                    "_build",
+                    {
+                        "contractName": (
+                            "Non-Verified Contract" if not_verified else "Broken Contract"
+                        )
+                    },
+                )
 
             else:
                 async with _contract_locks[address]:
                     # now that we're inside the lock, check and see if another coro populated the cache
-                    if cache_value := cls.get_instance(address):
+                    if cache_value := cast(
+                        Self | None, cls.get_instance(convert.to_address(address))
+                    ):
                         return cache_value
 
                     # nope, continue
@@ -579,7 +603,9 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
                     contract.__post_init__(cache_ttl)
 
         # Cache manually since we aren't calling init
-        cls[address] = contract
+        # The metaclass cache stores instances of this exact concrete class.
+        cache_instance = cast(Callable[[ChecksumAddress, Self], None], cls.__setitem__)
+        cache_instance(convert.to_address(address), contract)
 
         # keep the dict small, we cache Contract instances so we won't need these in the future
         _contract_locks.pop(address, None)
@@ -602,8 +628,9 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
         else:
             loop = get_running_loop()
             pop_at = loop.time() + cache_ttl
-            if pop_at > contract._ttl_cache_popper.when():
-                contract._ttl_cache_popper._when = pop_at
+            popper = cast(TimerHandle, contract._ttl_cache_popper)
+            if pop_at > popper.when():
+                setattr(popper, "_when", pop_at)
                 # NOTE: keeping this code around, I don't think the current (faster) implementation
                 # will work with uvloop so I might have to implement a try, except here
                 #
@@ -617,8 +644,8 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
 
     @eth_retry.auto_retry
     def __init_from_abi__(
-        self, build: dict, owner: AccountsType | None = None, persist: bool = True
-    ) -> None:
+        self, build: dict[str, Any], owner: AccountsType | None = None, persist: bool = True
+    ) -> Self:
         """
         Initialize a :class:`~Contract` instance from an ABI.
 
@@ -635,7 +662,9 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
             >>> contract.name()
             'Dai Stablecoin'
         """
-        _ContractBase.__init__(self, None, build, {})
+        # Brownie from_abi also accepts this minimal deployment dictionary; its
+        # ContractBuildJson annotation additionally describes compiler output.
+        _ContractBase.__init__(self, None, cast(ContractBuildJson, build), {})
         _DeployedContractBase.__init__(self, build["address"], owner, None)  # type: ignore [type-var]
         if persist:
             _add_deployment(self)
@@ -647,7 +676,7 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
             )
         return self
 
-    def has_method(self, method: str, return_response: bool = False) -> bool | Any:
+    def has_method(self, method: str, return_response: bool = False) -> Coroutine[Any, Any, Any]:
         """
         Check if the contract has a specific method.
 
@@ -707,7 +736,7 @@ class Contract(dank_mids.Contract, metaclass=ChecksumAddressSingletonMeta):
             >>> await contract.get_code()
             HexBytes('0x...')
         """
-        return await get_code(self.address, block=block)
+        return await get_code(self.address, block_identifier=block)
 
     def _schedule_cache_pop(self, cache_ttl: int | None) -> None:
         if cache_ttl is None:
@@ -762,18 +791,18 @@ def is_contract(address: AnyAddressType) -> bool:
 
 @overload
 async def has_method(
-    address: Address, method: str, return_response: Literal[True]
-) -> bool | Any: ...
-
-
-@overload
-async def has_method(
-    address: Address, method: str, return_response: Literal[False] = False
+    address: AnyAddressType, method: str, return_response: Literal[False] = False
 ) -> bool: ...
 
 
+@overload
+async def has_method(address: AnyAddressType, method: str, return_response: bool) -> Any: ...
+
+
 @a_sync(default="sync", cache_type="memory", ram_cache_maxsize=ENVS.CONTRACT_CACHE_MAXSIZE)
-async def has_method(address: Address, method: str, return_response: bool = False) -> bool | Any:
+async def has_method(
+    address: AnyAddressType, method: str, return_response: bool = False
+) -> bool | Any:
     """
     Checks to see if a contract has a `method` view method with no inputs.
     `return_response=True` will return `response` in bytes if `response` else `False`
@@ -803,7 +832,12 @@ async def has_method(address: Address, method: str, return_response: bool = Fals
 
 
 @stuck_coro_debugger
-@a_sync(default="sync", cache_type="memory", ram_cache_ttl=15 * 60, ram_cache_maxsize=ENVS.CONTRACT_CACHE_MAXSIZE)
+@a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=15 * 60,
+    ram_cache_maxsize=ENVS.CONTRACT_CACHE_MAXSIZE,
+)
 async def has_methods(
     address: AnyAddressType,
     methods: Iterable[str],
@@ -849,30 +883,41 @@ async def probe(
     address = await convert.to_address_async(address)
     results = await gather_methods(address, methods, block=block, return_exceptions=True)
     logger_debug("probe results: %s", results)
-    results = [
+    matched = [
         (method, result)
         for method, result in zip(methods, results)
         if not isinstance(result, Exception) and result is not None
     ]
-    if len(results) not in [1, 0]:
-        logger_debug("multiple results: %s", results)
-        if len(results) != 2 or results[0][1] != results[1][1]:
+    method: str | tuple[str, str] | None
+    if len(matched) not in [1, 0]:
+        logger_debug("multiple results: %s", matched)
+        if len(matched) != 2 or matched[0][1] != matched[1][1]:
             raise AssertionError(
-                f"`probe` returned multiple results for {address}: {results}. Must debug"
+                f"`probe` returned multiple results for {address}: {matched}. Must debug"
             )
-        method = results[0][0], results[1][0]
-        result = results[0][1]
-        results = [(method, result)]
-        logger_debug("final results: %s", results)
-    method, result = results[0] if len(results) == 1 else (None, None)
+        method = matched[0][0], matched[1][0]
+        result = matched[0][1]
+        logger_debug("final results: %s", [(method, result)])
+    else:
+        method, result = matched[0] if len(matched) == 1 else (None, None)
     if method:
         assert result is not None
     return (method, result) if return_method else result
 
 
+@overload
+async def build_name(
+    address: AnyAddressType, return_None_on_failure: Literal[False] = False
+) -> str: ...
+
+
+@overload
+async def build_name(address: AnyAddressType, return_None_on_failure: bool) -> str | None: ...
+
+
 @a_sync(default="sync")
 @stuck_coro_debugger
-async def build_name(address: AnyAddressType, return_None_on_failure: bool = False) -> str:
+async def build_name(address: AnyAddressType, return_None_on_failure: bool = False) -> str | None:
     """
     Get the build name of a contract.
 
@@ -886,7 +931,7 @@ async def build_name(address: AnyAddressType, return_None_on_failure: bool = Fal
     """
     try:
         contract = await Contract.coroutine(address)
-        return contract.__dict__["_build"]["contractName"]
+        return cast(str, contract.__dict__["_build"]["contractName"])
     except ContractNotVerified:
         if not return_None_on_failure:
             raise
@@ -905,7 +950,9 @@ async def proxy_implementation(address: AnyAddressType, block: Block | None) -> 
         >>> await proxy_implementation("0x6B175474E89094C44Da98b954EedeAC495271d0F")
         '0x1234567890abcdef1234567890abcdef12345678'
     """
-    return await probe(address, ("implementation()(address)", "target()(address)"), block)
+    return cast(
+        Address, await probe(address, ("implementation()(address)", "target()(address)"), block)
+    )
 
 
 def _squeeze(contract: Contract) -> Contract:
@@ -920,7 +967,7 @@ def _squeeze(contract: Contract) -> Contract:
         >>> _squeeze(contract)
         <Contract object>
     """
-    if build := contract._build:
+    if build := cast(dict[str, Any], contract._build):
         for k in DISCARD_SOURCE_KEYS:
             if k in build:
                 build[k] = {}
@@ -930,7 +977,7 @@ def _squeeze(contract: Contract) -> Contract:
 # we loosely cache this so we don't have to repeatedly fetch abis for commonly used proxy implementations
 @cachebox.cached(cachebox.TTLCache(1000, ttl=60 * 60))
 @eth_retry.auto_retry
-def _extract_abi_data(address: Address):
+def _extract_abi_data(address: Address) -> tuple[str, list[ABIElement], str | None]:
     """
     Extract ABI data for a contract from the blockchain explorer.
 
@@ -948,6 +995,7 @@ def _extract_abi_data(address: Address):
         >>> print(name)
         'Dai Stablecoin'
     """
+    address = convert.to_address(address)
     try:
         data = _fetch_from_explorer(address, "getsourcecode", False)["result"][0]
     except ConnectionError as e:
@@ -983,10 +1031,10 @@ def _extract_abi_data(address: Address):
     except ValidationError as e:
         raise ValueError(e, data["ABI"]) from e
     implementation = data.get("Implementation")
-    return name, abi, implementation
+    return name, cast(list[ABIElement], abi), implementation
 
 
-def _resolve_proxy(address) -> tuple[str, list]:
+def _resolve_proxy(address: Address) -> tuple[str, list[ABIElement]]:
     """
     Resolve the implementation address for a proxy contract.
 
@@ -1020,20 +1068,20 @@ def _resolve_proxy(address) -> tuple[str, list]:
         address, int(web3.keccak(text="eip1967.proxy.implementation").hex(), 16) - 1
     )
     # always check for an EIP1822 proxy - https://eips.ethereum.org/EIPS/eip-1822
-    implementation_eip1822 = web3.eth.get_storage_at(address, web3.keccak(text="PROXIABLE"))
+    implementation_eip1822 = web3.eth.get_storage_at(
+        address, int.from_bytes(web3.keccak(text="PROXIABLE"), "big")
+    )
 
     # Just leave this code where it is for a helpful debugger as needed.
     if address == "":
-        raise Exception(
-            f"""implementation: {implementation!r}
+        raise Exception(f"""implementation: {implementation!r}
             implementation_eip1967: {len(implementation_eip1967)} {implementation_eip1967!r}
-            implementation_eip1822: {len(implementation_eip1822)} {implementation_eip1822!r}"""
-        )
+            implementation_eip1822: {len(implementation_eip1822)} {implementation_eip1822!r}""")
 
     if len(implementation_eip1967) > 0 and int(implementation_eip1967.hex(), 16):
-        as_proxy_for = _resolve_address(implementation_eip1967[-20:])
+        as_proxy_for = convert.to_address(implementation_eip1967[-20:])
     elif len(implementation_eip1822) > 0 and int(implementation_eip1822.hex(), 16):
-        as_proxy_for = _resolve_address(implementation_eip1822[-20:])
+        as_proxy_for = convert.to_address(implementation_eip1822[-20:])
     elif implementation:
         # for other proxy patterns, we only check if etherscan indicates
         # the contract is a proxy. otherwise we could have a false positive
@@ -1057,7 +1105,7 @@ _block_explorer_api_limiter = AsyncLimiter(1, 0.2)
 
 # we loosely cache this so we don't have to repeatedly fetch abis for commonly used proxy implementations
 @cachebox.cached(cachebox.TTLCache(1000, ttl=300))
-async def _extract_abi_data_async(address: Address):
+async def _extract_abi_data_async(address: Address) -> tuple[str, list[ABIElement], str | None]:
     """
     Extract ABI data for a contract from the blockchain explorer.
 
@@ -1075,6 +1123,7 @@ async def _extract_abi_data_async(address: Address):
         >>> print(name)
         'Dai Stablecoin'
     """
+    address = await convert.to_address_async(address)
     try:
         async with _block_explorer_api_limiter:
             response = await _fetch_from_explorer_async(address, "getsourcecode", False)
@@ -1112,11 +1161,11 @@ async def _extract_abi_data_async(address: Address):
     except ValidationError as e:
         raise ValueError(e, data["ABI"]) from e
     implementation = data.get("Implementation")
-    return name, abi, implementation
+    return name, cast(list[ABIElement], abi), implementation
 
 
 @eth_retry.auto_retry
-async def _fetch_from_explorer_async(address: str, action: str, silent: bool) -> dict:
+async def _fetch_from_explorer_async(address: str, action: str, silent: bool) -> dict[str, Any]:
     url = "https://api.etherscan.io/v2/api"
 
     if address in _unverified_addresses:
@@ -1140,12 +1189,17 @@ async def _fetch_from_explorer_async(address: str, action: str, silent: bool) ->
     ):
         address = _resolve_address(code[120:160])
 
-    params = {"module": "contract", "action": action, "address": address, "chainid": _CHAINID}
+    params: dict[str, str | int] = {
+        "module": "contract",
+        "action": action,
+        "address": address,
+        "chainid": _CHAINID,
+    }
     return await _fetch_explorer_data(url, silent=silent, params=params)
 
 
 @cachebox.cached(cachebox.LRUCache(ENVS.DEFAULT_CACHE_MAXSIZE))
-def _get_explorer_api_key(url, silent) -> tuple[str, str]:
+def _get_explorer_api_key(url: str, silent: bool) -> str | None:
     if api_key := getenv("ETHERSCAN_TOKEN"):
         return api_key
     if not silent:
@@ -1159,7 +1213,9 @@ def _get_explorer_api_key(url, silent) -> tuple[str, str]:
 
 
 @eth_retry.auto_retry
-async def _fetch_explorer_data(url, silent, params):
+async def _fetch_explorer_data(
+    url: str, silent: bool, params: dict[str, str | int]
+) -> dict[str, Any]:
     api_key = _get_explorer_api_key(url, silent)
     if api_key is not None:
         params["apiKey"] = api_key
@@ -1177,16 +1233,16 @@ async def _fetch_explorer_data(url, silent, params):
                 raise ConnectionError(
                     f"Status {response.status} when querying {url}: {await response.text()}"
                 )
-            data = await response.json()
+            data: dict[str, Any] = await response.json()
             if int(data["status"]) != 1:
                 raise ValueError(f"Failed to retrieve data from API: {data}")
             return data
 
 
-_get_storage_at = dank_mids.eth.get_storage_at
+_get_storage_at = dank_eth.get_storage_at
 
 
-async def _resolve_proxy_async(address) -> tuple[str, list]:
+async def _resolve_proxy_async(address: Address) -> tuple[str, list[ABIElement]]:
     """
     Resolve the implementation address for a proxy contract.
 
@@ -1221,21 +1277,19 @@ async def _resolve_proxy_async(address) -> tuple[str, list]:
         _get_storage_at(
             address, int(web3.keccak(text="eip1967.proxy.implementation").hex(), 16) - 1
         ),
-        _get_storage_at(address, web3.keccak(text="PROXIABLE")),
+        _get_storage_at(address, int.from_bytes(web3.keccak(text="PROXIABLE"), "big")),
     )
 
     # Just leave this code where it is for a helpful debugger as needed.
     if address == "":
-        raise Exception(
-            f"""implementation: {implementation!r}
+        raise Exception(f"""implementation: {implementation!r}
             implementation_eip1967: {len(implementation_eip1967)} {implementation_eip1967!r}
-            implementation_eip1822: {len(implementation_eip1822)} {implementation_eip1822!r}"""
-        )
+            implementation_eip1822: {len(implementation_eip1822)} {implementation_eip1822!r}""")
 
     if len(implementation_eip1967) > 0 and int(implementation_eip1967.hex(), 16):
-        as_proxy_for = _resolve_address(implementation_eip1967[-20:])
+        as_proxy_for = convert.to_address(implementation_eip1967[-20:])
     elif len(implementation_eip1822) > 0 and int(implementation_eip1822.hex(), 16):
-        as_proxy_for = _resolve_address(implementation_eip1822[-20:])
+        as_proxy_for = convert.to_address(implementation_eip1822[-20:])
     elif implementation:
         # for other proxy patterns, we only check if etherscan indicates
         # the contract is a proxy. otherwise we could have a false positive
@@ -1254,7 +1308,7 @@ async def _resolve_proxy_async(address) -> tuple[str, list]:
     return name, abi
 
 
-_resolve_proxy_async = SmartProcessingQueue(_resolve_proxy_async, num_workers=8)
+_resolve_proxy_async_queue = SmartProcessingQueue(_resolve_proxy_async, num_workers=8)
 
 
 def _setup_events(contract: Contract) -> None:

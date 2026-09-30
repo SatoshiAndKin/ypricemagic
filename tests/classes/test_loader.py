@@ -8,6 +8,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+from tests.test_pricing_correctness import run_async_test
 from y.classes.common import _EventsLoader, _Loader
 
 
@@ -28,7 +29,7 @@ def loader_instance(cls: type[_Loader], operation: Any) -> Any:
     return loader
 
 
-@pytest.mark.asyncio_cooperative
+@run_async_test
 async def test_failure_reaches_current_and_later_callers() -> None:
     release = asyncio.Event()
     failure = RuntimeError("factory load failed")
@@ -41,13 +42,13 @@ async def test_failure_reaches_current_and_later_callers() -> None:
     first, second = loader.loaded, loader.loaded
     release.set()
     results = await asyncio.wait_for(asyncio.gather(first, second, return_exceptions=True), 1)
-    assert results == [failure, failure]
+    assert len(results) == 2 and all(result is failure for result in results)
     with pytest.raises(RuntimeError, match="factory load failed"):
         await loader.loaded
     loader.operation.assert_awaited_once()
 
 
-@pytest.mark.asyncio_cooperative
+@run_async_test
 async def test_cancelled_caller_does_not_cancel_shared_load() -> None:
     release = asyncio.Event()
     loader = loader_instance(ControlledLoader, AsyncMock(side_effect=release.wait))
@@ -62,7 +63,7 @@ async def test_cancelled_caller_does_not_cancel_shared_load() -> None:
     loader.operation.assert_awaited_once()
 
 
-@pytest.mark.asyncio_cooperative
+@run_async_test
 async def test_cancelled_loader_reaches_all_callers() -> None:
     loader = loader_instance(ControlledLoader, AsyncMock(side_effect=asyncio.Event().wait))
     first, second = loader.loaded, loader.loaded
@@ -79,7 +80,7 @@ class EventLoader(_EventsLoader):
         return self.stream
 
 
-@pytest.mark.asyncio_cooperative
+@run_async_test
 async def test_event_loader_waits_for_event_processing() -> None:
     release = asyncio.Event()
     blocks = []
@@ -104,7 +105,7 @@ async def test_event_loader_waits_for_event_processing() -> None:
     loader.stream._lock.wait_for.assert_awaited_once_with(123)
 
 
-@pytest.mark.asyncio_cooperative
+@run_async_test
 async def test_event_loader_propagates_stream_failure() -> None:
     async def events(block: int) -> AsyncIterator[str]:
         raise ValueError("event decode failed")

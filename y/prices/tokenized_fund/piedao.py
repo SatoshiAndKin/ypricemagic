@@ -1,16 +1,20 @@
 import logging
+from asyncio import gather
 from decimal import Decimal
 
 import a_sync
-from a_sync import cgather
 from brownie import ZERO_ADDRESS
 from multicall import Call
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y import convert
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.contracts import has_method
-from y.datatypes import Address, AnyAddressType, Block, UsdPrice, UsdValue
+from y.convert import to_address_async
+from y.datatypes import AnyAddressType, Block, UsdPrice, UsdValue
 from y.exceptions import call_reverted
+from y.prices._candidates import gather_owned
 from y.utils.raw_calls import raw_call
 
 logger = logging.getLogger(__name__)
@@ -56,16 +60,16 @@ async def get_price(
         - :func:`get_tvl`
         - :class:`ERC20`
     """
-    tvl, total_supply = await cgather(
+    tvl, total_supply = await gather(
         get_tvl(pie, block, skip_cache=skip_cache),
-        ERC20(pie, asynchronous=True).total_supply_readable(block),
+        ERC20(pie, asynchronous=True).total_supply_readable(block, sync=False),
     )
     if tvl is None:
         return None
     return UsdPrice(tvl / total_supply)
 
 
-async def get_tokens(pie_address: Address, block: Block | None = None) -> list[ERC20] | None:
+async def get_tokens(pie_address: AnyAddressType, block: Block | None = None) -> list[ERC20] | None:
     """
     Get the list of tokens in a PieDAO token.
 
@@ -83,11 +87,13 @@ async def get_tokens(pie_address: Address, block: Block | None = None) -> list[E
     Note:
         This function retrieves token addresses using a multicall and then creates :class:`ERC20` instances from those addresses.
     """
-    tokens = await Call(pie_address, "getTokens()(address[])", block_id=block)
+    tokens = await Call(
+        await to_address_async(pie_address), "getTokens()(address[])", block_id=block
+    )
     return None if tokens is None else list(map(ERC20, tokens))
 
 
-async def get_bpool(pie_address: Address, block: Block | None = None) -> Address:
+async def get_bpool(pie_address: AnyAddressType, block: Block | None = None) -> AnyAddressType:
     """
     Get the Balancer pool address for a PieDAO token.
 
@@ -102,8 +108,9 @@ async def get_bpool(pie_address: Address, block: Block | None = None) -> Address
         >>> get_bpool("0x1234567890abcdef1234567890abcdef12345678")
         '0xBpoolAddress'
     """
+    address = await convert.to_address_async(pie_address)
     try:
-        bpool = await raw_call(pie_address, "getBPool()", output="address", block=block, sync=False)
+        bpool = await raw_call(address, "getBPool()", output="address", block=block, sync=False)
         return bpool if bpool != ZERO_ADDRESS else pie_address
     except Exception as e:
         if not call_reverted(e):
@@ -111,8 +118,9 @@ async def get_bpool(pie_address: Address, block: Block | None = None) -> Address
         return pie_address
 
 
+@stuck_coro_debugger
 async def get_tvl(
-    pie_address: Address,
+    pie_address: AnyAddressType,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
 ) -> UsdValue | None:
@@ -133,16 +141,21 @@ async def get_tvl(
         - :func:`get_bpool`
         - :func:`get_tokens`
     """
-    tokens: list[ERC20]
-    pool, tokens = await cgather(get_bpool(pie_address, block), get_tokens(pie_address, block))
+    tokens: list[ERC20] | None
+    pool, tokens = await gather(get_bpool(pie_address, block), get_tokens(pie_address, block))
     if tokens is None:
         return None
-    return await a_sync.map(get_value, tokens, bpool=pool, block=block, skip_cache=skip_cache).sum(
-        pop=True, sync=False
+    return UsdValue(
+        sum(
+            await gather_owned(
+                get_value(pool, token, block=block, skip_cache=skip_cache) for token in tokens
+            )
+        )
     )
 
 
-async def get_balance(bpool: Address, token: ERC20, block: Block | None = None) -> Decimal:
+@stuck_coro_debugger
+async def get_balance(bpool: AnyAddressType, token: ERC20, block: Block | None = None) -> Decimal:
     """
     Get the balance of a token in a Balancer pool.
 
@@ -155,15 +168,15 @@ async def get_balance(bpool: Address, token: ERC20, block: Block | None = None) 
         >>> get_balance("0xBpoolAddress", ERC20("0xTokenAddress"))
         1000.0
     """
-    balance, scale = await cgather(
-        Call(token.address, ("balanceOf(address)(uint)", bpool), block_id=block),
+    balance, scale = await gather(
+        Call(token.address, ["balanceOf(address)(uint)", bpool], block_id=block),
         token.__scale__,
     )
     return Decimal(balance) / scale
 
 
 async def get_value(
-    bpool: Address,
+    bpool: AnyAddressType,
     token: ERC20,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
@@ -187,8 +200,10 @@ async def get_value(
     See Also:
         - :func:`get_balance`
     """
-    balance, price = await cgather(
+    balance, price = await gather(
         get_balance(bpool, token, block),
         token.price(block, skip_cache=skip_cache, sync=False),
     )
+    if price is None:
+        raise ValueError(f"No price for {token.address}")
     return UsdValue(balance * Decimal(float(price)))

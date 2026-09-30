@@ -3,28 +3,28 @@ from asyncio import Future, ensure_future, get_event_loop, shield
 from collections.abc import Awaitable, Generator
 from decimal import Decimal
 from functools import cached_property
-from logging import getLogger
-from typing import TYPE_CHECKING, Any, Final, Literal, Union, final
+from logging import Logger, getLogger
+from operator import lt
+from typing import TYPE_CHECKING, Any, Final, Literal, NoReturn, Union, cast, final
 
 import a_sync
 from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
-from a_sync.a_sync.method import ASyncBoundMethod
-from brownie import Contract, chain, web3
+from brownie import chain, web3
 from brownie.convert.datatypes import HexString
 from brownie.exceptions import ContractNotFound
 from eth_retry import auto_retry
 from eth_typing import ChecksumAddress
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._decorators import stuck_coro_debugger
+from y._typing import a_sync_property
 from y.classes.singleton import ChecksumASyncSingletonMeta
 from y.constants import EEE_ADDRESS
 from y.contracts import Contract, build_name, contract_creation_block_async, has_method, probe
-from y.datatypes import Address, AnyAddressType, Block, Pool, UsdPrice
+from y.datatypes import AnyAddressType, Block, Pool, PriceResult
 from y.exceptions import ContractNotVerified, MessedUpBrownieContract, NonStandardERC20
 from y.networks import Network
 from y.utils import _erc20, logging, raw_calls
@@ -45,10 +45,10 @@ def hex_to_string(h: HexString) -> str:
     Returns:
         The converted string.
     """
-    h = h.hex().rstrip("0")
-    if len(h) % 2 != 0:
-        h += "0"
-    return bytes.fromhex(h).decode("utf-8")
+    encoded = h.hex().rstrip("0")
+    if len(encoded) % 2 != 0:
+        encoded += "0"
+    return bytes.fromhex(encoded).decode("utf-8")
 
 
 class ContractBase(a_sync.ASyncGenericBase, metaclass=ChecksumASyncSingletonMeta):
@@ -113,7 +113,7 @@ class ContractBase(a_sync.ASyncGenericBase, metaclass=ChecksumASyncSingletonMeta
         return Contract(self.address)
 
     @cached_property
-    def _is_cached(self) -> bool:
+    def _is_cached(self) -> bool | None:
         try:
             self.contract
             return True
@@ -138,7 +138,7 @@ class ContractBase(a_sync.ASyncGenericBase, metaclass=ChecksumASyncSingletonMeta
         """
         return await build_name(self.address, sync=False)
 
-    __build_name__: HiddenMethodDescriptor[Self, str]
+    __build_name__: HiddenMethodDescriptor["ContractBase", str]
 
     @stuck_coro_debugger
     async def deploy_block(self, when_no_history_return_0: bool = False) -> int:
@@ -164,8 +164,6 @@ class ContractBase(a_sync.ASyncGenericBase, metaclass=ChecksumASyncSingletonMeta
                 self.address, when_no_history_return_0=when_no_history_return_0
             )
         return self._deploy_block
-
-    deploy_block: ASyncBoundMethod[Self, Any, int]
 
     async def has_method(self, method: str, return_response: bool = False) -> bool | Any:
         """
@@ -211,7 +209,7 @@ class ERC20(ContractBase):
                 except RuntimeError:
                     loop = None
                 else:
-                    if not loop.is_running() and not loop.is_closed():
+                    if loop is not None and not loop.is_running() and not loop.is_closed():
                         try:
                             return f"<{cls} {self.__symbol__(sync=True)} '{self.address}'>"
                         except NonStandardERC20:
@@ -235,16 +233,18 @@ class ERC20(ContractBase):
             'TKN'
         """
         if self.address == EEE_ADDRESS:
-            return {
-                Network.Mainnet: "ETH",
-                Network.Fantom: "FTM",
-                Network.Polygon: "MATIC",
-                Network.Arbitrum: "ETH",
-                Network.Optimism: "ETH",
-                Network.Base: "ETH",
-                Network.Katana: "ETH",
-                Network.Berachain: "BERA",
-            }.get(chain.id, "ETH")
+            return dict[int, str](
+                {
+                    Network.Mainnet: "ETH",
+                    Network.Fantom: "FTM",
+                    Network.Polygon: "MATIC",
+                    Network.Arbitrum: "ETH",
+                    Network.Optimism: "ETH",
+                    Network.Base: "ETH",
+                    Network.Katana: "ETH",
+                    Network.Berachain: "BERA",
+                }
+            ).get(chain.id, "ETH")
         import y._db.utils.token as db
 
         if symbol := await db.get_symbol(self.address):
@@ -257,7 +257,7 @@ class ERC20(ContractBase):
         db.set_symbol(self.address, symbol)
         return symbol
 
-    @a_sync.aka.property
+    @a_sync_property
     @stuck_coro_debugger
     async def name(self) -> str:
         """
@@ -341,11 +341,11 @@ class ERC20(ContractBase):
             >>> await token.scale
             1000000000000000000
         """
-        return 10 ** await self.__decimals__
+        return cast(int, 10 ** await self.__decimals__)
 
     async def _scale(self, block: Block | None = None) -> int:
         # TODO: deprecate and remove
-        return 10 ** await self._decimals(block)
+        return cast(int, 10 ** await self._decimals(block))
 
     async def total_supply(self, block: Block | None = None) -> int:
         """
@@ -415,7 +415,9 @@ class ERC20(ContractBase):
         return_None_on_failure: bool = False,
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
-    ) -> UsdPrice | None:
+        *,
+        amount: int | Decimal | None = None,
+    ) -> PriceResult | None:
         """
         Get the price of the token in USD.
 
@@ -424,6 +426,7 @@ class ERC20(ContractBase):
             return_None_on_failure: If True, return None instead of raising a :class:`~y.exceptions.yPriceMagicError` on failure.
             skip_cache: If True, skip using the cache while fetching price data.
             ignore_pools: An optional tuple of pools to ignore when calculating the price.
+            amount: Optional integer or Decimal amount in readable tokens for a native sale estimate.
 
         Returns:
             The price of the token in USD, or None if return_None_on_failure is True and the price cannot be retrieved.
@@ -444,6 +447,7 @@ class ERC20(ContractBase):
         return await get_price(
             self.address,
             block=block,
+            amount=amount,
             fail_to_None=return_None_on_failure,
             skip_cache=skip_cache,
             ignore_pools=ignore_pools,
@@ -451,7 +455,7 @@ class ERC20(ContractBase):
         )
 
     @classmethod
-    async def _get_scale_for(cls, address: AnyAddressType) -> Awaitable[int]:
+    async def _get_scale_for(cls, address: AnyAddressType) -> int:
         # We use async ERC20 for memory sake since internal objects are
         # often async and we can avoid duplication 2x a/sync objs
         token = ERC20(address, asynchronous=True)
@@ -460,7 +464,7 @@ class ERC20(ContractBase):
         except KeyError:
             # We'll use __scale__ instead of scale here for the purposes of optimization
             # We also pass sync kwarg to __scale__ to optimize speed even though async is default
-            return await token.__scale__(sync=False)
+            return cast(int, await token.__scale__(sync=False))
 
     async def _symbol(self) -> str:
         """
@@ -487,7 +491,7 @@ class ERC20(ContractBase):
             if symbol:
                 symbol = hex_to_string(symbol)
         if symbol:
-            return symbol
+            return cast(str, symbol)
         # we've failed to fetch
         self.__raise_exception("symbol")
 
@@ -513,11 +517,11 @@ class ERC20(ContractBase):
             if name:
                 name = hex_to_string(name)
         if name:
-            return name
+            return cast(str, name)
         # we've failed to fetch
         self.__raise_exception("name")
 
-    def __raise_exception(self, fn_name: str):
+    def __raise_exception(self, fn_name: str) -> NoReturn:
         """
         Raise a NonStandardERC20 exception with a custom error message.
 
@@ -543,10 +547,10 @@ class ERC20(ContractBase):
         ) from None
 
     # These dundermethods are created by a_sync for the async_properties on this class
-    __symbol__: HiddenMethodDescriptor[Self, str]
-    __name__: HiddenMethodDescriptor[Self, str]
-    __decimals__: HiddenMethodDescriptor[Self, int]
-    __scale__: HiddenMethodDescriptor[Self, int]
+    __symbol__: HiddenMethodDescriptor["ERC20", str]
+    __name__: HiddenMethodDescriptor["ERC20", str]
+    __decimals__: HiddenMethodDescriptor["ERC20", int]
+    __scale__: HiddenMethodDescriptor["ERC20", int]
 
 
 @final
@@ -700,7 +704,7 @@ class WeiBalance(a_sync.ASyncGenericBase):
             >>> balance1 >= balance2
             True
         """
-        if __o < self:
+        if lt(cast(Any, __o), self):
             return True
         elif type(__o) is type(self):
             return self == __o
@@ -711,6 +715,7 @@ class WeiBalance(a_sync.ASyncGenericBase):
     def __radd__(self, __o: Union["WeiBalance", Literal[0]]) -> "WeiBalance":
         if __o == 0:
             return self
+        __o = cast(WeiBalance, __o)
         try:
             if self.token != __o.token:
                 raise ValueError(
@@ -860,9 +865,9 @@ class WeiBalance(a_sync.ASyncGenericBase):
             ignore_pools=self._ignore_pools,
         )
 
-    @a_sync.aka.property
+    @a_sync_property
     @stuck_coro_debugger
-    async def readable(self) -> Decimal:
+    async def readable(self) -> Decimal | Literal[0]:
         """
         Get the balance scaled to a human-readable decimal.
 
@@ -886,9 +891,9 @@ class WeiBalance(a_sync.ASyncGenericBase):
         )
         return readable
 
-    __readable__: HiddenMethodDescriptor[Self, Decimal]
+    __readable__: HiddenMethodDescriptor["WeiBalance", Decimal | Literal[0]]
 
-    @a_sync.aka.property
+    @a_sync_property
     @stuck_coro_debugger
     async def price(self) -> Decimal:
         """
@@ -908,20 +913,17 @@ class WeiBalance(a_sync.ASyncGenericBase):
             ignore_pools=self._ignore_pools,
             sync=False,
         )
-        # magic.get_price returns PriceResult; extract .price for Decimal()
-        from y.datatypes import PriceResult as _PriceResult
-
-        if isinstance(raw_price, _PriceResult):
-            raw_price = raw_price.price
-        price = Decimal(raw_price)
+        if raw_price is None:
+            raise ValueError(f"No price for {self.token.address} at {self.block}")
+        price = Decimal(raw_price.price)
         self._logger.debug("balance: %s  price: %s", self, price)
         return price
 
-    __price__: HiddenMethodDescriptor[Self, Decimal]
+    __price__: HiddenMethodDescriptor["WeiBalance", Decimal]
 
-    @a_sync.aka.property
+    @a_sync_property
     @stuck_coro_debugger
-    async def value_usd(self) -> Decimal:
+    async def value_usd(self) -> Decimal | Literal[0]:
         """
         Get the value of the balance in USD.
 
@@ -936,14 +938,14 @@ class WeiBalance(a_sync.ASyncGenericBase):
         if self.balance == 0:
             return 0
         balance, price = await cgather(self.__readable__, self.__price__)
-        value = balance * price
+        value = cast(Decimal, balance * price)
         self._logger.debug("balance: %s  price: %s  value: %s", balance, price, value)
         return value
 
-    __value_usd__: HiddenMethodDescriptor[Self, Decimal]
+    __value_usd__: HiddenMethodDescriptor["WeiBalance", Decimal | Literal[0]]
 
     @property
-    def _logger(self) -> logging.Logger:
+    def _logger(self) -> Logger:
         """
         Get the logger for the WeiBalance object.
 

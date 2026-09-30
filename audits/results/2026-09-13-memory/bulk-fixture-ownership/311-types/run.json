@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-m",
+    "mypy"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789342489.528849,
+  "source_sha": "25b549a063a1775c2256be2906fec1bc2c998898",
+  "source_revision": "worktree",
+  "source_archive_sha256": "9f717492fa4b570a63ce0b4554ec60a4e1cac651575be81dee4634fed8f632c0",
+  "image": "sha256:38f6e4cd7d2a9df84610e38783ff92bc8967e40b41ce5cda86581519c271a939",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 41.559669971466064
+}

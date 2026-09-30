@@ -1,0 +1,10 @@
+[
+  {
+    "token": "0x6C8c6b02E7b2BE14d4fA6022Dfd6d75921D90E4E",
+    "block": 7720735,
+    "underlying_per_ctoken": 0.020000120246616737,
+    "status": "failure",
+    "error": "yPriceMagicError: PriceError while fetching Mainnet BAT 0x0D8775F648430679A709E98d2b0Cb6250d2887EF at block 7720735",
+    "elapsed_seconds": 1239.0206370759988
+  }
+]

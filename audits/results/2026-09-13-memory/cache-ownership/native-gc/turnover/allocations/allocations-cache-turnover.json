@@ -1,0 +1,301 @@
+{
+  "objects": {
+    "logging.Logger": 2,
+    "_asyncio.Task": 1,
+    "_asyncio.TaskStepMethWrapper": 1,
+    "logging.Formatter": 1,
+    "logging.PercentStyle": 1,
+    "logging._StderrHandler": 1,
+    "logging.RootLogger": 1,
+    "logging.Manager": 1,
+    "logging.PlaceHolder": 1
+  },
+  "tasks_by_coroutine": {
+    "main:pending": 1
+  },
+  "historical_buffer_entries": {},
+  "queued_database_operations": {},
+  "logging": {},
+  "cached_property_state": {},
+  "async_caches": [],
+  "cachebox_caches": [
+    {
+      "function": "__main__.main.<locals>.sync_value",
+      "hits": 32768,
+      "misses": 32768,
+      "entries": 64,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    },
+    {
+      "function": "__main__.main.<locals>.async_value",
+      "hits": 32768,
+      "misses": 32768,
+      "entries": 64,
+      "locks": 0,
+      "idle_locks": 0,
+      "exceptions": 0
+    }
+  ],
+  "pony_adapted_sql_cache": {
+    "entries": 0,
+    "query_characters": 0,
+    "adapted_query_characters": 0
+  },
+  "python_current_bytes": 700292,
+  "python_peak_bytes": 921925,
+  "rss_peak_bytes": 25690112,
+  "top_allocations": [
+    {
+      "traceback": "/runner/cache_profile.py:26",
+      "bytes": 528512,
+      "count": 128
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/_cachebox.py:941",
+      "bytes": 46053,
+      "count": 903
+    },
+    {
+      "traceback": "/runner/cache_profile.py:89",
+      "bytes": 34496,
+      "count": 251
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/copy.py:71",
+      "bytes": 25024,
+      "count": 209
+    },
+    {
+      "traceback": "/runner/cache_profile.py:37",
+      "bytes": 8192,
+      "count": 256
+    },
+    {
+      "traceback": "/runner/cache_profile.py:59",
+      "bytes": 6144,
+      "count": 128
+    },
+    {
+      "traceback": "/runner/cache_profile.py:65",
+      "bytes": 6080,
+      "count": 127
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/pathlib.py:1013",
+      "bytes": 5900,
+      "count": 100
+    },
+    {
+      "traceback": "/runner/cache_profile.py:79",
+      "bytes": 5632,
+      "count": 128
+    },
+    {
+      "traceback": "/runner/cache_profile.py:73",
+      "bytes": 5632,
+      "count": 128
+    },
+    {
+      "traceback": "/runner/cache_profile.py:40",
+      "bytes": 4096,
+      "count": 128
+    },
+    {
+      "traceback": "/runner/cache_profile.py:36",
+      "bytes": 4096,
+      "count": 128
+    },
+    {
+      "traceback": "/runner/cache_profile.py:80",
+      "bytes": 3072,
+      "count": 64
+    },
+    {
+      "traceback": "/runner/cache_profile.py:74",
+      "bytes": 3024,
+      "count": 63
+    },
+    {
+      "traceback": "/runner/cache_profile.py:72",
+      "bytes": 2048,
+      "count": 64
+    },
+    {
+      "traceback": "/runner/cache_profile.py:88",
+      "bytes": 1024,
+      "count": 1
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/json/encoder.py:254",
+      "bytes": 880,
+      "count": 22
+    },
+    {
+      "traceback": "/runner/cache_profile.py:49",
+      "bytes": 616,
+      "count": 4
+    },
+    {
+      "traceback": "/runner/profile_state.py:86",
+      "bytes": 590,
+      "count": 10
+    },
+    {
+      "traceback": "/runner/profile_state.py:140",
+      "bytes": 544,
+      "count": 4
+    },
+    {
+      "traceback": "<frozen abc>:123",
+      "bytes": 448,
+      "count": 4
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:553",
+      "bytes": 400,
+      "count": 10
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:549",
+      "bytes": 400,
+      "count": 10
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/json/encoder.py:334",
+      "bytes": 368,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/json/encoder.py:278",
+      "bytes": 344,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/json/encoder.py:414",
+      "bytes": 336,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:208",
+      "bytes": 320,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:317",
+      "bytes": 312,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:408",
+      "bytes": 304,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/json/__init__.py:234",
+      "bytes": 304,
+      "count": 2
+    },
+    {
+      "traceback": "/runner/profile_state.py:134",
+      "bytes": 288,
+      "count": 4
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/json/encoder.py:342",
+      "bytes": 288,
+      "count": 1
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:410",
+      "bytes": 272,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:319",
+      "bytes": 272,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/_cachebox.py:885",
+      "bytes": 256,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:477",
+      "bytes": 240,
+      "count": 2
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:382",
+      "bytes": 240,
+      "count": 2
+    },
+    {
+      "traceback": "/runner/cache_profile.py:62",
+      "bytes": 240,
+      "count": 2
+    },
+    {
+      "traceback": "/runner/cache_profile.py:56",
+      "bytes": 240,
+      "count": 2
+    },
+    {
+      "traceback": "/runner/profile_state.py:133",
+      "bytes": 208,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:87",
+      "bytes": 208,
+      "count": 1
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:201",
+      "bytes": 176,
+      "count": 4
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:469",
+      "bytes": 160,
+      "count": 1
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:374",
+      "bytes": 160,
+      "count": 1
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/json/encoder.py:224",
+      "bytes": 160,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:141",
+      "bytes": 149,
+      "count": 2
+    },
+    {
+      "traceback": "/runner/profile_state.py:66",
+      "bytes": 80,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:65",
+      "bytes": 80,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:64",
+      "bytes": 80,
+      "count": 1
+    },
+    {
+      "traceback": "/runner/profile_state.py:63",
+      "bytes": 80,
+      "count": 1
+    }
+  ]
+}

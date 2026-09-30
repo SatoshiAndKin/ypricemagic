@@ -1,0 +1,18 @@
+{
+  "source_sha": "17c08dda9796994ea755699032975dc4b91fd06e",
+  "compile": {
+    "conclusion": "success",
+    "url": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36443564850"
+  },
+  "lint": {
+    "conclusion": "success",
+    "url": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36443564982"
+  },
+  "mypy": {
+    "ubuntu_313_conclusion": "failure",
+    "url": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36443564896",
+    "comparison": "ci-mypy-313-comparison.json"
+  },
+  "generated_bot_commit": "bd1302d1c6a66305cf46be76a867b60636279fe7",
+  "bot_changes": "Only build/__native_internal_ypricemagic.h, build/__native_ypricemagic.c and build/__native_ypricemagic.h; pricing and test source match the tested repair commit."
+}

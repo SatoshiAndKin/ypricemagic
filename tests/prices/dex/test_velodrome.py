@@ -4,7 +4,7 @@ from tests.fixtures import async_test, optimism_only
 
 @async_test
 @optimism_only
-async def test_wtbt():
+async def test_wtbt() -> None:
     """
     Test the price of the WTBT token at a specific block on the Optimism network.
 
@@ -30,7 +30,7 @@ async def test_wtbt():
 
 @async_test
 @optimism_only
-async def test_mseth():
+async def test_mseth() -> None:
     """
     Test the price of the MSETH token at a specific block on the Optimism network.
 

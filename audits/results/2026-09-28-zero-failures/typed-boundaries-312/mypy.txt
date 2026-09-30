@@ -1,0 +1,1240 @@
+y/_db/utils/utils.py: note: In function "get_block_timestamp":
+y/_db/utils/utils.py:159: error: Redundant cast to "float"  [redundant-cast]
+        return cast(float, unix)
+               ^
+y/utils/multicall.py:49: error: Argument 1 to "from_abi" of "Contract" has
+incompatible type "str"; expected "ContractName"  [arg-type]
+        brownie.Contract.from_abi("Multicall2", MULTICALL2, MULTICALL2_ABI...
+                                  ^~~~~~~~~~~~
+y/utils/multicall.py:49: error: Argument 2 to "from_abi" of "Contract" has
+incompatible type "str | None"; expected "HexAddress"  [arg-type]
+        brownie.Contract.from_abi("Multicall2", MULTICALL2, MULTICALL2_ABI...
+                                                ^~~~~~~~~~
+y/utils/multicall.py:49: error: Argument 3 to "from_abi" of "Contract" has
+incompatible type "list[object]"; expected
+"list[ABIFunction | ABIConstructor | ABIFallback | ABIReceive | ABIEvent | ABIError]"
+ [arg-type]
+    ...   brownie.Contract.from_abi("Multicall2", MULTICALL2, MULTICALL2_ABI)
+                                                              ^~~~~~~~~~~~~~
+y/utils/multicall.py:51: error: Argument 1 to "Contract" has incompatible type
+"str | None"; expected
+"str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int" 
+[arg-type]
+        else Contract(MULTICALL2)
+                      ^~~~~~~~~~
+y/utils/multicall.py: note: In function "multicall_same_func_no_input":
+y/utils/multicall.py:66: error: Missing type parameters for generic type
+"Callable"  [type-arg]
+        apply_func: Callable | None = None,
+                    ^
+y/utils/multicall.py:71: error: Missing type parameters for generic type "dict"
+ [type-arg]
+        results: list[dict] = await igather(
+                      ^
+y/utils/multicall.py:72: error: Argument 1 to "Call" has incompatible type
+"str | bytes | Contract | ERC20 | int"; expected
+"str | Address | ChecksumAddress | HexAddress"  [arg-type]
+            Call(address, [method], ((address, apply_func)), block_id=bloc...
+                 ^~~~~~~
+y/utils/multicall.py:72: error: Argument 3 to "Call" has incompatible type
+"tuple[str | bytes | Contract | ERC20 | int, Callable[..., Any] | None]";
+expected "Sequence[tuple[Any, Callable[..., Any]]] | None"  [arg-type]
+            Call(address, [method], ((address, apply_func)), block_id=bloc...
+                                     ^~~~~~~~~~~~~~~~~~~~~
+y/utils/multicall.py: note: In function "multicall_same_func_same_contract_different_inputs":
+y/utils/multicall.py:82: error: Missing type parameters for generic type "list"
+ [type-arg]
+        inputs: list | tuple,
+                ^
+y/utils/multicall.py:82: error: Missing type parameters for generic type
+"tuple"  [type-arg]
+        inputs: list | tuple,
+                       ^
+y/utils/multicall.py:84: error: Missing type parameters for generic type
+"Callable"  [type-arg]
+        apply_func: Callable | None = None,
+                    ^
+y/utils/multicall.py:89: error: Missing type parameters for generic type "dict"
+ [type-arg]
+        results: list[dict] = await igather(
+                      ^
+y/utils/multicall.py:90: error: List item 0 has incompatible type
+"tuple[Any, Callable[..., Any] | None]"; expected
+"tuple[Any, Callable[..., Any]]"  [list-item]
+            (Call(address, [method, input], [(input, apply_func)], block_i...
+                                             ^~~~~~~~~~~~~~~~~~~
+y/utils/multicall.py: note: In function "multicall_totalSupply":
+y/utils/multicall.py:136: error: List comprehension has incompatible type
+List[int | None]; expected List[int]  [misc]
+            await _totalSupply(
+            ^~~~~~~~~~~~~~~~~~~
+y/utils/multicall.py: note: In function "fetch_multicall":
+y/utils/multicall.py:169: error: Incompatible types (expression has type
+"str | Any", TypedDict item "data" has type "bytes | HexStr")  [typeddict-item]
+                {"to": str(multicall2), "data": data},
+                                                ^~~~
+y/utils/multicall.py:173: error: Argument 1 to "decode_output" of
+"_ContractMethod" has incompatible type "HexBytes"; expected "str"  [arg-type]
+            result = multicall2.tryAggregate.decode_output(call)
+                                                           ^~~~
+y/utils/multicall.py:173: error: Argument 1 to "decode_output" of
+"OverloadedMethod" has incompatible type "HexBytes"; expected "str"  [arg-type]
+            result = multicall2.tryAggregate.decode_output(call)
+                                                           ^~~~
+y/utils/multicall.py:175: error: Item "ContractCall" of
+"ContractCall | ContractTx | OverloadedMethod" has no attribute "coroutine" 
+[union-attr]
+            result = await multicall2.tryAggregate.coroutine(
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/multicall.py:175: error: Item "ContractTx" of
+"ContractCall | ContractTx | OverloadedMethod" has no attribute "coroutine" 
+[union-attr]
+            result = await multicall2.tryAggregate.coroutine(
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/multicall.py:175: error: Item "OverloadedMethod" of
+"ContractCall | ContractTx | OverloadedMethod" has no attribute "coroutine" 
+[union-attr]
+            result = await multicall2.tryAggregate.coroutine(
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/convex.py: note: In function "get_underlying_lp":
+y/prices/convex.py:181: error: Need type annotation for "pool_info" 
+[var-annotated]
+                pool_info = await booster_contract.poolInfo.coroutine(i)
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/_markets.py: note: In function "swap":
+y/prices/_markets.py:477: error: Argument 1 to "int" has incompatible type
+"int | tuple[int, ...]"; expected
+"str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc"  [arg-type]
+            result = int(quoted)
+                         ^~~~~~
+y/prices/dex/uniswap/v2_forks.py:370: error: No overload variant of "get" of
+"dict" matches argument types "int", "dict[Never, Never]"  [call-overload]
+    SPECIAL_PATHS = {
+                    ^
+y/prices/dex/uniswap/v2_forks.py:370: note: Possible overload variants:
+y/prices/dex/uniswap/v2_forks.py:370: note:     def get(self, Network, None = ..., /) -> dict[str, dict[str, tuple[str | Contract | None, ...]]] | None
+y/prices/dex/uniswap/v2_forks.py:370: note:     def get(self, Network, dict[str, dict[str, tuple[str | Contract | None, ...]]], /) -> dict[str, dict[str, tuple[str | Contract | None, ...]]]
+y/prices/dex/uniswap/v2_forks.py:370: note:     def [_T] get(self, Network, _T, /) -> dict[str, dict[str, tuple[str | Contract | None, ...]]] | _T
+y/prices/dex/uniswap/v2_forks.py: note: In function "special_paths":
+y/prices/dex/uniswap/v2_forks.py:484: error: Returning Any from function
+declared to return
+"dict[str, dict[str | bytes | HexBytes | Address | EthAddress, list[str | bytes | HexBytes | Address | EthAddress]]]"
+ [no-any-return]
+        return SPECIAL_PATHS.get(protocol, {})
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In function "get_decoded":
+y/_db/utils/logs.py:235: error: Redundant cast to "Log"  [redundant-cast]
+        entity = cast(DbLog, getitem(DbLog, (CHAINID, log.block_number, lo...
+                 ^
+y/_db/utils/logs.py:236: error: "Log" has no attribute "decoded" 
+[attr-defined]
+        if decoded := entity.decoded:
+                      ^~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In function "set_decoded":
+y/_db/utils/logs.py:246: error: Redundant cast to "Log"  [redundant-cast]
+        entity = cast(DbLog, getitem(DbLog, (CHAINID, log.block_number, lo...
+                 ^
+y/_db/utils/logs.py:247: error: "Log" has no attribute "decoded" 
+[attr-defined]
+        entity.decoded = decoded
+        ^~~~~~~~~~~~~~
+y/_db/utils/contract.py:12: error: Module "y._db.utils.utils" does not
+explicitly export attribute "make_executor"  [attr-defined]
+    from y._db.utils.utils import ensure_block, make_executor
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/contract.py: note: In function "get_deploy_block":
+y/_db/utils/contract.py:63: error: Incompatible types in assignment (expression
+has type "Block | None", variable has type "int | None")  [assignment]
+        if deploy_block := token.deploy_block:
+                           ^~~~~~~~~~~~~~~~~~
+y/_db/utils/contract.py: note: In function "known_deploy_blocks":
+y/_db/utils/contract.py:117: error: Item "None" of "Block | None" has no
+attribute "number"  [union-attr]
+                (c.address, c.deploy_block.number)
+                            ^~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/contract.py:119: error: Item "None" of "Block | None" has no
+attribute "number"  [union-attr]
+                if c.chain.id == CHAINID and c.deploy_block.number
+                                             ^~~~~~~~~~~~~~~~~~~~~
+y/classes/common.py: note: In member "__ge__" of class "WeiBalance":
+y/classes/common.py:713: error: Argument 1 to "lt" has incompatible type
+"object"; expected
+"_SupportsDunderLE | _SupportsDunderGE | _SupportsDunderGT | _SupportsDunderLT" 
+[arg-type]
+            if lt(__o, self):
+                  ^~~
+y/classes/common.py: note: In member "value_usd" of class "WeiBalance":
+y/classes/common.py:949: error: Incompatible return value type (got
+"Decimal | int", expected "Decimal | Literal[0]")  [return-value]
+            return value
+                   ^~~~~
+y/_db/utils/token.py: note: In function "get_token":
+y/_db/utils/token.py:72: error: Redundant cast to "Address"  [redundant-cast]
+                        addr = cast(Address, getitem(Address, (CHAINID, ad...
+                               ^
+y/prices/pendle.py: note: In function "get_tokens":
+y/prices/pendle.py:72: error: Incompatible types in assignment (expression has
+type "Contract", variable has type
+"str | bytes | HexBytes | Address | EthAddress")  [assignment]
+        lp_token = await Contract.coroutine(lp_token)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/pendle.py:73: error: Returning Any from function declared to return
+"tuple[str, str, str]"  [no-any-return]
+        return await lp_token.readTokens
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/pendle.py:73: error: Item "str" of
+"str | bytes | HexBytes | Address | EthAddress" has no attribute "readTokens" 
+[union-attr]
+        return await lp_token.readTokens
+                     ^~~~~~~~~~~~~~~~~~~
+y/prices/pendle.py:73: error: Item "bytes" of
+"str | bytes | HexBytes | Address | EthAddress" has no attribute "readTokens" 
+[union-attr]
+        return await lp_token.readTokens
+                     ^~~~~~~~~~~~~~~~~~~
+y/prices/pendle.py:73: error: Item "HexBytes" of
+"str | bytes | HexBytes | Address | EthAddress" has no attribute "readTokens" 
+[union-attr]
+        return await lp_token.readTokens
+                     ^~~~~~~~~~~~~~~~~~~
+y/prices/pendle.py:73: error: Item "Address" of
+"str | bytes | HexBytes | Address | EthAddress" has no attribute "readTokens" 
+[union-attr]
+        return await lp_token.readTokens
+                     ^~~~~~~~~~~~~~~~~~~
+y/prices/pendle.py:73: error: Item "EthAddress" of
+"str | bytes | HexBytes | Address | EthAddress" has no attribute "readTokens" 
+[union-attr]
+        return await lp_token.readTokens
+                     ^~~~~~~~~~~~~~~~~~~
+y/prices/pendle.py: note: In function "get_lp_price":
+y/prices/pendle.py:79: error: Incompatible default for argument "block"
+(default has type "None", argument has type "int | BlockNumber")  [assignment]
+        token: Address, block: Block = None, skip_cache: bool = ENVS.SKIP_...
+                                       ^~~~
+y/prices/pendle.py:79: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+y/prices/pendle.py:79: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+y/prices/pendle.py:120: error: Item "None" of "Contract | None" has no
+attribute "getLpToAssetRate"  [union-attr]
+                    PENDLE_ORACLE.getLpToAssetRate.coroutine(
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/pendle.py:133: error: If x = b'abc' then f"{x}" or "{}".format(x)
+produces "b'abc'", not "abc". If this is desired behavior, use f"{x!r}" or
+"{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]
+    ...ce(token, rate * Decimal(float(child)), f"Pendle {token} via {asset}",...
+                                                        ^~~~~~~
+y/prices/gearbox.py: note: In class "DieselPool":
+y/prices/gearbox.py:23: error: Signature of "contract" incompatible with
+supertype "ContractBase"  [override]
+        async def contract(self) -> Contract:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/gearbox.py:23: note:      Superclass:
+y/prices/gearbox.py:23: note:          Contract
+y/prices/gearbox.py:23: note:      Subclass:
+y/prices/gearbox.py:23: note:          Awaitable[Contract]
+y/prices/gearbox.py: note: In member "exchange_rate" of class "DieselPool":
+y/prices/gearbox.py:52: error: Need type annotation for "converted" 
+[var-annotated]
+            converted = await pool.fromDiesel.coroutine(scale, block_ident...
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/gearbox.py: note: In member "get_price" of class "Gearbox":
+y/prices/gearbox.py:117: error: Invalid index type
+"str | bytes | HexBytes | Address | EthAddress" for "dict[ERC20, DieselPool]";
+expected type "ERC20"  [index]
+            return await dtokens[token].get_price(block, skip_cache=skip_c...
+                                 ^~~~~
+y/prices/gearbox.py: note: At top level:
+y/prices/gearbox.py:123: error: Incompatible types in assignment (expression
+has type "set[Never]", variable has type "Gearbox")  [assignment]
+        gearbox = set()
+                  ^~~~~
+y/prices/chainlink.py: note: In member "scale" of class "Feed":
+y/prices/chainlink.py:253: error: Returning Any from function declared to
+return "int"  [no-any-return]
+            return 10 ** await self.decimals(block)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/chainlink.py: note: In member "__init__" of class "FeedsFromEvents":
+y/prices/chainlink.py:275: error: Function is missing a type annotation for one
+or more arguments  [no-untyped-def]
+        def __init__(self, addresses, topics, *, asynchronous: bool = True...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/chainlink.py: note: In member "_include_event" of class "FeedsFromEvents":
+y/prices/chainlink.py:280: error: Missing type parameters for generic type
+"_EventItem"  [type-arg]
+        def _include_event(event: _EventItem) -> bool:
+                                  ^
+y/prices/chainlink.py: note: In member "_process_event" of class "FeedsFromEvents":
+y/prices/chainlink.py:297: error: Missing type parameters for generic type
+"_EventItem"  [type-arg]
+        def _process_event(self, event: _EventItem) -> Feed:
+                                        ^
+y/prices/chainlink.py:301: error: "_EventItem[Any]" has no attribute
+"block_number"  [attr-defined]
+                event.block_number,
+                ^~~~~~~~~~~~~~~~~~
+y/prices/chainlink.py: note: In member "__init__" of class "Chainlink":
+y/prices/chainlink.py:344: error: Incompatible types in assignment (expression
+has type "None", variable has type "Contract")  [assignment]
+                self.registry = None
+                                ^~~~
+y/prices/chainlink.py:345: error: Incompatible types in assignment (expression
+has type "None", variable has type "FeedsFromEvents")  [assignment]
+                self._feeds_from_events = None
+                                          ^~~~
+y/prices/chainlink.py: note: In member "has_feed" of class "Chainlink":
+y/prices/chainlink.py:425: error: No overload variant of "__call__" of
+"ASyncBoundMethod" matches argument types
+"str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int",
+"int | BlockNumber | None", "bool"  [call-overload]
+            return await self.get_feed(asset, block=block, sync=False) is ...
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/chainlink.py:425: note: Possible overload variants:
+y/prices/chainlink.py:425: note:     def __call__(self, asset: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber | BlockRef | None = ..., *, sync: Literal[True]) -> Feed | None
+y/prices/chainlink.py:425: note:     def __call__(self, asset: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber | BlockRef | None = ..., *, sync: Literal[False]) -> Coroutine[Any, Any, Feed | None]
+y/prices/chainlink.py:425: note:     def __call__(self, asset: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber | BlockRef | None = ..., *, asynchronous: Literal[False]) -> Feed | None
+y/prices/chainlink.py:425: note:     def __call__(self, asset: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber | BlockRef | None = ..., *, asynchronous: Literal[True]) -> Coroutine[Any, Any, Feed | None]
+y/prices/chainlink.py:425: note:     def __call__(self, asset: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber | BlockRef | None = ...) -> Coroutine[Any, Any, Feed | None] | Feed | None
+y/prices/chainlink.py: note: At top level:
+y/prices/chainlink.py:478: error: Incompatible types in assignment (expression
+has type "set[Never]", variable has type "Chainlink")  [assignment]
+        chainlink = set()
+                    ^~~~~
+y/prices/tokenized_fund/tokensets.py: note: In member "components" of class "TokenSet":
+y/prices/tokenized_fund/tokensets.py:122: error: Need type annotation for
+"components"  [var-annotated]
+            components = await contract.getComponents.coroutine(block_iden...
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/tokenized_fund/tokensets.py: note: In member "balances" of class "TokenSet":
+y/prices/tokenized_fund/tokensets.py:157: error: "object" has no attribute
+"__iter__"; maybe "__dir__" or "__str__"? (not iterable)  [attr-defined]
+    ...      _components = ((component.address,) for component in components)
+                                                                  ^~~~~~~~~~
+y/prices/tokenized_fund/tokensets.py:166: error: No overload variant of "zip"
+matches argument types "object", "Any"  [call-overload]
+                for component, balance in zip(components, balances)
+                                          ^~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/tokenized_fund/tokensets.py:166: note: Possible overload variants:
+y/prices/tokenized_fund/tokensets.py:166: note:     def [_T_co] __new__(cls, *, strict: bool = ...) -> zip[Any]
+y/prices/tokenized_fund/tokensets.py:166: note:     def [_T_co, _T1] __new__(cls, Iterable[_T1], /, *, strict: bool = ...) -> zip[tuple[_T1]]
+y/prices/tokenized_fund/tokensets.py:166: note:     def [_T_co, _T1, _T2] __new__(cls, Iterable[_T1], Iterable[_T2], /, *, strict: bool = ...) -> zip[tuple[_T1, _T2]]
+y/prices/tokenized_fund/tokensets.py:166: note:     def [_T_co, _T1, _T2, _T3] __new__(cls, Iterable[_T1], Iterable[_T2], Iterable[_T3], /, *, strict: bool = ...) -> zip[tuple[_T1, _T2, _T3]]
+y/prices/tokenized_fund/tokensets.py:166: note:     def [_T_co, _T1, _T2, _T3, _T4] __new__(cls, Iterable[_T1], Iterable[_T2], Iterable[_T3], Iterable[_T4], /, *, strict: bool = ...) -> zip[tuple[_T1, _T2, _T3, _T4]]
+y/prices/tokenized_fund/tokensets.py:166: note:     def [_T_co, _T1, _T2, _T3, _T4, _T5] __new__(cls, Iterable[_T1], Iterable[_T2], Iterable[_T3], Iterable[_T4], Iterable[_T5], /, *, strict: bool = ...) -> zip[tuple[_T1, _T2, _T3, _T4, _T5]]
+y/prices/tokenized_fund/tokensets.py:166: note:     def [_T_co] __new__(cls, Iterable[Any], Iterable[Any], Iterable[Any], Iterable[Any], Iterable[Any], Iterable[Any], /, *iterables: Iterable[Any], strict: bool = ...) -> zip[tuple[Any, ...]]
+y/prices/tokenized_fund/reserve.py: note: In function "get_price":
+y/prices/tokenized_fund/reserve.py:81: error: Argument 1 to "Call" has
+incompatible type
+"str | bytes | HexBytes | evmspec.data._main.Address | EthAddress"; expected
+"str | eth_typing.evm.Address | ChecksumAddress | HexAddress"  [arg-type]
+        main = await Call(token_address, "main()(address)", block_id=block...
+                          ^~~~~~~~~~~~~
+y/prices/tokenized_fund/reserve.py:88: error: "Never" object is not iterable 
+[misc]
+            low, high = await basket_handler.price.coroutine(block_identif...
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/tokenized_fund/reserve.py:90: error: Incompatible return value type
+(got "None", expected "Decimal")  [return-value]
+            return None
+                   ^~~~
+y/prices/tokenized_fund/reserve.py:92: error: Cannot determine type of "low" 
+[has-type]
+            return Decimal(low + high) // 2 / 10**18
+                           ^~~
+y/prices/tokenized_fund/reserve.py:92: error: Cannot determine type of "high" 
+[has-type]
+            return Decimal(low + high) // 2 / 10**18
+                                 ^~~~
+y/prices/tokenized_fund/piedao.py: note: In function "get_bpool":
+y/prices/tokenized_fund/piedao.py:111: error: Argument 1 to "raw_call" has
+incompatible type
+"str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int";
+expected "str | bytes | HexBytes | Address | EthAddress | Contract | ERC20" 
+[arg-type]
+            bpool = await raw_call(pie_address, "getBPool()", output="addr...
+                                   ^~~~~~~~~~~
+y/prices/tokenized_fund/piedao.py:112: error: Incompatible return value type
+(got "int | str | bytes | Contract | ERC20 | None", expected
+"str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int") 
+[return-value]
+            return bpool if bpool != ZERO_ADDRESS else pie_address
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/tokenized_fund/basketdao.py: note: In function "get_price":
+y/prices/tokenized_fund/basketdao.py:71: error: Argument 2 to "cgather" has
+incompatible type "Coroutine[Any, Any, float] | float"; expected
+"Awaitable[Any]"  [arg-type]
+            ERC20(address, asynchronous=True).total_supply_readable(block=...
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/stable_swap/stargate.py:88: error: Unused "type: ignore" comment 
+[unused-ignore]
+        for pool in SEED_POOLS.get(chain.id, ()):  # type: ignore[arg-type...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/stable_swap/stargate.py: note: In member "pools" of class "StargateFactory":
+y/prices/stable_swap/stargate.py:152: error: Incompatible types in "await"
+(actual type "Task[None] | None", expected type "Awaitable[Any]")  [misc]
+            await pool_map._init_loader
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/stable_swap/stargate.py: note: In class "StargatePool":
+y/prices/stable_swap/stargate.py:170: error: Signature of "contract"
+incompatible with supertype "ContractBase"  [override]
+        async def contract(self) -> Contract:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/stable_swap/stargate.py:170: note:      Superclass:
+y/prices/stable_swap/stargate.py:170: note:          Contract
+y/prices/stable_swap/stargate.py:170: note:      Subclass:
+y/prices/stable_swap/stargate.py:170: note:          Awaitable[Contract]
+y/prices/stable_swap/stargate.py:198: error: Signature of "price" incompatible
+with supertype "ERC20"  [override]
+        async def price(
+        ^~~~~~~~~~~~~~~~
+y/prices/stable_swap/stargate.py:198: note:      Superclass:
+y/prices/stable_swap/stargate.py:198: note:          ASyncBoundMethod[StargatePool, [int | BlockNumber | None, bool, bool, tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...], DefaultNamedArg(int | Decimal | None, 'amount')], PriceResult | None]
+y/prices/stable_swap/stargate.py:198: note:      Subclass:
+y/prices/stable_swap/stargate.py:198: note:          ASyncBoundMethod[StargatePool, [int | BlockNumber | None, bool], PriceResult | None]
+y/prices/stable_swap/stargate.py: note: In member "price" of class "StargatePool":
+y/prices/stable_swap/stargate.py:204: error: Need type annotation for
+"lp_scale"  [var-annotated]
+                lp_scale, underlying = await gather_owned([self.__scale__,...
+                                       ^
+y/prices/stable_swap/stargate.py:204: error: Need type annotation for
+"underlying"  [var-annotated]
+                lp_scale, underlying = await gather_owned([self.__scale__,...
+                                       ^
+y/prices/stable_swap/stargate.py:204: error: Argument 1 to "gather_owned" has
+incompatible type "list[object]"; expected "Iterable[Awaitable[Never]]" 
+[arg-type]
+    ...       lp_scale, underlying = await gather_owned([self.__scale__, self...
+                                                        ^~~~~~~~~~~~~~~~~~~~~...
+y/prices/stable_swap/ellipsis.py: note: In function "get_price":
+y/prices/stable_swap/ellipsis.py:79: error: Incompatible types in assignment
+(expression has type "Contract", variable has type "ChecksumAddress") 
+[assignment]
+        minter = await Contract.coroutine(minter)
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/stable_swap/ellipsis.py:85: error: "ChecksumAddress" has no attribute
+"coins"  [attr-defined]
+                    minter.coins.coroutine(i, block_identifier=block),
+                    ^~~~~~~~~~~~
+y/prices/stable_swap/ellipsis.py:86: error: "ChecksumAddress" has no attribute
+"balances"  [attr-defined]
+                    minter.balances.coroutine(i, block_identifier=block),
+                    ^~~~~~~~~~~~~~~
+y/prices/stable_swap/ellipsis.py:95: error: Argument 2 to "cgather" has
+incompatible type "Coroutine[Any, Any, float] | float"; expected
+"Awaitable[Any]"  [arg-type]
+            ERC20(token_address, asynchronous=True).total_supply_readable(...
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/stable_swap/curve.py: note: In member "get_factory" of class "CurveRegistry":
+y/prices/stable_swap/curve.py:637: error: Argument 1 to "coroutine" of
+"Contract" has incompatible type "str | bytes | Factory"; expected
+"str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int" 
+[arg-type]
+                return await Contract.coroutine(factory)
+                                                ^~~~~~~
+y/prices/lending/aave.py: note: In member "__contains__" of class "AaveRegistry":
+y/prices/lending/aave.py:336: error:
+"Awaitable[list[AaveMarketV1 | AaveMarketV2 | AaveMarketV3]]" has no attribute
+"__iter__" (not iterable)  [attr-defined]
+            return any(__o in pool for pool in self.pools)
+                                               ^~~~~~~~~~
+y/prices/lending/aave.py:336: note: Maybe you forgot to use "await"?
+y/prices/dex/uniswap/v1.py: note: In member "get_exchange" of class "UniswapV1":
+y/prices/dex/uniswap/v1.py:69: error: Need type annotation for "exchange" 
+[var-annotated]
+                exchange = await factory.getExchange.coroutine(token_addre...
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/classes/_abc.py: note: In member "get_pool_price" of class "LiquidityPool":
+y/classes/_abc.py:92: error: Argument 1 to "Decimal" has incompatible type
+"float | None"; expected
+"Decimal | float | str | tuple[int, Sequence[int], int]"  [arg-type]
+    ...one if tvl is None else UsdPrice(Decimal(tvl) / Decimal(total_supply))
+                                                               ^~~~~~~~~~~~
+y/prices/dex/solidly.py: note: In function "get_quote":
+y/prices/dex/solidly.py:61: error: Function is missing a type annotation 
+[no-untyped-def]
+            async def quote(routes):
+            ^~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/solidly.py: note: In member "get_quote" of class "SolidlyRouterBase":
+y/prices/dex/solidly.py:78: error: Call to untyped function "quote" in typed
+context  [no-untyped-call]
+            quotes = await gather_owned(quote(routes) for routes in varian...
+                                        ^~~~~~~~~~~~~
+y/prices/dex/solidly.py: note: In member "_encode_route" of class "SolidlyRouterBase":
+y/prices/dex/solidly.py:85: error: Function is missing a type annotation 
+[no-untyped-def]
+        def _encode_route(self, start, end, stable):
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/solidly.py: note: In member "get_routes_from_path" of class "SolidlyRouterBase":
+y/prices/dex/solidly.py:96: error: Function is missing a return type annotation
+ [no-untyped-def]
+        async def get_routes_from_path(self, path: Path, block: Block, poo...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/dex/solidly.py:101: error: No overload variant of "__call__" of
+"ASyncBoundMethod" matches argument types "str | bytes | Contract | ERC20",
+"str | bytes | Contract | ERC20", "bool", "int | BlockNumber", "bool" 
+[call-overload]
+                    self.get_pool(start, end, stable, block, sync=False) f...
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/solidly.py:101: note: Possible overload variants:
+y/prices/dex/solidly.py:101: note:     def __call__(input_token: str | bytes | HexBytes | Address | EthAddress, output_token: str | bytes | HexBytes | Address | EthAddress, stable: bool, block: int | BlockNumber, *, sync: Literal[True]) -> UniswapV2Pool | None
+y/prices/dex/solidly.py:101: note:     def __call__(input_token: str | bytes | HexBytes | Address | EthAddress, output_token: str | bytes | HexBytes | Address | EthAddress, stable: bool, block: int | BlockNumber, *, sync: Literal[False]) -> Coroutine[Any, Any, UniswapV2Pool | None]
+y/prices/dex/solidly.py:101: note:     def __call__(input_token: str | bytes | HexBytes | Address | EthAddress, output_token: str | bytes | HexBytes | Address | EthAddress, stable: bool, block: int | BlockNumber, *, asynchronous: Literal[False]) -> UniswapV2Pool | None
+y/prices/dex/solidly.py:101: note:     def __call__(input_token: str | bytes | HexBytes | Address | EthAddress, output_token: str | bytes | HexBytes | Address | EthAddress, stable: bool, block: int | BlockNumber, *, asynchronous: Literal[True]) -> Coroutine[Any, Any, UniswapV2Pool | None]
+y/prices/dex/solidly.py:101: note:     def __call__(input_token: str | bytes | HexBytes | Address | EthAddress, output_token: str | bytes | HexBytes | Address | EthAddress, stable: bool, block: int | BlockNumber) -> Coroutine[Any, Any, UniswapV2Pool | None] | UniswapV2Pool | None
+y/prices/dex/solidly.py:107: error: Call to untyped function "_encode_route" in
+typed context  [no-untyped-call]
+                    routes.append(self._encode_route(start, end, stable))
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/solidly.py: note: In class "SolidlyRouter":
+y/prices/dex/solidly.py:162: error: Signature of "get_pool" incompatible with
+supertype "SolidlyRouterBase"  [override]
+        async def get_pool(
+        ^~~~~~~~~~~~~~~~~~~
+y/prices/dex/solidly.py:162: note:      Superclass:
+y/prices/dex/solidly.py:162: note:          ASyncBoundMethod[SolidlyRouter, [str | bytes | HexBytes | Address | EthAddress, str | bytes | HexBytes | Address | EthAddress, bool, int | BlockNumber], UniswapV2Pool | None]
+y/prices/dex/solidly.py:162: note:      Subclass:
+y/prices/dex/solidly.py:162: note:          ASyncBoundMethod[SolidlyRouter, [str | bytes | HexBytes | Address | EthAddress, str | bytes | HexBytes | Address | EthAddress, bool, int | BlockNumber], SolidlyPool | None]
+y/prices/dex/velodrome.py: note: In member "_encode_route" of class "VelodromeRouterV2":
+y/prices/dex/velodrome.py:87: error: Function is missing a type annotation 
+[no-untyped-def]
+        def _encode_route(self, start, end, stable):
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/velodrome.py: note: In member "__init__" of class "VelodromeRouterV2":
+y/prices/dex/velodrome.py:90: error: Function is missing a type annotation for
+one or more arguments  [no-untyped-def]
+        def __init__(self, *args, **kwargs) -> None:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/velodrome.py: note: In class "VelodromeRouterV2":
+y/prices/dex/velodrome.py:153: error: Signature of "get_pool" incompatible with
+supertype "SolidlyRouterBase"  [override]
+        async def get_pool(
+        ^~~~~~~~~~~~~~~~~~~
+y/prices/dex/velodrome.py:153: note:      Superclass:
+y/prices/dex/velodrome.py:153: note:          ASyncBoundMethod[VelodromeRouterV2, [str | bytes | HexBytes | Address | EthAddress, str | bytes | HexBytes | Address | EthAddress, bool, int | BlockNumber], UniswapV2Pool | None]
+y/prices/dex/velodrome.py:153: note:      Subclass:
+y/prices/dex/velodrome.py:153: note:          ASyncBoundMethod[VelodromeRouterV2, [str | bytes | HexBytes | Address | EthAddress, str | bytes | HexBytes | Address | EthAddress, bool, int | BlockNumber], VelodromePool | None]
+y/prices/dex/velodrome.py:183: error: Signature of "pools" incompatible with
+supertype "UniswapRouterV2"  [override]
+        async def pools(self) -> set[VelodromePool]:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/velodrome.py:183: note:      Superclass:
+y/prices/dex/velodrome.py:183: note:          Awaitable[Collection[UniswapV2Pool]]
+y/prices/dex/velodrome.py:183: note:      Subclass:
+y/prices/dex/velodrome.py:183: note:          Awaitable[set[VelodromePool]]
+y/prices/dex/velodrome.py: note: In member "pools" of class "VelodromeRouterV2":
+y/prices/dex/velodrome.py:213: error: Argument 3 to "from_abi" of "Contract"
+has incompatible type "list[object]"; expected
+"list[ABIFunction | ABIConstructor | ABIFallback | ABIReceive | ABIEvent | ABIError]"
+ [arg-type]
+    ... = Contract.from_abi("PoolFactory", self.factory, VELO_V2_FACTORY_ABI)
+                                                         ^~~~~~~~~~~~~~~~~~~
+y/prices/dex/velodrome.py: note: In class "VelodromeRouterV2":
+y/prices/dex/velodrome.py:255: error: Incompatible types in assignment
+(expression has type "HiddenMethod[VelodromeRouterV2, set[VelodromePool]]", base
+class "UniswapRouterV2" defined the type as
+"HiddenMethod[VelodromeRouterV2, Collection[UniswapV2Pool]]")  [assignment]
+        __pools__: HiddenMethodDescriptor["VelodromeRouterV2", set[Velodro...
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/dex/velodrome.py: note: In function "is_contract":
+y/prices/dex/velodrome.py:319: error: Argument 1 to "get_code" of "DankEth" has
+incompatible type "str | bytes | HexBytes | Address | EthAddress"; expected
+"ChecksumAddress"  [arg-type]
+        if result := await dank_eth.get_code(pool_address) not in ("0x", b...
+                                             ^~~~~~~~~~~~
+y/prices/dex/velodrome.py: note: At top level:
+y/prices/dex/velodrome.py:324: error: Need type annotation for "__pools" (hint:
+"__pools: list[<type>] = ...")  [var-annotated]
+    __pools = []
+    ^~~~~~~
+y/prices/dex/uniswap/uniswap.py:20: error: Module "y.prices.dex.uniswap.v2"
+does not explicitly export attribute "NotAUniswapV2Pool"  [attr-defined]
+    from y.prices.dex.uniswap.v2 import NotAUniswapV2Pool, UniswapRouterV2...
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/dex/uniswap/uniswap.py: note: In member "__init__" of class "UniswapMultiplexer":
+y/prices/dex/uniswap/uniswap.py:94: error: Argument 1 to "extend" of "list" has
+incompatible type "dict_values[str, T]"; expected
+"Iterable[UniswapV1 | UniswapRouterV2 | UniswapV3]"  [arg-type]
+            self.uniswaps.extend(self.v2_routers.values())
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/uniswap/uniswap.py: note: In member "is_uniswap_pool" of class "UniswapMultiplexer":
+y/prices/dex/uniswap/uniswap.py:117: error: If x = b'abc' then f"{x}" or
+"{}".format(x) produces "b'abc'", not "abc". If this is desired behavior, use
+f"{x!r}" or "{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]
+                            f"UniClone Factory {factory} is unknown to ypr...
+                                               ^~~~~~~~~
+y/prices/dex/uniswap/uniswap.py:119: error: Argument 1 to "append" of "list"
+has incompatible type "str | bytes | HexBytes | Address | EthAddress"; expected
+"str"  [arg-type]
+                        self.v2_factories.append(factory)
+                                                 ^~~~~~~
+y/prices/dex/uniswap/uniswap.py: note: In member "routers_by_depth" of class "UniswapMultiplexer":
+y/prices/dex/uniswap/uniswap.py:182: error: No overload variant of "__call__"
+of "ASyncBoundMethod" matches argument types "ChecksumAddress",
+"int | BlockNumber | None",
+"tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...]",
+"bool"  [call-overload]
+                uniswap.check_liquidity(token_in, block, ignore_pools=igno...
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/dex/uniswap/uniswap.py:182: note: Possible overload variants:
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token_address: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., *, sync: Literal[True]) -> int
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token_address: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., *, sync: Literal[False]) -> Coroutine[Any, Any, int]
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token_address: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., *, asynchronous: Literal[False]) -> int
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token_address: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., *, asynchronous: Literal[True]) -> Coroutine[Any, Any, int]
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token_address: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ...) -> Coroutine[Any, Any, int] | int
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] | list[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool] = ..., *, sync: Literal[True]) -> int
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] | list[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool] = ..., *, sync: Literal[False]) -> Coroutine[Any, Any, int]
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] | list[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool] = ..., *, asynchronous: Literal[False]) -> int
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] | list[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool] = ..., *, asynchronous: Literal[True]) -> Coroutine[Any, Any, int]
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] | list[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool] = ...) -> Coroutine[Any, Any, int] | int
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., *, sync: Literal[True]) -> int
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., *, sync: Literal[False]) -> Coroutine[Any, Any, int]
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., *, asynchronous: Literal[False]) -> int
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., *, asynchronous: Literal[True]) -> Coroutine[Any, Any, int]
+y/prices/dex/uniswap/uniswap.py:182: note:     def __call__(token: str | bytes | HexBytes | Address | EthAddress, block: int | BlockNumber, ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ...) -> Coroutine[Any, Any, int] | int
+y/prices/solidex.py: note: In function "_get_pool":
+y/prices/solidex.py:87: error: Function is missing a type annotation for one or
+more arguments  [no-untyped-def]
+    async def _get_pool(token) -> EthAddress:
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/solidex.py:105: error: Returning Any from function declared to return
+"EthAddress"  [no-any-return]
+        return await contract.pool
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/rkp3r.py: note: In function "get_price":
+y/prices/rkp3r.py:83: error: Argument 1 to "float" has incompatible type
+"object"; expected "str | Buffer | SupportsFloat | SupportsIndex"  [arg-type]
+            Decimal(float(price)) * (100 - discount) / 100,
+                          ^~~~~
+y/prices/rkp3r.py:83: error: Unsupported operand types for - ("int" and
+"object")  [operator]
+            Decimal(float(price)) * (100 - discount) / 100,
+                                           ^~~~~~~~
+y/prices/rkp3r.py:84: error: If x = b'abc' then f"{x}" or "{}".format(x)
+produces "b'abc'", not "abc". If this is desired behavior, use f"{x!r}" or
+"{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]
+            f"rKP3R {address} discounted KP3R",
+                    ^~~~~~~~~
+y/prices/tokenized_fund/gelato.py: note: In function "_get_price":
+y/prices/tokenized_fund/gelato.py:137: error: Unsupported operand types for /
+("Decimal" and "object")  [operator]
+        total_value = Decimal(balance0) / scale0 * Decimal(str(float(price...
+                                          ^~~~~~
+y/prices/tokenized_fund/gelato.py:137: error: Argument 1 to "float" has
+incompatible type "object"; expected
+"str | Buffer | SupportsFloat | SupportsIndex"  [arg-type]
+    ... = Decimal(balance0) / scale0 * Decimal(str(float(price0))) + Decimal(
+                                                         ^~~~~~
+y/prices/tokenized_fund/gelato.py:139: error: Unsupported operand types for /
+("Decimal" and "object")  [operator]
+        ) / scale1 * Decimal(str(float(price1)))
+            ^~~~~~
+y/prices/tokenized_fund/gelato.py:139: error: Argument 1 to "float" has
+incompatible type "object"; expected
+"str | Buffer | SupportsFloat | SupportsIndex"  [arg-type]
+        ) / scale1 * Decimal(str(float(price1)))
+                                       ^~~~~~
+y/prices/stable_swap/saddle.py: note: In function "get_pool":
+y/prices/stable_swap/saddle.py:82: error: Incompatible return value type (got
+"None", expected "str | bytes | HexBytes | Address | EthAddress") 
+[return-value]
+            return None
+                   ^~~~
+y/prices/stable_swap/saddle.py:84: error: Incompatible return value type (got
+"Any | None", expected "str | bytes | HexBytes | Address | EthAddress") 
+[return-value]
+            return pool or None
+                   ^~~~~~~~~~~~
+y/prices/stable_swap/saddle.py: note: In function "get_price":
+y/prices/stable_swap/saddle.py:107: error: Argument 2 to "cgather" has
+incompatible type "Coroutine[Any, Any, float] | float"; expected
+"Awaitable[float]"  [arg-type]
+            ERC20(token_address, asynchronous=True).total_supply_readable(...
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/stable_swap/saddle.py: note: In function "get_tvl":
+y/prices/stable_swap/saddle.py:137: error: Incompatible types in assignment
+(expression has type "list[ERC20] | str | bytes", variable has type
+"list[ERC20]")  [assignment]
+        pool, tokens = await cgather(
+                       ^
+y/prices/stable_swap/saddle.py:152: error: No overload variant of "zip" matches
+argument types "list[Any]", "object", "object"  [call-overload]
+    ...nce / scale * price for balance, scale, price in zip(balances, scales,...
+                                                        ^~~~~~~~~~~~~~~~~~~~~...
+y/prices/stable_swap/saddle.py:152: note: Possible overload variants:
+y/prices/stable_swap/saddle.py:152: note:     def [_T_co] __new__(cls, *, strict: bool = ...) -> zip[Any]
+y/prices/stable_swap/saddle.py:152: note:     def [_T_co, _T1] __new__(cls, Iterable[_T1], /, *, strict: bool = ...) -> zip[tuple[_T1]]
+y/prices/stable_swap/saddle.py:152: note:     def [_T_co, _T1, _T2] __new__(cls, Iterable[_T1], Iterable[_T2], /, *, strict: bool = ...) -> zip[tuple[_T1, _T2]]
+y/prices/stable_swap/saddle.py:152: note:     def [_T_co, _T1, _T2, _T3] __new__(cls, Iterable[_T1], Iterable[_T2], Iterable[_T3], /, *, strict: bool = ...) -> zip[tuple[_T1, _T2, _T3]]
+y/prices/stable_swap/saddle.py:152: note:     def [_T_co, _T1, _T2, _T3, _T4] __new__(cls, Iterable[_T1], Iterable[_T2], Iterable[_T3], Iterable[_T4], /, *, strict: bool = ...) -> zip[tuple[_T1, _T2, _T3, _T4]]
+y/prices/stable_swap/saddle.py:152: note:     def [_T_co, _T1, _T2, _T3, _T4, _T5] __new__(cls, Iterable[_T1], Iterable[_T2], Iterable[_T3], Iterable[_T4], Iterable[_T5], /, *, strict: bool = ...) -> zip[tuple[_T1, _T2, _T3, _T4, _T5]]
+y/prices/stable_swap/saddle.py:152: note:     def [_T_co] __new__(cls, Iterable[Any], Iterable[Any], Iterable[Any], Iterable[Any], Iterable[Any], Iterable[Any], /, *iterables: Iterable[Any], strict: bool = ...) -> zip[tuple[Any, ...]]
+y/prices/stable_swap/saddle.py: note: In function "get_tokens":
+y/prices/stable_swap/saddle.py:177: error: Cannot determine type of "pool" 
+[has-type]
+                pool,
+                ^~~~
+y/prices/stable_swap/mstablefeederpool.py: note: In function "get_price":
+y/prices/stable_swap/mstablefeederpool.py:86: error: Value of type "int" is not
+indexable  [index]
+        ratio = ratio[0] / scale
+                ^~~~~~~~
+y/prices/eth_derivs/wsteth.py: note: In member "__init__" of class "wstEth":
+y/prices/eth_derivs/wsteth.py:55: error: Invalid index type "int" for
+"dict[Network, str]"; expected type "Network"  [index]
+    ...etwork.Mainnet: "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"}[CHAINID]
+                                                                     ^~~~~~~
+y/prices/eth_derivs/wsteth.py:58: error: Invalid index type "int" for
+"dict[Network, str]"; expected type "Network"  [index]
+                }[CHAINID]
+                  ^~~~~~~
+y/prices/eth_derivs/wsteth.py:60: error: Incompatible types in assignment
+(expression has type "None", variable has type "str")  [assignment]
+                self.address = None
+                               ^~~~
+y/prices/eth_derivs/wsteth.py: note: In member "get_price" of class "wstEth":
+y/prices/eth_derivs/wsteth.py:93: error: Argument 1 to "get_price" has
+incompatible type "Contract | None"; expected
+"str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int" 
+[arg-type]
+                    magic.get_price(weth, block, skip_cache=skip_cache, sy...
+                                    ^~~~
+y/prices/eth_derivs/wsteth.py:96: error: Unsupported operand types for /
+("object" and "Decimal")  [operator]
+            share_price /= Decimal(10**18)
+            ^
+y/prices/eth_derivs/wsteth.py:99: error: Argument 1 to "float" has incompatible
+type "object"; expected "str | Buffer | SupportsFloat | SupportsIndex" 
+[arg-type]
+                share_price * Decimal(float(weth_price)),
+                                            ^~~~~~~~~~
+y/prices/eth_derivs/creth.py: note: In function "get_price_creth":
+y/prices/eth_derivs/creth.py:68: error: List item 1 has incompatible type
+"Coroutine[Any, Any, int] | int"; expected "Awaitable[object]"  [list-item]
+                ERC20(address, asynchronous=True).total_supply(block),
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/eth_derivs/creth.py:69: error: Argument 1 to "get_price" has
+incompatible type "Contract | None"; expected
+"str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int" 
+[arg-type]
+                magic.get_price(weth, block, skip_cache=skip_cache, sync=F...
+                                ^~~~
+y/prices/eth_derivs/creth.py:72: error: Unsupported left operand type for /
+("object")  [operator]
+        per_share = total_balance / total_supply
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/eth_derivs/creth.py:74: error: Argument 1 to "float" has incompatible
+type "object"; expected "str | Buffer | SupportsFloat | SupportsIndex" 
+[arg-type]
+            address, per_share * float(weth_price), f"crETH {address} back...
+                                       ^~~~~~~~~~
+y/prices/dex/mooniswap.py:27: error: Incompatible types in assignment
+(expression has type "None", variable has type "Contract")  [assignment]
+        router = None
+                 ^~~~
+y/prices/dex/mooniswap.py: note: In function "get_pool_price":
+y/prices/dex/mooniswap.py:100: error: Argument 1 to "cgather" has incompatible
+type "Coroutine[Any, Any, Any] | Coroutine[Any, Any, Decimal] | Decimal";
+expected "Awaitable[Any]"  [arg-type]
+                dank_eth.get_balance(address, block_identifier=block)
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/mooniswap.py:105: error: Argument 2 to "cgather" has incompatible
+type "Coroutine[Any, Any, Any] | Coroutine[Any, Any, Decimal] | Decimal";
+expected "Awaitable[Any]"  [arg-type]
+                dank_eth.get_balance(address, block_identifier=block)
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/mooniswap.py:110: error: Argument 1 to "get_price" has
+incompatible type "Contract | None"; expected
+"str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int" 
+[arg-type]
+                magic.get_price(gas_coin, block, skip_cache=skip_cache, sy...
+                                ^~~~~~~~
+y/prices/dex/mooniswap.py:115: error: Argument 1 to "get_price" has
+incompatible type "Contract | None"; expected
+"str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int" 
+[arg-type]
+                magic.get_price(gas_coin, block, skip_cache=skip_cache, sy...
+                                ^~~~~~~~
+y/prices/dex/mooniswap.py:119: error: Argument 5 to "cgather" has incompatible
+type "Coroutine[Any, Any, float] | float"; expected "Awaitable[Any]"  [arg-type]
+            ERC20(address, asynchronous=True).total_supply_readable(block)...
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/mooniswap.py:128: error: Returning Any from function declared to
+return "UsdPrice"  [no-any-return]
+        return totalVal / Decimal(total_supply)
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/balancer/v1.py: note: In function "_calc_out_value":
+y/prices/dex/balancer/v1.py:89: error: Unsupported operand types for / ("int"
+and "object")  [operator]
+                token_in, (total_outout / out_scale) * float(out_price) / ...
+                                          ^~~~~~~~~
+y/prices/dex/balancer/v1.py:89: error: Argument 1 to "float" has incompatible
+type "object"; expected "str | Buffer | SupportsFloat | SupportsIndex" 
+[arg-type]
+    ...    token_in, (total_outout / out_scale) * float(out_price) / scale, s...
+                                                        ^~~~~~~~~
+y/prices/dex/balancer/v1.py: note: In member "get_tvl" of class "BalancerV1Pool":
+y/prices/dex/balancer/v1.py:172: error: Generator has incompatible item type
+"Decimal"; expected "bool"  [misc]
+                balance * Decimal(float(price))
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/balancer/v1.py:172: error: Argument 1 to "float" has incompatible
+type "PriceResult | None"; expected
+"str | Buffer | SupportsFloat | SupportsIndex"  [arg-type]
+                balance * Decimal(float(price))
+                                        ^~~~~
+y/prices/dex/balancer/v1.py:176: error: Incompatible return value type (got
+"float", expected "UsdValue | None")  [return-value]
+            return good_value / len(good_balances) * len(token_balances)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/balancer/v1.py: note: In member "get_balances" of class "BalancerV1Pool":
+y/prices/dex/balancer/v1.py:196: error: Argument 1 to "TaskMapping" has
+incompatible type
+"ASyncBoundMethod[BalancerV1Pool, [str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, int | BlockNumber], Decimal]";
+expected
+"def (ERC20, /, *args: Any, sync: Literal[True], **kwargs: Any) -> Awaitable[Decimal]"
+ [arg-type]
+            return await a_sync.map(self.get_balance, self.__tokens__, blo...
+                                    ^~~~~~~~~~~~~~~~
+y/prices/dex/balancer/v1.py:196: note: "ASyncBoundMethod[BalancerV1Pool, [str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, int | BlockNumber], Decimal].__call__" has type overloaded function
+y/prices/dex/balancer/v1.py: note: In member "_get_split" of class "BalancerV1":
+y/prices/dex/balancer/v1.py:295: error: Function is missing a type annotation 
+[no-untyped-def]
+        async def _get_split(self, token_in, token_out, amount_in, block):
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/balancer/v1.py: note: In member "check_liquidity_against" of class "BalancerV1":
+y/prices/dex/balancer/v1.py:330: error: Call to untyped function "_get_split"
+of "BalancerV1" in typed context  [no-untyped-call]
+            split = await self._get_split(token_in, token_out, amount_in, ...
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/dex/balancer/v1.py: note: In member "get_some_output" of class "BalancerV1":
+y/prices/dex/balancer/v1.py:356: error: Incompatible return value type (got
+"tuple[Contract, int]", expected "tuple[EthAddress, int] | None") 
+[return-value]
+                    return token_out, output
+                           ^~~~~~~~~~~~~~~~~
+y/prices/dex/balancer/v1.py: note: In member "check_liquidity" of class "BalancerV1":
+y/prices/dex/balancer/v1.py:381: error: Call to untyped function "_get_split"
+of "BalancerV1" in typed context  [no-untyped-call]
+                self._get_split(token, token_out, amount, block)
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/balancer/v1.py:393: error: Too many arguments for "max" of
+"ASyncDescriptor"  [call-arg]
+                await BalancerV1Pool.check_liquidity.max(pools, token=toke...
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/dex/balancer/v1.py:393: error: Unexpected keyword argument "token" for
+"max" of "ASyncDescriptor"  [call-arg]
+                await BalancerV1Pool.check_liquidity.max(pools, token=toke...
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+/usr/local/lib/python3.12/site-packages/a_sync/a_sync/_descriptor.pyi:28: note: "max" of "ASyncDescriptor" defined here
+y/prices/dex/balancer/v1.py:393: error: Unexpected keyword argument "block" for
+"max" of "ASyncDescriptor"  [call-arg]
+                await BalancerV1Pool.check_liquidity.max(pools, token=toke...
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/dex/balancer/v1.py:393: error: Unexpected keyword argument "sync" for
+"max" of "ASyncDescriptor"  [call-arg]
+                await BalancerV1Pool.check_liquidity.max(pools, token=toke...
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/dex/balancer/v1.py:393: error: Incompatible types in "await" (actual
+type
+"ASyncFunction[[AsyncIterable[BalancerV1Pool] | Iterable[BalancerV1Pool], str | bytes | HexBytes | Address | EthAddress, int | BlockNumber], int]",
+expected type "Awaitable[Any]")  [misc]
+                await BalancerV1Pool.check_liquidity.max(pools, token=toke...
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/dex/balancer/balancer.py: note: In member "versions" of class "BalancerMultiplexer":
+y/prices/dex/balancer/balancer.py:70: error: Need type annotation for "v" 
+[var-annotated]
+            return [v for v in await gather_owned([self.__v1__, self.__v2_...
+                   ^
+y/prices/dex/balancer/balancer.py:70: error: Argument 1 to "gather_owned" has
+incompatible type "list[object]"; expected "Iterable[Awaitable[Never]]" 
+[arg-type]
+            return [v for v in await gather_owned([self.__v1__, self.__v2_...
+                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/balancer/balancer.py: note: In member "get_pool_price" of class "BalancerMultiplexer":
+y/prices/dex/balancer/balancer.py:153: error: Missing type parameters for
+generic type "BalancerABC"  [type-arg]
+            balancer: BalancerABC = await self.get_version(token_address, ...
+                      ^
+y/prices/dex/balancer/balancer.py: note: In member "get_version" of class "BalancerMultiplexer":
+y/prices/dex/balancer/balancer.py:209: error: Missing type parameters for
+generic type "BalancerABC"  [type-arg]
+    ...c def get_version(self, token_address: AnyAddressType) -> BalancerABC:
+                                                                 ^
+y/prices/yearn.py: note: In class "YearnInspiredVault":
+y/prices/yearn.py:336: error: Signature of "price" incompatible with supertype
+"ERC20"  [override]
+        async def price(
+        ^~~~~~~~~~~~~~~~
+y/prices/yearn.py:336: note:      Superclass:
+y/prices/yearn.py:336: note:          ASyncBoundMethod[YearnInspiredVault, [int | BlockNumber | None, bool, bool, tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...], DefaultNamedArg(int | Decimal | None, 'amount')], PriceResult | None]
+y/prices/yearn.py:336: note:      Subclass:
+y/prices/yearn.py:336: note:          ASyncBoundMethod[YearnInspiredVault, [int | BlockNumber | None, tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...], bool], PriceResult | None]
+y/prices/band.py: note: In member "get_price" of class "Band":
+y/prices/band.py:136: error: "object" has no attribute "getReferenceData" 
+[attr-defined]
+                reference_data = await oracle.getReferenceData.coroutine(
+                                       ^~~~~~~~~~~~~~~~~~~~~~~
+y/prices/band.py:139: error: Returning Any from function declared to return
+"float | None"  [no-any-return]
+                return reference_data[0] / 10**18
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/band.py: note: At top level:
+y/prices/band.py:149: error: Incompatible types in assignment (expression has
+type "set[Never]", variable has type "Band")  [assignment]
+        band = set()
+               ^~~~~
+y/prices/utils/buckets.py: note: In function "check_bucket":
+y/prices/utils/buckets.py:195: error: Argument 2 to "__log_bucket" has
+incompatible type "str | None"; expected "str"  [arg-type]
+            await __log_bucket(token_address, bucket)
+                                              ^~~~~~
+y/prices/dex/genericamm.py: note: In function "is_generic_amm":
+y/prices/dex/genericamm.py:39: error: Incompatible return value type (got
+"bool | None", expected "bool")  [return-value]
+            return contract.verified and hasall(contract, _CHECK_METHODS)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/dex/genericamm.py: note: In member "get_price" of class "GenericAmm":
+y/prices/dex/genericamm.py:96: error: No overload variant of "__call__" of
+"ASyncBoundMethod" matches argument types "ChecksumAddress",
+"int | BlockNumber | None", "bool", "bool"  [call-overload]
+                self.get_tvl(lp_token_address, block=block, skip_cache=ski...
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/dex/genericamm.py:96: note: Possible overload variants:
+y/prices/dex/genericamm.py:96: note:     def __call__(lp_token_address: ChecksumAddress, block: BlockNumber | None = ..., skip_cache: bool = ..., *, sync: Literal[True]) -> UsdValue
+y/prices/dex/genericamm.py:96: note:     def __call__(lp_token_address: ChecksumAddress, block: BlockNumber | None = ..., skip_cache: bool = ..., *, sync: Literal[False]) -> Coroutine[Any, Any, UsdValue]
+y/prices/dex/genericamm.py:96: note:     def __call__(lp_token_address: ChecksumAddress, block: BlockNumber | None = ..., skip_cache: bool = ..., *, asynchronous: Literal[False]) -> UsdValue
+y/prices/dex/genericamm.py:96: note:     def __call__(lp_token_address: ChecksumAddress, block: BlockNumber | None = ..., skip_cache: bool = ..., *, asynchronous: Literal[True]) -> Coroutine[Any, Any, UsdValue]
+y/prices/dex/genericamm.py:96: note:     def __call__(lp_token_address: ChecksumAddress, block: BlockNumber | None = ..., skip_cache: bool = ...) -> Coroutine[Any, Any, UsdValue] | UsdValue
+y/prices/dex/genericamm.py:97: error: Argument 2 to "cgather" has incompatible
+type "Coroutine[Any, Any, float] | float"; expected "Awaitable[Any]"  [arg-type]
+                ERC20(lp_token_address, asynchronous=True).total_supply_re...
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/dex/genericamm.py:100: error: Incompatible return value type (got
+"None", expected "UsdPrice")  [return-value]
+                return None
+                       ^~~~
+y/prices/dex/genericamm.py:102: error: Incompatible return value type (got
+"int", expected "UsdPrice")  [return-value]
+                return 0
+                       ^
+y/prices/dex/genericamm.py: note: In member "get_tokens" of class "GenericAmm":
+y/prices/dex/genericamm.py:128: error: Incompatible return value type (got
+"tuple[ERC20, ...]", expected "tuple[ERC20, ERC20]")  [return-value]
+            return tuple(ERC20(token, asynchronous=self.asynchronous) for ...
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/prices/dex/genericamm.py: note: In member "get_tvl" of class "GenericAmm":
+y/prices/dex/genericamm.py:163: error: Incompatible types in assignment
+(expression has type "Generator[WeiBalance, None, None]", variable has type
+"tuple[ERC20, ERC20]")  [assignment]
+            reserves = (
+                       ^
+y/prices/dex/genericamm.py:164: error: Argument 1 to "WeiBalance" has
+incompatible type "ERC20"; expected "int | Decimal"  [arg-type]
+                WeiBalance(reserve, token, block=block, skip_cache=skip_ca...
+                           ^~~~~~~
+tools/typing_probes.py: note: In member "pool" of class "NarrowQuote":
+tools/typing_probes.py:97: error: Signature of "pool" incompatible with
+supertype "BroadQuote"  [override]
+        async def pool(self) -> str:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tools/typing_probes.py:97: note:      Superclass:
+tools/typing_probes.py:97: note:          ASyncBoundMethod[NarrowQuote, [], object]
+tools/typing_probes.py:97: note:      Subclass:
+tools/typing_probes.py:97: note:          ASyncBoundMethod[NarrowQuote, [], str]
+tests/test_pricing_correctness.py: note: In function "test_price_block_is_a_plain_integer":
+tests/test_pricing_correctness.py:100: error: Item "None" of "_Call | None" has
+no attribute "args"  [union-attr]
+        assert lookup.await_args.args == (TOKEN, BLOCK)
+               ^~~~~~~~~~~~~~~~~~~~~~
+tests/test_pricing_correctness.py:101: error: Item "None" of "_Call | None" has
+no attribute "args"  [union-attr]
+        assert type(lookup.await_args.args[1]) is int
+                    ^~~~~~~~~~~~~~~~~~~~~~
+tests/test_pricing_correctness.py: note: In function "test_xpremia_backing":
+tests/test_pricing_correctness.py:138: error: Argument 1 to "float" has
+incompatible type "PriceResult | None"; expected
+"str | Buffer | SupportsFloat | SupportsIndex"  [arg-type]
+            assert float(result) == expected
+                         ^~~~~~
+tests/test_pricing_correctness.py: note: In function "test_conversion_preserves_exact_child_path":
+tests/test_pricing_correctness.py:323: error: Item "None" of
+"PriceResult | None" has no attribute "path"  [union-attr]
+        assert result.path == [
+               ^~~~~~~~~~~
+tests/test_pricing_correctness.py:327: error: Item "None" of
+"PriceResult | None" has no attribute "path"  [union-attr]
+        assert result.path[1] is not child.path[0]
+               ^~~~~~~~~~~
+tests/test_pricing_correctness.py:328: error: Item "None" of
+"PriceResult | None" has no attribute "path"  [union-attr]
+        result.path.pop()
+        ^~~~~~~~~~~
+tests/test_pricing_correctness.py: note: In function "test_conversion_ratios_keep_child_steps":
+tests/test_pricing_correctness.py:688: error: Item "None" of
+"PriceResult | None" has no attribute "path"  [union-attr]
+        assert gauge.path == [
+               ^~~~~~~~~~
+tests/test_pricing_correctness.py: note: In function "test_erc4626_ratio_and_wrapped_gas_paths":
+tests/test_pricing_correctness.py:806: error: Argument 1 to "float" has
+incompatible type "PriceResult | None"; expected
+"str | Buffer | SupportsFloat | SupportsIndex"  [arg-type]
+        assert float(result) == 12
+                     ^~~~~~
+tests/test_pricing_correctness.py:807: error: Item "None" of
+"PriceResult | None" has no attribute "path"  [union-attr]
+        assert result.path[0].token == TOKEN and result.path[0].price == 1...
+               ^~~~~~~~~~~
+tests/test_pricing_correctness.py:808: error: Item "None" of
+"PriceResult | None" has no attribute "path"  [union-attr]
+        assert result.path[1] == child.path[0] and result.path[1] is not c...
+               ^~~~~~~~~~~
+tests/test_pricing_correctness.py:809: error: Item "None" of
+"PriceResult | None" has no attribute "path"  [union-attr]
+        assert result.path[0].source == (
+               ^~~~~~~~~~~
+tests/test_pricing_correctness.py: note: In function "test_solidly_compares_stable_and_volatile_routes":
+tests/test_pricing_correctness.py:854: error: Incompatible return value type
+(got "tuple[int, int]", expected "list[int]")  [return-value]
+            return (amount, 3 if routes[0][2] else 8)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/test_pricing_correctness.py: note: In function "test_balancer_bucket_uses_lp_valuation_before_dex_comparison":
+tests/test_pricing_correctness.py:993: error: Argument 3 to
+"_exit_early_for_known_tokens" has incompatible type "Logger"; expected
+"PriceLogger"  [arg-type]
+            TOKEN, BLOCK, logging.getLogger(__name__), skip_cache=True, ig...
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/test_price_result.py: note: In member "test_decimal_of_result_raises" of class "TestPriceResultDecimal":
+tests/test_price_result.py:240: error: Argument 1 to "Decimal" has incompatible
+type "PriceResult"; expected
+"Decimal | float | str | tuple[int, Sequence[int], int]"  [arg-type]
+                Decimal(result)
+                        ^~~~~~
+tests/test_log_cache.py: note: In function "test_batch_reference_lookup_respects_sql_limit_and_preserves_rows":
+tests/test_log_cache.py:196: error: Argument 1 to "_prepare_logs" has
+incompatible type "list[y._db.log.Log]"; expected
+"list[evmspec.structs.log.Log]"  [arg-type]
+                rows = logs._prepare_logs(events, hashes + ((address,),), ...
+                                          ^~~~~~
+tests/test_log_cache.py:196: note: "list" is invariant -- see https://mypy.readthedocs.io/en/stable/common_issues.html#variance
+tests/test_log_cache.py:196: note: Consider using "Sequence" instead, which is covariant
+tests/fixtures.py: note: In function "sync_result":
+tests/fixtures.py:271: error: Redundant cast to "_Result"  [redundant-cast]
+        return cast(_Result, value)
+               ^
+tests/classes/test_singleton.py: note: In function "test_contract_singleton":
+tests/classes/test_singleton.py:42: error: Argument 1 to "ContractBase" has
+incompatible type "object"; expected
+"str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int" 
+[arg-type]
+                variation
+                ^~~~~~~~~
+y/_cache.py: note: In function "get_lru_cache":
+y/_cache.py:39: error: Missing type parameters for generic type "LRUCache" 
+[type-arg]
+    ...get_lru_cache(cache_type: CacheType = "default") -> cachebox.LRUCache:
+                                                           ^
+y/_cache.py: note: In function "get_ttl_cache":
+y/_cache.py:63: error: Missing type parameters for generic type "TTLCache" 
+[type-arg]
+    ...: CacheType = "default", ttl: int | None = None) -> cachebox.TTLCache:
+                                                           ^
+y/_cache.py: note: At top level:
+y/_cache.py:88: error: Missing type parameters for generic type "LRUCache" 
+[type-arg]
+    DEFAULT_LRU_CACHE: cachebox.LRUCache = get_lru_cache("default")
+                       ^
+y/_cache.py:89: error: Missing type parameters for generic type "LRUCache" 
+[type-arg]
+    BLOCK_LRU_CACHE: cachebox.LRUCache = get_lru_cache("block")
+                     ^
+y/_cache.py:90: error: Missing type parameters for generic type "LRUCache" 
+[type-arg]
+    CONTRACT_LRU_CACHE: cachebox.LRUCache = get_lru_cache("contract")
+                        ^
+y/_cache.py:91: error: Missing type parameters for generic type "LRUCache" 
+[type-arg]
+    PRICE_LRU_CACHE: cachebox.LRUCache = get_lru_cache("price")
+                     ^
+y/_db/utils/traces.py: note: In member "_is_cached_thru" of class "TraceCache":
+y/_db/utils/traces.py:132: error: List item 0 has incompatible type "None";
+expected "str"  [list-item]
+                for from_address in self.from_addresses or [None]
+                                                            ^~~~
+y/_db/utils/traces.py:133: error: List item 0 has incompatible type "None";
+expected "str"  [list-item]
+                for to_address in self.to_addresses or [None]
+                                                        ^~~~
+tests/test_amount_quotes.py: note: In function "test_public_stablecoin_cached_classification_uses_historical_feed":
+tests/test_amount_quotes.py:487: error:
+"ASyncFunctionSyncDefault[[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, int | None], str | None]"
+has no attribute "__wrapped__"  [attr-defined]
+        check = buckets.check_bucket.__wrapped__
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/test_synthetix.py:12: error: Need type annotation for "SYNTHS" 
+[var-annotated]
+        SYNTHS = sync_result(sync_synthetix.synths)
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/test_synthetix.py:12: error: Argument 1 to "sync_result" has
+incompatible type "Awaitable[list[ChecksumAddress]]"; expected
+"Awaitable[Never]"  [arg-type]
+        SYNTHS = sync_result(sync_synthetix.synths)
+                             ^~~~~~~~~~~~~~~~~~~~~
+tests/prices/test_synthetix.py: note: In function "test_get_synths":
+tests/prices/test_synthetix.py:19: error: Argument 1 to "sync_result" has
+incompatible type "Awaitable[list[ChecksumAddress]]"; expected
+"Awaitable[Never]"  [arg-type]
+        assert len(sync_result(sync_synthetix.synths)) >= 10
+                               ^~~~~~~~~~~~~~~~~~~~~
+tests/prices/test_popsicle.py: note: In function "test_popsicle_get_price":
+tests/prices/test_popsicle.py:82: error: Need type annotation for "prices" 
+[var-annotated]
+        prices = a_sync.map(popsicle.get_price, blocks, token=token)
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/test_popsicle.py:82: error: Argument 1 to "TaskMapping" has
+incompatible type
+"ASyncFunctionSyncDefault[[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, int | BlockNumber | None, DefaultNamedArg(bool, 'skip_cache')], UsdPrice | None]";
+expected
+"def (Any, /, *args: Any, sync: Literal[True], **kwargs: Any) -> Awaitable[Never]"
+ [arg-type]
+        prices = a_sync.map(popsicle.get_price, blocks, token=token)
+                            ^~~~~~~~~~~~~~~~~~
+tests/prices/test_popsicle.py:82: note: "ASyncFunctionSyncDefault[[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, int | BlockNumber | None, DefaultNamedArg(bool, 'skip_cache')], UsdPrice | None].__call__" has type overloaded function
+tests/prices/test_exotic_tokens.py: note: In function "test_xpremia_price":
+tests/prices/test_exotic_tokens.py:150: error: Argument 1 to "get_code" of
+"DankEth" has incompatible type "str"; expected "ChecksumAddress"  [arg-type]
+        assert await dank_eth.get_code(XPREMIA, block_identifier=TEST_BLOC...
+                                       ^~~~~~~
+tests/prices/test_exotic_tokens.py:171: error: Argument 1 to "float" has
+incompatible type "PriceResult | None"; expected
+"str | Buffer | SupportsFloat | SupportsIndex"  [arg-type]
+        assert float(result) == pytest.approx(float(expected))
+                     ^~~~~~
+tests/prices/test_exotic_tokens.py:172: error: Item "None" of
+"PriceResult | None" has no attribute "path"  [union-attr]
+        assert result.path[0].token == XPREMIA
+               ^~~~~~~~~~~
+tests/prices/test_exotic_tokens.py:173: error: Item "None" of
+"PriceResult | None" has no attribute "path"  [union-attr]
+        assert result.path[1].token == PREMIA
+               ^~~~~~~~~~~
+tests/prices/lending/test_aave.py: note: In function "test_AaveRegistry":
+tests/prices/lending/test_aave.py:137: error:
+"Awaitable[list[AaveMarketV1 | AaveMarketV2 | AaveMarketV3]]" has no attribute
+"__iter__" (not iterable)  [attr-defined]
+        for pool in aave.pools:
+                    ^~~~~~~~~~
+tests/prices/lending/test_aave.py:137: note: Maybe you forgot to use "await"?
+y/cli.py: note: In function "db_clear":
+y/cli.py:177: error: Returning Any from function declared to return "int" 
+[no-any-return]
+                return deleted
+                ^~~~~~~~~~~~~~
+tests/test_quote_repairs.py: note: In function "test_multiplexer_normalizes_supported_addresses":
+tests/test_quote_repairs.py:244: error: No overload variant of "__call__" of
+"ASyncBoundMethod" matches argument types "object", "int", "bool" 
+[call-overload]
+        result = await uniswap_multiplexer.get_price(inputs[kind], BLOCK.n...
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+tests/test_quote_repairs.py:244: note: Possible overload variants:
+tests/test_quote_repairs.py:244: note:     def __call__(token_in: str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, block: int | BlockNumber | None = ..., ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., skip_cache: bool = ..., *, sync: Literal[True]) -> PriceResult | None
+tests/test_quote_repairs.py:244: note:     def __call__(token_in: str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, block: int | BlockNumber | None = ..., ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., skip_cache: bool = ..., *, sync: Literal[False]) -> Coroutine[Any, Any, PriceResult | None]
+tests/test_quote_repairs.py:244: note:     def __call__(token_in: str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, block: int | BlockNumber | None = ..., ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., skip_cache: bool = ..., *, asynchronous: Literal[False]) -> PriceResult | None
+tests/test_quote_repairs.py:244: note:     def __call__(token_in: str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, block: int | BlockNumber | None = ..., ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., skip_cache: bool = ..., *, asynchronous: Literal[True]) -> Coroutine[Any, Any, PriceResult | None]
+tests/test_quote_repairs.py:244: note:     def __call__(token_in: str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, block: int | BlockNumber | None = ..., ignore_pools: tuple[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., skip_cache: bool = ...) -> Coroutine[Any, Any, PriceResult | None] | PriceResult | None
+tests/classes/test_erc20.py:15: error: Incompatible types in assignment
+(expression has type "list[ChecksumAddress]", variable has type "list[str]") 
+[assignment]
+    TOKENS: list[str] = list(STABLECOINS) + [WRAPPED_GAS_COIN]
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/classes/test_erc20.py:15: note: "list" is invariant -- see https://mypy.readthedocs.io/en/stable/common_issues.html#variance
+tests/classes/test_erc20.py:15: note: Consider using "Sequence" instead, which is covariant
+tests/classes/test_erc20.py: note: In function "test_erc20_sync":
+tests/classes/test_erc20.py:61: error: Argument 1 to "sync_result" has
+incompatible type "Awaitable[int]"; expected "Awaitable[Never]"  [arg-type]
+        assert 10**sync_result(token.decimals) == sync_result(token.scale)...
+                               ^~~~~~~~~~~~~~
+tests/classes/test_erc20.py:61: error: Argument 1 to "sync_result" has
+incompatible type "Awaitable[int]"; expected
+"Literal[0] | Awaitable[Literal[0]]"  [arg-type]
+        assert 10**sync_result(token.decimals) == sync_result(token.scale)...
+                               ^~~~~~~~~~~~~~
+tests/classes/test_erc20.py:62: error: Unsupported left operand type for /
+("Coroutine[Any, Any, int]")  [operator]
+        assert token.total_supply(block) / token.scale == token.total_supp...
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/classes/test_erc20.py:62: note: Maybe you forgot to use "await"?
+tests/classes/test_erc20.py:62: error: Unsupported operand types for / ("int"
+and "Awaitable[int]")  [operator]
+        assert token.total_supply(block) / token.scale == token.total_supp...
+                                           ^~~~~~~~~~~
+tests/classes/test_erc20.py:62: note: Left operand is of type "Coroutine[Any, Any, int] | int"
+tests/classes/test_erc20.py: note: In function "test_erc20_async":
+tests/classes/test_erc20.py:105: error: Argument 1 to "async_result" has
+incompatible type "Awaitable[int]"; expected "Awaitable[Never]"  [arg-type]
+    ...(token.total_supply(block)) / await async_result(token.scale) == await...
+                                                        ^~~~~~~~~~~
+tests/classes/test_erc20.py: note: In function "test_erc20_at_block":
+tests/classes/test_erc20.py:158: error: Argument 1 to "async_result" has
+incompatible type "Coroutine[Any, Any, int]"; expected "Awaitable[Never]" 
+[arg-type]
+    ...c_result(token.total_supply(block)) / await async_result(token._scale(
+                                                                ^~~~~~~~~~~~~
+tests/test_misc_fixes.py: note: In function "test_crvusd_address_is_correct":
+tests/test_misc_fixes.py:28: error: Invalid index type "str" for
+"dict[ChecksumAddress, str]"; expected type "ChecksumAddress"  [index]
+        assert STABLECOINS[correct_address] == "crvusd"
+                           ^~~~~~~~~~~~~~~
+tests/test_misc_fixes.py: note: In function "test_new_stablecoins_present":
+tests/test_misc_fixes.py:41: error: Invalid index type "str" for
+"dict[ChecksumAddress, str]"; expected type "ChecksumAddress"  [index]
+            assert STABLECOINS[address] == name
+                               ^~~~~~~
+tests/test_misc_fixes.py: note: In function "test_chainlink_get_feed_falls_back_to_static_feeds":
+tests/test_misc_fixes.py:63: error: Function is missing a type annotation 
+[no-untyped-def]
+        async def events(to_block):
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/dex/test_uniswap.py: note: In function "test_uniswap_v1":
+tests/prices/dex/test_uniswap.py:72: error: Function is missing a type
+annotation for one or more arguments  [no-untyped-def]
+    async def test_uniswap_v1(token, async_uni_v1) -> None:
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/dex/test_uniswap.py: note: In function "test_uniswap_v3":
+tests/prices/dex/test_uniswap.py:133: error: Function is missing a type
+annotation for one or more arguments  [no-untyped-def]
+    async def test_uniswap_v3(token) -> None:
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/dex/test_uniswap.py:142: error: Item "None" of "UniswapV3 | None"
+has no attribute "get_price"  [union-attr]
+        price = await v3.uniswap_v3.get_price(token, block.number, skip_ca...
+                      ^~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/dex/test_uniswap.py:143: error: Item "None" of "UniswapV3 | None"
+has no attribute "_quoter"  [union-attr]
+        quoter = await load_quoter(v3.uniswap_v3._quoter)
+                                   ^~~~~~~~~~~~~~~~~~~~~
+tests/prices/dex/test_uniswap.py:164: error: Need type annotation for "small" 
+[var-annotated]
+                small = await quoter.quoteExactInput.coroutine(
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/dex/test_uniswap.py:167: error: Need type annotation for "large" 
+[var-annotated]
+                large = await quoter.quoteExactInput.coroutine(
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/dex/test_uniswap.py:177: error: Item "None" of "UniswapV3 | None"
+has no attribute "_factory"  [union-attr]
+                first_markets=(str(v3.uniswap_v3._factory).lower(),),
+                                   ^~~~~~~~~~~~~~~~~~~~~~
+tests/prices/dex/test_uniswap.py:195: error: Need type annotation for "native" 
+[var-annotated]
+                native = await native_quoter.quoteExactInput.coroutine(
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/test_magic.py: note: In function "relevant_tokens":
+tests/prices/test_magic.py:124: error: Argument 1 to "TaskMapping" has
+incompatible type
+"ASyncFunctionAsyncDefault[[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, bool], int]";
+expected
+"def (ChecksumAddress, /, *args: Any, sync: Literal[True], **kwargs: Any) -> Awaitable[int]"
+ [arg-type]
+            contract_creation_block_async, addresses
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/prices/test_magic.py:124: note: "ASyncFunctionAsyncDefault[[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int, bool], int].__call__" has type overloaded function
+Found 228 errors in 58 files (checked 230 source files)

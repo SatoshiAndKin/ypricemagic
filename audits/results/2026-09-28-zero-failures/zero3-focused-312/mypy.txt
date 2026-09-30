@@ -1,0 +1,11 @@
+y/prices/dex/mooniswap.py: note: In function "get_pool_price":
+y/prices/dex/mooniswap.py:132: error: Returning Any from function declared to
+return "Decimal"  [no-any-return]
+        return totalVal / Decimal(total_supply)
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/test_typed_interfaces.py: note: In function "test_mooniswap_preserves_decimal_price":
+tests/test_typed_interfaces.py:41: error: Module "y.prices.dex.mooniswap" does
+not explicitly export attribute "magic"  [attr-defined]
+        monkeypatch.setattr(mooniswap.magic, "get_price", AsyncMock(return...
+                            ^~~~~~~~~~~~~~~
+Found 2 errors in 2 files (checked 230 source files)

@@ -1,0 +1,48 @@
+[
+  {
+    "phase": "call",
+    "elapsed_seconds": 37.499834042973816,
+    "rss_peak_bytes": 237195264,
+    "live_tasks": 110,
+    "test": "tests/test_historical_price_repairs.py::test_unverified_aave_v3_uses_contract_methods",
+    "outcome": "failed",
+    "duration": 7.100100629031658e-05,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf213f8be3cb0>\n\n    @run_async_test\n    async def test_unverified_aave_v3_uses_contract_methods(monkeypatch: Any) -> None:\n        module = importlib.import_module(\"y.prices.lending.aave\")\n        registry = instance(module.AaveRegistry)\n        monkeypatch.setattr(\n>           module.Contract, \"coroutine\", AsyncMock(return_value=SimpleNamespace(verified=False))\n        )\nE       AttributeError: module 'y.prices.lending.aave' has no attribute 'Contract'\n\ntests/test_historical_price_repairs.py:648: AttributeError",
+    "error_message": "AttributeError: module 'y.prices.lending.aave' has no attribute 'Contract'",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 709,
+      "multicall_uid": 26,
+      "request_uid": 23,
+      "jsonrpc_batch_uid": 98
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 68.47330331796547,
+    "rss_peak_bytes": 268193792,
+    "live_tasks": 118,
+    "test": "tests/test_amount_quotes.py::test_public_batch_preserves_duplicate_tokens_and_checks_lengths_before_rpc",
+    "outcome": "failed",
+    "duration": 9.49589884839952e-05,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf213df72fb90>\n\n    @run_async_test\n    async def test_public_batch_preserves_duplicate_tokens_and_checks_lengths_before_rpc(\n        monkeypatch: Any,\n    ) -> None:\n        rpc = SimpleNamespace(eth=SimpleNamespace(block_number=None))\n>       monkeypatch.setattr(magic, \"dank_mids\", rpc)\nE       AttributeError: <module 'y.prices.magic' from '/work/y/prices/magic.py'> has no attribute 'dank_mids'\n\ntests/test_amount_quotes.py:336: AttributeError",
+    "error_message": "AttributeError: <module 'y.prices.magic' from '/work/y/prices/magic.py'> has no attribute 'dank_mids'",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 781,
+      "multicall_uid": 28,
+      "request_uid": 24,
+      "jsonrpc_batch_uid": 100
+    }
+  }
+]

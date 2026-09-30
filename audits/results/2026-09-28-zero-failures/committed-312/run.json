@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python tools/validation/focused.py"
+  ],
+  "docker_context": "colima-rpc-tune",
+  "builder": "ypricemagic-validation-4168ea425aa6",
+  "complete": true,
+  "started_unix": 1790609171.8685062,
+  "source_sha": "17c08dda9796994ea755699032975dc4b91fd06e",
+  "source_revision": "HEAD",
+  "source_archive_sha256": "4ef13deba34845676c700abfa37503ff7f3093dd6564f89d7916c150991e1368",
+  "image": "sha256:4e638397b0f7820ee48560e2b2199d06d519ba410890c207b9409d5d1978eed6",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 209.33786392211914
+}

@@ -1,0 +1,2 @@
+FAILED tests/classes/test_erc20.py::test_erc20_at_block[0x57Ab1E02fEE23774580C119740129eAC7081e9D3-5761012]
+============= 1 failed, 19 passed, 5 skipped in 455.17s (0:07:35) ==============

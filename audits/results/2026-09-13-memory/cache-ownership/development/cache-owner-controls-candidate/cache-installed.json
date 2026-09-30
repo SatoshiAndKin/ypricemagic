@@ -1,0 +1,5 @@
+{
+  "version": "6.2.7",
+  "core": "/usr/local/lib/python3.12/site-packages/cachebox/_core.cpython-312-aarch64-linux-gnu.so",
+  "core_sha256": "6289a5469332243c7265e34b85c30afc4d20d08f7ff46f8387b245ae3b0abba4"
+}

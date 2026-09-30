@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "export VALIDATION_WAITS=1; sh /runner/full_suite.sh"
+  ],
+  "docker_context": "colima-rpc-tune",
+  "builder": "ypricemagic-validation-4168ea425aa6",
+  "complete": true,
+  "started_unix": 1790570836.145634,
+  "source_sha": "1982188de89137cc9327db3ae4dd75b10769c7f7",
+  "source_revision": "worktree",
+  "source_archive_sha256": "42e0a3fe1d85c8ea14d863563f396b9f95332f39143cbddf0320f4dd7d45e650",
+  "image": "sha256:4e638397b0f7820ee48560e2b2199d06d519ba410890c207b9409d5d1978eed6",
+  "exit_code": 2,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 3886.448702096939
+}

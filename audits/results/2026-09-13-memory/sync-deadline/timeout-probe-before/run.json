@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /work/tools/validation/test_timeout.py > /reports/timeout-probe.txt 2>&1"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789402120.676266,
+  "source_sha": "d00a51464750a42d8f25737937858a983b0f80dd",
+  "source_revision": "worktree",
+  "source_archive_sha256": "a15167e1b4c205a0d8081f198bba8b259b0351ee605bac960d08fb9c85905cb7",
+  "image": "sha256:5f67dfecf3085abd5cff6a15469e5bc36ea28fee0c557e05340cf7b181ac13bc",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 2.9862160682678223
+}

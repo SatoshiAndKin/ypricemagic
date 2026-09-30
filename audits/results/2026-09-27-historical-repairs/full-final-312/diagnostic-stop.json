@@ -1,0 +1,5 @@
+{
+  "interrupted": true,
+  "reason": "Superseded snapshot: the earlier full run exposed fifteen newly enabled Compound/Venus async cases with a verified invalid resilient oracle price revert. This second full run started before that finding. Stop it to validate the six-reason repair before the next full run; this attempt is explicitly incomplete, not a timeout or a pass.",
+  "recorded_unix": 1790569855.389344
+}

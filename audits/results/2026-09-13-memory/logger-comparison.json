@@ -1,0 +1,146 @@
+{
+  "before": {
+    "allocations": [
+      {
+        "requests": 10000,
+        "elapsed_seconds": 0.5631956309998714,
+        "retained_loggers": 10000,
+        "retained_diagnostic_tasks": 10000,
+        "live_tasks": 10001,
+        "python_retained_bytes": 31559990,
+        "python_peak_bytes": 31561478,
+        "rss_peak_bytes": 248233984,
+        "profiler": "tracemalloc; exclude this run from timing comparisons"
+      },
+      {
+        "requests": 10000,
+        "elapsed_seconds": 0.5570210229998338,
+        "retained_loggers": 10000,
+        "retained_diagnostic_tasks": 10000,
+        "live_tasks": 10001,
+        "python_retained_bytes": 31560045,
+        "python_peak_bytes": 31561533,
+        "rss_peak_bytes": 248250368,
+        "profiler": "tracemalloc; exclude this run from timing comparisons"
+      },
+      {
+        "requests": 10000,
+        "elapsed_seconds": 0.5649318359992321,
+        "retained_loggers": 10000,
+        "retained_diagnostic_tasks": 10000,
+        "live_tasks": 10001,
+        "python_retained_bytes": 31560045,
+        "python_peak_bytes": 31561533,
+        "rss_peak_bytes": 248217600,
+        "profiler": "tracemalloc; exclude this run from timing comparisons"
+      }
+    ],
+    "timing": [
+      {
+        "requests": 10000,
+        "elapsed_seconds": 0.18707624499984377,
+        "retained_loggers": 10000,
+        "retained_diagnostic_tasks": 10000,
+        "live_tasks": 10001,
+        "python_retained_bytes": null,
+        "python_peak_bytes": null,
+        "rss_peak_bytes": 215588864,
+        "profiler": null
+      },
+      {
+        "requests": 10000,
+        "elapsed_seconds": 0.18551073799972073,
+        "retained_loggers": 10000,
+        "retained_diagnostic_tasks": 10000,
+        "live_tasks": 10001,
+        "python_retained_bytes": null,
+        "python_peak_bytes": null,
+        "rss_peak_bytes": 215658496,
+        "profiler": null
+      },
+      {
+        "requests": 10000,
+        "elapsed_seconds": 0.19342372200026148,
+        "retained_loggers": 10000,
+        "retained_diagnostic_tasks": 10000,
+        "live_tasks": 10001,
+        "python_retained_bytes": null,
+        "python_peak_bytes": null,
+        "rss_peak_bytes": 215408640,
+        "profiler": null
+      }
+    ]
+  },
+  "after": {
+    "allocations": [
+      {
+        "requests": 10000,
+        "elapsed_seconds": 0.20081429900074,
+        "retained_loggers": 0,
+        "retained_diagnostic_tasks": 0,
+        "live_tasks": 1,
+        "python_retained_bytes": 1780216,
+        "python_peak_bytes": 1867716,
+        "rss_peak_bytes": 186023936,
+        "profiler": "tracemalloc; exclude this run from timing comparisons"
+      },
+      {
+        "requests": 10000,
+        "elapsed_seconds": 0.2007293810002011,
+        "retained_loggers": 0,
+        "retained_diagnostic_tasks": 0,
+        "live_tasks": 1,
+        "python_retained_bytes": 1780216,
+        "python_peak_bytes": 1867716,
+        "rss_peak_bytes": 185978880,
+        "profiler": "tracemalloc; exclude this run from timing comparisons"
+      },
+      {
+        "requests": 10000,
+        "elapsed_seconds": 0.20002071100043395,
+        "retained_loggers": 0,
+        "retained_diagnostic_tasks": 0,
+        "live_tasks": 1,
+        "python_retained_bytes": 1780216,
+        "python_peak_bytes": 1867716,
+        "rss_peak_bytes": 185978880,
+        "profiler": "tracemalloc; exclude this run from timing comparisons"
+      }
+    ],
+    "timing": [
+      {
+        "requests": 10000,
+        "elapsed_seconds": 0.05165815100008331,
+        "retained_loggers": 0,
+        "retained_diagnostic_tasks": 0,
+        "live_tasks": 1,
+        "python_retained_bytes": null,
+        "python_peak_bytes": null,
+        "rss_peak_bytes": 183926784,
+        "profiler": null
+      },
+      {
+        "requests": 10000,
+        "elapsed_seconds": 0.05274890399959986,
+        "retained_loggers": 0,
+        "retained_diagnostic_tasks": 0,
+        "live_tasks": 1,
+        "python_retained_bytes": null,
+        "python_peak_bytes": null,
+        "rss_peak_bytes": 183836672,
+        "profiler": null
+      },
+      {
+        "requests": 10000,
+        "elapsed_seconds": 0.05283411199980037,
+        "retained_loggers": 0,
+        "retained_diagnostic_tasks": 0,
+        "live_tasks": 1,
+        "python_retained_bytes": null,
+        "python_peak_bytes": null,
+        "rss_peak_bytes": 183664640,
+        "profiler": null
+      }
+    ]
+  }
+}

@@ -7,6 +7,8 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+from tests.test_pricing_correctness import run_async_test
+
 module = import_module("y.prices.stable_swap.curve")
 
 FACTORY = "0x2db0E83599a91b508Ac268a6197b8B14F5e72840"
@@ -14,7 +16,7 @@ POOL = "0x0000000000000000000000000000000000000001"
 TOKEN = "0x0000000000000000000000000000000000000002"
 
 
-@pytest.mark.asyncio_cooperative
+@run_async_test
 @pytest.mark.parametrize("interface", ["get_token", "get_lp_token", "stable"])
 async def test_factory_registers_the_actual_lp_token(
     monkeypatch: pytest.MonkeyPatch, interface: str
@@ -40,7 +42,7 @@ async def test_factory_registers_the_actual_lp_token(
     assert registry.factories == {FACTORY: {POOL}}
 
 
-@pytest.mark.asyncio_cooperative
+@run_async_test
 async def test_unknown_factory_does_not_invent_an_lp_token(monkeypatch: pytest.MonkeyPatch) -> None:
     contract = SimpleNamespace(address=FACTORY)
     registry = SimpleNamespace(token_to_pool={}, factories=defaultdict(set))

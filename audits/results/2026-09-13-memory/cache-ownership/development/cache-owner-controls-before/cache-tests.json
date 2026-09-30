@@ -1,0 +1,170 @@
+[
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001412919955328107,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.0005500010011019185,
+    "error": "def test_sync_eviction_releases_keys_and_keeps_cached_values():\n        calls = 0\n        cache = LRUCache(4)\n    \n        @cached(cache)\n        def value(key):\n            nonlocal calls\n            calls += 1\n            return {\"number\": key.number}\n    \n        refs = []\n        for number in range(128):\n            key = Key(number)\n            refs.append(weakref.ref(key))\n            result = value(key)\n            assert result == {\"number\": number}\n            result[\"number\"] = -1\n            assert value(key) == {\"number\": number}\n            del key\n        assert calls == 128\n        assert len(cache) == 4\n>       assert [ref().number for ref in refs if ref() is not None] == [124, 125, 126, 127]\nE       assert [0, 1, 2, 3, 4, 5, ...] == [124, 125, 126, 127]\nE         At index 0 diff: 0 != 124\nE         Left contains 124 more items, first extra item: 4\nE         Use -v to get the full diff\n\npython/tests/test_ownership.py:35: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 6.86249986756593e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 4.500099748838693e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "call",
+    "outcome": "skipped",
+    "seconds": 5.583300662692636e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 3.883300814777613e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 4.250100755598396e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.0035666370094986632,
+    "error": "def test_sync_failed_call_releases_key_and_can_retry():\n        calls = 0\n    \n        @cached(LRUCache(4))\n        def value(key):\n            nonlocal calls\n            calls += 1\n            raise ValueError(str(key.number))\n    \n        def failed():\n            key = Key(42)\n            ref = weakref.ref(key)\n            for _ in range(2):\n                with pytest.raises(ValueError, match=\"^42$\"):\n                    value(key)\n            return ref\n    \n        ref = failed()\n        gc.collect()\n        assert calls == 2\n>       assert ref() is None\nE       AssertionError: assert <tests.test_ownership.Key object at 0xf7cecd66af30> is None\nE        +  where <tests.test_ownership.Key object at 0xf7cecd66af30> = <weakref at 0xf7cecd338bd0; to 'Key' at 0xf7cecd66af30>()\n\npython/tests/test_ownership.py:83: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.0458009354770184e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 4.3666004785336554e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "call",
+    "outcome": "skipped",
+    "seconds": 5.558299017138779e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 3.562499477993697e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 7.866699888836592e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "call",
+    "outcome": "skipped",
+    "seconds": 4.474999150261283e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 3.920900053344667e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 6.104199565015733e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "call",
+    "outcome": "skipped",
+    "seconds": 5.0874994485639036e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 4.4334010453894734e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 3.704200207721442e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "call",
+    "outcome": "skipped",
+    "seconds": 4.5666005462408066e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 3.308399755042046e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 3.47500026691705e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "call",
+    "outcome": "skipped",
+    "seconds": 4.1292005334980786e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 3.862500307150185e-05,
+    "error": null
+  }
+]

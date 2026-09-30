@@ -1,0 +1,1137 @@
+y/_db/structs.py:3: error: Module "dank_mids.types" has no attribute
+"_DictStruct"; maybe "DictStruct"?  [attr-defined]
+    from dank_mids.types import _DictStruct
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/structs.py: note: In class "_CamelDictStruct":
+y/_db/structs.py:7: error: Unexpected keyword argument "rename" for
+"__init_subclass__" of "object"  [call-arg]
+    class _CamelDictStruct(_DictStruct, rename="camel"):
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/structs.py:7: error: Class cannot subclass "_DictStruct" (has type "Any")
+ [misc]
+    class _CamelDictStruct(_DictStruct, rename="camel"):
+                           ^~~~~~~~~~~
+y/_db/structs.py: note: In member "__getitem__" of class "_CamelDictStruct":
+y/_db/structs.py:13: error: Function is missing a return type annotation 
+[no-untyped-def]
+        def __getitem__(self, attr: str):
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/local/lib/python3.12/site-packages/mypy/typeshed/stdlib/builtins.pyi: note: In class "_CamelDictStruct":
+/usr/local/lib/python3.12/site-packages/mypy/typeshed/stdlib/builtins.pyi:139: note: "__init_subclass__" of "object" defined here
+y/_db/log.py: note: In class "Log":
+y/_db/log.py:7: error: Frozen dataclass cannot inherit from a non-frozen
+dataclass  [misc]
+    class Log(evmspec.Log, frozen=True, kw_only=True, array_like=True, for...
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...
+y/__init__.py:9: error: Module "brownie.network.contract" has no attribute "_explorer_tokens"  [attr-defined]
+        from brownie.network.contract import _explorer_tokens
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/__init__.py:130: error: Cannot find implementation or library stub for module named "eth_portfolio._db"  [import-not-found]
+        from eth_portfolio._db import entities as _db_entities
+    ^
+y/__init__.py:130: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+y/_db/utils/_ep.py: note: In function "_get_get_block":
+y/_db/utils/_ep.py:16: error: Function is missing a return type annotation  [no-untyped-def]
+    def _get_get_block():
+    ^~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/_ep.py: note: At top level:
+y/_db/utils/_ep.py:36: error: Cannot find implementation or library stub for module named "eth_portfolio._db.utils"  [import-not-found]
+            from eth_portfolio._db.utils import get_block
+    ^
+y/_db/utils/_ep.py: note: In function "_get_get_token":
+y/_db/utils/_ep.py:43: error: Function is missing a return type annotation  [no-untyped-def]
+    def _get_get_token():
+    ^~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/asyncpg.py:4: error: Skipping analyzing "asyncpg": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+    import asyncpg
+    ^
+y/time.py:17: error: Cannot find implementation or library stub for module named "dank_mids._config"  [import-not-found]
+        from dank_mids._config import GANACHE_FORK
+    ^
+y/time.py:17: error: Name "GANACHE_FORK" already defined (possibly by an import)  [no-redef]
+        from dank_mids._config import GANACHE_FORK
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/time.py:49: error: Untyped decorator makes function "get_block_timestamp" untyped  [untyped-decorator]
+    @yLazyLogger(logger)
+     ^~~~~~~~~~~~~~~~~~~
+y/time.py: note: In function "last_block_on_date":
+y/time.py:175: error: Incompatible types in assignment (expression has type "int", variable has type "BlockNumber")  [assignment]
+                hi = mid
+                     ^~~
+y/time.py:178: error: Incompatible types in assignment (expression has type "int", variable has type "BlockNumber")  [assignment]
+        hi = hi - 1
+             ^~~~~~
+y/time.py:181: error: Incompatible return value type (got "BlockNumber | None", expected "BlockNumber")  [return-value]
+        return block
+               ^~~~~
+y/time.py: note: In function "_parse_timestamp":
+y/time.py:237: error: Incompatible types in assignment (expression has type "int", variable has type "UnixTimestamp | datetime")  [assignment]
+            timestamp = int(timestamp.timestamp())
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~
+y/time.py:240: error: Argument 1 to "UnixTimestamp" has incompatible type "UnixTimestamp | datetime"; expected "int"  [arg-type]
+        return UnixTimestamp(timestamp)
+                             ^~~~~~~~~
+y/time.py: note: In function "closest_block_after_timestamp_async":
+y/time.py:312: error: Incompatible return value type (got "int", expected "BlockNumber")  [return-value]
+                return block_at_ts + 1
+                       ^~~~~~~~~~~~~~~
+y/time.py: note: In function "_closest_block_after_timestamp_cached":
+y/time.py:338: error: Incompatible types in assignment (expression has type "int", variable has type "BlockNumber")  [assignment]
+                hi = mid
+                     ^~~
+y/time.py:342: error: Argument 1 to "NoBlockFound" has incompatible type "int"; expected "UnixTimestamp | datetime"  [arg-type]
+            raise NoBlockFound(timestamp)
+                               ^~~~~~~~~
+y/time.py: note: In function "check_node":
+y/time.py:361: error: "BlockData" has no attribute "timestamp"  [attr-defined]
+        node_timestamp = web3.eth.get_block("latest").timestamp
+                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/time.py: note: In function "check_node_async":
+y/time.py:383: error: Argument 1 to "get_block_timestamp" of "DankEth" has incompatible type "str"; expected "int"  [arg-type]
+        node_timestamp = await dank_eth.get_block_timestamp("latest")
+                                                            ^~~~~~~~
+y/utils/client.py:9: error: Module "dank_mids" does not explicitly export attribute "dank_web3"  [attr-defined]
+    from dank_mids import dank_web3
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/client.py:18: error: Untyped decorator makes function "get_ethereum_client" untyped  [untyped-decorator]
+    @yLazyLogger(logger)
+     ^~~~~~~~~~~~~~~~~~~
+y/utils/client.py: note: In function "get_ethereum_client":
+y/utils/client.py:42: error: "Web3" has no attribute "clientVersion"  [attr-defined]
+            version = web3.clientVersion
+                      ^~~~~~~~~~~~~~~~~~
+y/utils/client.py: note: At top level:
+y/utils/client.py:74: error: Untyped decorator makes function "_get_ethereum_client" untyped  [untyped-decorator]
+    @yLazyLogger(logger)
+     ^~~~~~~~~~~~~~~~~~~
+y/classes/singleton.py:7: error: Module "checksum_dict.base" does not explicitly export attribute "AnyAddressOrContract"  [attr-defined]
+    from checksum_dict.base import AnyAddressOrContract
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/classes/singleton.py: note: In member "__init__" of class "ChecksumASyncSingletonMeta":
+y/classes/singleton.py:41: error: Function is missing a type annotation  [no-untyped-def]
+        def __init__(cls, name, bases, namespace):
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/classes/singleton.py:59: error: Need type annotation for "__locks"  [var-annotated]
+            cls.__locks = {
+                          ^
+y/classes/singleton.py: note: In member "__call__" of class "ChecksumASyncSingletonMeta":
+y/classes/singleton.py:68: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+        def __call__(cls, address: AnyAddressOrContract, *args, **kwargs) -> T:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/classes/singleton.py:114: error: Incompatible types in assignment (expression has type "str", variable has type "Address | HexAddress | ChecksumAddress | Contract | ERC20")  [assignment]
+            address = str(address)
+                      ^~~~~~~~~~~~
+y/classes/singleton.py:115: error: "ChecksumASyncSingletonMeta[T]" has no attribute "__a_sync_instance_will_be_sync__"  [attr-defined]
+            is_sync = cls.__a_sync_instance_will_be_sync__(args, kwargs)
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/classes/singleton.py:118: error: Incompatible types in assignment (expression has type "T", variable has type "ChecksumAddressDict[T]")  [assignment]
+                instance = instances[address]
+                           ^~~~~~~~~~~~~~~~~~
+y/classes/singleton.py:123: error: Incompatible types in assignment (expression has type "T", variable has type "ChecksumAddressDict[T]")  [assignment]
+                        instance = instances[address]
+                                   ^~~~~~~~~~~~~~~~~~
+y/classes/singleton.py:128: error: "ChecksumAddressDict[T]" has no attribute "asynchronous"  [attr-defined]
+            if instance.asynchronous is is_sync:
+               ^~~~~~~~~~~~~~~~~~~~~
+y/classes/singleton.py:131: error: "ChecksumAddressDict[T]" has no attribute "asynchronous"  [attr-defined]
+                    + f"{instance} {kwargs} {is_sync} {instance.asynchronous} {args} {kwargs}"
+                                                      ^~~~~~~~~~~~~~~~~~~~~~
+y/classes/singleton.py:133: error: Incompatible return value type (got "ChecksumAddressDict[T]", expected "T")  [return-value]
+            return instance
+                   ^~~~~~~~
+y/utils/middleware.py:14: error: Module "web3.middleware" has no attribute "ExtraDataToPOAMiddleware"  [attr-defined]
+        from web3.middleware import ExtraDataToPOAMiddleware as _poa_middleware
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/middleware.py:14: error: Name "_poa_middleware" already defined (possibly by an import)  [no-redef]
+        from web3.middleware import ExtraDataToPOAMiddleware as _poa_middleware
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/middleware.py: note: In function "_get_batch_size":
+y/utils/middleware.py:67: error: "BaseProvider" has no attribute "endpoint_uri"  [attr-defined]
+            if provider in web3.provider.endpoint_uri:
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/middleware.py: note: In function "getcode_cache_middleware":
+y/utils/middleware.py:96: error: Missing type parameters for generic type "Callable"  [type-arg]
+    def getcode_cache_middleware(make_request: Callable, web3: Web3) -> Callable:
+                                               ^
+y/utils/middleware.py: note: In function "setup_getcode_cache_middleware":
+y/utils/middleware.py:158: error: "BaseProvider" has no attribute "endpoint_uri"  [attr-defined]
+                assert web3.provider.endpoint_uri.startswith(
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/middleware.py:165: error: "BaseProvider" has no attribute "endpoint_uri"  [attr-defined]
+                web3.provider = HTTPProvider(web3.provider.endpoint_uri, {"timeout": 600}, session)
+                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/common.py:49: error: Module "y" does not explicitly export attribute "Block"  [attr-defined]
+        from y import Block
+        ^~~~~~~~~~~~~~~~~~~
+y/_db/common.py:58: error: Call to untyped function "PruningThreadPoolExecutor" in typed context  [no-untyped-call]
+    default_filter_threads = PruningThreadPoolExecutor(4)
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/common.py: note: In function "enc_hook":
+y/_db/common.py:94: error: Incompatible return value type (got "int", expected "bytes")  [return-value]
+                return int(obj)
+                       ^~~~~~~~
+y/_db/common.py:96: error: Returning Any from function declared to return "bytes"  [no-any-return]
+                return obj[2:]
+                ^~~~~~~~~~~~~~
+y/_db/common.py:99: error: Incompatible return value type (got "str", expected "bytes")  [return-value]
+                return hex(int(obj.hex(), 16))[2:]
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/common.py:101: error: Incompatible return value type (got "str", expected "bytes")  [return-value]
+                return bytes(obj).hex()
+                       ^~~~~~~~~~~~~~~~
+y/_db/common.py:103: error: Incompatible return value type (got "dict[Any, Any]", expected "bytes")  [return-value]
+                return dict(obj)
+                       ^~~~~~~~~
+y/_db/common.py: note: In function "dec_hook":
+y/_db/common.py:130: error: Too many arguments for "object"  [call-arg]
+            return typ(obj)
+                   ^~~~~~~~
+y/_db/common.py: note: At top level:
+y/_db/common.py:264: error: Missing type parameters for generic type "DiskCache"  [type-arg]
+    C = TypeVar("C", bound=DiskCache)
+                           ^
+y/_db/common.py: note: In member "_extend" of class "_DiskCachedMixin":
+y/_db/common.py:361: error: "_DiskCachedMixin[T, C]" has no attribute "_get_block_for_obj"  [attr-defined]
+                    block = self._get_block_for_obj(self._objects[-1])
+                            ^~~~~~~~~~~~~~~~~~~~~~~
+y/_db/common.py: note: In function "make_executor":
+y/_db/common.py:429: error: Call to untyped function "PruningThreadPoolExecutor" in typed context  [no-untyped-call]
+        return PruningThreadPoolExecutor(big if ENVS.DB_PROVIDER == "postgres" else small, name)
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/common.py: note: In member "_get_block_for_obj" of class "Filter":
+y/_db/common.py:545: error: Returning Any from function declared to return "int | BlockNumber"  [no-any-return]
+            return obj.blockNumber
+            ^~~~~~~~~~~~~~~~~~~~~~
+y/_db/common.py:545: error: "T" has no attribute "blockNumber"  [attr-defined]
+            return obj.blockNumber
+                   ^~~~~~~~~~~~~~~
+y/_db/common.py: note: In class "Filter":
+y/_db/common.py:547: error: "type[ASyncIterator[T]]" has no attribute "wrap"  [attr-defined]
+        @ASyncIterator.wrap
+         ^~~~~~~~~~~~~~~~~~
+y/_db/common.py:547: error: Untyped decorator makes function "_objects_thru" untyped  [untyped-decorator]
+        @ASyncIterator.wrap
+         ^~~~~~~~~~~~~~~~~~
+y/_db/common.py:623: error: Untyped decorator makes function "_sleep" untyped  [untyped-decorator]
+        @async_property
+         ^~~~~~~~~~~~~~
+y/_db/common.py: note: In member "_wakeup" of class "Filter":
+y/_db/common.py:635: error: Argument 1 to "_raise_if_exception" has incompatible type "None"; expected "Task[Any]"  [arg-type]
+            _raise_if_exception(self._task)
+                                ^~~~~~~~~~
+y/_db/common.py: note: In member "_load_range" of class "Filter":
+y/_db/common.py:781: error: Argument 1 to "block_ranges" has incompatible type "int | BlockNumber"; expected "BlockNumber"  [arg-type]
+                block_ranges(from_block, to_block, self._chunk_size)
+                             ^~~~~~~~~~
+y/_db/common.py:781: error: Argument 2 to "block_ranges" has incompatible type "int | BlockNumber"; expected "BlockNumber | None"  [arg-type]
+                block_ranges(from_block, to_block, self._chunk_size)
+                                         ^~~~~~~~
+y/_db/common.py: note: In member "_insert_chunk" of class "Filter":
+y/_db/common.py:900: error: "Task[None]" has no attribute "_depth"  [attr-defined]
+            task._depth = depth
+            ^~~~~~~~~~~
+y/_db/common.py: note: In member "_ensure_task" of class "Filter":
+y/_db/common.py:913: error: "Task[Never]" has no attribute "_log_destroy_pending"  [attr-defined]
+                task._log_destroy_pending = False
+                ^~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/common.py:913: note: Maybe you forgot to use "await"?
+y/_db/common.py: note: In member "__insert_chunk" of class "Filter":
+y/_db/common.py:922: error: Missing type parameters for generic type "Task"  [type-arg]
+            prev_chunk_task: Task | None,
+                             ^
+y/_db/common.py: note: In function "_clean_addresses":
+y/_db/common.py:976: error: Missing type parameters for generic type "list"  [type-arg]
+    def _clean_addresses(addresses: list | tuple) -> str | list[str]:
+                                    ^
+y/_db/common.py:976: error: Missing type parameters for generic type "tuple"  [type-arg]
+    def _clean_addresses(addresses: list | tuple) -> str | list[str]:
+                                           ^
+y/_db/common.py:989: error: Non-overlapping equality check (left operand type: "list[Any] | tuple[Any, ...]", right operand type: "Literal['0x0000000000000000000000000000000000000000']")  [comparison-overlap]
+        if addresses == ZERO_ADDRESS:
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/common.py:992: error: Incompatible return value type (got "list[Any] | tuple[Any, ...]", expected "str | list[str]")  [return-value]
+            return addresses
+                   ^~~~~~~~~
+y/_db/common.py:999: error: Argument 1 to "to_address" has incompatible type "list[Any] | tuple[Any, ...]"; expected "str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int"  [arg-type]
+        return convert.to_address(addresses)
+                                  ^~~~~~~~~
+y/prices/synthetix.py:8: error: Module "faster_eth_abi" does not explicitly export attribute "encode"  [attr-defined]
+    from faster_eth_abi import encode
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/synthetix.py: note: In class "Synthetix":
+y/prices/synthetix.py:67: error: Argument 1 to "a_sync_property" has incompatible type "Callable[[Synthetix], Coroutine[Any, Any, Contract]]"; expected "Callable[[Never], Awaitable[Never]] | Callable[[Never], Never]"  [arg-type]
+        @a_sync.aka.property
+         ^
+y/prices/synthetix.py: note: In member "address_resolver-redefinition" of class "Synthetix":
+y/prices/synthetix.py:79: error: Invalid index type "int" for "dict[Network, str]"; expected type "Network"  [index]
+            return await Contract.coroutine(addresses[CHAINID])
+                                                      ^~~~~~~
+y/prices/synthetix.py: note: In member "get_address-redefinition" of class "Synthetix":
+y/prices/synthetix.py:84: error: Incompatible default for argument "block" (default has type "None", argument has type "int | BlockNumber")  [assignment]
+        async def get_address(self, name: str, block: Block = None) -> Contract | None:
+                                                              ^~~~
+y/prices/synthetix.py:84: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+y/prices/synthetix.py:84: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+y/prices/synthetix.py:104: error: Need type annotation for "address"  [var-annotated]
+            address = await address_resolver.getAddress.coroutine(
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/synthetix.py: note: In member "synths-redefinition" of class "Synthetix":
+y/prices/synthetix.py:129: error: Item "None" of "Contract | None" has no attribute "availableSynthCount"  [union-attr]
+            synth_count = await proxy_erc20.availableSynthCount
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/synthetix.py:133: error: Item "None" of "Contract | None" has no attribute "availableSynths"  [union-attr]
+                for synth in await proxy_erc20.availableSynths.map(range(synth_count))
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/synthetix.py: note: In member "get_currency_key-redefinition" of class "Synthetix":
+y/prices/synthetix.py:190: error: Argument 1 to "Call" has incompatible type "str | bytes | HexBytes | evmspec.data._main.Address | EthAddress | Contract | ERC20 | int"; expected "str | eth_typing.evm.Address | ChecksumAddress | HexAddress"  [arg-type]
+                await Call(token, "target()(address)")
+                           ^~~~~
+y/prices/synthetix.py:191: error: Argument 1 to "has_method" has incompatible type "str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int"; expected "str | bytes | HexBytes | Address | EthAddress"  [arg-type]
+                if await has_method(token, "target()(address)", sync=False)
+                                    ^~~~~
+y/prices/synthetix.py:195: error: Argument 1 to "Call" has incompatible type "Any | str | bytes | Contract | ERC20 | int"; expected "str | Address | ChecksumAddress | HexAddress"  [arg-type]
+                await Call(target, "currencyKey()(bytes32)")
+                           ^~~~~~
+y/prices/synthetix.py:196: error: Argument 1 to "has_method" has incompatible type "str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int"; expected "str | bytes | HexBytes | Address | EthAddress"  [arg-type]
+                if await has_method(token, "currencyKey()(bytes32)", sync=False)
+                                    ^~~~~
+y/prices/synthetix.py: note: In member "get_price-redefinition" of class "Synthetix":
+y/prices/synthetix.py:201: error: Missing return statement  [return]
+        async def get_price(self, token: AnyAddressType, block: Block | None = None) -> UsdPrice | None:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/synthetix.py: note: At top level:
+y/prices/synthetix.py:248: error: Need type annotation for "synthetix"  [var-annotated]
+    synthetix = Synthetix(asynchronous=True) if CHAINID in addresses else set()
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/contract.py:11: error: Module "y._db.utils.utils" does not explicitly export attribute "make_executor"  [attr-defined]
+    from y._db.utils.utils import ensure_block, make_executor
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/contract.py:106: error: Incompatible types in assignment (expression has type "ProcessingQueue[[VarArg(Any), NamedArg(Literal[True], 'sync'), KwArg(Any)], Never]", variable has type "Callable[[str, int], None]")  [assignment]
+    set_deploy_block = ProcessingQueue(_set_deploy_block, num_workers=2, return_data=False)
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/contract.py:106: note: "ProcessingQueue[[VarArg(Any), NamedArg(Literal[True], 'sync'), KwArg(Any)], Never].__call__" has type "def __call__(*args: Any, sync: Literal[True], **kwargs: Any) -> Future[Never]"
+y/_db/utils/contract.py:106: error: Argument 1 to "ProcessingQueue" has incompatible type "ASyncFunctionAsyncDefault[[str, int], None]"; expected "def (*args: Any, sync: Literal[True], **kwargs: Any) -> Awaitable[Never]"  [arg-type]
+    set_deploy_block = ProcessingQueue(_set_deploy_block, num_workers=2, return_data=False)
+                                       ^~~~~~~~~~~~~~~~~
+y/_db/utils/contract.py:106: note: "ASyncFunctionAsyncDefault[[str, int], None].__call__" has type overloaded function
+y/_db/utils/contract.py: note: In function "known_deploy_blocks":
+y/_db/utils/contract.py:130: error: Item "None" of "Block | None" has no attribute "number"  [union-attr]
+                (c.address, c.deploy_block.number)
+                            ^~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/contract.py:132: error: Item "None" of "Block | None" has no attribute "number"  [union-attr]
+                if c.chain.id == CHAINID and c.deploy_block.number
+                                             ^~~~~~~~~~~~~~~~~~~~~
+y/prices/stable_swap/curve.py:106: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+    class CurveEvents(ProcessedEvents[_EventItem]):
+                                      ^
+y/prices/stable_swap/curve.py: note: In member "_process_event" of class "RegistryEvents":
+y/prices/stable_swap/curve.py:139: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        def _process_event(self, event: _EventItem) -> None:
+                                        ^
+y/prices/stable_swap/curve.py: note: In class "CurveRegistry":
+y/prices/stable_swap/curve.py:725: error: Missing type parameters for generic type "Task"  [type-arg]
+        def _task(self) -> Task:
+                           ^
+y/prices/stable_swap/curve.py: note: In function "_task":
+y/prices/stable_swap/curve.py:729: error: Missing type parameters for generic type "Task"  [type-arg]
+            def propagate_exceptions(t: Task) -> None:
+                                        ^
+y/prices/lending/aave.py: note: In class "AaveMarketBase":
+y/prices/lending/aave.py:128: error: Missing type parameters for generic type "tuple"  [type-arg]
+        async def get_reserve_data(self, reserve: AnyAddressType) -> tuple:
+                                                                     ^
+y/prices/lending/aave.py: note: In class "AaveMarketV2":
+y/prices/lending/aave.py:234: error: Missing type parameters for generic type "tuple"  [type-arg]
+        async def get_reserve_data(self, reserve: AnyAddressType) -> tuple:
+                                                                     ^
+y/prices/dex/uniswap/uniswap.py:20: error: Module "y.prices.dex.uniswap.v2" does not explicitly export attribute "NotAUniswapV2Pool"  [attr-defined]
+    from y.prices.dex.uniswap.v2 import NotAUniswapV2Pool, UniswapRouterV2, UniswapV2Pool
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/yearn.py: note: In class "YearnInspiredVault":
+y/prices/yearn.py:164: error: Name "underlying" already defined on line 161  [no-redef]
+        @a_sync.aka.cached_property
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+y/classes/common.py: note: In function "hex_to_string":
+y/classes/common.py:54: error: Incompatible types in assignment (expression has type "str", variable has type "HexString")  [assignment]
+        h = h.hex().rstrip("0")
+            ^~~~~~~~~~~~~~~~~~~
+y/classes/common.py:56: error: Incompatible types in assignment (expression has type "bytes", variable has type "HexString")  [assignment]
+            h += "0"
+            ^~~~~~~~
+y/classes/common.py:56: error: Unsupported operand types for + ("HexString" and "str")  [operator]
+            h += "0"
+                 ^~~
+y/classes/common.py:57: error: Argument 1 to "fromhex" of "bytes" has incompatible type "HexString"; expected "str"  [arg-type]
+        return bytes.fromhex(h).decode("utf-8")
+                             ^
+y/classes/common.py: note: In member "contract-redefinition" of class "ContractBase":
+y/classes/common.py:118: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+        def contract(self) -> Contract:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/classes/common.py:119: error: Returning Any from function declared to return Contract?  [no-any-return]
+            return Contract(self.address)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/classes/common.py: note: In member "_is_cached" of class "ContractBase":
+y/classes/common.py:129: error: Incompatible return value type (got "None", expected "bool")  [return-value]
+                return None
+                       ^~~~
+y/classes/common.py: note: In member "build_name-redefinition" of class "ContractBase":
+y/classes/common.py:133: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+        async def build_name(self) -> str:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/classes/common.py: note: In class "WeiBalance":
+y/classes/common.py:951: error: Name "logging.Logger" is not defined  [name-defined]
+        def _logger(self) -> logging.Logger:
+                             ^
+y/prices/dex/balancer/v2.py: note: In class "BalancerV2Vault":
+y/prices/dex/balancer/v2.py:201: error: Missing type parameters for generic type "tuple"  [type-arg]
+        ) -> list[tuple]:
+                  ^
+y/prices/dex/balancer/v2.py: note: In member "_include_event" of class "BalancerEvents":
+y/prices/dex/balancer/v2.py:275: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        def _include_event(self, event: _EventItem) -> Awaitable[bool]:
+                                        ^
+y/prices/dex/balancer/v2.py: note: In member "_process_event" of class "BalancerEvents":
+y/prices/dex/balancer/v2.py:295: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        def _process_event(self, event: _EventItem) -> "BalancerV2Pool":
+                                        ^
+y/prices/dex/balancer/v2.py: note: In member "_task_done_callback" of class "BalancerEvents":
+y/prices/dex/balancer/v2.py:341: error: Missing type parameters for generic type "Task"  [type-arg]
+        def _task_done_callback(self, t: Task):
+                                         ^
+y/prices/dex/balancer/balancer.py: note: In member "get_pool_price-redefinition" of class "BalancerMultiplexer":
+y/prices/dex/balancer/balancer.py:152: error: Missing type parameters for generic type "BalancerABC"  [type-arg]
+            balancer: BalancerABC = await self.get_version(token_address)
+                      ^
+y/prices/dex/balancer/balancer.py: note: In class "BalancerMultiplexer":
+y/prices/dex/balancer/balancer.py:208: error: Missing type parameters for generic type "BalancerABC"  [type-arg]
+        async def get_version(self, token_address: AnyAddressType) -> BalancerABC:
+                                                                      ^
+y/utils/events.py: note: In function "decode_logs":
+y/utils/events.py:75: error: Incompatible types in assignment (expression has type "list[object]", variable has type "Iterable[LogReceipt] | Iterable[Log]")  [assignment]
+        logs = list(logs)
+               ^~~~~~~~~~
+y/utils/events.py:80: error: Item "LogReceipt" of "LogReceipt | Log" has no attribute "address"  [union-attr]
+            if log.address not in _deployment_topics:
+               ^~~~~~~~~~~
+y/utils/events.py:80: error: Unsupported operand types for in ("Any | Address | None" and "dict[ChecksumAddress, dict[HexStr, TopicMapData]]")  [operator]
+            if log.address not in _deployment_topics:
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/events.py:81: error: Item "LogReceipt" of "LogReceipt | Log" has no attribute "address"  [union-attr]
+                _add_deployment_topics(log.address, Contract(log.address).abi)
+                                       ^~~~~~~~~~~
+y/utils/events.py:81: error: Argument 1 to "_add_deployment_topics" has incompatible type "Any | Address | None"; expected "ChecksumAddress"  [arg-type]
+                _add_deployment_topics(log.address, Contract(log.address).abi)
+                                       ^~~~~~~~~~~
+y/utils/events.py:83: error: Value of type "Iterable[LogReceipt] | Iterable[Log]" is not indexable  [index]
+        if logs_are_structs := isinstance(logs[0], Log):
+                                          ^~~~~~~
+y/utils/events.py:85: error: Item "LogReceipt" of "LogReceipt | Log" has no attribute "topics"  [union-attr]
+            orig_topics = [log.topics for log in logs]
+                           ^~~~~~~~~~
+y/utils/events.py:88: error: Argument 1 to "force_setattr" has incompatible type "LogReceipt | Log"; expected "Struct"  [arg-type]
+                force_setattr(log, "topics", list(log.topics))
+                              ^~~
+y/utils/events.py:88: error: Item "LogReceipt" of "LogReceipt | Log" has no attribute "topics"  [union-attr]
+                force_setattr(log, "topics", list(log.topics))
+                                                  ^~~~~~~~~~
+y/utils/events.py:91: error: Argument 1 to "_decode_logs" has incompatible type "Iterable[LogReceipt] | Iterable[Log]"; expected "list[_EventItem[Any]] | list[Mapping[str, Any]]"  [arg-type]
+            decoded = _decode_logs(logs)
+                                   ^~~~
+y/utils/events.py:94: error: Incompatible types in assignment (expression has type "list[Never]", variable has type "EventDict")  [assignment]
+            decoded = []
+                      ^~
+y/utils/events.py:97: error: "EventDict" has no attribute "extend"  [attr-defined]
+                    decoded.extend(_decode_logs([log]))
+                    ^~~~~~~~~~~~~~
+y/utils/events.py:97: error: Argument 1 to "_decode_logs" has incompatible type "list[LogReceipt | Log]"; expected "list[_EventItem[Any]] | list[Mapping[str, Any]]"  [arg-type]
+                    decoded.extend(_decode_logs([log]))
+                                                ^~~~~
+y/utils/events.py:99: error: Argument 1 to "len" has incompatible type "Iterable[LogReceipt] | Iterable[Log]"; expected "Sized"  [arg-type]
+        with reraise_excs_with_extra_context(len(logs), decoded):
+                                                 ^~~~
+y/utils/events.py:101: error: Incompatible types in assignment (expression has type "object", variable has type "LogReceipt | Log")  [assignment]
+                for i, (log, orig_topics) in enumerate(zip(logs, orig_topics)):
+                ^
+y/utils/events.py:101: error: Incompatible types in assignment (expression has type "Any | tuple[Topic, ...]", variable has type "list[Any | tuple[Topic, ...]]")  [assignment]
+                for i, (log, orig_topics) in enumerate(zip(logs, orig_topics)):
+                ^
+y/utils/events.py:102: error: Item "LogReceipt" of "LogReceipt | Log" has no attribute "blockNumber"  [union-attr]
+                    setattr(decoded[i], "block_number", log.blockNumber)
+                                                        ^~~~~~~~~~~~~~~
+y/utils/events.py:103: error: Item "LogReceipt" of "LogReceipt | Log" has no attribute "transactionHash"  [union-attr]
+                    setattr(decoded[i], "transaction_hash", log.transactionHash)
+                                                            ^~~~~~~~~~~~~~~~~~~
+y/utils/events.py:104: error: Item "LogReceipt" of "LogReceipt | Log" has no attribute "logIndex"  [union-attr]
+                    setattr(decoded[i], "log_index", log.logIndex)
+                                                     ^~~~~~~~~~~~
+y/utils/events.py:106: error: Argument 1 to "force_setattr" has incompatible type "LogReceipt | Log"; expected "Struct"  [arg-type]
+                    force_setattr(log, "topics", orig_topics)
+                                  ^~~
+y/utils/events.py:108: error: Incompatible types in assignment (expression has type "object", variable has type "LogReceipt | Log")  [assignment]
+                for i, log in enumerate(logs):
+                ^
+y/utils/events.py: note: In function "logs_to_balance_checkpoints":
+y/utils/events.py:256: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+    def logs_to_balance_checkpoints(logs) -> dict[ChecksumAddress, int]:
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/events.py:271: error: Need type annotation for "balances"  [var-annotated]
+        balances = Counter()
+                   ^~~~~~~~~
+y/utils/events.py:272: error: Need type annotation for "checkpoints"  [var-annotated]
+        checkpoints = defaultdict(dict)
+                      ^~~~~~~~~~~~~~~~~
+y/utils/events.py:286: error: Incompatible return value type (got "defaultdict[Any, dict[Any, Any]]", expected "dict[ChecksumAddress, int]")  [return-value]
+        return checkpoints
+               ^~~~~~~~~~~
+y/utils/events.py: note: In function "checkpoints_to_weight":
+y/utils/events.py:289: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+    def checkpoints_to_weight(checkpoints, start_block: Block, end_block: Block) -> float:
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/events.py: note: In function "_get_logs_async":
+y/utils/events.py:349: error: Need type annotation for "get_logs_semaphore"  [var-annotated]
+    get_logs_semaphore = defaultdict(
+    ^~~~~~~~~~~~~~~~~~
+y/utils/events.py:358: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+    async def _get_logs_async(address, topics, start, end) -> list[Log]:
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/events.py: note: In function "_get_logs_async_no_cache":
+y/utils/events.py:382: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+    async def _get_logs_async_no_cache(address, topics, start, end) -> list[Log]:
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/events.py: note: In function "_get_logs_no_cache":
+y/utils/events.py:468: error: Incompatible types (expression has type "list[str] | None", TypedDict item "topics" has type "Sequence[Hash32 | HexBytes | HexStr | Sequence[Hash32 | HexBytes | HexStr] | None]")  [typeddict-item]
+                response = web3.eth.get_logs({"topics": topics, "fromBlock": start, "toBlock": end})
+                                                        ^~~~~~
+y/utils/events.py:475: error: Incompatible types (expression has type "list[str]", TypedDict item "topics" has type "Sequence[Hash32 | HexBytes | HexStr | Sequence[Hash32 | HexBytes | HexStr] | None]")  [typeddict-item]
+                        "topics": topics,
+                                  ^~~~~~
+y/utils/events.py: note: In function "_get_logs_batch_cached":
+y/utils/events.py:529: error: Argument 1 to "_get_logs_no_cache" has incompatible type "str | None"; expected "ChecksumAddress | None"  [arg-type]
+        return _get_logs_no_cache(address, topics, start, end)
+                                  ^~~~~~~
+y/utils/events.py: note: In member "__init__" of class "LogFilter":
+y/utils/events.py:541: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+        def __init__(
+        ^~~~~~~~~~~~~
+y/utils/events.py:576: error: Argument 1 to "__init__" of "Filter" has incompatible type "int | BlockNumber | None"; expected "int | BlockNumber"  [arg-type]
+                from_block,
+                ^~~~~~~~~~
+y/utils/events.py:580: error: Argument "executor" to "__init__" of "Filter" has incompatible type "_AsyncExecutorMixin | None"; expected "AsyncThreadPoolExecutor | None"  [arg-type]
+                executor=executor,
+                         ^~~~~~~~
+y/utils/events.py: note: In member "cache" of class "LogFilter":
+y/utils/events.py:595: error: Incompatible types in assignment (expression has type "LogCache", variable has type "None")  [assignment]
+                self._cache = cache
+                              ^~~~~
+y/utils/events.py: note: In member "logs" of class "LogFilter":
+y/utils/events.py:621: error: Returning Any from function declared to return "ASyncIterator[Log]"  [no-any-return]
+            return self._objects_thru(block=to_block)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/events.py: note: In function "bulk_insert":
+y/utils/events.py:651: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+            async def bulk_insert_wrapped(*args, **kwargs) -> None:
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/events.py:652: error: "bulk_insert" gets multiple values for keyword argument "executor"  [misc]
+                return await bulk_insert(*args, **kwargs, executor=executor)
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/events.py: note: In class "LogFilter":
+y/utils/events.py:656: error: Untyped decorator makes function "_from_block" untyped  [untyped-decorator]
+        @async_property
+         ^~~~~~~~~~~~~~
+y/utils/events.py: note: In member "events" of class "Events":
+y/utils/events.py:736: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        ) -> a_sync.ASyncIterator[_EventItem]:
+                                  ^
+y/utils/events.py:751: error: Returning Any from function declared to return "ASyncIterator[_EventItem[Any]]"  [no-any-return]
+            return self._objects_thru(block=to_block, from_block=from_block)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/events.py: note: In member "_get_block_for_obj" of class "Events":
+y/utils/events.py:770: error: Argument 1 of "_get_block_for_obj" is incompatible with supertype "y._db.common.Filter"; supertype defines the argument type as "Log"  [override]
+        def _get_block_for_obj(self, obj: _EventItem) -> Block:
+                                     ^~~~~~~~~~~~~~~
+y/utils/events.py:770: note: This violates the Liskov substitution principle
+y/utils/events.py:770: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+y/utils/events.py:770: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        def _get_block_for_obj(self, obj: _EventItem) -> Block:
+                                          ^
+y/utils/events.py:785: error: Returning Any from function declared to return "int | BlockNumber"  [no-any-return]
+            return obj.block_number
+            ^~~~~~~~~~~~~~~~~~~~~~~
+y/utils/events.py:785: error: "_EventItem[Any]" has no attribute "block_number"  [attr-defined]
+            return obj.block_number
+                   ^~~~~~~~~~~~~~~~
+y/utils/events.py: note: In class "Events":
+y/utils/events.py:787: error: Need type annotation for "__slots__" (hint: "__slots__: list[<type>] = ...")  [var-annotated]
+        __slots__ = []
+        ^~~~~~~~~
+y/utils/events.py: note: In member "_include_event" of class "ProcessedEvents":
+y/utils/events.py:797: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        def _include_event(self, event: _EventItem) -> bool | Awaitable[bool]:
+                                        ^
+y/utils/events.py: note: In member "_process_event" of class "ProcessedEvents":
+y/utils/events.py:817: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        def _process_event(self, event: _EventItem) -> T:
+                                        ^
+y/utils/events.py: note: In member "objects" of class "ProcessedEvents":
+y/utils/events.py:835: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        ) -> a_sync.ASyncIterator[_EventItem]:
+                                  ^
+y/utils/events.py:850: error: Returning Any from function declared to return "ASyncIterator[_EventItem[Any]]"  [no-any-return]
+            return self._objects_thru(block=to_block, from_block=from_block)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/events.py: note: In member "_extend" of class "ProcessedEvents":
+y/utils/events.py:887: error: Argument 1 has incompatible type "T"; expected "Log"  [arg-type]
+                        append_processed_event(self._process_event(event))
+                                               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/events.py: note: In class "ProcessedEvents":
+y/utils/events.py:893: error: Need type annotation for "__slots__" (hint: "__slots__: list[<type>] = ...")  [var-annotated]
+        __slots__ = []
+        ^~~~~~~~~
+y/utils/raw_calls.py: note: In function "_cached_call_fn":
+y/utils/raw_calls.py:50: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+    async def _cached_call_fn(
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/raw_calls.py:51: error: Missing type parameters for generic type "Callable"  [type-arg]
+        func: Callable,
+              ^
+y/utils/raw_calls.py: note: In function "_decimals":
+y/utils/raw_calls.py:198: error: If x = b'abc' then f"{x}" or "{}".format(x) produces "b'abc'", not "abc". If this is desired behavior, use f"{x!r}" or "{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]
+                Contract {contract_address} is a proxy contract, and had no implementation at block {block}."""
+                         ^~~~~~~~~~~~~~~~~~
+y/utils/raw_calls.py:203: error: If x = b'abc' then f"{x}" or "{}".format(x) produces "b'abc'", not "abc". If this is desired behavior, use f"{x!r}" or "{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]
+            Unable to fetch `decimals` for {contract_address} on {Network.printable()}
+                                           ^~~~~~~~~~~~~~~~~~
+y/utils/raw_calls.py: note: In function "_totalSupply":
+y/utils/raw_calls.py:254: error: If x = b'abc' then f"{x}" or "{}".format(x) produces "b'abc'", not "abc". If this is desired behavior, use f"{x!r}" or "{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]
+            Unable to fetch `totalSupply` for {contract_address} on {Network.printable()}
+                                              ^~~~~~~~~~~~~~~~~~
+y/utils/raw_calls.py: note: In function "balanceOf":
+y/utils/raw_calls.py:313: error: If x = b'abc' then f"{x}" or "{}".format(x) produces "b'abc'", not "abc". If this is desired behavior, use f"{x!r}" or "{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]
+            Unable to fetch `balanceOf` for token: {call_address} holder: {input_address} on {Network.printable()}
+                                                   ^~~~~~~~~~~~~~
+y/utils/raw_calls.py: note: In function "_balanceOfReadable":
+y/utils/raw_calls.py:336: error: Argument 2 to "cgather" has incompatible type "int | None"; expected "Awaitable[int | None]"  [arg-type]
+            _decimals(call_address, block=block, return_None_on_failure=return_None_on_failure),
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/raw_calls.py:339: error: Returning Any from function declared to return "float | None"  [no-any-return]
+            return balance / 10**decimals
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/raw_calls.py:347: error: If x = b'abc' then f"{x}" or "{}".format(x) produces "b'abc'", not "abc". If this is desired behavior, use f"{x!r}" or "{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]
+            token: {call_address} holder: {input_address} on {Network.printable()}
+                   ^~~~~~~~~~~~~~
+y/utils/raw_calls.py: note: In function "raw_call":
+y/utils/raw_calls.py:357: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+    async def raw_call(
+    ^~~~~~~~~~~~~~~~~~~
+y/utils/raw_calls.py:362: error: Incompatible default for argument "output" (default has type "None", argument has type "str")  [assignment]
+        output: str = None,
+                      ^~~~
+y/utils/raw_calls.py:362: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+y/utils/raw_calls.py:362: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+y/utils/raw_calls.py:406: error: Argument 1 to "call" of "DankEth" has incompatible type "dict[str, str]"; expected "TxParams"  [arg-type]
+            response = await dank_eth.call(data, block_identifier=block)
+                                           ^~~~
+y/utils/raw_calls.py:425: error: Non-overlapping identity check (left operand type: "str", right operand type: "type[int]")  [comparison-overlap]
+            elif output is int or output in {"int", "uint", "uint256"}:
+                 ^~~~~~~~~~~~~
+y/utils/raw_calls.py: note: In function "prepare_data":
+y/utils/raw_calls.py:441: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+    def prepare_data(
+    ^~~~~~~~~~~~~~~~~
+y/utils/raw_calls.py:481: error: Returning Any from function declared to return "str"  [no-any-return]
+            return method
+            ^~~~~~~~~~~~~
+y/utils/raw_calls.py:492: error: Returning Any from function declared to return "str"  [no-any-return]
+            return method + prepare_input(inputs)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/raw_calls.py: note: In function "prepare_input":
+y/utils/raw_calls.py:563: error: Item "int" of "bytes | int | str | str | bytes | HexBytes | Address | EthAddress | EthAddress | brownie.network.contract.Contract | y.contracts.Contract" has no attribute "hex"  [union-attr]
+            return input.hex()
+                   ^~~~~~~~~
+y/utils/raw_calls.py:563: error: Item "str" of "bytes | int | str | str | bytes | HexBytes | Address | EthAddress | EthAddress | brownie.network.contract.Contract | y.contracts.Contract" has no attribute "hex"  [union-attr]
+            return input.hex()
+                   ^~~~~~~~~
+y/utils/raw_calls.py:563: error: Item "Address" of "bytes | int | str | str | bytes | HexBytes | Address | EthAddress | EthAddress | brownie.network.contract.Contract | y.contracts.Contract" has no attribute "hex"  [union-attr]
+            return input.hex()
+                   ^~~~~~~~~
+y/utils/raw_calls.py:563: error: Item "EthAddress" of "bytes | int | str | str | bytes | HexBytes | Address | EthAddress | EthAddress | brownie.network.contract.Contract | y.contracts.Contract" has no attribute "hex"  [union-attr]
+            return input.hex()
+                   ^~~~~~~~~
+y/utils/multicall.py:49: error: Argument 1 to "from_abi" of "Contract" has incompatible type "str"; expected "ContractName"  [arg-type]
+        brownie.Contract.from_abi("Multicall2", MULTICALL2, MULTICALL2_ABI)
+                                  ^~~~~~~~~~~~
+y/utils/multicall.py:49: error: Argument 2 to "from_abi" of "Contract" has incompatible type "str | None"; expected "HexAddress"  [arg-type]
+        brownie.Contract.from_abi("Multicall2", MULTICALL2, MULTICALL2_ABI)
+                                                ^~~~~~~~~~
+y/utils/multicall.py:49: error: Argument 3 to "from_abi" of "Contract" has incompatible type "list[object]"; expected "list[ABIFunction | ABIConstructor | ABIFallback | ABIReceive | ABIEvent | ABIError]"  [arg-type]
+        brownie.Contract.from_abi("Multicall2", MULTICALL2, MULTICALL2_ABI)
+                                                            ^~~~~~~~~~~~~~
+y/utils/multicall.py:51: error: Argument 1 to "Contract" has incompatible type "str | None"; expected "str | bytes | HexBytes | Address | EthAddress | Contract | ERC20 | int"  [arg-type]
+        else Contract(MULTICALL2)
+                      ^~~~~~~~~~
+y/utils/multicall.py: note: In function "multicall_same_func_no_input":
+y/utils/multicall.py:66: error: Missing type parameters for generic type "Callable"  [type-arg]
+        apply_func: Callable | None = None,
+                    ^
+y/utils/multicall.py:71: error: Missing type parameters for generic type "dict"  [type-arg]
+        results: list[dict] = await igather(
+                      ^
+y/utils/multicall.py:72: error: Argument 1 to "Call" has incompatible type "str | bytes | Contract | ERC20 | int"; expected "str | Address | ChecksumAddress | HexAddress"  [arg-type]
+            Call(address, [method], ((address, apply_func)), block_id=block) for address in addresses
+                 ^~~~~~~
+y/utils/multicall.py:72: error: Argument 3 to "Call" has incompatible type "tuple[str | bytes | Contract | ERC20 | int, Callable[..., Any] | None]"; expected "Sequence[tuple[Any, Callable[..., Any]]] | None"  [arg-type]
+            Call(address, [method], ((address, apply_func)), block_id=block) for address in addresses
+                                     ^~~~~~~~~~~~~~~~~~~~~
+y/utils/multicall.py: note: In function "multicall_same_func_same_contract_different_inputs":
+y/utils/multicall.py:82: error: Missing type parameters for generic type "list"  [type-arg]
+        inputs: list | tuple,
+                ^
+y/utils/multicall.py:82: error: Missing type parameters for generic type "tuple"  [type-arg]
+        inputs: list | tuple,
+                       ^
+y/utils/multicall.py:84: error: Missing type parameters for generic type "Callable"  [type-arg]
+        apply_func: Callable | None = None,
+                    ^
+y/utils/multicall.py:89: error: Missing type parameters for generic type "dict"  [type-arg]
+        results: list[dict] = await igather(
+                      ^
+y/utils/multicall.py:90: error: List item 0 has incompatible type "tuple[Any, Callable[..., Any] | None]"; expected "tuple[Any, Callable[..., Any]]"  [list-item]
+            (Call(address, [method, input], [(input, apply_func)], block_id=block) for input in inputs),
+                                             ^~~~~~~~~~~~~~~~~~~
+y/utils/multicall.py: note: In function "multicall_decimals":
+y/utils/multicall.py:119: error: Argument 1 to "TaskMapping" has incompatible type "ASyncFunctionSyncDefault[[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20, int | BlockNumber | None, bool], int | None]"; expected "def (Any, /, *args: Any, sync: Literal[True], **kwargs: Any) -> Awaitable[Never]"  [arg-type]
+            _decimals, addresses, block=block, return_None_on_failure=return_None_on_failure
+            ^~~~~~~~~
+y/utils/multicall.py:119: note: "ASyncFunctionSyncDefault[[str | bytes | HexBytes | Address | EthAddress | Contract | ERC20, int | BlockNumber | None, bool], int | None].__call__" has type overloaded function
+y/utils/multicall.py: note: In function "multicall_totalSupply":
+y/utils/multicall.py:136: error: List comprehension has incompatible type List[int | None]; expected List[int]  [misc]
+            await _totalSupply(
+            ^~~~~~~~~~~~~~~~~~~
+y/utils/multicall.py: note: In function "fetch_multicall":
+y/utils/multicall.py:169: error: Incompatible types (expression has type "str | Any", TypedDict item "data" has type "bytes | HexStr")  [typeddict-item]
+                {"to": str(multicall2), "data": data},
+                                                ^~~~
+y/utils/multicall.py:173: error: Argument 1 to "decode_output" of "_ContractMethod" has incompatible type "HexBytes"; expected "str"  [arg-type]
+            result = multicall2.tryAggregate.decode_output(call)
+                                                           ^~~~
+y/utils/multicall.py:173: error: Argument 1 to "decode_output" of "OverloadedMethod" has incompatible type "HexBytes"; expected "str"  [arg-type]
+            result = multicall2.tryAggregate.decode_output(call)
+                                                           ^~~~
+y/utils/multicall.py:175: error: Item "ContractCall" of "ContractCall | ContractTx | OverloadedMethod" has no attribute "coroutine"  [union-attr]
+            result = await multicall2.tryAggregate.coroutine(
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/multicall.py:175: error: Item "ContractTx" of "ContractCall | ContractTx | OverloadedMethod" has no attribute "coroutine"  [union-attr]
+            result = await multicall2.tryAggregate.coroutine(
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/multicall.py:175: error: Item "OverloadedMethod" of "ContractCall | ContractTx | OverloadedMethod" has no attribute "coroutine"  [union-attr]
+            result = await multicall2.tryAggregate.coroutine(
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In function "_decode_hook_unsafe":
+y/_db/utils/logs.py:60: error: Function is missing a type annotation  [no-untyped-def]
+    def _decode_hook_unsafe(typ, obj):
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In function "bulk_insert":
+y/_db/utils/logs.py:161: error: Call to untyped function (unknown) in typed context  [no-untyped-call]
+        if _check_using_extended_db():
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py:167: error: Generator has incompatible item type "tuple[int, BlockNumber | None]"; expected "tuple[int, BlockNumber | None, str]"  [misc]
+            blocks = tuple((CHAINID, block) for block in {log.blockNumber for log in logs})
+                           ^~~~~~~~~~~~~~~~
+y/_db/utils/logs.py:173: error: Argument 1 to "_remove_0x_prefix" has incompatible type "str | None"; expected "str"  [arg-type]
+        hashes = tuple((_remove_0x_prefix(hash),) for hash in itertools.chain(txhashes, addresses))
+                                          ^~~~
+y/_db/utils/logs.py: note: In function "get_topic_dbid":
+y/_db/utils/logs.py:204: error: Incompatible types in assignment (expression has type "str", variable has type "Topic")  [assignment]
+        topic = _remove_0x_prefix(topic.strip())
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In function "get_decoded":
+y/_db/utils/logs.py:228: error: Missing return statement  [return]
+    def get_decoded(log: Log) -> _EventItem | None:
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py:228: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+    def get_decoded(log: Log) -> _EventItem | None:
+                                 ^
+y/_db/utils/logs.py:230: error: Incompatible types in assignment (expression has type "y._db.entities.Log", variable has type "y._db.log.Log")  [assignment]
+        log = DbLog[CHAINID, log.block_number, log.transaction_hash, log.log_index]
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In function "set_decoded":
+y/_db/utils/logs.py:239: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+    def set_decoded(log: Log, decoded: _EventItem) -> None:
+                                       ^
+y/_db/utils/logs.py:240: error: Incompatible types in assignment (expression has type "y._db.entities.Log", variable has type "y._db.log.Log")  [assignment]
+        log = DbLog[CHAINID, log.block_number, log.transaction_hash, log.log_index]
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py:241: error: "Log" has no attribute "decoded"  [attr-defined]
+        log.decoded = decoded
+        ^~~~~~~~~~~
+y/_db/utils/logs.py: note: In member "topic0" of class "LogCache":
+y/_db/utils/logs.py:263: error: Incompatible return value type (got "Any | None", expected "str")  [return-value]
+            return self.topics[0] if self.topics else None
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In member "topic1" of class "LogCache":
+y/_db/utils/logs.py:267: error: Incompatible return value type (got "Any | None", expected "str")  [return-value]
+            return self.topics[1] if self.topics and len(self.topics) > 1 else None
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In member "topic2" of class "LogCache":
+y/_db/utils/logs.py:271: error: Incompatible return value type (got "Any | None", expected "str")  [return-value]
+            return self.topics[2] if self.topics and len(self.topics) > 2 else None
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In member "topic3" of class "LogCache":
+y/_db/utils/logs.py:275: error: Incompatible return value type (got "Any | None", expected "str")  [return-value]
+            return self.topics[3] if self.topics and len(self.topics) > 3 else None
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In member "load_metadata" of class "LogCache":
+y/_db/utils/logs.py:277: error: Missing return statement  [return]
+        def load_metadata(self) -> LogCacheInfo | None:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In member "_get_query" of class "LogCache":
+y/_db/utils/logs.py:368: error: Incompatible types in assignment (expression has type "Query[Any, Any]", variable has type "Generator[Log, None, None]")  [assignment]
+            generator = self._wrap_query_with_addresses(generator)
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py:371: error: Incompatible types in assignment (expression has type "Query[Any, Any]", variable has type "Generator[Log, None, None]")  [assignment]
+                generator = self._wrap_query_with_topic(generator, topic)
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In member "_wrap_query_with_addresses" of class "LogCache":
+y/_db/utils/logs.py:435: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+        def _wrap_query_with_addresses(self, generator) -> Query:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py:435: error: Missing type parameters for generic type "Query"  [type-arg]
+        def _wrap_query_with_addresses(self, generator) -> Query:
+                                                           ^
+y/_db/utils/logs.py:437: error: Returning Any from function declared to return "Query[Any, Any]"  [no-any-return]
+                return generator
+                ^~~~~~~~~~~~~~~~
+y/_db/utils/logs.py:440: error: Incompatible return value type (got "Generator[Any, None, None]", expected "Query[Any, Any]")  [return-value]
+                return (log for log in generator if log.address.hash == address)
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py:442: error: Incompatible return value type (got "Generator[Any, None, None]", expected "Query[Any, Any]")  [return-value]
+            return (log for log in generator if log.address.hash in addresses)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py: note: In member "_wrap_query_with_topic" of class "LogCache":
+y/_db/utils/logs.py:444: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+        def _wrap_query_with_topic(self, generator, topic_id: str) -> Query:
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py:444: error: Missing type parameters for generic type "Query"  [type-arg]
+        def _wrap_query_with_topic(self, generator, topic_id: str) -> Query:
+                                                                      ^
+y/_db/utils/logs.py:446: error: Returning Any from function declared to return "Query[Any, Any]"  [no-any-return]
+                return generator
+                ^~~~~~~~~~~~~~~~
+y/_db/utils/logs.py:451: error: Incompatible return value type (got "Generator[Any, None, None]", expected "Query[Any, Any]")  [return-value]
+                return (log for log in generator if getattr(log, topic_id).topic == topic)
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/logs.py:454: error: Incompatible return value type (got "Generator[Any, None, None]", expected "Query[Any, Any]")  [return-value]
+            return (log for log in generator if getattr(log, topic_id).topic in topics)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/_erc20.py: note: In function "decimals":
+y/utils/_erc20.py:24: error: Function is missing a return type annotation  [no-untyped-def]
+    async def decimals(
+    ^~~~~~~~~~~~~~~~~~~
+y/utils/_erc20.py: note: In function "totalSupply":
+y/utils/_erc20.py:69: error: Function is missing a return type annotation  [no-untyped-def]
+    async def totalSupply(
+    ^~~~~~~~~~~~~~~~~~~~~~
+y/utils/_erc20.py: note: In function "totalSupplyReadable":
+y/utils/_erc20.py:116: error: Function is missing a return type annotation  [no-untyped-def]
+    async def totalSupplyReadable(
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/_erc20.py: note: In function "_choose_appropriate_fn":
+y/utils/_erc20.py:173: error: Function is missing a return type annotation  [no-untyped-def]
+    def _choose_appropriate_fn(input: Any, singlecall_fn: Callable, multicall_fn: Callable):
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/utils/_erc20.py:173: error: Missing type parameters for generic type "Callable"  [type-arg]
+    def _choose_appropriate_fn(input: Any, singlecall_fn: Callable, multicall_fn: Callable):
+                                                          ^
+y/utils/_erc20.py: note: In function "_check_if_supported":
+y/utils/_erc20.py:238: error: Missing return statement  [return]
+    def _check_if_supported(input: Any) -> bool:
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/token.py: note: In function "get_token":
+y/_db/utils/token.py:70: error: Variable "y.constants.CHAINID" is not valid as a type  [valid-type]
+                        addr = Address[CHAINID, address]  # type: ignore [type-arg]
+                                       ^
+y/_db/utils/token.py:70: note: Error code "valid-type" not covered by "type: ignore" comment
+y/_db/utils/token.py:70: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#variables-vs-type-aliases
+y/_db/utils/token.py:70: error: Variable "address" is not valid as a type  [valid-type]
+                        addr = Address[CHAINID, address]  # type: ignore [type-arg]
+                                                ^
+y/prices/chainlink.py: note: In member "_include_event" of class "FeedsFromEvents":
+y/prices/chainlink.py:280: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        def _include_event(event: _EventItem) -> bool:
+                                  ^
+y/prices/chainlink.py: note: In member "_process_event" of class "FeedsFromEvents":
+y/prices/chainlink.py:297: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        def _process_event(self, event: _EventItem) -> Feed:
+                                        ^
+y/prices/dex/uniswap/v3.py: note: In member "_process_event" of class "UniV3Pools":
+y/prices/dex/uniswap/v3.py:648: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        def _process_event(self, event: _EventItem) -> UniswapV3Pool:
+                                        ^
+y/prices/dex/uniswap/v3.py: note: In member "_process_event" of class "SlipstreamPools":
+y/prices/dex/uniswap/v3.py:704: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        def _process_event(self, event: _EventItem) -> UniswapV3Pool:
+                                        ^
+y/prices/dex/uniswap/v2.py: note: In function "_load_cached_pool_tuples":
+y/prices/dex/uniswap/v2.py:87: error: Missing type parameters for generic type "_PoolTuple"  [type-arg]
+    def _load_cached_pool_tuples(factory: str) -> list[_PoolTuple]:
+                                                       ^
+y/prices/dex/uniswap/v2.py: note: In function "_save_pool_tuples":
+y/prices/dex/uniswap/v2.py:102: error: Missing type parameters for generic type "_PoolTuple"  [type-arg]
+    def _save_pool_tuples(factory: str, tuples: list[_PoolTuple]) -> None:
+                                                     ^
+y/prices/dex/uniswap/v2.py: note: In member "_process_event" of class "PoolsFromEvents":
+y/prices/dex/uniswap/v2.py:490: error: Missing type parameters for generic type "_EventItem"  [type-arg]
+        def _process_event(self, event: _EventItem) -> UniswapV2Pool:
+                                        ^
+y/_db/__init__.py: note: In function "bind_db":
+y/_db/__init__.py:8: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+    def bind_db(db: Database, **connection_settings) -> None:
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py: note: In function "get_chain":
+y/_db/utils/utils.py:59: error: Incompatible return value type (got "Entity", expected "Chain")  [return-value]
+        return Chain.get(id=CHAINID) or insert(type=Chain, id=CHAINID) or Chain[CHAINID]
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py: note: In function "ensure_block":
+y/_db/utils/utils.py:124: error: "_import_get_get_block" does not return a value (it only ever returns None)  [func-returns-value]
+        get_get_block = _get_get_block or _import_get_get_block()
+                                          ^~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py:127: error: "Block" not callable  [operator]
+            get_block(number, sync=True)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py:129: error: "Block" not callable  [operator]
+            get_block(number, sync=True)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py: note: In function "get_block_timestamp":
+y/_db/utils/utils.py:148: error: "_import_get_get_block" does not return a value (it only ever returns None)  [func-returns-value]
+        get_get_block = _get_get_block or _import_get_get_block()
+                                          ^~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py:150: error: "Block" not callable  [operator]
+        ts = get_block(number, sync=True).timestamp
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py:158: error: Returning Any from function declared to return "int | None"  [no-any-return]
+        return unix
+        ^~~~~~~~~~~
+y/_db/utils/utils.py: note: In function "get_block_at_timestamp":
+y/_db/utils/utils.py:162: error: Missing return statement  [return]
+    def get_block_at_timestamp(timestamp: datetime) -> BlockNumber | None:
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py:183: error: Incompatible return value type (got "int", expected "BlockNumber | None")  [return-value]
+            return block
+                   ^~~~~
+y/_db/utils/utils.py: note: In function "_set_block_timestamp":
+y/_db/utils/utils.py:201: error: "_import_get_get_block" does not return a value (it only ever returns None)  [func-returns-value]
+        get_get_block = _get_get_block or _import_get_get_block()
+                                          ^~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py:203: error: "Block" not callable  [operator]
+        block = get_block(block, sync=True)
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py:204: error: Incompatible types in assignment (expression has type "datetime", variable has type "int")  [assignment]
+        timestamp = datetime.fromtimestamp(timestamp, tz=timezone.utc)
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py:205: error: "int" has no attribute "timestamp"  [attr-defined]
+        block.timestamp = timestamp
+        ^~~~~~~~~~~~~~~
+y/_db/utils/utils.py: note: At top level:
+y/_db/utils/utils.py:224: error: Incompatible types in assignment (expression has type "ProcessingQueue[[VarArg(Any), NamedArg(Literal[True], 'sync'), KwArg(Any)], Never]", variable has type "Callable[[int, int], None]")  [assignment]
+    set_block_timestamp = ProcessingQueue(_set_block_timestamp, num_workers=2, return_data=False)
+                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py:224: note: "ProcessingQueue[[VarArg(Any), NamedArg(Literal[True], 'sync'), KwArg(Any)], Never].__call__" has type "def __call__(*args: Any, sync: Literal[True], **kwargs: Any) -> Future[Never]"
+y/_db/utils/utils.py:224: error: Argument 1 to "ProcessingQueue" has incompatible type "ASyncFunctionAsyncDefault[[int, int], None]"; expected "def (*args: Any, sync: Literal[True], **kwargs: Any) -> Awaitable[Never]"  [arg-type]
+    set_block_timestamp = ProcessingQueue(_set_block_timestamp, num_workers=2, return_data=False)
+                                          ^~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py:224: note: "ASyncFunctionAsyncDefault[[int, int], None].__call__" has type overloaded function
+y/_db/utils/utils.py:246: error: Need type annotation for "set_block_at_timestamp"  [var-annotated]
+    set_block_at_timestamp = ProcessingQueue(_set_block_at_timestamp, num_workers=2, return_data=False)
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py:246: error: Argument 1 to "ProcessingQueue" has incompatible type "ASyncFunctionAsyncDefault[[datetime, int], None]"; expected "def (*args: Any, sync: Literal[True], **kwargs: Any) -> Awaitable[Never]"  [arg-type]
+    set_block_at_timestamp = ProcessingQueue(_set_block_at_timestamp, num_workers=2, return_data=False)
+                                             ^~~~~~~~~~~~~~~~~~~~~~~
+y/_db/utils/utils.py:246: note: "ASyncFunctionAsyncDefault[[datetime, int], None].__call__" has type overloaded function
+y/_db/utils/bulk.py: note: In function "insert":
+y/_db/utils/bulk.py:103: error: "Database" has no attribute "provider_name"; maybe "provider"?  [attr-defined]
+        sql, parameters = build_query(db.provider_name, entity_name, columns, items)
+                                      ^~~~~~~~~~~~~~~~
+y/contracts.py: note: In function "Contract_erc20":
+y/contracts.py:103: error: Returning Any from function declared to return "Contract"  [no-any-return]
+        return Contract.from_abi("ERC20", address, ERC20ABI)
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/contracts.py: note: In function "Contract_with_erc20_fallback":
+y/contracts.py:122: error: Returning Any from function declared to return "Contract"  [no-any-return]
+            return address
+            ^~~~~~~~~~~~~~
+y/contracts.py:125: error: Returning Any from function declared to return "Contract"  [no-any-return]
+            return Contract(address)
+            ^~~~~~~~~~~~~~~~~~~~~~~~
+y/contracts.py: note: In function "probe":
+y/contracts.py:887: error: Incompatible types in assignment (expression has type "None", variable has type "tuple[Any, Any]")  [assignment]
+        method, result = results[0] if len(results) == 1 else (None, None)
+                         ^
+y/contracts.py: note: In function "build_name":
+y/contracts.py:909: error: Returning Any from function declared to return "str"  [no-any-return]
+            return contract.__dict__["_build"]["contractName"]
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/contracts.py:913: error: Incompatible return value type (got "None", expected "str")  [return-value]
+            return None
+                   ^~~~
+y/contracts.py: note: In function "proxy_implementation":
+y/contracts.py:928: error: Returning Any from function declared to return "str | bytes | HexBytes | Address | EthAddress"  [no-any-return]
+        return await probe(address, ("implementation()(address)", "target()(address)"), block)
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/convex.py: note: In function "get_underlying_lp":
+y/prices/convex.py:181: error: Need type annotation for "pool_info"  [var-annotated]
+                pool_info = await booster_contract.poolInfo.coroutine(i)
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/utils/ypriceapi.py:64: error: Need type annotation for "skip_tokens" (hint: "skip_tokens: set[<type>] = ...")  [var-annotated]
+    skip_tokens: Final = set()
+    ^~~~~~~~~~~
+y/prices/utils/ypriceapi.py: note: In function "announce_beta":
+y/prices/utils/ypriceapi.py:105: error: Cannot assign to final name "should_use"  [misc]
+        should_use = False
+        ^~~~~~~~~~~~~~~~~~
+y/prices/utils/ypriceapi.py: note: In function "get_session":
+y/prices/utils/ypriceapi.py:123: error: Argument "headers" to "ClientSession" has incompatible type "dict[str, str | None]"; expected "Mapping[str, str] | Mapping[istr, str] | CIMultiDict[str] | CIMultiDictProxy[str] | Iterable[tuple[str | istr, str]] | None"  [arg-type]
+            headers=AUTH_HEADERS,
+                    ^~~~~~~~~~~~
+y/prices/utils/ypriceapi.py: note: In function "get_price":
+y/prices/utils/ypriceapi.py:171: error: Missing return statement  [return]
+    async def get_price(token: Address, block: Block | None) -> UsdPrice | None:
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/utils/ypriceapi.py:216: error: If x = b'abc' then f"{x}" or "{}".format(x) produces "b'abc'", not "abc". If this is desired behavior, use f"{x!r}" or "{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]
+                            f"/get_price/{CHAINID}/{token}?block={block}"
+                                                   ^~~~~~~
+y/prices/utils/ypriceapi.py:232: error: If x = b'abc' then f"{x}" or "{}".format(x) produces "b'abc'", not "abc". If this is desired behavior, use f"{x!r}" or "{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]
+                logger.warning(f"ypriceAPI timed out for {token} at {block}.{FALLBACK_STR}")
+                                                         ^~~~~~~
+y/prices/utils/ypriceapi.py:237: error: If x = b'abc' then f"{x}" or "{}".format(x) produces "b'abc'", not "abc". If this is desired behavior, use f"{x!r}" or "{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]
+                    f"ypriceAPI {e.__class__.__name__} for {token} at {block}.{FALLBACK_STR}"
+                                                           ^~~~~~~
+y/prices/utils/ypriceapi.py: note: In function "read_response":
+y/prices/utils/ypriceapi.py:241: error: Missing return statement  [return]
+    async def read_response(
+    ^~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/utils/ypriceapi.py:264: error: "type[HTTPStatusExtended]" has no attribute "OK"  [attr-defined]
+        if response.status == HTTPStatusExtended.OK:
+                              ^~~~~~~~~~~~~~~~~~~~~
+y/prices/utils/ypriceapi.py:276: error: "type[HTTPStatusExtended]" has no attribute "UNAUTHORIZED"  [attr-defined]
+        elif response.status == HTTPStatusExtended.UNAUTHORIZED:
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/utils/ypriceapi.py:277: error: "type[HTTPStatusExtended]" has no attribute "UNAUTHORIZED"  [attr-defined]
+            if HTTPStatusExtended.UNAUTHORIZED not in notified:
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/utils/ypriceapi.py:281: error: "type[HTTPStatusExtended]" has no attribute "UNAUTHORIZED"  [attr-defined]
+                notified.add(HTTPStatusExtended.UNAUTHORIZED)
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/utils/ypriceapi.py:284: error: "type[HTTPStatusExtended]" has no attribute "NOT_FOUND"  [attr-defined]
+        elif response.status == HTTPStatusExtended.NOT_FOUND and token and block:
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/utils/ypriceapi.py:291: error: "type[HTTPStatusExtended]" has no attribute "BAD_GATEWAY"  [attr-defined]
+            HTTPStatusExtended.BAD_GATEWAY,
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/utils/ypriceapi.py:292: error: "type[HTTPStatusExtended]" has no attribute "SERVICE_UNAVAILABLE"  [attr-defined]
+            HTTPStatusExtended.SERVICE_UNAVAILABLE,
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/prices/utils/ypriceapi.py:316: error: If x = b'abc' then f"{x}" or "{}".format(x) produces "b'abc'", not "abc". If this is desired behavior, use f"{x!r}" or "{!r}".format(x). Otherwise, decode the bytes  [str-bytes-safe]
+                msg += f" for {token} at {block}.{FALLBACK_STR}"
+                              ^~~~~~~
+y/prices/utils/ypriceapi.py: note: In function "_set_resume_at":
+y/prices/utils/ypriceapi.py:358: error: Incompatible types in assignment (expression has type "float", variable has type "int")  [assignment]
+            resume_at = resume_from_this_err_at
+                        ^~~~~~~~~~~~~~~~~~~~~~~
+y/prices/stable_swap/froyo.py: note: In function "get_price":
+y/prices/stable_swap/froyo.py:90: error: Unsupported operand types for / ("None" and "int")  [operator]
+        return UsdPrice(virtual_price / 10**18)
+                        ^
+y/prices/stable_swap/froyo.py:90: note: Left operand is of type "Any | None"
+y/prices/stable_swap/belt.py: note: In function "get_price":
+y/prices/stable_swap/belt.py:73: error: Unsupported operand types for / ("None" and "int")  [operator]
+        return UsdPrice(virtual_price / 10**18)
+                        ^
+y/prices/stable_swap/belt.py:73: note: Left operand is of type "Any | None"
+y/prices/dex/uniswap/v2_forks.py:370: error: No overload variant of "get" of "dict" matches argument types "int", "dict[Never, Never]"  [call-overload]
+    SPECIAL_PATHS = {
+                    ^
+y/prices/dex/uniswap/v2_forks.py:370: note: Possible overload variants:
+y/prices/dex/uniswap/v2_forks.py:370: note:     def get(self, Network, None = ..., /) -> dict[str, dict[str, tuple[str | Contract | None, ...]]] | None
+y/prices/dex/uniswap/v2_forks.py:370: note:     def get(self, Network, dict[str, dict[str, tuple[str | Contract | None, ...]]], /) -> dict[str, dict[str, tuple[str | Contract | None, ...]]]
+y/prices/dex/uniswap/v2_forks.py:370: note:     def [_T] get(self, Network, _T, /) -> dict[str, dict[str, tuple[str | Contract | None, ...]]] | _T
+y/prices/dex/uniswap/v2_forks.py: note: In function "special_paths":
+y/prices/dex/uniswap/v2_forks.py:484: error: Returning Any from function declared to return "dict[str, dict[str | bytes | HexBytes | Address | EthAddress, list[str | bytes | HexBytes | Address | EthAddress]]]"  [no-any-return]
+        return SPECIAL_PATHS.get(protocol, {})
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+y/classes/common.py:145: error: INTERNAL ERROR -- Please try using mypy master on GitHub:
+https://mypy.readthedocs.io/en/stable/common_issues.html#using-a-development-mypy-build
+Please report a bug at https://github.com/python/mypy/issues
+version: 1.19.1+bytesrefcount1
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/usr/local/lib/python3.12/site-packages/mypy/__main__.py", line 37, in <module>
+    console_entry()
+  File "/usr/local/lib/python3.12/site-packages/mypy/__main__.py", line 15, in console_entry
+    main()
+  File "/usr/local/lib/python3.12/site-packages/mypy/main.py", line 135, in main
+    res, messages, blockers = run_build(sources, options, fscache, t0, stdout, stderr)
+  File "/usr/local/lib/python3.12/site-packages/mypy/main.py", line 219, in run_build
+    res = build.build(sources, options, None, flush_errors, fscache, stdout, stderr)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 222, in build
+    result = _build(
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 301, in _build
+    graph = dispatch(sources, manager, stdout)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 2952, in dispatch
+    process_graph(graph, manager)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 3347, in process_graph
+    done, still_working = manager.wait_for_done(graph)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 925, in wait_for_done
+    process_stale_scc(graph, next_scc, self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 3485, in process_stale_scc
+    graph[id].type_check_first_pass()
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 2340, in type_check_first_pass
+    self.type_checker().check_first_pass()
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 532, in check_first_pass
+    self.accept(d)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1478, in accept
+    return visitor.visit_class_def(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 2689, in visit_class_def
+    self.accept(defn.defs)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1573, in accept
+    return visitor.visit_block(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 3161, in visit_block
+    self.accept(s)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1155, in accept
+    return visitor.visit_decorator(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 5462, in visit_decorator
+    self.visit_decorator_inner(e)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 5469, in visit_decorator_inner
+    self.check_func_item(e.func, name=e.func.name, allow_empty=allow_empty)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 1239, in check_func_item
+    self.check_func_def(defn, typ, name, allow_empty)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 1512, in check_func_def
+    self.accept(item.body)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1573, in accept
+    return visitor.visit_block(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 3161, in visit_block
+    self.accept(s)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1769, in accept
+    return visitor.visit_return_stmt(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 4904, in visit_return_stmt
+    self.check_return_stmt(s)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 4951, in check_return_stmt
+    return_type = self.get_coroutine_return_type(self.return_types[-1])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 1161, in get_coroutine_return_type
+    assert isinstance(return_type, Instance), "Should only be called on coroutine functions."
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Should only be called on coroutine functions.
+y/classes/common.py:145: : note: use --pdb to drop into pdb

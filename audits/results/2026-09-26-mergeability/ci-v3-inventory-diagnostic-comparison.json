@@ -1,0 +1,484 @@
+{
+  "before": "62fd373c438a681b7d699751745a60db0c211dd3",
+  "after": "d414e7d3c27bc335a253012dddd7c3e58aa1da57",
+  "normalization": "Diagnostic source positions excluded; embedded on line references normalized. CI transitive dependencies are not frozen.",
+  "jobs": [
+    {
+      "name": "mypy (ubuntu-latest, 3.11)",
+      "before_count": 1806,
+      "after_count": 1791,
+      "added": [],
+      "removed": [
+        {
+          "file": "y/_db/common.py",
+          "message": "Function is missing a type annotation for one or more arguments [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "message": "Call to untyped function \"skip_too_early\" in typed context [no-untyped-call]",
+          "count": 4
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"_EventItem[Any]\", variable has type \"UniswapV3Pool\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Invalid index type \"int | None\" for \"dict[int | BlockNumber, list[UniswapV3Pool]]\"; expected type \"int | BlockNumber\" [index]",
+          "count": 3
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"list[UniswapV3Pool]\", variable has type \"UniV3Pools\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Unsupported operand types for < (\"int\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Unsupported operand types for < (\"BlockNumber\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"UniV3Pools\", target has type \"list[UniswapV3Pool]\") [assignment]",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.13)",
+      "before_count": 1806,
+      "after_count": 1791,
+      "added": [],
+      "removed": [
+        {
+          "file": "y/_db/common.py",
+          "message": "Function is missing a type annotation for one or more arguments [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "message": "Call to untyped function \"skip_too_early\" in typed context [no-untyped-call]",
+          "count": 4
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"_EventItem[Any]\", variable has type \"UniswapV3Pool\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Invalid index type \"int | None\" for \"dict[int | BlockNumber, list[UniswapV3Pool]]\"; expected type \"int | BlockNumber\" [index]",
+          "count": 3
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"list[UniswapV3Pool]\", variable has type \"UniV3Pools\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Unsupported operand types for < (\"int\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Unsupported operand types for < (\"BlockNumber\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"UniV3Pools\", target has type \"list[UniswapV3Pool]\") [assignment]",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "name": "mypy (windows-latest, 3.11)",
+      "before_count": 1839,
+      "after_count": 1824,
+      "added": [],
+      "removed": [
+        {
+          "file": "y\\_db\\common.py",
+          "message": "Function is missing a type annotation for one or more arguments [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y\\_db\\common.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y\\_db\\common.py",
+          "message": "Call to untyped function \"skip_too_early\" in typed context [no-untyped-call]",
+          "count": 4
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Incompatible types in assignment (expression has type \"_EventItem[Any]\", variable has type \"UniswapV3Pool\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Invalid index type \"int | None\" for \"dict[int | BlockNumber, list[UniswapV3Pool]]\"; expected type \"int | BlockNumber\" [index]",
+          "count": 3
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Incompatible types in assignment (expression has type \"list[UniswapV3Pool]\", variable has type \"UniV3Pools\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Unsupported operand types for < (\"int\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Unsupported operand types for < (\"BlockNumber\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Incompatible types in assignment (expression has type \"UniV3Pools\", target has type \"list[UniswapV3Pool]\") [assignment]",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "name": "mypy (macos-latest, 3.13)",
+      "before_count": 1806,
+      "after_count": 1791,
+      "added": [],
+      "removed": [
+        {
+          "file": "y/_db/common.py",
+          "message": "Function is missing a type annotation for one or more arguments [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "message": "Call to untyped function \"skip_too_early\" in typed context [no-untyped-call]",
+          "count": 4
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"_EventItem[Any]\", variable has type \"UniswapV3Pool\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Invalid index type \"int | None\" for \"dict[int | BlockNumber, list[UniswapV3Pool]]\"; expected type \"int | BlockNumber\" [index]",
+          "count": 3
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"list[UniswapV3Pool]\", variable has type \"UniV3Pools\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Unsupported operand types for < (\"int\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Unsupported operand types for < (\"BlockNumber\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"UniV3Pools\", target has type \"list[UniswapV3Pool]\") [assignment]",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.12)",
+      "before_count": 1806,
+      "after_count": 1791,
+      "added": [],
+      "removed": [
+        {
+          "file": "y/_db/common.py",
+          "message": "Function is missing a type annotation for one or more arguments [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "message": "Call to untyped function \"skip_too_early\" in typed context [no-untyped-call]",
+          "count": 4
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"_EventItem[Any]\", variable has type \"UniswapV3Pool\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Invalid index type \"int | None\" for \"dict[int | BlockNumber, list[UniswapV3Pool]]\"; expected type \"int | BlockNumber\" [index]",
+          "count": 3
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"list[UniswapV3Pool]\", variable has type \"UniV3Pools\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Unsupported operand types for < (\"int\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Unsupported operand types for < (\"BlockNumber\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"UniV3Pools\", target has type \"list[UniswapV3Pool]\") [assignment]",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "name": "mypy (macos-latest, 3.11)",
+      "before_count": 1806,
+      "after_count": 1791,
+      "added": [],
+      "removed": [
+        {
+          "file": "y/_db/common.py",
+          "message": "Function is missing a type annotation for one or more arguments [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "message": "Call to untyped function \"skip_too_early\" in typed context [no-untyped-call]",
+          "count": 4
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"_EventItem[Any]\", variable has type \"UniswapV3Pool\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Invalid index type \"int | None\" for \"dict[int | BlockNumber, list[UniswapV3Pool]]\"; expected type \"int | BlockNumber\" [index]",
+          "count": 3
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"list[UniswapV3Pool]\", variable has type \"UniV3Pools\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Unsupported operand types for < (\"int\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Unsupported operand types for < (\"BlockNumber\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"UniV3Pools\", target has type \"list[UniswapV3Pool]\") [assignment]",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "name": "mypy (macos-latest, 3.12)",
+      "before_count": 1806,
+      "after_count": 1791,
+      "added": [],
+      "removed": [
+        {
+          "file": "y/_db/common.py",
+          "message": "Function is missing a type annotation for one or more arguments [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/common.py",
+          "message": "Call to untyped function \"skip_too_early\" in typed context [no-untyped-call]",
+          "count": 4
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"_EventItem[Any]\", variable has type \"UniswapV3Pool\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Invalid index type \"int | None\" for \"dict[int | BlockNumber, list[UniswapV3Pool]]\"; expected type \"int | BlockNumber\" [index]",
+          "count": 3
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"list[UniswapV3Pool]\", variable has type \"UniV3Pools\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Unsupported operand types for < (\"int\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Unsupported operand types for < (\"BlockNumber\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v3.py",
+          "message": "Incompatible types in assignment (expression has type \"UniV3Pools\", target has type \"list[UniswapV3Pool]\") [assignment]",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "name": "mypy (windows-latest, 3.13)",
+      "before_count": 1839,
+      "after_count": 1824,
+      "added": [],
+      "removed": [
+        {
+          "file": "y\\_db\\common.py",
+          "message": "Function is missing a type annotation for one or more arguments [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y\\_db\\common.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y\\_db\\common.py",
+          "message": "Call to untyped function \"skip_too_early\" in typed context [no-untyped-call]",
+          "count": 4
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Incompatible types in assignment (expression has type \"_EventItem[Any]\", variable has type \"UniswapV3Pool\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Invalid index type \"int | None\" for \"dict[int | BlockNumber, list[UniswapV3Pool]]\"; expected type \"int | BlockNumber\" [index]",
+          "count": 3
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Incompatible types in assignment (expression has type \"list[UniswapV3Pool]\", variable has type \"UniV3Pools\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Unsupported operand types for < (\"int\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Unsupported operand types for < (\"BlockNumber\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Incompatible types in assignment (expression has type \"UniV3Pools\", target has type \"list[UniswapV3Pool]\") [assignment]",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "name": "mypy (windows-latest, 3.12)",
+      "before_count": 1837,
+      "after_count": 1822,
+      "added": [],
+      "removed": [
+        {
+          "file": "y\\_db\\common.py",
+          "message": "Function is missing a type annotation for one or more arguments [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y\\_db\\common.py",
+          "message": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        },
+        {
+          "file": "y\\_db\\common.py",
+          "message": "Call to untyped function \"skip_too_early\" in typed context [no-untyped-call]",
+          "count": 4
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Incompatible types in assignment (expression has type \"_EventItem[Any]\", variable has type \"UniswapV3Pool\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Invalid index type \"int | None\" for \"dict[int | BlockNumber, list[UniswapV3Pool]]\"; expected type \"int | BlockNumber\" [index]",
+          "count": 3
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Incompatible types in assignment (expression has type \"list[UniswapV3Pool]\", variable has type \"UniV3Pools\") [assignment]",
+          "count": 1
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Unsupported operand types for < (\"int\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Unsupported operand types for < (\"BlockNumber\" and \"None\") [operator]",
+          "count": 1
+        },
+        {
+          "file": "y\\prices\\dex\\uniswap\\v3.py",
+          "message": "Incompatible types in assignment (expression has type \"UniV3Pools\", target has type \"list[UniswapV3Pool]\") [assignment]",
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "queried_hash": "0xe81dd2b5684d8bf1786735b931e1a18023bdbfa4d67cab72d808f24a3038df8d",
+  "block": {
+    "number": "0x18db466",
+    "hash": "0xe81dd2b5684d8bf1786735b931e1a18023bdbfa4d67cab72d808f24a3038df8d",
+    "parentHash": "0x4e6fc5363da54f3f0fbc56e453592e8a26ee57d2038a2372e7959c693520b082",
+    "timestamp": "0x6ab828d7"
+  },
+  "canonical": {
+    "number": "0x18db466",
+    "hash": "0x20782c5a78503c2065d3c9d8dc3c2e9f5bd6134c310c383b464e3a051abd6a35",
+    "parentHash": "0x4e6fc5363da54f3f0fbc56e453592e8a26ee57d2038a2372e7959c693520b082",
+    "timestamp": "0x6ab828e3"
+  },
+  "orphaned": true
+}

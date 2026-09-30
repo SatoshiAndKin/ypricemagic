@@ -1,0 +1,30 @@
+{
+  "command": [
+    "sh",
+    "/runner/repeat_cache.sh"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 3.9124838649877347,
+  "peak_sampled_process_rss_bytes": 41218048,
+  "cgroup_before": {
+    "memory.current": "8921088",
+    "memory.peak": "8921088",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "14241792",
+    "memory.peak": "141971456",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

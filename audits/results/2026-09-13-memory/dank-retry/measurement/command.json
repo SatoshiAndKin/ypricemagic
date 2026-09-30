@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; export PYTEST_PLUGINS= PYTEST_DISABLE_PLUGIN_AUTOLOAD=1; cd /tmp; for phase in before after; do if [ \"$phase\" = before ]; then export PYTHONPATH=/runner; else export PYTHONPATH=/runner:/work; fi; for sample in 1 2 3; do python /work/benchmarks/http_retry_memory.py --output \"/reports/$phase-$sample.json\"; done; python /work/benchmarks/http_retry_memory.py --allocations --output \"/reports/$phase-allocations.json\"; done"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 5.185173693000252,
+  "peak_sampled_process_rss_bytes": 174059520,
+  "cgroup_before": {
+    "memory.current": "8736768",
+    "memory.peak": "8839168",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "14110720",
+    "memory.peak": "285474816",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

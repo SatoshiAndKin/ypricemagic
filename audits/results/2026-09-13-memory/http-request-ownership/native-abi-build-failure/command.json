@@ -1,0 +1,34 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m pip install --no-deps coverage==7.10.7 && python scripts/run_mypyc_build.py && python -c \"$1\" && PYTEST_PLUGINS= PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -c \"$2\"",
+    "native-owner",
+    "from pathlib import Path\nimport importlib,json\nfrom importlib.machinery import EXTENSION_SUFFIXES\nmodules={name:importlib.import_module(name).__file__ for name in ['dank_mids._tasks','dank_mids.helpers._requester','dank_mids.controller','dank_mids.helpers._codec']}\nPath('/reports/native-paths.json').write_text(json.dumps(modules,indent=2)+'\\n')\nassert all(any(path.endswith(suffix) for suffix in EXTENSION_SUFFIXES) for path in modules.values()),modules\n",
+    "from pathlib import Path\nimport json,sys,tomllib,pytest,os,coverage\nclass Results:\n def __init__(self): self.rows=[]\n def pytest_runtest_logreport(self,report):\n  self.rows.append(dict(test=report.nodeid,phase=report.when,outcome=report.outcome,error=str(report.longrepr) if report.failed else None))\n def pytest_sessionfinish(self,session,exitstatus):\n  Path('/reports/owner-tests.json').write_text(json.dumps(dict(collected=session.testscollected,exit_code=int(exitstatus),events=self.rows),indent=2)+'\\n')\nfrom dank_mids import _requests,_tasks\nfrom dank_mids.helpers import _requester\nPath('/reports/owner-module-paths.json').write_text(json.dumps({m.__name__:m.__file__ for m in (_requests,_tasks,_requester)},indent=2)+'\\n')\nos.chdir('/work/tests/unit')\ncov=coverage.Coverage(branch=True,source=['dank_mids'],data_file='/reports/.coverage')\ncov.start()\nstatus=pytest.main([],plugins=[Results()])\ncov.stop();cov.save();cov.json_report(outfile='/reports/owner-coverage.json')\nraise SystemExit(status)\n"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 42.560001685000316,
+  "peak_sampled_process_rss_bytes": 715382784,
+  "cgroup_before": {
+    "memory.current": "8994816",
+    "memory.peak": "8994816",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "55644160",
+    "memory.peak": "1031909376",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

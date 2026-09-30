@@ -1,0 +1,61 @@
+{
+  "complete": false,
+  "reason": "Manual interruption based on an outdated stall assessment. The final checkpoint shows resumed progress: 389 terminal outcomes. This is not evidence of a persistent stall.",
+  "collected": 1957,
+  "counts": {
+    "sessionstart:": 1,
+    "collection:": 1,
+    "setup:passed": 389,
+    "call:passed": 270,
+    "teardown:passed": 389,
+    "call:skipped": 9,
+    "call:failed": 110
+  },
+  "last_test_event": {
+    "phase": "teardown",
+    "elapsed_seconds": 697.0635520929936,
+    "rss_peak_bytes": 736894976,
+    "live_tasks": 25578,
+    "test": "tests/prices/test_chainlink.py::test_chainlink_before_registry[0x9fcf418B971134625CdF38448B949C8640971671]",
+    "outcome": "passed",
+    "duration": 2.384185791015625e-07,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 0,
+        "flights": 11
+      },
+      "result_cache": {
+        "values": 0,
+        "flights": 3
+      },
+      "state_cache": {
+        "values": 1187,
+        "flights": 1
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 97201,
+      "multicall_uid": 1888,
+      "request_uid": 24840,
+      "jsonrpc_batch_uid": 1667
+    }
+  },
+  "progress": {
+    "elapsed_seconds": 912.1131364099856,
+    "sampled_process_rss_bytes": 755879936,
+    "peak_sampled_process_rss_bytes": 1079517184,
+    "cgroup": {
+      "memory.current": "879005696",
+      "memory.peak": "1175195648",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "42"
+    }
+  },
+  "captured_unix": 1790362115.5128927
+}

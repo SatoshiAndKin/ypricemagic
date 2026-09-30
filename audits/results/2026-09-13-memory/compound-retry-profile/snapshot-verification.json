@@ -1,0 +1,10 @@
+{
+  "runner-files.json": {
+    "files": 28,
+    "copied_content_matches_recorded_hashes": true
+  },
+  "workload-files.json": {
+    "files": 2,
+    "copied_content_matches_recorded_hashes": true
+  }
+}

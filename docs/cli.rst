@@ -6,18 +6,25 @@ The y/cli.py module provides command-line tools for debugging and database manag
 Debugging
 ---------
 
-The CLI includes two debugging commands that leverage Brownie's run command to execute dedicated debugging scripts. They are designed to simplify the process of investigating price retrieval and Curve pool operations without manually setting environment variables.
+The CLI includes commands to inspect price retrieval and Curve pool operations.
 
 debug price
 ~~~~~~~~~~~
 Description:
-    Debug token price retrieval. This command runs the Brownie script "debug-price" using the specified token address and, optionally, a block number. The token is passed via the --token flag and the block number via --block.
+    Debug token price retrieval with the specified token address and an optional
+    block number. This operation enables DEBUG logging for ``y``. It reuses an
+    available handler, or adds a stream handler if none is available. Importing
+    the CLI and running ``audit-prices`` or database commands preserve the
+    configured logging level and handlers.
+
+    Long-running calls emit DEBUG-only ``y.stuck?`` messages every five minutes
+    when that logger is enabled. See :doc:`caching` for diagnostic guidance.
 
 Usage:
     ypricemagic debug price --token <token_address> [--block <block_number>]
 
 Example:
-    ypricemagic debug price --token 0xABCdef... --block 1234567
+    ypricemagic debug price --token 0x6B3595068778DD592e39A122f4f5a5cF09C90fE2 --block 18000000
 
 debug curve
 ~~~~~~~~~~~
@@ -85,3 +92,26 @@ Usage:
     (Replace <target> with the token address or symbol, for example:
         ypricemagic db select 0x123abc... or
         ypricemagic db select MOON)
+
+db reset-prices
+~~~~~~~~~~~~~~~
+Description:
+    Back up the configured SQLite database and remove one chain's cached prices.
+    Stop all writers before this command. The backup path must not exist.
+    The command checks the backup, reports deleted rows, and preserves metadata,
+    events, discovery data, and prices for other chains. Restart writers after
+    the command to clear memory caches. Prices rebuild on demand.
+
+Usage::
+
+    BROWNIE_NETWORK_ID=mainnet ypricemagic db reset-prices --chain 1 --backup /path/to/backup.sqlite
+
+The command uses ``YPRICEMAGIC_SQLITE_PATH`` when set, or the default database at
+``~/.ypricemagic/ypricemagic.sqlite``. It does not stop or restart other processes.
+
+Historical price audit
+----------------------
+
+``ypricemagic audit-prices MANIFEST --json REPORT.json --csv REPORT.csv``
+compares historical public prices against DeFiLlama with a 5% spot tolerance.
+See :doc:`amount-quotes` for the manifest, coverage rules, and exit codes.

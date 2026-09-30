@@ -1,0 +1,19 @@
+{
+  "exit_code": 1,
+  "command": [
+    "docker",
+    "--context",
+    "colima-ypricemagic",
+    "exec",
+    "-w",
+    "/reports/cooperative-wait-repair",
+    "-e",
+    "PYTEST_PLUGINS=pytest_asyncio_cooperative.plugin",
+    "-e",
+    "PYTHONPATH=/reports/cooperative-wait-repair",
+    "ypricemagic-validation-job",
+    "/reports/cooperative-unit/bin/python",
+    "-m",
+    "pytest"
+  ]
+}

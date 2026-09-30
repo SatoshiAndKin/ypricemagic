@@ -1,0 +1,10 @@
+{
+  "path": "measured-workload.py",
+  "sha256": "155bd08eabb8c68942f6100b86d139523ed5eb964fb579d7ce194480ea4befe0",
+  "same_content_for_before_and_after": true,
+  "before_module": "/usr/local/lib/python3.12/site-packages/dank_mids/_requests.py",
+  "before_revision": "bc59c589ee631221b9aa4879fe1a0734afaaee04",
+  "after_module": "/work/dank_mids/_requests.py",
+  "after_source_archive_sha256": "03df9ec1d292e90e9a3995aaa6049fa7c31211891dcfebba28a7534c168dbcb9",
+  "note": "This is the exact measured workload. The reusable runner copy adds type annotations and materializes the final Future identity check after the pending-memory sample."
+}

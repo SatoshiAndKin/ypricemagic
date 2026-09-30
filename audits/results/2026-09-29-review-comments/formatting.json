@@ -1,0 +1,16 @@
+{
+  "source": "7d5074c0b31fa61b59a1a79ad9aaeccdeafb51ad",
+  "black": {
+    "files": 8,
+    "exit_code": 0,
+    "result": "8 files would be left unchanged"
+  },
+  "isort": {
+    "files": 8,
+    "exit_code": 0
+  },
+  "git_diff_check": {
+    "range": "c27864f0..7d5074c0",
+    "exit_code": 0
+  }
+}

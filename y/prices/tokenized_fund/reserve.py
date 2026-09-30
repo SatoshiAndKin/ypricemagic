@@ -42,7 +42,7 @@ async def get_price(
     token_address: Address,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
-) -> Decimal:
+) -> Decimal | None:
     """
     Retrieve the USD price of a Reserve Protocol R-token.
 
@@ -78,14 +78,15 @@ async def get_price(
     See Also:
         :func:`~y.prices.tokenized_fund.reserve.is_rtoken`
     """
-    main = await Call(token_address, "main()(address)", block_id=block)
+    main = await Call(str(token_address), "main()(address)", block_id=block)
     if main is None:
         raise TypeError(main, token_address, await is_rtoken(token_address, sync=False))
     basket_handler = await Contract.coroutine(
         await Call(main, "basketHandler()(address)", block_id=block)
     )
     try:
-        low, high = await basket_handler.price.coroutine(block_identifier=block)
+        bounds: tuple[int, int] = await basket_handler.price.coroutine(block_identifier=block)
+        low, high = bounds
     except Revert:
         return None
     else:

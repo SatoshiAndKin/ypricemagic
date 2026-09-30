@@ -1,0 +1,72 @@
+{
+  "elapsed_seconds": 45.027825416007545,
+  "error_type": "TimeoutError",
+  "method": "eth_getLogs",
+  "client_timeout_seconds": 45,
+  "params": [
+    {
+      "fromBlock": "0x1799098",
+      "toBlock": "0x179b7a7",
+      "address": "0x47Fb2585D2C56Fe188D0E6ec628a38b74fCeeeDf",
+      "topics": [
+        "0x27a180c70f2642f63d1694eb252b7df52e7ab2565e3f67adf7748acb7d82b9bc"
+      ]
+    }
+  ],
+  "narrow_rechecks": [
+    {
+      "case": "head",
+      "method": "eth_blockNumber",
+      "params": [],
+      "client_timeout_seconds": 15,
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": "0x18db687"
+      },
+      "elapsed_seconds": 0.04867720798938535
+    },
+    {
+      "case": "one-block",
+      "method": "eth_getLogs",
+      "params": [
+        {
+          "fromBlock": "0x1799098",
+          "toBlock": "0x1799098",
+          "address": "0x47Fb2585D2C56Fe188D0E6ec628a38b74fCeeeDf",
+          "topics": [
+            "0x27a180c70f2642f63d1694eb252b7df52e7ab2565e3f67adf7748acb7d82b9bc"
+          ]
+        }
+      ],
+      "client_timeout_seconds": 15,
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": []
+      },
+      "elapsed_seconds": 0.26455683300446253
+    },
+    {
+      "case": "1000-blocks",
+      "method": "eth_getLogs",
+      "params": [
+        {
+          "fromBlock": "0x1799098",
+          "toBlock": "0x179947f",
+          "address": "0x47Fb2585D2C56Fe188D0E6ec628a38b74fCeeeDf",
+          "topics": [
+            "0x27a180c70f2642f63d1694eb252b7df52e7ab2565e3f67adf7748acb7d82b9bc"
+          ]
+        }
+      ],
+      "client_timeout_seconds": 45,
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": []
+      },
+      "elapsed_seconds": 3.0148605419963133
+    }
+  ]
+}

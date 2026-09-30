@@ -1,0 +1,86 @@
+import ast
+import json
+import time
+import urllib.request
+from decimal import Decimal
+from pathlib import Path
+
+from eth_abi import decode, encode
+from eth_utils import keccak
+
+private = Path('/private/tmp/yprice-mergeable')
+directory = Path('audits/results/2026-09-26-mergeability/audit-v3-inventory-312')
+audit = json.loads((directory / 'audit.json').read_text())
+settings = dict(line.split('=', 1) for line in (private / 'runtime-default-range.env').read_text().splitlines() if '=' in line)
+endpoint = settings['VALIDATION_RPC_URL']
+calls = []
+
+def rpc(method, params):
+    payload = {'jsonrpc': '2.0', 'id': len(calls) + 1, 'method': method, 'params': params}
+    request = urllib.request.Request(endpoint, json.dumps(payload).encode(), {'Content-Type': 'application/json'})
+    with urllib.request.urlopen(request, timeout=45) as response:
+        result = json.load(response)
+    calls.append({'method': method, 'params': params, 'response': result, 'observed_unix': time.time()})
+    return result
+
+def read(token, signature, outputs, block_hash, types=(), arguments=()):
+    data = '0x' + (keccak(text=signature)[:4] + encode(types, arguments)).hex()
+    result = rpc('eth_call', [{'to': token, 'data': data}, {'blockHash': block_hash, 'requireCanonical': True}])
+    if 'error' in result or result.get('result') == '0x':
+        return None
+    return decode(outputs, bytes.fromhex(result['result'][2:]))
+
+def canonical(row):
+    block = rpc('eth_getBlockByNumber', [hex(row['block_number']), False])['result']
+    assert block['hash'] == row['block_hash']
+    return {key: block[key] for key in ('number', 'hash', 'timestamp', 'stateRoot')}
+
+gauge = '0x182B723a58739a9c974cFDB385ceaDb237453c28'
+vault = '0xdA816459F1AB5631232FE5e97a05BBBb94970c95'
+groups = {}
+for row in audit['rows']:
+    if row['status'] == 'price_failure' and row['mode'] == 'sale' and row['token'].lower() in (gauge.lower(), vault.lower()):
+        groups.setdefault((row['token'], row['block_number']), []).append(row)
+checks = []
+for (token, number), rows in groups.items():
+    row = rows[0]
+    before = canonical(row)
+    block_hash = row['block_hash']
+    check = {'token': token, 'block_number': number, 'block_hash': block_hash, 'canonical_before': before, 'failed_amounts': [r['amount'] for r in rows]}
+    if token.lower() == gauge.lower():
+        lp, = read(token, 'lp_token()', ['address'], block_hash)
+        backing, = read(lp, 'balanceOf(address)', ['uint256'], block_hash, ['address'], [token])
+        check.update(lp_token=lp, backing=backing, all_exceed_backing=all(int(Decimal(r['amount']) * 10**18) > backing for r in rows))
+        assert check['all_exceed_backing']
+    else:
+        values = {}
+        for name, output in [('apiVersion', 'string'), ('token', 'address'), ('totalSupply', 'uint256'), ('totalAssets', 'uint256'), ('lockedProfit', 'uint256'), ('lockedProfitDegradation', 'uint256'), ('lastReport', 'uint256')]:
+            values[name], = read(token, name + '()', [output], block_hash)
+        idle = read(token, 'totalIdle()', ['uint256'], block_hash)
+        if idle is None:
+            idle = read(values['token'], 'balanceOf(address)', ['uint256'], block_hash, ['address'], [token])
+        values['idle'], = idle
+        ratio = (int(before['timestamp'], 16) - values['lastReport']) * values['lockedProfitDegradation']
+        locked = values['lockedProfit'] - values['lockedProfit'] * ratio // 10**18 if ratio < 10**18 else 0
+        amounts = [int(Decimal(r['amount']) * 10**18) * (values['totalAssets'] - locked) // values['totalSupply'] for r in rows]
+        check.update(reads=values, output_native=amounts, all_exceed_idle=all(amount > values['idle'] for amount in amounts))
+        assert check['all_exceed_idle']
+    check['canonical_after'] = canonical(row)
+    checks.append(check)
+    print(json.dumps({'block': number, 'token': token, 'backing_or_idle': check.get('backing', check.get('reads', {}).get('idle')), 'verified': True}), flush=True)
+
+replays = []
+for row in audit['rows']:
+    if 'OutOfOffset' not in row.get('failure', ''):
+        continue
+    before = canonical(row)
+    node = ast.parse(row['failure'].removeprefix('ValueError: '), mode='eval').body
+    request = next(value for key, value in zip(node.keys, node.values) if isinstance(key, ast.Constant) and key.value == 'dankmids_added_context')
+    args = {keyword.arg: ast.literal_eval(keyword.value) for keyword in request.keywords}
+    result = rpc(args['method'], args['params'])
+    replays.append({'token': row['token'], 'amount': row['amount'], 'block_number': row['block_number'], 'original_error': row['failure'], 'request': {'method': args['method'], 'params': args['params']}, 'replay': result, 'canonical_before': before, 'canonical_after': canonical(row)})
+    print(json.dumps({'out_of_offset_replay': len(replays), 'error': result.get('error')}), flush=True)
+
+result = {'source_commit': 'd414e7d3c27bc335a253012dddd7c3e58aa1da57', 'sequential': True, 'backing_checks': checks, 'unexpected_error_replays': replays, 'rpc_evidence': calls, 'limitation': 'These reads explain unavailable immediate redemptions and preserve unexpected RPC errors. They do not prove holder eligibility or turn audit failures into passes.'}
+(directory / 'native-outcome-rechecks.json').write_text(json.dumps(result, indent=2) + '\n')
+print(json.dumps({'backing_checks': len(checks), 'error_replays': len(replays), 'rpc_calls': len(calls)}), flush=True)

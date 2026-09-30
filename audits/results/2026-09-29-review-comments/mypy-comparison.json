@@ -1,0 +1,29 @@
+[
+  {
+    "python": "3.11",
+    "baseline_report": "audits/results/2026-09-28-zero-failures/release-focused-311/mypy.txt",
+    "current_report": "audits/results/2026-09-29-review-comments/review-final4-focused-311/mypy.txt",
+    "baseline": "Success: no issues found in 230 source files",
+    "current": "Success: no issues found in 231 source files",
+    "diagnostics_added": [],
+    "diagnostics_removed": []
+  },
+  {
+    "python": "3.12",
+    "baseline_report": "audits/results/2026-09-28-zero-failures/release2-full-312/mypy.txt",
+    "current_report": "audits/results/2026-09-29-review-comments/review-final4-full-312/mypy.txt",
+    "baseline": "Success: no issues found in 230 source files",
+    "current": "Success: no issues found in 231 source files",
+    "diagnostics_added": [],
+    "diagnostics_removed": []
+  },
+  {
+    "python": "3.13",
+    "baseline_report": "audits/results/2026-09-28-zero-failures/release-focused-native-313/mypy.txt",
+    "current_report": "audits/results/2026-09-29-review-comments/review-final4-focused-313/mypy.txt",
+    "baseline": "Success: no issues found in 230 source files",
+    "current": "Success: no issues found in 231 source files",
+    "diagnostics_added": [],
+    "diagnostics_removed": []
+  }
+]

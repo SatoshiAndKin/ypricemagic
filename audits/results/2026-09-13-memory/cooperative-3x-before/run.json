@@ -1,0 +1,18 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m pip install --no-deps . && sh /runner/repeat_cooperative.sh"
+  ],
+  "complete": true,
+  "started_unix": 1789280855.327734,
+  "source_sha": "c566307c6ba3767e45416678ecb17324d5d85eed",
+  "source_revision": "c566307c6ba3767e45416678ecb17324d5d85eed",
+  "source_archive_sha256": "a806bd2ff3e41b585acfc9cb13d85322cda0fc365cfcea1367dad462ac4fbc1f",
+  "image": "sha256:2fe46c86dd882f4aa70f6bd44fd8f812d65ca8e4c98e4061fc3819938b48c97e",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 8.639085054397583
+}

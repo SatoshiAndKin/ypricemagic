@@ -1,0 +1,1184 @@
+{
+  "timeout-probe-before": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /work/tools/validation/test_timeout.py > /reports/timeout-probe.txt 2>&1"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789402120.676266,
+      "source_sha": "d00a51464750a42d8f25737937858a983b0f80dd",
+      "source_revision": "worktree",
+      "source_archive_sha256": "a15167e1b4c205a0d8081f198bba8b259b0351ee605bac960d08fb9c85905cb7",
+      "image": "sha256:5f67dfecf3085abd5cff6a15469e5bc36ea28fee0c557e05340cf7b181ac13bc",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 2.9862160682678223
+    },
+    "container_peak_bytes": 172261376,
+    "peak_sampled_process_rss_bytes": 192208896,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 0,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-interruption-before": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio\nimport importlib\nimport json\nimport signal\nfrom pathlib import Path\n\nimport a_sync\n\n\nclass InterruptedRequest(BaseException):\n    pass\n\n\nevents = []\nfailure = InterruptedRequest(\"caller interrupted the synchronous request\")\n\n\n@a_sync.a_sync(default=\"sync\")\nasync def request():\n    events.append(\"entered\")\n    try:\n        await asyncio.Event().wait()\n    finally:\n        events.append(\"released\")\n\n\ndef interrupt(signum, frame):\n    raise failure\n\n\nloop = asyncio.get_event_loop()\nbefore = asyncio.all_tasks(loop)\nhandler = signal.signal(signal.SIGALRM, interrupt)\ncaught = None\ntry:\n    signal.setitimer(signal.ITIMER_REAL, 0.1)\n    request()\nexcept InterruptedRequest as error:\n    caught = error\nfinally:\n    signal.setitimer(signal.ITIMER_REAL, 0)\n    signal.signal(signal.SIGALRM, handler)\n\npending = asyncio.all_tasks(loop) - before\nresult = {\n    \"same_exception\": caught is failure,\n    \"events_after_interruption\": list(events),\n    \"pending_request_tasks\": len(pending),\n    \"native_helper\": importlib.import_module(\"a_sync.a_sync._helpers\").__file__,\n}\nassert result[\"native_helper\"].endswith(\".so\"), result\n# Preserve the failure, then clean this diagnostic's own tasks before exit.\nfor task in pending:\n    task.cancel()\nloop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))\nresult[\"events_after_diagnostic_cleanup\"] = list(events)\nresult[\"complete\"] = True\nresult[\"ownership_passed\"] = bool(\n    result[\"same_exception\"]\n    and result[\"events_after_interruption\"] == [\"entered\", \"released\"]\n    and result[\"pending_request_tasks\"] == 0\n)\nPath(\"/reports/sync-interruption.json\").write_text(json.dumps(result, indent=2) + \"\\n\")\nprint(json.dumps(result))\nraise SystemExit(0 if result[\"ownership_passed\"] else 1)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789402234.504159,
+      "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+      "source_revision": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+      "source_archive_sha256": "a1e317af9ce8e55fd6a48b08ea6c381c2fc51e46198bf83f39ae473ec26577d9",
+      "image": "sha256:5f67dfecf3085abd5cff6a15469e5bc36ea28fee0c557e05340cf7b181ac13bc",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 1.8166520595550537
+    },
+    "container_peak_bytes": 36806656,
+    "peak_sampled_process_rss_bytes": 15900672,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 380,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-interruption-after": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio\nimport importlib\nimport json\nimport signal\nfrom pathlib import Path\n\nimport a_sync\n\n\nclass InterruptedRequest(BaseException):\n    pass\n\n\nevents = []\nfailure = InterruptedRequest(\"caller interrupted the synchronous request\")\n\n\n@a_sync.a_sync(default=\"sync\")\nasync def request():\n    events.append(\"entered\")\n    try:\n        await asyncio.Event().wait()\n    finally:\n        events.append(\"released\")\n\n\ndef interrupt(signum, frame):\n    raise failure\n\n\nloop = asyncio.get_event_loop()\nbefore = asyncio.all_tasks(loop)\nhandler = signal.signal(signal.SIGALRM, interrupt)\ncaught = None\ntry:\n    signal.setitimer(signal.ITIMER_REAL, 0.1)\n    request()\nexcept InterruptedRequest as error:\n    caught = error\nfinally:\n    signal.setitimer(signal.ITIMER_REAL, 0)\n    signal.signal(signal.SIGALRM, handler)\n\npending = asyncio.all_tasks(loop) - before\nresult = {\n    \"same_exception\": caught is failure,\n    \"events_after_interruption\": list(events),\n    \"pending_request_tasks\": len(pending),\n    \"native_helper\": importlib.import_module(\"a_sync.a_sync._helpers\").__file__,\n}\nassert result[\"native_helper\"].endswith(\".so\"), result\n# Preserve the failure, then clean this diagnostic's own tasks before exit.\nfor task in pending:\n    task.cancel()\nloop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))\nresult[\"events_after_diagnostic_cleanup\"] = list(events)\nresult[\"complete\"] = True\nresult[\"ownership_passed\"] = bool(\n    result[\"same_exception\"]\n    and result[\"events_after_interruption\"] == [\"entered\", \"released\"]\n    and result[\"pending_request_tasks\"] == 0\n)\nPath(\"/reports/sync-interruption.json\").write_text(json.dumps(result, indent=2) + \"\\n\")\nprint(json.dumps(result))\nraise SystemExit(0 if result[\"ownership_passed\"] else 1)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789402868.497509,
+      "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+      "source_revision": "worktree",
+      "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403",
+      "image": "sha256:1ba12aaef218d368be4b64d2ae7e49193eab413dc506a7f4a14e34ff18b8356b",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 1.769395112991333
+    },
+    "container_peak_bytes": 36937728,
+    "peak_sampled_process_rss_bytes": 17104896,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 391,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-interruption-owner-before": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789402555.177193,
+      "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+      "source_revision": "worktree",
+      "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403",
+      "image": "sha256:5f67dfecf3085abd5cff6a15469e5bc36ea28fee0c557e05340cf7b181ac13bc",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 30.16400694847107
+    },
+    "container_peak_bytes": 392380416,
+    "peak_sampled_process_rss_bytes": 196812800,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 16504,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-interruption-owner-after": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789402836.287188,
+      "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+      "source_revision": "worktree",
+      "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403",
+      "image": "sha256:1ba12aaef218d368be4b64d2ae7e49193eab413dc506a7f4a14e34ff18b8356b",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 32.16415882110596
+    },
+    "container_peak_bytes": 392073216,
+    "peak_sampled_process_rss_bytes": 196218880,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 6216,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-interruption-full-before": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import importlib,json,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/smart-owner-full-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\nshutil.copytree(source/'tests',target/'tests')\n# Keep mypy settings for the dependency's existing type-plugin tests.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\n'+''.join(key+' = '+json.dumps(value)+'\\n' for key,value in config['tool']['validation']['full_pytest'].items()))\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/owner-full.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789402978.039687,
+      "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+      "source_revision": "worktree",
+      "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403",
+      "image": "sha256:5f67dfecf3085abd5cff6a15469e5bc36ea28fee0c557e05340cf7b181ac13bc",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 148.2793791294098
+    },
+    "container_peak_bytes": 419467264,
+    "peak_sampled_process_rss_bytes": 205713408,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 34699,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-interruption-full-after": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import importlib,json,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/smart-owner-full-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\nshutil.copytree(source/'tests',target/'tests')\n# Keep mypy settings for the dependency's existing type-plugin tests.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\n'+''.join(key+' = '+json.dumps(value)+'\\n' for key,value in config['tool']['validation']['full_pytest'].items()))\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/owner-full.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789403126.3651478,
+      "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+      "source_revision": "worktree",
+      "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403",
+      "image": "sha256:1ba12aaef218d368be4b64d2ae7e49193eab413dc506a7f4a14e34ff18b8356b",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 147.23310613632202
+    },
+    "container_peak_bytes": 419323904,
+    "peak_sampled_process_rss_bytes": 205029376,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 24573,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-interruption-owner-311": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789403559.8153129,
+      "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+      "source_revision": "worktree",
+      "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403",
+      "image": "sha256:288d848f9f032ec10167be79d0fc65969f21a69edca5e09afc94d32459e45296",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 32.34344124794006
+    },
+    "container_peak_bytes": 481595392,
+    "peak_sampled_process_rss_bytes": 189493248,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 1896,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-interruption-owner-313": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789403665.3729029,
+      "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+      "source_revision": "worktree",
+      "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403",
+      "image": "sha256:72a637626c7e62405d9837ae899f2eb7cd239cbb5bdd14f48dfcde7c77610587",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 32.11402225494385
+    },
+    "container_peak_bytes": 470450176,
+    "peak_sampled_process_rss_bytes": 198135808,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 6216,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "portable-interruption-before": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789405667.450238,
+      "source_sha": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "source_revision": "worktree",
+      "source_archive_sha256": "b7f33cce7dc4b71f65688cc190dba022510d282cf6fcd26b6268313dbecdf78c",
+      "image": "sha256:5f67dfecf3085abd5cff6a15469e5bc36ea28fee0c557e05340cf7b181ac13bc",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 31.12961983680725
+    },
+    "container_peak_bytes": 392400896,
+    "peak_sampled_process_rss_bytes": 196005888,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 15890,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "portable-interruption-full-before": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import importlib,json,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/smart-owner-full-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\nshutil.copytree(source/'tests',target/'tests')\n# Keep mypy settings for the dependency's existing type-plugin tests.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\n'+''.join(key+' = '+json.dumps(value)+'\\n' for key,value in config['tool']['validation']['full_pytest'].items()))\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/owner-full.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789405796.1595259,
+      "source_sha": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "source_revision": "worktree",
+      "source_archive_sha256": "b7f33cce7dc4b71f65688cc190dba022510d282cf6fcd26b6268313dbecdf78c",
+      "image": "sha256:5f67dfecf3085abd5cff6a15469e5bc36ea28fee0c557e05340cf7b181ac13bc",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 147.93370628356934
+    },
+    "container_peak_bytes": 419569664,
+    "peak_sampled_process_rss_bytes": 205283328,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 33045,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "portable-interruption-full-after": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import importlib,json,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/smart-owner-full-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\nshutil.copytree(source/'tests',target/'tests')\n# Keep mypy settings for the dependency's existing type-plugin tests.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\n'+''.join(key+' = '+json.dumps(value)+'\\n' for key,value in config['tool']['validation']['full_pytest'].items()))\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/owner-full.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789405944.16159,
+      "source_sha": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "source_revision": "worktree",
+      "source_archive_sha256": "b7f33cce7dc4b71f65688cc190dba022510d282cf6fcd26b6268313dbecdf78c",
+      "image": "sha256:1ba12aaef218d368be4b64d2ae7e49193eab413dc506a7f4a14e34ff18b8356b",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 147.86457991600037
+    },
+    "container_peak_bytes": 419487744,
+    "peak_sampled_process_rss_bytes": 205332480,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 23533,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-interruption-build-312": {
+    "run": {
+      "complete": true,
+      "purpose": "Compile synchronous caller interruption cleanup with identical supporting dependencies",
+      "started_unix": 1789402697.22265,
+      "application": {
+        "source_sha": "d00a51464750a42d8f25737937858a983b0f80dd",
+        "source_revision": "d00a51464750a42d8f25737937858a983b0f80dd",
+        "source_archive_sha256": "8ee668322d3bdfbde80ed1ae730f995eaf2659fcda54be3612450f646e80eac4"
+      },
+      "owner": {
+        "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+        "source_revision": "worktree",
+        "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403"
+      },
+      "image": "sha256:1ba12aaef218d368be4b64d2ae7e49193eab413dc506a7f4a14e34ff18b8356b",
+      "elapsed_seconds": 72.90146994590759
+    }
+  },
+  "sync-deadline-application-312": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /work/tools/validation/test_timeout.py > /reports/timeout-probe.txt 2>&1 && python /runner/focused.py && python -c 'import ast,hashlib,importlib,importlib.metadata,json\nfrom pathlib import Path\nexpected=next(line for line in Path('\"'\"'/work/requirements-dev.txt'\"'\"').read_text().splitlines() if line.startswith('\"'\"'pytest-asyncio-cooperative @'\"'\"')).rsplit('\"'\"'@'\"'\"',1)[1]\ncooperative=importlib.metadata.distribution('\"'\"'pytest-asyncio-cooperative'\"'\"')\nasync_dist=importlib.metadata.distribution('\"'\"'ez-a-sync'\"'\"')\nproof={'\"'\"'cooperative'\"'\"':json.loads(cooperative.read_text('\"'\"'direct_url.json'\"'\"')),'\"'\"'ez_a_sync'\"'\"':json.loads(async_dist.read_text('\"'\"'direct_url.json'\"'\"'))}\nassert proof['\"'\"'cooperative'\"'\"']['\"'\"'vcs_info'\"'\"']['\"'\"'commit_id'\"'\"']==expected,proof\nrequired=next(line for line in Path('\"'\"'/work/requirements.txt'\"'\"').read_text().splitlines() if line.startswith('\"'\"'ez-a-sync @'\"'\"')).rsplit('\"'\"'@'\"'\"',1)[1]\nassert proof['\"'\"'ez_a_sync'\"'\"']['\"'\"'vcs_info'\"'\"']['\"'\"'commit_id'\"'\"']==required,proof\nproof['\"'\"'native_modules'\"'\"']={name:importlib.import_module(name).__file__ for name in ['\"'\"'a_sync.a_sync.property'\"'\"','\"'\"'a_sync.async_property.cached'\"'\"','\"'\"'a_sync._smart'\"'\"','\"'\"'a_sync.a_sync._helpers'\"'\"']}\nassert all(path.endswith('\"'\"'.so'\"'\"') for path in proof['\"'\"'native_modules'\"'\"'].values()),proof\nplugin=importlib.import_module('\"'\"'pytest_asyncio_cooperative.plugin'\"'\"')\nproof['\"'\"'cooperative_plugin_sha256'\"'\"']=hashlib.sha256(Path(plugin.__file__).read_bytes()).hexdigest()\nassert proof['\"'\"'cooperative_plugin_sha256'\"'\"']=='\"'\"'3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7'\"'\"',proof\nproof['\"'\"'pytest_timeout_version'\"'\"']=importlib.metadata.version('\"'\"'pytest-timeout'\"'\"')\nassert proof['\"'\"'pytest_timeout_version'\"'\"']=='\"'\"'2.2.0'\"'\"',proof\nPath('\"'\"'/reports/ownership-pins.json'\"'\"').write_text(json.dumps(proof,indent=2))\n'; status=$?; python -m mypy > /reports/mypy.txt 2>&1; exit $status"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789404160.592472,
+      "source_sha": "d00a51464750a42d8f25737937858a983b0f80dd",
+      "source_revision": "worktree",
+      "source_archive_sha256": "ec73c035849c181dc2440676be1eeddbe00dd939ee0ceed7e2ceb08c2cb941d8",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 282.81763792037964
+    },
+    "container_peak_bytes": 1166147584,
+    "peak_sampled_process_rss_bytes": 1055727616,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 40277,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    },
+    "pytest": {
+      "collected": 278,
+      "terminal_outcomes": 278,
+      "unique_terminal_cases": 278,
+      "counts": {
+        "sessionstart:": 1,
+        "collection:": 1,
+        "setup:passed": 278,
+        "call:passed": 278,
+        "teardown:passed": 278,
+        "sessionfinish:": 1
+      },
+      "final_summary_present": true,
+      "last_phase": "sessionfinish",
+      "last_logical_rpc_counts": {
+        "call_uid": 899,
+        "multicall_uid": 28,
+        "request_uid": 24,
+        "jsonrpc_batch_uid": 100
+      },
+      "peak_observed_live_tasks": 189
+    }
+  },
+  "sync-deadline-types-before-312": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python -m mypy > /reports/mypy.txt 2>&1"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789404443.474619,
+      "source_sha": "1a8023089c220ce4f1ae33497b70fb463fe582d3",
+      "source_revision": "1a8023089c220ce4f1ae33497b70fb463fe582d3",
+      "source_archive_sha256": "eabd7dd2fe8c21666bdbf08500d00926cb7b8998146688627523b991ae67bf32",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 154.49862504005432
+    },
+    "container_peak_bytes": 1164120064,
+    "peak_sampled_process_rss_bytes": 1066553344,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 7161,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-deadline-owner-312": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789404598.085163,
+      "source_sha": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "source_revision": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "source_archive_sha256": "39772e67d238de68339cc15fccc035e3713abc3867aabfbb2b46453622ee4421",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 32.25781297683716
+    },
+    "container_peak_bytes": 392007680,
+    "peak_sampled_process_rss_bytes": 195854336,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 6231,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "portable-interruption-312": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789405698.6339378,
+      "source_sha": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "source_revision": "worktree",
+      "source_archive_sha256": "b7f33cce7dc4b71f65688cc190dba022510d282cf6fcd26b6268313dbecdf78c",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 31.175214052200317
+    },
+    "container_peak_bytes": 391589888,
+    "peak_sampled_process_rss_bytes": 206184448,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 6231,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-interruption-build-311": {
+    "run": {
+      "complete": true,
+      "purpose": "Compile synchronous caller interruption cleanup with identical supporting dependencies",
+      "started_unix": 1789403488.283305,
+      "application": {
+        "source_sha": "d00a51464750a42d8f25737937858a983b0f80dd",
+        "source_revision": "d00a51464750a42d8f25737937858a983b0f80dd",
+        "source_archive_sha256": "8ee668322d3bdfbde80ed1ae730f995eaf2659fcda54be3612450f646e80eac4"
+      },
+      "owner": {
+        "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+        "source_revision": "worktree",
+        "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403"
+      },
+      "image": "sha256:288d848f9f032ec10167be79d0fc65969f21a69edca5e09afc94d32459e45296",
+      "elapsed_seconds": 71.47052311897278
+    }
+  },
+  "sync-deadline-application-311": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /work/tools/validation/test_timeout.py > /reports/timeout-probe.txt 2>&1 && python /runner/focused.py && python -c 'import ast,hashlib,importlib,importlib.metadata,json\nfrom pathlib import Path\nexpected=next(line for line in Path('\"'\"'/work/requirements-dev.txt'\"'\"').read_text().splitlines() if line.startswith('\"'\"'pytest-asyncio-cooperative @'\"'\"')).rsplit('\"'\"'@'\"'\"',1)[1]\ncooperative=importlib.metadata.distribution('\"'\"'pytest-asyncio-cooperative'\"'\"')\nasync_dist=importlib.metadata.distribution('\"'\"'ez-a-sync'\"'\"')\nproof={'\"'\"'cooperative'\"'\"':json.loads(cooperative.read_text('\"'\"'direct_url.json'\"'\"')),'\"'\"'ez_a_sync'\"'\"':json.loads(async_dist.read_text('\"'\"'direct_url.json'\"'\"'))}\nassert proof['\"'\"'cooperative'\"'\"']['\"'\"'vcs_info'\"'\"']['\"'\"'commit_id'\"'\"']==expected,proof\nrequired=next(line for line in Path('\"'\"'/work/requirements.txt'\"'\"').read_text().splitlines() if line.startswith('\"'\"'ez-a-sync @'\"'\"')).rsplit('\"'\"'@'\"'\"',1)[1]\nassert proof['\"'\"'ez_a_sync'\"'\"']['\"'\"'vcs_info'\"'\"']['\"'\"'commit_id'\"'\"']==required,proof\nproof['\"'\"'native_modules'\"'\"']={name:importlib.import_module(name).__file__ for name in ['\"'\"'a_sync.a_sync.property'\"'\"','\"'\"'a_sync.async_property.cached'\"'\"','\"'\"'a_sync._smart'\"'\"','\"'\"'a_sync.a_sync._helpers'\"'\"']}\nassert all(path.endswith('\"'\"'.so'\"'\"') for path in proof['\"'\"'native_modules'\"'\"'].values()),proof\nplugin=importlib.import_module('\"'\"'pytest_asyncio_cooperative.plugin'\"'\"')\nproof['\"'\"'cooperative_plugin_sha256'\"'\"']=hashlib.sha256(Path(plugin.__file__).read_bytes()).hexdigest()\nassert proof['\"'\"'cooperative_plugin_sha256'\"'\"']=='\"'\"'3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7'\"'\"',proof\nproof['\"'\"'pytest_timeout_version'\"'\"']=importlib.metadata.version('\"'\"'pytest-timeout'\"'\"')\nassert proof['\"'\"'pytest_timeout_version'\"'\"']=='\"'\"'2.2.0'\"'\"',proof\nPath('\"'\"'/reports/ownership-pins.json'\"'\"').write_text(json.dumps(proof,indent=2))\n'; status=$?; python -m mypy > /reports/mypy.txt 2>&1; exit $status"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789404630.4031649,
+      "source_sha": "d00a51464750a42d8f25737937858a983b0f80dd",
+      "source_revision": "worktree",
+      "source_archive_sha256": "ec73c035849c181dc2440676be1eeddbe00dd939ee0ceed7e2ceb08c2cb941d8",
+      "image": "sha256:0fecced576e80b46d40ee5ecf306d9c0dad2ffcbf42af156b9ad2c30de82b579",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 297.03188920021057
+    },
+    "container_peak_bytes": 1163370496,
+    "peak_sampled_process_rss_bytes": 1021587456,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 40359,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    },
+    "pytest": {
+      "collected": 278,
+      "terminal_outcomes": 278,
+      "unique_terminal_cases": 278,
+      "counts": {
+        "sessionstart:": 1,
+        "collection:": 1,
+        "setup:passed": 278,
+        "call:passed": 278,
+        "teardown:passed": 278,
+        "sessionfinish:": 1
+      },
+      "final_summary_present": true,
+      "last_phase": "sessionfinish",
+      "last_logical_rpc_counts": {
+        "call_uid": 1050,
+        "multicall_uid": 28,
+        "request_uid": 25,
+        "jsonrpc_batch_uid": 100
+      },
+      "peak_observed_live_tasks": 183
+    }
+  },
+  "sync-deadline-types-before-311": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python -m mypy > /reports/mypy.txt 2>&1"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789404927.501059,
+      "source_sha": "1a8023089c220ce4f1ae33497b70fb463fe582d3",
+      "source_revision": "1a8023089c220ce4f1ae33497b70fb463fe582d3",
+      "source_archive_sha256": "eabd7dd2fe8c21666bdbf08500d00926cb7b8998146688627523b991ae67bf32",
+      "image": "sha256:0fecced576e80b46d40ee5ecf306d9c0dad2ffcbf42af156b9ad2c30de82b579",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 144.76183605194092
+    },
+    "container_peak_bytes": 1129013248,
+    "peak_sampled_process_rss_bytes": 1043001344,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 6791,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-deadline-owner-311": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789405072.3650932,
+      "source_sha": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "source_revision": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "source_archive_sha256": "39772e67d238de68339cc15fccc035e3713abc3867aabfbb2b46453622ee4421",
+      "image": "sha256:0fecced576e80b46d40ee5ecf306d9c0dad2ffcbf42af156b9ad2c30de82b579",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 32.28150391578674
+    },
+    "container_peak_bytes": 390828032,
+    "peak_sampled_process_rss_bytes": 211759104,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 2440,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "portable-interruption-311": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789405729.857484,
+      "source_sha": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "source_revision": "worktree",
+      "source_archive_sha256": "b7f33cce7dc4b71f65688cc190dba022510d282cf6fcd26b6268313dbecdf78c",
+      "image": "sha256:0fecced576e80b46d40ee5ecf306d9c0dad2ffcbf42af156b9ad2c30de82b579",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 33.07406687736511
+    },
+    "container_peak_bytes": 391757824,
+    "peak_sampled_process_rss_bytes": 208642048,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 2440,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-interruption-build-313": {
+    "run": {
+      "complete": true,
+      "purpose": "Compile synchronous caller interruption cleanup with identical supporting dependencies",
+      "started_unix": 1789403592.242642,
+      "application": {
+        "source_sha": "d00a51464750a42d8f25737937858a983b0f80dd",
+        "source_revision": "d00a51464750a42d8f25737937858a983b0f80dd",
+        "source_archive_sha256": "8ee668322d3bdfbde80ed1ae730f995eaf2659fcda54be3612450f646e80eac4"
+      },
+      "owner": {
+        "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+        "source_revision": "worktree",
+        "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403"
+      },
+      "image": "sha256:72a637626c7e62405d9837ae899f2eb7cd239cbb5bdd14f48dfcde7c77610587",
+      "elapsed_seconds": 73.07281303405762
+    }
+  },
+  "sync-deadline-application-313": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /work/tools/validation/test_timeout.py > /reports/timeout-probe.txt 2>&1 && python /runner/focused.py && python -c 'import ast,hashlib,importlib,importlib.metadata,json\nfrom pathlib import Path\nexpected=next(line for line in Path('\"'\"'/work/requirements-dev.txt'\"'\"').read_text().splitlines() if line.startswith('\"'\"'pytest-asyncio-cooperative @'\"'\"')).rsplit('\"'\"'@'\"'\"',1)[1]\ncooperative=importlib.metadata.distribution('\"'\"'pytest-asyncio-cooperative'\"'\"')\nasync_dist=importlib.metadata.distribution('\"'\"'ez-a-sync'\"'\"')\nproof={'\"'\"'cooperative'\"'\"':json.loads(cooperative.read_text('\"'\"'direct_url.json'\"'\"')),'\"'\"'ez_a_sync'\"'\"':json.loads(async_dist.read_text('\"'\"'direct_url.json'\"'\"'))}\nassert proof['\"'\"'cooperative'\"'\"']['\"'\"'vcs_info'\"'\"']['\"'\"'commit_id'\"'\"']==expected,proof\nrequired=next(line for line in Path('\"'\"'/work/requirements.txt'\"'\"').read_text().splitlines() if line.startswith('\"'\"'ez-a-sync @'\"'\"')).rsplit('\"'\"'@'\"'\"',1)[1]\nassert proof['\"'\"'ez_a_sync'\"'\"']['\"'\"'vcs_info'\"'\"']['\"'\"'commit_id'\"'\"']==required,proof\nproof['\"'\"'native_modules'\"'\"']={name:importlib.import_module(name).__file__ for name in ['\"'\"'a_sync.a_sync.property'\"'\"','\"'\"'a_sync.async_property.cached'\"'\"','\"'\"'a_sync._smart'\"'\"','\"'\"'a_sync.a_sync._helpers'\"'\"']}\nassert all(path.endswith('\"'\"'.so'\"'\"') for path in proof['\"'\"'native_modules'\"'\"'].values()),proof\nplugin=importlib.import_module('\"'\"'pytest_asyncio_cooperative.plugin'\"'\"')\nproof['\"'\"'cooperative_plugin_sha256'\"'\"']=hashlib.sha256(Path(plugin.__file__).read_bytes()).hexdigest()\nassert proof['\"'\"'cooperative_plugin_sha256'\"'\"']=='\"'\"'3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7'\"'\"',proof\nproof['\"'\"'pytest_timeout_version'\"'\"']=importlib.metadata.version('\"'\"'pytest-timeout'\"'\"')\nassert proof['\"'\"'pytest_timeout_version'\"'\"']=='\"'\"'2.2.0'\"'\"',proof\nPath('\"'\"'/reports/ownership-pins.json'\"'\"').write_text(json.dumps(proof,indent=2))\n'; status=$?; python -m mypy > /reports/mypy.txt 2>&1; exit $status"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789405104.694784,
+      "source_sha": "d00a51464750a42d8f25737937858a983b0f80dd",
+      "source_revision": "worktree",
+      "source_archive_sha256": "ec73c035849c181dc2440676be1eeddbe00dd939ee0ceed7e2ceb08c2cb941d8",
+      "image": "sha256:b3d211f81c8e17526bcc27eb32961e8515d99ebd6478ce75c49ef3c1850bd8c9",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 289.5961229801178
+    },
+    "container_peak_bytes": 1200775168,
+    "peak_sampled_process_rss_bytes": 1043312640,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 40392,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    },
+    "pytest": {
+      "collected": 278,
+      "terminal_outcomes": 278,
+      "unique_terminal_cases": 278,
+      "counts": {
+        "sessionstart:": 1,
+        "collection:": 1,
+        "setup:passed": 278,
+        "call:passed": 278,
+        "teardown:passed": 278,
+        "sessionfinish:": 1
+      },
+      "final_summary_present": true,
+      "last_phase": "sessionfinish",
+      "last_logical_rpc_counts": {
+        "call_uid": 1051,
+        "multicall_uid": 28,
+        "request_uid": 24,
+        "jsonrpc_batch_uid": 100
+      },
+      "peak_observed_live_tasks": 188
+    }
+  },
+  "sync-deadline-types-before-313": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python -m mypy > /reports/mypy.txt 2>&1"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789405394.346634,
+      "source_sha": "1a8023089c220ce4f1ae33497b70fb463fe582d3",
+      "source_revision": "1a8023089c220ce4f1ae33497b70fb463fe582d3",
+      "source_archive_sha256": "eabd7dd2fe8c21666bdbf08500d00926cb7b8998146688627523b991ae67bf32",
+      "image": "sha256:b3d211f81c8e17526bcc27eb32961e8515d99ebd6478ce75c49ef3c1850bd8c9",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 148.38983607292175
+    },
+    "container_peak_bytes": 1159884800,
+    "peak_sampled_process_rss_bytes": 1039699968,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 7048,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "sync-deadline-owner-313": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789405542.847085,
+      "source_sha": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "source_revision": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "source_archive_sha256": "39772e67d238de68339cc15fccc035e3713abc3867aabfbb2b46453622ee4421",
+      "image": "sha256:b3d211f81c8e17526bcc27eb32961e8515d99ebd6478ce75c49ef3c1850bd8c9",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 33.1770761013031
+    },
+    "container_peak_bytes": 392273920,
+    "peak_sampled_process_rss_bytes": 193667072,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 6391,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "portable-interruption-313": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789405762.9878578,
+      "source_sha": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "source_revision": "worktree",
+      "source_archive_sha256": "b7f33cce7dc4b71f65688cc190dba022510d282cf6fcd26b6268313dbecdf78c",
+      "image": "sha256:b3d211f81c8e17526bcc27eb32961e8515d99ebd6478ce75c49ef3c1850bd8c9",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 33.11536121368408
+    },
+    "container_peak_bytes": 391929856,
+    "peak_sampled_process_rss_bytes": 192671744,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": false,
+    "compiled_modules": 0,
+    "log_retention": {
+      "total_bytes": 6391,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  }
+}

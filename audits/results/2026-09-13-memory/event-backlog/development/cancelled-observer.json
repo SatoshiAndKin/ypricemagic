@@ -1,0 +1,16 @@
+{
+  "python": "3.12.12 (main, Feb 12 2026, 00:42:34) [Clang 21.1.4 ]",
+  "boundary": "Small host standard-library diagnostic; no project imports or performance claim",
+  "results": [
+    {
+      "capture_current_task": true,
+      "retained_before_collection": true,
+      "retained_after_collection": false
+    },
+    {
+      "capture_current_task": false,
+      "retained_before_collection": false,
+      "retained_after_collection": false
+    }
+  ]
+}

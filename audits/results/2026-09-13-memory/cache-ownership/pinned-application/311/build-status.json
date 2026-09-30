@@ -1,0 +1,27 @@
+{
+  "exit_code": 0,
+  "state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 124938,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-14T09:28:35.281265651Z",
+    "FinishedAt": "0001-01-01T00:00:00Z"
+  },
+  "cgroup": {
+    "peak_bytes": 1962078208,
+    "events": {
+      "low": "0",
+      "high": "0",
+      "max": "0",
+      "oom": "0",
+      "oom_kill": "0",
+      "oom_group_kill": "0"
+    }
+  }
+}

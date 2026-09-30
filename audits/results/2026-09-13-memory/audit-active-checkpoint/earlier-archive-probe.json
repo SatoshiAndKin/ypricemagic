@@ -1,0 +1,58 @@
+{
+  "started_unix": 1789457063.0951097,
+  "block_number": 13000000,
+  "complete": true,
+  "calls": [
+    {
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "web3_clientVersion",
+        "params": []
+      },
+      "result": "reth/v2.5.2-9c4573f/x86_64-unknown-linux-gnu",
+      "elapsed_seconds": 0.02571242200792767
+    },
+    {
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "eth_getBlockByNumber",
+        "params": [
+          "0xc65d40",
+          false
+        ]
+      },
+      "result": {
+        "number": "0xc65d40",
+        "hash": "0x736048fc56ee5570d18fce0fbad513f8a3cc1de2b18bfecfc8b3663e0bee1570",
+        "timestamp": "0x6112f563"
+      },
+      "elapsed_seconds": 0.014888717996655032
+    },
+    {
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "eth_call",
+        "params": [
+          {
+            "to": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+            "data": "0x313ce567"
+          },
+          {
+            "blockHash": "0x736048fc56ee5570d18fce0fbad513f8a3cc1de2b18bfecfc8b3663e0bee1570",
+            "requireCanonical": true
+          }
+        ]
+      },
+      "result": "0x0000000000000000000000000000000000000000000000000000000000000006",
+      "elapsed_seconds": 0.01333367099869065
+    }
+  ],
+  "scope": "A separate three-request archive diagnostic in the active audit container. It does not establish the cause of the full-suite failure. Its small process and network overhead is included in the active audit counters.",
+  "reth_identified": true,
+  "usdc_decimals": 6,
+  "finished_unix": 1789457063.1490607,
+  "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48"
+}

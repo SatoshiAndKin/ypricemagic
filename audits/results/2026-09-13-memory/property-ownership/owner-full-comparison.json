@@ -1,0 +1,185 @@
+{
+  "cases": 747,
+  "same_test_source_archive": true,
+  "before": {
+    "pass": 716,
+    "failure": 30,
+    "skip": 1
+  },
+  "after": {
+    "pass": 731,
+    "failure": 15,
+    "skip": 1
+  },
+  "added_failures": [],
+  "removed_failures": [
+    "tests.a_sync.test_cached_property_ownership::test_cached_loader_releases_instances_and_reuses_values[False-ASyncCachedPropertyDescriptor]",
+    "tests.a_sync.test_cached_property_ownership::test_cached_loader_releases_instances_and_reuses_values[False-AsyncCachedPropertyDescriptor]",
+    "tests.a_sync.test_cached_property_ownership::test_cached_loader_releases_instances_and_reuses_values[True-ASyncCachedPropertyDescriptor]",
+    "tests.a_sync.test_cached_property_ownership::test_cached_loader_releases_instances_and_reuses_values[True-AsyncCachedPropertyDescriptor]",
+    "tests.mypy.test_mypy_plugin::test_metaclass_preserves_method_and_cached_property_body_checks",
+    "tests.mypy.test_mypy_plugin::test_metaclass_wraps_sync_methods_and_descriptors",
+    "tests.test_smart_ownership::test_completed_await_releases_caller_callbacks_and_results[cancel-future]",
+    "tests.test_smart_ownership::test_completed_await_releases_caller_callbacks_and_results[cancel-shield]",
+    "tests.test_smart_ownership::test_completed_await_releases_caller_callbacks_and_results[cancel-task]",
+    "tests.test_smart_ownership::test_completed_await_releases_caller_callbacks_and_results[failure-future]",
+    "tests.test_smart_ownership::test_completed_await_releases_caller_callbacks_and_results[failure-shield]",
+    "tests.test_smart_ownership::test_completed_await_releases_caller_callbacks_and_results[failure-task]",
+    "tests.test_smart_ownership::test_completed_await_releases_caller_callbacks_and_results[success-future]",
+    "tests.test_smart_ownership::test_completed_await_releases_caller_callbacks_and_results[success-shield]",
+    "tests.test_smart_ownership::test_completed_await_releases_caller_callbacks_and_results[success-task]"
+  ],
+  "remaining": {
+    "tests.asyncio.test_create_task::test_create_task_skip_gc_until_done": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"AssertionError: assert 1 == 0&#10; +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})\">@pytest.mark.asyncio_cooperative\n    async def test_create_task_skip_gc_until_done():\n        async def sample_coroutine():\n            return \"GC Test\"\n    \n        persisted_tasks = _get_persisted_tasks()\n    \n        assert len(persisted_tasks) == 0\n        task = create_task(sample_coroutine(), skip_gc_until_done=True)\n        assert len(persisted_tasks) == 1\n        result = await task\n        assert next(iter(persisted_tasks)).done()\n        # create some junk task to trigger the pruning of the persisted task set\n        create_task(sleep(0))\n&gt;       assert len(persisted_tasks) == 0\nE       AssertionError: assert 1 == 0\nE        +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})\n\ntests/asyncio/test_create_task.py:53: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"AssertionError: assert 1 == 0&#10; +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})\">@pytest.mark.asyncio_cooperative\n    async def test_create_task_skip_gc_until_done():\n        async def sample_coroutine():\n            return \"GC Test\"\n    \n        persisted_tasks = _get_persisted_tasks()\n    \n        assert len(persisted_tasks) == 0\n        task = create_task(sample_coroutine(), skip_gc_until_done=True)\n        assert len(persisted_tasks) == 1\n        result = await task\n        assert next(iter(persisted_tasks)).done()\n        # create some junk task to trigger the pruning of the persisted task set\n        create_task(sleep(0))\n&gt;       assert len(persisted_tasks) == 0\nE       AssertionError: assert 1 == 0\nE        +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})\n\ntests/asyncio/test_create_task.py:53: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore[3]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (3 &lt; 3 or 1.0031242370605469 &gt; 3)\">i = 3\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (3 &lt; 3 or 1.0031242370605469 &gt; 3)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (3 &lt; 3 or 1.007763147354126 &gt; 3)\">i = 3\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (3 &lt; 3 or 1.007763147354126 &gt; 3)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore[4]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (4 &lt; 3 or 1.0031888484954834 &gt; 4)\">i = 4\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (4 &lt; 3 or 1.0031888484954834 &gt; 4)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (4 &lt; 3 or 1.004974603652954 &gt; 4)\">i = 4\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (4 &lt; 3 or 1.004974603652954 &gt; 4)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore[5]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (5 &lt; 3 or 1.005159854888916 &gt; 5)\">i = 5\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (5 &lt; 3 or 1.005159854888916 &gt; 5)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (5 &lt; 3 or 1.0043423175811768 &gt; 5)\">i = 5\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (5 &lt; 3 or 1.0043423175811768 &gt; 5)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore[6]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (6 &lt; 3 or 1.0068235397338867 &gt; 6)\">i = 6\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (6 &lt; 3 or 1.0068235397338867 &gt; 6)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (6 &lt; 3 or 1.010627269744873 &gt; 6)\">i = 6\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (6 &lt; 3 or 1.010627269744873 &gt; 6)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore[7]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (7 &lt; 3 or 1.0117847919464111 &gt; 7)\">i = 7\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (7 &lt; 3 or 1.0117847919464111 &gt; 7)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (7 &lt; 3 or 1.0092508792877197 &gt; 7)\">i = 7\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (7 &lt; 3 or 1.0092508792877197 &gt; 7)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore[8]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (8 &lt; 3 or 1.003164529800415 &gt; 8)\">i = 8\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (8 &lt; 3 or 1.003164529800415 &gt; 8)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (8 &lt; 3 or 1.0057482719421387 &gt; 8)\">i = 8\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (8 &lt; 3 or 1.0057482719421387 &gt; 8)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore[9]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (9 &lt; 3 or 1.001840591430664 &gt; 9)\">i = 9\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (9 &lt; 3 or 1.001840591430664 &gt; 9)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (9 &lt; 3 or 1.0114054679870605 &gt; 9)\">i = 9\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore(i: int):\n        start = time()\n        assert await instance.test_fn() == 1\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (9 &lt; 3 or 1.0114054679870605 &gt; 9)\n\ntests/primitives/test_semaphore.py:31: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore_property[3]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (3 &lt; 3 or 1.0116784572601318 &gt; 3)\">i = 3\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (3 &lt; 3 or 1.0116784572601318 &gt; 3)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (3 &lt; 3 or 1.003345251083374 &gt; 3)\">i = 3\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (3 &lt; 3 or 1.003345251083374 &gt; 3)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore_property[4]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (4 &lt; 3 or 1.0107498168945312 &gt; 4)\">i = 4\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (4 &lt; 3 or 1.0107498168945312 &gt; 4)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (4 &lt; 3 or 1.003617525100708 &gt; 4)\">i = 4\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (4 &lt; 3 or 1.003617525100708 &gt; 4)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore_property[5]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (5 &lt; 3 or 1.004969835281372 &gt; 5)\">i = 5\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (5 &lt; 3 or 1.004969835281372 &gt; 5)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (5 &lt; 3 or 1.010371446609497 &gt; 5)\">i = 5\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (5 &lt; 3 or 1.010371446609497 &gt; 5)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore_property[6]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (6 &lt; 3 or 1.004399299621582 &gt; 6)\">i = 6\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (6 &lt; 3 or 1.004399299621582 &gt; 6)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (6 &lt; 3 or 1.0025713443756104 &gt; 6)\">i = 6\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (6 &lt; 3 or 1.0025713443756104 &gt; 6)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore_property[7]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (7 &lt; 3 or 1.0077755451202393 &gt; 7)\">i = 7\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (7 &lt; 3 or 1.0077755451202393 &gt; 7)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (7 &lt; 3 or 1.0034468173980713 &gt; 7)\">i = 7\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (7 &lt; 3 or 1.0034468173980713 &gt; 7)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore_property[8]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (8 &lt; 3 or 1.007375717163086 &gt; 8)\">i = 8\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (8 &lt; 3 or 1.007375717163086 &gt; 8)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (8 &lt; 3 or 1.0054206848144531 &gt; 8)\">i = 8\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (8 &lt; 3 or 1.0054206848144531 &gt; 8)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      }
+    },
+    "tests.primitives.test_semaphore::test_semaphore_property[9]": {
+      "before": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (9 &lt; 3 or 1.0050849914550781 &gt; 9)\">i = 9\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (9 &lt; 3 or 1.0050849914550781 &gt; 9)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      },
+      "after": {
+        "status": "failure",
+        "failure": "<failure message=\"assert (9 &lt; 3 or 1.0051591396331787 &gt; 9)\">i = 9\n\n    @increment\n    @pytest.mark.asyncio_cooperative\n    async def test_semaphore_property(i: int):\n        start = time()\n        assert await instance.test_property == 2\n        duration = time() - start\n        # There is a 1 second sleep in this fn. If the semaphore is not working, all tests will complete in 1 second.\n&gt;       assert i &lt; 3 or duration &gt; i\nE       assert (9 &lt; 3 or 1.0051591396331787 &gt; 9)\n\ntests/primitives/test_semaphore.py:41: AssertionError</failure>"
+      }
+    }
+  },
+  "expectation_change": "The original metaclass input now requires resolved builtins.int instead of unresolved int?. One added test requires both method and cached-property body errors."
+}

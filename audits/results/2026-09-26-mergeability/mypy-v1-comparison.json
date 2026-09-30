@@ -1,0 +1,14 @@
+{
+  "baseline_run": "focused-validated-312",
+  "current_run": "focused-final-validated-312",
+  "baseline_total": 1804,
+  "current_total": 1804,
+  "added": [],
+  "removed": [],
+  "normalization": "Only positional referenced source line numbers",
+  "file_sha256": {
+    "baseline": "3431e68bf1e535356b53d55680e767ce1f0adf08de24764bb0ca3c2ea8a57f20",
+    "current": "3431e68bf1e535356b53d55680e767ce1f0adf08de24764bb0ca3c2ea8a57f20"
+  },
+  "current_application_run_complete": true
+}

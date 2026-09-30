@@ -1,11 +1,12 @@
 import os
+from typing import Any
 
 from pony.orm import BindingError, Database, DatabaseError, TransactionError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 
 
-def bind_db(db: Database, **connection_settings) -> None:
+def bind_db(db: Database, **connection_settings: Any) -> None:
     """Bind a database to the given connection settings.
 
     This function attempts to bind a `pony.orm.Database` instance to the specified

@@ -134,3 +134,32 @@ References
 - ``y/_db/utils/``
 - ``y/contracts.py``
 - ``y/prices/utils/ypriceapi.py``
+
+Price selection and invalidation
+--------------------------------
+
+A positive, finite API or known-token valuation takes priority over DEX fallback.
+DEX fallback uses liquidity-based price estimation across Uniswap, Curve, and
+Balancer. It tries the deepest eligible pool in input-token units, then falls
+back after quote failures or dead ends. Protocol and pool address resolve ties.
+It does not guarantee the highest possible route price. Bounded discovery
+workers share immutable block data. Caller cancellation drains owned tasks;
+shared registry loaders remain available to other lookups. No selection deadline
+is added. See :doc:`amount-quotes` for native amount quotes and redemption limits.
+
+``skip_cache=True`` bypasses the final price caches. Recursive calls inherit this
+setting and pool exclusions. Restricted or dependent calculations do not read or
+write the unrestricted price cache. Price conversion steps precede copied child
+paths. Numeric-only SQL cache hits have an empty path.
+
+After a pricing correction, stop every process that writes to the selected
+database. Run ``ypricemagic db reset-prices --chain CHAIN_ID --backup BACKUP_PATH``
+with the same database configuration. The command creates and checks a complete
+SQLite backup, reports the affected row count, and deletes only that chain's
+price rows. It preserves other chains, token metadata, events, and pool discovery
+data. Restart the writers to clear their memory caches. Prices rebuild on demand.
+
+Enable ``logging.getLogger("y.stuck?").setLevel(logging.DEBUG)`` to receive
+``still executing`` messages every five minutes for long-running async calls.
+The messages are DEBUG-only. Structured amount quotes record the selected swap
+and redemption steps.

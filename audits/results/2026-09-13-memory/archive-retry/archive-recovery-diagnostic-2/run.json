@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import json, os, time, urllib.request, urllib.error\nfrom pathlib import Path\nurl = os.environ['VALIDATION_RPC_URL']\nreport = Path(os.environ['VALIDATION_REPORT']) / 'archive-diagnostic.json'\nrows = []\ndef call(label, method, params):\n    started = time.monotonic()\n    row = dict(label=label, method=method, params=params, timeout_seconds=90)\n    try:\n        body = json.dumps(dict(jsonrpc='2.0', id=1, method=method, params=params)).encode()\n        request = urllib.request.Request(url, body, {'Content-Type': 'application/json'})\n        with urllib.request.urlopen(request, timeout=90) as response:\n            result = json.load(response)\n        row['result'] = result.get('result')\n        if 'error' in result:\n            row['rpc_error'] = result['error']\n    except Exception as error:\n        row['error_type'] = type(error).__name__\n        if isinstance(error, urllib.error.HTTPError):\n            row['http_status'] = error.code\n    row['elapsed_seconds'] = time.monotonic() - started\n    rows.append(row)\n    report.write_text(json.dumps(dict(complete=False, calls=rows), indent=2)+'\\n')\n    print(json.dumps(row), flush=True)\n    return row.get('result')\ncall('client', 'web3_clientVersion', [])\ntx = {'to': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 'data': '0x313ce567'}\ncall('latest', 'eth_call', [tx, 'latest'])\nfor number in (16830000, 18000000):\n    header = call(f'header-{number}', 'eth_getBlockByNumber', [hex(number), False])\n    call(f'number-{number}', 'eth_call', [tx, hex(number)])\n    if isinstance(header, dict):\n        call(f'hash-{number}', 'eth_call', [tx, {'blockHash': header['hash'], 'requireCanonical': True}])\nreport.write_text(json.dumps(dict(complete=True, calls=rows), indent=2)+'\\n')\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789319072.487149,
+  "source_sha": "850d7506d554209738cc2c471f82fbb951845d29",
+  "source_revision": "850d7506d554209738cc2c471f82fbb951845d29",
+  "source_archive_sha256": "fc7bdc0c1d5a1a15277664d9efcd1c89a5200c6abe47f05d8a6da202ab86298c",
+  "image": "sha256:4ccb5b8063f29ecbd755ac2760da6364ee81d9f630af1a1f855ecfb83e34ae1b",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 256.84122705459595
+}

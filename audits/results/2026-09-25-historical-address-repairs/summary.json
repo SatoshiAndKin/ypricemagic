@@ -1,0 +1,495 @@
+{
+  "baseline-312": {
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 286.99078392982483,
+    "source_sha": "0b553dfa819e418df7cbd85b77464eb26d748bd4",
+    "source_archive_sha256": "354aa0aadecf5116d5760e0b9b8e57146b969078344918275c23440356706338",
+    "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+    "missing_reports": [],
+    "oom_killed": false,
+    "command": {
+      "command": [
+        "sh",
+        "-c",
+        "set -e; python -m pip install --no-deps --no-build-isolation -e .; python -m mypy > /reports/mypy.txt 2>&1 || true; python /runner/check_compiled.py; python tools/validation/focused.py"
+      ],
+      "exit_code": 1,
+      "interrupted": false,
+      "elapsed_seconds": 286.03643389100034,
+      "peak_sampled_process_rss_bytes": 1053794304,
+      "cgroup_before": {
+        "memory.current": "8876032",
+        "memory.peak": "8876032",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      },
+      "cgroup_after": {
+        "memory.current": "166322176",
+        "memory.peak": "1164095488",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      }
+    },
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 431,
+        "call:passed": 404,
+        "teardown:passed": 431,
+        "call:failed": 27
+      },
+      "collected": 431
+    },
+    "mypy": {
+      "before": 1827,
+      "after": 1827,
+      "added": [],
+      "removed": [],
+      "baseline": "audits/results/2026-09-25-uniswap-review/committed-312",
+      "dependencies_identical": true,
+      "added_after_line_reference_normalization": [],
+      "removed_after_line_reference_normalization": []
+    }
+  },
+  "committed-312": {
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 359.3641788959503,
+    "source_sha": "a7c7545d121b4ec5ecb5830f1e7363d4073ca68d",
+    "source_archive_sha256": "7fada48ff77638d8312830565bf3cb62ea9c55ee73a63e6a30f14d871dc0e9ee",
+    "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+    "missing_reports": [],
+    "oom_killed": false,
+    "command": {
+      "command": [
+        "sh",
+        "-c",
+        "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python -m mypy > /reports/mypy.txt 2>&1 || true; python /runner/check_compiled.py; python tools/validation/focused.py"
+      ],
+      "exit_code": 0,
+      "interrupted": false,
+      "elapsed_seconds": 352.6913624730005,
+      "peak_sampled_process_rss_bytes": 1071980544,
+      "cgroup_before": {
+        "memory.current": "20742144",
+        "memory.peak": "20742144",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      },
+      "cgroup_after": {
+        "memory.current": "403550208",
+        "memory.peak": "1356513280",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      }
+    },
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 431,
+        "call:passed": 431,
+        "teardown:passed": 431
+      },
+      "collected": 431
+    },
+    "mypy": {
+      "before": 1827,
+      "after": 1827,
+      "added": [
+        [
+          "y/prices/dex/uniswap/v2.py",
+          "Name \"deepest_pool\" already defined on line 810 [no-redef]",
+          1
+        ]
+      ],
+      "removed": [
+        [
+          "y/prices/dex/uniswap/v2.py",
+          "Name \"deepest_pool\" already defined on line 809 [no-redef]",
+          1
+        ]
+      ],
+      "baseline": "audits/results/2026-09-25-uniswap-review/committed-312",
+      "dependencies_identical": true,
+      "added_after_line_reference_normalization": [],
+      "removed_after_line_reference_normalization": []
+    }
+  },
+  "fixed-311": {
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 277.0852949619293,
+    "source_sha": "0b553dfa819e418df7cbd85b77464eb26d748bd4",
+    "source_archive_sha256": "0f050399a080b97a49529cc2708d2fc4de50c29f4d85a4c3a0752061fa6c4fe4",
+    "image": "sha256:0fecced576e80b46d40ee5ecf306d9c0dad2ffcbf42af156b9ad2c30de82b579",
+    "missing_reports": [],
+    "oom_killed": false,
+    "command": {
+      "command": [
+        "sh",
+        "-c",
+        "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python -m mypy > /reports/mypy.txt 2>&1 || true; python /runner/check_compiled.py; python tools/validation/focused.py"
+      ],
+      "exit_code": 0,
+      "interrupted": false,
+      "elapsed_seconds": 276.1933357130001,
+      "peak_sampled_process_rss_bytes": 1031454720,
+      "cgroup_before": {
+        "memory.current": "8634368",
+        "memory.peak": "8740864",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      },
+      "cgroup_after": {
+        "memory.current": "157814784",
+        "memory.peak": "1126576128",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      }
+    },
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 431,
+        "call:passed": 431,
+        "teardown:passed": 431
+      },
+      "collected": 431
+    },
+    "mypy": {
+      "before": 1827,
+      "after": 1827,
+      "added": [
+        [
+          "y/prices/dex/uniswap/v2.py",
+          "Name \"deepest_pool\" already defined on line 810 [no-redef]",
+          1
+        ]
+      ],
+      "removed": [
+        [
+          "y/prices/dex/uniswap/v2.py",
+          "Name \"deepest_pool\" already defined on line 809 [no-redef]",
+          1
+        ]
+      ],
+      "baseline": "audits/results/2026-09-25-uniswap-review/final-311",
+      "dependencies_identical": true,
+      "added_after_line_reference_normalization": [],
+      "removed_after_line_reference_normalization": []
+    }
+  },
+  "fixed-312": {
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 272.95589995384216,
+    "source_sha": "0b553dfa819e418df7cbd85b77464eb26d748bd4",
+    "source_archive_sha256": "0f050399a080b97a49529cc2708d2fc4de50c29f4d85a4c3a0752061fa6c4fe4",
+    "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+    "missing_reports": [],
+    "oom_killed": false,
+    "command": {
+      "command": [
+        "sh",
+        "-c",
+        "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python -m mypy > /reports/mypy.txt 2>&1 || true; python /runner/check_compiled.py; python tools/validation/focused.py"
+      ],
+      "exit_code": 0,
+      "interrupted": false,
+      "elapsed_seconds": 272.1785215910022,
+      "peak_sampled_process_rss_bytes": 1065005056,
+      "cgroup_before": {
+        "memory.current": "8818688",
+        "memory.peak": "8929280",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      },
+      "cgroup_after": {
+        "memory.current": "166125568",
+        "memory.peak": "1173401600",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      }
+    },
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 431,
+        "call:passed": 431,
+        "teardown:passed": 431
+      },
+      "collected": 431
+    },
+    "mypy": {
+      "before": 1827,
+      "after": 1827,
+      "added": [
+        [
+          "y/prices/dex/uniswap/v2.py",
+          "Name \"deepest_pool\" already defined on line 810 [no-redef]",
+          1
+        ]
+      ],
+      "removed": [
+        [
+          "y/prices/dex/uniswap/v2.py",
+          "Name \"deepest_pool\" already defined on line 809 [no-redef]",
+          1
+        ]
+      ],
+      "baseline": "audits/results/2026-09-25-uniswap-review/committed-312",
+      "dependencies_identical": true,
+      "added_after_line_reference_normalization": [],
+      "removed_after_line_reference_normalization": []
+    }
+  },
+  "fixed-313": {
+    "complete": true,
+    "exit_code": 0,
+    "elapsed_seconds": 235.5644679069519,
+    "source_sha": "0b553dfa819e418df7cbd85b77464eb26d748bd4",
+    "source_archive_sha256": "0f050399a080b97a49529cc2708d2fc4de50c29f4d85a4c3a0752061fa6c4fe4",
+    "image": "sha256:b3d211f81c8e17526bcc27eb32961e8515d99ebd6478ce75c49ef3c1850bd8c9",
+    "missing_reports": [],
+    "oom_killed": false,
+    "command": {
+      "command": [
+        "sh",
+        "-c",
+        "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python -m mypy > /reports/mypy.txt 2>&1 || true; python /runner/check_compiled.py; python tools/validation/focused.py"
+      ],
+      "exit_code": 0,
+      "interrupted": false,
+      "elapsed_seconds": 234.62504105300104,
+      "peak_sampled_process_rss_bytes": 1066479616,
+      "cgroup_before": {
+        "memory.current": "8667136",
+        "memory.peak": "8667136",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      },
+      "cgroup_after": {
+        "memory.current": "166723584",
+        "memory.peak": "1168658432",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      }
+    },
+    "pytest": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 431,
+        "call:passed": 431,
+        "teardown:passed": 431
+      },
+      "collected": 431
+    },
+    "mypy": {
+      "before": 1827,
+      "after": 1827,
+      "added": [
+        [
+          "y/prices/dex/uniswap/v2.py",
+          "Name \"deepest_pool\" already defined on line 810 [no-redef]",
+          1
+        ]
+      ],
+      "removed": [
+        [
+          "y/prices/dex/uniswap/v2.py",
+          "Name \"deepest_pool\" already defined on line 809 [no-redef]",
+          1
+        ]
+      ],
+      "baseline": "audits/results/2026-09-25-uniswap-review/final-313",
+      "dependencies_identical": true,
+      "added_after_line_reference_normalization": [],
+      "removed_after_line_reference_normalization": []
+    }
+  },
+  "full-312": {
+    "complete": false,
+    "exit_code": 130,
+    "elapsed_seconds": 3124.070410966873,
+    "source_sha": "0b553dfa819e418df7cbd85b77464eb26d748bd4",
+    "source_archive_sha256": "0f050399a080b97a49529cc2708d2fc4de50c29f4d85a4c3a0752061fa6c4fe4",
+    "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+    "missing_reports": [
+      "pytest-summary.json"
+    ],
+    "oom_killed": false,
+    "command": {
+      "command": [
+        "sh",
+        "/runner/full_suite.sh"
+      ],
+      "exit_code": -15,
+      "interrupted": true,
+      "elapsed_seconds": 3122.667893918002,
+      "peak_sampled_process_rss_bytes": 2984370176,
+      "cgroup_before": {
+        "memory.current": "8736768",
+        "memory.peak": "8843264",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      },
+      "cgroup_after": {
+        "memory.current": "3863166976",
+        "memory.peak": "3994030080",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "21"
+      }
+    }
+  },
+  "native-312": {
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 318.9483058452606,
+    "source_sha": "0b553dfa819e418df7cbd85b77464eb26d748bd4",
+    "source_archive_sha256": "0f050399a080b97a49529cc2708d2fc4de50c29f4d85a4c3a0752061fa6c4fe4",
+    "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+    "missing_reports": [],
+    "oom_killed": false,
+    "command": {
+      "command": [
+        "sh",
+        "-c",
+        "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; python /runner/native.py; python /runner/native_reviewed.py"
+      ],
+      "exit_code": 1,
+      "interrupted": false,
+      "elapsed_seconds": 318.06984952100174,
+      "peak_sampled_process_rss_bytes": 1052626944,
+      "cgroup_before": {
+        "memory.current": "8785920",
+        "memory.peak": "8892416",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      },
+      "cgroup_after": {
+        "memory.current": "141434880",
+        "memory.peak": "1173082112",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      }
+    }
+  },
+  "reproduced-312": {
+    "complete": true,
+    "exit_code": 1,
+    "elapsed_seconds": 261.621258020401,
+    "source_sha": "0b553dfa819e418df7cbd85b77464eb26d748bd4",
+    "source_archive_sha256": "051c03e443f4e5922440be119c97e08385850a7dec5fee5d66bc098c7597c33a",
+    "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+    "missing_reports": [],
+    "oom_killed": false,
+    "command": {
+      "command": [
+        "sh",
+        "-c",
+        "set -e; python -m pip install --no-deps --no-build-isolation -e .; python -m mypy > /reports/mypy.txt 2>&1 || true; python /runner/check_compiled.py; python tools/validation/focused.py"
+      ],
+      "exit_code": 1,
+      "interrupted": false,
+      "elapsed_seconds": 260.81697758500013,
+      "peak_sampled_process_rss_bytes": 1071480832,
+      "cgroup_before": {
+        "memory.current": "8982528",
+        "memory.peak": "8982528",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      },
+      "cgroup_after": {
+        "memory.current": "166440960",
+        "memory.peak": "1162387456",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+        "cpu.max": "400000 100000",
+        "pids.max": "512",
+        "pids.current": "2"
+      }
+    },
+    "pytest": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 431,
+        "call:passed": 405,
+        "teardown:passed": 431,
+        "call:failed": 26
+      },
+      "collected": 431
+    },
+    "mypy": {
+      "before": 1827,
+      "after": 1827,
+      "added": [],
+      "removed": [],
+      "baseline": "audits/results/2026-09-25-uniswap-review/committed-312",
+      "dependencies_identical": true,
+      "added_after_line_reference_normalization": [],
+      "removed_after_line_reference_normalization": []
+    }
+  }
+}

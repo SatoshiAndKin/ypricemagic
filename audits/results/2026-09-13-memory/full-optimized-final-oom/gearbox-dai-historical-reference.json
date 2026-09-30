@@ -1,0 +1,14 @@
+{
+  "block": 16980000,
+  "block_hash": "0xeb3a499c986be2f6392fc416d01c2b409dc16e71e640d5437ca99bb4dccd6be5",
+  "dai_usd_feed": "0xdec0a100ead1faa37407f0edc76033426cf90b82",
+  "decimals": 8,
+  "round_data": [
+    17128,
+    99970000,
+    1680662927,
+    1680662927,
+    17128
+  ],
+  "complete": true
+}

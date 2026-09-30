@@ -1,0 +1,15 @@
+{
+  "changed_environment_keys": [
+    "YPRICEMAGIC_GETLOGS_BATCH_SIZE"
+  ],
+  "ranges": {
+    "slow-erc20-retry-312": 1000,
+    "slow-erc20-default-312": 10000
+  },
+  "all_other_environment_entries_equal": true,
+  "source_archive_expected": "2d9ceec58ea71c2847886f7e484faaeda0d12662464d8d8f439d1f264ad7ae27",
+  "same_frozen_image": true,
+  "deadline_seconds": 3600,
+  "cases_run_sequentially": true,
+  "limit": "Provider load and live head can change between runs; shared-provider audit remains active. This is not a fully isolated performance benchmark."
+}

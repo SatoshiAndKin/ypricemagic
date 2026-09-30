@@ -6,13 +6,17 @@ from typing import Any
 from unittest.mock import AsyncMock, Mock
 
 import pytest
+from dank_mids import BlockSemaphore
 
-from y._db.common import Filter
+from tests.test_pricing_correctness import run_async_test
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._db.common import Filter
 
 
 def scanner(fetch: AsyncMock, *, limit: int | None = None) -> Any:
-    return SimpleNamespace(
+    state = SimpleNamespace(
+        semaphore=BlockSemaphore(int(ENVS.GETLOGS_DOP)),
+        _db_task=None,
         _chunk_size=10,
         _chunks_per_batch=limit,
         _verbose=False,
@@ -22,8 +26,14 @@ def scanner(fetch: AsyncMock, *, limit: int | None = None) -> Any:
         _set_lock=AsyncMock(),
     )
 
+    def insert(*args: Any) -> None:
+        state._db_task = asyncio.create_task(asyncio.sleep(0))
 
-@pytest.mark.asyncio_cooperative
+    state._insert_chunk.side_effect = insert
+    return state
+
+
+@run_async_test
 async def test_scan_bounds_work_and_keeps_results_in_block_order() -> None:
     window_size = int(ENVS.GETLOGS_DOP)
     release = asyncio.Event()
@@ -59,7 +69,7 @@ async def test_scan_bounds_work_and_keeps_results_in_block_order() -> None:
     assert checkpoints[-1] == 999
 
 
-@pytest.mark.asyncio_cooperative
+@run_async_test
 @pytest.mark.parametrize("cancel", [False, True])
 async def test_failed_or_cancelled_scan_joins_pending_fetches(cancel: bool) -> None:
     window_size = int(ENVS.GETLOGS_DOP)
@@ -95,7 +105,7 @@ async def test_failed_or_cancelled_scan_joins_pending_fetches(cancel: bool) -> N
     assert state._fetch_range_wrapped.await_count == window_size
 
 
-@pytest.mark.asyncio_cooperative
+@run_async_test
 async def test_explicit_chunk_limit_keeps_exact_scan_boundary() -> None:
     async def fetch(i: int, start: int, end: int, debug: bool) -> tuple[int, int, list[int]]:
         return i, end, []
@@ -109,7 +119,7 @@ async def test_explicit_chunk_limit_keeps_exact_scan_boundary() -> None:
     assert state._set_lock.await_args.args == (26,)
 
 
-@pytest.mark.asyncio_cooperative
+@run_async_test
 async def test_scan_refills_consumed_slots_before_the_whole_window_finishes() -> None:
     window_size = int(ENVS.GETLOGS_DOP)
     release = asyncio.Event()

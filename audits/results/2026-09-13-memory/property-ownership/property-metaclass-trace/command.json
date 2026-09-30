@@ -1,0 +1,34 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=/runner",
+    "python",
+    "-P",
+    "-c",
+    "import ast,json,subprocess,sys,textwrap\nfrom pathlib import Path\nsource=Path('/work')\nmodule=ast.parse((source/'tests/mypy/test_mypy_plugin.py').read_text())\ntest=next(n for n in module.body if isinstance(n,ast.FunctionDef) and n.name=='test_metaclass_wraps_sync_methods_and_descriptors')\ncode=test.body[0].value.args[1].value\ntarget=Path('/tmp/property-metaclass-probe');target.mkdir()\n(target/'snippet.py').write_text(textwrap.dedent(code))\nconfig=(source/'pyproject.toml').read_text().replace('files = [\"a_sync\", \"tests/mypy/cached_property_contract.py\"]','files = [\"snippet.py\"]')\n(target/'pyproject.toml').write_text(config)\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=target,text=True,capture_output=True)\nPath('/reports/mypy.txt').write_text(result.stdout+result.stderr)\nPath('/reports/metaclass-probe.json').write_text(json.dumps({'exit_code':result.returncode,'source':code},indent=2))\n"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 3.3301156960078515,
+  "peak_sampled_process_rss_bytes": 126738432,
+  "cgroup_before": {
+    "memory.current": "8839168",
+    "memory.peak": "8839168",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "33615872",
+    "memory.peak": "135360512",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

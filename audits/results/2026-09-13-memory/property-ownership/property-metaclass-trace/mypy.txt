@@ -1,0 +1,82 @@
+Warning: Unpack is already enabled by default
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/usr/local/lib/python3.12/site-packages/mypy/__main__.py", line 37, in <module>
+    console_entry()
+  File "/usr/local/lib/python3.12/site-packages/mypy/__main__.py", line 15, in console_entry
+    main()
+  File "/usr/local/lib/python3.12/site-packages/mypy/main.py", line 135, in main
+    res, messages, blockers = run_build(sources, options, fscache, t0, stdout, stderr)
+  File "/usr/local/lib/python3.12/site-packages/mypy/main.py", line 219, in run_build
+    res = build.build(sources, options, None, flush_errors, fscache, stdout, stderr)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 222, in build
+    result = _build(
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 301, in _build
+    graph = dispatch(sources, manager, stdout)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 2952, in dispatch
+    process_graph(graph, manager)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 3347, in process_graph
+    done, still_working = manager.wait_for_done(graph)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 925, in wait_for_done
+    process_stale_scc(graph, next_scc, self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 3485, in process_stale_scc
+    graph[id].type_check_first_pass()
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 2340, in type_check_first_pass
+    self.type_checker().check_first_pass()
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 532, in check_first_pass
+    self.accept(d)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1478, in accept
+    return visitor.visit_class_def(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 2689, in visit_class_def
+    self.accept(defn.defs)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1573, in accept
+    return visitor.visit_block(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 3161, in visit_block
+    self.accept(s)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1155, in accept
+    return visitor.visit_decorator(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 5462, in visit_decorator
+    self.visit_decorator_inner(e)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 5498, in visit_decorator_inner
+    sig, t2 = self.expr_checker.check_call(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checkexpr.py", line 1600, in check_call
+    return self.check_overload_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checkexpr.py", line 2750, in check_overload_call
+    inferred_result = self.infer_overload_return_type(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checkexpr.py", line 2947, in infer_overload_return_type
+    elif any_causes_overload_ambiguity(matches, return_types, arg_types, arg_kinds, arg_names):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checkexpr.py", line 6745, in any_causes_overload_ambiguity
+    if has_any_type(arg_type, ignore_in_type_obj=True):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checkexpr.py", line 6511, in has_any_type
+    return t.accept(HasAnyType(ignore_in_type_obj))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/types.py", line 2341, in accept
+    return visitor.visit_callable_type(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checkexpr.py", line 6523, in visit_callable_type
+    if self.ignore_in_type_obj and t.is_type_obj():
+                                   ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/types.py", line 2322, in is_type_obj
+    return self.fallback.type.is_metaclass() and not isinstance(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 4125, in __getattribute__
+    raise AssertionError(object.__getattribute__(self, "msg"))
+AssertionError: fallback can't be filled out until semanal
+snippet.py:13: error: INTERNAL ERROR -- Please try using mypy master on GitHub:
+https://mypy.readthedocs.io/en/stable/common_issues.html#using-a-development-mypy-build
+Please report a bug at https://github.com/python/mypy/issues
+version: 1.19.1+bytesrefcount1
+snippet.py:13: : note: use --pdb to drop into pdb

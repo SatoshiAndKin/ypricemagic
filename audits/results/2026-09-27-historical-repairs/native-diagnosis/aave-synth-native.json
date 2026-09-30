@@ -1,0 +1,68 @@
+[
+  {
+    "token": "0x2e8F4bdbE3d47d7d7DE490437AeA9915D930F1A3",
+    "block": 26073318,
+    "hash": "0x4991b1f887ba0a67cf7052998563abb73e6f7536f5358e60866685e466266b45",
+    "underlying": "0x8e870d67f660d95d5be530380d0ec0bd388289e1",
+    "target()": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "error": {
+        "code": 3,
+        "message": "execution reverted",
+        "data": "0x"
+      }
+    },
+    "currencyKey()": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "error": {
+        "code": 3,
+        "message": "execution reverted",
+        "data": "0x"
+      }
+    },
+    "resolver()": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "error": {
+        "code": 3,
+        "message": "execution reverted",
+        "data": "0x"
+      }
+    }
+  },
+  {
+    "token": "0x6F634c6135D2EBD550000ac92F494F9CB8183dAe",
+    "block": 26073318,
+    "hash": "0x4991b1f887ba0a67cf7052998563abb73e6f7536f5358e60866685e466266b45",
+    "underlying": "0x1494ca1f11d487c2bbe4543e90080aeba4ba3c2b",
+    "target()": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "error": {
+        "code": 3,
+        "message": "execution reverted",
+        "data": "0x"
+      }
+    },
+    "currencyKey()": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "error": {
+        "code": 3,
+        "message": "execution reverted",
+        "data": "0x"
+      }
+    },
+    "resolver()": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "error": {
+        "code": 3,
+        "message": "execution reverted",
+        "data": "0x"
+      }
+    }
+  }
+]

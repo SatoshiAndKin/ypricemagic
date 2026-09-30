@@ -1,0 +1,29 @@
+{
+  "duplicate_prevented": true,
+  "oom": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": true,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 137,
+    "Error": "",
+    "StartedAt": "2026-09-13T05:37:04.840542224Z",
+    "FinishedAt": "2026-09-13T05:37:04.897617175Z"
+  },
+  "cancel": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 137,
+    "Error": "",
+    "StartedAt": "2026-09-13T05:37:05.016401004Z",
+    "FinishedAt": "2026-09-13T05:37:07.107079202Z"
+  }
+}

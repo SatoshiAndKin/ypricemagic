@@ -1,0 +1,12 @@
+{
+  "baseline": {
+    "exit_code": 1,
+    "output": "--- :before\t2026-09-14 06:36:15.905312\n+++ :after\t2026-09-14 06:36:15.905509\n@@ -4,22 +4,12 @@\n from typing import Iterable, Optional\n \n from mypy.checkmember import analyze_member_access\n-from mypy.nodes import (\n-    AssignmentStmt,\n-    CallExpr,\n-    Decorator,\n-    Expression,\n-    FuncDef,\n-    MemberExpr,\n-    NameExpr,\n-    OverloadedFuncDef,\n-    StrExpr,\n-    Var,\n-)\n+from mypy.nodes import (AssignmentStmt, CallExpr, Decorator, Expression, FuncDef, MemberExpr,\n+                        NameExpr, OverloadedFuncDef, StrExpr, Var)\n from mypy.plugin import AttributeContext, ClassDefContext, FunctionContext, MethodContext, Plugin\n from mypy.plugins.common import add_attribute_to_class\n+from mypy.types import CallableType, Instance, Overloaded, Parameters, Type, get_proper_type\n from mypy.typevars import fill_typevars\n-from mypy.types import CallableType, Instance, Overloaded, Parameters, Type, get_proper_type\n \n PLUGIN_METADATA_KEY = \"a_sync.mypy\"\n \nERROR:  Imports are incorrectly sorted and/or formatted.\n"
+  },
+  "committed": {
+    "exit_code": 1,
+    "output": "--- :before\t2026-09-14 06:36:15.954153\n+++ :after\t2026-09-14 06:36:15.954369\n@@ -4,22 +4,12 @@\n from typing import Iterable, Optional\n \n from mypy.checkmember import analyze_member_access\n-from mypy.nodes import (\n-    AssignmentStmt,\n-    CallExpr,\n-    Decorator,\n-    Expression,\n-    FuncDef,\n-    MemberExpr,\n-    NameExpr,\n-    OverloadedFuncDef,\n-    StrExpr,\n-    Var,\n-)\n+from mypy.nodes import (AssignmentStmt, CallExpr, Decorator, Expression, FuncDef, MemberExpr,\n+                        NameExpr, OverloadedFuncDef, StrExpr, Var)\n from mypy.plugin import AttributeContext, ClassDefContext, FunctionContext, MethodContext, Plugin\n from mypy.plugins.common import add_attribute_to_class\n+from mypy.types import CallableType, Instance, Overloaded, Parameters, Type, get_proper_type\n from mypy.typevars import fill_typevars\n-from mypy.types import CallableType, Instance, Overloaded, Parameters, Type, get_proper_type\n \n PLUGIN_METADATA_KEY = \"a_sync.mypy\"\n \nERROR:  Imports are incorrectly sorted and/or formatted.\n"
+  },
+  "imports_identical": true,
+  "boundary": "Existing owner import formatting fails the configured default isort layout before and after. Black uses a different multiline layout. The ownership and compiler changes add no imports in this module."
+}

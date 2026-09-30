@@ -1,0 +1,34 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=/runner",
+    "python",
+    "-P",
+    "-c",
+    "import importlib,json,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/smart-owner-full-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\nshutil.copytree(source/'tests',target/'tests')\n# Keep mypy settings for the dependency's existing type-plugin tests.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\n'+''.join(key+' = '+json.dumps(value)+'\\n' for key,value in config['tool']['validation']['full_pytest'].items()))\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/owner-full.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nraise SystemExit(status)\n"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 147.03690021201328,
+  "peak_sampled_process_rss_bytes": 205283328,
+  "cgroup_before": {
+    "memory.current": "8904704",
+    "memory.peak": "8904704",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "261505024",
+    "memory.peak": "419569664",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

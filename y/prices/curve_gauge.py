@@ -14,15 +14,21 @@ from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
-from y.datatypes import AnyAddressType, Block, UsdPrice
+from y.datatypes import AnyAddressType, Block, PriceResult
 from y.exceptions import call_reverted
+from y.prices._candidates import derive_price
 from y.utils.cache import optional_async_diskcache
 from y.utils.raw_calls import raw_call
 
 logger = logging.getLogger(__name__)
 
 
-@a_sync.a_sync(default="sync", cache_type="memory", ram_cache_ttl=5 * 60, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+@a_sync.a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=5 * 60,
+    ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE,
+)
 @optional_async_diskcache
 async def is_curve_gauge(token_address: AnyAddressType) -> bool:
     """Determine whether a token is a Curve gauge.
@@ -103,7 +109,7 @@ async def get_price(
     token_address: AnyAddressType,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
-) -> UsdPrice | None:
+) -> PriceResult | None:
     """Get the USD price of a Curve gauge token.
 
     Curve gauges are 1:1 with their underlying LP token, so the price is
@@ -129,6 +135,7 @@ async def get_price(
     if lp_token is None:
         logger.warning("Could not resolve LP token for gauge %s", token_address)
         return None
-    return await magic.get_price(
-        lp_token, block=block, skip_cache=skip_cache, sync=False
-    )
+    child = await magic.get_price(lp_token, block=block, skip_cache=skip_cache, sync=False)
+    if child is not None:
+        return derive_price(token_address, float(child), f"Curve gauge for LP {lp_token}", child)
+    return None

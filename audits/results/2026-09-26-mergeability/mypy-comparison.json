@@ -1,0 +1,119 @@
+{
+  "baseline_total": 1827,
+  "current_total": 1804,
+  "added": [],
+  "removed": [
+    [
+      "y/utils/events.py",
+      "Call to untyped function \"LogCache\" in typed context [no-untyped-call]",
+      1
+    ],
+    [
+      "y/_db/utils/logs.py",
+      "Function is missing a type annotation [no-untyped-def]",
+      1
+    ],
+    [
+      "y/_db/utils/logs.py",
+      "The type \"type[Log]\" is not generic and not indexable [misc]",
+      1
+    ],
+    [
+      "y/_db/utils/logs.py",
+      "Missing type parameters for generic type \"tuple\" [type-arg]",
+      1
+    ],
+    [
+      "y/_db/utils/logs.py",
+      "Argument 1 to \"get_hash_dbid\" has incompatible type \"str\"; expected \"HexStr\" [arg-type]",
+      1
+    ],
+    [
+      "y/_db/utils/logs.py",
+      "Argument 1 to \"get_hash_dbid\" has incompatible type \"Address | None\"; expected \"HexStr\" [arg-type]",
+      1
+    ],
+    [
+      "y/_db/utils/logs.py",
+      "No overload variant of \"zip_longest\" matches argument types \"range\", \"object\" [call-overload]",
+      1
+    ],
+    [
+      "y/_db/utils/logs.py",
+      "Missing type parameters for generic type \"Query\" [type-arg]",
+      1
+    ],
+    [
+      "y/classes/common.py",
+      "Missing type parameters for generic type \"Address\" [type-arg]",
+      1
+    ],
+    [
+      "y/classes/common.py",
+      "Incompatible types in assignment (expression has type \"CythonEvent\", variable has type \"None\") [assignment]",
+      1
+    ],
+    [
+      "y/classes/common.py",
+      "Returning Any from function declared to return \"Awaitable[Literal[True]]\" [no-any-return]",
+      1
+    ],
+    [
+      "y/classes/common.py",
+      "\"None\" has no attribute \"wait\" [attr-defined]",
+      1
+    ],
+    [
+      "y/classes/common.py",
+      "Incompatible types in assignment (expression has type \"Task[Never]\", variable has type \"None\") [assignment]",
+      1
+    ],
+    [
+      "y/classes/common.py",
+      "\"None\" has no attribute \"add_done_callback\" [attr-defined]",
+      1
+    ],
+    [
+      "y/classes/common.py",
+      "Incompatible return value type (got \"None\", expected \"Task[Never]\") [return-value]",
+      1
+    ],
+    [
+      "y/classes/common.py",
+      "Incompatible types in assignment (expression has type \"Exception\", variable has type \"None\") [assignment]",
+      1
+    ],
+    [
+      "y/classes/common.py",
+      "Incompatible types in assignment (expression has type \"Task[bool]\", variable has type \"None\") [assignment]",
+      1
+    ],
+    [
+      "y/classes/common.py",
+      "Incompatible return value type (got \"None\", expected \"Awaitable[Literal[True]]\") [return-value]",
+      1
+    ],
+    [
+      "y/classes/common.py",
+      "Implicit return in function which does not return [misc]",
+      1
+    ],
+    [
+      "y/prices/stable_swap/curve.py",
+      "Return type \"Coroutine[Any, Any, None]\" of \"_load\" incompatible with return type \"Coroutine[Any, Any, Never]\" in supertype \"y.classes.common._Loader\" [override]",
+      1
+    ],
+    [
+      "y/prices/stable_swap/curve.py",
+      "\"None\" has no attribute \"set\" [attr-defined]",
+      1
+    ],
+    [
+      "tests/prices/dex/test_uniswap.py",
+      "No overload variant of \"get_price\" matches argument types \"Any\", \"bool\", \"bool\" [call-overload]",
+      2
+    ]
+  ],
+  "normalization": "Only referenced source line numbers in diagnostic messages",
+  "current_run": "focused-validated-312"
+}

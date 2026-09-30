@@ -1,9 +1,11 @@
 import logging
+from typing import Any, cast
 
 import a_sync
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20, WeiBalance
 from y.contracts import has_methods
 from y.datatypes import AnyAddressType, Block, UsdPrice, UsdValue
@@ -20,7 +22,12 @@ _RESERVES_METHODS = (
 logger = logging.getLogger(__name__)
 
 
-@a_sync.a_sync(default="sync", cache_type="memory", ram_cache_ttl=5 * 60, ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE)
+@a_sync.a_sync(
+    default="sync",
+    cache_type="memory",
+    ram_cache_ttl=5 * 60,
+    ram_cache_maxsize=ENVS.DEFAULT_CACHE_MAXSIZE,
+)
 @optional_async_diskcache
 async def is_popsicle_lp(token_address: AnyAddressType) -> bool:
     """
@@ -69,12 +76,22 @@ async def get_price(
         - :func:`get_tvl`
         - :func:`get_balances`
     """
+    return await _get_price(token, block, skip_cache=skip_cache)
+
+
+@stuck_coro_debugger
+async def _get_price(
+    token: AnyAddressType, block: Block | None, *, skip_cache: bool
+) -> UsdPrice | None:
     address = await convert.to_address_async(token)
+    pool = ERC20(address, asynchronous=True)
+    total_supply = await cast(Any, pool.total_supply)(block, sync=False)
+    if not total_supply:
+        return None
     total_val = await get_tvl(address, block, skip_cache=skip_cache, sync=False)
     if total_val is None:
         return None
-    total_supply = await ERC20(address, asynchronous=True).total_supply_readable(block, sync=False)
-    return UsdPrice(total_val / total_supply)
+    return UsdPrice(total_val * await pool._scale(block) / total_supply)
 
 
 @a_sync.a_sync(default="sync")
@@ -103,7 +120,7 @@ async def get_tvl(
         - :func:`get_price`
         - :func:`get_balances`
     """
-    balances: tuple[WeiBalance, WeiBalance]
+    balances: tuple[WeiBalance, WeiBalance] | None
     balances = await get_balances(
         token, block, skip_cache=skip_cache, _async_balance_objects=True, sync=False
     )

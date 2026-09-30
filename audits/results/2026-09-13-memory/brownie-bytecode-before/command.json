@@ -1,0 +1,31 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import gc\nimport json\nimport os\nfrom pathlib import Path\nimport resource\nimport tracemalloc\nfrom brownie.network.middlewares import caching\n\nbytecode = (b'\\x7f' + b'\\xff' * 32 + b'\\x00') * 512\nexpected = b'\\x7f\\x00' * 512\ntracemalloc.start()\nsamples = []\nfor index in range(16):\n    assert caching._strip_push_data(bytecode) == expected\n    current, peak = tracemalloc.get_traced_memory()\n    samples.append({'iteration':index+1,'python_current_bytes':current,'python_peak_bytes':peak,'rss_peak_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024})\nsnapshot=tracemalloc.take_snapshot()\ngc.collect()\nreport={'complete':True,'module_file':caching.__file__,'input_bytes':len(bytecode),'samples':samples,'current_after_collection_bytes':tracemalloc.get_traced_memory()[0],'top_allocations':[{'source':str(s.traceback),'bytes':s.size,'count':s.count} for s in snapshot.statistics('traceback')[:12]]}\nPath(os.environ['VALIDATION_REPORT'],'bytecode-allocation.json').write_text(json.dumps(report,indent=2)+'\\n')\nprint(json.dumps(report))\n"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 2.036061159997189,
+  "peak_sampled_process_rss_bytes": 19738624,
+  "cgroup_before": {
+    "memory.current": "8847360",
+    "memory.peak": "8847360",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "13115392",
+    "memory.peak": "141938688",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

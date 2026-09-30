@@ -1,0 +1,30 @@
+{
+  "committed_owner_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+  "measured_image": "sha256:a44dd03ae137e5c1dba112967e0291b275252cac926ccae9c705bd66f13151d9",
+  "compiler_repaired_image": "sha256:fcd3908da00853ba93e682c1289990203420203fe8584580b552bf7ebd23c73c",
+  "runtime_sources": {
+    "a_sync/_smart.pyx": {
+      "sha256": "84a6b16729afb17a86918753c3749d9fb158e6abba6c673a47e0e1e22d3f4cdc",
+      "identical_measured_compiler_repaired_and_committed": true
+    },
+    "a_sync/a_sync/property.pyx": {
+      "sha256": "c8a15a0704e28a076132f91b4e0fcab0775edd13660c631ec6f9c2afa3388729",
+      "identical_measured_compiler_repaired_and_committed": true
+    },
+    "a_sync/async_property/cached.pyx": {
+      "sha256": "2c9ccfe779602ae80cb6224fa328d81f42d8ea087df57f017ab11ff724bf0b3c",
+      "identical_measured_compiler_repaired_and_committed": true
+    }
+  },
+  "formatted_sources": {
+    "a_sync/a_sync/property.pyi": {
+      "committed_sha256": "e673691f8b702da58d03a9d8500bbe64294a6f72b3b84a65e385dea3663aced3",
+      "same_ast_as_full_suite_image": true
+    },
+    "a_sync_mypy_plugin/__init__.py": {
+      "committed_sha256": "a8ac344f6fe007cc8a5dea1457d5f25d394c476676ab514fe90a3105bedd430e",
+      "same_ast_as_full_suite_image": true
+    }
+  },
+  "pool_helper_sha256": "67c55186ffc968329346c953c379f8d8f92fe70e080369913b903b7414cb4ebb"
+}

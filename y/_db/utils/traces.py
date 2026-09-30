@@ -1,15 +1,16 @@
 import logging
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Iterable, Mapping
+from typing import Any, cast
 
 import a_sync
 import dank_mids
 import msgspec.json
 import pony.orm
-from a_sync import AsyncThreadPoolExecutor, PruningThreadPoolExecutor
+from a_sync import AsyncThreadPoolExecutor
 from eth_utils.toolz import concat
 from evmspec import FilterTrace
 
-from y._db.common import DiskCache, Filter, _clean_addresses
+from y._db.common import DiskCache, Filter, _clean_addresses, make_executor
 from y._db.decorators import db_session_retry_locked
 from y._db.entities import Chain, Trace, TraceCacheInfo, insert
 from y._db.utils._ep import _get_get_block
@@ -19,12 +20,14 @@ logger = logging.getLogger(__name__)
 _logger_debug = logger.debug
 
 
-_trace_executor = PruningThreadPoolExecutor(10, "ypricemagic db executor [trace]")
+_trace_executor = make_executor(10, 10, "ypricemagic db executor [trace]")
+
+TraceData = dict[str, Any]
 
 
 @a_sync.a_sync(default="async", executor=_trace_executor)
 @db_session_retry_locked
-def insert_trace(trace: FilterTrace) -> None:
+def insert_trace(trace: FilterTrace | TraceData) -> None:
     """Insert a trace into the database.
 
     This function inserts a given trace into the database by encoding it
@@ -37,13 +40,14 @@ def insert_trace(trace: FilterTrace) -> None:
         - :func:`y._db.entities.insert`
         - :class:`evmspec.FilterTrace`
     """
+    data: TraceData = trace if isinstance(trace, dict) else msgspec.to_builtins(trace)
     get_block = _get_get_block()
-    kwargs = {
-        "block": get_block(trace.blockNumber, sync=True),
-        "hash": trace.transactionHash,
+    kwargs: dict[str, Any] = {
+        "block": get_block(data["blockNumber"], sync=True),
+        "hash": data["transactionHash"],
         "raw": msgspec.json.encode(trace),
     }
-    for dct in [trace, *trace.values()]:
+    for dct in [data, *(value for value in data.values() if isinstance(value, Mapping))]:
         if "from" in dct:
             kwargs["from_address"] = dct["from"]
         if "to" in dct:
@@ -51,7 +55,7 @@ def insert_trace(trace: FilterTrace) -> None:
     insert(type=Trace, **kwargs)
 
 
-class TraceCache(DiskCache[dict, TraceCacheInfo]):
+class TraceCache(DiskCache[TraceData, TraceCacheInfo]):
     """Cache for storing and retrieving trace data.
 
     This class provides methods to load metadata, check cache status,
@@ -64,7 +68,7 @@ class TraceCache(DiskCache[dict, TraceCacheInfo]):
 
     __slots__ = "from_addresses", "to_addresses"
 
-    def __init__(self, from_addresses: list[str], to_addresses: list[str]):
+    def __init__(self, from_addresses: list[str], to_addresses: list[str]) -> None:
         """Initialize TraceCache with cleaned from and to addresses.
 
         Args:
@@ -81,8 +85,8 @@ class TraceCache(DiskCache[dict, TraceCacheInfo]):
         See Also:
             - :func:`y._db.common._clean_addresses`
         """
-        self.from_addresses = _clean_addresses(from_addresses)
-        self.to_addresses = _clean_addresses(to_addresses)
+        self.from_addresses = cast(list[str], _clean_addresses(from_addresses))
+        self.to_addresses = cast(list[str], _clean_addresses(to_addresses))
 
     def load_metadata(
         self, chain: Chain, from_address: str | None, to_address: str | None
@@ -101,7 +105,9 @@ class TraceCache(DiskCache[dict, TraceCacheInfo]):
             - :class:`y._db.entities.TraceCacheInfo`
         """
         return TraceCacheInfo.get(
-            chain=chain, from_address=str(from_address), to_address=str(to_address)
+            chain=chain,
+            from_addresses=msgspec.json.encode([from_address] if from_address else []),
+            to_addresses=msgspec.json.encode([to_address] if to_address else []),
         )
 
     def _is_cached_thru(self, from_block: int) -> int:
@@ -119,18 +125,20 @@ class TraceCache(DiskCache[dict, TraceCacheInfo]):
         from y._db.utils import utils as db
 
         chain = db.get_chain(sync=True)
+        from_addresses: list[str | None] = list(self.from_addresses) or [None]
+        to_addresses: list[str | None] = list(self.to_addresses) or [None]
         infos = [
             self.load_metadata(chain, from_address, to_address)
             or self.load_metadata(chain, from_address, None)
             or self.load_metadata(chain, None, to_address)
-            for from_address in self.from_addresses
-            for to_address in self.to_addresses
+            for from_address in from_addresses
+            for to_address in to_addresses
         ]
         if all(info and info.cached_from <= from_block for info in infos):
-            return max(info.cached_thru for info in infos)
+            return max(cast(TraceCacheInfo, info).cached_thru for info in infos)
         return 0
 
-    def _select(self, from_block: int, to_block: int) -> list[dict]:
+    def _select(self, from_block: int, to_block: int) -> list[TraceData]:
         """Select cached traces within a block range.
 
         Args:
@@ -151,8 +159,8 @@ class TraceCache(DiskCache[dict, TraceCacheInfo]):
                 trace.raw
                 for trace in Trace
                 if trace.block.chain == db.get_chain(sync=True)
-                and (not self.from_addresses or trace.address in self.from_addresses)
-                and (not self.to_addresses or trace.address in self.to_addresses)
+                and (not self.from_addresses or trace.from_address in self.from_addresses)
+                and (not self.to_addresses or trace.to_address in self.to_addresses)
                 and trace.block.number >= from_block
                 and trace.block.number <= to_block
             )
@@ -177,8 +185,8 @@ class TraceCache(DiskCache[dict, TraceCacheInfo]):
                 for to_address in self.to_addresses:
                     if info := TraceCacheInfo.get(
                         chain=chain,
-                        from_address=msgspec.json.encode([from_address]),
-                        to_address=msgspec.json.encode([to_address]),
+                        from_addresses=msgspec.json.encode([from_address]),
+                        to_addresses=msgspec.json.encode([to_address]),
                     ):
                         if from_block < info.cached_from:
                             info.cached_from = from_block
@@ -188,17 +196,19 @@ class TraceCache(DiskCache[dict, TraceCacheInfo]):
                             should_commit = True
                     else:
                         TraceCacheInfo(
+                            cached_from=from_block,
+                            cached_thru=done_thru,
                             chain=chain,
-                            from_address=msgspec.json.encode([from_address]),
-                            to_address=msgspec.json.encode([to_address]),
+                            from_addresses=msgspec.json.encode([from_address]),
+                            to_addresses=msgspec.json.encode([to_address]),
                         )
                         should_commit = True
         elif self.from_addresses:
             for from_address in self.from_addresses:
                 if info := TraceCacheInfo.get(
                     chain=chain,
-                    from_address=msgspec.json.encode([from_address]),
-                    to_address=msgspec.json.encode([]),
+                    from_addresses=msgspec.json.encode([from_address]),
+                    to_addresses=msgspec.json.encode([]),
                 ):
                     if from_block < info.cached_from:
                         info.cached_from = from_block
@@ -208,17 +218,19 @@ class TraceCache(DiskCache[dict, TraceCacheInfo]):
                         should_commit = True
                 else:
                     TraceCacheInfo(
+                        cached_from=from_block,
+                        cached_thru=done_thru,
                         chain=chain,
-                        from_address=msgspec.json.encode([from_address]),
-                        to_address=msgspec.json.encode([]),
+                        from_addresses=msgspec.json.encode([from_address]),
+                        to_addresses=msgspec.json.encode([]),
                     )
                     should_commit = True
         elif self.to_addresses:
             for to_address in self.to_addresses:
                 if info := TraceCacheInfo.get(
                     chain=chain,
-                    from_address=msgspec.json.encode([]),
-                    to_address=msgspec.json.encode([to_address]),
+                    from_addresses=msgspec.json.encode([]),
+                    to_addresses=msgspec.json.encode([to_address]),
                 ):
                     if from_block < info.cached_from:
                         info.cached_from = from_block
@@ -228,15 +240,17 @@ class TraceCache(DiskCache[dict, TraceCacheInfo]):
                         should_commit = True
                 else:
                     TraceCacheInfo(
+                        cached_from=from_block,
+                        cached_thru=done_thru,
                         chain=chain,
-                        from_address=msgspec.json.encode([]),
-                        to_address=msgspec.json.encode([to_address]),
+                        from_addresses=msgspec.json.encode([]),
+                        to_addresses=msgspec.json.encode([to_address]),
                     )
                     should_commit = True
         elif info := TraceCacheInfo.get(
             chain=chain,
-            from_address=msgspec.json.encode([]),
-            to_address=msgspec.json.encode([]),
+            from_addresses=msgspec.json.encode([]),
+            to_addresses=msgspec.json.encode([]),
         ):
             if from_block < info.cached_from:
                 info.cached_from = from_block
@@ -246,9 +260,11 @@ class TraceCache(DiskCache[dict, TraceCacheInfo]):
                 should_commit = True
         else:
             TraceCacheInfo(
+                cached_from=from_block,
+                cached_thru=done_thru,
                 chain=chain,
-                from_address=msgspec.json.encode([]),
-                to_address=msgspec.json.encode([]),
+                from_addresses=msgspec.json.encode([]),
+                to_addresses=msgspec.json.encode([]),
             )
             should_commit = True
 
@@ -262,7 +278,7 @@ class TraceCache(DiskCache[dict, TraceCacheInfo]):
             )
 
 
-class TraceFilter(Filter[dict, TraceCache]):
+class TraceFilter(Filter[TraceData, TraceCache]):
     """Filter for processing and caching traces.
 
     This class provides methods to filter traces based on from and to addresses,
@@ -289,7 +305,7 @@ class TraceFilter(Filter[dict, TraceCache]):
         executor: AsyncThreadPoolExecutor | None = None,
         is_reusable: bool = True,
         verbose: bool = False,
-    ):
+    ) -> None:
         """Initialize TraceFilter with addresses and block range.
 
         Args:
@@ -329,7 +345,7 @@ class TraceFilter(Filter[dict, TraceCache]):
             self._cache = TraceCache(self.from_addresses, self.to_addresses)
         return self._cache
 
-    def traces(self, to_block: int | None) -> AsyncIterator[dict]:
+    def traces(self, to_block: int | None) -> AsyncIterator[TraceData]:
         """Get an asynchronous iterator over traces up to a specified block.
 
         Args:
@@ -343,7 +359,7 @@ class TraceFilter(Filter[dict, TraceCache]):
         """
         return self._objects_thru(block=to_block)
 
-    async def _fetch_range(self, from_block: int, to_block: int) -> list[dict]:
+    async def _fetch_range(self, from_block: int, to_block: int) -> list[TraceData]:
         """Fetch traces within a block range.
 
         Args:
@@ -360,13 +376,15 @@ class TraceFilter(Filter[dict, TraceCache]):
             - :meth:`dank_mids.web3.provider.make_request`
         """
         try:
-            return await dank_mids.web3.provider.make_request("TraceFilter", {})
+            return cast(
+                list[TraceData], await dank_mids.web3.provider.make_request("TraceFilter", {})
+            )
         except NotImplementedError:
             tasks = a_sync.map(self._trace_block, range(from_block, to_block))
             results = {block: traces async for block, traces in tasks.map()}
             return list(concat(results[i] for i in range(from_block, to_block)))
 
-    async def _trace_block(self, block: int) -> list[dict]:
+    async def _trace_block(self, block: int) -> list[TraceData]:
         """Trace a specific block for transactions.
 
         Args:
@@ -381,43 +399,22 @@ class TraceFilter(Filter[dict, TraceCache]):
         return [
             trace
             for trace in await dank_mids.web3.provider.make_request("TraceBlock", block)
-            if (not self.from_addresses or trace_is_from(self.from_addresses))
+            if (not self.from_addresses or trace_is_from(self.from_addresses, trace))
             and (not self.to_addresses or trace_is_to(self.to_addresses, trace))
         ]
 
 
-trace_is_from = lambda addresses, trace: any(
-    "from" in x and x["from"] in addresses for x in (trace, trace.values())
-)
-"""Check if a trace is from any of the specified addresses.
+def trace_is_from(addresses: Iterable[str], trace: Mapping[str, Any]) -> bool:
+    """Match sender fields on a trace and its nested action mappings."""
+    return any(
+        "from" in item and item["from"] in addresses
+        for item in (trace, *(value for value in trace.values() if isinstance(value, Mapping)))
+    )
 
-Args:
-    addresses: List of addresses to check against.
-    trace: The trace to check.
 
-Returns:
-    True if the trace is from any of the specified addresses, False otherwise.
-
-Examples:
-    >>> trace = {"from": "0x123"}
-    >>> trace_is_from(["0x123", "0x456"], trace)
-    True
-"""
-
-trace_is_to = lambda addresses, trace: any(
-    "to" in x and x["to"] in addresses for x in (trace, trace.values())
-)
-"""Check if a trace is to any of the specified addresses.
-
-Args:
-    addresses: List of addresses to check against.
-    trace: The trace to check.
-
-Returns:
-    True if the trace is to any of the specified addresses, False otherwise.
-
-Examples:
-    >>> trace = {"to": "0x456"}
-    >>> trace_is_to(["0x123", "0x456"], trace)
-    True
-"""
+def trace_is_to(addresses: Iterable[str], trace: Mapping[str, Any]) -> bool:
+    """Match recipient fields on a trace and its nested action mappings."""
+    return any(
+        "to" in item and item["to"] in addresses
+        for item in (trace, *(value for value in trace.values() if isinstance(value, Mapping)))
+    )

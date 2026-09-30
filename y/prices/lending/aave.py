@@ -2,53 +2,59 @@ import logging
 from abc import abstractmethod
 from collections.abc import Awaitable
 from decimal import Decimal
-from typing import Union
+from typing import Any, Union, cast
 
 import a_sync
-from a_sync import cgather, igather
+from a_sync import igather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import chain
 from multicall import Call
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20, ContractBase
-from y.contracts import Contract
-from y.datatypes import Address, AddressOrContract, AnyAddressType, Block, UsdPrice
+from y.contracts import has_methods
+from y.datatypes import Address, AddressOrContract, AnyAddressType, Block, PriceResult
 from y.networks import Network
-from y.utils import hasall
+from y.prices._candidates import derive_price, gather_owned
 from y.utils.logging import get_price_logger
 from y.utils.raw_calls import raw_call
 
 logger = logging.getLogger(__name__)
 
 
-v1_pools = {
-    Network.Mainnet: ("0x398eC7346DcD622eDc5ae82352F02bE94C62d119",),
-}.get(chain.id, ())
+v1_pools = dict[int, tuple[str, ...]](
+    {
+        Network.Mainnet: ("0x398eC7346DcD622eDc5ae82352F02bE94C62d119",),
+    }
+).get(chain.id, ())
 
-v2_pools = {
-    Network.Mainnet: (
-        "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9",  # aave
-        "0x7937D4799803FbBe595ed57278Bc4cA21f3bFfCB",  # aave amm
-        "0xcE744a9BAf573167B2CF138114BA32ed7De274Fa",  # umee
-    ),
-    Network.Polygon: ("0x8dFf5E27EA6b7AC08EbFdf9eB090F32ee9a30fcf",),  # aave
-    Network.Avalanche: ("0x70BbE4A294878a14CB3CDD9315f5EB490e346163",),  # blizz
-}.get(chain.id, [])
+v2_pools = dict[int, tuple[str, ...]](
+    {
+        Network.Mainnet: (
+            "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9",  # aave
+            "0x7937D4799803FbBe595ed57278Bc4cA21f3bFfCB",  # aave amm
+            "0xcE744a9BAf573167B2CF138114BA32ed7De274Fa",  # umee
+        ),
+        Network.Polygon: ("0x8dFf5E27EA6b7AC08EbFdf9eB090F32ee9a30fcf",),  # aave
+        Network.Avalanche: ("0x70BbE4A294878a14CB3CDD9315f5EB490e346163",),  # blizz
+    }
+).get(chain.id, ())
 
-v3_pools = {
-    Network.Mainnet: ("0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2",),  # aave v3
-    Network.Optimism: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-    Network.Arbitrum: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-    Network.Harmony: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-    Network.Arbitrum: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-    Network.Fantom: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-    Network.Avalanche: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-    Network.Polygon: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
-}.get(chain.id, ())
+v3_pools = dict[int, tuple[str, ...]](
+    {
+        Network.Mainnet: ("0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2",),  # aave v3
+        Network.Optimism: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+        Network.Arbitrum: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+        Network.Harmony: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+        Network.Arbitrum: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+        Network.Fantom: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+        Network.Avalanche: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+        Network.Polygon: ("0x794a61358D6845594F94dc1DB02A252b5b4814aD",),  # aave v3
+    }
+).get(chain.id, ())
 
 
 class AaveMarketBase(ContractBase):
@@ -91,7 +97,8 @@ class AaveMarketBase(ContractBase):
             raise RuntimeError(
                 f"'self.asynchronous' must be False to use {cls}.__contains__.\nYou may wish to use {cls}.is_atoken instead."
             )
-        return convert.to_address(token) in self.atokens
+        address = convert.to_address(cast(AnyAddressType, token))
+        return any(atoken == address for atoken in self.__atokens__(sync=True))
 
     async def contains(self, token: object) -> bool:
         """
@@ -111,19 +118,20 @@ class AaveMarketBase(ContractBase):
             >>> await market.contains(token)
             True
         """
-        contains = await convert.to_address_async(token) in await self.__atokens__
+        address = await convert.to_address_async(cast(AnyAddressType, token))
+        contains = any(atoken == address for atoken in await self.__atokens__)
         logger.debug("%s contains %s: %s", self, token, contains)
         return contains
 
     async def get_reserves(self) -> list[Address]:
-        return await Call(self.address, [self._get_reserves_method])
+        return cast(list[Address], await Call(self.address, [self._get_reserves_method]))
 
-    async def get_reserve_data(self, reserve: AnyAddressType) -> tuple:
+    async def get_reserve_data(self, reserve: AnyAddressType) -> tuple[Any, ...]:
         return await self.contract.getReserveData.coroutine(reserve)
 
     @property
     @abstractmethod
-    async def atokens(self) -> Awaitable[list[ERC20]]:
+    def atokens(self) -> Awaitable[list[ERC20]]:
         """
         Get the aTokens of the market.
 
@@ -139,7 +147,7 @@ class AaveMarketBase(ContractBase):
             [<ERC20 '0xTokenAddress1'>, <ERC20 '0xTokenAddress2'>]
         """
 
-    __atokens__: HiddenMethodDescriptor[Self, list[ERC20]]
+    __atokens__: HiddenMethodDescriptor["AaveMarketBase", list[ERC20]]
 
     @abstractmethod
     async def underlying(self, atoken_address: AddressOrContract) -> ERC20:
@@ -178,11 +186,15 @@ class AaveMarketBase(ContractBase):
 
 class AaveMarketV1(AaveMarketBase):
     @a_sync.aka.cached_property
+    @stuck_coro_debugger
     async def atokens(self) -> list[ERC20]:
-        reserves_data = a_sync.map(self.get_reserve_data, self.get_reserves(sync=False))
+        reserves_data = await gather_owned(
+            cast(Any, self.get_reserve_data)(reserve, sync=False)
+            for reserve in await self.get_reserves(sync=False)
+        )
         atokens = [
             ERC20(reserve_data["aTokenAddress"], asynchronous=self.asynchronous)
-            async for _, reserve_data in reserves_data
+            for reserve_data in reserves_data
         ]
         logger.info("loaded %s v1 atokens for %s", len(atokens), repr(self))
         return atokens
@@ -202,12 +214,16 @@ _V2_RESERVE_DATA_METHOD = "getReserveData(address)((uint256,uint128,uint128,uint
 
 class AaveMarketV2(AaveMarketBase):
     @a_sync.aka.cached_property
+    @stuck_coro_debugger
     async def atokens(self) -> list[ERC20]:
-        reserves_data = a_sync.map(self.get_reserve_data, self.get_reserves(sync=False))
+        reserves_data = await gather_owned(
+            cast(Any, self.get_reserve_data)(reserve, sync=False)
+            for reserve in await self.get_reserves(sync=False)
+        )
         try:
             atokens = [
                 ERC20(reserve_data[7], asynchronous=self.asynchronous)
-                async for _, reserve_data in reserves_data
+                for reserve_data in reserves_data
             ]
             logger.info("loaded %s v2 atokens for %s", len(atokens), repr(self))
             return atokens
@@ -216,8 +232,10 @@ class AaveMarketV2(AaveMarketBase):
             logger.warning("failed to load tokens for %s", self)
             return []
 
-    async def get_reserve_data(self, reserve: AnyAddressType) -> tuple:
-        return await Call(self.address, [_V2_RESERVE_DATA_METHOD, str(reserve)])
+    async def get_reserve_data(self, reserve: AnyAddressType) -> tuple[Any, ...]:
+        return cast(
+            tuple[Any, ...], await Call(self.address, [_V2_RESERVE_DATA_METHOD, str(reserve)])
+        )
 
     @a_sync.a_sync(ram_cache_maxsize=256)
     async def underlying(self, atoken_address: AddressOrContract) -> ERC20:
@@ -232,12 +250,16 @@ class AaveMarketV2(AaveMarketBase):
 
 class AaveMarketV3(AaveMarketBase):
     @a_sync.aka.cached_property
+    @stuck_coro_debugger
     async def atokens(self) -> list[ERC20]:
-        reserves_data = a_sync.map(self.get_reserve_data, self.get_reserves(sync=False))
+        reserves_data = await gather_owned(
+            cast(Any, self.get_reserve_data)(reserve, sync=False)
+            for reserve in await self.get_reserves(sync=False)
+        )
         try:
             atokens = [
                 ERC20(reserve_data[8], asynchronous=self.asynchronous)
-                async for _, reserve_data in reserves_data
+                for reserve_data in reserves_data
             ]
             logger.info("loaded %s v3 atokens for %s", len(atokens), repr(self))
             return atokens
@@ -259,9 +281,6 @@ class AaveMarketV3(AaveMarketBase):
 
 AaveMarket = Union[AaveMarketV1, AaveMarketV2, AaveMarketV3]
 
-_WRAPPED_V2_METHODS = "ATOKEN", "STATIC_ATOKEN_LM_REVISION", "staticToDynamicAmount"
-_WRAPPED_V3_METHODS = "ATOKEN", "AAVE_POOL", "UNDERLYING"
-
 
 class AaveRegistry(a_sync.ASyncGenericSingleton):
     def __init__(self, *, asynchronous: bool = False) -> None:
@@ -270,14 +289,13 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
 
     @a_sync.aka.cached_property
     async def pools(self) -> list[AaveMarket]:
-        v1, v2, v3 = await cgather(
-            self.__pools_v1__,
-            self.__pools_v2__,
-            self.__pools_v3__,
+        groups = await gather_owned(
+            cast(Awaitable[list[AaveMarket]], group)
+            for group in (self.__pools_v1__, self.__pools_v2__, self.__pools_v3__)
         )
-        return v1 + v2 + v3
+        return [pool for group in groups for pool in group]
 
-    __pools__: HiddenMethodDescriptor[Self, list[AaveMarket]]
+    __pools__: HiddenMethodDescriptor["AaveRegistry", list[AaveMarket]]
 
     @a_sync.aka.cached_property
     async def pools_v1(self) -> list[AaveMarketV1]:
@@ -285,7 +303,7 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
         logger.debug("AaveRegistry v1 pools %s", pools)
         return pools
 
-    __pools_v1__: HiddenMethodDescriptor[Self, list[AaveMarketV1]]
+    __pools_v1__: HiddenMethodDescriptor["AaveRegistry", list[AaveMarketV1]]
 
     @a_sync.aka.cached_property
     async def pools_v2(self) -> list[AaveMarketV2]:
@@ -293,7 +311,7 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
         logger.debug("AaveRegistry v2 pools %s", pools)
         return pools
 
-    __pools_v2__: HiddenMethodDescriptor[Self, list[AaveMarketV2]]
+    __pools_v2__: HiddenMethodDescriptor["AaveRegistry", list[AaveMarketV2]]
 
     @a_sync.aka.cached_property
     async def pools_v3(self) -> list[AaveMarketV3]:
@@ -301,7 +319,7 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
         logger.debug("AaveRegistry v3 pools %s", pools)
         return pools
 
-    __pools_v3__: HiddenMethodDescriptor[Self, list[AaveMarketV3]]
+    __pools_v3__: HiddenMethodDescriptor["AaveRegistry", list[AaveMarketV3]]
 
     async def pool_for_atoken(
         self, atoken_address: AnyAddressType
@@ -316,7 +334,7 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
             raise RuntimeError(
                 f"'self.asynchronous' must be False to use AaveRegistry.__contains__.\nYou may wish to use AaveRegistry.is_atoken instead."
             )
-        return any(__o in pool for pool in self.pools)
+        return any(__o in pool for pool in self.__pools__(sync=True))
 
     @a_sync.a_sync(cache_type="memory", ram_cache_maxsize=ENVS.CONTRACT_CACHE_MAXSIZE)
     async def is_atoken(self, atoken_address: AnyAddressType) -> bool:
@@ -329,74 +347,111 @@ class AaveRegistry(a_sync.ASyncGenericSingleton):
         logger.debug("is_atoken: %s", is_atoken)
         return is_atoken
 
+    @stuck_coro_debugger
     async def is_wrapped_atoken_v2(self, atoken_address: AnyAddressType) -> bool:
         # NOTE: Not sure if this wrapped version is actually related to aave but this works for pricing purposes.
-        contract = await Contract.coroutine(atoken_address, require_success=False)
-        return contract.verified and hasall(contract, _WRAPPED_V2_METHODS)
+        return bool(
+            await cast(Any, has_methods)(
+                atoken_address,
+                ("ATOKEN()(address)", "STATIC_ATOKEN_LM_REVISION()(uint256)"),
+                sync=False,
+            )
+        )
 
+    @stuck_coro_debugger
     async def is_wrapped_atoken_v3(self, atoken_address: AnyAddressType) -> bool:
         # NOTE: Not sure if this wrapped version is actually related to aave but this works for pricing purposes.
-        contract = await Contract.coroutine(atoken_address, require_success=False)
-        return contract.verified and hasall(contract, _WRAPPED_V3_METHODS)
+        return bool(
+            await cast(Any, has_methods)(
+                atoken_address,
+                ("ATOKEN()(address)", "AAVE_POOL()(address)", "UNDERLYING()(address)"),
+                sync=False,
+            )
+        )
 
     @a_sync.a_sync(cache_type="memory", ram_cache_maxsize=ENVS.CONTRACT_CACHE_MAXSIZE)
+    @stuck_coro_debugger
     async def underlying(self, atoken_address: AddressOrContract) -> ERC20:
-        pool: AaveMarketV1 | AaveMarketV2 | AaveMarketV3 = await self.pool_for_atoken(
-            atoken_address, sync=False
-        )
+        pool = await self.pool_for_atoken(atoken_address, sync=False)
+        if pool is None:
+            raise ValueError(f"No Aave market for {str(atoken_address)}")
         return await pool.underlying(atoken_address, sync=False)
 
+    @stuck_coro_debugger
     async def get_price(
         self,
         atoken_address: AddressOrContract,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice:
+    ) -> PriceResult | None:
         underlying: ERC20 = await self.underlying(atoken_address, sync=False)
-        return await underlying.price(block, skip_cache=skip_cache, sync=False)
+        child = await underlying.price(
+            block, skip_cache=skip_cache, return_None_on_failure=True, sync=False
+        )
+        if child is None:
+            return None
+        return derive_price(
+            atoken_address,
+            float(child),
+            f"Aave {str(atoken_address)} underlying {underlying.address}",
+            child,
+        )
 
+    @stuck_coro_debugger
     async def get_price_wrapped_v2(
         self,
         atoken_address: AddressOrContract,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice | None:
+    ) -> PriceResult | None:
         return await self._get_price_wrapped(
             atoken_address, "staticToDynamicAmount", block=block, skip_cache=skip_cache
         )
 
+    @stuck_coro_debugger
     async def get_price_wrapped_v3(
         self,
         atoken_address: AddressOrContract,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice | None:
+    ) -> PriceResult | None:
         return await self._get_price_wrapped(
             atoken_address, "convertToAssets", block=block, skip_cache=skip_cache
         )
 
+    @stuck_coro_debugger
     async def _get_price_wrapped(
         self,
         atoken_address: AddressOrContract,
         method: str,
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
-    ) -> UsdPrice | None:
-        contract, scale = await cgather(
-            Contract.coroutine(atoken_address),
-            ERC20._get_scale_for(atoken_address),
-        )
+    ) -> PriceResult | None:
+        address = await convert.to_address_async(atoken_address)
+        scale = await ERC20._get_scale_for(address)
         try:
-            underlying, price_per_share = await cgather(
-                # NOTE: We can probably cache this without breaking anything
-                contract.ATOKEN.coroutine(block_identifier=block),
-                getattr(contract, method).coroutine(scale, block_identifier=block),
+            underlying, price_per_share = await gather_owned(
+                [
+                    # NOTE: We can probably cache this without breaking anything
+                    Call(address, "ATOKEN()(address)", block_id=block).coroutine(),
+                    Call(
+                        address, [f"{method}(uint256)(uint256)", scale], block_id=block
+                    ).coroutine(),
+                ]
             )
         except ContractLogicError:
             return None
         price_per_share /= Decimal(scale)
-        return price_per_share * Decimal(
-            await ERC20(underlying, asynchronous=True).price(block, skip_cache=skip_cache)
+        child = await ERC20(underlying, asynchronous=True).price(
+            block, skip_cache=skip_cache, sync=False
+        )
+        if child is None:
+            return None
+        return derive_price(
+            atoken_address,
+            price_per_share * Decimal(float(child)),
+            f"Aave wrapped {str(atoken_address)} via {method}",
+            child,
         )
 
 

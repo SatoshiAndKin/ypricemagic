@@ -1,0 +1,22 @@
+[
+  {
+    "file": "owner-mypy.txt",
+    "scrubbed_original_sha256": "09dd3ffe961ea6df8dce980172ee3d847f121b2497b5268e38c26dcddbc4a4cc",
+    "published_sha256": "a503494b2c794bb3b95910deb21dd1040af530f0d5662cc397a7dd2d8298ecdc"
+  },
+  {
+    "file": "property-owner-tests.json",
+    "scrubbed_original_sha256": "70e901860b72572793aed0d09bf0a2ed26302bec2ac81bbc4ca468db96e6b646",
+    "published_sha256": "f68dc28be7d28ced5a01ff621941ea6e8e1f51fba80d5d7e55b7030cb4e07a8f"
+  },
+  {
+    "file": "property-runtime-contract.json",
+    "scrubbed_original_sha256": "256ae239255f9f1bd6fd6386fa89a12842fadf4b0a61ccec0cf234278801ef94",
+    "published_sha256": "5e5117ed86eaa988d47899cfc83839d15bb9fc8beec42a9f3916808fe814f013"
+  },
+  {
+    "file": "pytest.xml",
+    "scrubbed_original_sha256": "4421e57f884fbc52ef4b226f6034ee1484d12ff3c4174992417181ca785ba2c4",
+    "published_sha256": "e7dd94c5ef00de645d952dbed4047c4908d83e0df08751f98b4ec3c176fff047"
+  }
+]

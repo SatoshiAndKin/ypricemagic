@@ -1,0 +1,800 @@
+{
+  "full-deadline-original": {
+    "run": {
+      "command": [
+        "sh",
+        "/runner/full_suite.sh"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789406251.7766788,
+      "source_sha": "476af288a520a30052668a8b3ad7e3e682cd101f",
+      "source_revision": "476af288a520a30052668a8b3ad7e3e682cd101f",
+      "source_archive_sha256": "eb6a47ec7bd5b8200a7988e06b05cf743313c63987ab6179ca9061adf1426ac5",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 2,
+      "oom_killed": true,
+      "missing_reports": [
+        "pytest-summary.json"
+      ],
+      "elapsed_seconds": 1203.6312232017517
+    },
+    "container_peak_bytes": 8589934592,
+    "peak_sampled_process_rss_bytes": 8558968832,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 40,
+      "oom": 1,
+      "oom_kill": 1,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": true,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 137473,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    },
+    "pytest": {
+      "collected": 1752,
+      "terminal_outcomes": 412,
+      "unique_terminal_cases": 412,
+      "counts": {
+        "sessionstart:": 1,
+        "collection:": 1,
+        "setup:passed": 409,
+        "call:skipped": 9,
+        "teardown:passed": 412,
+        "call:passed": 291,
+        "call:failed": 109,
+        "setup:failed": 3
+      },
+      "final_summary_present": false,
+      "last_phase": "teardown",
+      "last_logical_rpc_counts": {
+        "call_uid": 109706,
+        "multicall_uid": 2008,
+        "request_uid": 27065,
+        "jsonrpc_batch_uid": 2193
+      },
+      "peak_observed_live_tasks": 98518
+    }
+  },
+  "full-deadline-preoptimization": {
+    "run": {
+      "command": [
+        "sh",
+        "/runner/full_suite.sh"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789407455.5107079,
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_revision": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_archive_sha256": "46250ae5f72bd79819c3a88db91469bbf8c89f412ba0da16f28065a74aac49b9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 2,
+      "oom_killed": true,
+      "missing_reports": [
+        "pytest-summary.json"
+      ],
+      "elapsed_seconds": 1525.5179541110992
+    },
+    "container_peak_bytes": 8589996032,
+    "peak_sampled_process_rss_bytes": 8610045952,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 5479,
+      "oom": 1,
+      "oom_kill": 1,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": true,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 168041,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    },
+    "pytest": {
+      "collected": 1816,
+      "terminal_outcomes": 486,
+      "unique_terminal_cases": 486,
+      "counts": {
+        "sessionstart:": 1,
+        "collection:": 1,
+        "setup:passed": 483,
+        "call:skipped": 9,
+        "teardown:passed": 486,
+        "call:passed": 305,
+        "call:failed": 169,
+        "setup:failed": 3
+      },
+      "final_summary_present": false,
+      "last_phase": "teardown",
+      "last_logical_rpc_counts": {
+        "call_uid": 261267,
+        "multicall_uid": 16470,
+        "request_uid": 35905,
+        "jsonrpc_batch_uid": 11851
+      },
+      "peak_observed_live_tasks": 97815
+    }
+  },
+  "full-deadline-optimized": {
+    "run": {
+      "command": [
+        "sh",
+        "/runner/full_suite.sh"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789408981.1407812,
+      "source_sha": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_revision": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_archive_sha256": "3a1a9d464dfaf6a7a80da469ebd53b427fccefbd88bca0cba44bd0577b5d7aa9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "interrupted": true,
+      "exit_code": 130,
+      "oom_killed": false,
+      "missing_reports": [
+        "pytest-summary.json"
+      ],
+      "elapsed_seconds": 6465.463246822357
+    },
+    "container_peak_bytes": 4401676288,
+    "peak_sampled_process_rss_bytes": 3082756096,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 405507,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    },
+    "pytest": {
+      "collected": 1865,
+      "terminal_outcomes": 1467,
+      "unique_terminal_cases": 1467,
+      "counts": {
+        "sessionstart:": 1,
+        "collection:": 1,
+        "setup:passed": 1462,
+        "call:passed": 1076,
+        "teardown:passed": 1461,
+        "call:skipped": 15,
+        "call:failed": 370,
+        "setup:skipped": 6,
+        "teardown:skipped": 6
+      },
+      "final_summary_present": false,
+      "last_phase": "setup",
+      "last_logical_rpc_counts": {
+        "call_uid": 1431107,
+        "multicall_uid": 52100,
+        "request_uid": 143718,
+        "jsonrpc_batch_uid": 122041
+      },
+      "peak_observed_live_tasks": 93215
+    }
+  },
+  "native-deadline-before": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/native.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789415446.713888,
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_revision": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_archive_sha256": "46250ae5f72bd79819c3a88db91469bbf8c89f412ba0da16f28065a74aac49b9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "interrupted": true,
+      "exit_code": 130,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 242.83935499191284
+    },
+    "container_peak_bytes": 1171931136,
+    "peak_sampled_process_rss_bytes": 1068290048,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 10705,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "native-reviewed-deadline-before": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/native_reviewed.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789415689.619252,
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_revision": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_archive_sha256": "46250ae5f72bd79819c3a88db91469bbf8c89f412ba0da16f28065a74aac49b9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "interrupted": true,
+      "exit_code": 130,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 363.2885010242462
+    },
+    "container_peak_bytes": 1165611008,
+    "peak_sampled_process_rss_bytes": 1068032000,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 22585,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "native-deadline-after": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/native.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789416052.982843,
+      "source_sha": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_revision": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_archive_sha256": "3a1a9d464dfaf6a7a80da469ebd53b427fccefbd88bca0cba44bd0577b5d7aa9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 119.56420612335205
+    },
+    "container_peak_bytes": 1165357056,
+    "peak_sampled_process_rss_bytes": 1063788544,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 9436,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "native-reviewed-deadline-after": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/native_reviewed.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789416172.6384509,
+      "source_sha": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_revision": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_archive_sha256": "3a1a9d464dfaf6a7a80da469ebd53b427fccefbd88bca0cba44bd0577b5d7aa9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 1,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 333.07990193367004
+    },
+    "container_peak_bytes": 1164902400,
+    "peak_sampled_process_rss_bytes": 1057828864,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 21295,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "public-deadline-before-timing-1": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/pricing_profile.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789416505.823168,
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_revision": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_archive_sha256": "46250ae5f72bd79819c3a88db91469bbf8c89f412ba0da16f28065a74aac49b9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 137,
+      "oom_killed": true,
+      "missing_reports": [
+        "public-summary.json"
+      ],
+      "elapsed_seconds": 745.5734651088715
+    },
+    "container_peak_bytes": 8589950976,
+    "peak_sampled_process_rss_bytes": 8607158272,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 3325,
+      "oom": 1,
+      "oom_kill": 1,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": true,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 14948,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "public-deadline-before-timing-2": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/pricing_profile.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789417251.500614,
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_revision": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_archive_sha256": "46250ae5f72bd79819c3a88db91469bbf8c89f412ba0da16f28065a74aac49b9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 137,
+      "oom_killed": true,
+      "missing_reports": [
+        "public-summary.json"
+      ],
+      "elapsed_seconds": 883.5539870262146
+    },
+    "container_peak_bytes": 8589971456,
+    "peak_sampled_process_rss_bytes": 8609431552,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 8750,
+      "oom": 2,
+      "oom_kill": 1,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": true,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 14701,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "public-deadline-before-timing-3": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/pricing_profile.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789418135.1497102,
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_revision": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_archive_sha256": "46250ae5f72bd79819c3a88db91469bbf8c89f412ba0da16f28065a74aac49b9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 137,
+      "oom_killed": true,
+      "missing_reports": [
+        "public-summary.json"
+      ],
+      "elapsed_seconds": 714.510922908783
+    },
+    "container_peak_bytes": 8589946880,
+    "peak_sampled_process_rss_bytes": 8609857536,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 10761,
+      "oom": 1,
+      "oom_kill": 1,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": true,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 14513,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "public-deadline-before-allocations": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/pricing_profile.py --allocations"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789418849.774369,
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_revision": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_archive_sha256": "46250ae5f72bd79819c3a88db91469bbf8c89f412ba0da16f28065a74aac49b9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 137,
+      "oom_killed": true,
+      "missing_reports": [
+        "public-summary.json"
+      ],
+      "elapsed_seconds": 652.5580339431763
+    },
+    "container_peak_bytes": 8589934592,
+    "peak_sampled_process_rss_bytes": 8554885120,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 1278,
+      "oom": 1,
+      "oom_kill": 1,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": true,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 13120,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "public-deadline-after-timing-1": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/pricing_profile.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789419502.4007418,
+      "source_sha": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_revision": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_archive_sha256": "3a1a9d464dfaf6a7a80da469ebd53b427fccefbd88bca0cba44bd0577b5d7aa9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 1357.364163160324
+    },
+    "container_peak_bytes": 3222843392,
+    "peak_sampled_process_rss_bytes": 2104565760,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 14583,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "public-deadline-after-timing-2": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/pricing_profile.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789420859.865358,
+      "source_sha": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_revision": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_archive_sha256": "3a1a9d464dfaf6a7a80da469ebd53b427fccefbd88bca0cba44bd0577b5d7aa9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 1374.305461883545
+    },
+    "container_peak_bytes": 3111694336,
+    "peak_sampled_process_rss_bytes": 2095247360,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 14788,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "public-deadline-after-timing-3": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/pricing_profile.py"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789422234.279091,
+      "source_sha": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_revision": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_archive_sha256": "3a1a9d464dfaf6a7a80da469ebd53b427fccefbd88bca0cba44bd0577b5d7aa9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 1389.395583152771
+    },
+    "container_peak_bytes": 3120422912,
+    "peak_sampled_process_rss_bytes": 2104582144,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 15035,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "public-deadline-after-allocations": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python /runner/pricing_profile.py --allocations"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789423623.804254,
+      "source_sha": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_revision": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_archive_sha256": "3a1a9d464dfaf6a7a80da469ebd53b427fccefbd88bca0cba44bd0577b5d7aa9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": false,
+      "elapsed_seconds": 1912.7509949207306
+    },
+    "container_peak_bytes": 8393064448,
+    "peak_sampled_process_rss_bytes": 7717281792,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": false,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 14562,
+      "expired_bytes": 0,
+      "rotations": 0,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "audit-deadline-before": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python -c 'import faulthandler,signal,runpy,shutil; faulthandler.register(signal.SIGUSR1,all_threads=True); runpy.run_path(shutil.which(\"ypricemagic\"),run_name=\"__main__\")' audit-prices audits/mainnet.json --json /reports/audit.json --csv /reports/audit.csv"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789425536.662206,
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_revision": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "source_archive_sha256": "46250ae5f72bd79819c3a88db91469bbf8c89f412ba0da16f28065a74aac49b9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 137,
+      "oom_killed": true,
+      "missing_reports": [
+        "audit.json",
+        "audit.csv"
+      ],
+      "elapsed_seconds": 819.2476789951324
+    },
+    "container_peak_bytes": 8589942784,
+    "peak_sampled_process_rss_bytes": 8607477760,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 3227,
+      "oom": 1,
+      "oom_kill": 1,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": true,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 619530706,
+      "expired_bytes": 104857600,
+      "rotations": 5,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  },
+  "audit-deadline-after": {
+    "run": {
+      "command": [
+        "sh",
+        "-c",
+        "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python -c 'import faulthandler,signal,runpy,shutil; faulthandler.register(signal.SIGUSR1,all_threads=True); runpy.run_path(shutil.which(\"ypricemagic\"),run_name=\"__main__\")' audit-prices audits/mainnet.json --json /reports/audit.json --csv /reports/audit.csv"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": false,
+      "started_unix": 1789426356.0069,
+      "source_sha": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_revision": "c16d43e0c6b38e146834f0cd8d75090bb25222c7",
+      "source_archive_sha256": "3a1a9d464dfaf6a7a80da469ebd53b427fccefbd88bca0cba44bd0577b5d7aa9",
+      "image": "sha256:d0eb8585a747730516769a0223fa674ef9ffbc602ff32e801b0ca1e5e9136e48",
+      "exit_code": 137,
+      "oom_killed": true,
+      "missing_reports": [
+        "audit.json",
+        "audit.csv"
+      ],
+      "elapsed_seconds": 207492.78541898727
+    },
+    "container_peak_bytes": 8589934592,
+    "peak_sampled_process_rss_bytes": 8395034624,
+    "cgroup_memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 292,
+      "oom": 1,
+      "oom_kill": 1,
+      "oom_group_kill": 0
+    },
+    "docker_oom_killed": true,
+    "archive_passed": true,
+    "compiled_modules": 10,
+    "log_retention": {
+      "total_bytes": 23909504778,
+      "expired_bytes": 23488102400,
+      "rotations": 228,
+      "file_limit_bytes": 104857600,
+      "retained_files": 5
+    }
+  }
+}

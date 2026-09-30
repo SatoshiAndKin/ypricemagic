@@ -1,0 +1,504 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-6.2.5, py-1.11.0, pluggy-1.6.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /work/tests/unit, configfile: pytest.ini
+collecting ... collected 21 items
+
+tests/unit/test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[False] FAILED
+tests/unit/test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[True] FAILED
+tests/unit/test_http_retry_release.py::test_success_keeps_response_and_request_identity PASSED
+tests/unit/test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[400] PASSED
+tests/unit/test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[429] PASSED
+tests/unit/test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[500] PASSED
+tests/unit/test_http_retry_release.py::test_local_timeout_preserves_the_race[0-0] PASSED
+tests/unit/test_http_retry_release.py::test_local_timeout_preserves_the_race[0-1] PASSED
+tests/unit/test_http_retry_release.py::test_local_timeout_preserves_the_race[2-0] PASSED
+tests/unit/test_http_retry_release.py::test_local_timeout_preserves_the_race[2-1] PASSED
+tests/unit/test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[False-make_request] PASSED
+tests/unit/test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[False-get_response_unbatched] PASSED
+tests/unit/test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[True-make_request] PASSED
+tests/unit/test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[True-get_response_unbatched] PASSED
+tests/unit/test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[success] PASSED
+tests/unit/test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[failure] FAILED
+tests/unit/test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[cancel] FAILED
+tests/unit/test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-False] PASSED
+tests/unit/test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-True] PASSED
+tests/unit/test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-False] PASSED
+tests/unit/test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-True] PASSED
+
+=================================== FAILURES ===================================
+__ test_http_408_releases_failed_attempts_before_replacement_finishes[False] ___
+
+cancel = False
+
+    @pytest.mark.parametrize("cancel", [False, True])
+    def test_http_408_releases_failed_attempts_before_replacement_finishes(cancel):
+        async def check():
+            started, release = asyncio.Event(), asyncio.Event()
+            references, calls, events = [], [], []
+            expected = decode_raw(b'{"jsonrpc":"2.0","id":"same","result":"0x1"}')
+    
+            async def operation(method, params, request_id):
+                calls.append((method, params, request_id))
+                if len(calls) <= 8:
+                    payload = Payload()
+                    references.append(weakref.ref(payload))
+                    raise ClientResponseError(
+                        SimpleNamespace(real_url="http://example.invalid"),
+                        (),
+                        status=408,
+                        message="request timeout",
+                    )
+                started.set()
+                await release.wait()
+                return expected
+    
+            def observer(event):
+                events.append((event.attempt, type(event.error), event.metadata))
+    
+            request = RPCRequest(Controller(operation), "eth_blockNumber", [], uid="same")
+            register_retry_observer(observer)
+            task = asyncio.create_task(request.make_request())
+            try:
+                await asyncio.wait_for(started.wait(), 2)
+                await asyncio.sleep(0)
+                gc.collect()
+                assert len(references) == 8
+                assert [ref() for ref in references] == [None] * 8
+                assert calls == [("eth_blockNumber", [], "same")] * 9
+                assert events == [
+                    (index, ClientResponseError, {"status": "408"}) for index in range(1, 9)
+                ]
+                if cancel:
+                    task.cancel()
+                    with pytest.raises(asyncio.CancelledError):
+                        await task
+                else:
+                    release.set()
+                    assert await task is expected
+                    assert request._fut.result() is expected
+            finally:
+                unregister_retry_observer(observer)
+                release.set()
+                await asyncio.gather(task, return_exceptions=True)
+                if not request._fut.done():
+                    request._fut.cancel()
+    
+>       asyncio.run(check())
+
+tests/unit/test_http_retry_release.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def check():
+        started, release = asyncio.Event(), asyncio.Event()
+        references, calls, events = [], [], []
+        expected = decode_raw(b'{"jsonrpc":"2.0","id":"same","result":"0x1"}')
+    
+        async def operation(method, params, request_id):
+            calls.append((method, params, request_id))
+            if len(calls) <= 8:
+                payload = Payload()
+                references.append(weakref.ref(payload))
+                raise ClientResponseError(
+                    SimpleNamespace(real_url="http://example.invalid"),
+                    (),
+                    status=408,
+                    message="request timeout",
+                )
+            started.set()
+            await release.wait()
+            return expected
+    
+        def observer(event):
+            events.append((event.attempt, type(event.error), event.metadata))
+    
+        request = RPCRequest(Controller(operation), "eth_blockNumber", [], uid="same")
+        register_retry_observer(observer)
+        task = asyncio.create_task(request.make_request())
+        try:
+            await asyncio.wait_for(started.wait(), 2)
+            await asyncio.sleep(0)
+            gc.collect()
+            assert len(references) == 8
+>           assert [ref() for ref in references] == [None] * 8
+E           AssertionError: assert [None, None, ...ne, None, ...] == [None, None, ...ne, None, ...]
+E             At index 7 diff: <test_http_retry_release.Payload object at 0xfe81c44d5670> != None
+E             Full diff:
+E               [
+E                None,
+E                None,
+E                None,
+E                None,...
+E             
+E             ...Full output truncated (7 lines hidden), use '-vv' to show
+
+tests/unit/test_http_retry_release.py:67: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  dank_mids.errors.timeouts:logging.py:295 `make_request` server timeout (code 408) 3 times for <RPCRequest uid=same method=eth_blockNumber params=[]>, trying again...
+WARNING  dank_mids.errors.timeouts:logging.py:295 `make_request` server timeout (code 408) 4 times for <RPCRequest uid=same method=eth_blockNumber params=[]>, trying again...
+WARNING  dank_mids.errors.timeouts:logging.py:295 `make_request` server timeout (code 408) 5 times for <RPCRequest uid=same method=eth_blockNumber params=[]>, trying again...
+WARNING  dank_mids.errors.timeouts:logging.py:295 `make_request` server timeout (code 408) 6 times for <RPCRequest uid=same method=eth_blockNumber params=[]>, trying again...
+WARNING  dank_mids.errors.timeouts:logging.py:295 `make_request` server timeout (code 408) 7 times for <RPCRequest uid=same method=eth_blockNumber params=[]>, trying again...
+WARNING  dank_mids.errors.timeouts:logging.py:295 `make_request` server timeout (code 408) 8 times for <RPCRequest uid=same method=eth_blockNumber params=[]>, trying again...
+___ test_http_408_releases_failed_attempts_before_replacement_finishes[True] ___
+
+cancel = True
+
+    @pytest.mark.parametrize("cancel", [False, True])
+    def test_http_408_releases_failed_attempts_before_replacement_finishes(cancel):
+        async def check():
+            started, release = asyncio.Event(), asyncio.Event()
+            references, calls, events = [], [], []
+            expected = decode_raw(b'{"jsonrpc":"2.0","id":"same","result":"0x1"}')
+    
+            async def operation(method, params, request_id):
+                calls.append((method, params, request_id))
+                if len(calls) <= 8:
+                    payload = Payload()
+                    references.append(weakref.ref(payload))
+                    raise ClientResponseError(
+                        SimpleNamespace(real_url="http://example.invalid"),
+                        (),
+                        status=408,
+                        message="request timeout",
+                    )
+                started.set()
+                await release.wait()
+                return expected
+    
+            def observer(event):
+                events.append((event.attempt, type(event.error), event.metadata))
+    
+            request = RPCRequest(Controller(operation), "eth_blockNumber", [], uid="same")
+            register_retry_observer(observer)
+            task = asyncio.create_task(request.make_request())
+            try:
+                await asyncio.wait_for(started.wait(), 2)
+                await asyncio.sleep(0)
+                gc.collect()
+                assert len(references) == 8
+                assert [ref() for ref in references] == [None] * 8
+                assert calls == [("eth_blockNumber", [], "same")] * 9
+                assert events == [
+                    (index, ClientResponseError, {"status": "408"}) for index in range(1, 9)
+                ]
+                if cancel:
+                    task.cancel()
+                    with pytest.raises(asyncio.CancelledError):
+                        await task
+                else:
+                    release.set()
+                    assert await task is expected
+                    assert request._fut.result() is expected
+            finally:
+                unregister_retry_observer(observer)
+                release.set()
+                await asyncio.gather(task, return_exceptions=True)
+                if not request._fut.done():
+                    request._fut.cancel()
+    
+>       asyncio.run(check())
+
+tests/unit/test_http_retry_release.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def check():
+        started, release = asyncio.Event(), asyncio.Event()
+        references, calls, events = [], [], []
+        expected = decode_raw(b'{"jsonrpc":"2.0","id":"same","result":"0x1"}')
+    
+        async def operation(method, params, request_id):
+            calls.append((method, params, request_id))
+            if len(calls) <= 8:
+                payload = Payload()
+                references.append(weakref.ref(payload))
+                raise ClientResponseError(
+                    SimpleNamespace(real_url="http://example.invalid"),
+                    (),
+                    status=408,
+                    message="request timeout",
+                )
+            started.set()
+            await release.wait()
+            return expected
+    
+        def observer(event):
+            events.append((event.attempt, type(event.error), event.metadata))
+    
+        request = RPCRequest(Controller(operation), "eth_blockNumber", [], uid="same")
+        register_retry_observer(observer)
+        task = asyncio.create_task(request.make_request())
+        try:
+            await asyncio.wait_for(started.wait(), 2)
+            await asyncio.sleep(0)
+            gc.collect()
+            assert len(references) == 8
+>           assert [ref() for ref in references] == [None] * 8
+E           AssertionError: assert [None, None, ...ne, None, ...] == [None, None, ...ne, None, ...]
+E             At index 7 diff: <test_http_retry_release.Payload object at 0xfe81c44d7b60> != None
+E             Full diff:
+E               [
+E                None,
+E                None,
+E                None,
+E                None,...
+E             
+E             ...Full output truncated (7 lines hidden), use '-vv' to show
+
+tests/unit/test_http_retry_release.py:67: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  dank_mids.errors.timeouts:logging.py:295 `make_request` server timeout (code 408) 3 times for <RPCRequest uid=same method=eth_blockNumber params=[]>, trying again...
+WARNING  dank_mids.errors.timeouts:logging.py:295 `make_request` server timeout (code 408) 4 times for <RPCRequest uid=same method=eth_blockNumber params=[]>, trying again...
+WARNING  dank_mids.errors.timeouts:logging.py:295 `make_request` server timeout (code 408) 5 times for <RPCRequest uid=same method=eth_blockNumber params=[]>, trying again...
+WARNING  dank_mids.errors.timeouts:logging.py:295 `make_request` server timeout (code 408) 6 times for <RPCRequest uid=same method=eth_blockNumber params=[]>, trying again...
+WARNING  dank_mids.errors.timeouts:logging.py:295 `make_request` server timeout (code 408) 7 times for <RPCRequest uid=same method=eth_blockNumber params=[]>, trying again...
+WARNING  dank_mids.errors.timeouts:logging.py:295 `make_request` server timeout (code 408) 8 times for <RPCRequest uid=same method=eth_blockNumber params=[]>, trying again...
+________ test_finished_batch_task_releases_registry_ownership[failure] _________
+
+outcome = 'failure'
+
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_finished_batch_task_releases_registry_ownership(outcome):
+        from dank_mids._tasks import BATCH_TASKS, create_batch_task
+    
+        async def check():
+            entered = asyncio.Event()
+    
+            async def operation():
+                entered.set()
+                if outcome == "failure":
+                    raise RuntimeError("failed batch")
+                if outcome == "cancel":
+                    await asyncio.Event().wait()
+                return 7
+    
+            task = create_batch_task(operation(), name="owned-batch")
+            reference = weakref.ref(task)
+            try:
+                await entered.wait()
+                if outcome == "cancel":
+                    task.cancel()
+                await asyncio.gather(task, return_exceptions=True)
+                await asyncio.sleep(0)
+                assert task not in BATCH_TASKS
+            finally:
+                BATCH_TASKS.discard(task)
+            del task
+            gc.collect()
+            assert reference() is None
+    
+>       asyncio.run(check())
+
+tests/unit/test_http_retry_release.py:271: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def check():
+        entered = asyncio.Event()
+    
+        async def operation():
+            entered.set()
+            if outcome == "failure":
+                raise RuntimeError("failed batch")
+            if outcome == "cancel":
+                await asyncio.Event().wait()
+            return 7
+    
+        task = create_batch_task(operation(), name="owned-batch")
+        reference = weakref.ref(task)
+        try:
+            await entered.wait()
+            if outcome == "cancel":
+                task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
+            await asyncio.sleep(0)
+            assert task not in BATCH_TASKS
+        finally:
+            BATCH_TASKS.discard(task)
+        del task
+        gc.collect()
+>       assert reference() is None
+E       AssertionError: assert <Task finished name='owned-batch' coro=<test_finished_batch_task_releases_registry_ownership.<locals>.check.<locals>.operation() done, defined at /work/tests/unit/test_http_retry_release.py:248> exception=RuntimeError('failed batch')> is None
+E        +  where <Task finished name='owned-batch' coro=<test_finished_batch_task_releases_registry_ownership.<locals>.check.<locals>.operation() done, defined at /work/tests/unit/test_http_retry_release.py:248> exception=RuntimeError('failed batch')> = <weakref at 0xfe81c44ced90; to '_asyncio.Task' at 0xfe81c4687f40>()
+
+tests/unit/test_http_retry_release.py:269: AssertionError
+------------------------------ Captured log call -------------------------------
+ERROR    dank_mids.tasks:logging.py:295 exception in batch task <Task finished name='owned-batch' coro=<test_finished_batch_task_releases_registry_ownership.<locals>.check.<locals>.operation() done, defined at /work/tests/unit/test_http_retry_release.py:248> exception=RuntimeError('failed batch')>
+NoneType: None
+_________ test_finished_batch_task_releases_registry_ownership[cancel] _________
+
+outcome = 'cancel'
+
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_finished_batch_task_releases_registry_ownership(outcome):
+        from dank_mids._tasks import BATCH_TASKS, create_batch_task
+    
+        async def check():
+            entered = asyncio.Event()
+    
+            async def operation():
+                entered.set()
+                if outcome == "failure":
+                    raise RuntimeError("failed batch")
+                if outcome == "cancel":
+                    await asyncio.Event().wait()
+                return 7
+    
+            task = create_batch_task(operation(), name="owned-batch")
+            reference = weakref.ref(task)
+            try:
+                await entered.wait()
+                if outcome == "cancel":
+                    task.cancel()
+                await asyncio.gather(task, return_exceptions=True)
+                await asyncio.sleep(0)
+                assert task not in BATCH_TASKS
+            finally:
+                BATCH_TASKS.discard(task)
+            del task
+            gc.collect()
+            assert reference() is None
+    
+>       asyncio.run(check())
+
+tests/unit/test_http_retry_release.py:271: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def check():
+        entered = asyncio.Event()
+    
+        async def operation():
+            entered.set()
+            if outcome == "failure":
+                raise RuntimeError("failed batch")
+            if outcome == "cancel":
+                await asyncio.Event().wait()
+            return 7
+    
+        task = create_batch_task(operation(), name="owned-batch")
+        reference = weakref.ref(task)
+        try:
+            await entered.wait()
+            if outcome == "cancel":
+                task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
+            await asyncio.sleep(0)
+            assert task not in BATCH_TASKS
+        finally:
+            BATCH_TASKS.discard(task)
+        del task
+        gc.collect()
+>       assert reference() is None
+E       AssertionError: assert <Task cancelled name='owned-batch' coro=<test_finished_batch_task_releases_registry_ownership.<locals>.check.<locals>.operation() done, defined at /work/tests/unit/test_http_retry_release.py:248>> is None
+E        +  where <Task cancelled name='owned-batch' coro=<test_finished_batch_task_releases_registry_ownership.<locals>.check.<locals>.operation() done, defined at /work/tests/unit/test_http_retry_release.py:248>> = <weakref at 0xfe81c39ebec0; to '_asyncio.Task' at 0xfe81c4686800>()
+
+tests/unit/test_http_retry_release.py:269: AssertionError
+------------------------------ Captured log call -------------------------------
+ERROR    dank_mids.tasks:logging.py:295 batch task <Task cancelled name='owned-batch' coro=<test_finished_batch_task_releases_registry_ownership.<locals>.check.<locals>.operation() done, defined at /work/tests/unit/test_http_retry_release.py:248>> is cancelled???
+reason: None
+NoneType: None
+=============================== warnings summary ===============================
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    and isinstance(item.value, ast.Str)
+
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:691
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:691
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:691: DeprecationWarning: Attribute s is deprecated and will be removed in Python 3.14; use value instead
+    doc = item.value.s
+
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:958: 31 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:958: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    inlocs = ast.Compare(ast.Str(name.id), [ast.In()], [locs])
+
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:961: 31 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:961: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    expr = ast.IfExp(test, self.display(name), ast.Str(name.id))
+
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:1071: 21 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:1071: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    syms.append(ast.Str(sym))
+
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:1073: 21 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:1073: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    expls.append(ast.Str(expl))
+
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:823: 102 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:823: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    keys = [ast.Str(key) for key in current.keys()]
+
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:933: 29 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:933: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    assertmsg = ast.Str("")
+
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:935: 29 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:935: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    template = ast.BinOp(assertmsg, ast.Add(), ast.Str(explanation))
+
+../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:947: 30 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:947: DeprecationWarning: ast.NameConstant is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    clear = ast.Assign(variables, ast.NameConstant(None))
+
+../usr/local/lib/python3.12/site-packages/web3/__init__.py:2
+  /usr/local/lib/python3.12/site-packages/web3/__init__.py:2: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+    import pkg_resources
+
+../usr/local/lib/python3.12/site-packages/web3/providers/websocket/websocket.py:21
+  /usr/local/lib/python3.12/site-packages/web3/providers/websocket/websocket.py:21: DeprecationWarning: websockets.client.connect is deprecated
+    from websockets.client import (
+
+../usr/local/lib/python3.12/site-packages/websockets/legacy/__init__.py:6
+  /usr/local/lib/python3.12/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions
+    warnings.warn(  # deprecated in 14.0 - 2024-11-09
+
+../usr/local/lib/python3.12/site-packages/web3/providers/websocket/websocket_v2.py:18
+  /usr/local/lib/python3.12/site-packages/web3/providers/websocket/websocket_v2.py:18: DeprecationWarning: websockets.client.connect is deprecated
+    from websockets.client import (
+
+dank_mids/helpers/_session.py:126
+  /work/dank_mids/helpers/_session.py:126: DeprecationWarning: Inheritance class DankClientSession from ClientSession is discouraged
+    class DankClientSession(ClientSession):
+
+test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-False]
+test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-True]
+test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-False]
+test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-True]
+  /usr/local/lib/python3.12/site-packages/aiohttp/connector.py:993: DeprecationWarning: enable_cleanup_closed ignored because https://github.com/python/cpython/pull/118960 is fixed in Python version sys.version_info(major=3, minor=12, micro=14, releaselevel='final', serial=0)
+    super().__init__(
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[False]
+FAILED tests/unit/test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[True]
+FAILED tests/unit/test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[failure]
+FAILED tests/unit/test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[cancel]
+================== 4 failed, 17 passed, 308 warnings in 2.26s ==================

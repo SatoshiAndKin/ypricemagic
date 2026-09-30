@@ -20,7 +20,7 @@ from y import ENVIRONMENT_VARIABLES as ENVS
 from y.classes.common import ERC20
 from y.constants import CHAINID, NETWORK_NAME, wbtc, weth
 from y.contracts import Contract
-from y.exceptions import NonStandardERC20
+from y.exceptions import CantFetchParam, NonStandardERC20
 from y.networks import Network
 from y.prices.lending.aave import aave
 from y.prices.lending.compound import CToken
@@ -41,8 +41,7 @@ if ENVS.SENSE_CHECK_FILE:
 # This module is far from perfect, but provides an acceptable way to validate some of the prices returned by `get_price`
 
 acceptable_all_chains: Final[set[ChecksumAddress]] = {
-    weth.address,
-    wbtc.address,
+    token.address for token in (weth, wbtc) if token is not None
 }
 
 ACCEPTABLE_HIGH_PRICES: Final[set[ChecksumAddress]] = {  # type: ignore [call-overload]
@@ -207,9 +206,7 @@ ACCEPTABLE_HIGH_PRICES: Final[set[ChecksumAddress]] = {  # type: ignore [call-ov
         "0x236aa50979D5f3De3Bd1Eeb40E81137F22ab794b",  # tbtc
         "0xcb327b99ff831bf8223cced12b1338ff3aa322ff",  # bsdETH
     },
-}.get(
-    CHAINID, set()
-) | acceptable_all_chains
+}.get(CHAINID, set()) | acceptable_all_chains
 """
 List of tokens addresses for which high prices are acceptable.
 Nothing will be logged for tokens in this list.
@@ -254,8 +251,12 @@ async def sense_check(
 
     # for some token types, its normal to have a crazy high nominal price
     # we can skip the sense check for those
-    if await _exit_sense_check(token_address):
-        return None
+    try:
+        if await _exit_sense_check(token_address, block):
+            return None
+    except (CantFetchParam, NonStandardERC20):
+        # Classification is optional diagnostic metadata, not price evidence.
+        logger.debug("missing sense-check metadata for %s at %s", token_address, block)
 
     # proceed with sense check
     try:
@@ -275,7 +276,9 @@ async def sense_check(
 
 
 # yLazyLogger(logger)
-async def _exit_sense_check(token_address: ChecksumAddress) -> bool:
+async def _exit_sense_check(
+    token_address: ChecksumAddress, block: BlockNumber | None = None
+) -> bool:
     """
     For some token types, its normal to have a crazy high nominal price.
     We can skip the sense check for those.
@@ -295,7 +298,7 @@ async def _exit_sense_check(token_address: ChecksumAddress) -> bool:
         :data:`ACCEPTABLE_HIGH_PRICES` for the list of tokens that are exempt from the sense check.
     """
 
-    bucket = await check_bucket(token_address, sync=False)
+    bucket = await check_bucket(token_address, block=block, sync=False)
 
     if bucket in ("uni or uni-like lp", "balancer pool"):
         return True
@@ -305,7 +308,7 @@ async def _exit_sense_check(token_address: ChecksumAddress) -> bool:
         if questionable_underlyings := [
             und.address for und in underlyings if und.address not in ACCEPTABLE_HIGH_PRICES
         ]:
-            return await a_sync.map(_exit_sense_check, questionable_underlyings).all(  # type: ignore [call-overload, no-any-return]
+            return await a_sync.map(_exit_sense_check, questionable_underlyings, block=block).all(  # type: ignore [call-overload, no-any-return]
                 sync=False
             )
         return True
@@ -318,11 +321,11 @@ async def _exit_sense_check(token_address: ChecksumAddress) -> bool:
         contract = await Contract.coroutine(token_address)
         underlying = await contract.pool
     elif bucket == "yearn or yearn-like":
-        underlying = await YearnInspiredVault(
-            token_address, asynchronous=True
-        ).underlying
+        underlying = await YearnInspiredVault(token_address, asynchronous=True).underlying
     else:
         return False
 
     underlying_addr = underlying.address
-    return underlying_addr in ACCEPTABLE_HIGH_PRICES or await _exit_sense_check(underlying_addr)
+    return underlying_addr in ACCEPTABLE_HIGH_PRICES or await _exit_sense_check(
+        underlying_addr, block
+    )

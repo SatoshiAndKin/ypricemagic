@@ -2,14 +2,15 @@ import logging
 from decimal import Decimal
 
 import a_sync
-from a_sync import igather
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.contracts import has_methods
-from y.datatypes import AnyAddressType, Block, UsdPrice
+from y.datatypes import AnyAddressType, Block, PriceResult
 from y.prices import magic
+from y.prices._candidates import derive_price, gather_owned
 from y.utils import gather_methods
 
 logger = logging.getLogger(__name__)
@@ -48,11 +49,12 @@ async def is_ib_token(token: AnyAddressType) -> bool:
 
 
 @a_sync.a_sync(default="sync")
+@stuck_coro_debugger
 async def get_price(
     token: AnyAddressType,
     block: Block | None = None,
     skip_cache: bool = ENVS.SKIP_CACHE,
-) -> UsdPrice:
+) -> PriceResult:
     """
     Calculates the price of an Iron Bank token.
 
@@ -82,9 +84,14 @@ async def get_price(
     token, total_bal, total_supply = await gather_methods(
         address, ("token", "totalToken", "totalSupply"), block=block
     )
-    token_scale, pool_scale = await igather(map(ERC20._get_scale_for, (token, address)))
+    token_scale, pool_scale = await gather_owned(map(ERC20._get_scale_for, (token, address)))
     total_bal /= Decimal(token_scale)
     total_supply /= Decimal(pool_scale)
     share_price = total_bal / total_supply
     token_price = await magic.get_price(token, block, skip_cache=skip_cache, sync=False)
-    return share_price * token_price
+    return derive_price(
+        address,
+        float(share_price) * float(token_price),
+        f"Iron Bank {address} underlying",
+        token_price,
+    )

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import gc\nimport json\nimport os\nfrom pathlib import Path\nimport resource\nimport tracemalloc\nfrom brownie.network.middlewares import caching\n\nbytecode = (b'\\x7f' + b'\\xff' * 32 + b'\\x00') * 512\nexpected = b'\\x7f\\x00' * 512\ntracemalloc.start()\nsamples = []\nfor index in range(16):\n    assert caching._strip_push_data(bytecode) == expected\n    current, peak = tracemalloc.get_traced_memory()\n    samples.append({'iteration':index+1,'python_current_bytes':current,'python_peak_bytes':peak,'rss_peak_bytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024})\nsnapshot=tracemalloc.take_snapshot()\ngc.collect()\nreport={'complete':True,'module_file':caching.__file__,'input_bytes':len(bytecode),'samples':samples,'current_after_collection_bytes':tracemalloc.get_traced_memory()[0],'top_allocations':[{'source':str(s.traceback),'bytes':s.size,'count':s.count} for s in snapshot.statistics('traceback')[:12]]}\nPath(os.environ['VALIDATION_REPORT'],'bytecode-allocation.json').write_text(json.dumps(report,indent=2)+'\\n')\nprint(json.dumps(report))\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789324546.1189,
+  "source_sha": "850d7506d554209738cc2c471f82fbb951845d29",
+  "source_revision": "850d7506d554209738cc2c471f82fbb951845d29",
+  "source_archive_sha256": "fc7bdc0c1d5a1a15277664d9efcd1c89a5200c6abe47f05d8a6da202ab86298c",
+  "image": "sha256:4ccb5b8063f29ecbd755ac2760da6364ee81d9f630af1a1f855ecfb83e34ae1b",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 3.3415520191192627
+}

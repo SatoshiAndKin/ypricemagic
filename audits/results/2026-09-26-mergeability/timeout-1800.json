@@ -1,0 +1,20 @@
+{
+  "command": "python /work/tools/validation/test_timeout.py",
+  "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+  "container": "full-optimized-312",
+  "exit_code": 0,
+  "tests": 2,
+  "elapsed_seconds": 1.885,
+  "assertions": [
+    "missing required pytest-timeout stops collection",
+    "central synchronous deadline is 1800 seconds",
+    "explicit one-second timeout interrupts and tears down fixture",
+    "next test executes after timeout",
+    "all 100 cooperative cases enter before release"
+  ],
+  "files": {
+    "pyproject.toml": "381f41e2cc949704f1d480cc9b145395b6f7e04200060ddc47bbbc9da9135c9f",
+    "tools/validation/test_timeout.py": "be442810c2ce23318f07321c51c0b07f3343e74f2e4099d93c27f8d5294c8dfc"
+  },
+  "log_sha256": "db7628f0bf4e1f29851599cea2bc895ec5357f4d8d2d90772f6cd648ac36ed32"
+}

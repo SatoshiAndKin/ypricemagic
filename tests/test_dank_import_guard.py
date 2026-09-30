@@ -2,14 +2,16 @@ import importlib.util
 import sys
 import types
 from pathlib import Path
+from typing import NoReturn
 
 import pytest
 
 MODULE_PATH = Path(__file__).resolve().parents[1] / "y" / "_dank_import_guard.py"
 
 
-def _load_guard_module(name: str):
+def _load_guard_module(name: str) -> types.ModuleType:
     spec = importlib.util.spec_from_file_location(name, MODULE_PATH)
+    assert spec is not None
     module = importlib.util.module_from_spec(spec)
     loader = spec.loader
     assert loader is not None
@@ -17,23 +19,23 @@ def _load_guard_module(name: str):
     return module
 
 
-def test_import_dank_w3_returns_underlying_object(monkeypatch):
+def test_import_dank_w3_returns_underlying_object(monkeypatch: pytest.MonkeyPatch) -> None:
     guard = _load_guard_module("y_dank_import_guard_success")
 
     sentinel = object()
     fake_dank_mids = types.ModuleType("dank_mids")
-    fake_dank_mids.dank_web3 = sentinel
+    setattr(fake_dank_mids, "dank_web3", sentinel)
     monkeypatch.setitem(sys.modules, "dank_mids", fake_dank_mids)
 
     assert guard.import_dank_w3() is sentinel
 
 
-def test_import_dank_w3_raises_actionable_error_with_cause(monkeypatch):
+def test_import_dank_w3_raises_actionable_error_with_cause(monkeypatch: pytest.MonkeyPatch) -> None:
     guard = _load_guard_module("y_dank_import_guard_failure")
 
     fake_dank_mids = types.ModuleType("dank_mids")
 
-    def _missing_attr(name: str):
+    def _missing_attr(name: str) -> NoReturn:
         if name == "dank_web3":
             raise guard.BrowniePatchNotInitializedError("dank_web3")
         raise AttributeError(name)

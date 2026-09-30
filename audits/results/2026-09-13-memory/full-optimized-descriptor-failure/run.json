@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "/runner/full_suite.sh"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": false,
+  "started_unix": 1789343008.150485,
+  "source_sha": "368a6e79fa7226cb0f7f92be27a90c80d5a649b7",
+  "source_revision": "368a6e79fa7226cb0f7f92be27a90c80d5a649b7",
+  "source_archive_sha256": "4d6b39e243752de36290011c75cb046c9cea80d640b173953e9fbc3f90b3634a",
+  "image": "sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b",
+  "exit_code": 2,
+  "oom_killed": false,
+  "missing_reports": [
+    "pytest-summary.json"
+  ],
+  "elapsed_seconds": 2371.6056389808655
+}

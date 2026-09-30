@@ -1,0 +1,72 @@
+{
+  "sync-interruption-full": {
+    "cases": 752,
+    "same_source_archive": true,
+    "supporting_dependencies_equal": true,
+    "before": {
+      "pass": 745,
+      "failure": 6,
+      "skipped": 1
+    },
+    "after": {
+      "pass": 750,
+      "failure": 1,
+      "skipped": 1
+    },
+    "added_failures": [],
+    "removed_failures": [
+      "tests.a_sync.test_sync_interruption::test_sync_interruption_preserves_independent_shared_request",
+      "tests.a_sync.test_sync_interruption::test_sync_interruption_releases_request_and_preserves_original_error[CallerInterrupted-False]",
+      "tests.a_sync.test_sync_interruption::test_sync_interruption_releases_request_and_preserves_original_error[CallerInterrupted-True]",
+      "tests.a_sync.test_sync_interruption::test_sync_interruption_releases_request_and_preserves_original_error[RuntimeError-False]",
+      "tests.a_sync.test_sync_interruption::test_sync_interruption_releases_request_and_preserves_original_error[RuntimeError-True]"
+    ],
+    "remaining_failures": {
+      "tests.asyncio.test_create_task::test_create_task_skip_gc_until_done": {
+        "before": {
+          "status": "failure",
+          "error": "<failure message=\"AssertionError: assert 1 == 0&#10; +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})\">@pytest.mark.asyncio_cooperative\n    async def test_create_task_skip_gc_until_done():\n        async def sample_coroutine():\n            return \"GC Test\"\n    \n        persisted_tasks = _get_persisted_tasks()\n    \n        assert len(persisted_tasks) == 0\n        task = create_task(sample_coroutine(), skip_gc_until_done=True)\n        assert len(persisted_tasks) == 1\n        result = await task\n        assert next(iter(persisted_tasks)).done()\n        # create some junk task to trigger the pruning of the persisted task set\n        create_task(sleep(0))\n&gt;       assert len(persisted_tasks) == 0\nE       AssertionError: assert 1 == 0\nE        +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})\n\ntests/asyncio/test_create_task.py:53: AssertionError</failure>"
+        },
+        "after": {
+          "status": "failure",
+          "error": "<failure message=\"AssertionError: assert 1 == 0&#10; +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})\">@pytest.mark.asyncio_cooperative\n    async def test_create_task_skip_gc_until_done():\n        async def sample_coroutine():\n            return \"GC Test\"\n    \n        persisted_tasks = _get_persisted_tasks()\n    \n        assert len(persisted_tasks) == 0\n        task = create_task(sample_coroutine(), skip_gc_until_done=True)\n        assert len(persisted_tasks) == 1\n        result = await task\n        assert next(iter(persisted_tasks)).done()\n        # create some junk task to trigger the pruning of the persisted task set\n        create_task(sleep(0))\n&gt;       assert len(persisted_tasks) == 0\nE       AssertionError: assert 1 == 0\nE        +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})\n\ntests/asyncio/test_create_task.py:53: AssertionError</failure>"
+        }
+      }
+    }
+  },
+  "portable-interruption-full": {
+    "cases": 752,
+    "same_source_archive": true,
+    "supporting_dependencies_equal": true,
+    "before": {
+      "pass": 745,
+      "failure": 6,
+      "skipped": 1
+    },
+    "after": {
+      "pass": 750,
+      "failure": 1,
+      "skipped": 1
+    },
+    "added_failures": [],
+    "removed_failures": [
+      "tests.a_sync.test_sync_interruption::test_sync_interruption_preserves_independent_shared_request",
+      "tests.a_sync.test_sync_interruption::test_sync_interruption_releases_request_and_preserves_original_error[CallerInterrupted-False]",
+      "tests.a_sync.test_sync_interruption::test_sync_interruption_releases_request_and_preserves_original_error[CallerInterrupted-True]",
+      "tests.a_sync.test_sync_interruption::test_sync_interruption_releases_request_and_preserves_original_error[RuntimeError-False]",
+      "tests.a_sync.test_sync_interruption::test_sync_interruption_releases_request_and_preserves_original_error[RuntimeError-True]"
+    ],
+    "remaining_failures": {
+      "tests.asyncio.test_create_task::test_create_task_skip_gc_until_done": {
+        "before": {
+          "status": "failure",
+          "error": "<failure message=\"AssertionError: assert 1 == 0&#10; +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})\">@pytest.mark.asyncio_cooperative\n    async def test_create_task_skip_gc_until_done():\n        async def sample_coroutine():\n            return \"GC Test\"\n    \n        persisted_tasks = _get_persisted_tasks()\n    \n        assert len(persisted_tasks) == 0\n        task = create_task(sample_coroutine(), skip_gc_until_done=True)\n        assert len(persisted_tasks) == 1\n        result = await task\n        assert next(iter(persisted_tasks)).done()\n        # create some junk task to trigger the pruning of the persisted task set\n        create_task(sleep(0))\n&gt;       assert len(persisted_tasks) == 0\nE       AssertionError: assert 1 == 0\nE        +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})\n\ntests/asyncio/test_create_task.py:53: AssertionError</failure>"
+        },
+        "after": {
+          "status": "failure",
+          "error": "<failure message=\"AssertionError: assert 1 == 0&#10; +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})\">@pytest.mark.asyncio_cooperative\n    async def test_create_task_skip_gc_until_done():\n        async def sample_coroutine():\n            return \"GC Test\"\n    \n        persisted_tasks = _get_persisted_tasks()\n    \n        assert len(persisted_tasks) == 0\n        task = create_task(sample_coroutine(), skip_gc_until_done=True)\n        assert len(persisted_tasks) == 1\n        result = await task\n        assert next(iter(persisted_tasks)).done()\n        # create some junk task to trigger the pruning of the persisted task set\n        create_task(sleep(0))\n&gt;       assert len(persisted_tasks) == 0\nE       AssertionError: assert 1 == 0\nE        +  where 1 = len({&lt;Task finished name='' coro=&lt;&lt;coroutine without __name__&gt;()&gt; result='GC Test'&gt;})\n\ntests/asyncio/test_create_task.py:53: AssertionError</failure>"
+        }
+      }
+    }
+  }
+}

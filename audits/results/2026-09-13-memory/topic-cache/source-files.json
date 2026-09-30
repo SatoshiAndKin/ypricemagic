@@ -1,0 +1,11 @@
+{
+  "source_base": "0b16d2fab24ca98637d0a9862a58a61bfec37eeb",
+  "validated_worktree_archive_sha256": "ed327097f9c520397c1fc69f1c1e9b0d4c1d4b0f468fa52df32eab68562ae048",
+  "task_file_sha256": {
+    "y/_db/utils/logs.py": "677533bbbd7d97cf8194b28db9ab559a775ef433bce858b8f805ed8c39d36899",
+    "pyproject.toml": "06e73488fe895aa19405e0f75e3920fb670f8d74514cda715f1535e62a5536da",
+    "tests/test_topic_memory.py": "902b727977d00baef90d2c51861a06ec5d51eeb60e346fd7311bfd1e29f19629",
+    "tools/validation/topic_profile.py": "90ca016a27c02b6cf097dccfd5d75c28feacdf347f4afb1ea5166967a442d82d",
+    "tools/validation/repeat_topics.sh": "b002771e0fb6e749ef48144106e5ab701291539542413aa13a7f58c791980e0f"
+  }
+}

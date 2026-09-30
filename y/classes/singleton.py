@@ -1,12 +1,20 @@
 import threading
 from collections import defaultdict
-from typing import Generic, TypeVar
+from collections.abc import Callable
+from typing import Any, Generic, Protocol, TypeVar, cast
 
 from a_sync.a_sync._meta import ASyncMeta
 from checksum_dict import ChecksumAddressDict
-from checksum_dict.base import AnyAddressOrContract
+from eth_typing import HexAddress, HexStr
 
-T = TypeVar("T", bound=object)
+from y.datatypes import AnyAddressType
+
+
+class _AsyncInstance(Protocol):
+    asynchronous: bool
+
+
+T = TypeVar("T", bound=_AsyncInstance)
 
 
 class ChecksumASyncSingletonMeta(ASyncMeta, Generic[T]):
@@ -38,7 +46,7 @@ class ChecksumASyncSingletonMeta(ASyncMeta, Generic[T]):
         - :class:`~checksum_dict.ChecksumAddressDict`
     """
 
-    def __init__(cls, name, bases, namespace):
+    def __init__(cls, name: str, bases: tuple[type, ...], namespace: dict[str, Any]) -> None:
         """
         Initialize the metaclass with a name, bases, and namespace.
 
@@ -56,7 +64,7 @@ class ChecksumASyncSingletonMeta(ASyncMeta, Generic[T]):
         }
         """A dictionary to store singleton instances, keyed by their synchronous or asynchronous context."""
 
-        cls.__locks = {
+        cls.__locks: dict[bool, defaultdict[str, threading.Lock]] = {
             True: defaultdict(threading.Lock),
             False: defaultdict(threading.Lock),
         }
@@ -65,7 +73,7 @@ class ChecksumASyncSingletonMeta(ASyncMeta, Generic[T]):
         cls.__locks_lock: threading.Lock = threading.Lock()
         """A lock to ensure thread-safe access to the locks dictionary."""
 
-    def __call__(cls, address: AnyAddressOrContract, *args, **kwargs) -> T:
+    def __call__(cls, address: AnyAddressType, *args: Any, **kwargs: Any) -> T:
         """
         Create or retrieve a singleton instance for the given address.
 
@@ -111,20 +119,26 @@ class ChecksumASyncSingletonMeta(ASyncMeta, Generic[T]):
         See Also:
             - :class:`~checksum_dict.ChecksumAddressDict`
         """
-        address = str(address)
-        is_sync = cls.__a_sync_instance_will_be_sync__(args, kwargs)
-        instances = instance = cls.__instances[is_sync]
+        address_key = HexAddress(HexStr(str(address)))
+        instance_mode = cast(
+            Callable[[tuple[Any, ...], dict[str, Any]], bool],
+            getattr(cls, "__a_sync_instance_will_be_sync__"),
+        )
+        is_sync = instance_mode(args, kwargs)
+        instances = cls.__instances[is_sync]
         try:
-            instance = instances[address]
+            instance = instances[address_key]
         except KeyError:
-            with cls.__get_address_lock(address, is_sync):
+            with cls.__get_address_lock(address_key, is_sync):
                 try:
                     # Try to get the instance again, in case it was added while waiting for the lock
-                    instance = instances[address]
+                    instance = instances[address_key]
                 except KeyError:
                     # We failed to get the instance, create it and store it
-                    instance = instances[address] = super().__call__(address, *args, **kwargs)
-            cls.__delete_address_lock(address, is_sync)
+                    instance = instances[address_key] = super().__call__(
+                        address_key, *args, **kwargs
+                    )
+            cls.__delete_address_lock(address_key, is_sync)
         if instance.asynchronous is is_sync:
             raise RuntimeError(
                 "You must initialize your objects with 'asynchronous' specified as a kwarg, not a positional arg. "
@@ -132,7 +146,7 @@ class ChecksumASyncSingletonMeta(ASyncMeta, Generic[T]):
             )
         return instance
 
-    def __get_address_lock(self, address: AnyAddressOrContract, is_sync: bool) -> threading.Lock:
+    def __get_address_lock(self, address: str, is_sync: bool) -> threading.Lock:
         """
         Acquire a lock for the given address to ensure thread safety.
 
@@ -154,7 +168,7 @@ class ChecksumASyncSingletonMeta(ASyncMeta, Generic[T]):
             return self.__locks[is_sync][address]
 
     def __delete_address_lock(
-        self, address: AnyAddressOrContract, is_sync: bool
+        self, address: str, is_sync: bool
     ) -> None:  # sourcery skip: use-contextlib-suppress
         """
         Delete the lock for an address once the instance is created.

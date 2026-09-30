@@ -1,0 +1,30 @@
+{
+  "command": [
+    "python",
+    "tools/validation/rpc_state_probe.py"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 21.996422319032717,
+  "peak_sampled_process_rss_bytes": 37974016,
+  "cgroup_before": {
+    "memory.current": "8949760",
+    "memory.peak": "8949760",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "13856768",
+    "memory.peak": "141836288",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

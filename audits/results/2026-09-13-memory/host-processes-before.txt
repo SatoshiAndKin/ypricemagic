@@ -1,0 +1,6 @@
+  PID  PPID  PGID    RSS     ELAPSED COMMAND
+21844     1 21844  16496 01-00:19:29 env/bin/python /private/tmp/yprice-pr43-repairs/native.py
+24159     1 24159 6508880 01-00:13:38 env/bin/python -c from y.cli import main; main() audit-prices audits/mainnet.json --json audits/results/2026-09-11-pr43-repairs/audit-mainnet.json --csv audits/results/2026-09-11-pr43-repairs/audit-mainnet.csv
+55387     1 55387    416    10:31:10 /Applications/Xcode.app/Contents/Developer/usr/bin/make test
+56101 55387 55387 1110496    10:30:42 python -m pytest
+94768     1 94768  16416    09:29:26 /private/tmp/yprice-pr43-repairs/final-env/bin/python /private/tmp/yprice-pr43-repairs/run-local-native-reviewed.py

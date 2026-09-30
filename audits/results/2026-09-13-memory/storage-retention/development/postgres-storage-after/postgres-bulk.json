@@ -1,0 +1,22 @@
+[
+  {
+    "case": "test_bulk_writes_do_not_retain_each_payload_in_sql_cache",
+    "status": "failed",
+    "error": "Traceback (most recent call last):\n  File \"/runner/postgres_bulk.py\", line 33, in main\n    case(database)\n  File \"/work/tests/test_bulk_memory.py\", line 70, in test_bulk_writes_do_not_retain_each_payload_in_sql_cache\n    assert rows(database) == expected\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+  },
+  {
+    "case": "test_bulk_preserves_values_and_ignores_duplicate_keys",
+    "status": "failed",
+    "error": "Traceback (most recent call last):\n  File \"/runner/postgres_bulk.py\", line 33, in main\n    case(database)\n  File \"/work/tests/test_bulk_memory.py\", line 79, in test_bulk_preserves_values_and_ignores_duplicate_keys\n    assert rows(database) == [\n           ^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+  },
+  {
+    "case": "test_failed_bulk_rolls_back_all_rows_and_allows_reuse",
+    "status": "failed",
+    "error": "Traceback (most recent call last):\n  File \"/runner/postgres_bulk.py\", line 33, in main\n    case(database)\n  File \"/work/tests/test_bulk_memory.py\", line 91, in test_failed_bulk_rolls_back_all_rows_and_allows_reuse\n    assert rows(database) == [valid]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+  },
+  {
+    "case": "test_empty_bulk_preserves_existing_rows",
+    "status": "failed",
+    "error": "Traceback (most recent call last):\n  File \"/runner/postgres_bulk.py\", line 33, in main\n    case(database)\n  File \"/work/tests/test_bulk_memory.py\", line 98, in test_empty_bulk_preserves_existing_rows\n    assert rows(database) == [valid]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+  }
+]

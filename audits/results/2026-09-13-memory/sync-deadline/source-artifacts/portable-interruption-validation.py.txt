@@ -1,0 +1,60 @@
+import json
+import subprocess
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+root = Path('/Users/bryan/code/ypricemagic')
+base = Path('/private/tmp/yprice-memory')
+python = str(root / 'env/bin/python')
+old = json.loads((base / 'sync-interruption-images.json').read_text())['before']
+repaired = json.loads((base / 'sync-interruption-images.json').read_text())['after']
+images = json.loads((base / 'sync-deadline-pin-images.json').read_text())
+assert set(images) == {'3.11', '3.12', '3.13'}
+results = []
+
+def execute(name, image, full=False):
+    report = base / name
+    helper = base / ('sync-interruption-full-tests.py' if full else 'sync-interruption-owner-tests.py')
+    required = ['pytest.xml', 'owner-full.json'] if full else [
+        'pytest.xml', 'property-owner-tests.json', 'owner-mypy.txt', 'property-runtime-contract.json']
+    args = [python, str(root / 'tools/validation/run.py'), '--source',
+            '/private/tmp/yprice-async-memory', '--revision', 'worktree',
+            '--image', image, '--report', str(report)]
+    for file in required:
+        args += ['--require-report', file]
+    status = subprocess.run([*args, '--', 'env', 'PYTHONPATH=/runner', 'python', '-P',
+                             '-c', helper.read_text()], cwd=root,
+                            stdout=subprocess.DEVNULL).returncode
+    metadata = json.loads((report / 'run.json').read_text())
+    assert metadata['complete'] and not metadata['oom_killed'], metadata
+    cases = ET.parse(report / 'pytest.xml').getroot().findall('.//testcase')
+    failures = {case.attrib['classname'] + '::' + case.attrib['name']:
+                next(iter(case)).text for case in cases
+                if case.find('failure') is not None or case.find('error') is not None}
+    skipped = sum(case.find('skipped') is not None for case in cases)
+    result = {'name': name, 'exit_code': status, 'tests': len(cases),
+              'passed': len(cases) - len(failures) - skipped,
+              'skipped': skipped, 'failures': failures,
+              'source_archive_sha256': metadata['source_archive_sha256']}
+    results.append(result)
+    (base / 'portable-interruption-results.json').write_text(json.dumps(results, indent=2) + '\n')
+    print(name, {key: result[key] for key in ['exit_code', 'tests', 'passed', 'skipped']},
+          'failed', len(failures), flush=True)
+    return result
+
+before = execute('portable-interruption-before', old)
+assert before['tests'] == 52 and len(before['failures']) == 5, before
+assert all('test_sync_interruption' in key for key in before['failures']), before
+for version in ['3.12', '3.11', '3.13']:
+    result = execute('portable-interruption-' + version.replace('.', ''), images[version])
+    assert result['tests'] == 52 and result['passed'] == 52, result
+before = execute('portable-interruption-full-before', old, True)
+after = execute('portable-interruption-full-after', repaired, True)
+assert before['tests'] == after['tests'] == 752
+assert not (set(after['failures']) - set(before['failures'])), (before, after)
+assert len({result['source_archive_sha256'] for result in results}) == 1
+def supporting_dependencies(name):
+    return [line for line in (base / name / 'dependencies-after.txt').read_text().splitlines()
+            if not line.lower().startswith(('ez-a-sync', 'ez_a_sync'))]
+assert supporting_dependencies(before['name']) == supporting_dependencies(after['name'])
+print('Portable interruption controls completed; no added full-suite failures.', flush=True)

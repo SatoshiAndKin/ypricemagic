@@ -1,0 +1,14 @@
+{
+  "black": "25.9.0",
+  "isort": "7.0.0",
+  "autoflake": "2.2.1",
+  "result": "pass",
+  "files": [
+    "y/prices/_markets.py",
+    "y/prices/dex/uniswap/v2.py",
+    "y/prices/dex/uniswap/v3.py",
+    "tests/test_uniswap_address_repairs.py",
+    "tools/validation/native.py"
+  ],
+  "source_diff_whitespace": "pass"
+}

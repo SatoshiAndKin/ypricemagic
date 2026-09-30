@@ -37,7 +37,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Mypycify
         id: mypycify
@@ -62,7 +62,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Download wheel artifact
         uses: actions/download-artifact@v8
@@ -105,7 +105,7 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           # Upload entire repository
-          path: '.'
+          path: "."
 
       - name: Deploy to GitHub Pages
         id: deployment

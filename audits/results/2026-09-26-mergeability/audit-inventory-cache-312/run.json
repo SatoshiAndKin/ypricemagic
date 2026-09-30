@@ -1,0 +1,23 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; ypricemagic audit-prices audits/mainnet.json --json /reports/audit.json --csv /reports/audit.csv"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": false,
+  "started_unix": 1790493090.4707708,
+  "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+  "source_revision": "2d7784408172c9a7742493a490c3c54311832c94",
+  "source_archive_sha256": "5b4646c70fb73b6ec75f1c26f00dafe11f448a575f6c08fee6e875082dba3e40",
+  "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+  "interrupted": true,
+  "exit_code": 130,
+  "oom_killed": false,
+  "missing_reports": [
+    "audit.json",
+    "audit.csv"
+  ],
+  "elapsed_seconds": 2475.6147820949554
+}

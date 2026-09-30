@@ -1,0 +1,15 @@
+{
+  "normalization": "ANSI color escapes and trailing line whitespace removed; complete diagnostic text retained.",
+  "sources": [
+    {
+      "run": 36530225243,
+      "head": "f1bf98d0084ea0e892917ea5399c683618be221c",
+      "raw_log_sha256": "9ed64039fc64ea415554742a5e23674c6bb69ccf6b9de12282b15818f491a744"
+    },
+    {
+      "run": 36531787628,
+      "head": "934c2c4bfa46b7f853911400b5a5bc3fe0c33a90",
+      "raw_log_sha256": "5359ca81fc754e4c7701c897396a0dfb70b7e15530f34b36d80b921a04189292"
+    }
+  ]
+}

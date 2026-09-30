@@ -1,0 +1,2 @@
+# Candidate for the cache ownership regression comparison only.
+cachebox==6.2.7

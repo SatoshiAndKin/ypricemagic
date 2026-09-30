@@ -1,0 +1,52 @@
+[
+  {
+    "test": "tests/test_typed_interfaces.py::test_db_clear_uses_requested_selector[address]",
+    "outcome": "failed",
+    "duration": 0.002472175983712077
+  },
+  {
+    "test": "tests/test_typed_interfaces.py::test_curve_debug_command_uses_optional_network[None]",
+    "outcome": "failed",
+    "duration": 0.0008978790137916803
+  },
+  {
+    "test": "tests/test_typed_interfaces.py::test_ellipsis_keeps_reserves_in_native_units",
+    "outcome": "failed",
+    "duration": 0.0008074200013652444
+  },
+  {
+    "test": "tests/test_typed_interfaces.py::test_multicall_no_input_decodes_named_results[False]",
+    "outcome": "failed",
+    "duration": 0.0007607529987581074
+  },
+  {
+    "test": "tests/test_event_decode_executor.py::test_decode_does_not_wait_for_database_writer[False]",
+    "outcome": "passed",
+    "duration": 0.0006937939906492829
+  },
+  {
+    "test": "tests/test_typed_interfaces.py::test_curve_debug_command_uses_optional_network[mainnet]",
+    "outcome": "passed",
+    "duration": 0.0005908349994570017
+  },
+  {
+    "test": "tests/test_typed_interfaces.py::test_db_clear_uses_requested_selector[symbol]",
+    "outcome": "failed",
+    "duration": 0.0005211270181462169
+  },
+  {
+    "test": "tests/test_event_decode_executor.py::test_decode_does_not_wait_for_database_writer[True]",
+    "outcome": "passed",
+    "duration": 0.0004119190271012485
+  },
+  {
+    "test": "tests/test_typed_interfaces.py::test_db_clear_uses_requested_selector[block]",
+    "outcome": "failed",
+    "duration": 0.00041108502773568034
+  },
+  {
+    "test": "tests/test_event_decode_executor.py::test_decode_transfer_preserves_metadata_and_topics[True]",
+    "outcome": "passed",
+    "duration": 0.0004004179500043392
+  }
+]

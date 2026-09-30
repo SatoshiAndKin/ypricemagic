@@ -1,0 +1,55 @@
+{
+  "url": "https://github.com/SatoshiAndKin/dank_mids/actions/runs/36260223536",
+  "source_sha": "37d090afce68becf2287aa20173d719d136d079f",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "unit (windows-latest, 3.11)",
+      "conclusion": "success"
+    },
+    {
+      "name": "unit (ubuntu-latest, 3.13)",
+      "conclusion": "success"
+    },
+    {
+      "name": "unit (ubuntu-latest, 3.11)",
+      "conclusion": "success"
+    },
+    {
+      "name": "unit (macos-latest, 3.13)",
+      "conclusion": "success"
+    },
+    {
+      "name": "unit (ubuntu-latest, 3.10)",
+      "conclusion": "success"
+    },
+    {
+      "name": "unit (macos-latest, 3.12)",
+      "conclusion": "success"
+    },
+    {
+      "name": "unit (macos-latest, 3.10)",
+      "conclusion": "success"
+    },
+    {
+      "name": "unit (ubuntu-latest, 3.12)",
+      "conclusion": "success"
+    },
+    {
+      "name": "unit (windows-latest, 3.13)",
+      "conclusion": "success"
+    },
+    {
+      "name": "unit (macos-latest, 3.11)",
+      "conclusion": "success"
+    },
+    {
+      "name": "unit (windows-latest, 3.10)",
+      "conclusion": "success"
+    },
+    {
+      "name": "unit (windows-latest, 3.12)",
+      "conclusion": "success"
+    }
+  ]
+}

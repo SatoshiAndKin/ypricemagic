@@ -1,11 +1,10 @@
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
 
 import numpy as np
 import pytest
 from brownie import Contract as BrownieContract
 from brownie import chain
 from brownie.convert.datatypes import EthAddress
-from eth_utils.toolz import concat
 
 from y import convert
 from y.classes.common import ERC20
@@ -71,7 +70,7 @@ def blocks_for_contract(address: Address, count: int = 5) -> list[Block]:
     ]
 
 
-def mutate_address(address: Address) -> tuple[str, str, str, EthAddress]:
+def mutate_address(address: str) -> tuple[str, str, str, EthAddress]:
     """
     Returns the same address in various forms for testing.
 
@@ -109,7 +108,7 @@ def mutate_address(address: Address) -> tuple[str, str, str, EthAddress]:
     )
 
 
-def mutate_addresses(addresses: Iterable[Address]):
+def mutate_addresses(addresses: Iterable[str]) -> list[str]:
     """
     Return a list of all mutated address representations for each address in the given iterable.
 
@@ -121,11 +120,11 @@ def mutate_addresses(addresses: Iterable[Address]):
     See Also:
         :func:`mutate_address`
     """
-    return list(concat(map(mutate_address, addresses)))
+    return [mutation for address in addresses for mutation in mutate_address(address)]
 
 
 def mutate_contract(
-    contract_address: Address,
+    contract_address: str,
 ) -> tuple[str, str, str, EthAddress, BrownieContract]:
     """
     Returns the same contract address in various forms for testing.
@@ -153,12 +152,10 @@ def mutate_contract(
     See Also:
         :func:`mutate_address`
     """
-    mutations = list(mutate_address(contract_address))
-    mutations.append(Contract(contract_address))
-    return tuple(mutations)
+    return (*mutate_address(contract_address), Contract(contract_address))
 
 
-def mutate_contracts(addresses: Iterable[Address]):
+def mutate_contracts(addresses: Iterable[str]) -> list[str | BrownieContract]:
     """
     Return a list of all mutated contract representations for each address in the given iterable.
 
@@ -175,11 +172,11 @@ def mutate_contracts(addresses: Iterable[Address]):
     See Also:
         :func:`mutate_contract`
     """
-    return list(concat(map(mutate_contract, addresses)))
+    return [mutation for address in addresses for mutation in mutate_contract(address)]
 
 
 def mutate_token(
-    token: Address,
+    token: str,
 ) -> tuple[str, str, str, EthAddress, BrownieContract, ERC20, int]:
     """
     Returns the same token address in various forms for testing.
@@ -217,13 +214,10 @@ def mutate_token(
         :func:`mutate_contract`
         :class:`~y.classes.common.ERC20`
     """
-    mutations = list(mutate_contract(token))
-    mutations.append(ERC20(token))
-    mutations.append(int(token, 16))
-    return tuple(mutations)
+    return (*mutate_contract(token), ERC20(token), int(token, 16))
 
 
-def mutate_tokens(addresses: Iterable[Address]):
+def mutate_tokens(addresses: Iterable[str]) -> list[str | BrownieContract | ERC20 | int]:
     """
     Return a list of all mutated token representations for each address in the given iterable.
 
@@ -238,11 +232,11 @@ def mutate_tokens(addresses: Iterable[Address]):
     See Also:
         :func:`mutate_token`
     """
-    return list(concat(map(mutate_token, addresses)))
+    return [mutation for address in addresses for mutation in mutate_token(address)]
 
 
 @pytest.fixture
-def async_uni_v1():
+def async_uni_v1() -> Iterator[UniswapV1]:
     """
     A pytest fixture that yields an instance of :class:`~y.prices.dex.uniswap.v1.UniswapV1` in asynchronous mode.
 
@@ -256,3 +250,38 @@ def async_uni_v1():
         :class:`~y.prices.dex.uniswap.v1.UniswapV1`
     """
     yield UniswapV1(asynchronous=True)
+
+
+# Instance defaults are selected dynamically by a_sync. These helpers preserve
+# tests of that default behavior while checking its runtime sync/async contract.
+from collections.abc import Awaitable
+from inspect import isawaitable
+from typing import TypeVar, cast, overload
+
+_Result = TypeVar("_Result")
+
+
+@overload
+def async_result(value: Awaitable[_Result]) -> Awaitable[_Result]: ...
+
+
+@overload
+def async_result(value: _Result) -> Awaitable[_Result]: ...
+
+
+def async_result(value: _Result | Awaitable[_Result]) -> Awaitable[_Result]:
+    assert isawaitable(value), f"Expected an asynchronous result, got {type(value)}"
+    return cast(Awaitable[_Result], value)
+
+
+@overload
+def sync_result(value: Awaitable[_Result]) -> _Result: ...
+
+
+@overload
+def sync_result(value: _Result) -> _Result: ...
+
+
+def sync_result(value: _Result | Awaitable[_Result]) -> _Result:
+    assert not isawaitable(value), f"Expected a synchronous result, got {type(value)}"
+    return value

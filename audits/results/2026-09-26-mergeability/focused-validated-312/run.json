@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; export VALIDATION_WAITS=1; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; python -m mypy > /reports/mypy.txt 2>&1 || true; python -c 'import logging,runpy; logging.basicConfig(level=logging.WARNING); logging.getLogger(\"y.stuck?\").setLevel(logging.DEBUG); runpy.run_path(\"tools/validation/focused.py\",run_name=\"__main__\")' "
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1790452616.950559,
+  "source_sha": "6316c230b2a342178e2cc234466120fd567468da",
+  "source_revision": "worktree",
+  "source_archive_sha256": "6758f30c92ec3a6ffc8e2ec336a1578e370a224383db3a26c904ef9598b80ff0",
+  "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 457.6897270679474
+}

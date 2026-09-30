@@ -2,37 +2,168 @@
 requires = [
   "setuptools",
   "wheel",
-  "mypy[mypyc]==1.19.1",
+  "mypy[mypyc] @ git+https://github.com/SatoshiAndKin/mypy.git@18a37e099bba69872e38adaee3319c125c97048e",
   "pony-stubs==0.5.2",
   "types-python-dateutil",
   "types-cachetools",
   "types-requests",
-  "aiosqlite==0.22.1",
+  "types-PyYAML==6.0.12.20260906",
+  "aiosqlite @ git+https://github.com/SatoshiAndKin/aiosqlite.git@b8265cce6f09bcc8015ea09036f5e05c4546d740",
   "bobs_lazy_logging==0.0.5",
-  "dank-mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@master ; platform_system == 'MacOS' or (platform_system == 'Linux' and platform_machine != 'i686')",
-  "eth-brownie==1.22.0.dev2; platform_system == 'Linux' and platform_machine != 'i686'",
+  "dank-mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@1f76d99a9e727de7a6ed795f1cad9dbeb3db6cfa ; platform_system == 'MacOS' or (platform_system == 'Linux' and platform_machine != 'i686')",
+  "eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@c986066ddd9ae10906a470008d786faab2355cc5 ; platform_system == 'Linux' and platform_machine != 'i686'",
   "eth-retry==0.3.7",
   "eth-typing==5.2.1",
-  "ez-a-sync==0.34.2",
+  "ez-a-sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@ed3459ee74abec91c7675f57fee4b75595edbfdc",
   "faster-eth-abi>=5.2.12,<6",
   "faster-hexbytes==1.3.4",
   "typed-envs==0.2.4",
-  "cachebox>=5.2,<6",
+  "cachebox @ git+https://github.com/SatoshiAndKin/cachebox.git@10be25afe46afb32c8135db4d1b8e2d94431b9c1",
 ]
 
 [tool.mypy]
-plugins = ["typed_envs.mypy_plugin", "a_sync_mypy_plugin"]
-files = ["."]
+plugins = ["typed_envs.mypy_plugin", "tools/mypy_plugin.py"]
+files = [
+  "y",
+  "tests",
+  "tools/validation",
+  "tools/mypy_plugin.py",
+  "tools/typing_probes.py",
+]
+exclude = ["^build/", "^cache/", "^env/", "^[.]worktrees/"]
 strict = true
 pretty = true
 show_error_codes = true
 show_error_context = true
-install_types = true
-non_interactive = true
+show_traceback = true
+incremental = false
+follow_imports = "silent"
+
+# These dependency namespaces intentionally expose plain imports as their public
+# API without __all__. Preserve their inferred types when importing those names.
+[[tool.mypy.overrides]]
+module = [
+  "eth_utils",
+  "eth_utils.toolz",
+  "faster_eth_utils",
+  "brownie.convert",
+  "brownie.network",
+  "faster_eth_abi",
+  "eth_event",
+]
+implicit_reexport = true
+
+[[tool.mypy.overrides]]
+module = ["a_sync_mypy_plugin", "asyncpg"]
+follow_untyped_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+  "y._db.brownie",
+  "y._db.config",
+  "y._db.decorators",
+  "y._db.utils.stringify",
+  "y.ENVIRONMENT_VARIABLES",
+  "y.convert",
+  "y.exceptions",
+  "y.networks",
+  "y.prices.utils.sense_check",
+  "y.utils.gather",
+]
+disable_error_code = [
+  "import-not-found",
+  "no-untyped-def",
+  "no-untyped-call",
+  "unused-ignore",
+]
+
+[tool.mypyc]
+files = [
+  "y/_db/brownie.py",
+  "y/_db/config.py",
+  "y/_db/decorators.py",
+  "y/_db/utils/stringify.py",
+  "y/ENVIRONMENT_VARIABLES.py",
+  "y/convert.py",
+  "y/exceptions.py",
+  "y/networks.py",
+  "y/prices/utils/sense_check.py",
+  "y/utils/gather.py",
+]
 
 [tool.pytest.ini_options]
-timeout = 600
-asyncio_task_timeout = 600
+addopts = "-W ignore -s -p no:pytest_ethereum"
+required_plugins = ["pytest-timeout"]
+testpaths = ["tests"]
+norecursedirs = ["env", "build", "cache", ".worktrees"]
+# Cold full-suite calls have completed in 1,792.82 seconds.
+# Allow initialization plus historical samples without changing concurrency.
+timeout = 3600
+asyncio_task_timeout = 3600
 
 [tool.black]
 line-length = 100
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.validation]
+review_quote_tests = [
+  "tests/test_uniswap_address_repairs.py",
+  "tests/prices/test_chainlink.py",
+  "tests/prices/dex/test_uniswap.py::test_uniswap_v3",
+]
+repair_tests = [
+  "tests/test_historical_price_repairs.py",
+  "tests/prices/test_magic.py::test_bulk_fixture_releases_mapped_requests",
+]
+memory_tests = ["tests/prices/dex/test_uniswap.py"]
+topic_tests = ["tests/test_topic_memory.py"]
+fixture_tests = ["tests/prices/dex/test_uniswap.py::test_uniswap_v1"]
+chainlink_fixture_tests = [
+  "tests/prices/test_chainlink.py::test_chainlink_latest",
+]
+inventory_cache_tests = ["tests/test_inventory_cache.py"]
+v3_inventory_tests = ["tests/test_v3_inventory_cache.py"]
+slow_erc20_cases = [
+  { token = "0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f", block = 17708470 },
+  { token = "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8", block = 18465234 },
+]
+focused_tests = [
+  "tests/test_trace_interfaces.py",
+  "tests/test_time.py",
+  "tests/test_typed_interfaces.py",
+  "tests/test_rpc_state_retry.py",
+  "tests/test_historical_price_repairs.py",
+  "tests/test_constants.py",
+  "tests/test_misc_fixes.py",
+  "tests/test_filter_ranges.py",
+  "tests/test_log_cache.py",
+  "tests/test_event_decode_executor.py",
+  "tests/classes/test_loader.py",
+  "tests/prices/dex/test_pool_tokens.py",
+  "tests/prices/stable_swap/test_factory_loading.py",
+  "tests/test_topic_memory.py",
+  "tests/test_pool_memory.py",
+  "tests/test_bulk_memory.py",
+  "tests/test_event_memory.py",
+  "tests/prices/test_gearbox.py",
+  "tests/prices/test_magic.py::test_bulk_fixture_releases_mapped_requests",
+  "tests/test_memory_release.py",
+  "tests/test_inventory_cache.py",
+  "tests/test_v3_inventory_cache.py",
+  "tests/test_dank_import_guard.py",
+  "tests/test_pricing_correctness.py",
+  "tests/test_amount_quotes.py",
+  "tests/test_quote_regressions.py",
+  "tests/test_quote_repairs.py",
+  "tests/test_uniswap_address_repairs.py",
+  "tests/prices/dex/test_uniswap.py::test_uniswap_v2",
+  "tests/test_price_result.py",
+  "tests/test_trade_path_sources.py",
+  "tests/test_audit_prices.py",
+  "tests/test_cli_logging.py",
+  "tests/test_routing_scaling.py",
+  "tests/test_cachebox.py",
+]

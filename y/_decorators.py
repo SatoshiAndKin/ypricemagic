@@ -1,8 +1,8 @@
 from asyncio import iscoroutinefunction
-from collections.abc import Awaitable, Callable
+from collections.abc import AsyncIterator, Awaitable, Callable, Coroutine
 from functools import partial, wraps
 from logging import getLogger
-from typing import Final, TypeAlias, TypeVar
+from typing import Any, Final, Protocol, TypeVar, cast, overload
 
 from a_sync import debugging
 from typing_extensions import ParamSpec
@@ -10,16 +10,32 @@ from typing_extensions import ParamSpec
 P = ParamSpec("P")
 T = TypeVar("T")
 
-CoroFn: TypeAlias = Callable[P, Awaitable[T]]
+
+class _StuckDebugger(Protocol):
+    @overload
+    def __call__(self, fn: Callable[P, AsyncIterator[T]]) -> Callable[P, AsyncIterator[T]]: ...
+
+    @overload
+    def __call__(self, fn: Callable[P, Awaitable[T]]) -> Callable[P, Coroutine[Any, Any, T]]: ...
 
 
 stuck_coro_logger: Final = getLogger("y.stuck?")
-stuck_coro_debugger: Final[Callable[[CoroFn[P, T]], CoroFn[P, T]]] = partial(
-    debugging.stuck_coro_debugger, logger=stuck_coro_logger
+stuck_coro_debugger: Final = cast(
+    _StuckDebugger, partial(debugging.stuck_coro_debugger, logger=stuck_coro_logger)
 )
 
 
-def continue_on_revert(func: Callable[P, T]) -> Callable[P, T]:
+@overload
+def continue_on_revert(
+    func: Callable[P, Awaitable[T]],
+) -> Callable[P, Coroutine[Any, Any, T | None]]: ...
+
+
+@overload
+def continue_on_revert(func: Callable[P, T]) -> Callable[P, T | None]: ...
+
+
+def continue_on_revert(func: Callable[P, Any]) -> Callable[P, Any]:
     """
     Decorates a call-making function. If the call reverts, it attempts to continue
     by calling the standalone function :func:`continue_if_call_reverted` from the
@@ -58,21 +74,26 @@ def continue_on_revert(func: Callable[P, T]) -> Callable[P, T]:
     if iscoroutinefunction(func):
 
         @wraps(func)
-        async def continue_on_revert_wrap(*args: P.args, **kwargs: P.kwargs) -> T | None:
+        async def continue_on_revert_async(*args: P.args, **kwargs: P.kwargs) -> Any:
             try:
                 return await func(*args, **kwargs)
             except Exception as e:
                 continue_if_call_reverted(e)
+                return None
+
+        return continue_on_revert_async
 
     elif callable(func):
 
         @wraps(func)
-        def continue_on_revert_wrap(*args: P.args, **kwargs: P.kwargs) -> T | None:
+        def continue_on_revert_sync(*args: P.args, **kwargs: P.kwargs) -> Any:
             try:
                 return func(*args, **kwargs)
             except Exception as e:
                 continue_if_call_reverted(e)
+                return None
+
+        return continue_on_revert_sync
 
     else:
         raise NotImplementedError(f"Unable to decorate {func}")
-    return continue_on_revert_wrap

@@ -1,0 +1,65 @@
+"""Read the active pytest process's route without printing private endpoints."""
+import hashlib
+import ipaddress
+import json
+import os
+import socket
+import sys
+import time
+from pathlib import Path
+from urllib.parse import urlsplit
+
+import yaml
+
+url = os.environ['VALIDATION_RPC_URL']
+parsed = urlsplit(url)
+port = parsed.port or (443 if parsed.scheme == 'https' else 80)
+expected = {ipaddress.ip_address(row[4][0]) for row in socket.getaddrinfo(parsed.hostname, port)}
+config = yaml.safe_load((Path.home() / '.brownie/network-config.yaml').read_text())
+hosts = [network['host'] for group in config['live'] for network in group['networks']
+         if network['id'] == 'mainnet']
+processes = []
+for path in Path('/proc').glob('[0-9]*'):
+    try:
+        args = (path / 'cmdline').read_bytes().split(b'\0')
+    except (FileNotFoundError, ProcessLookupError):
+        continue
+    if any(arg == b'pytest' or arg.endswith(b'/pytest') for arg in args):
+        processes.append(path)
+assert len(processes) == 1, len(processes)
+process = processes[0]
+inodes = set()
+for path in (process / 'fd').iterdir():
+    try:
+        value = os.readlink(path)
+    except (FileNotFoundError, ProcessLookupError):
+        continue
+    if value.startswith('socket:'):
+        inodes.add(value[8:-1])
+connections = {'expected_rpc': 0, 'other_at_rpc_port': 0, 'https': 0, 'other': 0}
+states = {}
+for table in ['tcp', 'tcp6']:
+    for line in (process / 'net' / table).read_text().splitlines()[1:]:
+        fields = line.split()
+        if fields[9] not in inodes:
+            continue
+        address, remote_port = fields[2].split(':')
+        raw = bytes.fromhex(address)
+        raw = b''.join(raw[index:index+4][::-1] for index in range(0, len(raw), 4))
+        remote = ipaddress.ip_address(raw)
+        remote = getattr(remote, 'ipv4_mapped', None) or remote
+        remote_port = int(remote_port, 16)
+        if remote_port == port:
+            kind = 'expected_rpc' if remote in expected else 'other_at_rpc_port'
+        else:
+            kind = 'https' if remote_port == 443 else 'other'
+        connections[kind] += 1
+        states.setdefault(kind, {})[fields[3]] = states.setdefault(kind, {}).get(fields[3], 0) + 1
+report = {'unix_time': time.time(), 'purpose': 'Read-only route check during the full suite',
+          'source_sha256': hashlib.sha256(sys.argv[1].encode()).hexdigest(),
+          'mainnet_configuration_matches_requested_archive': hosts == [url],
+          'pytest_pid': int(process.name), 'connections': connections, 'tcp_states': states,
+          'private_endpoints_omitted': True}
+Path('/reports/application-rpc-route.json').write_text(json.dumps(report, indent=2) + '\n')
+Path('/reports/application-rpc-route-check.py.txt').write_text(sys.argv[1])
+print(json.dumps(report, indent=2))

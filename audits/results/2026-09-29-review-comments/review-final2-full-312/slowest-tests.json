@@ -1,0 +1,52 @@
+[
+  {
+    "test": "tests/test_rpc_state_retry.py::test_archive_state_retry_is_bounded_and_never_optional",
+    "outcome": "passed",
+    "duration": 3599.998603685992
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[24578930]",
+    "outcome": "passed",
+    "duration": 3097.6747131347656
+  },
+  {
+    "test": "tests/prices/dex/test_balancer.py::test_balancer_v2_token_price",
+    "outcome": "passed",
+    "duration": 3094.434914827347
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[21561390]",
+    "outcome": "passed",
+    "duration": 3092.178309202194
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[18543850]",
+    "outcome": "passed",
+    "duration": 3085.504425764084
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[23070160]",
+    "outcome": "passed",
+    "duration": 3075.8148458004
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[20052620]",
+    "outcome": "passed",
+    "duration": 3049.3730792999268
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[17035080]",
+    "outcome": "passed",
+    "duration": 2807.37299656868
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[12508770]",
+    "outcome": "passed",
+    "duration": 2629.946343898773
+  },
+  {
+    "test": "tests/prices/test_curve_gauge.py::test_hardcoded_gauge_still_resolves",
+    "outcome": "passed",
+    "duration": 2609.159239292145
+  }
+]

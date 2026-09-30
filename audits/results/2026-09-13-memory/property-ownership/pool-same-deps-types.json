@@ -1,0 +1,23 @@
+{
+  "before_rendered": 1832,
+  "after_rendered": 1829,
+  "added": [],
+  "removed": [
+    {
+      "file": "y/prices/dex/uniswap/v2.py",
+      "error": "Argument 1 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"UniswapV2Pool\"; expected \"Self\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/dex/uniswap/v2.py",
+      "error": "Argument 2 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"type[UniswapV2Pool]\"; expected \"type[Self]\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/dex/uniswap/v2.py",
+      "error": "Function is missing a type annotation [no-untyped-def]",
+      "count": 1
+    }
+  ],
+  "same_dependencies": true
+}

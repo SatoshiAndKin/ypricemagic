@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "PYTHONPATH=tools/validation python -m unittest discover -s tools/validation -p test_runner.py > /reports/runner-unittests.txt 2>&1 && python -m mypy > /reports/mypy.txt 2>&1 && python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python tools/validation/focused.py"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 240.3605247840169,
+  "peak_sampled_process_rss_bytes": 1060012032,
+  "cgroup_before": {
+    "memory.current": "11935744",
+    "memory.peak": "11935744",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "331567104",
+    "memory.peak": "1322848256",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

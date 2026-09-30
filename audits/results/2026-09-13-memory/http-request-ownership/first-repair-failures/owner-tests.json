@@ -1,0 +1,384 @@
+{
+  "collected": 21,
+  "exit_code": 1,
+  "events": [
+    {
+      "test": "test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[False]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[False]",
+      "phase": "call",
+      "outcome": "failed",
+      "error": "cancel = False\n\n    @pytest.mark.parametrize(\"cancel\", [False, True])\n    def test_http_408_releases_failed_attempts_before_replacement_finishes(cancel):\n        async def check():\n            started, release = asyncio.Event(), asyncio.Event()\n            references, calls, events = [], [], []\n            expected = decode_raw(b'{\"jsonrpc\":\"2.0\",\"id\":\"same\",\"result\":\"0x1\"}')\n    \n            async def operation(method, params, request_id):\n                calls.append((method, params, request_id))\n                if len(calls) <= 8:\n                    payload = Payload()\n                    references.append(weakref.ref(payload))\n                    raise ClientResponseError(\n                        SimpleNamespace(real_url=\"http://example.invalid\"),\n                        (),\n                        status=408,\n                        message=\"request timeout\",\n                    )\n                started.set()\n                await release.wait()\n                return expected\n    \n            def observer(event):\n                events.append((event.attempt, type(event.error), event.metadata))\n    \n            request = RPCRequest(Controller(operation), \"eth_blockNumber\", [], uid=\"same\")\n            register_retry_observer(observer)\n            task = asyncio.create_task(request.make_request())\n            try:\n                await asyncio.wait_for(started.wait(), 2)\n                await asyncio.sleep(0)\n                gc.collect()\n                assert len(references) == 8\n                assert [ref() for ref in references] == [None] * 8\n                assert calls == [(\"eth_blockNumber\", [], \"same\")] * 9\n                assert events == [\n                    (index, ClientResponseError, {\"status\": \"408\"}) for index in range(1, 9)\n                ]\n                if cancel:\n                    task.cancel()\n                    with pytest.raises(asyncio.CancelledError):\n                        await task\n                else:\n                    release.set()\n                    assert await task is expected\n                    assert request._fut.result() is expected\n            finally:\n                unregister_retry_observer(observer)\n                release.set()\n                await asyncio.gather(task, return_exceptions=True)\n                if not request._fut.done():\n                    request._fut.cancel()\n    \n>       asyncio.run(check())\n\ntests/unit/test_http_retry_release.py:87: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/asyncio/runners.py:195: in run\n    return runner.run(main)\n/usr/local/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete\n    return future.result()\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\n    async def check():\n        started, release = asyncio.Event(), asyncio.Event()\n        references, calls, events = [], [], []\n        expected = decode_raw(b'{\"jsonrpc\":\"2.0\",\"id\":\"same\",\"result\":\"0x1\"}')\n    \n        async def operation(method, params, request_id):\n            calls.append((method, params, request_id))\n            if len(calls) <= 8:\n                payload = Payload()\n                references.append(weakref.ref(payload))\n                raise ClientResponseError(\n                    SimpleNamespace(real_url=\"http://example.invalid\"),\n                    (),\n                    status=408,\n                    message=\"request timeout\",\n                )\n            started.set()\n            await release.wait()\n            return expected\n    \n        def observer(event):\n            events.append((event.attempt, type(event.error), event.metadata))\n    \n        request = RPCRequest(Controller(operation), \"eth_blockNumber\", [], uid=\"same\")\n        register_retry_observer(observer)\n        task = asyncio.create_task(request.make_request())\n        try:\n            await asyncio.wait_for(started.wait(), 2)\n            await asyncio.sleep(0)\n            gc.collect()\n            assert len(references) == 8\n>           assert [ref() for ref in references] == [None] * 8\nE           AssertionError: assert [None, None, ...ne, None, ...] == [None, None, ...ne, None, ...]\nE             At index 7 diff: <test_http_retry_release.Payload object at 0xfe81c44d5670> != None\nE             Full diff:\nE               [\nE                None,\nE                None,\nE                None,\nE                None,...\nE             \nE             ...Full output truncated (7 lines hidden), use '-vv' to show\n\ntests/unit/test_http_retry_release.py:67: AssertionError"
+    },
+    {
+      "test": "test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[False]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[True]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[True]",
+      "phase": "call",
+      "outcome": "failed",
+      "error": "cancel = True\n\n    @pytest.mark.parametrize(\"cancel\", [False, True])\n    def test_http_408_releases_failed_attempts_before_replacement_finishes(cancel):\n        async def check():\n            started, release = asyncio.Event(), asyncio.Event()\n            references, calls, events = [], [], []\n            expected = decode_raw(b'{\"jsonrpc\":\"2.0\",\"id\":\"same\",\"result\":\"0x1\"}')\n    \n            async def operation(method, params, request_id):\n                calls.append((method, params, request_id))\n                if len(calls) <= 8:\n                    payload = Payload()\n                    references.append(weakref.ref(payload))\n                    raise ClientResponseError(\n                        SimpleNamespace(real_url=\"http://example.invalid\"),\n                        (),\n                        status=408,\n                        message=\"request timeout\",\n                    )\n                started.set()\n                await release.wait()\n                return expected\n    \n            def observer(event):\n                events.append((event.attempt, type(event.error), event.metadata))\n    \n            request = RPCRequest(Controller(operation), \"eth_blockNumber\", [], uid=\"same\")\n            register_retry_observer(observer)\n            task = asyncio.create_task(request.make_request())\n            try:\n                await asyncio.wait_for(started.wait(), 2)\n                await asyncio.sleep(0)\n                gc.collect()\n                assert len(references) == 8\n                assert [ref() for ref in references] == [None] * 8\n                assert calls == [(\"eth_blockNumber\", [], \"same\")] * 9\n                assert events == [\n                    (index, ClientResponseError, {\"status\": \"408\"}) for index in range(1, 9)\n                ]\n                if cancel:\n                    task.cancel()\n                    with pytest.raises(asyncio.CancelledError):\n                        await task\n                else:\n                    release.set()\n                    assert await task is expected\n                    assert request._fut.result() is expected\n            finally:\n                unregister_retry_observer(observer)\n                release.set()\n                await asyncio.gather(task, return_exceptions=True)\n                if not request._fut.done():\n                    request._fut.cancel()\n    \n>       asyncio.run(check())\n\ntests/unit/test_http_retry_release.py:87: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/asyncio/runners.py:195: in run\n    return runner.run(main)\n/usr/local/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete\n    return future.result()\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\n    async def check():\n        started, release = asyncio.Event(), asyncio.Event()\n        references, calls, events = [], [], []\n        expected = decode_raw(b'{\"jsonrpc\":\"2.0\",\"id\":\"same\",\"result\":\"0x1\"}')\n    \n        async def operation(method, params, request_id):\n            calls.append((method, params, request_id))\n            if len(calls) <= 8:\n                payload = Payload()\n                references.append(weakref.ref(payload))\n                raise ClientResponseError(\n                    SimpleNamespace(real_url=\"http://example.invalid\"),\n                    (),\n                    status=408,\n                    message=\"request timeout\",\n                )\n            started.set()\n            await release.wait()\n            return expected\n    \n        def observer(event):\n            events.append((event.attempt, type(event.error), event.metadata))\n    \n        request = RPCRequest(Controller(operation), \"eth_blockNumber\", [], uid=\"same\")\n        register_retry_observer(observer)\n        task = asyncio.create_task(request.make_request())\n        try:\n            await asyncio.wait_for(started.wait(), 2)\n            await asyncio.sleep(0)\n            gc.collect()\n            assert len(references) == 8\n>           assert [ref() for ref in references] == [None] * 8\nE           AssertionError: assert [None, None, ...ne, None, ...] == [None, None, ...ne, None, ...]\nE             At index 7 diff: <test_http_retry_release.Payload object at 0xfe81c44d7b60> != None\nE             Full diff:\nE               [\nE                None,\nE                None,\nE                None,\nE                None,...\nE             \nE             ...Full output truncated (7 lines hidden), use '-vv' to show\n\ntests/unit/test_http_retry_release.py:67: AssertionError"
+    },
+    {
+      "test": "test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[True]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_success_keeps_response_and_request_identity",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_success_keeps_response_and_request_identity",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_success_keeps_response_and_request_identity",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[400]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[400]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[400]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[429]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[429]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[429]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[500]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[500]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[500]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_local_timeout_preserves_the_race[0-0]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_local_timeout_preserves_the_race[0-0]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_local_timeout_preserves_the_race[0-0]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_local_timeout_preserves_the_race[0-1]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_local_timeout_preserves_the_race[0-1]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_local_timeout_preserves_the_race[0-1]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_local_timeout_preserves_the_race[2-0]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_local_timeout_preserves_the_race[2-0]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_local_timeout_preserves_the_race[2-0]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_local_timeout_preserves_the_race[2-1]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_local_timeout_preserves_the_race[2-1]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_local_timeout_preserves_the_race[2-1]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[False-make_request]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[False-make_request]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[False-make_request]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[False-get_response_unbatched]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[False-get_response_unbatched]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[False-get_response_unbatched]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[True-make_request]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[True-make_request]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[True-make_request]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[True-get_response_unbatched]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[True-get_response_unbatched]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[True-get_response_unbatched]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[success]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[success]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[success]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[failure]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[failure]",
+      "phase": "call",
+      "outcome": "failed",
+      "error": "outcome = 'failure'\n\n    @pytest.mark.parametrize(\"outcome\", [\"success\", \"failure\", \"cancel\"])\n    def test_finished_batch_task_releases_registry_ownership(outcome):\n        from dank_mids._tasks import BATCH_TASKS, create_batch_task\n    \n        async def check():\n            entered = asyncio.Event()\n    \n            async def operation():\n                entered.set()\n                if outcome == \"failure\":\n                    raise RuntimeError(\"failed batch\")\n                if outcome == \"cancel\":\n                    await asyncio.Event().wait()\n                return 7\n    \n            task = create_batch_task(operation(), name=\"owned-batch\")\n            reference = weakref.ref(task)\n            try:\n                await entered.wait()\n                if outcome == \"cancel\":\n                    task.cancel()\n                await asyncio.gather(task, return_exceptions=True)\n                await asyncio.sleep(0)\n                assert task not in BATCH_TASKS\n            finally:\n                BATCH_TASKS.discard(task)\n            del task\n            gc.collect()\n            assert reference() is None\n    \n>       asyncio.run(check())\n\ntests/unit/test_http_retry_release.py:271: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/asyncio/runners.py:195: in run\n    return runner.run(main)\n/usr/local/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete\n    return future.result()\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\n    async def check():\n        entered = asyncio.Event()\n    \n        async def operation():\n            entered.set()\n            if outcome == \"failure\":\n                raise RuntimeError(\"failed batch\")\n            if outcome == \"cancel\":\n                await asyncio.Event().wait()\n            return 7\n    \n        task = create_batch_task(operation(), name=\"owned-batch\")\n        reference = weakref.ref(task)\n        try:\n            await entered.wait()\n            if outcome == \"cancel\":\n                task.cancel()\n            await asyncio.gather(task, return_exceptions=True)\n            await asyncio.sleep(0)\n            assert task not in BATCH_TASKS\n        finally:\n            BATCH_TASKS.discard(task)\n        del task\n        gc.collect()\n>       assert reference() is None\nE       AssertionError: assert <Task finished name='owned-batch' coro=<test_finished_batch_task_releases_registry_ownership.<locals>.check.<locals>.operation() done, defined at /work/tests/unit/test_http_retry_release.py:248> exception=RuntimeError('failed batch')> is None\nE        +  where <Task finished name='owned-batch' coro=<test_finished_batch_task_releases_registry_ownership.<locals>.check.<locals>.operation() done, defined at /work/tests/unit/test_http_retry_release.py:248> exception=RuntimeError('failed batch')> = <weakref at 0xfe81c44ced90; to '_asyncio.Task' at 0xfe81c4687f40>()\n\ntests/unit/test_http_retry_release.py:269: AssertionError"
+    },
+    {
+      "test": "test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[failure]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[cancel]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[cancel]",
+      "phase": "call",
+      "outcome": "failed",
+      "error": "outcome = 'cancel'\n\n    @pytest.mark.parametrize(\"outcome\", [\"success\", \"failure\", \"cancel\"])\n    def test_finished_batch_task_releases_registry_ownership(outcome):\n        from dank_mids._tasks import BATCH_TASKS, create_batch_task\n    \n        async def check():\n            entered = asyncio.Event()\n    \n            async def operation():\n                entered.set()\n                if outcome == \"failure\":\n                    raise RuntimeError(\"failed batch\")\n                if outcome == \"cancel\":\n                    await asyncio.Event().wait()\n                return 7\n    \n            task = create_batch_task(operation(), name=\"owned-batch\")\n            reference = weakref.ref(task)\n            try:\n                await entered.wait()\n                if outcome == \"cancel\":\n                    task.cancel()\n                await asyncio.gather(task, return_exceptions=True)\n                await asyncio.sleep(0)\n                assert task not in BATCH_TASKS\n            finally:\n                BATCH_TASKS.discard(task)\n            del task\n            gc.collect()\n            assert reference() is None\n    \n>       asyncio.run(check())\n\ntests/unit/test_http_retry_release.py:271: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/asyncio/runners.py:195: in run\n    return runner.run(main)\n/usr/local/lib/python3.12/asyncio/runners.py:118: in run\n    return self._loop.run_until_complete(task)\n/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete\n    return future.result()\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\n    async def check():\n        entered = asyncio.Event()\n    \n        async def operation():\n            entered.set()\n            if outcome == \"failure\":\n                raise RuntimeError(\"failed batch\")\n            if outcome == \"cancel\":\n                await asyncio.Event().wait()\n            return 7\n    \n        task = create_batch_task(operation(), name=\"owned-batch\")\n        reference = weakref.ref(task)\n        try:\n            await entered.wait()\n            if outcome == \"cancel\":\n                task.cancel()\n            await asyncio.gather(task, return_exceptions=True)\n            await asyncio.sleep(0)\n            assert task not in BATCH_TASKS\n        finally:\n            BATCH_TASKS.discard(task)\n        del task\n        gc.collect()\n>       assert reference() is None\nE       AssertionError: assert <Task cancelled name='owned-batch' coro=<test_finished_batch_task_releases_registry_ownership.<locals>.check.<locals>.operation() done, defined at /work/tests/unit/test_http_retry_release.py:248>> is None\nE        +  where <Task cancelled name='owned-batch' coro=<test_finished_batch_task_releases_registry_ownership.<locals>.check.<locals>.operation() done, defined at /work/tests/unit/test_http_retry_release.py:248>> = <weakref at 0xfe81c39ebec0; to '_asyncio.Task' at 0xfe81c4686800>()\n\ntests/unit/test_http_retry_release.py:269: AssertionError"
+    },
+    {
+      "test": "test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[cancel]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-False]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-False]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-False]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-True]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-True]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-True]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-False]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-False]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-False]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-True]",
+      "phase": "setup",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-True]",
+      "phase": "call",
+      "outcome": "passed",
+      "error": null
+    },
+    {
+      "test": "test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-True]",
+      "phase": "teardown",
+      "outcome": "passed",
+      "error": null
+    }
+  ]
+}

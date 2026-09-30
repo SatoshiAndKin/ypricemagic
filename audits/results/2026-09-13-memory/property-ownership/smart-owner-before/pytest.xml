@@ -1,0 +1,901 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="9" skipped="0" tests="38" time="1.369" timestamp="2026-09-14T12:41:48.302752" hostname="5b54e47093e6"><testcase classname="tests.test_smart" name="test_smart_future_init_no_args" time="0.000" /><testcase classname="tests.test_smart" name="test_smart_task_name" time="0.000" /><testcase classname="tests.test_smart" name="test_smart_future_init_loop_arg" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_min_async" time="0.004" /><testcase classname="tests.test_smart" name="test_smart_future_await_exc" time="0.004" /><testcase classname="tests.test_smart" name="test_smart_task_await_cancelled" time="0.004" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_max_async" time="0.004" /><testcase classname="tests.test_smart" name="test_smart_task_await_exc" time="0.004" /><testcase classname="tests.test_smart" name="test_shield_exc" time="0.004" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_any_async" time="0.004" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_sum_async" time="0.004" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_all_async" time="0.004" /><testcase classname="tests.test_smart" name="test_shield_cancel_inner" time="0.003" /><testcase classname="tests.test_smart" name="test_smart_future_await_cancelled" time="0.004" /><testcase classname="tests.test_smart" name="test_smart_future_await" time="0.003" /><testcase classname="tests.test_smart" name="test_smart_task_await" time="0.108" /><testcase classname="tests.test_smart" name="test_shield_cancel_outer" time="1.010" /><testcase classname="tests.test_smart" name="test_shield" time="1.010" /><testcase classname="tests.a_sync.test_cached_property_ownership" name="test_cached_loader_releases_instances_and_reuses_values[False-AsyncCachedPropertyDescriptor]" time="0.000" /><testcase classname="tests.a_sync.test_cached_property_ownership" name="test_cached_loader_releases_instances_and_reuses_values[False-ASyncCachedPropertyDescriptor]" time="0.000" /><testcase classname="tests.a_sync.test_cached_property_ownership" name="test_cached_loader_releases_instances_and_reuses_values[True-AsyncCachedPropertyDescriptor]" time="0.000" /><testcase classname="tests.a_sync.test_cached_property_ownership" name="test_cached_loader_releases_instances_and_reuses_values[True-ASyncCachedPropertyDescriptor]" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_any_sync" time="0.001" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_all_sync" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_min_sync" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_max_sync" time="0.000" /><testcase classname="tests.a_sync.test_property" name="test_property_descriptor_sum_sync" time="0.000" /><testcase classname="tests.test_smart" name="test_set_smart_task_factory" time="0.101" /><testcase classname="tests.test_smart" name="test_set_smart_task_factory_with_loop" time="0.105" /><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[success-future]" time="0.001"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50600&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b508c0&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50600&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b508c0&gt;)] = &lt;SmartTask pending name='Task-48' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'future', outcome = 'success'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50600&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b508c0&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50600&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b508c0&gt;)] = &lt;SmartTask pending name='Task-48' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[success-task]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b51580&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; result=&lt;test_smart_o...xf444d0a8af60&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xf444d25617c0&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b51580&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; result=&lt;test_smart_o...xf444d0a8af60&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xf444d25617c0&gt;)] = &lt;SmartTask pending name='Task-49' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...ntil_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartTask._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'task', outcome = 'success'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b51580&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; result=&lt;test_smart_o...xf444d0a8af60&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xf444d25617c0&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b51580&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; result=&lt;test_smart_o...xf444d0a8af60&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xf444d25617c0&gt;)] = &lt;SmartTask pending name='Task-49' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...ntil_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartTask._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[success-shield]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50600&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d1916b80&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50600&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d1916b80&gt;)] = &lt;SmartTask pending name='Task-51' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'shield', outcome = 'success'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50600&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d1916b80&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50600&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d1916b80&gt;)] = &lt;SmartTask pending name='Task-51' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[failure-future]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d2563980&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d2562f00&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d2563980&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d2562f00&gt;)] = &lt;SmartTask pending name='Task-53' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'future', outcome = 'failure'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d2563980&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d2562f00&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d2563980&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d2562f00&gt;)] = &lt;SmartTask pending name='Task-53' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[failure-task]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d2563840&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; exception=ValueError('lookup failed')&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b50900&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d2563840&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; exception=ValueError('lookup failed')&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b50900&gt;)] = &lt;SmartTask pending name='Task-54' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...ntil_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartTask._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'task', outcome = 'failure'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d2563840&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; exception=ValueError('lookup failed')&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b50900&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d2563840&gt;), (&lt;bound metho.../test_smart_ownership.py:17&gt; exception=ValueError('lookup failed')&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b50900&gt;)] = &lt;SmartTask pending name='Task-54' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...ntil_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartTask._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[failure-shield]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50940&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b50540&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50940&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b50540&gt;)] = &lt;SmartTask pending name='Task-56' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'shield', outcome = 'failure'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50940&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b50540&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50940&gt;), (&lt;bound metho..._done_cleanup_callback of &lt;SmartFuture key=None waiters=0 FINISHED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b50540&gt;)] = &lt;SmartTask pending name='Task-56' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[cancel-future]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50980&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b52000&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50980&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b52000&gt;)] = &lt;SmartTask pending name='Task-58' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'future', outcome = 'cancel'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50980&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b52000&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50980&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b52000&gt;)] = &lt;SmartTask pending name='Task-58' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[cancel-task]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50380&gt;), (&lt;bound metho...ned at /tmp/property-owner-tests/tests/test_smart_ownership.py:17&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0d4be40&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50380&gt;), (&lt;bound metho...ned at /tmp/property-owner-tests/tests/test_smart_ownership.py:17&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0d4be40&gt;)] = &lt;SmartTask pending name='Task-59' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...ntil_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartTask._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'task', outcome = 'cancel'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50380&gt;), (&lt;bound metho...ned at /tmp/property-owner-tests/tests/test_smart_ownership.py:17&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0d4be40&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50380&gt;), (&lt;bound metho...ned at /tmp/property-owner-tests/tests/test_smart_ownership.py:17&gt;&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0d4be40&gt;)] = &lt;SmartTask pending name='Task-59' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...ntil_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartTask._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase><testcase classname="tests.test_smart_ownership" name="test_completed_await_releases_caller_callbacks_and_results[cancel-shield]" time="0.000"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50980&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b50540&gt;)]))&#10; +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50980&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b50540&gt;)] = &lt;SmartTask pending name='Task-61' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks">kind = 'shield', outcome = 'cancel'
+
+    @pytest.mark.parametrize("kind", ["future", "task", "shield"])
+    @pytest.mark.parametrize("outcome", ["success", "failure", "cancel"])
+    def test_completed_await_releases_caller_callbacks_and_results(kind, outcome):
+        class Payload:
+            pass
+
+        async def produce(value):
+            await asyncio.sleep(0)
+            if outcome == "failure":
+                raise ValueError("lookup failed")
+            if outcome == "cancel":
+                raise asyncio.CancelledError
+            return value
+
+        async def check():
+            caller = asyncio.current_task()
+            callbacks_before = len(caller._callbacks or ())
+            payload = Payload()
+            reference = weakref.ref(payload)
+            inner = None
+            if kind == "future":
+                pending = SmartFuture()
+                loop = asyncio.get_running_loop()
+                if outcome == "failure":
+                    loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+                elif outcome == "cancel":
+                    loop.call_soon(pending.cancel)
+                else:
+                    loop.call_soon(pending.set_result, payload)
+            elif kind == "task":
+                pending = SmartTask(produce(payload))
+            else:
+                inner = asyncio.create_task(produce(payload))
+                pending = shield(inner)
+
+            if outcome == "success":
+                result = await pending
+                assert result is payload
+                del result
+            elif outcome == "failure":
+                with pytest.raises(ValueError, match="lookup failed"):
+                    await pending
+            else:
+                with pytest.raises(asyncio.CancelledError):
+                    await pending
+
+            assert len(caller._callbacks or ()) == callbacks_before
+            del payload, pending, inner
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+            if outcome == "success":
+                assert reference() is None
+
+&gt;       asyncio.get_event_loop().run_until_complete(check())
+
+tests/test_smart_ownership.py:64:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    async def check():
+        caller = asyncio.current_task()
+        callbacks_before = len(caller._callbacks or ())
+        payload = Payload()
+        reference = weakref.ref(payload)
+        inner = None
+        if kind == "future":
+            pending = SmartFuture()
+            loop = asyncio.get_running_loop()
+            if outcome == "failure":
+                loop.call_soon(pending.set_exception, ValueError("lookup failed"))
+            elif outcome == "cancel":
+                loop.call_soon(pending.cancel)
+            else:
+                loop.call_soon(pending.set_result, payload)
+        elif kind == "task":
+            pending = SmartTask(produce(payload))
+        else:
+            inner = asyncio.create_task(produce(payload))
+            pending = shield(inner)
+
+        if outcome == "success":
+            result = await pending
+            assert result is payload
+            del result
+        elif outcome == "failure":
+            with pytest.raises(ValueError, match="lookup failed"):
+                await pending
+        else:
+            with pytest.raises(asyncio.CancelledError):
+                await pending
+
+&gt;       assert len(caller._callbacks or ()) == callbacks_before
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(([(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50980&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b50540&gt;)]))
+E        +    where [(&lt;function _run_until_complete_cb at 0xf444d25a6020&gt;, &lt;_contextvars.Context object at 0xf444d0b50980&gt;), (&lt;bound metho...done_cleanup_callback of &lt;SmartFuture key=None waiters=0 CANCELLED&gt;&gt;, &lt;_contextvars.Context object at 0xf444d0b50540&gt;)] = &lt;SmartTask pending name='Task-61' coro=&lt;test_completed_await_releases_caller_callbacks_and_results.&lt;locals&gt;.check() ru...il_complete_cb() at /usr/local/lib/python3.12/asyncio/base_events.py:181, SmartFuture._waiter_done_cleanup_callback()]&gt;._callbacks
+
+tests/test_smart_ownership.py:57: AssertionError</failure></testcase></testsuite></testsuites>

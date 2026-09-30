@@ -1,0 +1,11 @@
+{
+  "base_source": "c27864f0b886eb3f8775eee6aa5d47f3e1b1d9ec",
+  "repair_source": "03df6cdf79f7e5902dd4e439b8a10d9ab0e414e5",
+  "assertion_file": "tests/test_uniswap_address_repairs.py",
+  "negative_file_sha256": "41dc03b3729cb8bd9dce1046dc2378d258aa0633e92846e9a32a2551b1133f7b",
+  "repaired_file_sha256": "e75aeb954a1ea1813263a312723b74005205226c648dee9d505e84d56b489dba",
+  "assertions_ast_identical": true,
+  "difference": "Formatting only; identical parsed assertions and fixtures.",
+  "negative_production_sha256": "d062dc205db73009ff8bb742e3a531981bc3b0a76208a8d418ff50f8f509b600",
+  "repaired_production_sha256": "ca44fe128f27ebad60a0041b9b23cf723f1084c473842a7712e13ed9087f707e"
+}

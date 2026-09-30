@@ -1,0 +1,54 @@
+[
+  {
+    "contract": "0x1A31D42149e82Eb99777f903C08A2E41A00085d3",
+    "block": 26059712,
+    "signature": "latestTimestamp()",
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "error": {
+        "code": 3,
+        "message": "execution reverted"
+      }
+    }
+  },
+  {
+    "contract": "0x1A31D42149e82Eb99777f903C08A2E41A00085d3",
+    "block": 26059712,
+    "signature": "latestAnswer()",
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "error": {
+        "code": 3,
+        "message": "execution reverted"
+      }
+    }
+  },
+  {
+    "contract": "0x1A31D42149e82Eb99777f903C08A2E41A00085d3",
+    "block": 26059712,
+    "signature": "decimals()",
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "error": {
+        "code": 3,
+        "message": "execution reverted"
+      }
+    }
+  },
+  {
+    "contract": "0x1A31D42149e82Eb99777f903C08A2E41A00085d3",
+    "block": 26059712,
+    "signature": "latestRoundData()",
+    "response": {
+      "jsonrpc": "2.0",
+      "id": 1,
+      "error": {
+        "code": 3,
+        "message": "execution reverted"
+      }
+    }
+  }
+]

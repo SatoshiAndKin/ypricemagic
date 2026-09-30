@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; python /runner/audit_retention.py"
+  ],
+  "exit_code": -15,
+  "interrupted": true,
+  "elapsed_seconds": 604.1454084319994,
+  "peak_sampled_process_rss_bytes": 2295283712,
+  "cgroup_before": {
+    "memory.current": "8749056",
+    "memory.peak": "8855552",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "3014197248",
+    "memory.peak": "3015163904",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "7"
+  }
+}

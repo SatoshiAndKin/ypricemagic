@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /work/tools/validation/test_timeout.py > /reports/timeout-probe.txt 2>&1 && python /runner/focused.py && python -c 'import ast,hashlib,importlib,importlib.metadata,json\nfrom pathlib import Path\nexpected=next(line for line in Path('\"'\"'/work/requirements-dev.txt'\"'\"').read_text().splitlines() if line.startswith('\"'\"'pytest-asyncio-cooperative @'\"'\"')).rsplit('\"'\"'@'\"'\"',1)[1]\ncooperative=importlib.metadata.distribution('\"'\"'pytest-asyncio-cooperative'\"'\"')\nasync_dist=importlib.metadata.distribution('\"'\"'ez-a-sync'\"'\"')\nproof={'\"'\"'cooperative'\"'\"':json.loads(cooperative.read_text('\"'\"'direct_url.json'\"'\"')),'\"'\"'ez_a_sync'\"'\"':json.loads(async_dist.read_text('\"'\"'direct_url.json'\"'\"'))}\nassert proof['\"'\"'cooperative'\"'\"']['\"'\"'vcs_info'\"'\"']['\"'\"'commit_id'\"'\"']==expected,proof\nrequired=next(line for line in Path('\"'\"'/work/requirements.txt'\"'\"').read_text().splitlines() if line.startswith('\"'\"'ez-a-sync @'\"'\"')).rsplit('\"'\"'@'\"'\"',1)[1]\nassert proof['\"'\"'ez_a_sync'\"'\"']['\"'\"'vcs_info'\"'\"']['\"'\"'commit_id'\"'\"']==required,proof\nproof['\"'\"'native_modules'\"'\"']={name:importlib.import_module(name).__file__ for name in ['\"'\"'a_sync.a_sync.property'\"'\"','\"'\"'a_sync.async_property.cached'\"'\"','\"'\"'a_sync._smart'\"'\"','\"'\"'a_sync.a_sync._helpers'\"'\"']}\nassert all(path.endswith('\"'\"'.so'\"'\"') for path in proof['\"'\"'native_modules'\"'\"'].values()),proof\nplugin=importlib.import_module('\"'\"'pytest_asyncio_cooperative.plugin'\"'\"')\nproof['\"'\"'cooperative_plugin_sha256'\"'\"']=hashlib.sha256(Path(plugin.__file__).read_bytes()).hexdigest()\nassert proof['\"'\"'cooperative_plugin_sha256'\"'\"']=='\"'\"'3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7'\"'\"',proof\nproof['\"'\"'pytest_timeout_version'\"'\"']=importlib.metadata.version('\"'\"'pytest-timeout'\"'\"')\nassert proof['\"'\"'pytest_timeout_version'\"'\"']=='\"'\"'2.2.0'\"'\"',proof\nPath('\"'\"'/reports/ownership-pins.json'\"'\"').write_text(json.dumps(proof,indent=2))\n'; status=$?; python -m mypy > /reports/mypy.txt 2>&1; exit $status"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789405104.694784,
+  "source_sha": "d00a51464750a42d8f25737937858a983b0f80dd",
+  "source_revision": "worktree",
+  "source_archive_sha256": "ec73c035849c181dc2440676be1eeddbe00dd939ee0ceed7e2ceb08c2cb941d8",
+  "image": "sha256:b3d211f81c8e17526bcc27eb32961e8515d99ebd6478ce75c49ef3c1850bd8c9",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 289.5961229801178
+}

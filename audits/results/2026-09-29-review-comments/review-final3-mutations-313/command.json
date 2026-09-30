@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m mypy > /reports/mypy.txt 2>&1 && python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python -c 'import json,os,subprocess,sys\nfrom pathlib import Path\nmutation='\"'\"'\"\"\"Run the exact reviewer mutants against centrally selected review tests.\"\"\"\\nimport importlib,os,tomllib\\nfrom pathlib import Path\\nimport pytest\\nmode=os.environ[\\'\"'\"'REVIEW_MUTATION\\'\"'\"']\\nclass Mutation:\\n def pytest_collection_modifyitems(self,items):\\n  # Install after conftest owns Brownie\\'\"'\"'s network initialization.\\n  from decimal import Decimal\\n  from y.datatypes import PriceResult,QuoteAsset,QuoteDetails,UsdPrice\\n  from y.prices._rpc import BlockRef\\n  from tests.price_expectations import native_read\\n  if mode==\\'\"'\"'chainlink\\'\"'\"':\\n   module=importlib.import_module(\\'\"'\"'y.prices.chainlink\\'\"'\"')\\n   async def missing(self,*args,**kwargs):return None\\n   module.Chainlink.get_feed=missing\\n  elif mode==\\'\"'\"'v3\\'\"'\"':\\n   module=importlib.import_module(\\'\"'\"'y.prices._routing\\'\"'\"')\\n   async def constant(token,block,**kwargs):\\n    resolved=await BlockRef.resolve(block)\\n    decimals=await native_read(str(token),\\'\"'\"'decimals()(uint8)\\'\"'\"',resolved)\\n    return PriceResult(UsdPrice(123),[],QuoteDetails(QuoteAsset(str(token).lower(),10**decimals,decimals),(),Decimal(123),resolved.number,resolved.hash,()))\\n   module.liquidity_price=constant\\n  else:raise ValueError(mode)\\ntargets=tomllib.loads(Path(\\'\"'\"'pyproject.toml\\'\"'\"').read_text())[\\'\"'\"'tool\\'\"'\"'][\\'\"'\"'validation\\'\"'\"'][\\'\"'\"'review_quote_tests\\'\"'\"']\\ntargets=[t for t in targets if (\\'\"'\"'test_chainlink.py\\'\"'\"' if mode==\\'\"'\"'chainlink\\'\"'\"' else \\'\"'\"'test_uniswap.py::test_uniswap_v3\\'\"'\"') in t]\\nraise SystemExit(pytest.main(targets,plugins=[Mutation()]))\\n'\"'\"'\nrows=[]\nfor mode in ('\"'\"'chainlink'\"'\"','\"'\"'v3'\"'\"'):\n report=Path('\"'\"'/reports'\"'\"')/(mode+'\"'\"'-mutation'\"'\"');report.mkdir()\n env=dict(os.environ,REVIEW_MUTATION=mode,VALIDATION_REPORT=str(report))\n result=subprocess.run([sys.executable,'\"'\"'-c'\"'\"',mutation],env=env)\n summary=json.loads((report/'\"'\"'pytest-summary.json'\"'\"').read_text())\n events=[json.loads(s) for s in (report/'\"'\"'pytest-events.jsonl'\"'\"').read_text().splitlines()]\n failures=[e for e in events if e.get('\"'\"'outcome'\"'\"')=='\"'\"'failed'\"'\"']\n assert result.returncode==1 and summary['\"'\"'exit_code'\"'\"']==1 and failures,(mode,result.returncode,summary)\n assert all(e['\"'\"'phase'\"'\"']=='\"'\"'call'\"'\"' and '\"'\"'AssertionError'\"'\"' in e.get('\"'\"'error'\"'\"','\"'\"''\"'\"') for e in failures),mode\n if mode=='\"'\"'v3'\"'\"': assert summary['\"'\"'counts'\"'\"']['\"'\"'call:failed'\"'\"']==84 and summary['\"'\"'collected'\"'\"']==84\n else: assert any('\"'\"'test_chainlink_latest[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2]'\"'\"' in e['\"'\"'test'\"'\"'] for e in failures)\n rows.append({'\"'\"'mutation'\"'\"':mode,'\"'\"'exit_code'\"'\"':result.returncode,'\"'\"'summary'\"'\"':summary})\n Path('\"'\"'/reports/mutation-results.json'\"'\"').write_text(json.dumps({'\"'\"'complete'\"'\"':False,'\"'\"'rows'\"'\"':rows},indent=2)+chr(10))\nPath('\"'\"'/reports/mutation-results.json'\"'\"').write_text(json.dumps({'\"'\"'complete'\"'\"':True,'\"'\"'rows'\"'\"':rows},indent=2)+chr(10))\n'"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 170.67682326497743,
+  "peak_sampled_process_rss_bytes": 1081974784,
+  "cgroup_before": {
+    "memory.current": "8687616",
+    "memory.peak": "8781824",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "167481344",
+    "memory.peak": "1200291840",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

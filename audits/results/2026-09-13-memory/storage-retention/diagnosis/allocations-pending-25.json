@@ -1,0 +1,540 @@
+{
+  "objects": {
+    "evmspec.structs.log.Topic": 495380,
+    "evmspec.data._main.BlockNumber": 488165,
+    "a_sync.async_property.cached.AsyncCachedPropertyInstanceState": 480296,
+    "y.prices.dex.uniswap.v2.UniswapV2Pool": 479774,
+    "_asyncio.Task": 472660,
+    "evmspec.data._ids.LogIndex": 8069,
+    "evmspec.data._main.TransactionHash": 8069,
+    "evmspec.data._ids.TransactionIndex": 7965,
+    "evmspec.structs.log.Log": 7965,
+    "evmspec.structs.log.Data": 7965,
+    "_asyncio.Future": 3388,
+    "dank_mids.semaphores._BlockSemaphoreContextManager": 2591,
+    "a_sync.a_sync.modifiers.manager.ModifierManager": 618,
+    "a_sync.primitives.locks.counter.CounterLock": 508,
+    "y.utils.events.Events": 502,
+    "y.prices.chainlink.Feed": 388,
+    "y.classes.common.ERC20": 374,
+    "a_sync._smart.WeakSet": 345,
+    "a_sync.debugging.__pyx_scope_struct_2_stuck_coro_wrap": 314,
+    "a_sync.a_sync.modifiers.manager.__pyx_scope_struct_1_apply_sync_modifiers": 274,
+    "a_sync.a_sync.function.__pyx_scope_struct_10___get__": 259,
+    "y.prices.lending.compound.CToken": 199,
+    "a_sync.a_sync.method.ASyncBoundMethodAsyncDefault": 184,
+    "_asyncio.FutureIter": 177,
+    "a_sync.debugging.__pyx_scope_struct__stuck_coro_debugger": 172,
+    "logging.Logger": 145,
+    "a_sync.a_sync.method.ASyncMethodDescriptor": 132,
+    "y.prices._rpc.BlockRef": 114,
+    "a_sync.primitives.locks.event.CythonEvent": 95,
+    "a_sync.task.TaskMapping": 91,
+    "a_sync.primitives.queue.Queue": 91,
+    "a_sync._smart.SmartFuture": 90,
+    "a_sync.a_sync.function.ASyncFunctionSyncDefault": 79,
+    "a_sync.a_sync.function.ASyncFunctionAsyncDefault": 71,
+    "dank_mids.helpers._session.HTTPStatusExtended": 67,
+    "dank_mids.helpers.hashing.AttributeDict": 67,
+    "y.contracts.Contract": 62,
+    "y.datatypes.UsdPrice": 60,
+    "y._db.decorators.retry_locked_wrap_retry_locked_obj": 56,
+    "y._db.decorators.retry_locked_env": 56,
+    "logging.PlaceHolder": 55,
+    "a_sync.a_sync.property.HiddenMethodDescriptor": 52,
+    "y.prices.magic._PriceRequest": 50,
+    "y.datatypes.QuoteAsset": 49,
+    "y.prices._routing.SearchContext": 49,
+    "y.prices._routing._Node": 49,
+    "a_sync.a_sync.property.ASyncCachedPropertyDescriptor": 44,
+    "a_sync.iter.ASyncGeneratorFunction": 40,
+    "a_sync.asyncio.igather.__pyx_scope_struct____pyx_f_6a_sync_7asyncio_7igather_cigather": 39,
+    "y.classes.singleton.ChecksumASyncSingletonMeta": 34,
+    "dank_mids.brownie_patch.types.DankContractCall": 33,
+    "a_sync.a_sync.property.HiddenMethod": 32,
+    "pytest_asyncio_cooperative.fixtures.CachedFunction": 32,
+    "a_sync.a_sync.property.__pyx_scope_struct__get": 30,
+    "a_sync.a_sync.property.__pyx_scope_struct_2_loader": 30,
+    "y.prices._quote._Flight": 29,
+    "dank_mids.brownie_patch._abi.FunctionABI": 23,
+    "dank_mids.logging.CLogger": 21,
+    "dank_mids._web3.method.MethodNoFormat": 19,
+    "a_sync.functools.cached_property_unsafe": 18,
+    "a_sync.a_sync._meta.ASyncMeta": 18,
+    "a_sync.a_sync.property.__pyx_scope_struct_1_get_loader": 18,
+    "y.networks.Network": 17,
+    "y.prices.gearbox.DieselPool": 17,
+    "y.datatypes.PriceResult": 17,
+    "y.datatypes.PriceStep": 17,
+    "a_sync.executor.PruningThreadPoolExecutor": 16,
+    "a_sync.a_sync._helpers.__pyx_scope_struct____pyx_f_6a_sync_6a_sync_8_helpers__asyncify_with_a_sync_executor": 15,
+    "a_sync.a_sync.function.__pyx_scope_struct_11___get__": 15,
+    "y.utils.logging.PriceLogger": 15,
+    "evmspec.data._main.Address": 14,
+    "dank_mids._web3.abi.Formatter": 13,
+    "y.prices.stable_swap.curve.Ids": 13,
+    "dank_mids._block.HashBlock": 9,
+    "a_sync.a_sync.property.ASyncPropertyDescriptor": 8,
+    "logging.StreamHandler": 7,
+    "a_sync.a_sync._meta.ASyncSingletonMeta": 7,
+    "y.prices.lending.compound.Comptroller": 7,
+    "y._db.decorators.result_count_wrap_log_result_count_result_count_deco_obj": 7,
+    "y._db.decorators.result_count_deco_log_result_count_env": 7,
+    "y._db.decorators.log_result_count_env": 7,
+    "a_sync.a_sync.method.ASyncBoundMethodSyncDefault": 7,
+    "y.prices.stable_swap.curve.Factory": 7,
+    "a_sync.a_sync.method.ASyncMethodDescriptorSyncDefault": 6,
+    "a_sync.executor.AsyncThreadPoolExecutor": 6,
+    "dank_mids.lock.AlertingRLock": 6,
+    "dank_mids.helpers._retry_mechanics.RetryBudget": 6,
+    "dank_mids.types.Request": 5,
+    "logging.Formatter": 5,
+    "logging.PercentStyle": 5,
+    "dank_mids.helpers._retry_mechanics.RetryAction": 5,
+    "dank_mids.helpers._session._HTTPStatusExtension": 5,
+    "a_sync.primitives.queue.ProcessingQueue": 5,
+    "y._db.utils.logs.LogCache": 5,
+    "dank_mids.helpers.future.DebuggableFuture": 4,
+    "dank_mids._web3.abi.map_to_typed_data": 4,
+    "y.prices.dex.balancer.v2.PoolSpecialization": 4,
+    "dank_mids._uid.UIDGenerator": 4,
+    "a_sync.asyncio.create_task.__pyx_scope_struct____await": 4,
+    "dank_mids._requests.RPCRequest": 3,
+    "logging.NullHandler": 3,
+    "a_sync.a_sync.property.__pyx_defaults": 3,
+    "evmspec.structs.trace.call.Type": 3,
+    "dank_mids.semaphores.EnvironmentVariable[BlockSemaphore]": 3,
+    "dank_mids.semaphores.BlockSemaphore": 3,
+    "y.prices.dex.uniswap.v2.UniswapRouterV2": 3,
+    "y.classes.common.ContractBase": 3,
+    "y.prices._quote.SharedCache": 3,
+    "y.prices.lending.aave.AaveMarketV2": 3,
+    "_pytest.logging.ColoredLevelFormatter": 2,
+    "_pytest.logging.LogCaptureHandler": 2,
+    "_pytest.logging.PercentStyleMultiline": 2,
+    "a_sync.async_property.proxy._ObjectProxyMetaType": 2,
+    "evmspec.data._enum.StringToIntEnumMeta": 2,
+    "evmspec.structs.receipt.Status": 2,
+    "evmspec.structs.trace.reward.Type": 2,
+    "a_sync.executor.EnvironmentVariable[AsyncProcessPoolExecutor]": 2,
+    "dank_mids.helpers._weaklist.WeakList": 2,
+    "a_sync.primitives.queue.SmartProcessingQueue": 2,
+    "y.prices.dex.balancer.v2.BalancerV2": 2,
+    "y.prices.dex.uniswap.v3.UniswapV3": 2,
+    "dank_mids.helpers._multicall.MulticallContract": 2,
+    "a_sync._smart.__pyx_scope_struct_3___pyx_f_6a_sync_6_smart__get_done_callbacks": 2,
+    "a_sync._smart.__pyx_scope_struct_1___await__": 2,
+    "y.prices.stable_swap.curve.Registry": 2,
+    "y.prices.stable_swap.curve.RegistryEvents": 2,
+    "a_sync.primitives.locks.counter.__pyx_scope_struct__wait_for": 1,
+    "a_sync.primitives.locks.event.__pyx_scope_struct_1__CythonEvent__wait": 1,
+    "logging._StderrHandler": 1,
+    "logging.RootLogger": 1,
+    "logging.Manager": 1,
+    "_pytest.logging.LoggingPlugin": 1,
+    "dank_mids._install_alias_guard.<locals>._DankModule": 1,
+    "a_sync.async_property.cached.AsyncCachedPropertyDescriptor": 1,
+    "a_sync.primitives.locks.semaphore.DummySemaphore": 1,
+    "a_sync.debugging.__pyx_defaults": 1,
+    "evmspec.structs.receipt._HexStringToIntEnumMeta": 1,
+    "dank_mids._mode.EnvironmentVariable[OperationMode]": 1,
+    "dank_mids.stats._StatsLogger": 1,
+    "dank_mids.stats._Collector": 1,
+    "dank_mids.stats._SentryExporter": 1,
+    "dank_mids.brownie_patch._BrowniePatchState": 1,
+    "dank_mids._demo_mode.DummyLogger": 1,
+    "dank_mids.helpers._retry_mechanics.RetryDecision": 1,
+    "dank_mids.helpers._requester.HTTPRequesterThread": 1,
+    "dank_mids.lock.Lock": 1,
+    "dank_mids.eth.DankEth": 1,
+    "y.networks.label_Network_obj": 1,
+    "y.networks.name_Network_obj": 1,
+    "y.networks.printable_Network_obj": 1,
+    "a_sync.a_sync.function.ASyncDecorator": 1,
+    "y._db.brownie.AsyncCursor": 1,
+    "y._db.decorators.__mypyc_lambda__0_obj": 1,
+    "y._db.decorators.__mypyc_lambda__1_obj": 1,
+    "y._db.decorators.__mypyc_lambda__2_obj": 1,
+    "a_sync.primitives.locks.semaphore.ThreadsafeSemaphore": 1,
+    "y.prices.chainlink.Chainlink": 1,
+    "y.prices.dex.balancer.v2.BalancerV2Vault": 1,
+    "y.prices.dex.balancer.v2.BalancerEvents": 1,
+    "y.prices.dex.balancer.balancer.BalancerMultiplexer": 1,
+    "y.prices.dex.genericamm.GenericAmm": 1,
+    "y.prices.dex.uniswap.uniswap.UniswapMultiplexer": 1,
+    "y.prices.dex.uniswap.v1.UniswapV1": 1,
+    "y.prices.eth_derivs.wsteth.wstEth": 1,
+    "y.prices.gearbox.Gearbox": 1,
+    "y.prices.lending.aave.AaveRegistry": 1,
+    "y.prices.lending.compound.Compound": 1,
+    "y.prices.stable_swap.curve.CurveRegistry": 1,
+    "y.prices.stable_swap.curve.AddressProviderEvents": 1,
+    "y.prices.synthetix.Synthetix": 1,
+    "dank_mids._vendor.aiolimiter.src.aiolimiter.leakybucket.AsyncLimiter": 1,
+    "dank_mids.helpers._session.DankClientSession": 1,
+    "dank_mids.controller.DankMiddlewareController": 1,
+    "_pytest.logging._FileHandler": 1,
+    "_pytest.logging._LiveLoggingNullHandler": 1,
+    "y.prices._routing.QuoteService": 1,
+    "y.prices.dex.balancer.v1.BalancerV1": 1,
+    "y.prices.lending.aave.AaveMarketV1": 1,
+    "y.prices.lending.aave.AaveMarketV3": 1,
+    "y.prices.dex.uniswap.v2.PoolsFromEvents": 1,
+    "a_sync.iter.ASyncIterator": 1,
+    "y.prices.stable_swap.stargate.StargateFactory": 1,
+    "y.prices.stable_swap.curve.AddressProvider": 1,
+    "y.prices.chainlink.FeedsFromEvents": 1,
+    "dank_mids.brownie_patch.types.DankOverloadedMethod": 1,
+    "pytest_asyncio_cooperative.plugin._TestResult": 1,
+    "dank_mids._requests.JSONRPCBatch": 1,
+    "dank_mids._requests._RequestEvent": 1
+  },
+  "tasks_by_coroutine": {
+    "None:done": 471689,
+    "has_methods:done": 170,
+    "_ASyncPropertyDescriptorBase.get:done": 112,
+    "AaveMarketBase.get_reserve_data:done": 89,
+    "has_method:done": 77,
+    "stuck_coro_debugger.<locals>.stuck_coro_wrap:pending": 67,
+    "AaveMarketV2.get_reserve_data:done": 65,
+    "SmartProcessingQueue._worker_coro:pending": 40,
+    "resolve_block_number:done": 35,
+    "test_wrapper:pending": 32,
+    "get_price:done": 19,
+    "DieselPool.contract:done": 17,
+    "Factory.read_pools:done": 16,
+    "get_price:pending": 15,
+    "AaveRegistry.is_atoken:done": 14,
+    "is_pie:done": 14,
+    "get_pool:done": 14,
+    "Synthetix.get_currency_key:done": 14,
+    "CurveRegistry.get_pool:done": 14,
+    "_decimals:done": 14,
+    "StargateFactory._pool_at:done": 13,
+    "_safe_check_bucket:done": 9,
+    "Registry:done": 6,
+    "Factory:done": 6,
+    "Filter.__fetch:pending": 5,
+    "_Loader.__load:done": 5,
+    "is_ib_token:done": 5,
+    "is_gelato_pool:done": 5,
+    "is_token_set:done": 5,
+    "is_eps_rewards_pool:done": 5,
+    "is_mstable_feeder_pool:done": 5,
+    "is_saddle_lp:done": 5,
+    "is_popsicle_lp:done": 5,
+    "is_stargate_lp:done": 5,
+    "is_curve_gauge:done": 5,
+    "is_erc4626_vault:done": 5,
+    "get_underlying_lp:done": 5,
+    "is_mooniswap_pool:done": 5,
+    "Compound.is_compound_market:done": 5,
+    "__await:pending": 4,
+    "ProcessingQueue._worker_coro:pending": 4,
+    "Filter.__insert_chunk:done": 4,
+    "HTTPRequesterThread.post.<locals>.request:done": 2,
+    "DankMiddlewareController.make_request:done": 2,
+    "Filter.__insert_chunk:pending": 1,
+    "DankMiddlewareController.make_request:pending": 1,
+    "run_tests:pending": 1,
+    "Gearbox.pools:done": 1,
+    "Gearbox.registry:done": 1,
+    "CurveRegistry._load_all:pending": 1,
+    "StargateFactory.pools:done": 1,
+    "Synthetix.get_address:done": 1
+  },
+  "historical_buffer_entries": {
+    "y.prices.chainlink.FeedsFromEvents._objects": 357,
+    "y.prices.stable_swap.curve.RegistryEvents._objects": 67,
+    "y.prices.stable_swap.curve.AddressProviderEvents._objects": 37,
+    "y.utils.events.Events._objects": 0,
+    "y.utils.events.Events._checkpoints": 0,
+    "y.prices.dex.balancer.v2.BalancerEvents._objects": 0,
+    "y.prices.dex.balancer.v2.BalancerEvents._checkpoints": 0,
+    "y.prices.stable_swap.curve.AddressProviderEvents._checkpoints": 0,
+    "y.prices.dex.uniswap.v2.PoolsFromEvents._objects": 0,
+    "y.prices.dex.uniswap.v2.PoolsFromEvents._checkpoints": 0,
+    "y.prices.chainlink.FeedsFromEvents._checkpoints": 0,
+    "y.prices.stable_swap.curve.RegistryEvents._checkpoints": 0
+  },
+  "queued_database_operations": {
+    "y._db.utils.price.set_price": 0,
+    "y._db.utils.token.set_bucket": 0,
+    "y._db.utils.contract.set_deploy_block": 0,
+    "y._db.decorators.ydb_write_threads": 0,
+    "y._db.utils.contract._deploy_block_write_executor": 0
+  },
+  "logging": {
+    "capture_handlers": 2,
+    "captured_records": 0,
+    "captured_characters": 0
+  },
+  "cached_property_state": {
+    "instances": 480296,
+    "cache_entries": 959558,
+    "locks_entries": 2,
+    "tasks_entries": 2,
+    "tasks_completed_tasks": 0,
+    "tasks_pending_tasks": 2
+  },
+  "pony_adapted_sql_cache": {
+    "entries": 6429,
+    "query_characters": 486688602,
+    "adapted_query_characters": 486688602
+  },
+  "python_current_bytes": 2005577340,
+  "python_peak_bytes": 2090943146,
+  "rss_peak_bytes": 7990968320,
+  "top_allocations": [
+    {
+      "traceback": "/work/y/_db/utils/bulk.py:101",
+      "bytes": 486952263,
+      "count": 6430
+    },
+    {
+      "traceback": "/work/y/prices/dex/uniswap/v2.py:164",
+      "bytes": 171310920,
+      "count": 2295290
+    },
+    {
+      "traceback": "/work/y/classes/singleton.py:126",
+      "bytes": 150338426,
+      "count": 1446510
+    },
+    {
+      "traceback": "/work/y/utils/events.py:87",
+      "bytes": 137462212,
+      "count": 1957602
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/asyncio/base_events.py:457",
+      "bytes": 135051828,
+      "count": 1426580
+    },
+    {
+      "traceback": "/work/y/prices/dex/uniswap/v2.py:160",
+      "bytes": 84848192,
+      "count": 964184
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:254",
+      "bytes": 72152064,
+      "count": 474601
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/_weakrefset.py:88",
+      "bytes": 54865968,
+      "count": 476044
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/evmspec/data/_main.py:336",
+      "bytes": 53892272,
+      "count": 515608
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/evmspec/data/_main.py:427",
+      "bytes": 51589515,
+      "count": 482145
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:259",
+      "bytes": 44571728,
+      "count": 474387
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/concurrent/futures/thread.py:59",
+      "bytes": 44303753,
+      "count": 478308
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:258",
+      "bytes": 41740600,
+      "count": 948618
+    },
+    {
+      "traceback": "/work/y/classes/singleton.py:114",
+      "bytes": 40024841,
+      "count": 482227
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:180",
+      "bytes": 38585416,
+      "count": 964630
+    },
+    {
+      "traceback": "/work/y/classes/singleton.py:118",
+      "bytes": 37895754,
+      "count": 192278
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/evmspec/data/_main.py:195",
+      "bytes": 32482040,
+      "count": 507532
+    },
+    {
+      "traceback": "/work/y/classes/common.py:87",
+      "bytes": 30893984,
+      "count": 482680
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/functools.py:480",
+      "bytes": 30347392,
+      "count": 474178
+    },
+    {
+      "traceback": "<frozen importlib._bootstrap_external>:757",
+      "bytes": 26622557,
+      "count": 243958
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:382",
+      "bytes": 23151744,
+      "count": 482300
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/cachebox/utils.py:412",
+      "bytes": 20984160,
+      "count": 137
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/ens/_normalization.py:152",
+      "bytes": 18414176,
+      "count": 313
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/json/decoder.py:354",
+      "bytes": 18249847,
+      "count": 497703
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/functools.py:446",
+      "bytes": 16833204,
+      "count": 474178
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/pony/orm/core.py:6357",
+      "bytes": 15469824,
+      "count": 483426
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/functools.py:445",
+      "bytes": 15186976,
+      "count": 474178
+    },
+    {
+      "traceback": "<frozen importlib._bootstrap>:488",
+      "bytes": 9955963,
+      "count": 71456
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/ens/_normalization.py:159",
+      "bytes": 8388608,
+      "count": 1
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/faster_eth_abi/codec.py:2805",
+      "bytes": 6236088,
+      "count": 51967
+    },
+    {
+      "traceback": "/work/y/prices/dex/uniswap/v2.py:631",
+      "bytes": 4167464,
+      "count": 4
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/ens/_normalization.py:148",
+      "bytes": 3678944,
+      "count": 1
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/dank_mids/semaphores.py:78",
+      "bytes": 3225448,
+      "count": 12913
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/eth_hash/backends/pycryptodome.py:37",
+      "bytes": 2972880,
+      "count": 24774
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:356",
+      "bytes": 2811632,
+      "count": 21319
+    },
+    {
+      "traceback": "/work/y/contracts.py:1111",
+      "bytes": 2117364,
+      "count": 34070
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/pony/orm/core.py:478",
+      "bytes": 1857165,
+      "count": 19270
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/dank_mids/eth.py:361",
+      "bytes": 1674635,
+      "count": 18820
+    },
+    {
+      "traceback": "<frozen abc>:106",
+      "bytes": 1607669,
+      "count": 5610
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/brownie/network/contract.py:720",
+      "bytes": 1291944,
+      "count": 62
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/faster_eth_abi/encoding.py:176",
+      "bytes": 1261015,
+      "count": 13001
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/pony/orm/core.py:1198",
+      "bytes": 1098512,
+      "count": 12941
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/pyunormalize/_unicode_data.py:7849",
+      "bytes": 1060632,
+      "count": 16756
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/dank_mids/brownie_patch/call.py:401",
+      "bytes": 990264,
+      "count": 12204
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/pyunormalize/_unicode_data.py:7130",
+      "bytes": 942744,
+      "count": 13072
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:295",
+      "bytes": 941285,
+      "count": 6174
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/enum.py:277",
+      "bytes": 756672,
+      "count": 4504
+    },
+    {
+      "traceback": "/work/y/contracts.py:982",
+      "bytes": 751881,
+      "count": 12503
+    },
+    {
+      "traceback": "/usr/local/lib/python3.12/ast.py:52",
+      "bytes": 731415,
+      "count": 7873
+    },
+    {
+      "traceback": "<frozen abc>:123",
+      "bytes": 708208,
+      "count": 7109
+    }
+  ]
+}

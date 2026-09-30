@@ -1,0 +1,33 @@
+"""Compare observed terminal cases without treating missing coverage as a pass."""
+import collections
+import hashlib
+import json
+from pathlib import Path
+
+base = Path('/private/tmp/yprice-memory')
+out = base / 'deadline-partial-observations'
+
+def load(name):
+    path = base / name
+    events = path / 'pytest-events.jsonl'
+    rows = [json.loads(line) for line in events.read_text().splitlines()]
+    terminal = [r for r in rows if r['phase'] == 'call' or (r['phase'] == 'setup' and r.get('outcome') in ('failed', 'skipped'))]
+    cases = {r['test']: r for r in terminal}
+    assert len(cases) == len(terminal)
+    run = json.loads((path / 'run.json').read_text())
+    identity = {k: run[k] for k in ('source_sha', 'source_archive_sha256', 'image', 'complete')}
+    identity['events_sha256'] = hashlib.sha256(events.read_bytes()).hexdigest()
+    identity['dependencies_sha256'] = hashlib.sha256((path / 'dependencies-after.txt').read_bytes()).hexdigest()
+    return cases, identity
+
+new, new_id = load('full-deadline-optimized')
+for baseline in ['original', 'preoptimization']:
+    old, old_id = load('full-deadline-' + baseline)
+    common = old.keys() & new.keys()
+    transitions = collections.Counter(old[k]['outcome'] + ' -> ' + new[k]['outcome'] for k in common)
+    changed = [{'test': k, 'before_phase': old[k]['phase'], 'after_phase': new[k]['phase'], 'before_outcome': old[k]['outcome'], 'after_outcome': new[k]['outcome'], 'before_error': old[k].get('error_message'), 'after_error': new[k].get('error_message')} for k in sorted(common) if old[k]['outcome'] != new[k]['outcome'] or old[k].get('error_message') != new[k].get('error_message') or old[k]['phase'] != new[k]['phase']]
+    assert old_id['image'] == new_id['image']
+    assert old_id['dependencies_sha256'] == new_id['dependencies_sha256']
+    report = {'complete_full_suite_comparison': False, 'scope': 'Only exact test IDs with terminal outcomes on both sides; no missing test becomes a pass. Cases can use dynamic historical samples even when their IDs match. This is an observation, not attribution of changes to code.', 'baseline': old_id, 'changed': new_id, 'common_observed_terminal_cases': len(common), 'before_only_observed_ids': sorted(old.keys() - new.keys()), 'after_only_observed_ids': sorted(new.keys() - old.keys()), 'transitions': dict(sorted(transitions.items())), 'changed_common_outcomes_or_errors': changed}
+    (out / (baseline + '.json')).write_text(json.dumps(report, indent=2) + '\n')
+print('Wrote both partial observations with source and dependency hashes.')

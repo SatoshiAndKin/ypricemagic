@@ -1,0 +1,197 @@
+{
+  "3.12": {
+    "application_tests": 278,
+    "owner_tests": 47,
+    "native_application_modules": 10,
+    "archive_passed": true,
+    "container_peak_bytes": 1166749696,
+    "command_elapsed_seconds": 174.9342337249982,
+    "run_including_build_seconds": 266.3250639438629,
+    "image": "sha256:5f67dfecf3085abd5cff6a15469e5bc36ea28fee0c557e05340cf7b181ac13bc",
+    "types": {
+      "before": 1839,
+      "after": 1836,
+      "added": [],
+      "removed": [
+        {
+          "file": "y/prices/dex/uniswap/v2.py",
+          "error": "Argument 1 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"UniswapV2Pool\"; expected \"Self\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v2.py",
+          "error": "Argument 2 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"type[UniswapV2Pool]\"; expected \"type[Self]\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v2.py",
+          "error": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        }
+      ],
+      "same_dependencies": true,
+      "legacy_parser_before": 1832,
+      "legacy_parser_after": 1829,
+      "all_reported_errors_parsed": true
+    },
+    "owner_mypy_errors": 300,
+    "runtime_contract": {
+      "passed": true,
+      "mypy_exit_code": 1
+    },
+    "source_pins": {
+      "cooperative": {
+        "url": "https://github.com/SatoshiAndKin/pytest-asyncio-cooperative",
+        "vcs_info": {
+          "commit_id": "17677c7145d24c36917036877681eb83225ccdb3",
+          "requested_revision": "17677c7145d24c36917036877681eb83225ccdb3",
+          "vcs": "git"
+        }
+      },
+      "ez_a_sync": {
+        "url": "https://github.com/SatoshiAndKin/ez-a-sync.git",
+        "vcs_info": {
+          "commit_id": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+          "requested_revision": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+          "vcs": "git"
+        }
+      },
+      "native_modules": {
+        "a_sync.a_sync.property": "/usr/local/lib/python3.12/site-packages/a_sync/a_sync/property.cpython-312-aarch64-linux-gnu.so",
+        "a_sync.async_property.cached": "/usr/local/lib/python3.12/site-packages/a_sync/async_property/cached.cpython-312-aarch64-linux-gnu.so",
+        "a_sync._smart": "/usr/local/lib/python3.12/site-packages/a_sync/_smart.cpython-312-aarch64-linux-gnu.so"
+      },
+      "cooperative_plugin_sha256": "3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7"
+    }
+  },
+  "3.11": {
+    "application_tests": 278,
+    "owner_tests": 47,
+    "native_application_modules": 10,
+    "archive_passed": true,
+    "container_peak_bytes": 1158004736,
+    "command_elapsed_seconds": 182.00884704799682,
+    "run_including_build_seconds": 278.81380009651184,
+    "image": "sha256:b0fe61590ed3fb62cee197720f6754fecdfccac18a6c18b91682554a8c55a841",
+    "types": {
+      "before": 1839,
+      "after": 1836,
+      "added": [],
+      "removed": [
+        {
+          "file": "y/prices/dex/uniswap/v2.py",
+          "error": "Argument 1 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"UniswapV2Pool\"; expected \"Self\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v2.py",
+          "error": "Argument 2 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"type[UniswapV2Pool]\"; expected \"type[Self]\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v2.py",
+          "error": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        }
+      ],
+      "same_dependencies": true,
+      "legacy_parser_before": 1832,
+      "legacy_parser_after": 1829,
+      "all_reported_errors_parsed": true
+    },
+    "owner_mypy_errors": 304,
+    "runtime_contract": {
+      "passed": true,
+      "mypy_exit_code": 1
+    },
+    "source_pins": {
+      "cooperative": {
+        "url": "https://github.com/SatoshiAndKin/pytest-asyncio-cooperative",
+        "vcs_info": {
+          "commit_id": "17677c7145d24c36917036877681eb83225ccdb3",
+          "requested_revision": "17677c7145d24c36917036877681eb83225ccdb3",
+          "vcs": "git"
+        }
+      },
+      "ez_a_sync": {
+        "url": "https://github.com/SatoshiAndKin/ez-a-sync.git",
+        "vcs_info": {
+          "commit_id": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+          "requested_revision": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+          "vcs": "git"
+        }
+      },
+      "native_modules": {
+        "a_sync.a_sync.property": "/usr/local/lib/python3.11/site-packages/a_sync/a_sync/property.cpython-311-aarch64-linux-gnu.so",
+        "a_sync.async_property.cached": "/usr/local/lib/python3.11/site-packages/a_sync/async_property/cached.cpython-311-aarch64-linux-gnu.so",
+        "a_sync._smart": "/usr/local/lib/python3.11/site-packages/a_sync/_smart.cpython-311-aarch64-linux-gnu.so"
+      },
+      "cooperative_plugin_sha256": "3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7"
+    }
+  },
+  "3.13": {
+    "application_tests": 278,
+    "owner_tests": 47,
+    "native_application_modules": 10,
+    "archive_passed": true,
+    "container_peak_bytes": 1197735936,
+    "command_elapsed_seconds": 175.06732674399973,
+    "run_including_build_seconds": 264.5683250427246,
+    "image": "sha256:0dc9708f82244609b4a08f1dc90e73390c64a789c8980cfec6584a96821c021f",
+    "types": {
+      "before": 1839,
+      "after": 1836,
+      "added": [],
+      "removed": [
+        {
+          "file": "y/prices/dex/uniswap/v2.py",
+          "error": "Argument 1 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"UniswapV2Pool\"; expected \"Self\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v2.py",
+          "error": "Argument 2 to \"__get__\" of \"HiddenMethodDescriptor\" has incompatible type \"type[UniswapV2Pool]\"; expected \"type[Self]\" [arg-type]",
+          "count": 1
+        },
+        {
+          "file": "y/prices/dex/uniswap/v2.py",
+          "error": "Function is missing a type annotation [no-untyped-def]",
+          "count": 1
+        }
+      ],
+      "same_dependencies": true,
+      "legacy_parser_before": 1832,
+      "legacy_parser_after": 1829,
+      "all_reported_errors_parsed": true
+    },
+    "owner_mypy_errors": 300,
+    "runtime_contract": {
+      "passed": true,
+      "mypy_exit_code": 1
+    },
+    "source_pins": {
+      "cooperative": {
+        "url": "https://github.com/SatoshiAndKin/pytest-asyncio-cooperative",
+        "vcs_info": {
+          "commit_id": "17677c7145d24c36917036877681eb83225ccdb3",
+          "requested_revision": "17677c7145d24c36917036877681eb83225ccdb3",
+          "vcs": "git"
+        }
+      },
+      "ez_a_sync": {
+        "url": "https://github.com/SatoshiAndKin/ez-a-sync.git",
+        "vcs_info": {
+          "commit_id": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+          "requested_revision": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+          "vcs": "git"
+        }
+      },
+      "native_modules": {
+        "a_sync.a_sync.property": "/usr/local/lib/python3.13/site-packages/a_sync/a_sync/property.cpython-313-aarch64-linux-gnu.so",
+        "a_sync.async_property.cached": "/usr/local/lib/python3.13/site-packages/a_sync/async_property/cached.cpython-313-aarch64-linux-gnu.so",
+        "a_sync._smart": "/usr/local/lib/python3.13/site-packages/a_sync/_smart.cpython-313-aarch64-linux-gnu.so"
+      },
+      "cooperative_plugin_sha256": "3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "base": "sha256:b3d211f81c8e17526bcc27eb32961e8515d99ebd6478ce75c49ef3c1850bd8c9",
+  "image": "sha256:5a7b0df3d3255bfb910604ff75ee0bfb6594c056ab27fe7233123517167ffb33",
+  "dank_revision": "1f76d99a9e727de7a6ed795f1cad9dbeb3db6cfa",
+  "context": "colima-rpc-tune",
+  "elapsed_seconds": 22.69490694999695
+}

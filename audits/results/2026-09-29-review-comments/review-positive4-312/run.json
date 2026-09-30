@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m mypy > /reports/mypy.txt 2>&1 && python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python tools/validation/focused.py && cp /reports/pytest-summary.json /reports/focused-summary.json && cp /reports/pytest-events.jsonl /reports/focused-events.jsonl && python -c 'import pytest,tomllib; from pathlib import Path; raise SystemExit(pytest.main(tomllib.loads(Path(\"pyproject.toml\").read_text())[\"tool\"][\"validation\"][\"review_quote_tests\"]))'"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1790738390.475104,
+  "source_sha": "c27864f0b886eb3f8775eee6aa5d47f3e1b1d9ec",
+  "source_revision": "worktree",
+  "source_archive_sha256": "4b5f10144b2814e1856cc9c298bd1db5c4b41d030df18794b01b362a7b64d770",
+  "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 1215.648559808731
+}

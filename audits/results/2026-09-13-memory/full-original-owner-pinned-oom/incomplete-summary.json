@@ -1,0 +1,18 @@
+{
+  "complete": false,
+  "reason": "Container reached its unchanged 8 GiB limit; no final pytest summary",
+  "source_sha": "476af288a520a30052668a8b3ad7e3e682cd101f",
+  "image": "sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b",
+  "counts": {
+    "sessionstart:None": 1,
+    "collection:None": 1,
+    "setup:passed": 435,
+    "call:skipped": 9,
+    "teardown:passed": 438,
+    "call:passed": 310,
+    "call:failed": 116,
+    "setup:failed": 3
+  },
+  "last_test": "tests/prices/test_magic.py::test_get_prices[13994236]",
+  "last_reported_live_tasks": 134679
+}

@@ -1,0 +1,32 @@
+{
+  "complete": true,
+  "rows": [
+    {
+      "mutation": "chainlink",
+      "exit_code": 1,
+      "summary": {
+        "exit_code": 1,
+        "counts": {
+          "setup:passed": 308,
+          "call:failed": 162,
+          "teardown:passed": 308,
+          "call:passed": 146
+        },
+        "collected": 308
+      }
+    },
+    {
+      "mutation": "v3",
+      "exit_code": 1,
+      "summary": {
+        "exit_code": 1,
+        "counts": {
+          "setup:passed": 84,
+          "call:failed": 84,
+          "teardown:passed": 84
+        },
+        "collected": 84
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; export VALIDATION_WAITS=1; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; python -m mypy > /reports/mypy.txt 2>&1 || true; python tools/validation/focused.py"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1790466658.38351,
+  "source_sha": "5936a4969bb0ed4e70cf057cce97c758f409db4c",
+  "source_revision": "5936a4969bb0ed4e70cf057cce97c758f409db4c",
+  "source_archive_sha256": "efe6bf996d0e0bb62a42c07ab2c0ad291c801c28040b2befb05725a48d4251d2",
+  "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 287.86748695373535
+}

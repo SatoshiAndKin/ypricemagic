@@ -1,0 +1,7 @@
+{
+  "requirements": [
+    "psycopg2-binary==2.9.10"
+  ],
+  "matches_both_installed_dependency_records": true,
+  "change": "Move the tested inline driver pin to a dedicated lockfile; same version and no-deps installation. No runtime code changes after the final matrix."
+}

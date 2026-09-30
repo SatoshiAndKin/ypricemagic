@@ -1,0 +1,12 @@
+{
+  "complete": false,
+  "purpose": "Build matched native cachebox cores for an owning Python cache-state repair",
+  "started_unix": 1789374862.0803509,
+  "cachebox_source": {
+    "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+    "source_revision": "9f775132786c267aa99849a5778e6e975adbfda6",
+    "source_archive_sha256": "7b0c04c5b67e78a6470fab0ec319b7919405863f1f34fd948da68056ccaf7db2"
+  },
+  "error": "Dependency build failed (1); see /private/tmp/yprice-memory/cache-owner-build-before/build.log",
+  "elapsed_seconds": 12.142444133758545
+}

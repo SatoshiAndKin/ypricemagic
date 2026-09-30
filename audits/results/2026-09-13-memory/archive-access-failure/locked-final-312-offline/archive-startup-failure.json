@@ -1,0 +1,13 @@
+{
+  "complete": false,
+  "cause": "Two archive probes timed out; the focused test process remains in eth_retry while importing Multicall and has not started collection",
+  "failed_probe": {
+    "complete": false,
+    "stage": "historical_call",
+    "number": 16830000,
+    "blocks": [],
+    "block_hash": "0x6e65cf41a9208837f764d22dd0358f7d67f57cd71ec5ee975d98674e292322bd",
+    "error_type": "TimeoutError"
+  },
+  "action": "Preserve the failed startup as incomplete and stop its owned supervisor; continue checks that do not need archive state"
+}

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; python /runner/probe.py; python -m pip install --no-deps --no-build-isolation -e .; python /runner/check_compiled.py; python -c 'import tomllib, pathlib, pytest; raise SystemExit(pytest.main(tomllib.loads(pathlib.Path(\"pyproject.toml\").read_text())[\"tool\"][\"validation\"][\"v3_inventory_tests\"]))' "
+  ],
+  "docker_context": "colima-rpc-tune",
+  "builder": "ypricemagic-validation-4168ea425aa6",
+  "complete": true,
+  "started_unix": 1790494735.2257862,
+  "source_sha": "2d7784408172c9a7742493a490c3c54311832c94",
+  "source_revision": "worktree",
+  "source_archive_sha256": "707dffa857e3c6b5fc3801e90bd1e963d45fdf4fd816ade3c48fb36f0abeb37a",
+  "image": "sha256:4e638397b0f7820ee48560e2b2199d06d519ba410890c207b9409d5d1978eed6",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 120.41607284545898
+}

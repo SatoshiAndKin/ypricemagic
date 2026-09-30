@@ -1,0 +1,17 @@
+{
+  "complete": false,
+  "collected": 1838,
+  "counts": {
+    "sessionstart:": 1,
+    "collection:": 1,
+    "setup:passed": 410,
+    "call:skipped": 8,
+    "teardown:passed": 409,
+    "call:passed": 281,
+    "call:failed": 121
+  },
+  "terminal_outcomes": 410,
+  "last_test": "tests/prices/test_convex.py::test_convex_returns_price_result",
+  "last_live_tasks": 7259,
+  "failure": "OSError: [Errno 24] Too many open files; pytest could not render a result or write the final report"
+}

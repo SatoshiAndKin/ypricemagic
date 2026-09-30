@@ -1,0 +1,38 @@
+{
+  "complete": true,
+  "owner_commit": "000e4f24466ddc01abc6bb1a12cc429cbeea5813",
+  "samples": 3,
+  "forced_gc": false,
+  "functions": 1000,
+  "captured_bytes_each": 65536,
+  "workloads": {
+    "before": {
+      "median_rss_peak_bytes": 98758656,
+      "median_elapsed_seconds": 0.02086343500559451,
+      "retained_functions": [
+        1000,
+        1000,
+        1000
+      ],
+      "python_current_bytes": 65982172
+    },
+    "after": {
+      "median_rss_peak_bytes": 32768000,
+      "median_elapsed_seconds": 0.0012336319996393286,
+      "retained_functions": [
+        0,
+        0,
+        0
+      ],
+      "python_current_bytes": 89600
+    }
+  },
+  "dependency_changes": {
+    "before_only": [
+      "ez_a_sync==0.34.2"
+    ],
+    "after_only": [
+      "ez_a_sync @ file:///opt/validation/rebuilt-async/ez_a_sync-0.34.3.dev0-cp312-cp312-linux_aarch64.whl#sha256=e87ea261978b5377e4ade5b6310dc3f878bb7f41da258480b062654e07c5c9df"
+    ]
+  }
+}

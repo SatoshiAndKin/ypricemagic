@@ -1,0 +1,34 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=/runner",
+    "python",
+    "-P",
+    "-c",
+    "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 30.372515937007847,
+  "peak_sampled_process_rss_bytes": 196005888,
+  "cgroup_before": {
+    "memory.current": "8978432",
+    "memory.peak": "8978432",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "224317440",
+    "memory.peak": "392400896",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

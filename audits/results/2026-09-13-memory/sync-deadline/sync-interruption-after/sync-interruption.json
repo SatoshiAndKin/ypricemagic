@@ -1,0 +1,15 @@
+{
+  "same_exception": true,
+  "events_after_interruption": [
+    "entered",
+    "released"
+  ],
+  "pending_request_tasks": 0,
+  "native_helper": "/usr/local/lib/python3.12/site-packages/a_sync/a_sync/_helpers.cpython-312-aarch64-linux-gnu.so",
+  "events_after_diagnostic_cleanup": [
+    "entered",
+    "released"
+  ],
+  "complete": true,
+  "ownership_passed": true
+}

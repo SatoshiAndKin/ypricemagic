@@ -1,0 +1,36 @@
+{
+  "observation": {
+    "phase": "call",
+    "elapsed_seconds": 1712.095571642003,
+    "rss_peak_bytes": 2537611264,
+    "live_tasks": 785,
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x1f9840a85d5aF5bf1D1762F925BDADdC4201F9841]",
+    "outcome": "failed",
+    "duration": 442.8568477630615,
+    "error": "token = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'\n\n    @pytest.mark.parametrize(\"token\", V2_TOKENS)\n    @pytest.mark.asyncio_cooperative\n    async def test_uniswap_v3(token):\n        \"\"\"Test Uniswap V3 price fetching.\n    \n        This test concurrently retrieves pricing data using the Uniswap V3 router and the generic\n        :func:`~y.prices.magic.get_price` function. It ensures that the price returned by the Uniswap V3 router\n        is within a 5% relative tolerance of the price obtained from the magic fetch.\n    \n        Args:\n            token: The token address to query.\n    \n        See Also:\n            :meth:`~y.prices.dex.uniswap.v3.uniswap_v3.get_price`\n        \"\"\"\n>       price, alt_price = await cgather(\n            v3.uniswap_v3.get_price(token, skip_cache=True, sync=False),\n            magic.get_price(token, skip_cache=True, sync=False),\n        )\n\ntests/prices/dex/test_uniswap.py:137: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/dex/uniswap/v3.py:513: in get_price\n    return await liquidity_price(\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/_routing.py:550: in liquidity_price\n    return await quote_service().price(\ny/prices/_routing.py:514: in price\n    result = await self.result_cache.get(key, calculate, skip_cache=skip_cache)\ny/prices/_quote.py:86: in get\n    return await factory()\ny/prices/_routing.py:475: in calculate\n    estimate = await self.estimate(\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/_routing.py:146: in estimate\n    direct = await self.route(\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/_routing.py:294: in route\n    markets = await self.markets(node.asset.token, block, skip_cache)\ny/prices/_routing.py:74: in markets\n    return await self.market_cache.get(\ny/prices/_quote.py:96: in get\n    result = await asyncio.shield(flight.task)\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/_markets.py:196: in discover\n    markets.extend(m for m in await bounded_map(lambda p: safely(v3_snapshot, p), pools) if m)\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/_quote.py:55: in bounded_map\n    await asyncio.gather(*tasks)\ny/prices/_quote.py:51: in worker\n    results[index] = await function(value)\ny/prices/_markets.py:121: in safely\n    return await function(value)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\npool = <UniswapV3Pool '0xcDe43d1D030a401Cf61A45b21b7Ad2d62b8902E7'>\n\n    async def v3_snapshot(pool: Any) -> Market | None:\n        if not await deployed(address(pool), block):\n            return None\n        tokens = (address(pool.token0), address(pool.token1))\n        balances = tuple(\n            [\n>               int(await state(t, \"balanceOf(address)(uint256)\", block, address(pool)))\n                for t in tokens\n            ]\n        )\nE       TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'\n\ny/prices/_markets.py:179: TypeError",
+    "error_message": "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'",
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 0,
+        "flights": 22
+      },
+      "result_cache": {
+        "values": 0,
+        "flights": 16
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 256
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 263987,
+      "multicall_uid": 13121,
+      "request_uid": 38499,
+      "jsonrpc_batch_uid": 14180
+    }
+  },
+  "discovery_source_identical_to_pre_fix": true,
+  "baseline_commit": "0b553dfa819e418df7cbd85b77464eb26d748bd4",
+  "limitation": "The prior matching live test timed out. Identical source is not proof of full-suite outcome equivalence."
+}

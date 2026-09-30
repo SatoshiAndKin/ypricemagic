@@ -1,0 +1,55 @@
+{
+  "negative_run": "fixture-before-retry-312",
+  "positive_run": "fixture-focused-retry-312",
+  "source_archives": {
+    "fixture-before-retry-312": "9c9fe73b1902bbfd6a07e1044e410ffc1b1918456c310b2f3c9a795879152c1f",
+    "fixture-focused-retry-312": "e915e708366546eb04e4b8b81f210b3102b3031d553b8bf1e4cdd343cccbff14",
+    "fixture-live-retry-312": "2d9ceec58ea71c2847886f7e484faaeda0d12662464d8d8f439d1f264ad7ae27"
+  },
+  "assertions_match": true,
+  "all_12_control_ids_pass_after": true,
+  "regressions": [
+    {
+      "test": "tests/test_misc_fixes.py::test_latest_feed_validation_handles_legacy_and_removed_aggregators[legacy_revert]",
+      "before": "failed",
+      "after": "passed",
+      "before_error": "web3.exceptions.ContractLogicError: execution reverted"
+    },
+    {
+      "test": "tests/test_misc_fixes.py::test_latest_feed_validation_handles_legacy_and_removed_aggregators[legacy_fresh]",
+      "before": "failed",
+      "after": "passed",
+      "before_error": "web3.exceptions.ContractLogicError: execution reverted"
+    }
+  ],
+  "live_repairs": [
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b]",
+      "full_snapshot_outcome": "failed",
+      "repaired_live_outcome": "skipped"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x1776e1F26f98b1A5dF9cD347953a26dd3Cb46671]",
+      "full_snapshot_outcome": "failed",
+      "repaired_live_outcome": "skipped"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x408e41876cCCDC0F92210600ef50372656052a38]",
+      "full_snapshot_outcome": "failed",
+      "repaired_live_outcome": "skipped"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0x00000000000000000000000000000000000003Da]",
+      "full_snapshot_outcome": "failed",
+      "repaired_live_outcome": "skipped"
+    },
+    {
+      "test": "tests/prices/test_chainlink.py::test_chainlink_latest[0xe1aFe1Fd76Fd88f78cBf599ea1846231B8bA3B6B]",
+      "full_snapshot_outcome": "failed",
+      "repaired_live_outcome": "skipped"
+    }
+  ],
+  "skip_reason_recorded_by_reporter": false,
+  "fixture_skip_condition": "The fixture explicitly skips when latest_timestamp is over 24 hours older than the resolved block timestamp. Controlled regressions verify that branch.",
+  "limit": "Live head blocks differ; controlled assertions separately prove fresh unpriced feeds and unexpected errors still fail."
+}

@@ -1,0 +1,225 @@
+{
+  "comparison": "CI versus frozen Linux Docker environment, not a source regression baseline",
+  "normalization": "OS path separators and embedded line references",
+  "jobs": [
+    {
+      "job": 108512340072,
+      "docker_count": 1804,
+      "ci_count": 1807,
+      "added": [
+        {
+          "file": "y/_db/exceptions.py",
+          "message": "Cannot find implementation or library stub for module named \"click\" [import-not-found]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/exceptions.py",
+          "message": "Returning Any from function declared to return \"bool\" [no-any-return]",
+          "count": 1
+        },
+        {
+          "file": "tests/fixtures.py",
+          "message": "Cannot find implementation or library stub for module named \"numpy\" [import-not-found]",
+          "count": 1
+        }
+      ],
+      "removed": []
+    },
+    {
+      "job": 108512340055,
+      "docker_count": 1804,
+      "ci_count": 1838,
+      "added": [
+        {
+          "file": "tools/validation/container.py",
+          "message": "Module has no attribute \"killpg\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/profile_state.py",
+          "message": "Module has no attribute \"getrusage\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/profile_state.py",
+          "message": "Module has no attribute \"RUSAGE_SELF\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/cache_profile.py",
+          "message": "Module has no attribute \"getrusage\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/cache_profile.py",
+          "message": "Module has no attribute \"RUSAGE_SELF\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/scaling_profile.py",
+          "message": "Module has no attribute \"getrusage\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/scaling_profile.py",
+          "message": "Module has no attribute \"RUSAGE_SELF\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/price_waits.py",
+          "message": "Module has no attribute \"SIGALRM\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/price_waits.py",
+          "message": "Module has no attribute \"alarm\" [attr-defined]",
+          "count": 2
+        },
+        {
+          "file": "tools/validation/native_reviewed.py",
+          "message": "Module has no attribute \"register\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/native_reviewed.py",
+          "message": "Module has no attribute \"SIGUSR1\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/native.py",
+          "message": "Module has no attribute \"register\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/native.py",
+          "message": "Module has no attribute \"SIGUSR1\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/logger_profile.py",
+          "message": "Module has no attribute \"getrusage\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/logger_profile.py",
+          "message": "Module has no attribute \"RUSAGE_SELF\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tests/fixtures.py",
+          "message": "Cannot find implementation or library stub for module named \"numpy\" [import-not-found]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/pytest_report.py",
+          "message": "Module has no attribute \"register\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/pytest_report.py",
+          "message": "Module has no attribute \"SIGUSR1\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/pytest_report.py",
+          "message": "Module has no attribute \"getrusage\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/pytest_report.py",
+          "message": "Module has no attribute \"RUSAGE_SELF\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/storage_profile.py",
+          "message": "Module has no attribute \"getrusage\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/storage_profile.py",
+          "message": "Module has no attribute \"RUSAGE_SELF\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/compound_profile.py",
+          "message": "Module has no attribute \"register\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/compound_profile.py",
+          "message": "Module has no attribute \"SIGUSR1\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/pricing_profile.py",
+          "message": "Module has no attribute \"getrusage\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/pricing_profile.py",
+          "message": "Module has no attribute \"RUSAGE_SELF\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/pricing_profile.py",
+          "message": "Module has no attribute \"register\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/pricing_profile.py",
+          "message": "Module has no attribute \"SIGUSR1\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/pool_discovery_profile.py",
+          "message": "Module has no attribute \"sysconf\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/pool_discovery_profile.py",
+          "message": "Module has no attribute \"getrusage\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/pool_discovery_profile.py",
+          "message": "Module has no attribute \"RUSAGE_SELF\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/event_profile.py",
+          "message": "Module has no attribute \"getrusage\" [attr-defined]",
+          "count": 1
+        },
+        {
+          "file": "tools/validation/event_profile.py",
+          "message": "Module has no attribute \"RUSAGE_SELF\" [attr-defined]",
+          "count": 1
+        }
+      ],
+      "removed": []
+    },
+    {
+      "job": 108512340086,
+      "docker_count": 1804,
+      "ci_count": 1807,
+      "added": [
+        {
+          "file": "y/_db/exceptions.py",
+          "message": "Cannot find implementation or library stub for module named \"click\" [import-not-found]",
+          "count": 1
+        },
+        {
+          "file": "y/_db/exceptions.py",
+          "message": "Returning Any from function declared to return \"bool\" [no-any-return]",
+          "count": 1
+        },
+        {
+          "file": "tests/fixtures.py",
+          "message": "Cannot find implementation or library stub for module named \"numpy\" [import-not-found]",
+          "count": 1
+        }
+      ],
+      "removed": []
+    }
+  ]
+}

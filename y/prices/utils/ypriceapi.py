@@ -1,22 +1,21 @@
 # sourcery skip: merge-assign-and-aug-assign
-import asyncio
 import logging
 import os
+from http import HTTPStatus
 from json import JSONDecodeError
 from random import randint
 from time import time
-from typing import Any, Final, final
+from typing import Any, Final, cast, final
 
-import dank_mids
 import cachebox
+import dank_mids
 from aiohttp import ClientResponse, ClientSession, ClientTimeout, TCPConnector
 from aiohttp.client_exceptions import ClientConnectorSSLError, ClientError, ContentTypeError
-from dank_mids.helpers._session import HTTPStatusExtended
+from dank_mids.brownie_patch import dank_eth
 
 from y import ENVIRONMENT_VARIABLES as ENVS
-from y.classes.common import UsdPrice
 from y.constants import CHAINID, NETWORK_NAME
-from y.datatypes import Address, Block
+from y.datatypes import Address, Block, UsdPrice
 
 logger: Final = logging.getLogger(__name__)
 
@@ -52,12 +51,12 @@ class BadResponse(Exception):
     """Exception raised for bad responses from ypriceAPI."""
 
 
-should_use: Final = not ENVS.SKIP_YPRICEAPI
-notified: Final[set[HTTPStatusExtended]] = set()
-resume_at = 0
+should_use = not ENVS.SKIP_YPRICEAPI
+notified: Final[set[int]] = set()
+resume_at = 0.0
 
 # NOTE: if you want to bypass ypriceapi for specific tokens, have your program add the addresses to this set.
-skip_tokens: Final = set()
+skip_tokens: Final[set[Address]] = set()
 skip_ypriceapi: Final = skip_tokens  # alias for backward compatability
 
 #########################
@@ -116,7 +115,7 @@ async def get_session() -> ClientSession:
     return ClientSession(
         os.environ.get("YPRICEAPI_URL", "https://ypriceapi-beta.yearn.finance"),
         connector=TCPConnector(verify_ssl=False),
-        headers=AUTH_HEADERS,
+        headers=cast(dict[str, str], AUTH_HEADERS),
         timeout=YPRICEAPI_TIMEOUT,
     )
 
@@ -198,7 +197,7 @@ async def get_price(token: Address, block: Block | None) -> UsdPrice | None:
         return None
 
     if block is None:
-        block = await dank_mids.eth.block_number
+        block = await dank_eth.block_number
 
     async with YPRICEAPI_SEMAPHORE[block]:
         try:
@@ -209,7 +208,7 @@ async def get_price(token: Address, block: Block | None) -> UsdPrice | None:
                         return None
                     session = await get_session()
                     async with session.get(
-                        f"/get_price/{CHAINID}/{token}?block={block}"
+                        f"/get_price/{CHAINID}/{str(token)}?block={block}"
                     ) as response:
                         return (
                             UsdPrice(price)
@@ -224,14 +223,16 @@ async def get_price(token: Address, block: Block | None) -> UsdPrice | None:
                     ):
                         raise
                     tries += 1
-        except asyncio.TimeoutError:
-            logger.warning(f"ypriceAPI timed out for {token} at {block}.{FALLBACK_STR}")
+        except TimeoutError:
+            logger.warning(f"ypriceAPI timed out for {str(token)} at {block}.{FALLBACK_STR}")
         except ContentTypeError:
             raise
         except ClientError as e:
             logger.warning(
-                f"ypriceAPI {e.__class__.__name__} for {token} at {block}.{FALLBACK_STR}"
+                f"ypriceAPI {e.__class__.__name__} for {str(token)} at {block}.{FALLBACK_STR}"
             )
+
+    return None
 
 
 async def read_response(
@@ -257,7 +258,7 @@ async def read_response(
         >>> data = await read_response(response)
     """
     # 200
-    if response.status == HTTPStatusExtended.OK:
+    if response.status == HTTPStatus.OK:
         try:
             return await response.json()
         except ContentTypeError as e:
@@ -269,23 +270,23 @@ async def read_response(
             )
 
     # 401
-    elif response.status == HTTPStatusExtended.UNAUTHORIZED:
-        if HTTPStatusExtended.UNAUTHORIZED not in notified:
+    elif response.status == HTTPStatus.UNAUTHORIZED:
+        if HTTPStatus.UNAUTHORIZED not in notified:
             logger.error(
                 f"Your provided ypriceAPI credentials are not authorized for use.{FALLBACK_STR}"
             )
-            notified.add(HTTPStatusExtended.UNAUTHORIZED)
+            notified.add(HTTPStatus.UNAUTHORIZED)
 
     # 404
-    elif response.status == HTTPStatusExtended.NOT_FOUND and token and block:
+    elif response.status == HTTPStatus.NOT_FOUND and token and block:
         logger.debug("Failed to get price from API: %s at %s", token, block)
 
     # Server Errors
 
     # 502 & 503
     elif response.status in {
-        HTTPStatusExtended.BAD_GATEWAY,
-        HTTPStatusExtended.SERVICE_UNAVAILABLE,
+        HTTPStatus.BAD_GATEWAY,
+        HTTPStatus.SERVICE_UNAVAILABLE,
     }:
         logger.warning("ypriceAPI returned status code %s", _get_err_reason(response))
         try:
@@ -301,7 +302,7 @@ async def read_response(
                 exc_info=True,
             )
             msg = ""
-                
+
         if msg:
             logger.warning(msg)
         _set_resume_at(_get_retry_header(response))
@@ -309,8 +310,10 @@ async def read_response(
     else:
         msg = f"ypriceAPI returned status code {_get_err_reason(response)}"
         if token and block:
-            msg += f" for {token} at {block}.{FALLBACK_STR}"
+            msg += f" for {str(token)} at {block}.{FALLBACK_STR}"
         logger.warning(msg)
+
+    return None
 
 
 def _get_err_reason(response: ClientResponse) -> str:

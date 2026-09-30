@@ -1,0 +1,190 @@
+{
+  "baseline_errors": 1788,
+  "candidate_errors": 1800,
+  "added": [
+    {
+      "file": "tests/prices/lending/test_compound.py",
+      "message": "Non-overlapping equality check (left operand type: \"Coroutine[Any, Any, int]\", right operand type: \"Literal[0]\") [comparison-overlap]",
+      "count": 1
+    },
+    {
+      "file": "tests/prices/test_magic.py",
+      "message": "Call to untyped function \"get_price\" in typed context [no-untyped-call]",
+      "count": 1
+    },
+    {
+      "file": "tests/test_historical_price_repairs.py",
+      "message": "Argument 2 to \"yPriceMagicError\" has incompatible type \"str\"; expected \"ChecksumAddress\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "tests/test_historical_price_repairs.py",
+      "message": "Argument 3 to \"yPriceMagicError\" has incompatible type \"int\"; expected \"BlockNumber | None\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "tests/test_historical_price_repairs.py",
+      "message": "Incompatible types in assignment (expression has type \"None\", variable has type \"tuple[str, str]\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "tests/test_historical_price_repairs.py",
+      "message": "Invalid index type \"int\" for \"dict\"; expected type \"str\" [index]",
+      "count": 1
+    },
+    {
+      "file": "tests/test_historical_price_repairs.py",
+      "message": "Module \"eth_abi\" does not explicitly export attribute \"encode\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "tests/test_historical_price_repairs.py",
+      "message": "Module \"y.prices._routing\" does not explicitly export attribute \"BlockRef\" [attr-defined]",
+      "count": 2
+    },
+    {
+      "file": "tests/test_historical_price_repairs.py",
+      "message": "No overload variant of \"__setitem__\" of \"list\" matches argument types \"int\", \"str\" [call-overload]",
+      "count": 1
+    },
+    {
+      "file": "tests/test_historical_price_repairs.py",
+      "message": "No overload variant of \"get_price\" matches argument types \"str\", \"int\", \"bool\", \"bool\" [call-overload]",
+      "count": 1
+    },
+    {
+      "file": "tests/test_historical_price_repairs.py",
+      "message": "No overload variant of \"get_price\" matches argument types \"str\", \"int\", \"bool\", \"bool\", \"bool\" [call-overload]",
+      "count": 3
+    },
+    {
+      "file": "tests/test_historical_price_repairs.py",
+      "message": "No overload variant of \"get_price\" matches argument types \"str\", \"int\", \"int\", \"bool\", \"bool\" [call-overload]",
+      "count": 1
+    },
+    {
+      "file": "tests/test_historical_price_repairs.py",
+      "message": "No overload variant of \"get_price\" matches argument types \"str\", \"int\", \"int\", \"bool\", \"bool\", \"bool\" [call-overload]",
+      "count": 1
+    },
+    {
+      "file": "tools/validation/native_historical.py",
+      "message": "Incompatible types in assignment (expression has type \"float\", variable has type \"int | None\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "tools/validation/native_historical.py",
+      "message": "Item \"set[Any]\" of \"Synthetix | set[Any]\" has no attribute \"get_price\" [union-attr]",
+      "count": 1
+    },
+    {
+      "file": "tools/validation/native_historical.py",
+      "message": "Unexpected keyword argument \"sync\" for \"get_price\" of \"Synthetix\" [call-arg]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/lending/aave.py",
+      "message": "Argument 1 to \"Call\" has incompatible type \"str | HexBytes? | Any | evmspec.data._main.Address | EthAddress | Contract\"; expected \"str | eth_typing.evm.Address | ChecksumAddress | HexAddress\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/lending/aave.py",
+      "message": "Unexpected keyword argument \"sync\" for \"get_reserve_data\" of \"AaveMarketBase\" [call-arg]",
+      "count": 2
+    },
+    {
+      "file": "y/prices/lending/aave.py",
+      "message": "Unexpected keyword argument \"sync\" for \"get_reserve_data\" of \"AaveMarketV2\" [call-arg]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/lending/compound.py",
+      "message": "Unexpected keyword argument \"asynchronous\" for \"price\" of \"ERC20\" [call-arg]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/popsicle.py",
+      "message": "Argument 1 to \"__call__\" of \"ASyncDecoratorSyncDefault\" has incompatible type \"def (token: str | HexBytes? | Any | Address | EthAddress | Contract | int, block: int | BlockNumber | None = ..., *, skip_cache: bool = ...) -> Coroutine[Any, Any, UsdPrice | None]\"; expected \"def (*Never, **Never) -> Awaitable[Never] | def (*Never, **Never) -> Never\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/tokenized_fund/gelato.py",
+      "message": "Argument 1 to \"__call__\" of \"ASyncDecoratorSyncDefault\" has incompatible type \"Callable[[str | HexBytes? | Any | Address | EthAddress | Contract | int, int | BlockNumber | None, bool], Coroutine[Any, Any, UsdPrice | None]]\"; expected \"def (*Never, **Never) -> Awaitable[Never] | def (*Never, **Never) -> Never\" [arg-type]",
+      "count": 1
+    }
+  ],
+  "removed": [
+    {
+      "file": "y/prices/lending/aave.py",
+      "message": "\"object\" has no attribute \"ATOKEN\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/lending/aave.py",
+      "message": "Argument 1 to \"Decimal\" has incompatible type \"object\"; expected \"Decimal | float | str | tuple[int, Sequence[int], int]\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/lending/aave.py",
+      "message": "Module \"y.utils\" does not explicitly export attribute \"hasall\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/lending/compound.py",
+      "message": "Call to untyped function \"PruningThreadPoolExecutor\" in typed context [no-untyped-call]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/lending/compound.py",
+      "message": "Item \"None\" of \"Comptroller | None\" has no attribute \"oracle\" [union-attr]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/lending/compound.py",
+      "message": "Unexpected keyword argument \"asynchronous\" for \"oracle\" of \"Comptroller\" [call-arg]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/lending/compound.py",
+      "message": "Unexpected keyword argument \"asynchronous\" for \"underlying_per_ctoken\" of \"CToken\" [call-arg]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/popsicle.py",
+      "message": "Argument 1 to \"__call__\" of \"ASyncDecoratorSyncDefault\" has incompatible type \"def get_price(token: str | HexBytes? | Any | Address | EthAddress | Contract | int, block: int | BlockNumber | None = ..., *, skip_cache: bool = ...) -> Coroutine[Any, Any, UsdPrice | None]\"; expected \"def (*Never, **Never) -> Awaitable[Never] | def (*Never, **Never) -> Never\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/tokenized_fund/gelato.py",
+      "message": "Argument 1 to \"__call__\" of \"ASyncDecoratorSyncDefault\" has incompatible type \"Callable[[str | HexBytes? | Any | Address | EthAddress | Contract | int, int | BlockNumber | None, bool], Coroutine[Any, Any, UsdPrice]]\"; expected \"def (*Never, **Never) -> Awaitable[Never] | def (*Never, **Never) -> Never\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/tokenized_fund/gelato.py",
+      "message": "Call to untyped function \"has_methods\" in typed context [no-untyped-call]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/tokenized_fund/gelato.py",
+      "message": "Returning Any from function declared to return \"bool\" [no-any-return]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/tokenized_fund/piedao.py",
+      "message": "Argument 2 to \"Call\" has incompatible type \"tuple[str, str | HexBytes? | Any | Address | EthAddress]\"; expected \"str | list[str | Any]\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/tokenized_fund/piedao.py",
+      "message": "No overload variant of \"__get__\" of \"ASyncMethodDescriptorSyncDefault\" matches argument types \"TaskMapping[str | Any, UsdValue]\", \"type[TaskMapping[str | Any, UsdValue]]\" [call-overload]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/tokenized_fund/piedao.py",
+      "message": "Returning Any from function declared to return \"UsdValue | None\" [no-any-return]",
+      "count": 1
+    }
+  ],
+  "baseline": "/private/tmp/yprice-mergeable/v3-inventory-final-311/mypy.txt",
+  "candidate": "/private/tmp/yprice-repairs/matrix-311/mypy.txt"
+}

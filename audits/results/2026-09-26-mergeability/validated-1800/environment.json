@@ -1,0 +1,6 @@
+{
+  "python": "3.12.14 (main, Aug 31 2026, 23:48:05) [GCC 12.2.0]",
+  "platform": "Linux-6.8.0-117-generic-aarch64-with-glibc2.36",
+  "machine": "aarch64",
+  "soabi": "cpython-312-aarch64-linux-gnu"
+}

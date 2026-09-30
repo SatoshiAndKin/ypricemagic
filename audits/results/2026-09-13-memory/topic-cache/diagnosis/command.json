@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python -c 'import asyncio,json,tracemalloc\nfrom pathlib import Path\nfrom y._db.utils import logs\nfrom y._db.entities import LogTopic\nfrom evmspec.structs.log import Topic\nfrom profile_state import capture,original_function\n\nasync def main():\n    tracemalloc.start()\n    count=8192\n    await logs._bulk_insert(LogTopic,('\"'\"'topic'\"'\"',),tuple((Topic((2**240+i).to_bytes(32,'\"'\"'big'\"'\"')).strip(),) for i in range(count)),sync=False)\n    for start in range(0,count,64):\n        topics=[Topic((2**240+i).to_bytes(32,'\"'\"'big'\"'\"')) for i in range(start,start+64)]\n        first=await asyncio.gather(*(logs.get_topic_dbid(t) for t in topics))\n        second=await asyncio.gather(*(logs.get_topic_dbid(t) for t in topics))\n        assert first==second and all(type(value) is int and value>0 for value in first), (start, first[:4], second[:4])\n    async_owner=logs.get_topic_dbid._asyncified\n    synchronous=[]\n    value=logs.get_topic_dbid.__wrapped__\n    seen=set()\n    while id(value) not in seen:\n        seen.add(id(value))\n        info=getattr(value,'\"'\"'cache_info'\"'\"',None)\n        if info is not None:synchronous.append({'\"'\"'function'\"'\"':original_function(value),'\"'\"'cache'\"'\"':info()._asdict()})\n        value=getattr(value,'\"'\"'__wrapped__'\"'\"',None)\n        if value is None:break\n    capture(Path('\"'\"'/reports'\"'\"'),'\"'\"'actual-topic-owner'\"'\"')\n    Path('\"'\"'/reports/topic-owner.json'\"'\"').write_text(json.dumps({'\"'\"'complete'\"'\"':True,'\"'\"'topics'\"'\"':count,'\"'\"'async_function'\"'\"':original_function(async_owner),'\"'\"'async_cache'\"'\"':async_owner.cache_info()._asdict(),'\"'\"'sync_caches'\"'\"':synchronous},indent=2)+'\"'\"'\\n'\"'\"')\nasyncio.run(main())\n'"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 117.30668945900106,
+  "peak_sampled_process_rss_bytes": 1086226432,
+  "cgroup_before": {
+    "memory.current": "9097216",
+    "memory.peak": "9199616",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "144478208",
+    "memory.peak": "1174601728",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

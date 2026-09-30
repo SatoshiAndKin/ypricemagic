@@ -1,0 +1,20 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "from pathlib import Path; import shutil; shutil.copyfile('/opt/validation/cachebox-source/Cargo.lock','/reports/Cargo.lock'); shutil.copyfile('/opt/validation/cachebox-metadata.json','/reports/cargo-metadata.json')"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789375052.4219708,
+  "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+  "source_revision": "9f775132786c267aa99849a5778e6e975adbfda6",
+  "source_archive_sha256": "7b0c04c5b67e78a6470fab0ec319b7919405863f1f34fd948da68056ccaf7db2",
+  "image": "sha256:a958771e5fe2315dbdbc855b3bb44ca42573f7635870f838a40a9d8fd9a28d88",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 1.8021531105041504
+}

@@ -1,0 +1,140 @@
+[
+  {
+    "phase": "call",
+    "elapsed_seconds": 65.55046937597217,
+    "rss_peak_bytes": 257536000,
+    "live_tasks": 153,
+    "test": "tests/test_quote_regressions.py::test_cached_fallback_bucket_respects_oracle_history[False-synthetix]",
+    "outcome": "failed",
+    "duration": 0.0006718759541399777,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf73336fbe8a0>\ncached = 'synthetix', band_supported = False\n\n    @run_async_test\n    @pytest.mark.parametrize(\"cached\", [\"synthetix\", \"yearn or yearn-like\", \"curve lp\"])\n    @pytest.mark.parametrize(\"band_supported\", [False, True])\n    async def test_cached_fallback_bucket_respects_oracle_history(\n        monkeypatch: Any, cached: str, band_supported: bool\n    ) -> None:\n        from y._db.utils import token as db\n        from y.prices.utils import buckets\n    \n        index = (\"synthetix\", \"yearn or yearn-like\", \"curve lp\").index(cached)\n        token = f\"0x{0x7100 + 2 * index + band_supported:040x}\"\n        monkeypatch.setattr(db, \"get_bucket\", AsyncMock(return_value=cached))\n        persisted = AsyncMock()\n        monkeypatch.setattr(db, \"set_bucket\", persisted)\n        feed = AsyncMock(side_effect=lambda token, *, block: block == 200)\n        monkeypatch.setattr(buckets, \"chainlink\", SimpleNamespace(has_feed=feed))\n        monkeypatch.setattr(buckets, \"band\", {token} if band_supported else set())\n        for block in (100, 200, 300):\n            expected = cached\n            if block == 200:\n                expected = \"chainlink and band\" if band_supported else \"chainlink feed\"\n>           assert await buckets.check_bucket(token, block, sync=False) == expected\n\ntests/test_quote_regressions.py:182: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:268: in __call__\n    return await self._shield_and_handle_cancelled_error(cache_item, key)\n/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:216: in _shield_and_handle_cancelled_error\n    return await asyncio.shield(task)\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/utils/buckets.py:107: in check_bucket\n    _, has_feed = await _safe_check_bucket(\ny/prices/utils/buckets.py:245: in _safe_check_bucket\n    result = await coro\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <AsyncMock id='271799337082400'>\nargs = ('0x0000000000000000000000000000000000007100',)\nkwargs = {'block': 100, 'sync': False}\n_call = call('0x0000000000000000000000000000000000007100', block=100, sync=False)\neffect = <function test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda> at 0xf73336d50680>\n\n    async def _execute_mock_call(self, /, *args, **kwargs):\n        # This is nearly just like super(), except for special handling\n        # of coroutines\n    \n        _call = _Call((args, kwargs), two=True)\n        self.await_count += 1\n        self.await_args = _call\n        self.await_args_list.append(_call)\n    \n        effect = self.side_effect\n        if effect is not None:\n            if _is_exception(effect):\n                raise effect\n            elif not _callable(effect):\n                try:\n                    result = next(effect)\n                except StopIteration:\n                    # It is impossible to propagate a StopIteration\n                    # through coroutines because of PEP 479\n                    raise StopAsyncIteration\n                if _is_exception(result):\n                    raise result\n            elif iscoroutinefunction(effect):\n                result = await effect(*args, **kwargs)\n            else:\n>               result = effect(*args, **kwargs)\nE               TypeError: test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda>() got an unexpected keyword argument 'sync'\n\n/usr/local/lib/python3.12/unittest/mock.py:2304: TypeError",
+    "error_message": "TypeError: test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda>() got an unexpected keyword argument 'sync'",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 1049,
+      "multicall_uid": 28,
+      "request_uid": 24,
+      "jsonrpc_batch_uid": 101
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 65.58152606198564,
+    "rss_peak_bytes": 257536000,
+    "live_tasks": 148,
+    "test": "tests/test_quote_regressions.py::test_cached_fallback_bucket_respects_oracle_history[False-yearn or yearn-like]",
+    "outcome": "failed",
+    "duration": 0.0017891699681058526,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf73336f65c70>\ncached = 'yearn or yearn-like', band_supported = False\n\n    @run_async_test\n    @pytest.mark.parametrize(\"cached\", [\"synthetix\", \"yearn or yearn-like\", \"curve lp\"])\n    @pytest.mark.parametrize(\"band_supported\", [False, True])\n    async def test_cached_fallback_bucket_respects_oracle_history(\n        monkeypatch: Any, cached: str, band_supported: bool\n    ) -> None:\n        from y._db.utils import token as db\n        from y.prices.utils import buckets\n    \n        index = (\"synthetix\", \"yearn or yearn-like\", \"curve lp\").index(cached)\n        token = f\"0x{0x7100 + 2 * index + band_supported:040x}\"\n        monkeypatch.setattr(db, \"get_bucket\", AsyncMock(return_value=cached))\n        persisted = AsyncMock()\n        monkeypatch.setattr(db, \"set_bucket\", persisted)\n        feed = AsyncMock(side_effect=lambda token, *, block: block == 200)\n        monkeypatch.setattr(buckets, \"chainlink\", SimpleNamespace(has_feed=feed))\n        monkeypatch.setattr(buckets, \"band\", {token} if band_supported else set())\n        for block in (100, 200, 300):\n            expected = cached\n            if block == 200:\n                expected = \"chainlink and band\" if band_supported else \"chainlink feed\"\n>           assert await buckets.check_bucket(token, block, sync=False) == expected\n\ntests/test_quote_regressions.py:182: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:268: in __call__\n    return await self._shield_and_handle_cancelled_error(cache_item, key)\n/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:216: in _shield_and_handle_cancelled_error\n    return await asyncio.shield(task)\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/utils/buckets.py:107: in check_bucket\n    _, has_feed = await _safe_check_bucket(\ny/prices/utils/buckets.py:245: in _safe_check_bucket\n    result = await coro\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <AsyncMock id='271799337737904'>\nargs = ('0x0000000000000000000000000000000000007102',)\nkwargs = {'block': 100, 'sync': False}\n_call = call('0x0000000000000000000000000000000000007102', block=100, sync=False)\neffect = <function test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda> at 0xf73336f26480>\n\n    async def _execute_mock_call(self, /, *args, **kwargs):\n        # This is nearly just like super(), except for special handling\n        # of coroutines\n    \n        _call = _Call((args, kwargs), two=True)\n        self.await_count += 1\n        self.await_args = _call\n        self.await_args_list.append(_call)\n    \n        effect = self.side_effect\n        if effect is not None:\n            if _is_exception(effect):\n                raise effect\n            elif not _callable(effect):\n                try:\n                    result = next(effect)\n                except StopIteration:\n                    # It is impossible to propagate a StopIteration\n                    # through coroutines because of PEP 479\n                    raise StopAsyncIteration\n                if _is_exception(result):\n                    raise result\n            elif iscoroutinefunction(effect):\n                result = await effect(*args, **kwargs)\n            else:\n>               result = effect(*args, **kwargs)\nE               TypeError: test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda>() got an unexpected keyword argument 'sync'\n\n/usr/local/lib/python3.12/unittest/mock.py:2304: TypeError",
+    "error_message": "TypeError: test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda>() got an unexpected keyword argument 'sync'",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 1049,
+      "multicall_uid": 28,
+      "request_uid": 24,
+      "jsonrpc_batch_uid": 101
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 65.60922494897386,
+    "rss_peak_bytes": 257536000,
+    "live_tasks": 148,
+    "test": "tests/test_quote_regressions.py::test_cached_fallback_bucket_respects_oracle_history[False-curve lp]",
+    "outcome": "failed",
+    "duration": 0.0008665850036777556,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf73336effb00>\ncached = 'curve lp', band_supported = False\n\n    @run_async_test\n    @pytest.mark.parametrize(\"cached\", [\"synthetix\", \"yearn or yearn-like\", \"curve lp\"])\n    @pytest.mark.parametrize(\"band_supported\", [False, True])\n    async def test_cached_fallback_bucket_respects_oracle_history(\n        monkeypatch: Any, cached: str, band_supported: bool\n    ) -> None:\n        from y._db.utils import token as db\n        from y.prices.utils import buckets\n    \n        index = (\"synthetix\", \"yearn or yearn-like\", \"curve lp\").index(cached)\n        token = f\"0x{0x7100 + 2 * index + band_supported:040x}\"\n        monkeypatch.setattr(db, \"get_bucket\", AsyncMock(return_value=cached))\n        persisted = AsyncMock()\n        monkeypatch.setattr(db, \"set_bucket\", persisted)\n        feed = AsyncMock(side_effect=lambda token, *, block: block == 200)\n        monkeypatch.setattr(buckets, \"chainlink\", SimpleNamespace(has_feed=feed))\n        monkeypatch.setattr(buckets, \"band\", {token} if band_supported else set())\n        for block in (100, 200, 300):\n            expected = cached\n            if block == 200:\n                expected = \"chainlink and band\" if band_supported else \"chainlink feed\"\n>           assert await buckets.check_bucket(token, block, sync=False) == expected\n\ntests/test_quote_regressions.py:182: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:268: in __call__\n    return await self._shield_and_handle_cancelled_error(cache_item, key)\n/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:216: in _shield_and_handle_cancelled_error\n    return await asyncio.shield(task)\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/utils/buckets.py:107: in check_bucket\n    _, has_feed = await _safe_check_bucket(\ny/prices/utils/buckets.py:245: in _safe_check_bucket\n    result = await coro\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <AsyncMock id='271799337877424'>\nargs = ('0x0000000000000000000000000000000000007104',)\nkwargs = {'block': 100, 'sync': False}\n_call = call('0x0000000000000000000000000000000000007104', block=100, sync=False)\neffect = <function test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda> at 0xf73375795260>\n\n    async def _execute_mock_call(self, /, *args, **kwargs):\n        # This is nearly just like super(), except for special handling\n        # of coroutines\n    \n        _call = _Call((args, kwargs), two=True)\n        self.await_count += 1\n        self.await_args = _call\n        self.await_args_list.append(_call)\n    \n        effect = self.side_effect\n        if effect is not None:\n            if _is_exception(effect):\n                raise effect\n            elif not _callable(effect):\n                try:\n                    result = next(effect)\n                except StopIteration:\n                    # It is impossible to propagate a StopIteration\n                    # through coroutines because of PEP 479\n                    raise StopAsyncIteration\n                if _is_exception(result):\n                    raise result\n            elif iscoroutinefunction(effect):\n                result = await effect(*args, **kwargs)\n            else:\n>               result = effect(*args, **kwargs)\nE               TypeError: test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda>() got an unexpected keyword argument 'sync'\n\n/usr/local/lib/python3.12/unittest/mock.py:2304: TypeError",
+    "error_message": "TypeError: test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda>() got an unexpected keyword argument 'sync'",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 1049,
+      "multicall_uid": 28,
+      "request_uid": 24,
+      "jsonrpc_batch_uid": 101
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 65.63877400598722,
+    "rss_peak_bytes": 257536000,
+    "live_tasks": 148,
+    "test": "tests/test_quote_regressions.py::test_cached_fallback_bucket_respects_oracle_history[True-synthetix]",
+    "outcome": "failed",
+    "duration": 0.0012366279843263328,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf73336fb76e0>\ncached = 'synthetix', band_supported = True\n\n    @run_async_test\n    @pytest.mark.parametrize(\"cached\", [\"synthetix\", \"yearn or yearn-like\", \"curve lp\"])\n    @pytest.mark.parametrize(\"band_supported\", [False, True])\n    async def test_cached_fallback_bucket_respects_oracle_history(\n        monkeypatch: Any, cached: str, band_supported: bool\n    ) -> None:\n        from y._db.utils import token as db\n        from y.prices.utils import buckets\n    \n        index = (\"synthetix\", \"yearn or yearn-like\", \"curve lp\").index(cached)\n        token = f\"0x{0x7100 + 2 * index + band_supported:040x}\"\n        monkeypatch.setattr(db, \"get_bucket\", AsyncMock(return_value=cached))\n        persisted = AsyncMock()\n        monkeypatch.setattr(db, \"set_bucket\", persisted)\n        feed = AsyncMock(side_effect=lambda token, *, block: block == 200)\n        monkeypatch.setattr(buckets, \"chainlink\", SimpleNamespace(has_feed=feed))\n        monkeypatch.setattr(buckets, \"band\", {token} if band_supported else set())\n        for block in (100, 200, 300):\n            expected = cached\n            if block == 200:\n                expected = \"chainlink and band\" if band_supported else \"chainlink feed\"\n>           assert await buckets.check_bucket(token, block, sync=False) == expected\n\ntests/test_quote_regressions.py:182: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:268: in __call__\n    return await self._shield_and_handle_cancelled_error(cache_item, key)\n/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:216: in _shield_and_handle_cancelled_error\n    return await asyncio.shield(task)\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/utils/buckets.py:107: in check_bucket\n    _, has_feed = await _safe_check_bucket(\ny/prices/utils/buckets.py:245: in _safe_check_bucket\n    result = await coro\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <AsyncMock id='271799337844368'>\nargs = ('0x0000000000000000000000000000000000007101',)\nkwargs = {'block': 100, 'sync': False}\n_call = call('0x0000000000000000000000000000000000007101', block=100, sync=False)\neffect = <function test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda> at 0xf733546ecea0>\n\n    async def _execute_mock_call(self, /, *args, **kwargs):\n        # This is nearly just like super(), except for special handling\n        # of coroutines\n    \n        _call = _Call((args, kwargs), two=True)\n        self.await_count += 1\n        self.await_args = _call\n        self.await_args_list.append(_call)\n    \n        effect = self.side_effect\n        if effect is not None:\n            if _is_exception(effect):\n                raise effect\n            elif not _callable(effect):\n                try:\n                    result = next(effect)\n                except StopIteration:\n                    # It is impossible to propagate a StopIteration\n                    # through coroutines because of PEP 479\n                    raise StopAsyncIteration\n                if _is_exception(result):\n                    raise result\n            elif iscoroutinefunction(effect):\n                result = await effect(*args, **kwargs)\n            else:\n>               result = effect(*args, **kwargs)\nE               TypeError: test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda>() got an unexpected keyword argument 'sync'\n\n/usr/local/lib/python3.12/unittest/mock.py:2304: TypeError",
+    "error_message": "TypeError: test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda>() got an unexpected keyword argument 'sync'",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 1049,
+      "multicall_uid": 28,
+      "request_uid": 24,
+      "jsonrpc_batch_uid": 101
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 65.6686373979901,
+    "rss_peak_bytes": 257536000,
+    "live_tasks": 137,
+    "test": "tests/test_quote_regressions.py::test_cached_fallback_bucket_respects_oracle_history[True-yearn or yearn-like]",
+    "outcome": "failed",
+    "duration": 0.0018610450206324458,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf7337c7f62d0>\ncached = 'yearn or yearn-like', band_supported = True\n\n    @run_async_test\n    @pytest.mark.parametrize(\"cached\", [\"synthetix\", \"yearn or yearn-like\", \"curve lp\"])\n    @pytest.mark.parametrize(\"band_supported\", [False, True])\n    async def test_cached_fallback_bucket_respects_oracle_history(\n        monkeypatch: Any, cached: str, band_supported: bool\n    ) -> None:\n        from y._db.utils import token as db\n        from y.prices.utils import buckets\n    \n        index = (\"synthetix\", \"yearn or yearn-like\", \"curve lp\").index(cached)\n        token = f\"0x{0x7100 + 2 * index + band_supported:040x}\"\n        monkeypatch.setattr(db, \"get_bucket\", AsyncMock(return_value=cached))\n        persisted = AsyncMock()\n        monkeypatch.setattr(db, \"set_bucket\", persisted)\n        feed = AsyncMock(side_effect=lambda token, *, block: block == 200)\n        monkeypatch.setattr(buckets, \"chainlink\", SimpleNamespace(has_feed=feed))\n        monkeypatch.setattr(buckets, \"band\", {token} if band_supported else set())\n        for block in (100, 200, 300):\n            expected = cached\n            if block == 200:\n                expected = \"chainlink and band\" if band_supported else \"chainlink feed\"\n>           assert await buckets.check_bucket(token, block, sync=False) == expected\n\ntests/test_quote_regressions.py:182: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:268: in __call__\n    return await self._shield_and_handle_cancelled_error(cache_item, key)\n/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:216: in _shield_and_handle_cancelled_error\n    return await asyncio.shield(task)\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/utils/buckets.py:107: in check_bucket\n    _, has_feed = await _safe_check_bucket(\ny/prices/utils/buckets.py:245: in _safe_check_bucket\n    result = await coro\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <AsyncMock id='271799337084800'>\nargs = ('0x0000000000000000000000000000000000007103',)\nkwargs = {'block': 100, 'sync': False}\n_call = call('0x0000000000000000000000000000000000007103', block=100, sync=False)\neffect = <function test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda> at 0xf73375775260>\n\n    async def _execute_mock_call(self, /, *args, **kwargs):\n        # This is nearly just like super(), except for special handling\n        # of coroutines\n    \n        _call = _Call((args, kwargs), two=True)\n        self.await_count += 1\n        self.await_args = _call\n        self.await_args_list.append(_call)\n    \n        effect = self.side_effect\n        if effect is not None:\n            if _is_exception(effect):\n                raise effect\n            elif not _callable(effect):\n                try:\n                    result = next(effect)\n                except StopIteration:\n                    # It is impossible to propagate a StopIteration\n                    # through coroutines because of PEP 479\n                    raise StopAsyncIteration\n                if _is_exception(result):\n                    raise result\n            elif iscoroutinefunction(effect):\n                result = await effect(*args, **kwargs)\n            else:\n>               result = effect(*args, **kwargs)\nE               TypeError: test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda>() got an unexpected keyword argument 'sync'\n\n/usr/local/lib/python3.12/unittest/mock.py:2304: TypeError",
+    "error_message": "TypeError: test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda>() got an unexpected keyword argument 'sync'",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 1049,
+      "multicall_uid": 28,
+      "request_uid": 24,
+      "jsonrpc_batch_uid": 101
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 65.69619395100744,
+    "rss_peak_bytes": 257536000,
+    "live_tasks": 128,
+    "test": "tests/test_quote_regressions.py::test_cached_fallback_bucket_respects_oracle_history[True-curve lp]",
+    "outcome": "failed",
+    "duration": 0.001161418971605599,
+    "error": "monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xf73336f66f60>\ncached = 'curve lp', band_supported = True\n\n    @run_async_test\n    @pytest.mark.parametrize(\"cached\", [\"synthetix\", \"yearn or yearn-like\", \"curve lp\"])\n    @pytest.mark.parametrize(\"band_supported\", [False, True])\n    async def test_cached_fallback_bucket_respects_oracle_history(\n        monkeypatch: Any, cached: str, band_supported: bool\n    ) -> None:\n        from y._db.utils import token as db\n        from y.prices.utils import buckets\n    \n        index = (\"synthetix\", \"yearn or yearn-like\", \"curve lp\").index(cached)\n        token = f\"0x{0x7100 + 2 * index + band_supported:040x}\"\n        monkeypatch.setattr(db, \"get_bucket\", AsyncMock(return_value=cached))\n        persisted = AsyncMock()\n        monkeypatch.setattr(db, \"set_bucket\", persisted)\n        feed = AsyncMock(side_effect=lambda token, *, block: block == 200)\n        monkeypatch.setattr(buckets, \"chainlink\", SimpleNamespace(has_feed=feed))\n        monkeypatch.setattr(buckets, \"band\", {token} if band_supported else set())\n        for block in (100, 200, 300):\n            expected = cached\n            if block == 200:\n                expected = \"chainlink and band\" if band_supported else \"chainlink feed\"\n>           assert await buckets.check_bucket(token, block, sync=False) == expected\n\ntests/test_quote_regressions.py:182: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:268: in __call__\n    return await self._shield_and_handle_cancelled_error(cache_item, key)\n/usr/local/lib/python3.12/site-packages/async_lru/__init__.py:216: in _shield_and_handle_cancelled_error\n    return await asyncio.shield(task)\na_sync/debugging.pyx:67: in stuck_coro_wrap\n    ???\ny/prices/utils/buckets.py:107: in check_bucket\n    _, has_feed = await _safe_check_bucket(\ny/prices/utils/buckets.py:245: in _safe_check_bucket\n    result = await coro\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = <AsyncMock id='271799335604912'>\nargs = ('0x0000000000000000000000000000000000007105',)\nkwargs = {'block': 100, 'sync': False}\n_call = call('0x0000000000000000000000000000000000007105', block=100, sync=False)\neffect = <function test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda> at 0xf7337437aa20>\n\n    async def _execute_mock_call(self, /, *args, **kwargs):\n        # This is nearly just like super(), except for special handling\n        # of coroutines\n    \n        _call = _Call((args, kwargs), two=True)\n        self.await_count += 1\n        self.await_args = _call\n        self.await_args_list.append(_call)\n    \n        effect = self.side_effect\n        if effect is not None:\n            if _is_exception(effect):\n                raise effect\n            elif not _callable(effect):\n                try:\n                    result = next(effect)\n                except StopIteration:\n                    # It is impossible to propagate a StopIteration\n                    # through coroutines because of PEP 479\n                    raise StopAsyncIteration\n                if _is_exception(result):\n                    raise result\n            elif iscoroutinefunction(effect):\n                result = await effect(*args, **kwargs)\n            else:\n>               result = effect(*args, **kwargs)\nE               TypeError: test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda>() got an unexpected keyword argument 'sync'\n\n/usr/local/lib/python3.12/unittest/mock.py:2304: TypeError",
+    "error_message": "TypeError: test_cached_fallback_bucket_respects_oracle_history.<locals>.<lambda>() got an unexpected keyword argument 'sync'",
+    "cache_occupancy": {
+      "state_cache": {
+        "values": 2,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 1049,
+      "multicall_uid": 28,
+      "request_uid": 24,
+      "jsonrpc_batch_uid": 101
+    }
+  }
+]

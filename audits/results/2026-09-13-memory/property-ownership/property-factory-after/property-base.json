@@ -1,0 +1,6 @@
+{
+  "native_path": "/usr/local/lib/python3.12/site-packages/a_sync/a_sync/property.cpython-312-aarch64-linux-gnu.so",
+  "stub_sha256": "441c98c16fde118e2f60c5a8bef6ebdea0c9e71306143ee6556f2cedd51cacc8",
+  "runtime_contract_passed": true,
+  "exit_code": 1
+}

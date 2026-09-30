@@ -1,0 +1,5 @@
+# Captured validation artifacts and chain fixtures retain their recorded bytes.
+audits/results/
+tests/data/
+# Agent metadata is outside the application formatting scope.
+.agents/

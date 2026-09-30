@@ -1,0 +1,94 @@
+{
+  "baseline_reported_errors": 1959,
+  "changed_reported_errors": 1940,
+  "baseline_rendered_errors": 1954,
+  "changed_rendered_errors": 1935,
+  "added": [],
+  "removed": [
+    {
+      "file": "y/utils/logging.py",
+      "error": "Incompatible default for argument \"symbol\" (default has type \"None\", argument has type \"str\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "y/utils/logging.py",
+      "error": "\"Logger\" has no attribute \"address\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "y/utils/logging.py",
+      "error": "\"Logger\" has no attribute \"block\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "y/utils/logging.py",
+      "error": "\"Logger\" has no attribute \"enabled\" [attr-defined]",
+      "count": 2
+    },
+    {
+      "file": "y/utils/logging.py",
+      "error": "Cannot assign to a method [method-assign]",
+      "count": 2
+    },
+    {
+      "file": "y/utils/logging.py",
+      "error": "\"Logger\" has no attribute \"debug_task\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "y/utils/logging.py",
+      "error": "\"Logger\" has no attribute \"close\" [attr-defined]",
+      "count": 1
+    },
+    {
+      "file": "y/utils/logging.py",
+      "error": "Incompatible types in assignment (expression has type \"Logger\", target has type \"PriceLogger\") [assignment]",
+      "count": 1
+    },
+    {
+      "file": "y/utils/logging.py",
+      "error": "Incompatible return value type (got \"Logger\", expected \"PriceLogger\") [return-value]",
+      "count": 1
+    },
+    {
+      "file": "y/utils/logging.py",
+      "error": "Function is missing a type annotation [no-untyped-def]",
+      "count": 1
+    },
+    {
+      "file": "y/utils/logging.py",
+      "error": "Incompatible types in assignment (expression has type \"tuple[str]",
+      "count": 1
+    },
+    {
+      "file": "y/utils/logging.py",
+      "error": "Return statement in function which does not return [misc]",
+      "count": 1
+    },
+    {
+      "file": "y/classes/common.py",
+      "error": "Argument 2 to \"get_price_logger\" has incompatible type \"int | None\"; expected \"int | BlockNumber\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/lending/aave.py",
+      "error": "Argument \"block\" to \"get_price_logger\" has incompatible type \"None\"; expected \"int | BlockNumber\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/dex/balancer/v2.py",
+      "error": "Argument 2 to \"get_price_logger\" has incompatible type \"int | BlockNumber | None\"; expected \"int | BlockNumber\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/yearn.py",
+      "error": "Argument \"block\" to \"get_price_logger\" has incompatible type \"None\"; expected \"int | BlockNumber\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/utils/buckets.py",
+      "error": "Argument \"block\" to \"get_price_logger\" has incompatible type \"None\"; expected \"int | BlockNumber\" [arg-type]",
+      "count": 1
+    }
+  ]
+}

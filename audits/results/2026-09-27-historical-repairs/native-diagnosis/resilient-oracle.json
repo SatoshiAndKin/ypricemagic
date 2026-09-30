@@ -1,0 +1,311 @@
+{
+  "recorded_unix": 1790569820.01783,
+  "oracle": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+  "historical_implementation": "0x1616bac3e4c2222b438b3410b5196604bc557bce",
+  "contract_name": "ResilientOracle",
+  "source_sha256": "31a1c508100d4edb3d87d809aa3f9e28c0f0dfabed0285a9fe03b64924431c68",
+  "source_url": "https://etherscan.io/address/0x1616bac3e4c2222b438b3410b5196604bc557bce#code",
+  "contains_exact_revert": true,
+  "rows": [
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0xd8AdD9B41D4E1cd64Edad8722AB0bA8D35536657]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df000000000000000000000000d8add9b41d4e1cd64edad8722ab0ba8d35536657"
+        },
+        "0x12c94ec"
+      ],
+      "hash": "0xa734b31a2621bde5a774e0aed71ce206d453738f538e8a5ebb9a9afe56046737",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0x13eB80FDBe5C5f4a7039728E258A6f05fb3B912b]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df00000000000000000000000013eb80fdbe5c5f4a7039728e258a6f05fb3b912b"
+        },
+        "0x12cced4"
+      ],
+      "hash": "0x100066ebba85b5c29c84c98e4c63ad127058b352278f3ec0e0cb2c18f65e8cba",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0x4fAfbDc4F2a9876Bd1764827b26fb8dc4FD1dB95]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df0000000000000000000000004fafbdc4f2a9876bd1764827b26fb8dc4fd1db95"
+        },
+        "0x12e742d"
+      ],
+      "hash": "0xcb847f33e7f5a16af099dcc42c4b1dc47949eb709c5dc062d0e7e21689cfde80",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0x17142a05fe678e9584FA1d88EfAC1bF181bF7ABe]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df00000000000000000000000017142a05fe678e9584fa1d88efac1bf181bf7abe"
+        },
+        "0x12e742e"
+      ],
+      "hash": "0x900fe2fc90ef7592bca360dec1aa9b4137e8c9feb13107fb807592e9e50f684c",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0x256AdDBe0a387c98f487e44b85c29eb983413c5e]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df000000000000000000000000256addbe0a387c98f487e44b85c29eb983413c5e"
+        },
+        "0x141c78b"
+      ],
+      "hash": "0xaf1be2f7fae29549aee58491a02c0d6baf59ff94800f8171e359173339b37111",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0x325cEB02fe1C2fF816A83a5770eA0E88e2faEcF2]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df000000000000000000000000325ceb02fe1c2ff816a83a5770ea0e88e2faecf2"
+        },
+        "0x141cdb8"
+      ],
+      "hash": "0xfe308fd37083e1aade1d10069bfdf86bf4552367a109b90e106cb563584d7dad",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0x25C20e6e110A1cE3FEbaCC8b7E48368c7b2F0C91]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df00000000000000000000000025c20e6e110a1ce3febacc8b7e48368c7b2f0c91"
+        },
+        "0x144dffe"
+      ],
+      "hash": "0xd183ee32068f4275d1d9e1b6609a591235d0c5c6f665c9106eb71fbcdfd3f6f6",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0x0c6B19287999f1e31a5c0a44393b24B62D2C0468]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df0000000000000000000000000c6b19287999f1e31a5c0a44393b24b62d2c0468"
+        },
+        "0x14bb7da"
+      ],
+      "hash": "0x638ee4531d9e5cd1cd052effb035e46239ea463bdd9d8c853c29c622e045faa8",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0xE36Ae842DbbD7aE372ebA02C8239cd431cC063d6]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df000000000000000000000000e36ae842dbbd7ae372eba02c8239cd431cc063d6"
+        },
+        "0x14bb7db"
+      ],
+      "hash": "0x90c2db9731c912496d831f902d4f472520cc9f931f0be4d7c49a46f2b745c62c",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0x0Ec5488e4F8f319213a14cab188E01fB8517Faa8]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df0000000000000000000000000ec5488e4f8f319213a14cab188e01fb8517faa8"
+        },
+        "0x14bf05f"
+      ],
+      "hash": "0x5e1351973da01cc07a6bd5bbcb18b399329107cd0fd40652009f1b2f112b2a26",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0xf87c0a64dc3a8622D6c63265FA29137788163879]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df000000000000000000000000f87c0a64dc3a8622d6c63265fa29137788163879"
+        },
+        "0x14c5d19"
+      ],
+      "hash": "0x6f4b79b8e79c46795ae59253b4a787bd7b03952ab7b740a06bfa067ff1cd5397",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0x520d67226Bc904aC122dcE66ed2f8f61AA1ED764]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df000000000000000000000000520d67226bc904ac122dce66ed2f8f61aa1ed764"
+        },
+        "0x14c5d1b"
+      ],
+      "hash": "0xbeb7a2a8aed64d6b0411322136705e717fd28a2682d9c9507d35d0b27bbe75db",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0x475d0C68a8CD275c15D1F01F4f291804E445F677]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df000000000000000000000000475d0c68a8cd275c15d1f01f4f291804e445f677"
+        },
+        "0x14c5d1a"
+      ],
+      "hash": "0xad44751ac5201f6280a8ee2d0bdc1a8c546891b7fd7c96a4279ea88ccd032c6a",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0xba3916302cBA4aBcB51a01e706fC6051AaF272A0]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df000000000000000000000000ba3916302cba4abcb51a01e706fc6051aaf272a0"
+        },
+        "0x14c5d1c"
+      ],
+      "hash": "0x388f61c46aafd0c6a1bb556ebdc163c99de63202a3376abd9123e0319679c998",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    },
+    {
+      "test": "tests/prices/lending/test_compound.py::test_compound_pricing_async[0x5e35C312862d53FD566737892aDCf010cb4928F7]",
+      "params": [
+        {
+          "to": "0xd2ce3fb018805ef92b8C5976cb31F84b4E295F94",
+          "data": "0xfc57d4df0000000000000000000000005e35c312862d53fd566737892adcf010cb4928f7"
+        },
+        "0x158ed11"
+      ],
+      "hash": "0x6bade1c83f09dae3927b3f67cca72d2c7686a35009a4d6bcd86ab294809eff97",
+      "replay": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": 3,
+          "message": "execution reverted: invalid resilient oracle price",
+          "data": "0x08c379a00000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000001e696e76616c696420726573696c69656e74206f7261636c652070726963650000"
+        }
+      }
+    }
+  ]
+}

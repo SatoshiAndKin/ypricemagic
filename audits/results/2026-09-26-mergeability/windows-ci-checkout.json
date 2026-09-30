@@ -1,0 +1,11 @@
+{
+  "failed_revision": "5936a4969bb0ed4e70cf057cce97c758f409db4c",
+  "job_url": "https://github.com/SatoshiAndKin/ypricemagic/actions/runs/36280700463/job/108511830289",
+  "stage": "Install build and runtime dependencies",
+  "cause": "Git Filename too long while recursively cloning ez-a-sync dependency submodules on Windows; mypy did not run",
+  "raw_log_sha256": "2bbf9630f31cb3b9aa3e9d6274cce1cdb8008f47cb28dcf9c6c1866ca55c0205",
+  "repair_commit": "f689b2c62051c6c1b139489951202794bd652eb1",
+  "repair": "Windows-only git config --global core.longpaths true before dependency installation",
+  "validation": "All three Windows jobs in run 36280880231 install dependencies successfully and reach mypy; mypy reports diagnostics and exits nonzero",
+  "application_source_changed": false
+}

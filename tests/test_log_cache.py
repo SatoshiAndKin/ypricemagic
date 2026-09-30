@@ -7,8 +7,8 @@ from types import ModuleType
 from unittest.mock import Mock
 
 import pytest
-from evmspec.data._main import _decode_hook
 from evmspec.data import Address, BlockNumber, LogIndex, TransactionHash
+from evmspec.data._main import _decode_hook
 from evmspec.structs.log import Topic
 from msgspec import ValidationError, json
 from msgspec.structs import replace

@@ -1,0 +1,39 @@
+{
+  "historical_added": {
+    "case": "V2 before Router02 deployment",
+    "block": 10100000,
+    "hash": "0x5e1bf57830198afe8da55194b916982922cb923b80fb2b050fecb80ee183d1cc",
+    "pool": "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+    "router": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+    "amount_in": 1000000000,
+    "pool_code_bytes": 11293,
+    "router_code_bytes": 0,
+    "adapter_result": null,
+    "canonical_verified": true,
+    "status": "pass"
+  },
+  "prior_rows_identical": true,
+  "prior_rows": 14,
+  "current_rows": 15,
+  "passing": 14,
+  "failures": [
+    {
+      "case": "Curve steCRV gauge",
+      "block": 18000000,
+      "hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+      "input": {
+        "token": "0x182b723a58739a9c974cfdb385ceadb237453c28",
+        "amount": 1000000000000000000,
+        "decimals": 18
+      },
+      "status": "failure",
+      "error": "AssertionError: adapter returned unavailable"
+    }
+  ],
+  "canonical_summary": {
+    "complete": true,
+    "cases": 8,
+    "block_hash": "0x95b198e154acbfc64109dfd22d8224fe927fd8dfdedfae01587674482ba4baf3",
+    "exit_code": 1
+  }
+}

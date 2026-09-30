@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m pip install --no-deps --no-build-isolation -e . && python /runner/focused.py && for repetition in 1 2 3; do directory=\"/reports/timing-${repetition}\"; mkdir \"$directory\" || exit $?; VALIDATION_REPORT=\"$directory\" python /runner/scaling_profile.py || exit $?; done && mkdir /reports/allocations && VALIDATION_REPORT=/reports/allocations python /runner/scaling_profile.py --allocations && python -m mypy"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 107.2169582409997,
+  "peak_sampled_process_rss_bytes": 1171001344,
+  "cgroup_before": {
+    "memory.current": "8482816",
+    "memory.peak": "8585216",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "159956992",
+    "memory.peak": "1230688256",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

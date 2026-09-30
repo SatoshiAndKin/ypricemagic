@@ -1,15 +1,17 @@
 import logging
 from decimal import Decimal
+from typing import cast
 
 import a_sync
-from a_sync import cgather
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
+from y._decorators import stuck_coro_debugger
 from y.constants import CHAINID, CONNECTED_TO_MAINNET, weth
-from y.datatypes import AnyAddressType, Block, UsdPrice
+from y.datatypes import AnyAddressType, Block, PriceResult
 from y.networks import Network
 from y.prices import magic
+from y.prices._candidates import derive_price, gather_owned
 from y.utils.raw_calls import raw_call
 
 logger = logging.getLogger(__name__)
@@ -50,17 +52,21 @@ class wstEth(a_sync.ASyncGenericBase):
         """
         super().__init__()
         self.asynchronous = asynchronous
+        self.address: str | None
         try:
-            self.address = {Network.Mainnet: "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"}[CHAINID]
-            self.wrapped_for_curve = {
-                Network.Mainnet: "0xb82CFa4325568748506dC7cF267857Ff1e3b8d39"
-            }[CHAINID]
+            self.address = dict[int, str](
+                {Network.Mainnet: "0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0"}
+            )[CHAINID]
+            self.wrapped_for_curve = dict[int, str](
+                {Network.Mainnet: "0xb82CFa4325568748506dC7cF267857Ff1e3b8d39"}
+            )[CHAINID]
         except KeyError:
             self.address = None
 
+    @stuck_coro_debugger
     async def get_price(
         self, block: Block | None = None, skip_cache: bool = ENVS.SKIP_CACHE
-    ) -> UsdPrice:
+    ) -> PriceResult:
         """
         Fetch the price of wstETH in USD.
 
@@ -85,12 +91,21 @@ class wstEth(a_sync.ASyncGenericBase):
             - :func:`y.utils.raw_calls.raw_call`
             - :func:`y.prices.magic.get_price`
         """
-        share_price, weth_price = await cgather(
-            raw_call(self.address, "stEthPerToken()", output="int", block=block, sync=False),
-            magic.get_price(weth, block, skip_cache=skip_cache, sync=False),
+        assert self.address is not None and weth is not None
+        share_price, weth_price = await gather_owned(
+            [
+                raw_call(self.address, "stEthPerToken()", output="int", block=block, sync=False),
+                magic.get_price(weth, block, skip_cache=skip_cache, sync=False),
+            ]
         )
-        share_price /= Decimal(10**18)
-        return UsdPrice(share_price * Decimal(float(weth_price)))
+        rate = Decimal(cast(int, share_price)) / Decimal(10**18)
+        weth_price = cast(PriceResult, weth_price)
+        return derive_price(
+            self.address,
+            rate * Decimal(float(weth_price)),
+            "Lido wstETH via stEthPerToken",
+            weth_price,
+        )
 
 
 wsteth = wstEth(asynchronous=True)

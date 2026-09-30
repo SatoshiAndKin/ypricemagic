@@ -1,0 +1,46 @@
+{
+  "complete": true,
+  "pools": 131072,
+  "phases": [
+    {
+      "phase": "construction",
+      "elapsed_seconds": 9.468009661999531,
+      "rss_current_bytes": 472576000,
+      "rss_peak_bytes": 472379392,
+      "python_current_bytes": 127047393,
+      "python_peak_bytes": 127051826
+    },
+    {
+      "phase": "index_all_tokens",
+      "elapsed_seconds": 20.50706779200118,
+      "rss_current_bytes": 3272626176,
+      "rss_peak_bytes": 3291074560,
+      "python_current_bytes": 1503242921,
+      "python_peak_bytes": 1592256521
+    },
+    {
+      "phase": "warm_independent_results",
+      "elapsed_seconds": 0.01032294200558681,
+      "rss_current_bytes": 3272638464,
+      "rss_peak_bytes": 3291074560,
+      "python_current_bytes": 1503254888,
+      "python_peak_bytes": 1592256521
+    }
+  ],
+  "property_values": 393216,
+  "bound_methods": {
+    "a_sync.a_sync.property.HiddenMethod": 393216
+  },
+  "scheduled_callbacks": 393221,
+  "logical_rpc_counts": {
+    "block_rpc": 0,
+    "http": 0,
+    "call_uid": 0,
+    "request_uid": 0,
+    "multicall_uid": 0,
+    "jsonrpc_batch_uid": 0
+  },
+  "metadata_sha256": "65fd7180d8667fba9cf382c179ddc43d2a139eaa38cbd9595b28fbfa118d70a4",
+  "profiler": "tracemalloc without allocation census",
+  "boundary": "synthetic seeded pool metadata; no reserve or discovery RPC"
+}

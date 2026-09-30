@@ -1,0 +1,84 @@
+{
+  "assigned_head": "6316c230b2a342178e2cc234466120fd567468da",
+  "master": "2ebf9c56115219f3b74cf16d93e376206861d641",
+  "limitation": "Identical test source is not a baseline runtime result or proof of unchanged dependencies and production behavior.",
+  "files": {
+    "tests/classes/test_erc20.py": {
+      "current_sha256": "fe1ed3203f121e86bae98de3a4faad3478eec5a6de47d305480f8f7b55cb4776",
+      "assigned_head_sha256": "fe1ed3203f121e86bae98de3a4faad3478eec5a6de47d305480f8f7b55cb4776",
+      "master_sha256": "fe1ed3203f121e86bae98de3a4faad3478eec5a6de47d305480f8f7b55cb4776",
+      "unchanged_since_assigned_head": true,
+      "unchanged_from_master": true
+    },
+    "tests/prices/dex/test_balancer.py": {
+      "current_sha256": "ea3f68eb63ba580aaeadf5440b330d676dd8065d22cf90eb87552d05ccd8cfa4",
+      "assigned_head_sha256": "ea3f68eb63ba580aaeadf5440b330d676dd8065d22cf90eb87552d05ccd8cfa4",
+      "master_sha256": "ea3f68eb63ba580aaeadf5440b330d676dd8065d22cf90eb87552d05ccd8cfa4",
+      "unchanged_since_assigned_head": true,
+      "unchanged_from_master": true
+    },
+    "tests/prices/dex/test_uniswap.py": {
+      "current_sha256": "184cd14f642e2d85ef83d304e487b2236986433a36b9e922f5487399d5350083",
+      "assigned_head_sha256": "d752c050856a11606e62d87a42ed777fc388bff417d6681328d40b7215e4c99f",
+      "master_sha256": "c720c20d3da71caf3cecf199b47132a6c859665405595b1510a7ed910ec5bb95",
+      "unchanged_since_assigned_head": false,
+      "unchanged_from_master": false
+    },
+    "tests/prices/lending/test_aave.py": {
+      "current_sha256": "d9cd6c9fc328f1c4e91bac99ad01863c2f5d2c8ea9093914e470541e6e79d963",
+      "assigned_head_sha256": "d9cd6c9fc328f1c4e91bac99ad01863c2f5d2c8ea9093914e470541e6e79d963",
+      "master_sha256": "d9cd6c9fc328f1c4e91bac99ad01863c2f5d2c8ea9093914e470541e6e79d963",
+      "unchanged_since_assigned_head": true,
+      "unchanged_from_master": true
+    },
+    "tests/prices/lending/test_compound.py": {
+      "current_sha256": "4edcbabb5cc804e1f6ac52eeba36e7ed0895c2412f708b044ecaf8770855e274",
+      "assigned_head_sha256": "4edcbabb5cc804e1f6ac52eeba36e7ed0895c2412f708b044ecaf8770855e274",
+      "master_sha256": "4edcbabb5cc804e1f6ac52eeba36e7ed0895c2412f708b044ecaf8770855e274",
+      "unchanged_since_assigned_head": true,
+      "unchanged_from_master": true
+    },
+    "tests/prices/stable_swap/test_curve.py": {
+      "current_sha256": "3faab01dcb477772efc294c85970718b41c1d0979ecf72de1d879d68a287b9a9",
+      "assigned_head_sha256": "3faab01dcb477772efc294c85970718b41c1d0979ecf72de1d879d68a287b9a9",
+      "master_sha256": "3faab01dcb477772efc294c85970718b41c1d0979ecf72de1d879d68a287b9a9",
+      "unchanged_since_assigned_head": true,
+      "unchanged_from_master": true
+    },
+    "tests/prices/test_magic.py": {
+      "current_sha256": "95db5b5ee0f563e18d487f031f3510ee0a241669b94618d5e309fb0bbc19fab7",
+      "assigned_head_sha256": "95db5b5ee0f563e18d487f031f3510ee0a241669b94618d5e309fb0bbc19fab7",
+      "master_sha256": "109acddd2e7cfb63c2800df81a1cea3edec0e9f6357cb366a3e75dc97411d0af",
+      "unchanged_since_assigned_head": true,
+      "unchanged_from_master": false
+    },
+    "tests/prices/test_popsicle.py": {
+      "current_sha256": "1cf5003662fa7a7c90c1ea41f40d1133d022f2bc7ca5cde4b2afb987688ededc",
+      "assigned_head_sha256": "1cf5003662fa7a7c90c1ea41f40d1133d022f2bc7ca5cde4b2afb987688ededc",
+      "master_sha256": "8f40e3e9da5fb5ba369f17ea2c97922e6eeb1f5e3bdb7adc57aee82c70c7c6df",
+      "unchanged_since_assigned_head": true,
+      "unchanged_from_master": false
+    },
+    "tests/prices/test_yearn.py": {
+      "current_sha256": "6a830887bd6b83c9b94bb565a361806823cb13f656f3bb8c0d7c5419b922c4ef",
+      "assigned_head_sha256": "6a830887bd6b83c9b94bb565a361806823cb13f656f3bb8c0d7c5419b922c4ef",
+      "master_sha256": "6a830887bd6b83c9b94bb565a361806823cb13f656f3bb8c0d7c5419b922c4ef",
+      "unchanged_since_assigned_head": true,
+      "unchanged_from_master": true
+    },
+    "tests/prices/tokenized_fund/test_piedao.py": {
+      "current_sha256": "2eaa6b76563490f1b723edfe101bda1b4e79052008c20e1c90f6de76067b92db",
+      "assigned_head_sha256": "2eaa6b76563490f1b723edfe101bda1b4e79052008c20e1c90f6de76067b92db",
+      "master_sha256": "2eaa6b76563490f1b723edfe101bda1b4e79052008c20e1c90f6de76067b92db",
+      "unchanged_since_assigned_head": true,
+      "unchanged_from_master": true
+    },
+    "tests/test_misc_fixes.py": {
+      "current_sha256": "bc40f3721e3245a297a04c9d31a3f4b63e6abfe50de0acf4737ddf995eb0a192",
+      "assigned_head_sha256": "766c60ff2355e585f477cecd7ab1205139040cd339f06bf45a467ffbd006aee3",
+      "master_sha256": "1a37b1cbf54a89aa7e862a1716ff37787c3164d4154fa0768b67e0f1cd78a74c",
+      "unchanged_since_assigned_head": false,
+      "unchanged_from_master": false
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "cold_seconds": 0.0031285840086638927,
+  "warm_seconds": 0.00016266712918877602,
+  "repeated_amount_seconds": 3.875000402331352e-05,
+  "concurrent_seconds": 0.002377416007220745,
+  "pools": 4771,
+  "input_pools": 75,
+  "peak_operations": 64,
+  "liquidity_reads": 75,
+  "quote_calls": 3,
+  "boundary": "controlled native RPC; cached production Sushi topology"
+}

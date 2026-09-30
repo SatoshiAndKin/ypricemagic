@@ -39,7 +39,7 @@ TEST_BLOCK = 18_000_000
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_is_erc4626_vault_sdai():
+async def test_is_erc4626_vault_sdai() -> None:
     """sDAI should be detected as an ERC4626 vault."""
     result = await erc4626.is_erc4626_vault(SDAI, sync=False)
     assert result is True, f"sDAI should be detected as ERC4626 vault, got {result}"
@@ -47,7 +47,7 @@ async def test_is_erc4626_vault_sdai():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_is_not_erc4626_vault_dai():
+async def test_is_not_erc4626_vault_dai() -> None:
     """DAI should NOT be detected as an ERC4626 vault."""
     result = await erc4626.is_erc4626_vault(DAI, sync=False)
     assert result is False, f"DAI should not be detected as ERC4626 vault, got {result}"
@@ -55,7 +55,7 @@ async def test_is_not_erc4626_vault_dai():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_is_not_erc4626_vault_usdc():
+async def test_is_not_erc4626_vault_usdc() -> None:
     """USDC should NOT be detected as an ERC4626 vault."""
     result = await erc4626.is_erc4626_vault(USDC, sync=False)
     assert result is False, f"USDC should not be detected as ERC4626 vault, got {result}"
@@ -68,12 +68,10 @@ async def test_is_not_erc4626_vault_usdc():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_erc4626_bucket():
+async def test_erc4626_bucket() -> None:
     """sDAI should be bucketed as 'erc4626 vault'."""
     bucket = await check_bucket(SDAI, sync=False)
-    assert bucket == "erc4626 vault", (
-        f"Expected 'erc4626 vault' bucket for sDAI, got '{bucket}'"
-    )
+    assert bucket == "erc4626 vault", f"Expected 'erc4626 vault' bucket for sDAI, got '{bucket}'"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -83,11 +81,9 @@ async def test_erc4626_bucket():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_sdai_price_positive():
+async def test_sdai_price_positive() -> None:
     """sDAI should resolve to a positive price."""
-    result = await magic.get_price(
-        SDAI, TEST_BLOCK, fail_to_None=True, skip_cache=True, sync=False
-    )
+    result = await magic.get_price(SDAI, TEST_BLOCK, fail_to_None=True, skip_cache=True, sync=False)
     assert result is not None, "sDAI price should not be None"
 
     price = float(result.price if isinstance(result, PriceResult) else result)
@@ -96,7 +92,7 @@ async def test_sdai_price_positive():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_sdai_price_greater_than_dai():
+async def test_sdai_price_greater_than_dai() -> None:
     """sDAI should be worth more than DAI since it accrues DSR interest."""
     sdai_result = await magic.get_price(
         SDAI, TEST_BLOCK, fail_to_None=True, skip_cache=True, sync=False
@@ -123,11 +119,9 @@ async def test_sdai_price_greater_than_dai():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_sdai_returns_price_result():
+async def test_sdai_returns_price_result() -> None:
     """sDAI pricing should return a PriceResult with descriptive source."""
-    result = await magic.get_price(
-        SDAI, TEST_BLOCK, fail_to_None=True, skip_cache=True, sync=False
-    )
+    result = await magic.get_price(SDAI, TEST_BLOCK, fail_to_None=True, skip_cache=True, sync=False)
     assert result is not None
     assert isinstance(result, PriceResult), f"Expected PriceResult, got {type(result)}"
     assert result.path, "PriceResult should have at least one step in path"
@@ -145,21 +139,17 @@ async def test_sdai_returns_price_result():
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_erc4626_get_price_direct():
+async def test_erc4626_get_price_direct() -> None:
     """Direct call to erc4626.get_price should return a valid price."""
-    price = await erc4626.get_price(
-        SDAI, block=TEST_BLOCK, skip_cache=True, sync=False
-    )
+    price = await erc4626.get_price(SDAI, block=TEST_BLOCK, skip_cache=True, sync=False)
     assert price is not None, "erc4626.get_price should return a non-None price for sDAI"
     assert float(price) > 0, f"erc4626.get_price should return positive price, got {price}"
 
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
-async def test_erc4626_get_price_non_vault_returns_none():
+async def test_erc4626_get_price_non_vault_returns_none() -> None:
     """erc4626.get_price on a non-vault token should return None."""
-    price = await erc4626.get_price(
-        DAI, block=TEST_BLOCK, skip_cache=True, sync=False
-    )
+    price = await erc4626.get_price(DAI, block=TEST_BLOCK, skip_cache=True, sync=False)
     # DAI doesn't have asset() so it should return None
     assert price is None, f"DAI is not an ERC4626 vault, expected None, got {price}"

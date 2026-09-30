@@ -1,27 +1,32 @@
 import itertools
 import logging
-from typing import Any
+from collections.abc import Iterable, Sequence
+from operator import getitem
+from typing import Any, cast
 
 import cachebox
 from a_sync import a_sync, cgather
-from a_sync.executor import AsyncExecutor
+from a_sync.executor import _AsyncExecutorMixin
 from brownie.network.event import _EventItem
 from eth_typing import HexStr
 from eth_utils.toolz import concat
+from evmspec import Log as RpcLog
 from evmspec.data import Address, HexBytes32, uint
 from evmspec.structs.log import Topic
 from hexbytes import HexBytes
 from msgspec import ValidationError, json
-from pony.orm import commit, db_session, select
+from pony.orm import commit, select
 from pony.orm.core import Query
 
+from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._db.common import DiskCache, default_filter_threads, enc_hook, make_executor
-from y._db.decorators import db_session_cached, db_session_retry_locked, retry_locked
+from y._db.decorators import db_session_retry_locked, retry_locked
 from y._db.entities import Block, Hashes
 from y._db.entities import Log as DbLog
 from y._db.entities import LogCacheInfo, LogTopic
 from y._db.log import Log
+from y._db.typing import db_session
 from y._db.utils._ep import _get_get_block
 from y._db.utils.bulk import insert as _bulk_insert
 from y.constants import CHAINID
@@ -55,7 +60,7 @@ _encode_generic = json.Encoder().encode
 _encode_log = json.Encoder(enc_hook=enc_hook).encode
 
 
-def _decode_hook_unsafe(typ, obj):
+def _decode_hook_unsafe(typ: type[Any], obj: Any) -> Any:
     """This decode hook does NOT ensure addresses are checksummed. They must be stored that way."""
     try:
         if issubclass(typ, uint):
@@ -79,7 +84,7 @@ _decode_log = json.Decoder(type=Log, dec_hook=_decode_hook_unsafe).decode
 
 
 def _prepare_log(
-    log: Log, hash_dbids: dict[str, int], topic_dbids: dict[str, int]
+    log: RpcLog, hash_dbids: dict[str, int], topic_dbids: dict[str, int]
 ) -> tuple[Any, ...]:
     """
     Prepare a log for insertion into the database.
@@ -138,7 +143,7 @@ def _get_dbids(entity: Any, attribute: str, values: tuple[str, ...]) -> dict[str
 
 
 def _prepare_logs(
-    logs: list[Log], hashes: tuple[tuple[str], ...], topics: tuple[tuple[str], ...]
+    logs: Sequence[RpcLog], hashes: tuple[tuple[str], ...], topics: tuple[tuple[str], ...]
 ) -> list[tuple[Any, ...]]:
     with db_session:
         hash_dbids = _get_dbids(Hashes, "hash", tuple(row[0] for row in hashes))
@@ -146,16 +151,20 @@ def _prepare_logs(
     return [_prepare_log(log, hash_dbids, topic_dbids) for log in logs]
 
 
-_check_using_extended_db = lambda: "eth_portfolio" in _get_get_block().__module__
+def _check_using_extended_db() -> bool:
+    return "eth_portfolio" in _get_get_block().__module__
 
 
-async def bulk_insert(logs: list[Log], executor: AsyncExecutor = default_filter_threads) -> None:
+async def bulk_insert(
+    logs: list[RpcLog], executor: _AsyncExecutorMixin = default_filter_threads
+) -> None:
     if not logs:
         return
 
     submit = executor.submit
 
     # handle a conflict with eth-portfolio's extended db
+    blocks: tuple[tuple[Any, ...], ...]
     if _check_using_extended_db():
         blocks = tuple(
             (CHAINID, block, "BlockExtended") for block in {log.blockNumber for log in logs}
@@ -167,7 +176,7 @@ async def bulk_insert(logs: list[Log], executor: AsyncExecutor = default_filter_
     del blocks
 
     txhashes = (txhash.hex() for txhash in {log.transactionHash for log in logs})
-    addresses = {log.address for log in logs}
+    addresses = {cast(str, log.address) for log in logs}
     hashes = tuple((_remove_0x_prefix(hash),) for hash in itertools.chain(txhashes, addresses))
     hashes_fut = submit(_bulk_insert, Hashes, ("hash",), hashes, sync=True)
     del txhashes, addresses
@@ -193,13 +202,16 @@ async def bulk_insert(logs: list[Log], executor: AsyncExecutor = default_filter_
     )
 
 
-@a_sync(default="async", executor=_topic_executor, ram_cache_maxsize=None)
-@db_session_cached
+# Cache completed IDs once for both synchronous and asynchronous callers.
+@a_sync(default="async", executor=_topic_executor)
+@retry_locked
+@cachebox.cached(cachebox.LRUCache(ENVS.DEFAULT_CACHE_MAXSIZE))
+@db_session_retry_locked
 def get_topic_dbid(topic: Topic) -> int:
-    topic = _remove_0x_prefix(topic.strip())
-    entity = _get_log_topic(topic=topic)
+    topic_text = _remove_0x_prefix(topic.strip())
+    entity = _get_log_topic(topic=topic_text)
     if entity is None:
-        entity = LogTopic(topic=topic)
+        entity = LogTopic(topic=topic_text)
     return entity.dbid
 
 
@@ -220,20 +232,21 @@ def _get_hash_dbid(hexstr: HexStr) -> int:
     return entity.dbid
 
 
-def get_decoded(log: Log) -> _EventItem | None:
+def get_decoded(log: RpcLog) -> _EventItem[Any] | None:
     # TODO: load these in bulk
-    log = DbLog[CHAINID, log.block_number, log.transaction_hash, log.log_index]
-    if decoded := log.decoded:
+    entity = getitem(DbLog, (CHAINID, log.block_number, log.transaction_hash, log.log_index))
+    if decoded := getattr(entity, "decoded"):
         return _EventItem(
             decoded["name"], decoded["address"], decoded["event_data"], decoded["pos"]
         )
+    return None
 
 
 @db_session
 @retry_locked
-def set_decoded(log: Log, decoded: _EventItem) -> None:
-    log = DbLog[CHAINID, log.block_number, log.transaction_hash, log.log_index]
-    log.decoded = decoded
+def set_decoded(log: RpcLog, decoded: _EventItem[Any]) -> None:
+    entity = getitem(DbLog, (CHAINID, log.block_number, log.transaction_hash, log.log_index))
+    setattr(entity, "decoded", decoded)
 
 
 page_size = 100
@@ -254,19 +267,19 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
         return f"{string})"
 
     @property
-    def topic0(self) -> str:
+    def topic0(self) -> str | list[str] | None:
         return self.topics[0] if self.topics else None
 
     @property
-    def topic1(self) -> str:
+    def topic1(self) -> str | list[str] | None:
         return self.topics[1] if self.topics and len(self.topics) > 1 else None
 
     @property
-    def topic2(self) -> str:
+    def topic2(self) -> str | list[str] | None:
         return self.topics[2] if self.topics and len(self.topics) > 2 else None
 
     @property
-    def topic3(self) -> str:
+    def topic3(self) -> str | list[str] | None:
         return self.topics[3] if self.topics and len(self.topics) > 3 else None
 
     def load_metadata(self) -> LogCacheInfo | None:
@@ -295,6 +308,7 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
             )
         ):
             return info
+        return None
 
     def _is_cached_thru(self, from_block: int) -> int:
         from y._db.utils import utils as db
@@ -352,7 +366,7 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
     ) -> "Query[tuple[int, str, int, bytes], tuple[int, str, int, bytes]]":
         from y._db.utils import utils as db
 
-        generator = (
+        generator: Iterable[DbLog] = (
             log
             for log in DbLog
             if log.block.chain == db.get_chain(sync=True)
@@ -427,7 +441,7 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
             logger.debug("cached %s %s thru %s", self.addresses, self.topics, done_thru)
         return
 
-    def _wrap_query_with_addresses(self, generator) -> Query:
+    def _wrap_query_with_addresses(self, generator: Iterable[DbLog]) -> Iterable[DbLog]:
         if not (addresses := self.addresses):
             return generator
         elif isinstance(addresses, str):
@@ -436,7 +450,7 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
         addresses = tuple(convert.to_address(address)[2:] for address in addresses)
         return (log for log in generator if log.address.hash in addresses)
 
-    def _wrap_query_with_topic(self, generator, topic_id: str) -> Query:
+    def _wrap_query_with_topic(self, generator: Iterable[DbLog], topic_id: str) -> Iterable[DbLog]:
         if not (topic_or_topics := getattr(self, topic_id)):
             return generator
 

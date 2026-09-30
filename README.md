@@ -8,7 +8,7 @@ Use this tool to extract historical on-chain price data from an archive node.
 ypricemagic is built to work seamlessly with both sync and async Python codebases using the [ez-a-sync framework](https://github.com/BobTheBuidler/ez-a-sync).
 
 ## Requirements
-- Python 3.9 or higher.
+- Python 3.11, 3.12, or 3.13.
 - At least 16GB of RAM.
 
 ## Prerequisites
@@ -53,7 +53,13 @@ prices = await get_prices(tokens, block, sync=False)
 See the [docs](https://bobthebuidler.github.io/ypricemagic) for more usage information.
 
 ## Debug logging
-If you need to spot long-running async calls, enable the `y.stuck?` logger at DEBUG to get periodic "still executing" messages. Details: [y.stuck? logger](CONTRIBUTING.md#y-stuck-logger).
+For wallet-independent sale estimates, use `get_price(token, block, amount=1000)`
+or `get_prices(tokens, block, amounts=[1, 2])`. Amounts use readable tokens and
+must be integers or `Decimal`. [Amount quotes and historical audits](docs/amount-quotes.rst)
+explain liquidity-based routing, native fees, supported redemptions, and limits.
+Python 3.11 through 3.13 are supported.
+
+If you need to spot long-running async calls, enable the `y.stuck?` logger at DEBUG to get "still executing" messages every five minutes. These messages are DEBUG-only. Details: [y.stuck? logger](CONTRIBUTING.md#y-stuck-logger).
 
 ## Extras
 You can also import protocol specific modules. For example:

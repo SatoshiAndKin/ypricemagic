@@ -1,0 +1,97 @@
+{
+  "head": "f689b2c62051c6c1b139489951202794bd652eb1",
+  "run_id": 36280880231,
+  "jobs": [
+    {
+      "name": "mypy (macos-latest, 3.13)",
+      "job_id": 108512339995,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1807 errors in 117 files (checked 216 source files)",
+      "raw_log_sha256": "39bdca384179bb92103d62c3c8df79e78bf16fce98f8993d7c045db7aead6314"
+    },
+    {
+      "name": "mypy (windows-latest, 3.12)",
+      "job_id": 108512340055,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1838 errors in 130 files (checked 216 source files)\r",
+      "raw_log_sha256": "f2666a11dfac284730a6ebf2d35448908d645a70d13ab03464406cde9134e2e6"
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.11)",
+      "job_id": 108512340063,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1807 errors in 117 files (checked 216 source files)",
+      "raw_log_sha256": "e89671cb81975428c877e832fc46c837d8e02f9f64b805ae5eb3d8999d70f238"
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.12)",
+      "job_id": 108512340072,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1807 errors in 117 files (checked 216 source files)",
+      "raw_log_sha256": "54f3d89a8ce85f0bfe490678bf8e53f638db99699fbe678c8632f8f98890bd8c"
+    },
+    {
+      "name": "mypy (windows-latest, 3.11)",
+      "job_id": 108512340080,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1840 errors in 131 files (checked 216 source files)\r",
+      "raw_log_sha256": "67fc4b9d33ec6be9cee8febd539ab228b0fedbd38e2519bb3707c81e54222939"
+    },
+    {
+      "name": "mypy (macos-latest, 3.12)",
+      "job_id": 108512340086,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1807 errors in 117 files (checked 216 source files)",
+      "raw_log_sha256": "8405b7d446c28b79a56cd20139e4bfea87ce012f8d816824752bf00e5236de76"
+    },
+    {
+      "name": "mypy (ubuntu-latest, 3.13)",
+      "job_id": 108512340122,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1807 errors in 117 files (checked 216 source files)",
+      "raw_log_sha256": "ad094bedaeafd5ed28041762af123a265acc76eb787ca2fcb4b8766092f6c470"
+    },
+    {
+      "name": "mypy (windows-latest, 3.13)",
+      "job_id": 108512340124,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1840 errors in 131 files (checked 216 source files)\r",
+      "raw_log_sha256": "8ff43bb3c57f5ecf82a1a9c7fe65e81695eeb650fb6f1040faee28726bbd3541"
+    },
+    {
+      "name": "mypy (macos-latest, 3.11)",
+      "job_id": 108512340160,
+      "conclusion": "failure",
+      "failed_steps": [
+        "Run MyPy"
+      ],
+      "summary": "Found 1807 errors in 117 files (checked 216 source files)",
+      "raw_log_sha256": "89d16d808504405abc786f83d50f174e1228e08bddcafb03775f50aabdb9148e"
+    }
+  ],
+  "note": "CI diagnostics remain failing. Docker compares frozen dependency diagnostics and finds no additions; CI installs unfrozen transitive dependency versions."
+}

@@ -1,0 +1,44 @@
+{
+  "complete": true,
+  "pools": 524288,
+  "phases": [
+    {
+      "phase": "construction",
+      "elapsed_seconds": 5.808499247999862,
+      "rss_current_bytes": 697303040,
+      "rss_peak_bytes": 697069568,
+      "python_current_bytes": null,
+      "python_peak_bytes": null
+    },
+    {
+      "phase": "index_all_tokens",
+      "elapsed_seconds": 7.182153743997333,
+      "rss_current_bytes": 1273131008,
+      "rss_peak_bytes": 1272946688,
+      "python_current_bytes": null,
+      "python_peak_bytes": null
+    },
+    {
+      "phase": "warm_independent_results",
+      "elapsed_seconds": 0.07633739800076,
+      "rss_current_bytes": 1283620864,
+      "rss_peak_bytes": 1293918208,
+      "python_current_bytes": null,
+      "python_peak_bytes": null
+    }
+  ],
+  "property_values": 1572864,
+  "bound_methods": {},
+  "scheduled_callbacks": 5,
+  "logical_rpc_counts": {
+    "block_rpc": 0,
+    "http": 0,
+    "call_uid": 0,
+    "request_uid": 0,
+    "multicall_uid": 0,
+    "jsonrpc_batch_uid": 0
+  },
+  "metadata_sha256": "ea1f044d3da1bcf44e2796970d8b7667ff3f50abe87330527b6728a8c027b2a8",
+  "profiler": null,
+  "boundary": "synthetic seeded pool metadata; no reserve or discovery RPC"
+}

@@ -1,0 +1,247 @@
+{
+  "released": false,
+  "fields": {
+    "asynchronous": "builtins.bool",
+    "__a_sync_should_await_cache__": "builtins.dict",
+    "_deploy_block": "builtins.int",
+    "__async_property__": "a_sync.async_property.cached.AsyncCachedPropertyInstanceState"
+  },
+  "router_cache_keys": [
+    "pools",
+    "pools_by_token"
+  ],
+  "router_cache_types": {
+    "pools": "list",
+    "pools_by_token": "dict"
+  },
+  "refs": [
+    {
+      "type": "builtins.dict",
+      "keys": [
+        "0x0000000000000000000000000000000012340099"
+      ],
+      "parents": [
+        {
+          "type": "builtins.coroutine",
+          "name": "main",
+          "parents": [
+            {
+              "type": "_asyncio.Task",
+              "parents": [
+                {
+                  "type": "builtins.dict",
+                  "keys": [
+                    "<_UnixSelectorEventLoop running=True closed=False debug=False>"
+                  ],
+                  "parents": [
+                    {
+                      "type": "builtins.module"
+                    },
+                    {
+                      "type": "builtins.dict",
+                      "keys": [
+                        "__name__",
+                        "__doc__",
+                        "__package__",
+                        "__loader__",
+                        "__spec__",
+                        "current_task",
+                        "get_event_loop",
+                        "get_running_loop",
+                        "_get_running_loop",
+                        "_set_running_loop",
+                        "_register_task",
+                        "_register_eager_task"
+                      ]
+                    },
+                    {
+                      "type": "builtins.dict",
+                      "keys": [
+                        "__name__",
+                        "__doc__",
+                        "__package__",
+                        "__loader__",
+                        "__spec__",
+                        "__file__",
+                        "__cached__",
+                        "__builtins__",
+                        "__all__",
+                        "concurrent",
+                        "contextvars",
+                        "functools"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "_asyncio.TaskStepMethWrapper",
+                  "parents": [
+                    {
+                      "type": "asyncio.events.Handle"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "builtins.dict",
+          "keys": [
+            "0x0000000000000000000000000000000000000101",
+            "0x0000000000000000000000000000000000000102"
+          ],
+          "parents": [
+            {
+              "type": "_asyncio.Task",
+              "parents": [
+                {
+                  "type": "a_sync._smart.__pyx_scope_struct_3___pyx_f_6a_sync_6_smart__get_done_callbacks",
+                  "parents": [
+                    {
+                      "type": "_cython_3_2_5.cython_function_or_method",
+                      "name": "_get_done_callbacks.<locals>._inner_done_callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "a_sync._smart.SmartFuture",
+              "parents": [
+                {
+                  "type": "a_sync._smart.__pyx_scope_struct_3___pyx_f_6a_sync_6_smart__get_done_callbacks",
+                  "parents": [
+                    {
+                      "type": "_cython_3_2_5.cython_function_or_method",
+                      "name": "_get_done_callbacks.<locals>._inner_done_callback"
+                    }
+                  ]
+                },
+                {
+                  "type": "builtins.method",
+                  "name": "SmartFuture._waiter_done_cleanup_callback",
+                  "parents": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "builtins.dict",
+      "keys": [
+        "0x0000000000000000000000000000000012340099"
+      ],
+      "parents": [
+        {
+          "type": "builtins.coroutine",
+          "name": "main",
+          "parents": [
+            {
+              "type": "_asyncio.Task",
+              "parents": [
+                {
+                  "type": "builtins.dict",
+                  "keys": [
+                    "<_UnixSelectorEventLoop running=True closed=False debug=False>"
+                  ],
+                  "parents": [
+                    {
+                      "type": "builtins.module"
+                    },
+                    {
+                      "type": "builtins.dict",
+                      "keys": [
+                        "__name__",
+                        "__doc__",
+                        "__package__",
+                        "__loader__",
+                        "__spec__",
+                        "current_task",
+                        "get_event_loop",
+                        "get_running_loop",
+                        "_get_running_loop",
+                        "_set_running_loop",
+                        "_register_task",
+                        "_register_eager_task"
+                      ]
+                    },
+                    {
+                      "type": "builtins.dict",
+                      "keys": [
+                        "__name__",
+                        "__doc__",
+                        "__package__",
+                        "__loader__",
+                        "__spec__",
+                        "__file__",
+                        "__cached__",
+                        "__builtins__",
+                        "__all__",
+                        "concurrent",
+                        "contextvars",
+                        "functools"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "_asyncio.TaskStepMethWrapper",
+                  "parents": [
+                    {
+                      "type": "asyncio.events.Handle"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "builtins.dict",
+          "keys": [
+            "0x0000000000000000000000000000000000000101",
+            "0x0000000000000000000000000000000000000102"
+          ],
+          "parents": [
+            {
+              "type": "_asyncio.Task",
+              "parents": [
+                {
+                  "type": "a_sync._smart.__pyx_scope_struct_3___pyx_f_6a_sync_6_smart__get_done_callbacks",
+                  "parents": [
+                    {
+                      "type": "_cython_3_2_5.cython_function_or_method",
+                      "name": "_get_done_callbacks.<locals>._inner_done_callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "a_sync._smart.SmartFuture",
+              "parents": [
+                {
+                  "type": "a_sync._smart.__pyx_scope_struct_3___pyx_f_6a_sync_6_smart__get_done_callbacks",
+                  "parents": [
+                    {
+                      "type": "_cython_3_2_5.cython_function_or_method",
+                      "name": "_get_done_callbacks.<locals>._inner_done_callback"
+                    }
+                  ]
+                },
+                {
+                  "type": "builtins.method",
+                  "name": "SmartFuture._waiter_done_cleanup_callback",
+                  "parents": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import hashlib,importlib.machinery,importlib.metadata,json\nfrom pathlib import Path\nimport cachebox\nimport cachebox._core\ncore=Path(cachebox._core.__file__)\nassert any(str(core).endswith(s) for s in importlib.machinery.EXTENSION_SUFFIXES)\nsource=json.loads(importlib.metadata.distribution('cachebox').read_text('direct_url.json'))\nassert source['vcs_info']['commit_id']=='10be25afe46afb32c8135db4d1b8e2d94431b9c1',source\nPath('/reports/cache-pin.json').write_text(json.dumps({'source':source,'version':cachebox.__version__,'core':str(core),'core_sha256':hashlib.sha256(core.read_bytes()).hexdigest(),'python_sources':{str(p.relative_to(core.parent)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(core.parent.rglob('*.py'))}},indent=2)+'\\n')\n"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 1.9049029110028641,
+  "peak_sampled_process_rss_bytes": 17190912,
+  "cgroup_before": {
+    "memory.current": "8749056",
+    "memory.peak": "8855552",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "15429632",
+    "memory.peak": "142929920",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

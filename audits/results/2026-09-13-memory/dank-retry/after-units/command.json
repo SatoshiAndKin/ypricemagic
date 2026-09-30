@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e\nexport PYTEST_PLUGINS= PYTEST_DISABLE_PLUGIN_AUTOLOAD=1\npython -m pip install --no-deps coverage==7.10.7\ncd tests/unit\nset +e\npython -m coverage run --branch --source=dank_mids -m pytest\nstatus=$?\npython -m coverage json -o /reports/unit-coverage.json\ncd /work\npython -m mypy\nexit \"$status\"\n"
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 14.236133884000083,
+  "peak_sampled_process_rss_bytes": 435802112,
+  "cgroup_before": {
+    "memory.current": "8953856",
+    "memory.peak": "8953856",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "124588032",
+    "memory.peak": "532897792",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

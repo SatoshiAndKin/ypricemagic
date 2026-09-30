@@ -1,0 +1,9 @@
+{
+  "exit_code": 0,
+  "counts": {
+    "setup:passed": 243,
+    "call:passed": 243,
+    "teardown:passed": 243
+  },
+  "collected": 243
+}

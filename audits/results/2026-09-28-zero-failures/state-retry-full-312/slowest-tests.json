@@ -1,0 +1,52 @@
+[
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[24572279]",
+    "outcome": "passed",
+    "duration": 3024.085435152054
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[18540155]",
+    "outcome": "passed",
+    "duration": 3013.413472175598
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[21556217]",
+    "outcome": "passed",
+    "duration": 3013.3681535720825
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[23064248]",
+    "outcome": "passed",
+    "duration": 2992.4379789829254
+  },
+  {
+    "test": "tests/prices/dex/test_balancer.py::test_balancer_v2_token_price",
+    "outcome": "passed",
+    "duration": 2991.700535058975
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[20048186]",
+    "outcome": "passed",
+    "duration": 2964.270492553711
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[17032124]",
+    "outcome": "passed",
+    "duration": 2795.9664640426636
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[12508031]",
+    "outcome": "passed",
+    "duration": 2592.0826811790466
+  },
+  {
+    "test": "tests/prices/test_curve_gauge.py::test_hardcoded_gauge_still_resolves",
+    "outcome": "passed",
+    "duration": 2557.8171792030334
+  },
+  {
+    "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x6Ee0f7BB50a54AB5253dA0667B0Dc2ee526C30a8]",
+    "outcome": "passed",
+    "duration": 2476.6104805469513
+  }
+]

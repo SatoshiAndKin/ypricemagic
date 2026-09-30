@@ -1,0 +1,22 @@
+[
+  {
+    "file": "build.log",
+    "scrubbed_original_sha256": "2b9c9f772784fa5807a20d9e3fdf7b2c640b9ecce1446445af5711c092c20686",
+    "published_sha256": "b9f5d7a5ea7fdda413a7ef9279b8ddb6c0fb2827a3d79e5a79ef26d91438b394"
+  },
+  {
+    "file": "mypy.txt",
+    "scrubbed_original_sha256": "07d5c1a0694c91a882c3144697b131c75dc08ef3a269ff9cd7c7d217bac57a31",
+    "published_sha256": "f55cd55ab98dce1fd5ec1b26b3ad724baf01ebc8ef2364a7497e74c80555057b"
+  },
+  {
+    "file": "ownership-pins.json",
+    "scrubbed_original_sha256": "26894172fee452a574d1ec0b049a777afa4faaf09634d17b821345981cd4e875",
+    "published_sha256": "7f255d60d8c515706999bf24f62091c578cbaa0961c70b5f3d69d9972a6b6818"
+  },
+  {
+    "file": "scaling.json",
+    "scrubbed_original_sha256": "62aabffb1dd507d02207955c76af1317bc25ac1ac7bcd8a85fb1d8f910eca91f",
+    "published_sha256": "e4e6e0585b06c3c7d804f83818988d743a44b0d5f0b39788dfbdb96ff5ddfab0"
+  }
+]

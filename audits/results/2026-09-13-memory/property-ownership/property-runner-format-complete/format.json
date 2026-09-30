@@ -1,0 +1,14 @@
+{
+  "version": "25.9.0",
+  "files": [
+    "y/prices/dex/uniswap/v2.py",
+    "tests/test_pool_memory.py",
+    "tests/test_pricing_correctness.py",
+    "tests/test_routing_scaling.py",
+    "tools/validation/pool_discovery_profile.py",
+    "tools/validation/compare.py",
+    "tools/validation/test_runner.py"
+  ],
+  "exit_code": 0,
+  "output": "All done! \u2728 \ud83c\udf70 \u2728\n7 files would be left unchanged.\n"
+}

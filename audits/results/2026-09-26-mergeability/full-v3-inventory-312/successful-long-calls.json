@@ -1,0 +1,259 @@
+{
+  "source_archive_sha256": "1a0e22293863990c1d850e7cd788faefdac3231c7d39e25ba33c2fb037c97ba5",
+  "over_600_seconds": 63,
+  "over_1800_seconds": 2,
+  "tests": [
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x6c3ea9036406852006290770BEdFcAbA0e23A0e8-18465961]",
+      "duration": 1805.7708508968353
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E-17267952]",
+      "duration": 1805.0203285217285
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f-17708470]",
+      "duration": 1799.5013272762299
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xdAC17F958D2ee523a2206206994597C13D831ec7-10000554]",
+      "duration": 1751.2375631332397
+    },
+    {
+      "test": "tests/prices/test_curve_gauge.py::test_hardcoded_gauge_still_resolves",
+      "duration": 1640.9028396606445
+    },
+    {
+      "test": "tests/prices/test_magic.py::test_get_prices[12506797]",
+      "duration": 1630.7429413795471
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810E776880C02933D47DB1B9FC05908E5386B96]",
+      "duration": 1598.5165648460388
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880C02933D47DB1b9fc05908e5386b961]",
+      "duration": 1597.7252802848816
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x6810e776880C02933D47DB1b9fc05908e5386b960]",
+      "duration": 1597.7252762317657
+    },
+    {
+      "test": "tests/prices/test_exotic_tokens.py::test_xpremia_price",
+      "duration": 1411.9744701385498
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x6Ee0f7BB50a54AB5253dA0667B0Dc2ee526C30a8]",
+      "duration": 1304.7122132778168
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc21]",
+      "duration": 1294.186758518219
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02AAA39B223FE8D0A0E5C4F27EAD9083C756CC2]",
+      "duration": 1294.166826248169
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2]",
+      "duration": 1294.1667585372925
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc20]",
+      "duration": 1294.103078365326
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xA361718326c15715591c299427c62086F69923D9]",
+      "duration": 1286.9978091716766
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xD37EE7e4f452C6638c96536e68090De8cBcdb583]",
+      "duration": 1285.1883215904236
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xc2e2152647F4C26028482Efaf64b2Aa28779EFC4]",
+      "duration": 1275.8728415966034
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4FE83213D56308330EC302A8BD641F1D0113A4CC]",
+      "duration": 1241.442943096161
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4fe83213d56308330ec302a8bd641f1d0113a4cc]",
+      "duration": 1241.2751204967499
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0F5D2fB29fb7d3CFeE444a200298f468908cC9421]",
+      "duration": 1240.0845363140106
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0F5D2FB29FB7D3CFEE444A200298F468908CC942]",
+      "duration": 1239.9806056022644
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0f5d2fb29fb7d3cfee444a200298f468908cc942]",
+      "duration": 1239.9003970623016
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x0F5D2fB29fb7d3CFeE444a200298f468908cC9420]",
+      "duration": 1239.8750545978546
+    },
+    {
+      "test": "tests/prices/test_exotic_tokens.py::test_xpremia_returns_price_result",
+      "duration": 1238.7749025821686
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4fE83213D56308330EC302a8BD641f1d0113A4Cc0]",
+      "duration": 1233.1599824428558
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x853d955aCEf822Db058eb8505911ED77F175b99e-11475581]",
+      "duration": 1232.6695177555084
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4fE83213D56308330EC302a8BD641f1d0113A4Cc1]",
+      "duration": 1232.632353067398
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x0000000000085d4780B73119b644AE5ecd22b376-11765631]",
+      "duration": 1230.2405898571014
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x04fa0d235c4abf4bcf4787af4cf447de572ef828]",
+      "duration": 1227.2943930625916
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF8280]",
+      "duration": 1227.2213509082794
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x04FA0D235C4ABF4BCF4787AF4CF447DE572EF828]",
+      "duration": 1226.830591917038
+    },
+    {
+      "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF8281]",
+      "duration": 1226.677598953247
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x6F634c6135D2EBD550000ac92F494F9CB8183dAe]",
+      "duration": 1219.2930097579956
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x683923dB55Fead99A79Fa01A27EeC3cB19679cC3]",
+      "duration": 1217.8839600086212
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x625aE63000f46200499120B906716420bd059240]",
+      "duration": 1194.5675988197327
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x7D2D3688Df45Ce7C552E19c27e007673da9204B8]",
+      "duration": 1189.9884214401245
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x71010A9D003445aC60C4e6A7017c1E89A477B438]",
+      "duration": 1189.8053922653198
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x6FCE4A401B6B80ACe52baAefE4421Bd188e76F6f]",
+      "duration": 1189.659068107605
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x712DB54daA836B53Ef1EcBb9c6ba3b9Efb073F40]",
+      "duration": 1184.6842381954193
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x69948cC03f478B95283F7dbf1CE764d0fc7EC54C]",
+      "duration": 1184.0361516475677
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x6C5024Cd4F8A59110119C56f8933403A539555EB]",
+      "duration": 1173.1288602352142
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xaC6Df26a590F08dcC95D5a4705ae8abbc88509Ef]",
+      "duration": 1171.8383688926697
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xa685a61171bb30d4072B338c80Cb7b2c865c873E]",
+      "duration": 1171.0150473117828
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xCC12AbE4ff81c9378D670De1b57F8e0Dd228D77a]",
+      "duration": 1170.9186775684357
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xF256CC7847E919FAc9B808cC216cAc87CCF2f47a]",
+      "duration": 1170.6928453445435
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x514cd6756CCBe28772d4Cb81bC3156BA9d1744aa]",
+      "duration": 1170.5482285022736
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xc9BC48c72154ef3e5425641a3c747242112a46AF]",
+      "duration": 1169.2706670761108
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0x1E6bb68Acec8fefBD87D192bE09bb274170a0548]",
+      "duration": 1164.7785799503326
+    },
+    {
+      "test": "tests/prices/lending/test_aave.py::test_atokens_async[0xA9e201A4e269d6cd5E9F0FcbcB78520cf815878B]",
+      "duration": 1154.879863023758
+    },
+    {
+      "test": "tests/prices/test_popsicle.py::test_popsicle_get_price[0x36e9B6e7FADC7b8Ee289c8A24Ad96573cda3D7D9]",
+      "duration": 1048.5662076473236
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2]",
+      "duration": 608.5723419189453
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-26067973]",
+      "duration": 608.382584810257
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-15398770]",
+      "duration": 608.3824443817139
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2-20733371]",
+      "duration": 608.3823575973511
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-15349414]",
+      "duration": 608.2827758789062
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2]",
+      "duration": 608.0811767578125
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-20708693]",
+      "duration": 608.0798006057739
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2-26067973]",
+      "duration": 608.0795698165894
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_async[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599]",
+      "duration": 607.9728636741638
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-21245050]",
+      "duration": 607.9714431762695
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-26067973]",
+      "duration": 607.8564519882202
+    },
+    {
+      "test": "tests/classes/test_erc20.py::test_erc20_at_block[0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599-16422128]",
+      "duration": 607.8560378551483
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "scope": "Two bounded host HTTP calls, no project imports or tests",
+  "calls": [
+    {
+      "method": "web3_clientVersion",
+      "params": [],
+      "timeout_seconds": 75,
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": "reth/v2.5.1-6dec1b9/x86_64-unknown-linux-gnu"
+      },
+      "elapsed_seconds": 0.020181166008114815
+    },
+    {
+      "method": "eth_call",
+      "params": [
+        {
+          "to": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          "data": "0x313ce567"
+        },
+        {
+          "blockHash": "0x6e65cf41a9208837f764d22dd0358f7d67f57cd71ec5ee975d98674e292322bd",
+          "requireCanonical": true
+        }
+      ],
+      "timeout_seconds": 75,
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": "0x0000000000000000000000000000000000000000000000000000000000000006"
+      },
+      "elapsed_seconds": 0.02098037488758564
+    }
+  ]
+}

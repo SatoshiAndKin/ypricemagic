@@ -1,0 +1,140 @@
+{
+  "3.12": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789402836.287188,
+      "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+      "source_revision": "worktree",
+      "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403",
+      "image": "sha256:1ba12aaef218d368be4b64d2ae7e49193eab413dc506a7f4a14e34ff18b8356b",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 32.16415882110596
+    },
+    "tests": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "52",
+      "time": "25.825",
+      "timestamp": "2026-09-14T16:20:37.233586",
+      "hostname": "617da66d9ec8"
+    },
+    "compiled_modules": {
+      "a_sync.a_sync.property": "/usr/local/lib/python3.12/site-packages/a_sync/a_sync/property.cpython-312-aarch64-linux-gnu.so",
+      "a_sync.async_property.cached": "/usr/local/lib/python3.12/site-packages/a_sync/async_property/cached.cpython-312-aarch64-linux-gnu.so",
+      "a_sync._smart": "/usr/local/lib/python3.12/site-packages/a_sync/_smart.cpython-312-aarch64-linux-gnu.so",
+      "a_sync.a_sync._helpers": "/usr/local/lib/python3.12/site-packages/a_sync/a_sync/_helpers.cpython-312-aarch64-linux-gnu.so"
+    },
+    "configured_mypy_errors": 300,
+    "runtime_contract": {
+      "passed": true,
+      "mypy_exit_code": 1
+    }
+  },
+  "3.11": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789403559.8153129,
+      "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+      "source_revision": "worktree",
+      "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403",
+      "image": "sha256:288d848f9f032ec10167be79d0fc65969f21a69edca5e09afc94d32459e45296",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 32.34344124794006
+    },
+    "tests": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "52",
+      "time": "25.870",
+      "timestamp": "2026-09-14T16:32:40.894391",
+      "hostname": "9e2ed588d352"
+    },
+    "compiled_modules": {
+      "a_sync.a_sync.property": "/usr/local/lib/python3.11/site-packages/a_sync/a_sync/property.cpython-311-aarch64-linux-gnu.so",
+      "a_sync.async_property.cached": "/usr/local/lib/python3.11/site-packages/a_sync/async_property/cached.cpython-311-aarch64-linux-gnu.so",
+      "a_sync._smart": "/usr/local/lib/python3.11/site-packages/a_sync/_smart.cpython-311-aarch64-linux-gnu.so",
+      "a_sync.a_sync._helpers": "/usr/local/lib/python3.11/site-packages/a_sync/a_sync/_helpers.cpython-311-aarch64-linux-gnu.so"
+    },
+    "configured_mypy_errors": 304,
+    "runtime_contract": {
+      "passed": true,
+      "mypy_exit_code": 1
+    }
+  },
+  "3.13": {
+    "run": {
+      "command": [
+        "env",
+        "PYTHONPATH=/runner",
+        "python",
+        "-P",
+        "-c",
+        "import asyncio,importlib,json,os,runpy,shutil,subprocess,sys,tomllib\nfrom pathlib import Path\nsource=Path('/work');target=Path('/tmp/property-owner-tests');target.mkdir()\nconfig=tomllib.loads((source/'pyproject.toml').read_text())\ntests=config['tool']['validation']['cached_property_tests']\nfor name in tests:\n    path=target/name;path.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source/name,path)\n# Keep the owner-declared target list; isolate tests from unbuilt Cython sources.\n(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\\n[tool.pytest.ini_options]\\ntestpaths = '+json.dumps(tests)+'\\naddopts = '+json.dumps(config['tool']['validation']['cached_property_pytest']['addopts'])+'\\n')\nstatus=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode\nmodules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}\nassert all(path.endswith('.so') for path in modules.values()),modules\nPath('/reports/property-owner-tests.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))\nresult=subprocess.run([sys.executable,'-P','-m','mypy'],cwd=source,text=True,capture_output=True)\noutput=result.stdout+result.stderr\nPath('/reports/owner-mypy.txt').write_text(output)\nassert 'INTERNAL ERROR' not in output and 'Traceback (most recent call last)' not in output,output\nnamespace=runpy.run_path(str(source/'tests/mypy/cached_property_contract.py'))\nasyncio.get_event_loop().run_until_complete(namespace['cached_property_contract']())\nasyncio.get_event_loop().run_until_complete(namespace['factory_contract']())\nPath('/reports/property-runtime-contract.json').write_text(json.dumps({'passed':True,'mypy_exit_code':result.returncode},indent=2))\nraise SystemExit(status)\n"
+      ],
+      "docker_context": "colima-ypricemagic",
+      "builder": "ypricemagic-validation-55871f24db8c",
+      "complete": true,
+      "started_unix": 1789403665.3729029,
+      "source_sha": "ebb981bfaffd887048d1945eff29ab5dfe360e34",
+      "source_revision": "worktree",
+      "source_archive_sha256": "c4757d2cda87ff0771c947a55011b9423c06806a5c7a11db20d70b8c83576403",
+      "image": "sha256:72a637626c7e62405d9837ae899f2eb7cd239cbb5bdd14f48dfcde7c77610587",
+      "exit_code": 0,
+      "oom_killed": false,
+      "missing_reports": [],
+      "below_memory_target": true,
+      "elapsed_seconds": 32.11402225494385
+    },
+    "tests": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "52",
+      "time": "26.036",
+      "timestamp": "2026-09-14T16:34:26.375589",
+      "hostname": "8e2b37a3a388"
+    },
+    "compiled_modules": {
+      "a_sync.a_sync.property": "/usr/local/lib/python3.13/site-packages/a_sync/a_sync/property.cpython-313-aarch64-linux-gnu.so",
+      "a_sync.async_property.cached": "/usr/local/lib/python3.13/site-packages/a_sync/async_property/cached.cpython-313-aarch64-linux-gnu.so",
+      "a_sync._smart": "/usr/local/lib/python3.13/site-packages/a_sync/_smart.cpython-313-aarch64-linux-gnu.so",
+      "a_sync.a_sync._helpers": "/usr/local/lib/python3.13/site-packages/a_sync/a_sync/_helpers.cpython-313-aarch64-linux-gnu.so"
+    },
+    "configured_mypy_errors": 300,
+    "runtime_contract": {
+      "passed": true,
+      "mypy_exit_code": 1
+    }
+  }
+}

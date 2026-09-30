@@ -1,0 +1,29 @@
+{
+  "source_commit": "0771c206",
+  "block": 16980000,
+  "hash": "0xeb3a499c986be2f6392fc416d01c2b409dc16e71e640d5437ca99bb4dccd6be5",
+  "cached_price": 1.0075477957388277,
+  "cached_path": [
+    {
+      "token": "0x6CFaF95457d7688022FC53e7AbE052ef8DFBbdBA",
+      "price": 1.0075477957388277,
+      "source": "Gearbox 0x24946bCbBd028D5ABb62ad9B635EB1b1a67AF668 underlying"
+    }
+  ],
+  "fresh_price": 1.0075477957388277,
+  "fresh_path": [
+    {
+      "token": "0x6CFaF95457d7688022FC53e7AbE052ef8DFBbdBA",
+      "price": 1.0075477957388277,
+      "source": "Gearbox 0x24946bCbBd028D5ABb62ad9B635EB1b1a67AF668 underlying"
+    },
+    {
+      "token": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+      "price": 0.9997,
+      "source": "Chainlink historical stablecoin USD for 0x6B175474E89094C44Da98b954EedeAC495271d0F"
+    }
+  ],
+  "repaired_test_sha256": "222980f5d7d5808953a255ed97a9807dbc0d8ec421bbca95f2aa0fea3bdd63e2",
+  "repaired_assertions": "pass",
+  "scope": "Single sequential native cache recheck; separate from the active pytest run"
+}

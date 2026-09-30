@@ -1,0 +1,26 @@
+{
+  "black": "25.9.0",
+  "isort": "7.0.0",
+  "autoflake": "2.2.1",
+  "result": "pass",
+  "files": [
+    "y/prices/_usdc.py",
+    "y/prices/_routing.py",
+    "y/prices/_redemptions.py",
+    "y/prices/_markets.py",
+    "y/prices/magic.py",
+    "y/prices/band.py",
+    "y/prices/dex/uniswap/v3.py",
+    "tests/test_quote_repairs.py",
+    "tests/test_quote_regressions.py",
+    "tests/test_amount_quotes.py",
+    "tools/validation/native.py",
+    "tools/validation/native_reviewed.py"
+  ],
+  "checks": [
+    "black --check (configured 100-column line length)",
+    "isort --check-only --profile black",
+    "autoflake --check --remove-all-unused-imports --expand-star-imports --ignore-init-module-imports",
+    "git diff --check on source files (raw generated diagnostics retain original whitespace)"
+  ]
+}

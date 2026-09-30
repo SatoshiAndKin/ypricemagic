@@ -1,6 +1,7 @@
 from functools import lru_cache
+from typing import Any
 
-from dank_mids.types import _DictStruct
+from dictstruct import DictStruct as _DictStruct
 from inflection import underscore
 
 
@@ -10,7 +11,7 @@ class _CamelDictStruct(_DictStruct, rename="camel"):
     Original use case was so Log structs can be used interchangably with LogReceipt instances
     """
 
-    def __getitem__(self, attr: str):
+    def __getitem__(self, attr: str) -> Any:
         return getattr(self, _make_snake(attr))
 
 

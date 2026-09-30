@@ -1,0 +1,131 @@
+tools/mypy_plugin.py: note: In member "get_method_signature_hook" of class "YPriceMagicPlugin":
+tools/mypy_plugin.py:57: error: Cannot infer type of lambda  [misc]
+                    return lambda ctx, default=default: _decorator_signatu...
+                           ^
+tests/conftest.py:5: error: Module "brownie.network" does not explicitly export
+attribute "connect"  [attr-defined]
+    brownie.network.connect(os.environ["BROWNIE_NETWORK"])
+    ^~~~~~~~~~~~~~~~~~~~~~~
+tests/conftest.py: note: In function "_safe_get_ast_hash":
+tests/conftest.py:22: error: Function is missing a type annotation 
+[no-untyped-def]
+    def _safe_get_ast_hash(path):
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/conftest.py: note: At top level:
+tests/conftest.py:38: error: Module "brownie.test.managers.base" does not
+explicitly export attribute "_get_ast_hash"  [attr-defined]
+    _btmb._get_ast_hash = _safe_get_ast_hash
+    ^~~~~~~~~~~~~~~~~~~
+y/__init__.py:130: error: Cannot find implementation or library stub for module named "eth_portfolio._db"  [import-not-found]
+        from eth_portfolio._db import entities as _db_entities
+    ^
+y/__init__.py:130: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+y/_db/utils/_ep.py:36: error: Cannot find implementation or library stub for module named "eth_portfolio._db.utils"  [import-not-found]
+            from eth_portfolio._db.utils import get_block
+    ^
+y/_db/utils/asyncpg.py:4: error: Skipping analyzing "asyncpg": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+    import asyncpg
+    ^
+y/time.py:16: error: Cannot find implementation or library stub for module named "dank_mids._config"  [import-not-found]
+        from dank_mids._config import GANACHE_FORK
+    ^
+/usr/local/lib/python3.12/site-packages/evmspec/data/_main.py:470: error: INTERNAL ERROR -- Please try using mypy master on GitHub:
+https://mypy.readthedocs.io/en/stable/common_issues.html#using-a-development-mypy-build
+Please report a bug at https://github.com/python/mypy/issues
+version: 1.19.1+bytesrefcount1
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/usr/local/lib/python3.12/site-packages/mypy/__main__.py", line 37, in <module>
+    console_entry()
+  File "/usr/local/lib/python3.12/site-packages/mypy/__main__.py", line 15, in console_entry
+    main()
+  File "/usr/local/lib/python3.12/site-packages/mypy/main.py", line 135, in main
+    res, messages, blockers = run_build(sources, options, fscache, t0, stdout, stderr)
+  File "/usr/local/lib/python3.12/site-packages/mypy/main.py", line 219, in run_build
+    res = build.build(sources, options, None, flush_errors, fscache, stdout, stderr)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 222, in build
+    result = _build(
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 301, in _build
+    graph = dispatch(sources, manager, stdout)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 2952, in dispatch
+    process_graph(graph, manager)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 3347, in process_graph
+    done, still_working = manager.wait_for_done(graph)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 925, in wait_for_done
+    process_stale_scc(graph, next_scc, self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 3485, in process_stale_scc
+    graph[id].type_check_first_pass()
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 2340, in type_check_first_pass
+    self.type_checker().check_first_pass()
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 532, in check_first_pass
+    self.accept(d)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1478, in accept
+    return visitor.visit_class_def(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 2689, in visit_class_def
+    self.accept(defn.defs)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1573, in accept
+    return visitor.visit_block(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 3161, in visit_block
+    self.accept(s)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1841, in accept
+    return visitor.visit_if_stmt(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 5070, in visit_if_stmt
+    self.accept(b)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1573, in accept
+    return visitor.visit_block(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 3161, in visit_block
+    self.accept(s)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 643, in accept
+    stmt.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1155, in accept
+    return visitor.visit_decorator(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 5462, in visit_decorator
+    self.visit_decorator_inner(e)
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 5498, in visit_decorator_inner
+    sig, t2 = self.expr_checker.check_call(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checkexpr.py", line 1621, in check_call
+    call_function = self.transform_callee_type(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checkexpr.py", line 1404, in transform_callee_type
+    return self.apply_method_signature_hook(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checkexpr.py", line 1363, in apply_method_signature_hook
+    return self.apply_signature_hook(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checkexpr.py", line 1328, in apply_signature_hook
+    adjusted = self.apply_signature_hook(item, args, arg_kinds, arg_names, hook)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checkexpr.py", line 1323, in apply_signature_hook
+    return hook(formal_arg_exprs, callee)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checkexpr.py", line 1369, in <lambda>
+    lambda args, sig: signature_hook(
+                      ^^^^^^^^^^^^^^^
+  File "/work/tools/mypy_plugin.py", line 57, in <lambda>
+    return lambda ctx, default=default: _decorator_signature(ctx, default)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/work/tools/mypy_plugin.py", line 30, in _decorator_signature
+    result = ctx.api.named_generic_type(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 7549, in named_generic_type
+    info = self.lookup_typeinfo(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 7556, in lookup_typeinfo
+    sym = self.lookup_qualified(fullname)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/checker.py", line 7626, in lookup_qualified
+    assert isinstance(sym.node, MypyFile)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 
+/usr/local/lib/python3.12/site-packages/evmspec/data/_main.py:470: : note: use --pdb to drop into pdb

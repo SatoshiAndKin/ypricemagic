@@ -1,0 +1,23 @@
+{
+  "command": [
+    "python",
+    "scripts/profile_requester_ownership.py",
+    "--rounds",
+    "100",
+    "--output",
+    "/reports/turnover.json"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789347829.565641,
+  "source_sha": "cc66b8e5754def5ea8cb2a214ce949049977a006",
+  "source_revision": "worktree",
+  "source_archive_sha256": "bf14e4d8d61ef770c923706995188211c87a996f4eb049075cd95054bbccf0de",
+  "image": "sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 161.85206413269043
+}

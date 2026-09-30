@@ -4,6 +4,7 @@ from unittest.mock import AsyncMock, Mock
 
 import pytest
 
+from tests.test_pricing_correctness import run_async_test
 from y.prices.dex.uniswap import v2
 
 TOKEN0 = "0x0000000000000000000000000000000000000001"
@@ -11,7 +12,7 @@ TOKEN1 = "0x0000000000000000000000000000000000000002"
 TOKEN2 = "0x0000000000000000000000000000000000000003"
 
 
-@pytest.mark.asyncio_cooperative
+@run_async_test
 async def test_cached_pool_tokens_need_no_tasks(monkeypatch: pytest.MonkeyPatch) -> None:
     pools = [
         v2.UniswapV2Pool(
@@ -31,7 +32,7 @@ async def test_cached_pool_tokens_need_no_tasks(monkeypatch: pytest.MonkeyPatch)
     assert checkpoints.await_count == 2
 
 
-@pytest.mark.asyncio_cooperative
+@run_async_test
 async def test_missing_pool_tokens_keep_existing_fetch_path(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

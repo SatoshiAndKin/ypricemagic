@@ -1,0 +1,24 @@
+{
+  "complete": true,
+  "concurrency": 64,
+  "rounds": 100,
+  "http_calls": 6400,
+  "elapsed_seconds": 158.89750981899851,
+  "rss_peak_bytes": 172986368,
+  "python_current_bytes": null,
+  "python_peak_bytes": null,
+  "profiler": null,
+  "gc_policy": "normal cyclic collection; no explicit collection",
+  "boundary": "Local HTTP sockets; all measurements precede final cleanup",
+  "warm_rounds": [
+    21,
+    100
+  ],
+  "warm_rss_range_bytes": [
+    172404736,
+    173281280
+  ],
+  "warm_process_fds": 27,
+  "warm_open_server_connections": 0,
+  "warm_pending_requester_tasks": 0
+}

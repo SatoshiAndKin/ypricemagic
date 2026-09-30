@@ -1,0 +1,6 @@
+tests/prices/dex/test_uniswap.py: note: In function "test_uniswap_v3":
+tests/prices/dex/test_uniswap.py:231: error: Need type annotation for
+"required"  [var-annotated]
+                required = await native_quoter.quoteExactOutput.coroutine(
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Found 1 error in 1 file (checked 231 source files)

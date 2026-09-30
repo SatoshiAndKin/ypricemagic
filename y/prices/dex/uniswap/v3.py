@@ -1,30 +1,23 @@
-import math
 from collections import defaultdict
-from collections.abc import AsyncIterator, Iterable
-from decimal import Decimal
+from collections.abc import AsyncIterator, Callable, Sequence
 from functools import cached_property, lru_cache
-from itertools import cycle, islice
 from logging import DEBUG, getLogger
-from typing import DefaultDict, Final, Literal, Union
+from typing import Any, DefaultDict, Final, TypedDict, cast
 
 import a_sync
-import eth_retry
-from a_sync import igather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie.network.event import _EventItem
-from eth_abi.exceptions import InvalidPointer
-from eth_typing import BlockNumber, HexAddress
-from faster_eth_abi.packed import encode_packed
-from typing_extensions import Self
+from eth_typing import BlockNumber
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._decorators import stuck_coro_debugger
+from y._typing import a_sync_property
 from y.classes.common import ERC20, ContractBase
 from y.constants import CHAINID, CONNECTED_TO_MAINNET, usdc, weth
 from y.contracts import Contract, contract_creation_block_async
-from y.datatypes import Address, AnyAddressType, Block, Pool, UsdPrice
-from y.exceptions import ContractNotVerified, NonStandardERC20, TokenNotFound, call_reverted
+from y.datatypes import Address, AnyAddressType, Block, Pool, PriceResult
+from y.exceptions import ContractNotVerified, NonStandardERC20, TokenNotFound
 from y.interfaces.uniswap.quoterv3 import UNIV3_QUOTER_ABI
 from y.networks import Network
 from y.utils.events import ProcessedEvents
@@ -35,10 +28,15 @@ UNISWAP_V3_QUOTER: Final = "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6"
 
 logger: Final = getLogger(__name__)
 
-Path = Iterable[Union[Address, int]]
+
+class _Deployment(TypedDict):
+    factory: str
+    quoter: str
+    fee_tiers: tuple[int, ...]
+
 
 # same addresses on all networks
-addresses: Final = {
+addresses: Final[dict[int, _Deployment]] = {
     Network.Mainnet: {
         "factory": UNISWAP_V3_FACTORY,
         "quoter": UNISWAP_V3_QUOTER,
@@ -61,7 +59,7 @@ addresses: Final = {
     },
 }
 
-forked_deployments: Final = {
+forked_deployments: Final[dict[int, list[_Deployment]]] = {
     Network.Optimism: [
         {
             # Velodrome slipstream
@@ -94,13 +92,6 @@ forked_deployments: Final = {
             "fee_tiers": (3000, 500, 10_000, 100),
         },
     ],
-}
-
-_FEE_DENOMINATOR: Final = Decimal(1_000_000)
-
-_PATH_TYPE_STRINGS: Final[dict[int, tuple[Literal["address", "uint24"], ...]]] = {
-    3: tuple(islice(cycle(("address", "uint24")), 3)),
-    5: tuple(islice(cycle(("address", "uint24")), 5)),
 }
 
 
@@ -149,7 +140,7 @@ class UniswapV3Pool(ContractBase):
         self.fee = fee
         self._deploy_block = deploy_block
 
-    def __contains__(self, token: Address) -> bool:
+    def __contains__(self, token: AnyAddressType) -> bool:
         """
         Check if a token is part of the pool.
 
@@ -170,7 +161,7 @@ class UniswapV3Pool(ContractBase):
         # force token to string in case it is Contract or EthAddress etc
         return str(token) in (self.token0.address, self.token1.address)
 
-    def __getitem__(self, token: Address) -> ERC20:
+    def __getitem__(self, token: AnyAddressType) -> ERC20:
         """
         Get the ERC20 token object for a given token address.
 
@@ -195,7 +186,7 @@ class UniswapV3Pool(ContractBase):
         return ERC20(token, asynchronous=self.asynchronous)
 
     @a_sync.a_sync(ram_cache_maxsize=100_000, ram_cache_ttl=60 * 60)
-    async def check_liquidity(self, token: AnyAddressType, block: Block) -> int | None:
+    async def check_liquidity(self, token: AnyAddressType, block: Block) -> int:
         """
         Check the liquidity of a token in the pool at a specific block.
 
@@ -296,14 +287,25 @@ class UniswapV3Pool(ContractBase):
         raise TokenNotFound(token_in, self)
 
 
+@stuck_coro_debugger
+async def load_quoter(address: str) -> Contract:
+    """Retain verified ABIs, with the standard ABI for unverified quoters."""
+    try:
+        return await Contract.coroutine(address)
+    except ContractNotVerified:
+        # The a_sync classmethod descriptor omits this synchronous overload.
+        from_abi = cast(Callable[[str, str, list[dict[str, Any]]], Contract], Contract.from_abi)
+        return from_abi("Quoter", address, UNIV3_QUOTER_ABI)
+
+
 class UniswapV3(a_sync.ASyncGenericBase):
     """Represents the Uniswap V3 protocol."""
 
     def __init__(
         self,
-        factory: HexAddress,
-        quoter: HexAddress,
-        fee_tiers: list[int],
+        factory: Address,
+        quoter: Address,
+        fee_tiers: Sequence[int],
         asynchronous: bool = True,
     ) -> None:
         """
@@ -328,12 +330,12 @@ class UniswapV3(a_sync.ASyncGenericBase):
         self._quoter = convert.to_address(quoter)
         self.fee_tiers = fee_tiers
         self.loading = False
-        self._pools = {}
+        self._pools: dict[str, UniswapV3Pool] = {}
 
     def __repr__(self) -> str:
         return f"<{type(self).__name__} factory={self._factory} quoter={self._quoter}>"
 
-    def __contains__(self, asset) -> bool:
+    def __contains__(self, asset: object) -> bool:
         """
         Check if Uniswap V3 pricing functionality is available on the current network.
 
@@ -370,7 +372,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
         """
         return a_sync.Event(name=str(self))
 
-    @a_sync.aka.property
+    @a_sync_property
     async def factory(self) -> Contract:
         """
         Get the factory contract for the Uniswap V3 protocol.
@@ -387,7 +389,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
         """
         return await Contract.coroutine(self._factory)
 
-    __factory__: HiddenMethodDescriptor[Self, Contract]
+    __factory__: HiddenMethodDescriptor["UniswapV3", Contract]
 
     @a_sync.aka.cached_property
     async def quoter(self) -> Contract:
@@ -404,16 +406,13 @@ class UniswapV3(a_sync.ASyncGenericBase):
         See Also:
             :class:`Contract`
         """
-        try:
-            return await Contract.coroutine(self._quoter)
-        except ContractNotVerified:
-            return Contract.from_abi("Quoter", self._quoter, UNIV3_QUOTER_ABI)
+        return await load_quoter(self._quoter)
 
-    __quoter__: HiddenMethodDescriptor[Self, Contract]
+    __quoter__: HiddenMethodDescriptor["UniswapV3", Contract]
 
     @a_sync.aka.cached_property
     @stuck_coro_debugger
-    async def pools(self) -> list[UniswapV3Pool]:
+    async def pools(self) -> "UniV3Pools":
         """
         Get the list of Uniswap V3 pools.
 
@@ -440,7 +439,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
             return SlipstreamPools(factory, asynchronous=self.asynchronous)
         return UniV3Pools(factory, asynchronous=self.asynchronous)
 
-    __pools__: HiddenMethodDescriptor[Self, "UniV3Pools"]
+    __pools__: HiddenMethodDescriptor["UniswapV3", "UniV3Pools"]
 
     async def pools_for_token(self, token: Address, block: Block) -> AsyncIterator[UniswapV3Pool]:
         """
@@ -462,99 +461,54 @@ class UniswapV3(a_sync.ASyncGenericBase):
 
         # we use a cache here to prevent unnecessary calls to __contains__
         # stringify token in case type is Contract or EthAddress
-        if cache := pools._pools_by_token_cache[str(token)]:
-            for deploy_block, cached_pools in cache.items():
-                if deploy_block > block:
-                    return
-                for pool in cached_pools:
+        token_key = str(token)
+        cache = pools._pools_by_token_cache[token_key]
+        loaded_through = pools._pools_loaded_through.get(token_key, -1)
+        seen: set[UniswapV3Pool] = set()
+        for deploy_block, cached_pools in sorted(cache.items()):
+            if deploy_block > block:
+                break
+            for pool in tuple(cached_pools):
+                if pool not in seen:
+                    seen.add(pool)
                     yield pool
 
-            if deploy_block == block:
-                # we got all for `block` and dont need to bother checking
-                return
-            async for pool in pools.objects(to_block=block, from_block=deploy_block + 1):
-                if token in pool:
-                    cache[pool._deploy_block].append(pool)
-                    yield pool
-        else:
-            async for pool in pools.objects(to_block=block):
-                if token in pool:
-                    cache[pool._deploy_block].append(pool)
-                    yield pool
-
-        try:
-            most_recent_deploy_block = pool._deploy_block
-        except NameError:
+        if block <= loaded_through:
             return
 
-        if cache:
-            cached_thru_block, pools = cache.popitem()
-            if most_recent_deploy_block > cached_thru_block:
-                # Signal to the cache that has loaded all pools for `token`
-                # thru the deploy block of the most recent pool deployed
-                cache[most_recent_deploy_block]
-                # If the item wasn't a placeholder, put it back
-                if pools:
-                    cache[cached_thru_block] = pools
-            else:
-                cache[cached_thru_block] = pools
-        else:
-            # Signal to the cache that has loaded all pools for `token`
-            # thru the deploy block of the most recent pool deployed
-            cache[most_recent_deploy_block]
+        async for pool in pools.objects(to_block=block, from_block=loaded_through + 1):
+            if token in pool:
+                entries = cache[cast(int, pool._deploy_block)]
+                if pool not in entries:
+                    entries.append(pool)
+                if pool not in seen:
+                    seen.add(pool)
+                    yield pool
+
+        # Only a fully consumed iterator establishes completeness. Concurrent
+        # older readers must not move another reader's completed boundary back.
+        pools._pools_loaded_through[token_key] = max(
+            block, pools._pools_loaded_through.get(token_key, -1)
+        )
 
     @stuck_coro_debugger
-    @a_sync.a_sync(cache_type="memory", ram_cache_ttl=ENVS.CACHE_TTL, ram_cache_maxsize=ENVS.PRICE_CACHE_MAXSIZE)
     async def get_price(
         self,
         token: Address,
         block: Block | None = None,
-        ignore_pools: tuple[Pool, ...] = (),  # unused
+        ignore_pools: tuple[Pool, ...] = (),
         skip_cache: bool = ENVS.SKIP_CACHE,  # unused
-    ) -> UsdPrice | None:
-        """
-        Get the price of a token in USD.
+    ) -> PriceResult | None:
+        """Use native quotes from liquidity-ranked pools at the requested block."""
+        from y.prices._routing import liquidity_price
 
-        Args:
-            token: The address of the token.
-            block: The block number to get the price at.
-            ignore_pools: Pools to ignore (unused).
-            skip_cache: Whether to skip cache (unused).
-
-        Returns:
-            The price of the token in USD, or None if not available.
-
-        Examples:
-            >>> uniswap_v3 = UniswapV3(...)
-            >>> price = await uniswap_v3.get_price("0xTokenAddress", 1234567)
-
-        See Also:
-            :func:`y.prices.magic.get_price`
-        """
-        quoter = await self.__quoter__
-        if block and block < await contract_creation_block_async(quoter, True):
-            return None
-
-        paths: list[Path] = [(token, fee, usdc.address) for fee in self.fee_tiers]
-        if token != weth:
-            paths += [
-                (token, fee, weth.address, self.fee_tiers[0], usdc.address)
-                for fee in self.fee_tiers
-            ]
-
-        if debug_logs_enabled := logger.isEnabledFor(DEBUG):
-            logger._log(DEBUG, "paths: %s", (paths,))
-
-        amount_in = await ERC20._get_scale_for(token)
-        results = await igather(self._quote_exact_input(path, amount_in, block) for path in paths)
-
-        if debug_logs_enabled:
-            logger._log(DEBUG, "results: %s", (results,))
-
-        outputs = list(filter(None, results))
-        if debug_logs_enabled:
-            logger._log(DEBUG, "outputs: %s", (outputs,))
-        return UsdPrice(max(outputs)) if outputs else None
+        return await liquidity_price(
+            await convert.to_address_async(token),
+            block,
+            ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
+            first_markets=(str(self._factory).lower(),),
+        )
 
     @stuck_coro_debugger
     @a_sync.a_sync(ram_cache_maxsize=100_000, ram_cache_ttl=60 * 60)
@@ -596,7 +550,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
                 logger._log(DEBUG, "block %s is before %s deploy block", (block, quoter))
             return 0
 
-        if token == weth.address:
+        if weth is not None and usdc is not None and token == weth.address:
             # NOTE: we need to filter these or else we will be fetching every pool
             #       for now, we only focus on weth/usdc pools
             filter_fn = (
@@ -665,102 +619,16 @@ class UniswapV3(a_sync.ASyncGenericBase):
             await log_liquidity(self, token, block, liquidity)
         return liquidity
 
-    @stuck_coro_debugger
-    @eth_retry.auto_retry
-    async def _quote_exact_input(
-        self, path: Path, amount_in: int, block: BlockNumber
-    ) -> Decimal | None:
-        """
-        Quote the exact input for a given path and amount.
-
-        Args:
-            path: The path for the swap.
-            amount_in: The input amount.
-            block: The block number to quote at.
-
-        Returns:
-            The quoted output amount.
-
-        Examples:
-            >>> uniswap_v3 = UniswapV3(...)
-            >>> output_amount = await uniswap_v3._quote_exact_input(path, 1000, 1234567)
-
-        See Also:
-            :func:`_undo_fees`
-        """
-        quoter = await self.__quoter__
-        try:
-            amount = await quoter.quoteExactInput.coroutine(
-                _encode_path(path), amount_in, block_identifier=block
-            )
-        except InvalidPointer:
-            # TODO: debug why this happens and handle it somewhere more appropriate
-            return None
-        except Exception as e:
-            if call_reverted(e):
-                return None
-            raise
-
-        scaled = (
-            # Quoter v2 uses this weird return struct, we must unpack it to get amount out.
-            (amount if isinstance(amount, int) else amount[0])
-            / _undo_fees(path)
-            / _FEE_DENOMINATOR
-        )
-        if scaled > 100_000_000:
-            # this is a totally arbitrary value used as a sense check,
-            # we were getting crazy prices from some pools on occasion
-            # but not sure why
-            return None
-        return round(scaled, 18)
-
-
-def _encode_path(path: Path) -> bytes:
-    """
-    Encode a path for Uniswap V3.
-
-    Args:
-        path: The path to encode.
-
-    Returns:
-        The encoded path.
-
-    Examples:
-        >>> path = ["0xToken0Address", 3000, "0xToken1Address"]
-        >>> encoded_path = _encode_path(path)
-
-    See Also:
-        :func:`encode_packed`
-    """
-    return encode_packed(_PATH_TYPE_STRINGS[len(path)], path)
-
-
-def _undo_fees(path: Path) -> Decimal:
-    """
-    Undo the fees for a given path.
-
-    Args:
-        path: The path to undo fees for.
-
-    Returns:
-        The fee multiplier.
-
-    Examples:
-        >>> path = ["0xToken0Address", 3000, "0xToken1Address"]
-        >>> fee_multiplier = _undo_fees(path)
-    """
-    fees = (1 - fee / _FEE_DENOMINATOR for fee in islice(path, 1, None, 2))
-    return math.prod(fees)
-
 
 class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
     """Represents a collection of Uniswap V3 Pools."""
 
     _pools_by_token_cache: DefaultDict[Address, dict[Block, list[UniswapV3Pool]]]
+    _pools_loaded_through: dict[str, int]
 
-    __slots__ = "asynchronous", "_pools_by_token_cache"
+    __slots__ = "asynchronous", "_pools_by_token_cache", "_pools_loaded_through"
 
-    def __init__(self, factory: Contract, asynchronous: bool = False):
+    def __init__(self, factory: Contract, asynchronous: bool = False) -> None:
         """
         Initialize a UniV3Pools instance.
 
@@ -778,8 +646,9 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
         self.asynchronous = asynchronous
         super().__init__(addresses=[factory.address], topics=[factory.topics["PoolCreated"]])
         self._pools_by_token_cache = defaultdict(lambda: defaultdict(list))
+        self._pools_loaded_through = {}
 
-    def _process_event(self, event: _EventItem) -> UniswapV3Pool:
+    def _process_event(self, event: _EventItem[Any]) -> UniswapV3Pool:
         """
         Process a PoolCreated event and return a UniswapV3Pool instance.
 
@@ -802,12 +671,12 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
         """
         token0, token1, fee, tick_spacing, pool = event.values()
         return UniswapV3Pool(
-            pool,
-            token0,
-            token1,
-            fee,
-            tick_spacing,
-            event.block_number,
+            address=pool,
+            token0=token0,
+            token1=token1,
+            tick_spacing=tick_spacing,
+            fee=fee,
+            deploy_block=cast(BlockNumber, getattr(event, "block_number")),
             asynchronous=self.asynchronous,
         )
 
@@ -825,24 +694,31 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
             >>> pools = UniV3Pools(...)
             >>> block_number = pools._get_block_for_obj(pool)
         """
-        return obj._deploy_block
+        return cast(int, obj._deploy_block)
+
+
+class SlipstreamPool(UniswapV3Pool):
+    """A concentrated pool addressed by tick spacing instead of a fee tier."""
+
+    __slots__ = ()
 
 
 class SlipstreamPools(UniV3Pools):
-    def _process_event(self, event: _EventItem) -> UniswapV3Pool:
+    def _process_event(self, event: _EventItem[Any]) -> UniswapV3Pool:
         token0, token1, tick_spacing, pool = event.values()
-        return UniswapV3Pool(
-            pool,
-            token0,
-            token1,
-            # NOTE: fee arg is not actually used in the current implementation, so we can use 0 here
-            0,  # TODO: implement fee maths properly
-            tick_spacing,
-            event.block_number,
+        return SlipstreamPool(
+            address=pool,
+            token0=token0,
+            token1=token1,
+            tick_spacing=tick_spacing,
+            # The native Slipstream quoter includes the pool's dynamic fee.
+            fee=0,
+            deploy_block=cast(BlockNumber, getattr(event, "block_number")),
             asynchronous=self.asynchronous,
         )
 
 
+uniswap_v3: UniswapV3 | None
 if CHAINID in addresses:
     uniswap_v3 = UniswapV3(
         addresses[CHAINID]["factory"],
@@ -859,7 +735,9 @@ forks = [
 ]
 
 
-async def log_liquidity(market, token, block, liquidity) -> None:
+async def log_liquidity(
+    market: object, token: AnyAddressType, block: Block, liquidity: int
+) -> None:
     __logger_log(
         DEBUG,
         "%s liquidity for %s %s at %s: %s",

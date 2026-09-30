@@ -1,0 +1,52 @@
+[
+  {
+    "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xbE9375C6a420D2eEB258962efB95551A5b722803]",
+    "outcome": "passed",
+    "duration": 0.5913791656494141
+  },
+  {
+    "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x4C19596f5aAfF459fA38B0f7eD92F11AE6543784]",
+    "outcome": "passed",
+    "duration": 0.5907576084136963
+  },
+  {
+    "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x84cA8bc7997272c7CfB4D0Cd3D55cd942B3c9419]",
+    "outcome": "passed",
+    "duration": 0.5788278579711914
+  },
+  {
+    "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x3155BA85D5F96b2d030a4966AF206230e46849cb]",
+    "outcome": "passed",
+    "duration": 0.5759520530700684
+  },
+  {
+    "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x33D0568941C0C64ff7e0FB4fbA0B11BD37deEd9f]",
+    "outcome": "passed",
+    "duration": 0.5758581161499023
+  },
+  {
+    "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x4688a8b1F292FDaB17E9a90c8Bc379dC1DBd8713]",
+    "outcome": "passed",
+    "duration": 0.5754835605621338
+  },
+  {
+    "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0xe28b3B32B6c345A34Ff64674606124Dd5Aceca30]",
+    "outcome": "passed",
+    "duration": 0.5751349925994873
+  },
+  {
+    "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x8CE9137d39326AD0cD6491fb5CC0CbA0e089b6A9]",
+    "outcome": "passed",
+    "duration": 0.5740423202514648
+  },
+  {
+    "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x57Ab1ec28D129707052df4dF418D58a2D46d5f51]",
+    "outcome": "passed",
+    "duration": 0.5739402770996094
+  },
+  {
+    "test": "tests/prices/test_chainlink.py::test_chainlink_get_feed[0x674C6Ad92Fd080e4004b2312b45f796a192D27a0]",
+    "outcome": "passed",
+    "duration": 0.5738685131072998
+  }
+]

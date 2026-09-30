@@ -1,0 +1,90 @@
+{
+  "purpose": "Original production helper implementations with the unchanged current regression assertions",
+  "files": {
+    "y/utils/raw_calls.py": {
+      "original_commit": "9ff4162254b802f532d8f6d04d8e64d1d88fb86a",
+      "restored_functions": [
+        "balanceOf",
+        "prepare_data"
+      ],
+      "original_file_sha256": "c3a3508c3e12f0a4f11b0ea87f098acec72e4fabfed5b0fb3b79957aa73e2636",
+      "repaired_file_sha256": "4ecfc1ee8f7f80eacc9f311c3f96c40722a899297310add43ddf01c5198520d3",
+      "control_file_sha256": "99165b24721eb5328fc084b9a1b8872d3d5fbf9d5d3b25ce8a8d61f7f8c821e6"
+    },
+    "y/utils/_erc20.py": {
+      "original_commit": "9ff4162254b802f532d8f6d04d8e64d1d88fb86a",
+      "restored_functions": [
+        "totalSupplyReadable"
+      ],
+      "original_file_sha256": "0520f91d32594e7799688d1700af406f4cb4692ead63ecba83a08516c0cdc58b",
+      "repaired_file_sha256": "c1d390454fa523ab98ea5371b3749f4940c839477b3bd0a967b2e40b788f8178",
+      "control_file_sha256": "5781eb82e468e1dd02a1dc42e790636422ae031aab9657c7ba82736694671bd7"
+    },
+    "y/utils/multicall.py": {
+      "original_commit": "9ff4162254b802f532d8f6d04d8e64d1d88fb86a",
+      "restored_functions": [
+        "multicall_same_func_no_input"
+      ],
+      "original_file_sha256": "074badd5638ca3405dc344e4de719137a8489c9883d4ed01913569178f1cb862",
+      "repaired_file_sha256": "69aa0abf90b75dc03fc665f24305e9b59dd4e378bf78f6543dcedf3a43b9d001",
+      "control_file_sha256": "aa6299e273522f05edaa770e3d3476d1c7f86153c49d7d7688d20fabf36add96"
+    },
+    "y/utils/events.py": {
+      "original_commit": "9ff4162254b802f532d8f6d04d8e64d1d88fb86a",
+      "restored_functions": [
+        "decode_logs"
+      ],
+      "original_file_sha256": "71f98d9c855a5a3eebc2eb589636d059852f19f9d88a2b2556211fdfff8342a9",
+      "repaired_file_sha256": "a436068ada500e12bb1061557507fe0154bc5bf4ecd4e4b92b8e2b31292832d0",
+      "control_file_sha256": "f82ebcaa91eb27d364d0b9ef0f9b31eb52313a90b74adbdf4e9dd7e711ef8ea4"
+    },
+    "y/prices/stable_swap/saddle.py": {
+      "original_commit": "9ff4162254b802f532d8f6d04d8e64d1d88fb86a",
+      "restored_functions": [
+        "get_tokens"
+      ],
+      "original_file_sha256": "9b5d6f7ed7ce554cd4dd497d0caefd069587dbe6a0d0d1648f248fe334f8ff13",
+      "repaired_file_sha256": "4007e550fd78c2eb43d9ab213b10f9b684ceddff0c785c493b518ffaba1453d7",
+      "control_file_sha256": "5587c95cf848ac41537b31aba04a05ad1cbb2533f0d37d76606915343caa9cba"
+    },
+    "y/prices/stable_swap/ellipsis.py": {
+      "original_commit": "9ff4162254b802f532d8f6d04d8e64d1d88fb86a",
+      "restored_functions": [
+        "get_price"
+      ],
+      "original_file_sha256": "dc986371e3006c7496661d6ac26d1e77bf4237b3c80fbdde1a8fd8bd7e12241f",
+      "repaired_file_sha256": "8c8d551434696f141470a5a4462894dcd3b0a8cc0a2bb8f79be8f1b3aa9c0243",
+      "control_file_sha256": "45f5d3de0ed4a88c9ff8b72220d35dd032efd53add0d106ebe95ce8d11989dfd"
+    },
+    "y/cli.py": {
+      "original_commit": "9ff4162254b802f532d8f6d04d8e64d1d88fb86a",
+      "restored_functions": [
+        "db_clear",
+        "main"
+      ],
+      "original_file_sha256": "1a1e5fe32b12463de76ea84907a31530e74230c2b0b2d6ce4fc79c381cb1ffb6",
+      "repaired_file_sha256": "33795d9c22bf702bf0bf470ffb3f96f33fa2da2bc1e454cc29f170615006ac52",
+      "control_file_sha256": "b4f5c4d50c40d36b811c532eda27bfcb017f9399d1a6280b64a6bfb2498a4569"
+    }
+  },
+  "selected": [
+    "tests/test_typed_interfaces.py::test_prepare_data_without_inputs",
+    "tests/test_typed_interfaces.py::test_readable_supply_accepts_decoded_integer_and_batch",
+    "tests/test_typed_interfaces.py::test_readable_supply_preserves_unavailable_batch_members",
+    "tests/test_typed_interfaces.py::test_balance_missing_result_obeys_failure_option",
+    "tests/test_typed_interfaces.py::test_balance_zero_is_available",
+    "tests/test_typed_interfaces.py::test_multicall_no_input_decodes_named_results",
+    "tests/test_typed_interfaces.py::test_saddle_resolves_pool_before_loading_tokens",
+    "tests/test_typed_interfaces.py::test_saddle_missing_pool_does_not_request_tokens",
+    "tests/test_typed_interfaces.py::test_ellipsis_keeps_reserves_in_native_units",
+    "tests/test_typed_interfaces.py::test_db_clear_uses_requested_selector",
+    "tests/test_typed_interfaces.py::test_curve_debug_command_uses_optional_network",
+    "tests/test_event_decode_executor.py"
+  ],
+  "repaired_commit": "0771c206b4cf1df396543dd4397c7c230bad9da7",
+  "unchanged_regression_files": {
+    "tests/test_typed_interfaces.py": "106831cda53789f2ed70b0be0e2e3ffb3a44052ff2497e039092bf4c34f80cad",
+    "tests/test_event_decode_executor.py": "cc75086e9df25ae3cc1d3f4bc40213ca588f3eaf1aa02d288aa4b068be3965ed",
+    "tests/test_pricing_correctness.py": "972e7eb692c3ef7998aa454a2c6253876f714486760b234109ba8ab67eff679f"
+  }
+}

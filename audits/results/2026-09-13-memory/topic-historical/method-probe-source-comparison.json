@@ -1,0 +1,34 @@
+{
+  "comparisons": [
+    {
+      "function": "call_reverted",
+      "file": "y/exceptions.py",
+      "baseline": "476af288a520a30052668a8b3ad7e3e682cd101f",
+      "same_function_body": true,
+      "function_body_sha256": "3bff2e2f4ff6a937c810e15f71fed5cbd068584059068ff81b50590d57faf03a"
+    },
+    {
+      "function": "call_reverted",
+      "file": "y/exceptions.py",
+      "baseline": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "same_function_body": true,
+      "function_body_sha256": "3bff2e2f4ff6a937c810e15f71fed5cbd068584059068ff81b50590d57faf03a"
+    },
+    {
+      "function": "has_method",
+      "file": "y/contracts.py",
+      "baseline": "476af288a520a30052668a8b3ad7e3e682cd101f",
+      "same_function_body": true,
+      "function_body_sha256": "727d255999931b4273cb3928898813c419e1c806636b5e199915f845aa963bad"
+    },
+    {
+      "function": "has_method",
+      "file": "y/contracts.py",
+      "baseline": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "same_function_body": true,
+      "function_body_sha256": "727d255999931b4273cb3928898813c419e1c806636b5e199915f845aa963bad"
+    }
+  ],
+  "limit": "Function-body equality explains the existing error classifier. It does not establish complete full-suite failure equivalence.",
+  "execution_error_definition": "https://github.com/bluealloy/revm/blob/main/crates/interpreter/src/instruction_result.rs"
+}

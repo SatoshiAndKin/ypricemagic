@@ -1,0 +1,26 @@
+[
+  {
+    "phase": "construction",
+    "elapsed_seconds": 5.808499247999862,
+    "rss_current_bytes": 697303040,
+    "rss_peak_bytes": 697069568,
+    "python_current_bytes": null,
+    "python_peak_bytes": null
+  },
+  {
+    "phase": "index_all_tokens",
+    "elapsed_seconds": 7.182153743997333,
+    "rss_current_bytes": 1273131008,
+    "rss_peak_bytes": 1272946688,
+    "python_current_bytes": null,
+    "python_peak_bytes": null
+  },
+  {
+    "phase": "warm_independent_results",
+    "elapsed_seconds": 0.07633739800076,
+    "rss_current_bytes": 1283620864,
+    "rss_peak_bytes": 1293918208,
+    "python_current_bytes": null,
+    "python_peak_bytes": null
+  }
+]

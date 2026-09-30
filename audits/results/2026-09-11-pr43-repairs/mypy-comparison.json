@@ -1,0 +1,41 @@
+{
+  "baseline_revision": "476af288",
+  "before_repairs_revision": "58ce5f68",
+  "baseline_errors": 2023,
+  "before_repairs_errors": 1957,
+  "changed_errors": 1953,
+  "new_since_repairs": [],
+  "new_since_original_base": [
+    {
+      "file": "y/classes/common.py",
+      "error": "No overload variant of \"get_price\" matches argument types \"ChecksumAddress\", \"int | BlockNumber | None\", \"int | Decimal | None\", \"bool\", \"bool\", \"tuple[str | HexBytes? | Any | Address | EthAddress | Contract | UniswapV2Pool | CurvePool | BalancerV2Pool, ...]\", \"bool\" [call-overload]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/dex/uniswap/v2.py",
+      "error": "Returning Any from function declared to return \"str\" [no-any-return]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/dex/uniswap/v2.py",
+      "error": "Argument 1 to \"a_sync_cached_property\" has incompatible type \"Callable[[UniswapRouterV2], Coroutine[Any, Any, dict[str, dict[UniswapV2Pool, str]]]]\"; expected \"Callable[[Never], Awaitable[Never]] | Callable[[Never], Never]\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/dex/balancer/v2.py",
+      "error": "Returning Any from function declared to return \"PriceResult | None\" [no-any-return]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/magic.py",
+      "error": "Argument 1 to \"__call__\" of \"ASyncDecoratorSyncDefault\" has incompatible type \"def get_price(token_address: str | HexBytes? | Any | Address | EthAddress | Contract | int, block: int | BlockNumber | None = ..., *, amount: int | Decimal | None = ..., fail_to_None: bool = ..., skip_cache: bool = ..., ignore_pools: tuple[str | HexBytes? | Any | Address | EthAddress | Contract | UniswapV2Pool | CurvePool | BalancerV2Pool, ...] = ..., silent: bool = ...) -> Coroutine[Any, Any, PriceResult | None]\"; expected \"def (*Never, **Never) -> Awaitable[Never] | def (*Never, **Never) -> Never\" [arg-type]",
+      "count": 1
+    },
+    {
+      "file": "y/prices/magic.py",
+      "error": "Argument 1 to \"__call__\" of \"ASyncDecoratorSyncDefault\" has incompatible type \"def get_prices(token_addresses: Iterable[str | HexBytes? | Any | Address | EthAddress | Contract | int], block: int | BlockNumber | None = ..., *, amounts: Iterable[int | Decimal] | None = ..., fail_to_None: bool = ..., skip_cache: bool = ..., silent: bool = ...) -> Coroutine[Any, Any, list[PriceResult | None]]\"; expected \"def (*Never, **Never) -> Awaitable[Never] | def (*Never, **Never) -> Never\" [arg-type]",
+      "count": 1
+    }
+  ],
+  "method": "Compare full wrapped error messages by file; normalize source line references; preserve duplicate counts."
+}

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/profile_pytest.py"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789324131.729182,
+  "source_sha": "b3d38e8aac65c4d62376300e3852979ebb158b9d",
+  "source_revision": "worktree",
+  "source_archive_sha256": "a9e2b5a443f026382f42a607677f6db702e7ab96cc7b97c78667536b825bfc4d",
+  "image": "sha256:4ccb5b8063f29ecbd755ac2760da6364ee81d9f630af1a1f855ecfb83e34ae1b",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": false,
+  "elapsed_seconds": 81.97757315635681
+}

@@ -1,0 +1,28 @@
+{
+  "concurrency": 64,
+  "retries": 16,
+  "payload_bytes": 131072,
+  "attempts": 1088,
+  "retained_failed_payloads": 258,
+  "pending_tasks": 129,
+  "memory_before": {
+    "VmHWM": 156876800,
+    "VmRSS": 156876800
+  },
+  "memory_pending": {
+    "VmHWM": 227442688,
+    "VmRSS": 227442688
+  },
+  "elapsed_to_pending_seconds": 0.023352860000159126,
+  "cpu_to_pending_seconds": 0.023325165999999953,
+  "tracemalloc_enabled": false,
+  "python_before_bytes": null,
+  "python_pending_bytes": null,
+  "request_module": "/work/dank_mids/_requests.py",
+  "total_elapsed_seconds": 0.023751487000481575,
+  "total_cpu_seconds": 0.02372295799999996,
+  "memory_completed": {
+    "VmHWM": 227442688,
+    "VmRSS": 227442688
+  }
+}

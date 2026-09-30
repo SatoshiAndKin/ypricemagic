@@ -1,0 +1,62 @@
+{
+  "executed_lines": [
+    468,
+    469,
+    474,
+    475,
+    476,
+    477,
+    478,
+    479,
+    482,
+    487,
+    496,
+    497,
+    498,
+    499,
+    502,
+    508,
+    517,
+    518,
+    519,
+    520,
+    521,
+    522,
+    524,
+    526,
+    528
+  ],
+  "summary": {
+    "covered_lines": 25,
+    "num_statements": 25,
+    "percent_covered": 100.0,
+    "percent_covered_display": "100",
+    "missing_lines": 0,
+    "excluded_lines": 0,
+    "num_branches": 4,
+    "num_partial_branches": 0,
+    "covered_branches": 4,
+    "missing_branches": 0
+  },
+  "missing_lines": [],
+  "excluded_lines": [],
+  "executed_branches": [
+    [
+      477,
+      478
+    ],
+    [
+      477,
+      479
+    ],
+    [
+      522,
+      524
+    ],
+    [
+      522,
+      528
+    ]
+  ],
+  "missing_branches": []
+}

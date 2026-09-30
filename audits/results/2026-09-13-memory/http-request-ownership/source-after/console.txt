@@ -1,0 +1,1571 @@
+Collecting coverage==7.10.7
+  Downloading coverage-7.10.7-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl.metadata (8.9 kB)
+Downloading coverage-7.10.7-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl (253 kB)
+Installing collected packages: coverage
+Successfully installed coverage-7.10.7
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+
+[notice] A new release of pip is available: 25.0.1 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip
+/usr/local/lib/python3.12/site-packages/web3/__init__.py:2: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+For your information, you can tweak your configuration for optimal performance using any of the envs below:
+EnvironmentVariable[int](name=`DANKMIDS_MAX_MULTICALL_SIZE`, default_value=10000, using_default=True)
+EnvironmentVariable[int](name=`DANKMIDS_MAX_JSONRPC_BATCH_SIZE`, default_value=500, using_default=True)
+EnvironmentVariable[int](name=`DANKMIDS_REQUESTS_PER_SECOND`, default_value=50, using_default=True)
+EnvironmentVariable[int](name=`DANKMIDS_MIN_REQUESTS_PER_SECOND`, default_value=10, using_default=True)
+EnvironmentVariable[bool](name=`DANKMIDS_GANACHE_FORK`, default_value=False, using_default=True)
+EnvironmentVariable[int](name=`DANKMIDS_AIOHTTP_TIMEOUT`, default_value=1200, using_default=True)
+EnvironmentVariable[bool](name=`DANKMIDS_COLLECT_STATS`, default_value=False, using_default=True)
+EnvironmentVariable[int](name=`DANKMIDS_STUCK_CALL_TIMEOUT`, default_value=120, using_default=True)
+More details can be found in dank_mids/ENVIRONMENT_VARIABLES.py
+NOTE: You can disable these logs by setting the `TYPEDENVS_SHUTUP` env var to any value.
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-6.2.5, py-1.11.0, pluggy-1.6.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /work/tests/unit, configfile: pytest.ini
+collecting ... collected 150 items
+
+test_block_decoding.py::test_current_block_accepts_every_field_order[baseFeePerGas-eth_getBlockByNumber] PASSED
+test_block_decoding.py::test_current_block_accepts_every_field_order[baseFeePerGas-eth_getBlockByHash] PASSED
+test_block_decoding.py::test_current_block_accepts_every_field_order[difficulty-eth_getBlockByNumber] PASSED
+test_block_decoding.py::test_current_block_accepts_every_field_order[difficulty-eth_getBlockByHash] PASSED
+test_block_decoding.py::test_current_block_accepts_every_field_order[withdrawals-eth_getBlockByNumber] PASSED
+test_block_decoding.py::test_current_block_accepts_every_field_order[withdrawals-eth_getBlockByHash] PASSED
+test_block_decoding.py::test_current_block_accepts_every_field_order[requestsHash-eth_getBlockByNumber] PASSED
+test_block_decoding.py::test_current_block_accepts_every_field_order[requestsHash-eth_getBlockByHash] PASSED
+test_block_decoding.py::test_current_block_accepts_every_field_order[hash-eth_getBlockByNumber] PASSED
+test_block_decoding.py::test_current_block_accepts_every_field_order[hash-eth_getBlockByHash] PASSED
+test_block_decoding.py::test_successive_fork_eras_do_not_change_other_requests[pre-london] PASSED
+test_block_decoding.py::test_successive_fork_eras_do_not_change_other_requests[london] PASSED
+test_block_decoding.py::test_successive_fork_eras_do_not_change_other_requests[shanghai] PASSED
+test_block_decoding.py::test_minimal_block_schema_and_unknown_field_validation PASSED
+test_block_decoding.py::test_missing_block_remains_null PASSED
+test_block_identity.py::test_hash_key_keeps_number_hash_and_canonical_requirement PASSED
+test_block_identity.py::test_selector_normalizes_hash_and_default_canonical_requirement PASSED
+test_block_identity.py::test_invalid_hash_selector_is_not_sent[selector0-ValueError] PASSED
+test_block_identity.py::test_invalid_hash_selector_is_not_sent[selector1-ValueError] PASSED
+test_block_identity.py::test_invalid_hash_selector_is_not_sent[selector2-ValueError] PASSED
+test_block_identity.py::test_invalid_hash_selector_is_not_sent[selector3-ValueError] PASSED
+test_block_identity.py::test_invalid_hash_selector_is_not_sent[selector4-TypeError] PASSED
+test_block_identity.py::test_hash_identifiers_use_the_existing_admission_limit PASSED
+test_block_identity.py::test_missing_or_mismatched_header_is_never_cached[None-BlockNotFound] PASSED
+test_block_identity.py::test_missing_or_mismatched_header_is_never_cached[header1-ValueError] PASSED
+test_block_identity.py::test_shared_header_lookup_survives_one_cancelled_waiter PASSED
+test_block_identity.py::test_controller_keeps_hash_identity_for_unbatched_calls FAILED
+test_block_identity.py::test_existing_semaphore_identifiers_keep_working[123] PASSED
+test_block_identity.py::test_existing_semaphore_identifiers_keep_working[0x123] PASSED
+test_block_identity.py::test_existing_semaphore_identifiers_keep_working[\x01#] PASSED
+test_block_identity.py::test_existing_semaphore_identifiers_keep_working[None] PASSED
+test_block_identity.py::test_existing_semaphore_identifiers_keep_working[latest] PASSED
+test_block_identity.py::test_semaphore_rejects_unsupported_selector PASSED
+test_block_identity.py::test_duplicate_rpc_keeps_the_hash_batch_key_and_wire_selector FAILED
+test_brownie_patch_errors.py::test_getattr_raises_import_error_for_missing_brownie PASSED
+test_brownie_patch_errors.py::test_getattr_raises_not_connected PASSED
+test_brownie_patch_errors.py::test_getattr_raises_not_initialized_when_connected_after_import PASSED
+test_brownie_patch_errors.py::test_getattr_raises_import_error_when_patch_import_fails PASSED
+test_brownie_patch_errors.py::test_getattr_raises_import_error_for_missing_brownie_types PASSED
+test_brownie_patch_errors.py::test_getattr_resolves_brownie_types PASSED
+test_brownie_patch_errors.py::test_getattr_converts_state_type_error_to_public_exception PASSED
+test_brownie_patch_errors.py::test_get_brownie_patch_status_coerces_state_identity_mismatch PASSED
+test_brownie_patch_errors.py::test_getattr_foreign_initialized_state_raises_public_exception PASSED
+test_brownie_patch_errors.py::test_compiled_import_path_normalizes_state_identity_mismatch[False] SKIPPED
+test_brownie_patch_errors.py::test_compiled_import_path_normalizes_state_identity_mismatch[True] SKIPPED
+test_gc_batch_contract.py::test_create_batch_task_finishes_without_live_waiters PASSED
+test_gc_batch_contract.py::test_multicall_gc_sets_exception_for_active_waiters PASSED
+test_gc_batch_contract.py::test_multicall_gc_treats_no_waiters_as_abandoned_work For your information, you can tweak your configuration for optimal performance using any of the envs below:
+EnvironmentVariable[int](name=`DANKMIDS_MAX_MULTICALL_SIZE`, default_value=10000, using_default=True)
+EnvironmentVariable[int](name=`DANKMIDS_MAX_JSONRPC_BATCH_SIZE`, default_value=500, using_default=True)
+EnvironmentVariable[int](name=`DANKMIDS_REQUESTS_PER_SECOND`, default_value=50, using_default=True)
+EnvironmentVariable[int](name=`DANKMIDS_MIN_REQUESTS_PER_SECOND`, default_value=10, using_default=True)
+EnvironmentVariable[bool](name=`DANKMIDS_GANACHE_FORK`, default_value=False, using_default=True)
+EnvironmentVariable[int](name=`DANKMIDS_AIOHTTP_TIMEOUT`, default_value=1200, using_default=True)
+EnvironmentVariable[bool](name=`DANKMIDS_COLLECT_STATS`, default_value=False, using_default=True)
+EnvironmentVariable[int](name=`DANKMIDS_STUCK_CALL_TIMEOUT`, default_value=120, using_default=True)
+More details can be found in dank_mids/ENVIRONMENT_VARIABLES.py
+NOTE: You can disable these logs by setting the `TYPEDENVS_SHUTUP` env var to any value.
+PASSED
+test_gc_batch_contract.py::test_jsonrpc_batch_gc_logs_waiter_impacting_work PASSED
+test_gc_batch_contract.py::test_jsonrpc_batch_gc_treats_no_waiters_as_abandoned_work PASSED
+test_gc_batch_contract.py::test_rpc_request_gc_treats_no_waiters_as_abandoned_work FAILED
+test_gc_batch_contract.py::test_rpc_request_gc_sets_exception_for_waiters FAILED
+test_gc_batch_contract.py::test_debuggable_future_waiter_count_updates_on_completion PASSED
+test_gc_batch_contract.py::test_debuggable_future_waiter_count_updates_on_cancellation PASSED
+test_gc_batch_contract.py::test_jsonrpc_batch_post_bails_out_when_all_calls_are_collected PASSED
+test_gc_batch_contract.py::test_early_start_keeps_multicalls_alive_through_handoff_and_dispatches FAILED
+test_gc_batch_contract.py::test_early_start_dispatches_existing_rpc_calls_without_waiters FAILED
+test_gc_batch_contract.py::test_batch_full_gate_dispatches_without_waiters FAILED
+test_gc_batch_contract.py::test_multicall_bisect_retry_does_not_wait_pending_done_directly FAILED
+test_gc_batch_contract.py::test_multicall_bisect_retry_timeout_does_not_dispatch_duplicate_batch FAILED
+test_gc_batch_contract.py::test_dispatch_pending_rpc_batch_respects_capacity_gate_for_bisect_retries FAILED
+test_gc_batch_contract.py::test_dispatch_cancellation_preserves_in_flight_batch[False] FAILED
+test_gc_batch_contract.py::test_dispatch_cancellation_preserves_in_flight_batch[True] FAILED
+test_gc_batch_contract.py::test_dispatch_with_no_pending_work_completes_without_a_task FAILED
+test_gc_batch_contract.py::test_dispatch_reports_failure_to_append_calls FAILED
+test_gc_batch_contract.py::test_dispatch_reports_batch_failure[False] FAILED
+test_gc_batch_contract.py::test_dispatch_reports_batch_failure[True] FAILED
+test_gc_batch_contract.py::test_request_gate_waits_for_one_loop_tick_before_dispatch FAILED
+test_gc_batch_contract.py::test_controller_has_pending_calls_ignores_stale_eth_entries FAILED
+test_gc_batch_contract.py::test_request_gate_skips_execute_batch_for_stale_eth_entries FAILED
+test_hash_rpc.py::test_native_batcher_preserves_hashes_and_canonical_requirement FAILED
+test_helpers_attrdict_compat.py::test_add_sync_attrdict_middleware_uses_legacy_symbol PASSED
+test_helpers_attrdict_compat.py::test_add_sync_attrdict_middleware_falls_back_to_v7_symbol PASSED
+test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[False] PASSED
+test_http_retry_release.py::test_http_408_releases_failed_attempts_before_replacement_finishes[True] PASSED
+test_http_retry_release.py::test_success_keeps_response_and_request_identity PASSED
+test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[400] PASSED
+test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[429] PASSED
+test_http_retry_release.py::test_other_http_errors_keep_identity_without_retry[500] PASSED
+test_http_retry_release.py::test_local_timeout_preserves_the_race[0-0] PASSED
+test_http_retry_release.py::test_local_timeout_preserves_the_race[0-1] PASSED
+test_http_retry_release.py::test_local_timeout_preserves_the_race[2-0] PASSED
+test_http_retry_release.py::test_local_timeout_preserves_the_race[2-1] PASSED
+test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[False-make_request] PASSED
+test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[False-get_response_unbatched] PASSED
+test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[True-make_request] PASSED
+test_http_retry_release.py::test_caller_cancellation_releases_every_http_attempt[True-get_response_unbatched] PASSED
+test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[success] PASSED
+test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[failure] PASSED
+test_http_retry_release.py::test_finished_batch_task_releases_registry_ownership[cancel] PASSED
+test_http_retry_release.py::test_unbatched_response_keeps_result_and_closes_duplicate_attempts[False-False] PASSED
+test_http_retry_release.py::test_unbatched_response_keeps_result_and_closes_duplicate_attempts[False-True] PASSED
+test_http_retry_release.py::test_unbatched_response_keeps_result_and_closes_duplicate_attempts[True-False] PASSED
+test_http_retry_release.py::test_unbatched_response_keeps_result_and_closes_duplicate_attempts[True-True] PASSED
+test_http_retry_release.py::test_json_batch_race_releases_only_its_owned_attempts[0] PASSED
+test_http_retry_release.py::test_json_batch_race_releases_only_its_owned_attempts[1] PASSED
+test_http_retry_release.py::test_json_batch_race_releases_only_its_owned_attempts[cancel] PASSED
+test_http_retry_release.py::test_unobserved_failed_batch_logs_once_without_retaining_the_task PASSED
+test_jsonrpc_batch_response.py::test_spoof_response_by_id_matches_and_skips_falsey PASSED
+test_lazy_imports.py::test_import_applies_side_effects PASSED
+test_lazy_imports.py::test_brownie_error_accessible PASSED
+test_lazy_imports.py::test_helpers_import_applies_side_effects PASSED
+test_lazy_imports.py::test_helpers_import_triggers_side_effects PASSED
+test_lazy_imports.py::test_eth_alias_survives_submodule_import PASSED
+test_native_wheel.py::test_wheel_rejects_missing_linked_module[None] PASSED
+test_native_wheel.py::test_wheel_rejects_missing_linked_module[dank_mids/helpers/_rate_limit] FAIL: native.whl: missing compiled artifact for dank_mids/helpers/_rate_limit.py
+PASSED
+test_native_wheel.py::test_wheel_rejects_missing_linked_module[dank_mids/helpers/_requester] FAIL: native.whl: missing compiled artifact for dank_mids/helpers/_requester.py
+PASSED
+test_native_wheel.py::test_wheel_rejects_missing_linked_module[dank_mids/_vendor/aiolimiter/src/aiolimiter/__init__] FAIL: native.whl: missing compiled artifact for dank_mids/_vendor/aiolimiter/src/aiolimiter/__init__.py
+PASSED
+test_native_wheel.py::test_wheel_rejects_missing_linked_module[dank_mids/_vendor/aiolimiter/src/aiolimiter/leakybucket] FAIL: native.whl: missing compiled artifact for dank_mids/_vendor/aiolimiter/src/aiolimiter/leakybucket.py
+PASSED
+test_native_wheel.py::test_wheel_rejects_missing_linked_module[native__mypyc] FAIL: native.whl: missing native mypyc group for .cpython-312-aarch64-linux-gnu.so
+PASSED
+test_native_wheel.py::test_native_rate_limiter_can_serve_a_request FAILED
+test_rate_limit_admission.py::test_rate_limit_releases_callers_as_one_batch PASSED
+test_rate_limit_admission.py::test_cancelled_caller_does_not_cancel_other_waiters[None] PASSED
+test_rate_limit_admission.py::test_cancelled_caller_does_not_cancel_other_waiters[failure1] PASSED
+test_rate_limit_admission.py::test_inactive_queue_and_failed_requester PASSED
+test_rate_limit_admission.py::test_requester_shares_drain_completion_and_errors[None] PASSED
+test_rate_limit_admission.py::test_requester_shares_drain_completion_and_errors[failure1] PASSED
+test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-False] PASSED
+test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-True] PASSED
+test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-False] PASSED
+test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-True] PASSED
+test_requester_shutdown.py::test_source_shutdown_closes_session_thread_and_loop[False] PASSED
+test_requester_shutdown.py::test_source_shutdown_closes_session_thread_and_loop[True] PASSED
+test_requester_shutdown.py::test_installed_requester_process_exits_cleanly[False] PASSED
+test_requester_shutdown.py::test_installed_requester_process_exits_cleanly[True] PASSED
+test_retry_mechanics.py::test_consume_retry_advances_attempt_until_budget_exhausted PASSED
+test_retry_mechanics.py::test_consume_retry_with_jitter_uses_random_delay PASSED
+test_retry_mechanics.py::test_choose_http_status_retry_uses_rate_limit_budget_for_429 PASSED
+test_retry_mechanics.py::test_choose_http_status_retry_retries_transient_status_with_delay PASSED
+test_retry_mechanics.py::test_choose_http_status_retry_raises_for_non_retry_codes PASSED
+test_retry_mechanics.py::test_use_warning_logger_defaults_to_attempt_three PASSED
+test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[None] FAILED
+test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[0x1234] FAILED
+test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data2] FAILED
+test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data3] FAILED
+test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data4] FAILED
+test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[42] FAILED
+test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[True] FAILED
+test_rpc_error_data.py::test_revert_with_structured_context_remains_a_revert FAILED
+test_rpc_error_data.py::test_only_chainstack_rate_limits_parse_the_retry_duration[250ms-0.25] FAILED
+test_rpc_error_data.py::test_only_chainstack_rate_limits_parse_the_retry_duration[250\xb5s-0.00025] FAILED
+test_rpc_error_data.py::test_malformed_rate_limit_retains_the_actual_error_context[data0] PASSED
+test_rpc_error_data.py::test_malformed_rate_limit_retains_the_actual_error_context[None] PASSED
+test_rpc_error_data.py::test_malformed_rate_limit_retains_the_actual_error_context[data2] PASSED
+test_run_mypyc_build.py::test_build_install_command_uses_requirements_file PASSED
+test_run_mypyc_build.py::test_build_mypyc_command_contains_targets_and_flags PASSED
+test_run_mypyc_build.py::test_main_runs_install_then_compile PASSED
+test_weaklist.py::test_append_iter_contains_and_len PASSED
+test_weaklist.py::test_extend_and_remove PASSED
+test_weaklist.py::test_gc_cleans_refs PASSED
+
+=================================== FAILURES ===================================
+___________ test_controller_keeps_hash_identity_for_unbatched_calls ____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xff76e4f190a0>
+
+    def test_controller_keeps_hash_identity_for_unbatched_calls(monkeypatch):
+        from unittest.mock import AsyncMock
+        from dank_mids import controller as module
+        from test_gc_batch_contract import _build_controller_for_early_start
+    
+        async def check():
+            owner = _build_controller_for_early_start()
+            target = "0x0000000000000000000000000000000000000002"
+            tx = {"to": target, "data": "0x12345678"}
+            hash_block = {"blockHash": HASH, "requireCanonical": True}
+            monkeypatch.setattr(module, "resolve_block_number", AsyncMock(return_value=18000000))
+            batched = AsyncMock(return_value={"result": b"batched"})
+            rpc = AsyncMock(return_value={"result": b"single"})
+            monkeypatch.setattr(module, "eth_call", batched)
+            monkeypatch.setattr(module, "RPCRequest", rpc)
+            assert await owner("eth_call", (tx, hash_block)) == {"result": b"batched"}
+            assert batched.call_args.args[1] == (tx, HashBlock(HASH, True, 18000000))
+            owner.no_multicall.add(target)
+            assert await owner("eth_call", (tx, hash_block)) == {"result": b"single"}
+            assert rpc.call_args.args[2] == (tx, hash_block)
+            await owner("eth_call", (tx, {"blockNumber": "0x123"}))
+            assert rpc.call_args.args[2] == (tx, "0x123")
+            # Resolve height for Multicall deployment selection, never for RPC state.
+            assert owner._select_mcall_target_for_block(HashBlock(HASH, True, 18000000)) == owner.mc2
+            assert owner._select_mcall_target_for_block("latest") == owner.mc2
+    
+>       asyncio.run(check())
+
+test_block_identity.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_block_identity.py:123: in check
+    owner = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4f64040>)
+
+test_gc_batch_contract.py:123: AssertionError
+________ test_duplicate_rpc_keeps_the_hash_batch_key_and_wire_selector _________
+
+    def test_duplicate_rpc_keeps_the_hash_batch_key_and_wire_selector():
+        from dank_mids._requests import eth_call
+        from test_gc_batch_contract import _build_controller_for_early_start
+    
+        async def check():
+            owner = _build_controller_for_early_start()
+            block = HashBlock(HASH, True, 18000000)
+            tx = {"to": "0x0000000000000000000000000000000000000002", "data": "0x12345678"}
+            call = eth_call(owner, (tx, block))
+            duplicate = call.create_duplicate()
+            assert duplicate.block == block
+            assert duplicate.params == (tx, block.rpc())
+            assert list(owner.pending_eth_calls) == [block]
+            assert "blockHash" in repr(duplicate)
+            await duplicate.spoof_response(bytes(32))
+    
+>       asyncio.run(check())
+
+test_block_identity.py:176: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_block_identity.py:165: in check
+    owner = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4f658c0>)
+
+test_gc_batch_contract.py:123: AssertionError
+___________ test_rpc_request_gc_treats_no_waiters_as_abandoned_work ____________
+
+    def test_rpc_request_gc_treats_no_waiters_as_abandoned_work() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            request = RPCRequest(controller, "web3_clientVersion", [])
+    
+            request.__del__()
+    
+            assert request._fut.done() is False
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:229: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4ed84a0>)
+
+test_gc_batch_contract.py:123: AssertionError
+________________ test_rpc_request_gc_sets_exception_for_waiters ________________
+
+    def test_rpc_request_gc_sets_exception_for_waiters() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            request = RPCRequest(controller, "web3_clientVersion", [])
+            waiter = await _start_future_waiter(request._fut)
+            assert request._fut.has_waiters is True
+    
+            request.__del__()
+    
+            with pytest.raises(GarbageCollectionError):
+                await asyncio.wait_for(waiter, timeout=1)
+            assert request._fut.has_waiters is False
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:252: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:241: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4ed9380>)
+
+test_gc_batch_contract.py:123: AssertionError
+____ test_early_start_keeps_multicalls_alive_through_handoff_and_dispatches ____
+
+    def test_early_start_keeps_multicalls_alive_through_handoff_and_dispatches() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            pending_call = _PendingEthCall()
+            multicall = Multicall(controller, [pending_call], bid="mc-handoff")
+    
+            started_with_live = []
+            dispatched = asyncio.Event()
+            batch = controller.pending_rpc_calls
+            original_start = type(batch).start
+    
+            def patched_start(self, batch=None, cleanup=True):
+                gc.collect()
+                started_with_live.append(len(self.calls.snapshot()))
+                return original_start(self, batch=batch, cleanup=cleanup)
+    
+            async def patched_get_response(self) -> None:
+                dispatched.set()
+                self._done.set()
+    
+            with (
+                patch.object(type(batch), "start", patched_start),
+                patch.object(type(batch), "get_response", patched_get_response),
+            ):
+                controller.pending_eth_calls = {"latest": multicall}
+                del multicall
+                controller.early_start()
+                await asyncio.wait_for(dispatched.wait(), timeout=1)
+    
+            assert controller.pending_eth_calls == {}
+            assert started_with_live == [1]
+            assert batch._awaited is True
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:341: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:310: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4ed9620>)
+
+test_gc_batch_contract.py:123: AssertionError
+________ test_early_start_dispatches_existing_rpc_calls_without_waiters ________
+
+    def test_early_start_dispatches_existing_rpc_calls_without_waiters() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            batch = controller.pending_rpc_calls
+            rpc_call = _RPCBatchCall()
+            dispatched = asyncio.Event()
+    
+            async def patched_get_response(self) -> None:
+                dispatched.set()
+                self._done.set()
+    
+            with patch.object(type(batch), "get_response", patched_get_response):
+                batch.append(rpc_call, skip_check=True)
+                controller.early_start()
+                await asyncio.wait_for(dispatched.wait(), timeout=1)
+    
+            assert batch._awaited is True
+            assert rpc_call._batch is batch
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:363: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:346: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4eda0a0>)
+
+test_gc_batch_contract.py:123: AssertionError
+_______________ test_batch_full_gate_dispatches_without_waiters ________________
+
+    def test_batch_full_gate_dispatches_without_waiters() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            controller.max_jsonrpc_batch_size = 1
+            batch = controller.pending_rpc_calls
+            rpc_call = _RPCBatchCall()
+            dispatched = asyncio.Event()
+    
+            async def patched_get_response(self) -> None:
+                dispatched.set()
+                self._done.set()
+    
+            with patch.object(type(batch), "get_response", patched_get_response):
+                batch.append(rpc_call)
+                await asyncio.wait_for(dispatched.wait(), timeout=1)
+    
+            assert batch._awaited is True
+            assert rpc_call._batch is batch
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:385: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:368: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4edac00>)
+
+test_gc_batch_contract.py:123: AssertionError
+_______ test_multicall_bisect_retry_does_not_wait_pending_done_directly ________
+
+    def test_multicall_bisect_retry_does_not_wait_pending_done_directly() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            pending_batch = controller.pending_rpc_calls
+            rpc_call = _RPCBatchCall()
+            pending_batch.append(rpc_call, skip_check=True)
+            multicall = Multicall(controller, [_PendingEthCall()], bid="mc-bisect")
+    
+            async def patched_get_response(self) -> None:
+                self._done.set()
+    
+            with (
+                patch.object(
+                    pending_batch._done, "wait", side_effect=AssertionError("should not be called")
+                ),
+                patch.object(JSONRPCBatch, "get_response", patched_get_response),
+            ):
+                await asyncio.wait_for(multicall.bisect_and_retry(RuntimeError("boom")), timeout=1)
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:407: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:390: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4edb760>)
+
+test_gc_batch_contract.py:123: AssertionError
+____ test_multicall_bisect_retry_timeout_does_not_dispatch_duplicate_batch _____
+
+    def test_multicall_bisect_retry_timeout_does_not_dispatch_duplicate_batch() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            pending_batch = controller.pending_rpc_calls
+            existing_rpc = _RPCBatchCall()
+            pending_batch.append(existing_rpc, skip_check=True)
+            controller_cls = type(controller)
+            pending_calls = (_PendingEthCall(), _PendingEthCall())
+    
+            multicall = Multicall(
+                controller,
+                pending_calls,
+                bid="mc-timeout-no-dup",
+            )
+            release = asyncio.Event()
+            timed_out = asyncio.Event()
+            fallback_starts: list[str] = []
+            original_dispatch = controller_cls.dispatch_pending_rpc_batch_and_wait
+            original_start = JSONRPCBatch.start
+    
+            async def release_later() -> None:
+                await asyncio.wait_for(timed_out.wait(), timeout=1)
+                release.set()
+    
+            async def patched_get_response(self) -> None:
+                await release.wait()
+                self._done.set()
+    
+            async def patched_dispatch(self, calls, timeout=120.0):
+                del timeout
+                return await original_dispatch(self, calls, timeout=0.01)
+    
+            def patched_start(self, batch=None, cleanup=True):
+                if isinstance(self.jid, str) and self.jid.endswith("_bisected"):
+                    fallback_starts.append(self.jid)
+                return original_start(self, batch=batch, cleanup=cleanup)
+    
+            with (
+                patch.object(controller_cls, "dispatch_pending_rpc_batch_and_wait", patched_dispatch),
+                patch.object(JSONRPCBatch, "get_response", patched_get_response),
+                patch.object(JSONRPCBatch, "start", patched_start),
+                _observe_batch_timeout(timed_out),
+            ):
+                releaser = asyncio.create_task(release_later())
+                await asyncio.wait_for(multicall.bisect_and_retry(RuntimeError("boom")), timeout=1)
+                await releaser
+    
+            assert fallback_starts == []
+            assert timed_out.is_set()
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:460: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:412: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4eda340>)
+
+test_gc_batch_contract.py:123: AssertionError
+__ test_dispatch_pending_rpc_batch_respects_capacity_gate_for_bisect_retries ___
+
+    def test_dispatch_pending_rpc_batch_respects_capacity_gate_for_bisect_retries() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            controller.max_jsonrpc_batch_size = 2
+            call0 = _PendingEthCall()
+            call1 = _PendingEthCall()
+    
+            pending_batch = controller.pending_rpc_calls
+            existing_rpc = _RPCBatchCall()
+            pending_batch.append(existing_rpc, skip_check=True)
+    
+            bisected = (
+                Multicall(controller, [call0], bid="mc-capacity-0"),
+                Multicall(controller, [call1], bid="mc-capacity-1"),
+            )
+            started_sizes: list[int] = []
+            original_start = JSONRPCBatch.start
+    
+            async def patched_get_response(self) -> None:
+                self._done.set()
+    
+            def patched_start(self, batch=None, cleanup=True):
+                started_sizes.append(len(self.calls.snapshot()))
+                return original_start(self, batch=batch, cleanup=cleanup)
+    
+            with (
+                patch.object(JSONRPCBatch, "get_response", patched_get_response),
+                patch.object(JSONRPCBatch, "start", patched_start),
+            ):
+                completed = await asyncio.wait_for(
+                    controller.dispatch_pending_rpc_batch_and_wait(bisected, timeout=1),
+                    timeout=1,
+                )
+    
+            assert completed is True
+            assert started_sizes == [2, 1]
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:500: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:465: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4ed9b60>)
+
+test_gc_batch_contract.py:123: AssertionError
+_________ test_dispatch_cancellation_preserves_in_flight_batch[False] __________
+
+after_timeout = False
+
+    @pytest.mark.parametrize("after_timeout", [False, True])
+    def test_dispatch_cancellation_preserves_in_flight_batch(after_timeout: bool) -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            batch = controller.pending_rpc_calls
+            call = _RPCBatchCall()
+            batch.append(call, skip_check=True)
+            started = asyncio.Event()
+            release = asyncio.Event()
+            timed_out = asyncio.Event()
+            starts = 0
+    
+            async def response(self) -> None:
+                nonlocal starts
+                starts += 1
+                started.set()
+                await release.wait()
+                self._done.set()
+    
+            with (
+                patch.object(JSONRPCBatch, "get_response", response),
+                _observe_batch_timeout(timed_out),
+            ):
+                caller = asyncio.create_task(
+                    controller.dispatch_pending_rpc_batch_and_wait(
+                        (), timeout=0 if after_timeout else 60
+                    )
+                )
+                await asyncio.wait_for(started.wait(), timeout=1)
+                if after_timeout:
+                    await asyncio.wait_for(timed_out.wait(), timeout=1)
+                caller.cancel()
+                with pytest.raises(asyncio.CancelledError):
+                    await caller
+                assert not batch._done.is_set()
+                release.set()
+                await asyncio.wait_for(batch._task, timeout=1)
+    
+            assert starts == 1
+            assert batch._done.is_set()
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:544: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:506: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4ed9000>)
+
+test_gc_batch_contract.py:123: AssertionError
+__________ test_dispatch_cancellation_preserves_in_flight_batch[True] __________
+
+after_timeout = True
+
+    @pytest.mark.parametrize("after_timeout", [False, True])
+    def test_dispatch_cancellation_preserves_in_flight_batch(after_timeout: bool) -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            batch = controller.pending_rpc_calls
+            call = _RPCBatchCall()
+            batch.append(call, skip_check=True)
+            started = asyncio.Event()
+            release = asyncio.Event()
+            timed_out = asyncio.Event()
+            starts = 0
+    
+            async def response(self) -> None:
+                nonlocal starts
+                starts += 1
+                started.set()
+                await release.wait()
+                self._done.set()
+    
+            with (
+                patch.object(JSONRPCBatch, "get_response", response),
+                _observe_batch_timeout(timed_out),
+            ):
+                caller = asyncio.create_task(
+                    controller.dispatch_pending_rpc_batch_and_wait(
+                        (), timeout=0 if after_timeout else 60
+                    )
+                )
+                await asyncio.wait_for(started.wait(), timeout=1)
+                if after_timeout:
+                    await asyncio.wait_for(timed_out.wait(), timeout=1)
+                caller.cancel()
+                with pytest.raises(asyncio.CancelledError):
+                    await caller
+                assert not batch._done.is_set()
+                release.set()
+                await asyncio.wait_for(batch._task, timeout=1)
+    
+            assert starts == 1
+            assert batch._done.is_set()
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:544: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:506: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4af8200>)
+
+test_gc_batch_contract.py:123: AssertionError
+_________ test_dispatch_with_no_pending_work_completes_without_a_task __________
+
+    def test_dispatch_with_no_pending_work_completes_without_a_task() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            batch = controller.pending_rpc_calls
+            assert await controller.dispatch_pending_rpc_batch_and_wait(()) is True
+            assert not batch._awaited
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:554: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:549: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4ed9c40>)
+
+test_gc_batch_contract.py:123: AssertionError
+________________ test_dispatch_reports_failure_to_append_calls _________________
+
+    def test_dispatch_reports_failure_to_append_calls() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            batch = controller.pending_rpc_calls
+            batch._awaited = True
+            call = _PendingEthCall()
+            multicall = Multicall(controller, [call], bid="cannot-append")
+            assert await controller.dispatch_pending_rpc_batch_and_wait((multicall,)) is False
+            assert controller.pending_rpc_calls is batch
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:567: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:559: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4eda960>)
+
+test_gc_batch_contract.py:123: AssertionError
+__________________ test_dispatch_reports_batch_failure[False] __________________
+
+after_timeout = False
+
+    @pytest.mark.parametrize("after_timeout", [False, True])
+    def test_dispatch_reports_batch_failure(after_timeout: bool) -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            batch = controller.pending_rpc_calls
+            call = _RPCBatchCall()
+            batch.append(call, skip_check=True)
+            started = asyncio.Event()
+            release = asyncio.Event()
+            timed_out = asyncio.Event()
+    
+            async def response(self) -> None:
+                started.set()
+                await release.wait()
+                self._done.set()
+                raise RuntimeError("controlled batch failure")
+    
+            with (
+                patch.object(JSONRPCBatch, "get_response", response),
+                _observe_batch_timeout(timed_out),
+            ):
+                caller = asyncio.create_task(
+                    controller.dispatch_pending_rpc_batch_and_wait(
+                        (), timeout=0 if after_timeout else 60
+                    )
+                )
+                await asyncio.wait_for(started.wait(), timeout=1)
+                if after_timeout:
+                    await asyncio.wait_for(timed_out.wait(), timeout=1)
+                release.set()
+                assert await asyncio.wait_for(caller, timeout=1) is False
+    
+            assert batch._done.is_set()
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:604: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:573: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4eda340>)
+
+test_gc_batch_contract.py:123: AssertionError
+__________________ test_dispatch_reports_batch_failure[True] ___________________
+
+after_timeout = True
+
+    @pytest.mark.parametrize("after_timeout", [False, True])
+    def test_dispatch_reports_batch_failure(after_timeout: bool) -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            batch = controller.pending_rpc_calls
+            call = _RPCBatchCall()
+            batch.append(call, skip_check=True)
+            started = asyncio.Event()
+            release = asyncio.Event()
+            timed_out = asyncio.Event()
+    
+            async def response(self) -> None:
+                started.set()
+                await release.wait()
+                self._done.set()
+                raise RuntimeError("controlled batch failure")
+    
+            with (
+                patch.object(JSONRPCBatch, "get_response", response),
+                _observe_batch_timeout(timed_out),
+            ):
+                caller = asyncio.create_task(
+                    controller.dispatch_pending_rpc_batch_and_wait(
+                        (), timeout=0 if after_timeout else 60
+                    )
+                )
+                await asyncio.wait_for(started.wait(), timeout=1)
+                if after_timeout:
+                    await asyncio.wait_for(timed_out.wait(), timeout=1)
+                release.set()
+                assert await asyncio.wait_for(caller, timeout=1) is False
+    
+            assert batch._done.is_set()
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:604: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:573: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4af8ba0>)
+
+test_gc_batch_contract.py:123: AssertionError
+__________ test_request_gate_waits_for_one_loop_tick_before_dispatch ___________
+
+    def test_request_gate_waits_for_one_loop_tick_before_dispatch() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            request = RPCRequest(controller, "web3_clientVersion", [])
+            # Some other unit tests toggle global batching behavior; pin this test to the batched path.
+            request.should_batch = True
+            request._batch = None
+            first_tick = asyncio.Event()
+            release_first_tick = asyncio.Event()
+            yield_calls = 0
+            execute_batch_calls = 0
+    
+            async def patched_yield_to_loop() -> None:
+                nonlocal yield_calls
+                yield_calls += 1
+                if yield_calls == 1:
+                    first_tick.set()
+                    await release_first_tick.wait()
+                else:
+                    await asyncio.sleep(0)
+    
+            async def patched_execute_batch(self) -> None:
+                nonlocal execute_batch_calls
+                execute_batch_calls += 1
+                if not request._fut.done():
+                    request._fut.set_result({"jsonrpc": "2.0", "id": request.uid, "result": "0x1"})
+    
+            with (
+                patch.object(requests_module, "yield_to_loop", patched_yield_to_loop),
+                patch.object(type(controller), "execute_batch", patched_execute_batch),
+            ):
+                response_task = asyncio.create_task(request.get_response())
+                await asyncio.wait_for(first_tick.wait(), timeout=1)
+                assert execute_batch_calls == 0
+                release_first_tick.set()
+                response = await asyncio.wait_for(response_task, timeout=1)
+    
+            assert yield_calls >= 1
+            assert execute_batch_calls == 1
+            assert response["result"] == "0x1"
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:648: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:609: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4edb840>)
+
+test_gc_batch_contract.py:123: AssertionError
+_________ test_controller_has_pending_calls_ignores_stale_eth_entries __________
+
+    def test_controller_has_pending_calls_ignores_stale_eth_entries() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+    
+            stale_multicall = Multicall(controller, [], bid="mc-stale")
+            controller.pending_eth_calls = {"latest": stale_multicall}
+            assert bool(controller.pending_eth_calls) is True
+            assert controller.has_pending_calls is False
+    
+            live_call = _PendingEthCall()
+            live_multicall = Multicall(controller, [live_call], bid="mc-live")
+            controller.pending_eth_calls = {"latest": live_multicall}
+            assert controller.has_pending_calls is True
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:665: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:653: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4eda420>)
+
+test_gc_batch_contract.py:123: AssertionError
+_________ test_request_gate_skips_execute_batch_for_stale_eth_entries __________
+
+    def test_request_gate_skips_execute_batch_for_stale_eth_entries() -> None:
+        async def run() -> None:
+            controller = _build_controller_for_early_start()
+            request = RPCRequest(controller, "web3_clientVersion", [])
+            # Some other unit tests toggle global batching behavior; pin this test to the batched path.
+            request.should_batch = True
+            request._batch = None
+            request._fut.set_result({"jsonrpc": "2.0", "id": request.uid, "result": "0x1"})
+    
+            # Remove the queued request from controller state so only stale eth entries remain.
+            controller.pending_rpc_calls = JSONRPCBatch(controller)
+            controller.pending_eth_calls = {"latest": Multicall(controller, [], bid="mc-stale")}
+            assert bool(controller.pending_eth_calls) is True
+            assert controller.has_pending_calls is False
+    
+            async def patched_execute_batch(self) -> None:
+                raise AssertionError("execute_batch should not be scheduled for stale eth entries")
+    
+            with patch.object(type(controller), "execute_batch", patched_execute_batch):
+                response = await asyncio.wait_for(request.get_response(), timeout=1)
+    
+            assert response["result"] == "0x1"
+    
+>       asyncio.run(run())
+
+test_gc_batch_contract.py:691: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.12/asyncio/runners.py:195: in run
+    return runner.run(main)
+/usr/local/lib/python3.12/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+/usr/local/lib/python3.12/asyncio/base_events.py:691: in run_until_complete
+    return future.result()
+test_gc_batch_contract.py:670: in run
+    controller = _build_controller_for_early_start()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def _build_controller_for_early_start() -> DankMiddlewareController:
+        module = controller_module
+>       assert any(module.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object _build_controller_for_early_start.<locals>.<genexpr> at 0xff76e4af8c80>)
+
+test_gc_batch_contract.py:123: AssertionError
+________ test_native_batcher_preserves_hashes_and_canonical_requirement ________
+
+    def test_native_batcher_preserves_hashes_and_canonical_requirement():
+>       assert any(controller.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+E       assert False
+E        +  where False = any(<generator object test_native_batcher_preserves_hashes_and_canonical_requirement.<locals>.<genexpr> at 0xff76e4fd6330>)
+
+test_hash_rpc.py:23: AssertionError
+_________________ test_native_rate_limiter_can_serve_a_request _________________
+
+    def test_native_rate_limiter_can_serve_a_request():
+        code = """
+    import asyncio
+    from importlib.machinery import EXTENSION_SUFFIXES
+    from dank_mids import setup_dank_w3
+    from dank_mids.helpers import _rate_limit, _requester
+    from dank_mids._vendor.aiolimiter.src.aiolimiter import leakybucket
+    
+    assert any(_rate_limit.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+    assert any(leakybucket.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)
+    
+    async def verify():
+        endpoint = 'http://127.0.0.1:1'
+        await _rate_limit.rate_limit_inactive(endpoint)
+        limiter = _rate_limit.limiters[endpoint]
+        async with limiter:
+            assert not limiter._waiters
+    
+    asyncio.run(verify())
+    _requester.shutdown_http_requester()
+    """
+>       subprocess.run(
+            [sys.executable, "-c", code], check=True, text=True, capture_output=True, timeout=10
+        )
+
+test_native_wheel.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+input = None, capture_output = True, timeout = 10, check = True
+popenargs = (['/usr/local/bin/python', '-c', '\nimport asyncio\nfrom importlib.machinery import EXTENSION_SUFFIXES\nfrom dank_mids...with limiter:\n        assert not limiter._waiters\n\nasyncio.run(verify())\n_requester.shutdown_http_requester()\n'],)
+kwargs = {'stderr': -1, 'stdout': -1, 'text': True}
+process = <Popen: returncode: 1 args: ['/usr/local/bin/python', '-c', "\nimport asynci...>
+stdout = ''
+stderr = '/usr/local/lib/python3.12/site-packages/web3/__init__.py:2: UserWarning: pkg_resources is deprecated as an API. See h...P` env var to any value.\nTraceback (most recent call last):\n  File "<string>", line 8, in <module>\nAssertionError\n'
+retcode = 1
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output & stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+>               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['/usr/local/bin/python', '-c', "\nimport asyncio\nfrom importlib.machinery import EXTENSION_SUFFIXES\nfrom dank_mids import setup_dank_w3\nfrom dank_mids.helpers import _rate_limit, _requester\nfrom dank_mids._vendor.aiolimiter.src.aiolimiter import leakybucket\n\nassert any(_rate_limit.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)\nassert any(leakybucket.__file__.endswith(suffix) for suffix in EXTENSION_SUFFIXES)\n\nasync def verify():\n    endpoint = 'http://127.0.0.1:1'\n    await _rate_limit.rate_limit_inactive(endpoint)\n    limiter = _rate_limit.limiters[endpoint]\n    async with limiter:\n        assert not limiter._waiters\n\nasyncio.run(verify())\n_requester.shutdown_http_requester()\n"]' returned non-zero exit status 1.
+
+/usr/local/lib/python3.12/subprocess.py:571: CalledProcessError
+_ test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[None] _
+
+data = None
+
+    @pytest.mark.parametrize(
+        "data", [None, "0x1234", {}, {"method": "unknown", "extra": "unsupported"}, [1, "x"], 42, True]
+    )
+    def test_error_preserves_arbitrary_json_data_in_single_and_batch_responses(data):
+        payload = {
+            "id": 1,
+            "jsonrpc": "2.0",
+            "error": {"code": -32601, "message": "Method not found", "data": data},
+        }
+        encoded = json.dumps(payload).encode()
+        for response in (decode_raw(encoded).decode(), decode_jsonrpc_batch(encoded)):
+            assert response.error.to_dict() == payload["error"]
+>           assert type(response.exception) is BadResponse
+E           AssertionError: assert <class 'dank_mids._exceptions.BadResponse'> is BadResponse
+E            +  where <class 'dank_mids._exceptions.BadResponse'> = type(BadResponse({'code': -32601, 'message': 'Method not found', 'data': None}))
+E            +    where BadResponse({'code': -32601, 'message': 'Method not found', 'data': None}) = Response(error=Error(code=-32601, message='Method not found', data=None), id=1, jsonrpc='2.0').exception
+
+test_rpc_error_data.py:26: AssertionError
+_ test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[0x1234] _
+
+data = '0x1234'
+
+    @pytest.mark.parametrize(
+        "data", [None, "0x1234", {}, {"method": "unknown", "extra": "unsupported"}, [1, "x"], 42, True]
+    )
+    def test_error_preserves_arbitrary_json_data_in_single_and_batch_responses(data):
+        payload = {
+            "id": 1,
+            "jsonrpc": "2.0",
+            "error": {"code": -32601, "message": "Method not found", "data": data},
+        }
+        encoded = json.dumps(payload).encode()
+        for response in (decode_raw(encoded).decode(), decode_jsonrpc_batch(encoded)):
+            assert response.error.to_dict() == payload["error"]
+>           assert type(response.exception) is BadResponse
+E           AssertionError: assert <class 'dank_mids._exceptions.BadResponse'> is BadResponse
+E            +  where <class 'dank_mids._exceptions.BadResponse'> = type(BadResponse({'code': -32601, 'message': 'Method not found', 'data': '0x1234'}))
+E            +    where BadResponse({'code': -32601, 'message': 'Method not found', 'data': '0x1234'}) = Response(error=Error(code=-32601, message='Method not found', data='0x1234'), id=1, jsonrpc='2.0').exception
+
+test_rpc_error_data.py:26: AssertionError
+_ test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data2] _
+
+data = {}
+
+    @pytest.mark.parametrize(
+        "data", [None, "0x1234", {}, {"method": "unknown", "extra": "unsupported"}, [1, "x"], 42, True]
+    )
+    def test_error_preserves_arbitrary_json_data_in_single_and_batch_responses(data):
+        payload = {
+            "id": 1,
+            "jsonrpc": "2.0",
+            "error": {"code": -32601, "message": "Method not found", "data": data},
+        }
+        encoded = json.dumps(payload).encode()
+        for response in (decode_raw(encoded).decode(), decode_jsonrpc_batch(encoded)):
+            assert response.error.to_dict() == payload["error"]
+>           assert type(response.exception) is BadResponse
+E           AssertionError: assert <class 'dank_mids._exceptions.BadResponse'> is BadResponse
+E            +  where <class 'dank_mids._exceptions.BadResponse'> = type(BadResponse({'code': -32601, 'message': 'Method not found', 'data': {}}))
+E            +    where BadResponse({'code': -32601, 'message': 'Method not found', 'data': {}}) = Response(error=Error(code=-32601, message='Method not found', data={}), id=1, jsonrpc='2.0').exception
+
+test_rpc_error_data.py:26: AssertionError
+_ test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data3] _
+
+data = {'extra': 'unsupported', 'method': 'unknown'}
+
+    @pytest.mark.parametrize(
+        "data", [None, "0x1234", {}, {"method": "unknown", "extra": "unsupported"}, [1, "x"], 42, True]
+    )
+    def test_error_preserves_arbitrary_json_data_in_single_and_batch_responses(data):
+        payload = {
+            "id": 1,
+            "jsonrpc": "2.0",
+            "error": {"code": -32601, "message": "Method not found", "data": data},
+        }
+        encoded = json.dumps(payload).encode()
+        for response in (decode_raw(encoded).decode(), decode_jsonrpc_batch(encoded)):
+            assert response.error.to_dict() == payload["error"]
+>           assert type(response.exception) is BadResponse
+E           AssertionError: assert <class 'dank_mids._exceptions.BadResponse'> is BadResponse
+E            +  where <class 'dank_mids._exceptions.BadResponse'> = type(BadResponse({'code': -32601, 'message': 'Method not found', 'data': {'method': 'unknown', 'extra': 'unsupported'}}))
+E            +    where BadResponse({'code': -32601, 'message': 'Method not found', 'data': {'method': 'unknown', 'extra': 'unsupported'}}) = Response(error=Error(code=-32601, message='Method not found', data={'method': 'unknown', 'extra': 'unsupported'}), id=1, jsonrpc='2.0').exception
+
+test_rpc_error_data.py:26: AssertionError
+_ test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data4] _
+
+data = [1, 'x']
+
+    @pytest.mark.parametrize(
+        "data", [None, "0x1234", {}, {"method": "unknown", "extra": "unsupported"}, [1, "x"], 42, True]
+    )
+    def test_error_preserves_arbitrary_json_data_in_single_and_batch_responses(data):
+        payload = {
+            "id": 1,
+            "jsonrpc": "2.0",
+            "error": {"code": -32601, "message": "Method not found", "data": data},
+        }
+        encoded = json.dumps(payload).encode()
+        for response in (decode_raw(encoded).decode(), decode_jsonrpc_batch(encoded)):
+            assert response.error.to_dict() == payload["error"]
+>           assert type(response.exception) is BadResponse
+E           AssertionError: assert <class 'dank_mids._exceptions.BadResponse'> is BadResponse
+E            +  where <class 'dank_mids._exceptions.BadResponse'> = type(BadResponse({'code': -32601, 'message': 'Method not found', 'data': [1, 'x']}))
+E            +    where BadResponse({'code': -32601, 'message': 'Method not found', 'data': [1, 'x']}) = Response(error=Error(code=-32601, message='Method not found', data=[1, 'x']), id=1, jsonrpc='2.0').exception
+
+test_rpc_error_data.py:26: AssertionError
+__ test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[42] __
+
+data = 42
+
+    @pytest.mark.parametrize(
+        "data", [None, "0x1234", {}, {"method": "unknown", "extra": "unsupported"}, [1, "x"], 42, True]
+    )
+    def test_error_preserves_arbitrary_json_data_in_single_and_batch_responses(data):
+        payload = {
+            "id": 1,
+            "jsonrpc": "2.0",
+            "error": {"code": -32601, "message": "Method not found", "data": data},
+        }
+        encoded = json.dumps(payload).encode()
+        for response in (decode_raw(encoded).decode(), decode_jsonrpc_batch(encoded)):
+            assert response.error.to_dict() == payload["error"]
+>           assert type(response.exception) is BadResponse
+E           AssertionError: assert <class 'dank_mids._exceptions.BadResponse'> is BadResponse
+E            +  where <class 'dank_mids._exceptions.BadResponse'> = type(BadResponse({'code': -32601, 'message': 'Method not found', 'data': 42}))
+E            +    where BadResponse({'code': -32601, 'message': 'Method not found', 'data': 42}) = Response(error=Error(code=-32601, message='Method not found', data=42), id=1, jsonrpc='2.0').exception
+
+test_rpc_error_data.py:26: AssertionError
+_ test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[True] _
+
+data = True
+
+    @pytest.mark.parametrize(
+        "data", [None, "0x1234", {}, {"method": "unknown", "extra": "unsupported"}, [1, "x"], 42, True]
+    )
+    def test_error_preserves_arbitrary_json_data_in_single_and_batch_responses(data):
+        payload = {
+            "id": 1,
+            "jsonrpc": "2.0",
+            "error": {"code": -32601, "message": "Method not found", "data": data},
+        }
+        encoded = json.dumps(payload).encode()
+        for response in (decode_raw(encoded).decode(), decode_jsonrpc_batch(encoded)):
+            assert response.error.to_dict() == payload["error"]
+>           assert type(response.exception) is BadResponse
+E           AssertionError: assert <class 'dank_mids._exceptions.BadResponse'> is BadResponse
+E            +  where <class 'dank_mids._exceptions.BadResponse'> = type(BadResponse({'code': -32601, 'message': 'Method not found', 'data': True}))
+E            +    where BadResponse({'code': -32601, 'message': 'Method not found', 'data': True}) = Response(error=Error(code=-32601, message='Method not found', data=True), id=1, jsonrpc='2.0').exception
+
+test_rpc_error_data.py:26: AssertionError
+_____________ test_revert_with_structured_context_remains_a_revert _____________
+
+    def test_revert_with_structured_context_remains_a_revert():
+        response = decode_raw(
+            b'{"error":{"code":3,"message":"execution reverted","data":{"reason":"paused"}}}'
+        ).decode()
+>       assert isinstance(response.exception, ExecutionReverted)
+E       AssertionError: assert False
+E        +  where False = isinstance(ExecutionReverted('execution reverted'), ExecutionReverted)
+E        +    where ExecutionReverted('execution reverted') = Response(error=Error(code=3, message='execution reverted', data={'reason': 'paused'})).exception
+
+test_rpc_error_data.py:35: AssertionError
+____ test_only_chainstack_rate_limits_parse_the_retry_duration[250ms-0.25] _____
+
+duration = '250ms', seconds = 0.25
+
+    @pytest.mark.parametrize("duration,seconds", [("250ms", 0.25), ("250µs", 0.00025)])
+    def test_only_chainstack_rate_limits_parse_the_retry_duration(duration, seconds):
+        response = decode_raw(
+            json.dumps(
+                {
+                    "error": {
+                        "code": -32005,
+                        "message": _CHAINSTACK_429_ERR_MSG,
+                        "data": {"try_again_in": duration},
+                    }
+                }
+            ).encode()
+        ).decode()
+>       assert isinstance(response.exception, ChainstackRateLimitError)
+E       assert False
+E        +  where False = isinstance(ChainstackRateLimitError({'code': -32005, 'message': "You've exceeded the RPS limit available on the current plan.", 'data': {'try_again_in': '250ms'}}), ChainstackRateLimitError)
+E        +    where ChainstackRateLimitError({'code': -32005, 'message': "You've exceeded the RPS limit available on the current plan.", 'data': {'try_again_in': '250ms'}}) = Response(error=Error(code=-32005, message="You've exceeded the RPS limit available on the current plan.", data={'try_again_in': '250ms'})).exception
+
+test_rpc_error_data.py:52: AssertionError
+_ test_only_chainstack_rate_limits_parse_the_retry_duration[250\xb5s-0.00025] __
+
+duration = '250µs', seconds = 0.00025
+
+    @pytest.mark.parametrize("duration,seconds", [("250ms", 0.25), ("250µs", 0.00025)])
+    def test_only_chainstack_rate_limits_parse_the_retry_duration(duration, seconds):
+        response = decode_raw(
+            json.dumps(
+                {
+                    "error": {
+                        "code": -32005,
+                        "message": _CHAINSTACK_429_ERR_MSG,
+                        "data": {"try_again_in": duration},
+                    }
+                }
+            ).encode()
+        ).decode()
+>       assert isinstance(response.exception, ChainstackRateLimitError)
+E       assert False
+E        +  where False = isinstance(ChainstackRateLimitError({'code': -32005, 'message': "You've exceeded the RPS limit available on the current plan.", 'data': {'try_again_in': '250µs'}}), ChainstackRateLimitError)
+E        +    where ChainstackRateLimitError({'code': -32005, 'message': "You've exceeded the RPS limit available on the current plan.", 'data': {'try_again_in': '250µs'}}) = Response(error=Error(code=-32005, message="You've exceeded the RPS limit available on the current plan.", data={'try_again_in': '250µs'})).exception
+
+test_rpc_error_data.py:52: AssertionError
+=============================== warnings summary ===============================
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:689: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    and isinstance(item.value, ast.Str)
+
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:691
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:691
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:691
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:691
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:691
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:691
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:691
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:691: DeprecationWarning: Attribute s is deprecated and will be removed in Python 3.14; use value instead
+    doc = item.value.s
+
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:958: 296 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:958: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    inlocs = ast.Compare(ast.Str(name.id), [ast.In()], [locs])
+
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:961: 296 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:961: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    expr = ast.IfExp(test, self.display(name), ast.Str(name.id))
+
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:1071: 200 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:1071: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    syms.append(ast.Str(sym))
+
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:1073: 200 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:1073: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    expls.append(ast.Str(expl))
+
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:823: 1022 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:823: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    keys = [ast.Str(key) for key in current.keys()]
+
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:933: 244 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:933: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    assertmsg = ast.Str("")
+
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:935: 246 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:935: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    template = ast.BinOp(assertmsg, ast.Add(), ast.Str(explanation))
+
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:947: 247 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:947: DeprecationWarning: ast.NameConstant is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    clear = ast.Assign(variables, ast.NameConstant(None))
+
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:983: 12 warnings
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:983: DeprecationWarning: ast.Str is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    expl_format = self.pop_format_context(ast.Str(expl))
+
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:995
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:995
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:995
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:995
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:995
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:995
+../../../usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:995
+  /usr/local/lib/python3.12/site-packages/_pytest/assertion/rewrite.py:995: DeprecationWarning: ast.Num is deprecated and will be removed in Python 3.14; use ast.Constant instead
+    expl_template = self.helper("_format_boolop", expl_list, ast.Num(is_or))
+
+test_gc_batch_contract.py::test_multicall_gc_treats_no_waiters_as_abandoned_work
+  /work/dank_mids/helpers/_session.py:126: DeprecationWarning: Inheritance class DankClientSession from ClientSession is discouraged
+    class DankClientSession(ClientSession):
+
+test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-False]
+test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[1-True]
+test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-False]
+test_requester_ownership.py::test_caller_cancellation_closes_remote_sockets[32-True]
+test_requester_shutdown.py::test_source_shutdown_closes_session_thread_and_loop[True]
+  /usr/local/lib/python3.12/site-packages/aiohttp/connector.py:993: DeprecationWarning: enable_cleanup_closed ignored because https://github.com/python/cpython/pull/118960 is fixed in Python version sys.version_info(major=3, minor=12, micro=14, releaselevel='final', serial=0)
+    super().__init__(
+
+-- Docs: https://docs.pytest.org/en/stable/warnings.html
+=========================== short test summary info ============================
+FAILED test_block_identity.py::test_controller_keeps_hash_identity_for_unbatched_calls
+FAILED test_block_identity.py::test_duplicate_rpc_keeps_the_hash_batch_key_and_wire_selector
+FAILED test_gc_batch_contract.py::test_rpc_request_gc_treats_no_waiters_as_abandoned_work
+FAILED test_gc_batch_contract.py::test_rpc_request_gc_sets_exception_for_waiters
+FAILED test_gc_batch_contract.py::test_early_start_keeps_multicalls_alive_through_handoff_and_dispatches
+FAILED test_gc_batch_contract.py::test_early_start_dispatches_existing_rpc_calls_without_waiters
+FAILED test_gc_batch_contract.py::test_batch_full_gate_dispatches_without_waiters
+FAILED test_gc_batch_contract.py::test_multicall_bisect_retry_does_not_wait_pending_done_directly
+FAILED test_gc_batch_contract.py::test_multicall_bisect_retry_timeout_does_not_dispatch_duplicate_batch
+FAILED test_gc_batch_contract.py::test_dispatch_pending_rpc_batch_respects_capacity_gate_for_bisect_retries
+FAILED test_gc_batch_contract.py::test_dispatch_cancellation_preserves_in_flight_batch[False]
+FAILED test_gc_batch_contract.py::test_dispatch_cancellation_preserves_in_flight_batch[True]
+FAILED test_gc_batch_contract.py::test_dispatch_with_no_pending_work_completes_without_a_task
+FAILED test_gc_batch_contract.py::test_dispatch_reports_failure_to_append_calls
+FAILED test_gc_batch_contract.py::test_dispatch_reports_batch_failure[False]
+FAILED test_gc_batch_contract.py::test_dispatch_reports_batch_failure[True]
+FAILED test_gc_batch_contract.py::test_request_gate_waits_for_one_loop_tick_before_dispatch
+FAILED test_gc_batch_contract.py::test_controller_has_pending_calls_ignores_stale_eth_entries
+FAILED test_gc_batch_contract.py::test_request_gate_skips_execute_batch_for_stale_eth_entries
+FAILED test_hash_rpc.py::test_native_batcher_preserves_hashes_and_canonical_requirement
+FAILED test_native_wheel.py::test_native_rate_limiter_can_serve_a_request - s...
+FAILED test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[None]
+FAILED test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[0x1234]
+FAILED test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data2]
+FAILED test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data3]
+FAILED test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[data4]
+FAILED test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[42]
+FAILED test_rpc_error_data.py::test_error_preserves_arbitrary_json_data_in_single_and_batch_responses[True]
+FAILED test_rpc_error_data.py::test_revert_with_structured_context_remains_a_revert
+FAILED test_rpc_error_data.py::test_only_chainstack_rate_limits_parse_the_retry_duration[250ms-0.25]
+FAILED test_rpc_error_data.py::test_only_chainstack_rate_limits_parse_the_retry_duration[250\xb5s-0.00025]
+=========== 31 failed, 117 passed, 2 skipped, 2791 warnings in 6.53s ===========

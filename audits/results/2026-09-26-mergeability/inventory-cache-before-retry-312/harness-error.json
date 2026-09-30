@@ -1,0 +1,5 @@
+{
+  "valid_regression_evidence": false,
+  "interrupted": true,
+  "reason": "The oversized fixture block used the same ab hash as imported BLOCK; warming the cache entered the unreleased oversized factory gate. Stop this invalid harness run instead of presenting it as a quote timeout. Retry uses cd for a distinct hash."
+}

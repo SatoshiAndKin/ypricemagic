@@ -1,0 +1,28 @@
+{
+  "focused": {
+    "exit_code": 0,
+    "counts": {
+      "setup:passed": 661,
+      "call:passed": 661,
+      "teardown:passed": 661
+    },
+    "collected": 661
+  },
+  "compiled_extensions": {
+    "y._db.brownie": "/work/y/_db/brownie.cpython-312-aarch64-linux-gnu.so",
+    "y._db.config": "/work/y/_db/config.cpython-312-aarch64-linux-gnu.so",
+    "y._db.decorators": "/work/y/_db/decorators.cpython-312-aarch64-linux-gnu.so",
+    "y._db.utils.stringify": "/work/y/_db/utils/stringify.cpython-312-aarch64-linux-gnu.so",
+    "y.ENVIRONMENT_VARIABLES": "/work/y/ENVIRONMENT_VARIABLES.cpython-312-aarch64-linux-gnu.so",
+    "y.convert": "/work/y/convert.cpython-312-aarch64-linux-gnu.so",
+    "y.exceptions": "/work/y/exceptions.cpython-312-aarch64-linux-gnu.so",
+    "y.networks": "/work/y/networks.cpython-312-aarch64-linux-gnu.so",
+    "y.prices.utils.sense_check": "/work/y/prices/utils/sense_check.cpython-312-aarch64-linux-gnu.so",
+    "y.utils.gather": "/work/y/utils/gather.cpython-312-aarch64-linux-gnu.so"
+  },
+  "mypy": "Success: no issues found in 230 source files\n",
+  "source_commit": "0771c206b4cf1df396543dd4397c7c230bad9da7",
+  "source_archive_sha256": "6a297110514ab34455c9e3d99f3214f1044edd3252b41bacba9f0466a45d73d6",
+  "full_job_complete": false,
+  "phase": "Focused phase complete; full suite still running"
+}

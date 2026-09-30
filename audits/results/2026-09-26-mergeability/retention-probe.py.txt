@@ -1,0 +1,109 @@
+"""Measure retained native market inventories at adjacent historical blocks."""
+import asyncio
+import hashlib
+import json
+import os
+import resource
+import sys
+import tomllib
+import tracemalloc
+from dataclasses import asdict
+from pathlib import Path
+from time import monotonic
+from typing import Any
+
+from common import write_json
+from profile_state import capture
+
+
+def cache_metrics() -> dict[str, Any]:
+    from y.prices._routing import quote_service
+    from y.prices._rpc import state_cache
+
+    service = quote_service()
+    inventories = service.market_cache.values
+    return {
+        "market_keys": len(inventories),
+        "market_cache_capacity": inventories.maxsize,
+        "inventory_market_references": sum(len(value) for value in inventories.values()),
+        "inventory_tuple_shallow_bytes": sum(sys.getsizeof(value) for value in inventories.values()),
+        "result_keys": len(service.result_cache.values),
+        "state_keys": len(state_cache().values),
+        "rss_peak_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+        "cgroup_current_bytes": int(Path('/sys/fs/cgroup/memory.current').read_text()),
+        "traced_current_bytes": tracemalloc.get_traced_memory()[0],
+    }
+
+
+async def monitor(directory: Path, started: float) -> None:
+    with (directory / 'retention-progress.jsonl').open('w') as stream:
+        while True:
+            row = {"elapsed_seconds": monotonic() - started, **cache_metrics()}
+            if tracemalloc.is_tracing():
+                snapshot = tracemalloc.take_snapshot()
+                row['largest_allocations'] = [
+                    {'location': str(stat.traceback), 'size': stat.size, 'count': stat.count}
+                    for stat in snapshot.statistics('lineno')[:25]
+                ]
+                del snapshot
+            stream.write(json.dumps(row) + '\n')
+            stream.flush()
+            await asyncio.sleep(60)
+
+
+async def main() -> int:
+    from y.prices._routing import quote_service
+    from y.prices._rpc import BlockRef
+
+    directory = Path(os.environ['VALIDATION_REPORT'])
+    deadline = tomllib.loads(Path('pyproject.toml').read_text())['tool']['pytest']['ini_options']['asyncio_task_timeout']
+    token = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+    rows: list[dict[str, Any]] = []
+    started = monotonic()
+    sampler = asyncio.create_task(monitor(directory, started))
+    complete = False
+    try:
+        for phase, number in [('cold', 23479243), ('adjacent', 23479244), ('repeat', 23479243)]:
+            begin = monotonic()
+            row: dict[str, Any] = {'phase': phase, 'token': token, 'block': number, 'deadline_seconds': deadline}
+            try:
+                block = await BlockRef.resolve(number)
+                row['block_hash'] = block.hash
+                markets = await asyncio.wait_for(quote_service().markets(token, block, False), deadline)
+                await block.verify()
+                digest = hashlib.sha256()
+                for market in markets:
+                    digest.update(json.dumps(asdict(market), sort_keys=True, default=str).encode())
+                    digest.update(b'\n')
+                row.update(status='pass', canonical_verified=True, markets=len(markets), inventory_sha256=digest.hexdigest())
+                del markets
+                row.update(cache_metrics())
+            except Exception as exc:
+                row.update(status='failure', error=f'{type(exc).__name__}: {exc}', **cache_metrics())
+            row['elapsed_seconds'] = monotonic() - begin
+            rows.append(row)
+            write_json(directory / 'retention-cases.json', rows)
+            print(json.dumps(row), flush=True)
+            if row['status'] != 'pass':
+                break
+            if phase == 'cold':
+                tracemalloc.start(1)
+            capture(directory, phase)
+        complete = len(rows) == 3 and all(row['status'] == 'pass' for row in rows)
+        if complete:
+            assert rows[0]['inventory_sha256'] == rows[2]['inventory_sha256']
+            assert rows[0]['block_hash'] == rows[2]['block_hash']
+        return 0 if complete else 1
+    finally:
+        sampler.cancel()
+        await asyncio.gather(sampler, return_exceptions=True)
+        write_json(directory / 'retention-summary.json', {'complete': complete, 'elapsed_seconds': monotonic() - started, 'cache_metrics': cache_metrics(), 'instrumentation': 'Tracemalloc and object census start after cold inventory; timings are not production benchmarks.'})
+
+
+if __name__ == '__main__':
+    from brownie._config import CONFIG
+    from brownie.network.main import connect
+
+    connect(os.environ['BROWNIE_NETWORK'])
+    CONFIG.settings['autofetch_sources'] = False
+    raise SystemExit(asyncio.get_event_loop().run_until_complete(main()))

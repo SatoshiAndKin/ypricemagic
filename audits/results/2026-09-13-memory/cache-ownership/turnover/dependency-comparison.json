@@ -1,0 +1,9 @@
+{
+  "other_packages_identical": true,
+  "before_cachebox_wheel": "cachebox @ file:///opt/validation/cachebox-wheels/cachebox-5.2.3-cp312-cp312-manylinux_2_34_aarch64.whl#sha256=85de0954ab30cd216e860315f988e77cec832cb2d7c7532373e383f4db82ae5e",
+  "after_cachebox_wheel": "cachebox @ file:///opt/validation/cachebox-wheels/cachebox-5.2.3-cp312-cp312-manylinux_2_34_aarch64.whl#sha256=d2a9631536e52ffaf05375595fc775d0d6d2ac63d76817aaa431f006d74895ab",
+  "native_core_identical": true,
+  "changed_python_sources": [
+    "utils.py"
+  ]
+}

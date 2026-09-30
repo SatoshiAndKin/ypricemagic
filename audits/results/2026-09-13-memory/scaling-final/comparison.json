@@ -1,0 +1,68 @@
+{
+  "complete": true,
+  "boundary": "Controlled native RPC over the cached production Sushi topology; same workload, helpers, dependencies, image and limits",
+  "samples": 3,
+  "profiler_timings_excluded": true,
+  "workloads": {
+    "before": {
+      "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+      "image": "sha256:4ccb5b8063f29ecbd755ac2760da6364ee81d9f630af1a1f855ecfb83e34ae1b",
+      "median": {
+        "rss_peak_bytes": 443097088,
+        "elapsed_seconds": 2.7607004230012535,
+        "historical_seconds": 2.626731837997795,
+        "cold_seconds": 0.0033501860016258433,
+        "warm_seconds": 9.387500176671892e-05,
+        "repeated_amount_seconds": 3.1416995625477284e-05,
+        "concurrent_seconds": 0.002197387999331113
+      },
+      "allocation_run": {
+        "python_peak_bytes": 212561486,
+        "python_retained_bytes": 4564892,
+        "rss_peak_bytes": 1335029760
+      },
+      "container_peak_including_build_and_profiler_bytes": 1489649664
+    },
+    "after": {
+      "source_sha": "850d7506d554209738cc2c471f82fbb951845d29",
+      "image": "sha256:4ccb5b8063f29ecbd755ac2760da6364ee81d9f630af1a1f855ecfb83e34ae1b",
+      "median": {
+        "rss_peak_bytes": 294731776,
+        "elapsed_seconds": 2.652514708999661,
+        "historical_seconds": 2.5366736669966485,
+        "cold_seconds": 0.003393894003238529,
+        "warm_seconds": 9.166699601337314e-05,
+        "repeated_amount_seconds": 3.258399374317378e-05,
+        "concurrent_seconds": 0.0021372200062614866
+      },
+      "allocation_run": {
+        "python_peak_bytes": 83515112,
+        "python_retained_bytes": 4596090,
+        "rss_peak_bytes": 647340032
+      },
+      "container_peak_including_build_and_profiler_bytes": 1242202112
+    }
+  },
+  "fixed_counters": {
+    "pools": 4771,
+    "input_pools": 75,
+    "peak_operations": 64,
+    "liquidity_reads": 75,
+    "quote_calls": 3,
+    "historical_blocks": 4128,
+    "final_market_entries": 4096,
+    "final_result_entries": 2048,
+    "total_liquidity_reads": 309675,
+    "total_quote_calls": 4131
+  },
+  "asserted_values": {
+    "price_for_one_token_usd": 1994,
+    "first_step_output_base_units": 997000000000000000,
+    "concurrent_results": 64
+  },
+  "changes_percent": {
+    "rss_peak_bytes": -33.48370278614875,
+    "elapsed_seconds": -3.9187777529291035,
+    "historical_seconds": -3.428525504521718
+  }
+}

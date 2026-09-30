@@ -1,0 +1,5 @@
+y/prices/stable_swap/curve.py:250: error: Invalid syntax  [syntax]
+            pool_count = await self.pool_count(, sync=False)
+                                                ^
+Warning: unused section(s) in pyproject.toml: module = ['a_sync_mypy_plugin', 'brownie.convert', 'eth_utils', 'eth_utils.toolz', 'faster_eth_utils', 'y.ENVIRONMENT_VARIABLES', 'y.convert', 'y.exceptions', 'y.networks', 'y.prices.utils.sense_check', 'y.utils.gather']
+Found 1 error in 1 file (errors prevented further checking)

@@ -1,0 +1,11 @@
+{
+  "base_source": "18a70eb1e249b5eb53d53ecf6ff7f5deb16e1be4",
+  "assertion_file": "tests/test_rpc_state_retry.py",
+  "assertion_sha256": "6f97ccca601423b7adef677e1e58ea9a74bac1b53c28b308490e9ab0c2f67f14",
+  "pre_fix_compound_sha256": "9185bfbf3477f84fdd5fcadab443b61799b2575247bb4a680d13740db9bca2ec",
+  "repair_compound_sha256": "6fd81fc73eef4299c5bfbaa7440c5001ddeeb09e4dd722c49d0621e0db056d31",
+  "focused_test_targets": [
+    "tests/test_rpc_state_retry.py"
+  ],
+  "config_sha256": "acd7fc0f20dd5dc306de2b56a9a17bb60e4dd0b10bd201b973132b2fcee4b0bf"
+}

@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m aiosqlite.tests && python -m mypy"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 2.198993680998683,
+  "peak_sampled_process_rss_bytes": 135720960,
+  "cgroup_before": {
+    "memory.current": "8790016",
+    "memory.peak": "8790016",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "27832320",
+    "memory.peak": "124669952",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

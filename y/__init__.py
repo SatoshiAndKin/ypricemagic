@@ -1,13 +1,17 @@
 import os
 from contextlib import suppress
+from importlib import import_module
+from typing import cast
 
 from brownie import chain, network
 
 try:
     # leaving this in here for backward compatability with older brownie versions
     # TODO: remove me when eetherscan disables v1 api
-    from brownie.network.contract import _explorer_tokens
-except ImportError:
+    _explorer_tokens = cast(
+        dict[str, str], getattr(import_module("brownie.network.contract"), "_explorer_tokens")
+    )
+except (ImportError, AttributeError):
     pass
 else:
     # this helps ensure backwards compatability with older versions of brownie
@@ -127,4 +131,6 @@ __all__ = [
 
 with suppress(ModuleNotFoundError):
     """If eth_portfolio is also installed in this env, we will use its extended version of our db schema"""
-    from eth_portfolio._db import entities as _db_entities
+    from importlib import import_module
+
+    _db_entities = import_module("eth_portfolio._db.entities")

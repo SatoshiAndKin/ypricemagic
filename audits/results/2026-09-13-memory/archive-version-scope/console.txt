@@ -1,0 +1,17 @@
+Obtaining file:///work
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: ypricemagic
+  Building editable for ypricemagic (pyproject.toml): started
+  Building editable for ypricemagic (pyproject.toml): finished with status 'done'
+  Created wheel for ypricemagic: filename=ypricemagic-0.0.0-0.editable-cp312-cp312-linux_aarch64.whl size=6242 sha256=e4e8562541aee1691e95ac2f1669222654f9733d98dbf780347962fb6c2d5277
+  Stored in directory: /tmp/pip-ephem-wheel-cache-4dw65n3c/wheels/c3/be/f9/d4edc8a6a5fc130baa8821785099dbd6f21e4c903787b290b5
+Successfully built ypricemagic
+Installing collected packages: ypricemagic
+Successfully installed ypricemagic-0.0.0
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+
+[notice] A new release of pip is available: 25.0.1 -> 26.2.1
+[notice] To update, run: pip install --upgrade pip

@@ -1,0 +1,58 @@
+[
+  {
+    "command": [
+      "env/bin/black",
+      "--check"
+    ],
+    "files": [
+      "y/prices/dex/uniswap/v2.py",
+      "tests/test_pool_memory.py",
+      "tests/test_pricing_correctness.py",
+      "tests/test_routing_scaling.py",
+      "tools/validation/pool_discovery_profile.py",
+      "tools/validation/compare.py",
+      "tools/validation/test_runner.py"
+    ],
+    "exit_code": 0,
+    "output": "All done! \u2728 \ud83c\udf70 \u2728\n7 files would be left unchanged.\n"
+  },
+  {
+    "command": [
+      "env/bin/isort",
+      "--profile=black",
+      "--check-only"
+    ],
+    "files": [
+      "y/prices/dex/uniswap/v2.py",
+      "tests/test_pool_memory.py",
+      "tests/test_pricing_correctness.py",
+      "tests/test_routing_scaling.py",
+      "tools/validation/pool_discovery_profile.py",
+      "tools/validation/compare.py",
+      "tools/validation/test_runner.py"
+    ],
+    "exit_code": 0,
+    "output": ""
+  },
+  {
+    "command": [
+      "env/bin/autoflake",
+      "--jobs=1",
+      "--check",
+      "--remove-all-unused-imports",
+      "--expand-star-imports",
+      "--ignore-init-module-imports"
+    ],
+    "files": [
+      "y/prices/dex/uniswap/v2.py",
+      "tests/test_pool_memory.py",
+      "tests/test_pricing_correctness.py",
+      "tests/test_routing_scaling.py",
+      "tools/validation/pool_discovery_profile.py",
+      "tools/validation/compare.py",
+      "tools/validation/test_runner.py"
+    ],
+    "exit_code": 0,
+    "output": "tests/test_routing_scaling.py: No issues detected!\ny/prices/dex/uniswap/v2.py: No issues detected!\ntools/validation/pool_discovery_profile.py: No issues detected!\ntools/validation/compare.py: No issues detected!\ntools/validation/test_runner.py: No issues detected!\ntests/test_pricing_correctness.py: No issues detected!\ntests/test_pool_memory.py: No issues detected!\n"
+  }
+]

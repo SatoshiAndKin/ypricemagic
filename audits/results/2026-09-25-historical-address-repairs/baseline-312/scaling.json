@@ -1,0 +1,24 @@
+{
+  "cold_seconds": 0.010175164999964181,
+  "warm_seconds": 0.00023175100068328902,
+  "repeated_amount_seconds": 6.445799954235554e-05,
+  "concurrent_seconds": 0.00203479999981937,
+  "pools": 4771,
+  "input_pools": 75,
+  "peak_operations": 64,
+  "liquidity_reads": 75,
+  "quote_calls": 3,
+  "boundary": "controlled native RPC; cached production Sushi topology",
+  "historical_blocks": 4128,
+  "historical_seconds": 3.8667525090022536,
+  "final_market_entries": 4096,
+  "final_result_entries": 2048,
+  "total_liquidity_reads": 309675,
+  "total_quote_calls": 4131,
+  "address_cache": {
+    "hits": 2180580,
+    "misses": 183,
+    "maxsize": 100000,
+    "currsize": 183
+  }
+}

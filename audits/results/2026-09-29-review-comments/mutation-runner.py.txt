@@ -1,0 +1,27 @@
+"""Run the exact reviewer mutants against centrally selected review tests."""
+import importlib,os,tomllib
+from pathlib import Path
+import pytest
+mode=os.environ['REVIEW_MUTATION']
+class Mutation:
+ def pytest_collection_modifyitems(self,items):
+  # Install after conftest owns Brownie's network initialization.
+  from decimal import Decimal
+  from y.datatypes import PriceResult,QuoteAsset,QuoteDetails,UsdPrice
+  from y.prices._rpc import BlockRef
+  from tests.price_expectations import native_read
+  if mode=='chainlink':
+   module=importlib.import_module('y.prices.chainlink')
+   async def missing(self,*args,**kwargs):return None
+   module.Chainlink.get_feed=missing
+  elif mode=='v3':
+   module=importlib.import_module('y.prices._routing')
+   async def constant(token,block,**kwargs):
+    resolved=await BlockRef.resolve(block)
+    decimals=await native_read(str(token),'decimals()(uint8)',resolved)
+    return PriceResult(UsdPrice(123),[],QuoteDetails(QuoteAsset(str(token).lower(),10**decimals,decimals),(),Decimal(123),resolved.number,resolved.hash,()))
+   module.liquidity_price=constant
+  else:raise ValueError(mode)
+targets=tomllib.loads(Path('pyproject.toml').read_text())['tool']['validation']['review_quote_tests']
+targets=[t for t in targets if ('test_chainlink.py' if mode=='chainlink' else 'test_uniswap.py::test_uniswap_v3') in t]
+raise SystemExit(pytest.main(targets,plugins=[Mutation()]))

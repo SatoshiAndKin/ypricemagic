@@ -1,0 +1,14 @@
+{
+  "baseline": "topic-release-312",
+  "changed": "public-timing-helper-types",
+  "baseline_diagnostics": 1917,
+  "changed_diagnostics": 1917,
+  "added": [],
+  "removed": [],
+  "validated_source_archive_sha256": "405c82ee7e2b0c319efb36d407d2011ef603d957967fca8499dd97ce75e0762c",
+  "source_files": {
+    "pyproject.toml": "d3d7c1f00645a68710086aca773fd18a4af15fa6f4b33849590943109cd5ba0b",
+    "tests/conftest.py": "300eb2bb7d6f99026f1abb2f9d818671fa081027162297e09b21d715fb3f7b20",
+    "tools/validation/pricing_profile.py": "5ccbbccd09afad87dde50ac6f2b0fc408b812851ef585f7896aecde5d3577b7e"
+  }
+}

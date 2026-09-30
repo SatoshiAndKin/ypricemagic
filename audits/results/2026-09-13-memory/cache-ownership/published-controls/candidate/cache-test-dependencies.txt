@@ -1,0 +1,9 @@
+cachebox==6.2.7
+iniconfig==2.3.0
+packaging==23.2
+pip==25.0.1
+pluggy==1.6.0
+Pygments==2.19.2
+pytest==9.1.1
+pytest-asyncio==1.4.0
+typing_extensions==4.15.0

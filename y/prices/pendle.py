@@ -1,14 +1,17 @@
 from decimal import Decimal
+from typing import cast
 
 import cachebox
-from a_sync import a_sync, cgather
+from a_sync import a_sync
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
+from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.contracts import Contract, has_method, is_contract
-from y.datatypes import Address, Block
+from y.datatypes import Address, Block, PriceResult
 from y.exceptions import ContractNotVerified
+from y.prices._candidates import derive_price, gather_owned
 
 try:
     oracle = "0x9a9Fa8338dd5E5B2188006f1Cd2Ef26d921650C2"
@@ -44,6 +47,7 @@ async def is_pendle_lp(token: Address) -> bool:
 
 
 @cachebox.cached(cachebox.LRUCache(ENVS.DEFAULT_CACHE_MAXSIZE))
+@stuck_coro_debugger
 async def get_tokens(lp_token: Address) -> tuple[str, str, str]:
     """
     Retrieves the addresses of the tokens in a Pendle LP token.
@@ -67,14 +71,15 @@ async def get_tokens(lp_token: Address) -> tuple[str, str, str]:
     See Also:
         - :func:`is_pendle_lp` for checking if a token is a Pendle LP token.
     """
-    lp_token = await Contract.coroutine(lp_token)
-    return await lp_token.readTokens
+    contract = await Contract.coroutine(lp_token)
+    return cast(tuple[str, str, str], await contract.readTokens.coroutine())
 
 
 @a_sync("sync")
+@stuck_coro_debugger
 async def get_lp_price(
-    token: Address, block: Block = None, skip_cache: bool = ENVS.SKIP_CACHE
-) -> Decimal | None:
+    token: Address, block: Block | None = None, skip_cache: bool = ENVS.SKIP_CACHE
+) -> PriceResult | None:
     """
     Calculates the price of a Pendle LP token.
 
@@ -97,6 +102,8 @@ async def get_lp_price(
     See Also:
         - :func:`get_tokens` for retrieving the tokens in a Pendle LP token.
     """
+    if PENDLE_ORACLE is None:
+        return None
     tokens = await get_tokens(str(token))  # force to string for cache key
     # NOTE: we might not need this, leave it commented out for now
     # names = await cgather(*(ERC20(t, asynchronous=True).name for t in tokens))
@@ -111,15 +118,26 @@ async def get_lp_price(
     #    rate = await PENDLE_ORACLE.getLpToAssetRate.coroutine(token, twap_duration, block_identifier=block)
     sy_token, p_token, y_token = tokens
     try:
-        sy, rate = await cgather(
-            Contract.coroutine(sy_token),
-            PENDLE_ORACLE.getLpToAssetRate.coroutine(token, TWAP_DURATION, block_identifier=block),
+        response: list[object] = await gather_owned(
+            [
+                Contract.coroutine(sy_token),
+                PENDLE_ORACLE.getLpToAssetRate.coroutine(
+                    token, TWAP_DURATION, block_identifier=block
+                ),
+            ]
         )
     except ContractLogicError:
         return None
 
-    _, asset, decimals = await sy.assetInfo
-    rate /= Decimal(10**decimals)
-    return rate * Decimal(
-        await ERC20(asset, asynchronous=True).price(block=block, skip_cache=skip_cache)
+    sy = cast(Contract, response[0])
+    info: tuple[int, str, int] = await sy.assetInfo.coroutine()
+    _, asset, decimals = info
+    rate = Decimal(cast(int, response[1])) / Decimal(10**decimals)
+    child = await ERC20(asset, asynchronous=True).price(
+        block=block, skip_cache=skip_cache, sync=False
+    )
+    if child is None:
+        return None
+    return derive_price(
+        token, rate * Decimal(float(child)), f"Pendle {str(token)} via {asset}", child
     )

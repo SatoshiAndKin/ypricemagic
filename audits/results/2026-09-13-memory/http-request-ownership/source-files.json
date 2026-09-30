@@ -1,0 +1,14 @@
+{
+  "source_revision": "c9b17b58bb7908b46bf20e35ba7c262e3750105d",
+  "profile_source": "Decoded exact helper from each recorded command; turnover uses committed source.",
+  "files": {
+    "committed-source/dank_mids/_requests.py.txt": "57b8537cf19de5dccbeac55ac79c72ba05886b7fbde040456d4d7560d0444630",
+    "committed-source/dank_mids/_tasks.py.txt": "cee7e28052d2a92e25b9505c74e8b07106a763672cc3bf7b8150df0ff153c9aa",
+    "committed-source/dank_mids/helpers/_requester.py.txt": "f2bfb27310d6d59fb8a9d12ac7f129bd13a1f7a4cb769615bc30c0c9148dcd7a",
+    "committed-source/scripts/profile_requester_ownership.py.txt": "a95879c5a9576aaefb0cea64d78f6551c7ec0f3ef3729e95a6a7eb0eb79cd744",
+    "committed-source/tests/unit/test_http_retry_release.py.txt": "5928ab1fa86331d07bb0917a9817e2ec5949f803ad0cbc8003e704d0d11f5822",
+    "committed-source/tests/unit/test_requester_ownership.py.txt": "86bc0d6518b3e0ebc480a531e5d5f0df8329714695723041dac08eaf9a300193",
+    "profile-after/profile_requester_ownership.py.txt": "3c276a3387b92db917927f44d7f57871b01eae6ff5505f1141d6c5e7fc0f57fa",
+    "profile-before/profile_requester_ownership.py.txt": "3c276a3387b92db917927f44d7f57871b01eae6ff5505f1141d6c5e7fc0f57fa"
+  }
+}

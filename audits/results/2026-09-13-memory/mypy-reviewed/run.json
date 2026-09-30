@@ -1,0 +1,18 @@
+{
+  "command": [
+    "python",
+    "-m",
+    "mypy"
+  ],
+  "complete": true,
+  "started_unix": 1789280753.893879,
+  "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+  "source_revision": "worktree",
+  "source_archive_sha256": "d7c1def6f23ef54b0b13320071ef62c30e0288ced1af6a1ce7add8bfd83c170b",
+  "image": "sha256:2fe46c86dd882f4aa70f6bd44fd8f812d65ca8e4c98e4061fc3819938b48c97e",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 7.864995241165161
+}

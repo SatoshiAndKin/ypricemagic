@@ -1,0 +1,78 @@
+{
+  "files": {
+    "y/prices/dex/uniswap/v2.py": "99cc8b0a66b50f47c513b38b9b013bfa4f6db584a17bd7034241f4ef4808bc23",
+    "tests/test_pool_memory.py": "684208d0289e456ebeae6112ed3335751082f442c972a8ee1fc936b31d2324f8",
+    "tests/test_pricing_correctness.py": "b7453edac1308dbfabfe5a3ed048105ad6b5ad0b47082c14e47720d8333b1ad3",
+    "tests/test_routing_scaling.py": "ad1d55f172b6667b257bd0570fea735a8ae3da49fdf4a13063488a3f30630cd2",
+    "tools/validation/pool_discovery_profile.py": "3bc9db14e92c8a8401d9e9ac6427e1312f661f16488b72fa64a09e8628b8f5af",
+    "tools/validation/compare.py": "69120182ed003639fd8595d5a05ce4bb8220d58c1dc2b1926865db652462295d",
+    "tools/validation/test_runner.py": "62eb4db6ae9d6d03be3c0a006affc6e99c6ca3a753e7a6a28921d4777a4420bd",
+    "pyproject.toml": "c6a0ac9c57b71e4925f33e6ae2ef5b23bc3142163e2a65649dbc38608d87afc2",
+    "requirements.txt": "1ad23dc66a588d8ae798af562dea56cf2ba374a3c756fb5281ae694a5ee0f898",
+    "requirements-dev.txt": "871553b3e51cbe45a4359bdf62a8a365a887babd1a84aa8cd25ceca23f346db1",
+    "tools/validation/dependencies-3.11.lock": "71b2f447356d75d8ec8d2a0f4582d1e95d2e9c0453a03d5ff02fbe506d32bb70",
+    "tools/validation/dependencies-3.12.lock": "0f9de3834ea6421a19688fee2ceb3d3a7d3b7fa3e8d5c9cb7bbed35a16d9e34d",
+    "tools/validation/dependencies-3.13.lock": "e00c781ba89e0829a150ca68072e423ba1743e1e90c1a3fd7d2ee3d3a0ba8afa"
+  },
+  "runner_and_format_run": {
+    "command": [
+      "env",
+      "PYTHONPATH=/runner",
+      "python",
+      "-P",
+      "-c",
+      "import json,os,subprocess,sys\nfrom pathlib import Path\nfiles=['y/prices/dex/uniswap/v2.py','tests/test_pool_memory.py','tests/test_pricing_correctness.py','tests/test_routing_scaling.py','tools/validation/pool_discovery_profile.py','tools/validation/compare.py','tools/validation/test_runner.py']\ntests=subprocess.run([sys.executable,'-P','-m','unittest','discover','-s','/work/tools/validation','-p','test_runner.py'],env=dict(os.environ,PYTHONPATH='/work/tools/validation'),text=True,capture_output=True)\nPath('/reports/runner-tests.json').write_text(json.dumps({'exit_code':tests.returncode,'output':tests.stdout+tests.stderr},indent=2))\nassert tests.returncode==0,tests.stdout+tests.stderr\nsubprocess.run([sys.executable,'-m','pip','install','--no-deps','--target','/tmp/black25','black==25.9.0'],check=True)\nenv=dict(os.environ,PYTHONPATH='/tmp/black25')\nversion=subprocess.check_output([sys.executable,'-P','-c','from black import __version__; print(__version__)'],env=env,text=True).strip()\nassert version=='25.9.0',version\nresult=subprocess.run([sys.executable,'-P','-m','black','--check',*files],env=env,text=True,capture_output=True)\nPath('/reports/format.json').write_text(json.dumps({'version':version,'files':files,'exit_code':result.returncode,'output':result.stdout+result.stderr},indent=2))\nassert result.returncode==0,result.stdout+result.stderr\n"
+    ],
+    "docker_context": "colima-ypricemagic",
+    "builder": "ypricemagic-validation-55871f24db8c",
+    "complete": true,
+    "started_unix": 1789394910.600659,
+    "source_sha": "2ecb8c9659c6f08375623e17ed359b1c55c33e93",
+    "source_revision": "worktree",
+    "source_archive_sha256": "1d934c88115b3079e4b9b455995b4ba434b3aa875284a1ab0f10c74c6bd5cc1f",
+    "image": "sha256:5f67dfecf3085abd5cff6a15469e5bc36ea28fee0c557e05340cf7b181ac13bc",
+    "exit_code": 0,
+    "oom_killed": false,
+    "missing_reports": [],
+    "below_memory_target": true,
+    "elapsed_seconds": 2.5748441219329834
+  },
+  "types_run": {
+    "command": [
+      "sh",
+      "-c",
+      "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python -m mypy > /reports/mypy.txt 2>&1"
+    ],
+    "docker_context": "colima-ypricemagic",
+    "builder": "ypricemagic-validation-55871f24db8c",
+    "complete": true,
+    "started_unix": 1789394913.280385,
+    "source_sha": "2ecb8c9659c6f08375623e17ed359b1c55c33e93",
+    "source_revision": "worktree",
+    "source_archive_sha256": "1d934c88115b3079e4b9b455995b4ba434b3aa875284a1ab0f10c74c6bd5cc1f",
+    "image": "sha256:5f67dfecf3085abd5cff6a15469e5bc36ea28fee0c557e05340cf7b181ac13bc",
+    "exit_code": 1,
+    "oom_killed": false,
+    "missing_reports": [],
+    "below_memory_target": true,
+    "elapsed_seconds": 118.16919088363647
+  },
+  "format": {
+    "version": "25.9.0",
+    "files": [
+      "y/prices/dex/uniswap/v2.py",
+      "tests/test_pool_memory.py",
+      "tests/test_pricing_correctness.py",
+      "tests/test_routing_scaling.py",
+      "tools/validation/pool_discovery_profile.py",
+      "tools/validation/compare.py",
+      "tools/validation/test_runner.py"
+    ],
+    "exit_code": 0,
+    "output": "All done! \u2728 \ud83c\udf70 \u2728\n7 files would be left unchanged.\n"
+  },
+  "runner_tests": {
+    "exit_code": 0,
+    "output": ".......\n----------------------------------------------------------------------\nRan 7 tests in 0.117s\n\nOK\n"
+  }
+}

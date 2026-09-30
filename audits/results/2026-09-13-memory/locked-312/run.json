@@ -1,0 +1,17 @@
+{
+  "command": [
+    "python",
+    "/runner/probe.py"
+  ],
+  "complete": true,
+  "started_unix": 1789280504.771532,
+  "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+  "source_revision": "worktree",
+  "source_archive_sha256": "4c056d1815ca6e75b788c28e1cd049e5df136856b560344fc0272d9e48e86252",
+  "image": "sha256:2fe46c86dd882f4aa70f6bd44fd8f812d65ca8e4c98e4061fc3819938b48c97e",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 31.897695064544678
+}

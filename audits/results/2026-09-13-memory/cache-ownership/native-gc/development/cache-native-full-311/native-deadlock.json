@@ -1,0 +1,11 @@
+{
+  "complete": false,
+  "pid": 24,
+  "threads": [
+    "24"
+  ],
+  "wait_channel": "futex_wait_queue",
+  "last_test": "python/tests/test_caches.py::TestCache::test_eq_implemetation",
+  "reason": "The sole test thread cannot make progress while parked on a mutex; collect its fatal-signal stack and preserve execution as incomplete",
+  "unix_time": 1789375976.11722
+}

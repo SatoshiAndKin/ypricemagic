@@ -1,0 +1,14 @@
+{
+  "exit_code": 0,
+  "command": [
+    "docker",
+    "--context",
+    "colima-ypricemagic",
+    "exec",
+    "-e",
+    "PYTHONPATH=/reports/sqlite-repaired-v2-probe",
+    "ypricemagic-validation-job",
+    "python",
+    "/reports/sqlite-retention-probe.py"
+  ]
+}

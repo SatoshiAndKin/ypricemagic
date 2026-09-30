@@ -1,0 +1,22 @@
+
+
+@run_async_test
+async def test_existing_uniswap_selection_assertion_accepts_depth(monkeypatch: Any) -> None:
+    """Exercise the existing live test's oracle over controlled router results."""
+    import dank_mids
+
+    from tests.prices.dex.test_uniswap import test_uniswap_v2
+    from y.prices.dex.uniswap import uniswap_multiplexer
+
+    multiplexer_graph(
+        monkeypatch,
+        [market("deep", depth=2), market("shallow", depth=1)],
+        {"deep": 2, "shallow": 9},
+    )
+    monkeypatch.setattr(dank_mids, "eth", SimpleNamespace(block_number=Ready(BLOCK.number)))
+    monkeypatch.setattr(
+        uniswap_multiplexer,
+        "uniswaps",
+        [SimpleNamespace(get_price=AsyncMock(return_value=value)) for value in (2, 9)],
+    )
+    await test_uniswap_v2(TOKEN)

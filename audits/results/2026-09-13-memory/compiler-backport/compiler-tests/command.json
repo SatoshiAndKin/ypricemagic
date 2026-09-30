@@ -1,0 +1,31 @@
+{
+  "command": [
+    "python",
+    "-c",
+    "import json,os,subprocess\nfrom pathlib import Path\nbase=Path('/opt/validation/mypy-source')\n# Use the owning suite's existing refcount test collection and pytest settings.\nresult=subprocess.run(['/opt/compiler-build/bin/python','-m','pytest','mypyc/test/test_refcount.py'],cwd=base,env={k:v for k,v in os.environ.items() if k!='PYTEST_PLUGINS'})\nPath('/reports/compiler-tests.json').write_text(json.dumps({'exit_code':result.returncode,'suite':'mypyc/test/test_refcount.py'})+'\\n')\nraise SystemExit(result.returncode)\n"
+  ],
+  "exit_code": 0,
+  "interrupted": false,
+  "elapsed_seconds": 2.7048885920012253,
+  "peak_sampled_process_rss_bytes": 404058112,
+  "cgroup_before": {
+    "memory.current": "8974336",
+    "memory.peak": "8974336",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "16429056",
+    "memory.peak": "362938368",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

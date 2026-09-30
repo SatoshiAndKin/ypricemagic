@@ -1,0 +1,250 @@
+[
+  {
+    "phase": "call",
+    "elapsed_seconds": 841.5178113519796,
+    "rss_peak_bytes": 2455166976,
+    "live_tasks": 67,
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02AAA39B223FE8D0A0E5C4F27EAD9083C756CC2]",
+    "outcome": "failed",
+    "duration": 810.771938085556,
+    "error": "token = '0xC02AAA39B223FE8D0A0E5C4F27EAD9083C756CC2'\n\n    @pytest.mark.parametrize(\"token\", V2_TOKENS)\n    @pytest.mark.asyncio_cooperative\n    async def test_uniswap_v3(token: Address) -> None:\n        \"\"\"Replay full-token native quotes instead of comparing them with spot oracles.\"\"\"\n        # Pin independent native replay to the investigated canonical historical state.\n        from eth_abi.packed import encode_packed\n    \n        from y.prices._routing import liquidity_price\n        from y.prices.dex.uniswap.v3 import load_quoter\n    \n        block = await BlockRef.resolve(26_063_967)\n        assert block.hash == REVIEW_BLOCK_HASH\n        assert v3.uniswap_v3 is not None\n        price = await v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False)\n        token_address = str(token).lower()\n        unavailable_tokens = {\n            \"0xec67005c4e498ec7f55e092bd1d35cbc47c91892\",\n            \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\",\n        }\n        if token_address in unavailable_tokens:\n            assert price is None\n            quoter = await load_quoter(v3.uniswap_v3._quoter)\n            path = encode_packed(\n                [\"address\", \"uint24\", \"address\"],\n                [token, 3000, \"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\"],\n            )\n            if token_address == \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\":\n                # BAND's native pool is at its price boundary and rejects either input.\n                for amount in (10**16, 10**18):\n                    with pytest.raises(ContractLogicError, match=\"execution reverted: SPL\"):\n                        await quoter.quoteExactInput.coroutine(\n                            path, amount, block_identifier=block.identifier\n                        )\n            else:\n                # MLN exhausts liquidity: 0.01 and 1 MLN return the same WETH amount.\n                # A full-token sale must be unavailable.\n                small: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**16, block_identifier=block.identifier\n                )\n                large: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**18, block_identifier=block.identifier\n                )\n                assert small == large == 3838826218858\n        else:\n            assert price is not None\n            sale = await liquidity_price(\n                str(token),\n                block.number,\n                amount=1,\n                skip_cache=True,\n                first_markets=(str(v3.uniswap_v3._factory).lower(),),\n            )\n            assert sale is not None and sale.quote is not None\n            quote = sale.quote\n            decimals = await native_read(token_address, \"decimals()(uint8)\", block)\n            assert quote.input.token == token_address\n            assert quote.input.decimals == decimals\n            assert quote.input.amount == 10**decimals\n            assert quote.block_number == block.number and quote.block_hash == block.hash\n            assert quote.steps, \"an available V3 price must execute a native trade\"\n            current = quote.input\n            for index, step in enumerate(quote.steps):\n>               assert step.kind == \"swap\" and step.protocol == \"Uniswap V3\"\nE               AssertionError: assert ('redemption' == 'swap'\nE                 - swap\nE                 + redemption)\n\ntests/prices/dex/test_uniswap.py:201: AssertionError",
+    "error_message": "AssertionError: assert ('redemption' == 'swap'\n  - swap\n  + redemption)",
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 21,
+        "flights": 1
+      },
+      "result_cache": {
+        "values": 0,
+        "flights": 0
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 275540,
+      "multicall_uid": 21018,
+      "request_uid": 22305,
+      "jsonrpc_batch_uid": 23550
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 841.5206978920032,
+    "rss_peak_bytes": 2455166976,
+    "live_tasks": 67,
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2]",
+    "outcome": "failed",
+    "duration": 810.7726943492889,
+    "error": "token = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'\n\n    @pytest.mark.parametrize(\"token\", V2_TOKENS)\n    @pytest.mark.asyncio_cooperative\n    async def test_uniswap_v3(token: Address) -> None:\n        \"\"\"Replay full-token native quotes instead of comparing them with spot oracles.\"\"\"\n        # Pin independent native replay to the investigated canonical historical state.\n        from eth_abi.packed import encode_packed\n    \n        from y.prices._routing import liquidity_price\n        from y.prices.dex.uniswap.v3 import load_quoter\n    \n        block = await BlockRef.resolve(26_063_967)\n        assert block.hash == REVIEW_BLOCK_HASH\n        assert v3.uniswap_v3 is not None\n        price = await v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False)\n        token_address = str(token).lower()\n        unavailable_tokens = {\n            \"0xec67005c4e498ec7f55e092bd1d35cbc47c91892\",\n            \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\",\n        }\n        if token_address in unavailable_tokens:\n            assert price is None\n            quoter = await load_quoter(v3.uniswap_v3._quoter)\n            path = encode_packed(\n                [\"address\", \"uint24\", \"address\"],\n                [token, 3000, \"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\"],\n            )\n            if token_address == \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\":\n                # BAND's native pool is at its price boundary and rejects either input.\n                for amount in (10**16, 10**18):\n                    with pytest.raises(ContractLogicError, match=\"execution reverted: SPL\"):\n                        await quoter.quoteExactInput.coroutine(\n                            path, amount, block_identifier=block.identifier\n                        )\n            else:\n                # MLN exhausts liquidity: 0.01 and 1 MLN return the same WETH amount.\n                # A full-token sale must be unavailable.\n                small: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**16, block_identifier=block.identifier\n                )\n                large: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**18, block_identifier=block.identifier\n                )\n                assert small == large == 3838826218858\n        else:\n            assert price is not None\n            sale = await liquidity_price(\n                str(token),\n                block.number,\n                amount=1,\n                skip_cache=True,\n                first_markets=(str(v3.uniswap_v3._factory).lower(),),\n            )\n            assert sale is not None and sale.quote is not None\n            quote = sale.quote\n            decimals = await native_read(token_address, \"decimals()(uint8)\", block)\n            assert quote.input.token == token_address\n            assert quote.input.decimals == decimals\n            assert quote.input.amount == 10**decimals\n            assert quote.block_number == block.number and quote.block_hash == block.hash\n            assert quote.steps, \"an available V3 price must execute a native trade\"\n            current = quote.input\n            for index, step in enumerate(quote.steps):\n>               assert step.kind == \"swap\" and step.protocol == \"Uniswap V3\"\nE               AssertionError: assert ('redemption' == 'swap'\nE                 - swap\nE                 + redemption)\n\ntests/prices/dex/test_uniswap.py:201: AssertionError",
+    "error_message": "AssertionError: assert ('redemption' == 'swap'\n  - swap\n  + redemption)",
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 21,
+        "flights": 1
+      },
+      "result_cache": {
+        "values": 0,
+        "flights": 0
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 275540,
+      "multicall_uid": 21018,
+      "request_uid": 22305,
+      "jsonrpc_batch_uid": 23550
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 841.5236826809705,
+    "rss_peak_bytes": 2455166976,
+    "live_tasks": 65,
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc21]",
+    "outcome": "failed",
+    "duration": 810.8604872226715,
+    "error": "token = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'\n\n    @pytest.mark.parametrize(\"token\", V2_TOKENS)\n    @pytest.mark.asyncio_cooperative\n    async def test_uniswap_v3(token: Address) -> None:\n        \"\"\"Replay full-token native quotes instead of comparing them with spot oracles.\"\"\"\n        # Pin independent native replay to the investigated canonical historical state.\n        from eth_abi.packed import encode_packed\n    \n        from y.prices._routing import liquidity_price\n        from y.prices.dex.uniswap.v3 import load_quoter\n    \n        block = await BlockRef.resolve(26_063_967)\n        assert block.hash == REVIEW_BLOCK_HASH\n        assert v3.uniswap_v3 is not None\n        price = await v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False)\n        token_address = str(token).lower()\n        unavailable_tokens = {\n            \"0xec67005c4e498ec7f55e092bd1d35cbc47c91892\",\n            \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\",\n        }\n        if token_address in unavailable_tokens:\n            assert price is None\n            quoter = await load_quoter(v3.uniswap_v3._quoter)\n            path = encode_packed(\n                [\"address\", \"uint24\", \"address\"],\n                [token, 3000, \"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\"],\n            )\n            if token_address == \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\":\n                # BAND's native pool is at its price boundary and rejects either input.\n                for amount in (10**16, 10**18):\n                    with pytest.raises(ContractLogicError, match=\"execution reverted: SPL\"):\n                        await quoter.quoteExactInput.coroutine(\n                            path, amount, block_identifier=block.identifier\n                        )\n            else:\n                # MLN exhausts liquidity: 0.01 and 1 MLN return the same WETH amount.\n                # A full-token sale must be unavailable.\n                small: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**16, block_identifier=block.identifier\n                )\n                large: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**18, block_identifier=block.identifier\n                )\n                assert small == large == 3838826218858\n        else:\n            assert price is not None\n            sale = await liquidity_price(\n                str(token),\n                block.number,\n                amount=1,\n                skip_cache=True,\n                first_markets=(str(v3.uniswap_v3._factory).lower(),),\n            )\n            assert sale is not None and sale.quote is not None\n            quote = sale.quote\n            decimals = await native_read(token_address, \"decimals()(uint8)\", block)\n            assert quote.input.token == token_address\n            assert quote.input.decimals == decimals\n            assert quote.input.amount == 10**decimals\n            assert quote.block_number == block.number and quote.block_hash == block.hash\n            assert quote.steps, \"an available V3 price must execute a native trade\"\n            current = quote.input\n            for index, step in enumerate(quote.steps):\n>               assert step.kind == \"swap\" and step.protocol == \"Uniswap V3\"\nE               AssertionError: assert ('redemption' == 'swap'\nE                 - swap\nE                 + redemption)\n\ntests/prices/dex/test_uniswap.py:201: AssertionError",
+    "error_message": "AssertionError: assert ('redemption' == 'swap'\n  - swap\n  + redemption)",
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 21,
+        "flights": 1
+      },
+      "result_cache": {
+        "values": 0,
+        "flights": 0
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 275543,
+      "multicall_uid": 21019,
+      "request_uid": 22305,
+      "jsonrpc_batch_uid": 23551
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 841.5277902609669,
+    "rss_peak_bytes": 2455166976,
+    "live_tasks": 63,
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc20]",
+    "outcome": "failed",
+    "duration": 810.8642044067383,
+    "error": "token = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'\n\n    @pytest.mark.parametrize(\"token\", V2_TOKENS)\n    @pytest.mark.asyncio_cooperative\n    async def test_uniswap_v3(token: Address) -> None:\n        \"\"\"Replay full-token native quotes instead of comparing them with spot oracles.\"\"\"\n        # Pin independent native replay to the investigated canonical historical state.\n        from eth_abi.packed import encode_packed\n    \n        from y.prices._routing import liquidity_price\n        from y.prices.dex.uniswap.v3 import load_quoter\n    \n        block = await BlockRef.resolve(26_063_967)\n        assert block.hash == REVIEW_BLOCK_HASH\n        assert v3.uniswap_v3 is not None\n        price = await v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False)\n        token_address = str(token).lower()\n        unavailable_tokens = {\n            \"0xec67005c4e498ec7f55e092bd1d35cbc47c91892\",\n            \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\",\n        }\n        if token_address in unavailable_tokens:\n            assert price is None\n            quoter = await load_quoter(v3.uniswap_v3._quoter)\n            path = encode_packed(\n                [\"address\", \"uint24\", \"address\"],\n                [token, 3000, \"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\"],\n            )\n            if token_address == \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\":\n                # BAND's native pool is at its price boundary and rejects either input.\n                for amount in (10**16, 10**18):\n                    with pytest.raises(ContractLogicError, match=\"execution reverted: SPL\"):\n                        await quoter.quoteExactInput.coroutine(\n                            path, amount, block_identifier=block.identifier\n                        )\n            else:\n                # MLN exhausts liquidity: 0.01 and 1 MLN return the same WETH amount.\n                # A full-token sale must be unavailable.\n                small: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**16, block_identifier=block.identifier\n                )\n                large: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**18, block_identifier=block.identifier\n                )\n                assert small == large == 3838826218858\n        else:\n            assert price is not None\n            sale = await liquidity_price(\n                str(token),\n                block.number,\n                amount=1,\n                skip_cache=True,\n                first_markets=(str(v3.uniswap_v3._factory).lower(),),\n            )\n            assert sale is not None and sale.quote is not None\n            quote = sale.quote\n            decimals = await native_read(token_address, \"decimals()(uint8)\", block)\n            assert quote.input.token == token_address\n            assert quote.input.decimals == decimals\n            assert quote.input.amount == 10**decimals\n            assert quote.block_number == block.number and quote.block_hash == block.hash\n            assert quote.steps, \"an available V3 price must execute a native trade\"\n            current = quote.input\n            for index, step in enumerate(quote.steps):\n>               assert step.kind == \"swap\" and step.protocol == \"Uniswap V3\"\nE               AssertionError: assert ('redemption' == 'swap'\nE                 - swap\nE                 + redemption)\n\ntests/prices/dex/test_uniswap.py:201: AssertionError",
+    "error_message": "AssertionError: assert ('redemption' == 'swap'\n  - swap\n  + redemption)",
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 21,
+        "flights": 1
+      },
+      "result_cache": {
+        "values": 0,
+        "flights": 0
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 275543,
+      "multicall_uid": 21019,
+      "request_uid": 22305,
+      "jsonrpc_batch_uid": 23551
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 975.3497830969864,
+    "rss_peak_bytes": 2530664448,
+    "live_tasks": 62,
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4fe83213d56308330ec302a8bd641f1d0113a4cc]",
+    "outcome": "failed",
+    "duration": 945.2875182628632,
+    "error": "token = '0x4fe83213d56308330ec302a8bd641f1d0113a4cc'\n\n    @pytest.mark.parametrize(\"token\", V2_TOKENS)\n    @pytest.mark.asyncio_cooperative\n    async def test_uniswap_v3(token: Address) -> None:\n        \"\"\"Replay full-token native quotes instead of comparing them with spot oracles.\"\"\"\n        # Pin independent native replay to the investigated canonical historical state.\n        from eth_abi.packed import encode_packed\n    \n        from y.prices._routing import liquidity_price\n        from y.prices.dex.uniswap.v3 import load_quoter\n    \n        block = await BlockRef.resolve(26_063_967)\n        assert block.hash == REVIEW_BLOCK_HASH\n        assert v3.uniswap_v3 is not None\n        price = await v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False)\n        token_address = str(token).lower()\n        unavailable_tokens = {\n            \"0xec67005c4e498ec7f55e092bd1d35cbc47c91892\",\n            \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\",\n        }\n        if token_address in unavailable_tokens:\n            assert price is None\n            quoter = await load_quoter(v3.uniswap_v3._quoter)\n            path = encode_packed(\n                [\"address\", \"uint24\", \"address\"],\n                [token, 3000, \"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\"],\n            )\n            if token_address == \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\":\n                # BAND's native pool is at its price boundary and rejects either input.\n                for amount in (10**16, 10**18):\n                    with pytest.raises(ContractLogicError, match=\"execution reverted: SPL\"):\n                        await quoter.quoteExactInput.coroutine(\n                            path, amount, block_identifier=block.identifier\n                        )\n            else:\n                # MLN exhausts liquidity: 0.01 and 1 MLN return the same WETH amount.\n                # A full-token sale must be unavailable.\n                small: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**16, block_identifier=block.identifier\n                )\n                large: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**18, block_identifier=block.identifier\n                )\n                assert small == large == 3838826218858\n        else:\n            assert price is not None\n            sale = await liquidity_price(\n                str(token),\n                block.number,\n                amount=1,\n                skip_cache=True,\n                first_markets=(str(v3.uniswap_v3._factory).lower(),),\n            )\n            assert sale is not None and sale.quote is not None\n            quote = sale.quote\n            decimals = await native_read(token_address, \"decimals()(uint8)\", block)\n            assert quote.input.token == token_address\n            assert quote.input.decimals == decimals\n            assert quote.input.amount == 10**decimals\n            assert quote.block_number == block.number and quote.block_hash == block.hash\n            assert quote.steps, \"an available V3 price must execute a native trade\"\n            current = quote.input\n            for index, step in enumerate(quote.steps):\n>               assert step.kind == \"swap\" and step.protocol == \"Uniswap V3\"\nE               AssertionError: assert ('swap' == 'swap'\nE                   swap and 'Uniswap V2' == 'Uniswap V3'\nE                 - Uniswap V3\nE                 ?          ^\nE                 + Uniswap V2\nE                 ?          ^)\n\ntests/prices/dex/test_uniswap.py:201: AssertionError",
+    "error_message": "AssertionError: assert ('swap' == 'swap'\n    swap and 'Uniswap V2' == 'Uniswap V3'\n  - Uniswap V3\n  ?          ^\n  + Uniswap V2\n  ?          ^)",
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 22,
+        "flights": 0
+      },
+      "result_cache": {
+        "values": 0,
+        "flights": 0
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 291494,
+      "multicall_uid": 23522,
+      "request_uid": 23117,
+      "jsonrpc_batch_uid": 26212
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 975.5112466279534,
+    "rss_peak_bytes": 2530664448,
+    "live_tasks": 58,
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4fE83213D56308330EC302a8BD641f1d0113A4Cc1]",
+    "outcome": "failed",
+    "duration": 945.4350974559784,
+    "error": "token = '0x4fE83213D56308330EC302a8BD641f1d0113A4Cc'\n\n    @pytest.mark.parametrize(\"token\", V2_TOKENS)\n    @pytest.mark.asyncio_cooperative\n    async def test_uniswap_v3(token: Address) -> None:\n        \"\"\"Replay full-token native quotes instead of comparing them with spot oracles.\"\"\"\n        # Pin independent native replay to the investigated canonical historical state.\n        from eth_abi.packed import encode_packed\n    \n        from y.prices._routing import liquidity_price\n        from y.prices.dex.uniswap.v3 import load_quoter\n    \n        block = await BlockRef.resolve(26_063_967)\n        assert block.hash == REVIEW_BLOCK_HASH\n        assert v3.uniswap_v3 is not None\n        price = await v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False)\n        token_address = str(token).lower()\n        unavailable_tokens = {\n            \"0xec67005c4e498ec7f55e092bd1d35cbc47c91892\",\n            \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\",\n        }\n        if token_address in unavailable_tokens:\n            assert price is None\n            quoter = await load_quoter(v3.uniswap_v3._quoter)\n            path = encode_packed(\n                [\"address\", \"uint24\", \"address\"],\n                [token, 3000, \"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\"],\n            )\n            if token_address == \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\":\n                # BAND's native pool is at its price boundary and rejects either input.\n                for amount in (10**16, 10**18):\n                    with pytest.raises(ContractLogicError, match=\"execution reverted: SPL\"):\n                        await quoter.quoteExactInput.coroutine(\n                            path, amount, block_identifier=block.identifier\n                        )\n            else:\n                # MLN exhausts liquidity: 0.01 and 1 MLN return the same WETH amount.\n                # A full-token sale must be unavailable.\n                small: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**16, block_identifier=block.identifier\n                )\n                large: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**18, block_identifier=block.identifier\n                )\n                assert small == large == 3838826218858\n        else:\n            assert price is not None\n            sale = await liquidity_price(\n                str(token),\n                block.number,\n                amount=1,\n                skip_cache=True,\n                first_markets=(str(v3.uniswap_v3._factory).lower(),),\n            )\n            assert sale is not None and sale.quote is not None\n            quote = sale.quote\n            decimals = await native_read(token_address, \"decimals()(uint8)\", block)\n            assert quote.input.token == token_address\n            assert quote.input.decimals == decimals\n            assert quote.input.amount == 10**decimals\n            assert quote.block_number == block.number and quote.block_hash == block.hash\n            assert quote.steps, \"an available V3 price must execute a native trade\"\n            current = quote.input\n            for index, step in enumerate(quote.steps):\n>               assert step.kind == \"swap\" and step.protocol == \"Uniswap V3\"\nE               AssertionError: assert ('swap' == 'swap'\nE                   swap and 'Uniswap V2' == 'Uniswap V3'\nE                 - Uniswap V3\nE                 ?          ^\nE                 + Uniswap V2\nE                 ?          ^)\n\ntests/prices/dex/test_uniswap.py:201: AssertionError",
+    "error_message": "AssertionError: assert ('swap' == 'swap'\n    swap and 'Uniswap V2' == 'Uniswap V3'\n  - Uniswap V3\n  ?          ^\n  + Uniswap V2\n  ?          ^)",
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 22,
+        "flights": 0
+      },
+      "result_cache": {
+        "values": 0,
+        "flights": 0
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 291515,
+      "multicall_uid": 23528,
+      "request_uid": 23120,
+      "jsonrpc_batch_uid": 26218
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 975.6145538329729,
+    "rss_peak_bytes": 2530664448,
+    "live_tasks": 58,
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4fE83213D56308330EC302a8BD641f1d0113A4Cc0]",
+    "outcome": "failed",
+    "duration": 945.5437114238739,
+    "error": "token = '0x4fE83213D56308330EC302a8BD641f1d0113A4Cc'\n\n    @pytest.mark.parametrize(\"token\", V2_TOKENS)\n    @pytest.mark.asyncio_cooperative\n    async def test_uniswap_v3(token: Address) -> None:\n        \"\"\"Replay full-token native quotes instead of comparing them with spot oracles.\"\"\"\n        # Pin independent native replay to the investigated canonical historical state.\n        from eth_abi.packed import encode_packed\n    \n        from y.prices._routing import liquidity_price\n        from y.prices.dex.uniswap.v3 import load_quoter\n    \n        block = await BlockRef.resolve(26_063_967)\n        assert block.hash == REVIEW_BLOCK_HASH\n        assert v3.uniswap_v3 is not None\n        price = await v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False)\n        token_address = str(token).lower()\n        unavailable_tokens = {\n            \"0xec67005c4e498ec7f55e092bd1d35cbc47c91892\",\n            \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\",\n        }\n        if token_address in unavailable_tokens:\n            assert price is None\n            quoter = await load_quoter(v3.uniswap_v3._quoter)\n            path = encode_packed(\n                [\"address\", \"uint24\", \"address\"],\n                [token, 3000, \"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\"],\n            )\n            if token_address == \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\":\n                # BAND's native pool is at its price boundary and rejects either input.\n                for amount in (10**16, 10**18):\n                    with pytest.raises(ContractLogicError, match=\"execution reverted: SPL\"):\n                        await quoter.quoteExactInput.coroutine(\n                            path, amount, block_identifier=block.identifier\n                        )\n            else:\n                # MLN exhausts liquidity: 0.01 and 1 MLN return the same WETH amount.\n                # A full-token sale must be unavailable.\n                small: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**16, block_identifier=block.identifier\n                )\n                large: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**18, block_identifier=block.identifier\n                )\n                assert small == large == 3838826218858\n        else:\n            assert price is not None\n            sale = await liquidity_price(\n                str(token),\n                block.number,\n                amount=1,\n                skip_cache=True,\n                first_markets=(str(v3.uniswap_v3._factory).lower(),),\n            )\n            assert sale is not None and sale.quote is not None\n            quote = sale.quote\n            decimals = await native_read(token_address, \"decimals()(uint8)\", block)\n            assert quote.input.token == token_address\n            assert quote.input.decimals == decimals\n            assert quote.input.amount == 10**decimals\n            assert quote.block_number == block.number and quote.block_hash == block.hash\n            assert quote.steps, \"an available V3 price must execute a native trade\"\n            current = quote.input\n            for index, step in enumerate(quote.steps):\n>               assert step.kind == \"swap\" and step.protocol == \"Uniswap V3\"\nE               AssertionError: assert ('swap' == 'swap'\nE                   swap and 'Uniswap V2' == 'Uniswap V3'\nE                 - Uniswap V3\nE                 ?          ^\nE                 + Uniswap V2\nE                 ?          ^)\n\ntests/prices/dex/test_uniswap.py:201: AssertionError",
+    "error_message": "AssertionError: assert ('swap' == 'swap'\n    swap and 'Uniswap V2' == 'Uniswap V3'\n  - Uniswap V3\n  ?          ^\n  + Uniswap V2\n  ?          ^)",
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 22,
+        "flights": 0
+      },
+      "result_cache": {
+        "values": 0,
+        "flights": 0
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 291527,
+      "multicall_uid": 23532,
+      "request_uid": 23120,
+      "jsonrpc_batch_uid": 26222
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 975.6849628149648,
+    "rss_peak_bytes": 2530664448,
+    "live_tasks": 53,
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0x4FE83213D56308330EC302A8BD641F1D0113A4CC]",
+    "outcome": "failed",
+    "duration": 945.61882853508,
+    "error": "token = '0x4FE83213D56308330EC302A8BD641F1D0113A4CC'\n\n    @pytest.mark.parametrize(\"token\", V2_TOKENS)\n    @pytest.mark.asyncio_cooperative\n    async def test_uniswap_v3(token: Address) -> None:\n        \"\"\"Replay full-token native quotes instead of comparing them with spot oracles.\"\"\"\n        # Pin independent native replay to the investigated canonical historical state.\n        from eth_abi.packed import encode_packed\n    \n        from y.prices._routing import liquidity_price\n        from y.prices.dex.uniswap.v3 import load_quoter\n    \n        block = await BlockRef.resolve(26_063_967)\n        assert block.hash == REVIEW_BLOCK_HASH\n        assert v3.uniswap_v3 is not None\n        price = await v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False)\n        token_address = str(token).lower()\n        unavailable_tokens = {\n            \"0xec67005c4e498ec7f55e092bd1d35cbc47c91892\",\n            \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\",\n        }\n        if token_address in unavailable_tokens:\n            assert price is None\n            quoter = await load_quoter(v3.uniswap_v3._quoter)\n            path = encode_packed(\n                [\"address\", \"uint24\", \"address\"],\n                [token, 3000, \"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2\"],\n            )\n            if token_address == \"0xba11d00c5f74255f56a5e366f4f77f5a186d7f55\":\n                # BAND's native pool is at its price boundary and rejects either input.\n                for amount in (10**16, 10**18):\n                    with pytest.raises(ContractLogicError, match=\"execution reverted: SPL\"):\n                        await quoter.quoteExactInput.coroutine(\n                            path, amount, block_identifier=block.identifier\n                        )\n            else:\n                # MLN exhausts liquidity: 0.01 and 1 MLN return the same WETH amount.\n                # A full-token sale must be unavailable.\n                small: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**16, block_identifier=block.identifier\n                )\n                large: int = await quoter.quoteExactInput.coroutine(\n                    path, 10**18, block_identifier=block.identifier\n                )\n                assert small == large == 3838826218858\n        else:\n            assert price is not None\n            sale = await liquidity_price(\n                str(token),\n                block.number,\n                amount=1,\n                skip_cache=True,\n                first_markets=(str(v3.uniswap_v3._factory).lower(),),\n            )\n            assert sale is not None and sale.quote is not None\n            quote = sale.quote\n            decimals = await native_read(token_address, \"decimals()(uint8)\", block)\n            assert quote.input.token == token_address\n            assert quote.input.decimals == decimals\n            assert quote.input.amount == 10**decimals\n            assert quote.block_number == block.number and quote.block_hash == block.hash\n            assert quote.steps, \"an available V3 price must execute a native trade\"\n            current = quote.input\n            for index, step in enumerate(quote.steps):\n>               assert step.kind == \"swap\" and step.protocol == \"Uniswap V3\"\nE               AssertionError: assert ('swap' == 'swap'\nE                   swap and 'Uniswap V2' == 'Uniswap V3'\nE                 - Uniswap V3\nE                 ?          ^\nE                 + Uniswap V2\nE                 ?          ^)\n\ntests/prices/dex/test_uniswap.py:201: AssertionError",
+    "error_message": "AssertionError: assert ('swap' == 'swap'\n    swap and 'Uniswap V2' == 'Uniswap V3'\n  - Uniswap V3\n  ?          ^\n  + Uniswap V2\n  ?          ^)",
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 22,
+        "flights": 0
+      },
+      "result_cache": {
+        "values": 0,
+        "flights": 0
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 291533,
+      "multicall_uid": 23534,
+      "request_uid": 23120,
+      "jsonrpc_batch_uid": 26224
+    }
+  }
+]

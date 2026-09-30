@@ -1,0 +1,170 @@
+[
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.0001890840067062527,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.0005187929928069934,
+    "error": "def test_sync_eviction_releases_keys_and_keeps_cached_values():\n        calls = 0\n        cache = LRUCache(4)\n    \n        @cached(cache)\n        def value(key):\n            nonlocal calls\n            calls += 1\n            return {\"number\": key.number}\n    \n        refs = []\n        for number in range(128):\n            key = Key(number)\n            refs.append(weakref.ref(key))\n            result = value(key)\n            assert result == {\"number\": number}\n            result[\"number\"] = -1\n            assert value(key) == {\"number\": number}\n            del key\n        assert calls == 128\n        assert len(cache) == 4\n>       assert [ref().number for ref in refs if ref() is not None] == [124, 125, 126, 127]\nE       assert [0, 1, 2, 3, 4, 5, ...] == [124, 125, 126, 127]\nE         \nE         At index 0 diff: 0 != 124\nE         Left contains 124 more items, first extra item: 4\nE         Use -v to get more diff\n\npython/tests/test_ownership.py:35: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 7.837500015739352e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00022683400311507285,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.0005729599943151698,
+    "error": "@pytest.mark.asyncio\n    async def test_async_eviction_releases_keys_and_keeps_cached_values():\n        calls = 0\n        cache = LRUCache(4)\n    \n        @cached(cache)\n        async def value(key):\n            nonlocal calls\n            calls += 1\n            return {\"number\": key.number}\n    \n        refs = []\n        for number in range(128):\n            key = Key(number)\n            refs.append(weakref.ref(key))\n            result = await value(key)\n            assert result == {\"number\": number}\n            result[\"number\"] = -1\n            assert await value(key) == {\"number\": number}\n            del key\n        assert calls == 128\n        assert len(cache) == 4\n>       assert [ref().number for ref in refs if ref() is not None] == [124, 125, 126, 127]\nE       assert [0, 1, 2, 3, 4, 5, ...] == [124, 125, 126, 127]\nE         \nE         At index 0 diff: 0 != 124\nE         Left contains 124 more items, first extra item: 4\nE         Use -v to get more diff\n\npython/tests/test_ownership.py:60: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_eviction_releases_keys_and_keeps_cached_values",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.0002215009881183505,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 4.6208995627239347e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.0037976780004100874,
+    "error": "def test_sync_failed_call_releases_key_and_can_retry():\n        calls = 0\n    \n        @cached(LRUCache(4))\n        def value(key):\n            nonlocal calls\n            calls += 1\n            raise ValueError(str(key.number))\n    \n        def failed():\n            key = Key(42)\n            ref = weakref.ref(key)\n            for _ in range(2):\n                with pytest.raises(ValueError, match=\"^42$\"):\n                    value(key)\n            return ref\n    \n        ref = failed()\n        gc.collect()\n        assert calls == 2\n>       assert ref() is None\nE       AssertionError: assert <tests.test_ownership.Key object at 0xe4ba4d77eab0> is None\nE        +  where <tests.test_ownership.Key object at 0xe4ba4d77eab0> = <weakref at 0xe4ba4d34ddf0; to 'Key' at 0xe4ba4d77eab0>()\n\npython/tests/test_ownership.py:83: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_sync_failed_call_releases_key_and_can_retry",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 5.283299833536148e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00015637600154150277,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.002561133005656302,
+    "error": "@pytest.mark.asyncio\n    async def test_async_failed_call_releases_key_and_can_retry():\n        calls = 0\n    \n        @cached(LRUCache(4))\n        async def value(key):\n            nonlocal calls\n            calls += 1\n            raise ValueError(str(key.number))\n    \n        async def failed():\n            key = Key(42)\n            ref = weakref.ref(key)\n            for _ in range(2):\n                with pytest.raises(ValueError, match=\"^42$\"):\n                    await value(key)\n            return ref\n    \n        ref = await failed()\n        gc.collect()\n        assert calls == 2\n>       assert ref() is None\nE       AssertionError: assert <tests.test_ownership.Key object at 0xe4ba4d77a870> is None\nE        +  where <tests.test_ownership.Key object at 0xe4ba4d77a870> = <weakref at 0xe4ba4d2fd300; to 'Key' at 0xe4ba4d77a870>()\n\npython/tests/test_ownership.py:107: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_async_failed_call_releases_key_and_can_retry",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00011100100527983159,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00015020799764897674,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.002507467012037523,
+    "error": "fail = False\n\n    @pytest.mark.asyncio\n    @pytest.mark.parametrize(\"fail\", [False, True])\n    async def test_cancelled_waiter_releases_state_after_owner_finishes(fail):\n        entered = asyncio.Event()\n        release = asyncio.Event()\n        cache = LRUCache(1)\n        calls = 0\n    \n        @cached(cache)\n        async def value(key):\n            nonlocal calls\n            calls += 1\n            entered.set()\n            await release.wait()\n            if fail:\n                raise ValueError(str(key.number))\n            return key.number\n    \n        async def requests():\n            key = Key(42)\n            ref = weakref.ref(key)\n            owner = asyncio.create_task(value(key))\n            await entered.wait()\n            waiter = asyncio.create_task(value(key))\n            await asyncio.sleep(0)\n            waiter.cancel()\n            with pytest.raises(asyncio.CancelledError):\n                await waiter\n            release.set()\n            if fail:\n                with pytest.raises(ValueError, match=\"^42$\"):\n                    await owner\n            else:\n                assert await owner == 42\n            return ref\n    \n        ref = await requests()\n        assert calls == 1\n        if not fail:\n            assert await value(Key(43)) == 43\n        await asyncio.sleep(0)\n        gc.collect()\n>       assert ref() is None\nE       AssertionError: assert <tests.test_ownership.Key object at 0xe4ba4d779a60> is None\nE        +  where <tests.test_ownership.Key object at 0xe4ba4d779a60> = <weakref at 0xe4ba4d5a4270; to 'Key' at 0xe4ba4d779a60>()\n\npython/tests/test_ownership.py:152: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[False]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 0.00012891700316686183,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00018120900494977832,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.002790883998386562,
+    "error": "fail = True\n\n    @pytest.mark.asyncio\n    @pytest.mark.parametrize(\"fail\", [False, True])\n    async def test_cancelled_waiter_releases_state_after_owner_finishes(fail):\n        entered = asyncio.Event()\n        release = asyncio.Event()\n        cache = LRUCache(1)\n        calls = 0\n    \n        @cached(cache)\n        async def value(key):\n            nonlocal calls\n            calls += 1\n            entered.set()\n            await release.wait()\n            if fail:\n                raise ValueError(str(key.number))\n            return key.number\n    \n        async def requests():\n            key = Key(42)\n            ref = weakref.ref(key)\n            owner = asyncio.create_task(value(key))\n            await entered.wait()\n            waiter = asyncio.create_task(value(key))\n            await asyncio.sleep(0)\n            waiter.cancel()\n            with pytest.raises(asyncio.CancelledError):\n                await waiter\n            release.set()\n            if fail:\n                with pytest.raises(ValueError, match=\"^42$\"):\n                    await owner\n            else:\n                assert await owner == 42\n            return ref\n    \n        ref = await requests()\n        assert calls == 1\n        if not fail:\n            assert await value(Key(43)) == 43\n        await asyncio.sleep(0)\n        gc.collect()\n>       assert ref() is None\nE       AssertionError: assert <tests.test_ownership.Key object at 0xe4ba4d77a3c0> is None\nE        +  where <tests.test_ownership.Key object at 0xe4ba4d77a3c0> = <weakref at 0xe4ba4d5a5440; to 'Key' at 0xe4ba4d77a3c0>()\n\npython/tests/test_ownership.py:152: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_waiter_releases_state_after_owner_finishes[True]",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.854199015535414e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00014037500659469515,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "call",
+    "outcome": "failed",
+    "seconds": 0.002657384000485763,
+    "error": "@pytest.mark.asyncio\n    async def test_shared_failure_releases_key_after_all_waiters_report():\n        entered = asyncio.Event()\n        release = asyncio.Event()\n        calls = 0\n    \n        @cached(LRUCache(4))\n        async def value(key):\n            nonlocal calls\n            calls += 1\n            entered.set()\n            await release.wait()\n            raise ValueError(str(key.number))\n    \n        async def requests():\n            key = Key(42)\n            ref = weakref.ref(key)\n            owner = asyncio.create_task(value(key))\n            await entered.wait()\n            waiter = asyncio.create_task(value(key))\n            await asyncio.sleep(0)\n            release.set()\n            outcomes = await asyncio.gather(owner, waiter, return_exceptions=True)\n            assert [type(error) for error in outcomes] == [ValueError, ValueError]\n            assert [str(error) for error in outcomes] == [\"42\", \"42\"]\n            assert outcomes[0] is outcomes[1]\n            return ref\n    \n        ref = await requests()\n        await asyncio.sleep(0)\n        gc.collect()\n        assert calls == 1\n>       assert ref() is None\nE       AssertionError: assert <tests.test_ownership.Key object at 0xe4ba4d779af0> is None\nE        +  where <tests.test_ownership.Key object at 0xe4ba4d779af0> = <weakref at 0xe4ba4d5a54e0; to 'Key' at 0xe4ba4d779af0>()\n\npython/tests/test_ownership.py:187: AssertionError"
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_shared_failure_releases_key_after_all_waiters_report",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.512600081507117e-05,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "setup",
+    "outcome": "passed",
+    "seconds": 0.00014241700409911573,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "call",
+    "outcome": "passed",
+    "seconds": 0.00012691700248979032,
+    "error": null
+  },
+  {
+    "test": "python/tests/test_ownership.py::test_cancelled_owner_does_not_cancel_surviving_waiter",
+    "phase": "teardown",
+    "outcome": "passed",
+    "seconds": 9.508299990557134e-05,
+    "error": null
+  }
+]

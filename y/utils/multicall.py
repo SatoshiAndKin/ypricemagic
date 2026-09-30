@@ -1,13 +1,15 @@
 import contextlib
 import logging
-from collections.abc import Callable, Iterable
-from typing import Any
+from collections.abc import Callable, Iterable, Sequence
+from typing import Any, cast
 
 import a_sync
 import brownie
-import dank_mids
 from a_sync import igather
+from brownie.typing import ContractName
+from dank_mids.brownie_patch import dank_eth
 from eth_abi.exceptions import InsufficientDataBytes
+from eth_typing import ABIElement, HexAddress, HexStr
 from multicall import Call
 from web3.exceptions import CannotHandleRequest
 
@@ -22,30 +24,39 @@ from y.utils.raw_calls import _decimals, _totalSupply
 
 logger = logging.getLogger(__name__)
 
-MULTICALL2 = {
-    Network.Mainnet: "0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696",
-    Network.Arbitrum: "0x842eC2c7D803033Edf55E478F461FC547Bc54EB2",
-    Network.Avalanche: "0xdf2122931FEb939FB8Cf4e67Ea752D1125e18858",
-    Network.BinanceSmartChain: "0xfF6FD90A470Aaa0c1B8A54681746b07AcdFedc9B",
-    Network.Fantom: "0xBAD2B082e2212DE4B065F636CA4e5e0717623d18",
-    Network.Harmony: "0x34b415f4d3b332515e66f70595ace1dcf36254c5",
-    Network.Heco: "0xd1F3BE686D64e1EA33fcF64980b65847aA43D79C",
-    Network.Moonriver: "0xaeF00A0Cf402D9DEdd54092D9cA179Be6F9E5cE3",
-    Network.Polygon: "0xc8E51042792d7405184DfCa245F2d27B94D013b6",
-    Network.xDai: "0x9903f30c1469d8A2f415D4E8184C93BD26992573",
-    Network.Aurora: "0xe0e3887b158F7F9c80c835a61ED809389BC08d1b",
-    Network.Cronos: "0x5e954f5972EC6BFc7dECd75779F10d848230345F",
-    Network.Optimism: "0xcA11bde05977b3631167028862bE2a173976CA11",  # Multicall 3
-    Network.Base: "0xcA11bde05977b3631167028862bE2a173976CA11",  # mc3
-    Network.Katana: "0xcA11bde05977b3631167028862bE2a173976CA11",
-    Network.Berachain: "0xcA11bde05977b3631167028862bE2a173976CA11",
-}.get(brownie.chain.id)
+MULTICALL2 = dict[int, str](
+    {
+        Network.Mainnet: "0x5BA1e12693Dc8F9c48aAD8770482f4739bEeD696",
+        Network.Arbitrum: "0x842eC2c7D803033Edf55E478F461FC547Bc54EB2",
+        Network.Avalanche: "0xdf2122931FEb939FB8Cf4e67Ea752D1125e18858",
+        Network.BinanceSmartChain: "0xfF6FD90A470Aaa0c1B8A54681746b07AcdFedc9B",
+        Network.Fantom: "0xBAD2B082e2212DE4B065F636CA4e5e0717623d18",
+        Network.Harmony: "0x34b415f4d3b332515e66f70595ace1dcf36254c5",
+        Network.Heco: "0xd1F3BE686D64e1EA33fcF64980b65847aA43D79C",
+        Network.Moonriver: "0xaeF00A0Cf402D9DEdd54092D9cA179Be6F9E5cE3",
+        Network.Polygon: "0xc8E51042792d7405184DfCa245F2d27B94D013b6",
+        Network.xDai: "0x9903f30c1469d8A2f415D4E8184C93BD26992573",
+        Network.Aurora: "0xe0e3887b158F7F9c80c835a61ED809389BC08d1b",
+        Network.Cronos: "0x5e954f5972EC6BFc7dECd75779F10d848230345F",
+        Network.Optimism: "0xcA11bde05977b3631167028862bE2a173976CA11",  # Multicall 3
+        Network.Base: "0xcA11bde05977b3631167028862bE2a173976CA11",  # mc3
+        Network.Katana: "0xcA11bde05977b3631167028862bE2a173976CA11",
+        Network.Berachain: "0xcA11bde05977b3631167028862bE2a173976CA11",
+    }
+).get(brownie.chain.id)
 
 multicall = None
-multicall2 = (
-    brownie.Contract.from_abi("Multicall2", MULTICALL2, MULTICALL2_ABI)
-    if brownie.chain.id in [Network.Harmony, Network.Cronos]
-    else Contract(MULTICALL2)
+multicall2 = cast(
+    Contract,
+    (
+        brownie.Contract.from_abi(
+            ContractName("Multicall2"),
+            cast(HexAddress, MULTICALL2),
+            cast(list[ABIElement], MULTICALL2_ABI),
+        )
+        if brownie.chain.id in [Network.Harmony, Network.Cronos]
+        else Contract(cast(str, MULTICALL2))
+    ),
 )
 
 # the address doesn't matter, it just needs to have code
@@ -60,13 +71,14 @@ async def multicall_same_func_no_input(
     addresses: Iterable[AnyAddressType],
     method: str,
     block: Block | None = None,
-    apply_func: Callable | None = None,
+    apply_func: Callable[..., Any] | None = None,
     return_None_on_failure: bool = False,
 ) -> list[Any]:
 
-    addresses = [await convert.to_address_async(address) for address in addresses]
-    results: list[dict] = await igather(
-        Call(address, [method], ((address, apply_func)), block_id=block) for address in addresses
+    normalized = [await convert.to_address_async(address) for address in addresses]
+    results: list[dict[Any, Any]] = await igather(
+        Call(address, [method], [(address, cast(Callable[..., Any], apply_func))], block_id=block)
+        for address in normalized
     )
     return [v for call in results for v in call.values()]
 
@@ -76,15 +88,23 @@ async def multicall_same_func_no_input(
 async def multicall_same_func_same_contract_different_inputs(
     address: AnyAddressType,
     method: str,
-    inputs: list | tuple,
+    inputs: Sequence[Any],
     block: Block | None = None,
-    apply_func: Callable | None = None,
+    apply_func: Callable[..., Any] | None = None,
     return_None_on_failure: bool = False,
 ) -> list[Any]:
     assert inputs
     address = await convert.to_address_async(address)
-    results: list[dict] = await igather(
-        (Call(address, [method, input], [(input, apply_func)], block_id=block) for input in inputs),
+    results: list[dict[Any, Any]] = await igather(
+        (
+            Call(
+                address,
+                [method, input],
+                [(input, cast(Callable[..., Any], apply_func))],
+                block_id=block,
+            )
+            for input in inputs
+        ),
         return_exceptions=return_None_on_failure,
     )
     if return_None_on_failure:
@@ -101,7 +121,7 @@ async def multicall_decimals(
     addresses: Iterable[AddressOrContract],
     block: Block | None = None,
     return_None_on_failure: bool = True,
-) -> list[int]:
+) -> list[int | None]:
 
     addresses = tuple(map(str, addresses))
     try:
@@ -112,9 +132,11 @@ async def multicall_decimals(
     except Exception as e:
         continue_if_call_reverted(e)
 
-    return await a_sync.map(
-        _decimals, addresses, block=block, return_None_on_failure=return_None_on_failure
-    ).values(pop=True)
+    return list[int | None](
+        await a_sync.map(
+            _decimals, addresses, block=block, return_None_on_failure=return_None_on_failure
+        ).values(pop=True)
+    )
 
 
 @a_sync.a_sync(default="sync")
@@ -123,7 +145,7 @@ async def multicall_totalSupply(
     addresses: Iterable[AddressOrContract],
     block: Block | None = None,
     return_None_on_failure: bool = True,
-) -> list[int]:
+) -> list[int | None]:
 
     with contextlib.suppress(CannotHandleRequest, InsufficientDataBytes):
         return await multicall_same_func_no_input(
@@ -162,12 +184,12 @@ async def fetch_multicall(*calls: Any, block: Block | None = None) -> list[Any |
     if isinstance(block, int) and block < multicall_deploy_block:
         # use state override to resurrect the contract prior to deployment
         data = multicall2.tryAggregate.encode_input(False, multicall_input)
-        call = await dank_mids.eth.call(
-            {"to": str(multicall2), "data": data},
+        call = await dank_eth.call(
+            {"to": str(multicall2), "data": HexStr(data)},
             block or "latest",
             {str(multicall2): {"code": f"0x{multicall2.bytecode}"}},  # type: ignore [dict-item, typeddict-item]
         )
-        result = multicall2.tryAggregate.decode_output(call)
+        result = multicall2.tryAggregate.decode_output(call.hex())
     else:
         result = await multicall2.tryAggregate.coroutine(
             False, multicall_input, block_identifier=block or "latest"

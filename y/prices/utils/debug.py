@@ -3,15 +3,12 @@ import logging
 from brownie import chain
 
 import y
+from y.datatypes import PriceResult
 
-# Set up logging similar to scripts/debug-price.py
 y_logger = logging.getLogger("y")
-y_logger.setLevel(logging.DEBUG)
-if not y_logger.hasHandlers():
-    y_logger.addHandler(logging.StreamHandler())
 
 
-def debug_price(token: str, block: int | None = None) -> float:
+def debug_price(token: str, block: int | None = None) -> PriceResult:
     """
     Debug token price retrieval.
 
@@ -28,6 +25,11 @@ def debug_price(token: str, block: int | None = None) -> float:
     """
     if not token:
         raise ValueError("You must specify a token address to debug.")
+
+    # Configure diagnostics only when the caller requests a debug operation.
+    y_logger.setLevel(logging.DEBUG)
+    if not y_logger.hasHandlers():
+        y_logger.addHandler(logging.StreamHandler())
 
     if block is None:
         block = chain.height

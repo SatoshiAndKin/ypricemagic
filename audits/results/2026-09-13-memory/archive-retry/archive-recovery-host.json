@@ -1,0 +1,39 @@
+{
+  "complete": true,
+  "origin": "Darwin",
+  "scope": "Bounded standard-library HTTP diagnostics only; no project imports or host test execution",
+  "calls": [
+    {
+      "label": "latest",
+      "method": "eth_call",
+      "params": [
+        {
+          "to": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          "data": "0x313ce567"
+        },
+        "latest"
+      ],
+      "timeout_seconds": 90,
+      "result": "0x0000000000000000000000000000000000000000000000000000000000000006",
+      "elapsed_seconds": 0.04472320806235075
+    },
+    {
+      "label": "hash-16830000",
+      "method": "eth_call",
+      "params": [
+        {
+          "to": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          "data": "0x313ce567"
+        },
+        {
+          "blockHash": "0x6e65cf41a9208837f764d22dd0358f7d67f57cd71ec5ee975d98674e292322bd",
+          "requireCanonical": true
+        }
+      ],
+      "timeout_seconds": 90,
+      "error_type": "HTTPError",
+      "http_status": 408,
+      "elapsed_seconds": 60.02619112515822
+    }
+  ]
+}

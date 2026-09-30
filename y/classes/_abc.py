@@ -1,12 +1,11 @@
 import abc
 from decimal import Decimal
 
-from a_sync import cgather
-
 import y.ENVIRONMENT_VARIABLES as ENVS
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
-from y.datatypes import Block, UsdPrice, UsdValue
+from y.datatypes import Block, Pool, UsdPrice, UsdValue
+from y.prices._candidates import gather_owned
 
 
 class Wrapper(ERC20):
@@ -51,7 +50,10 @@ class LiquidityPool(Wrapper):
 
     @stuck_coro_debugger
     async def get_pool_price(
-        self, block: Block | None = None, skip_cache: bool = ENVS.SKIP_CACHE
+        self,
+        block: Block | None = None,
+        skip_cache: bool = ENVS.SKIP_CACHE,
+        ignore_pools: tuple[Pool, ...] = (),
     ) -> UsdPrice | None:
         """
         Calculate the price of the liquidity pool token.
@@ -79,16 +81,27 @@ class LiquidityPool(Wrapper):
         See Also:
             - :meth:`get_tvl`
         """
-        tvl, total_supply = await cgather(
-            self.get_tvl(block=block, skip_cache=skip_cache, sync=False),
-            self.total_supply_readable(block=block, sync=False),
+        tvl, total_supply = await gather_owned(
+            [
+                self.get_tvl(
+                    block=block, skip_cache=skip_cache, ignore_pools=ignore_pools, sync=False
+                ),
+                self.total_supply_readable(block=block, sync=False),
+            ]
         )
-        return None if tvl is None else UsdPrice(Decimal(tvl) / Decimal(total_supply))
+        return (
+            None
+            if tvl is None or total_supply is None
+            else UsdPrice(Decimal(tvl) / Decimal(total_supply))
+        )
 
     @abc.abstractmethod
     async def get_tvl(
-        self, block: Block | None = None, skip_cache: bool = ENVS.SKIP_CACHE
-    ) -> UsdValue | None:
+        self,
+        block: Block | None = None,
+        skip_cache: bool = ENVS.SKIP_CACHE,
+        ignore_pools: tuple[Pool, ...] = (),
+    ) -> UsdValue | Decimal | None:
         """
         Get the Total Value Locked (TVL) in the liquidity pool.
 
@@ -100,7 +113,8 @@ class LiquidityPool(Wrapper):
             skip_cache: If True, bypasses ypricemagic's local caching mechanisms and forces a fresh calculation.
 
         Returns:
-            The Total Value Locked (TVL) in the pool as a :class:`~y.datatypes.UsdValue` object.
+            The Total Value Locked (TVL) as a :class:`~y.datatypes.UsdValue` or
+            :class:`~decimal.Decimal`, or None when unavailable.
 
         Note:
             The specific implementation of this method will depend on the type of liquidity pool.

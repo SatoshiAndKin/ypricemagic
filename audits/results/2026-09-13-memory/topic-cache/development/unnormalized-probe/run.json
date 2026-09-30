@@ -1,0 +1,23 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python -c 'import asyncio,json,tracemalloc\nfrom pathlib import Path\nfrom y._db.utils import logs\nfrom y._db.entities import LogTopic\nfrom evmspec.structs.log import Topic\nfrom profile_state import capture,original_function\n\nasync def main():\n    tracemalloc.start()\n    count=8192\n    await logs._bulk_insert(LogTopic,('\"'\"'topic'\"'\"',),tuple((f'\"'\"'{2**240+i:064x}'\"'\"',) for i in range(count)),sync=False)\n    for start in range(0,count,64):\n        topics=[Topic((2**240+i).to_bytes(32,'\"'\"'big'\"'\"')) for i in range(start,start+64)]\n        first=await asyncio.gather(*(logs.get_topic_dbid(t) for t in topics))\n        second=await asyncio.gather(*(logs.get_topic_dbid(t) for t in topics))\n        assert first==second and all(type(value) is int and value>0 for value in first)\n    async_owner=logs.get_topic_dbid._asyncified\n    synchronous=[]\n    value=logs.get_topic_dbid.__wrapped__\n    seen=set()\n    while id(value) not in seen:\n        seen.add(id(value))\n        info=getattr(value,'\"'\"'cache_info'\"'\"',None)\n        if info is not None:synchronous.append({'\"'\"'function'\"'\"':original_function(value),'\"'\"'cache'\"'\"':info()._asdict()})\n        value=getattr(value,'\"'\"'__wrapped__'\"'\"',None)\n        if value is None:break\n    capture(Path('\"'\"'/reports'\"'\"'),'\"'\"'actual-topic-owner'\"'\"')\n    Path('\"'\"'/reports/topic-owner.json'\"'\"').write_text(json.dumps({'\"'\"'complete'\"'\"':True,'\"'\"'topics'\"'\"':count,'\"'\"'async_function'\"'\"':original_function(async_owner),'\"'\"'async_cache'\"'\"':async_owner.cache_info()._asdict(),'\"'\"'sync_caches'\"'\"':synchronous},indent=2)+'\"'\"'\\n'\"'\"')\nasyncio.run(main())\n'"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": false,
+  "started_unix": 1789378637.8167522,
+  "source_sha": "baa140ec7fa50ce416b82981d77f6d96b6904361",
+  "source_revision": "worktree",
+  "source_archive_sha256": "32240549d52f5b7141e5c8e865ce6200d7d9d13f1cbcddcc93f37ede7002f18a",
+  "image": "sha256:90c9e64a153fd4543033071de3e031cec8d704c24be2f991bee1273fb04a08b0",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [
+    "compiled-modules.json",
+    "topic-owner.json",
+    "allocations-actual-topic-owner.json"
+  ],
+  "elapsed_seconds": 118.9335687160492
+}

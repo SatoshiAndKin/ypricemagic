@@ -1,0 +1,68 @@
+y/__init__.py:130: error: Cannot find implementation or library stub for module named "eth_portfolio._db"  [import-not-found]
+        from eth_portfolio._db import entities as _db_entities
+    ^
+y/__init__.py:130: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+y/_db/utils/_ep.py:36: error: Cannot find implementation or library stub for module named "eth_portfolio._db.utils"  [import-not-found]
+            from eth_portfolio._db.utils import get_block
+    ^
+y/_db/utils/asyncpg.py:4: error: Skipping analyzing "asyncpg": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+    import asyncpg
+    ^
+y/time.py:17: error: Cannot find implementation or library stub for module named "dank_mids._config"  [import-not-found]
+        from dank_mids._config import GANACHE_FORK
+    ^
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:762: error: INTERNAL ERROR -- Please try using mypy master on GitHub:
+https://mypy.readthedocs.io/en/stable/common_issues.html#using-a-development-mypy-build
+Please report a bug at https://github.com/python/mypy/issues
+version: 1.19.1+bytesrefcount1
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/usr/local/lib/python3.12/site-packages/mypy/__main__.py", line 37, in <module>
+    console_entry()
+  File "/usr/local/lib/python3.12/site-packages/mypy/__main__.py", line 15, in console_entry
+    main()
+  File "/usr/local/lib/python3.12/site-packages/mypy/main.py", line 135, in main
+    res, messages, blockers = run_build(sources, options, fscache, t0, stdout, stderr)
+  File "/usr/local/lib/python3.12/site-packages/mypy/main.py", line 219, in run_build
+    res = build.build(sources, options, None, flush_errors, fscache, stdout, stderr)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 222, in build
+    result = _build(
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 301, in _build
+    graph = dispatch(sources, manager, stdout)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 2952, in dispatch
+    process_graph(graph, manager)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 3347, in process_graph
+    done, still_working = manager.wait_for_done(graph)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 925, in wait_for_done
+    process_stale_scc(graph, next_scc, self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/build.py", line 3479, in process_stale_scc
+    mypy.semanal_main.semantic_analysis_for_scc(graph, scc, manager.errors)
+  File "/usr/local/lib/python3.12/site-packages/mypy/semanal_main.py", line 95, in semantic_analysis_for_scc
+    process_top_levels(graph, scc, patches)
+  File "/usr/local/lib/python3.12/site-packages/mypy/semanal_main.py", line 233, in process_top_levels
+    deferred, incomplete, progress = semantic_analyze_target(
+  File "/usr/local/lib/python3.12/site-packages/mypy/semanal_main.py", line 410, in semantic_analyze_target
+    analyzer.refresh_partial(
+  File "/usr/local/lib/python3.12/site-packages/mypy/semanal.py", line 701, in refresh_partial
+    self.refresh_top_level(node)
+  File "/usr/local/lib/python3.12/site-packages/mypy/semanal.py", line 719, in refresh_top_level
+    self.accept(d)
+  File "/usr/local/lib/python3.12/site-packages/mypy/semanal.py", line 7568, in accept
+    node.accept(self)
+  File "/usr/local/lib/python3.12/site-packages/mypy/nodes.py", line 1478, in accept
+    return visitor.visit_class_def(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/mypy/semanal.py", line 1827, in visit_class_def
+    self.analyze_class(defn)
+  File "/usr/local/lib/python3.12/site-packages/mypy/semanal.py", line 2044, in analyze_class
+    self.analyze_class_body_common(defn)
+  File "/usr/local/lib/python3.12/site-packages/mypy/semanal.py", line 2091, in analyze_class_body_common
+    self.apply_class_plugin_hooks(defn)
+  File "/usr/local/lib/python3.12/site-packages/mypy/semanal.py", line 2176, in apply_class_plugin_hooks
+    hook(ClassDefContext(defn, base_expr, self))
+  File "/work/tools/mypy_plugin.py", line 62, in _wrap_async_class
+    node.name = name
+    ^^^^^^^^^
+AttributeError: property 'name' of 'FuncDef' object has no setter
+/usr/local/lib/python3.12/site-packages/a_sync/task.py:762: : note: use --pdb to drop into pdb

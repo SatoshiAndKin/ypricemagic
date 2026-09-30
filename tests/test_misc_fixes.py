@@ -1,29 +1,36 @@
 """Tests for misc bug fixes: NonStandardERC20 catch, stablecoins, Chainlink feed resolution."""
 
 import asyncio
-from unittest.mock import AsyncMock, MagicMock, patch
+from collections.abc import AsyncIterator
+from types import SimpleNamespace
+from typing import Any
+from unittest.mock import AsyncMock
 
 import pytest
+from brownie import ZERO_ADDRESS
+from eth_abi.abi import encode
+from eth_utils.crypto import keccak
+from web3.exceptions import ContractLogicError
 
+from tests.test_pricing_correctness import run_async_test
+from y import convert
 from y.constants import STABLECOINS
-from y.exceptions import NonStandardERC20
-
 
 # ---------------------------------------------------------------------------
 # Fix 3 & 4: crvUSD address and new stablecoins
 # ---------------------------------------------------------------------------
 
 
-def test_crvusd_address_is_correct():
+def test_crvusd_address_is_correct() -> None:
     """VAL-MISC-003: crvUSD address is the actual crvUSD token, not the ERC-1155 NFT."""
     correct_address = "0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E"
     wrong_nft_address = "0xf939E0A03FB57F7cc3E4655C5262C496284665DC"
     assert correct_address in STABLECOINS, "crvUSD should be in STABLECOINS"
     assert wrong_nft_address not in STABLECOINS, "ERC-1155 NFT address should NOT be in STABLECOINS"
-    assert STABLECOINS[correct_address] == "crvusd"
+    assert STABLECOINS[convert.to_address(correct_address)] == "crvusd"
 
 
-def test_new_stablecoins_present():
+def test_new_stablecoins_present() -> None:
     """VAL-MISC-004: crvUSD, FRAX, PYUSD, GHO are in STABLECOINS dict."""
     expected = {
         "0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E": "crvusd",
@@ -33,125 +40,151 @@ def test_new_stablecoins_present():
     }
     for address, name in expected.items():
         assert address in STABLECOINS, f"{name} ({address}) should be in STABLECOINS"
-        assert STABLECOINS[address] == name
+        assert STABLECOINS[convert.to_address(address)] == name
 
 
-# ---------------------------------------------------------------------------
-# Fix 5: Chainlink returns latest aggregator
-# ---------------------------------------------------------------------------
+def test_chainlink_get_feed_falls_back_to_static_feeds(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A registry event for another asset must not replace this asset's static feed."""
+    import importlib
+    from types import SimpleNamespace
 
+    import a_sync
 
-@pytest.mark.asyncio_cooperative
-async def test_chainlink_get_feed_returns_latest_aggregator():
-    """VAL-MISC-005: get_feed returns the latest (most recent) aggregator for assets
-    that have had feed replacements, by iterating events from highest block first."""
-    from y.prices.chainlink import Chainlink, Feed
+    from y.prices._rpc import BlockRef
 
-    # Create a mock Chainlink instance to avoid real network calls
-    chainlink = object.__new__(Chainlink)
+    module = importlib.import_module("y.prices.chainlink")
+    chainlink = object.__new__(module.Chainlink)
+    a_sync.ASyncGenericBase.__init__(chainlink)
     chainlink.asynchronous = True
-    chainlink._feeds = []  # no static feeds
+    asset = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+    static = SimpleNamespace(asset=asset, address=asset, start_block=0)
+    chainlink._feeds = [static]
+    chainlink.registry = "0x0000000000000000000000000000000000000100"
+    block = BlockRef(1, 20_000_000, "0x" + "12" * 32, 1_700_000_000)
 
-    # Simulate 3 FeedConfirmed events for the same asset at different blocks
-    asset_address = "0x514910771AF9Ca656af840dff83E8264EcF986CA"  # LINK
+    async def events(to_block: int) -> AsyncIterator[Any]:
+        assert to_block == 20_000_000
+        yield SimpleNamespace(asset="0x0000000000000000000000000000000000000001", start_block=1)
 
-    def make_feed(address, block):
-        feed = Feed.__new__(Feed)
-        feed.address = address
-        feed.asset = MagicMock()
-        feed.asset.__eq__ = lambda self, other: str(other) == asset_address
-        feed.start_block = block
-        return feed
-
-    old_feed = make_feed("0xOldAggregator", 10_000_000)
-    mid_feed = make_feed("0xMidAggregator", 12_000_000)
-    latest_feed = make_feed("0xLatestAggregator", 15_000_000)
-
-    # Mock _feeds_from_events.objects to yield feeds in chronological order
-    async def mock_objects(to_block):
-        for f in [old_feed, mid_feed, latest_feed]:
-            yield f
-
-    mock_events = MagicMock()
-    mock_events.objects = mock_objects
-    chainlink._feeds_from_events = mock_events
-
-    # Call the underlying logic of get_feed directly (bypassing cache + dank_mids)
-    # This tests the core logic: iterate event feeds in reverse, return first match
-    event_feeds = []
-    async for feed in chainlink._feeds_from_events.objects(to_block=20_000_000):
-        event_feeds.append(feed)
-
-    result = None
-    for feed in reversed(event_feeds):
-        if asset_address == feed.asset:
-            result = feed
-            break
-
-    # If no match in events, check static feeds
-    if result is None:
-        for feed in chainlink._feeds:
-            if asset_address == feed.asset:
-                result = feed
-                break
-
-    # The result should be the LATEST feed (highest block), not the first one
-    assert result is latest_feed, (
-        f"Expected latest aggregator (block {latest_feed.start_block}), "
-        f"got aggregator at block {result.start_block if result else 'None'}"
+    chainlink._feeds_from_events = SimpleNamespace(objects=events)
+    deployed = AsyncMock(return_value=True)
+    registered = AsyncMock(return_value=module.ZERO_ADDRESS)
+    monkeypatch.setattr(module, "deployed", deployed)
+    monkeypatch.setattr(module, "optional_read", registered)
+    result = asyncio.get_event_loop().run_until_complete(
+        chainlink.get_feed(asset, block, sync=False)
     )
+    assert result is static
+    registered.assert_awaited_once_with(
+        chainlink.registry,
+        "getFeed(address,address)(address)",
+        block,
+        asset,
+        module.DENOMINATIONS["USD"],
+    )
+    assert deployed.await_count == 2
+    deployed.assert_awaited_with(static.address, block)
 
 
-@pytest.mark.asyncio_cooperative
-async def test_chainlink_get_feed_falls_back_to_static_feeds():
-    """When no event-based feed matches, static feeds should be checked."""
-    from y.prices.chainlink import Chainlink, Feed
+@run_async_test
+@pytest.mark.parametrize(
+    "response",
+    ["legacy_revert", "legacy_empty", "removed", "active_stale", "active_fresh", "legacy_fresh"],
+)
+async def test_latest_feed_validation_handles_legacy_and_removed_aggregators(
+    monkeypatch: Any, response: str
+) -> None:
+    from tests import price_expectations as reference
+    from tests.prices import test_chainlink as fixture
+    from y.prices import _rpc
+    from y.prices.chainlink import Feed, registries
 
-    chainlink = object.__new__(Chainlink)
-    chainlink.asynchronous = True
+    token = "0x0000000000000000000000000000000000000101"
+    registry = registries[1]
+    block = _rpc.BlockRef(1, 20_000_000, "0x" + "12" * 32, 1_700_000_000)
+    feed = Feed(token, token, asynchronous=True)
+    seen: list[bytes] = []
 
-    asset_address = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"  # WETH
+    async def rpc(transaction: dict[str, Any], *, block_identifier: Any) -> bytes:
+        assert block_identifier == block.identifier
+        data = bytes(transaction["data"])
+        seen.append(data[:4])
+        if transaction["to"].lower() == registry.lower():
+            if data[:4] == keccak(text="getCurrentPhaseId(address,address)")[:4]:
+                return encode(["uint16"], [1])
+            assert data[:4] == keccak(text="getPhaseFeed(address,address,uint16)")[:4]
+            return encode(["address"], [token])
+        assert transaction["to"].lower() == token
+        if data == keccak(text="aggregator()")[:4]:
+            if response in ("legacy_revert", "legacy_fresh"):
+                raise ContractLogicError("execution reverted")
+            if response == "legacy_empty":
+                return b""
+            return encode(["address"], [ZERO_ADDRESS if response == "removed" else token])
+        if data == keccak(text="latestTimestamp()")[:4]:
+            if response == "removed":
+                raise ContractLogicError("execution reverted")
+            return encode(
+                ["uint256"],
+                [block.timestamp if response.endswith("fresh") else block.timestamp - 86401],
+            )
+        if data == keccak(text="latestAnswer()")[:4]:
+            return encode(["int256"], [125000000])
+        assert data == keccak(text="decimals()")[:4]
+        return encode(["uint8"], [8])
 
-    static_feed = Feed.__new__(Feed)
-    static_feed.address = "0xStaticFeed"
-    static_feed.asset = MagicMock()
-    static_feed.asset.__eq__ = lambda self, other: str(other) == asset_address
-    static_feed.start_block = 0
-    chainlink._feeds = [static_feed]
+    price, get_feed = AsyncMock(return_value=None), AsyncMock(return_value=feed)
+    monkeypatch.setattr(fixture, "chainlink", SimpleNamespace(get_price=price, get_feed=get_feed))
+    monkeypatch.setattr(_rpc.BlockRef, "resolve", AsyncMock(return_value=block))
+    monkeypatch.setattr(_rpc.BlockRef, "verify", AsyncMock())
+    code = AsyncMock(return_value=b"deployed")
+    monkeypatch.setattr(
+        reference, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc, get_code=code))
+    )
+    if response.endswith("fresh"):
+        with pytest.raises(AssertionError):
+            await fixture.test_chainlink_latest(token)
+    else:
+        # Staleness or a removed aggregator is independently proven, not skipped.
+        await fixture.test_chainlink_latest(token)
+    expected = [
+        "getCurrentPhaseId(address,address)",
+        "getPhaseFeed(address,address,uint16)",
+        "latestTimestamp()",
+    ]
+    if response == "removed":
+        expected.append("aggregator()")
+    elif response.endswith("fresh"):
+        expected.extend(["latestAnswer()", "decimals()"])
+    assert seen == [keccak(text=signature)[:4] for signature in expected]
+    price.assert_awaited_once_with(token, block=block, sync=False)
+    get_feed.assert_awaited_once_with(token, block=block, sync=False)
+    code.assert_awaited_once_with(convert.to_address(registry), block.identifier)
 
-    # Mock _feeds_from_events.objects to yield a feed for a DIFFERENT asset
-    other_asset = "0x0000000000000000000000000000000000000001"
 
-    def make_feed_for_other(address, block):
-        feed = Feed.__new__(Feed)
-        feed.address = address
-        feed.asset = MagicMock()
-        feed.asset.__eq__ = lambda self, other: str(other) == other_asset
-        feed.start_block = block
-        return feed
+@run_async_test
+@pytest.mark.parametrize(
+    "error", [TypeError("bad decoder"), RuntimeError("RPC failed"), asyncio.CancelledError()]
+)
+async def test_latest_feed_validation_propagates_unexpected_errors(
+    monkeypatch: Any, error: BaseException
+) -> None:
+    from tests import price_expectations as reference
+    from tests.prices import test_chainlink as fixture
+    from y.prices import _rpc
 
-    async def mock_objects(to_block):
-        yield make_feed_for_other("0xSomeOtherFeed", 10_000_000)
-
-    mock_events = MagicMock()
-    mock_events.objects = mock_objects
-    chainlink._feeds_from_events = mock_events
-
-    # Test the logic directly
-    event_feeds = []
-    async for feed in chainlink._feeds_from_events.objects(to_block=20_000_000):
-        event_feeds.append(feed)
-
-    result = None
-    for feed in reversed(event_feeds):
-        if asset_address == feed.asset:
-            result = feed
-            break
-
-    if result is None:
-        for feed in chainlink._feeds:
-            if asset_address == feed.asset:
-                result = feed
-                break
-
-    assert result is static_feed
+    token = "0x0000000000000000000000000000000000000101"
+    block = _rpc.BlockRef(1, 20_000_000, "0x" + "12" * 32, 1_700_000_000)
+    rpc = AsyncMock(side_effect=error)
+    monkeypatch.setattr(_rpc.BlockRef, "resolve", AsyncMock(return_value=block))
+    monkeypatch.setattr(
+        reference,
+        "dank_web3",
+        SimpleNamespace(
+            eth=SimpleNamespace(call=rpc, get_code=AsyncMock(return_value=b"deployed"))
+        ),
+    )
+    with pytest.raises(type(error)) as raised:
+        await fixture.test_chainlink_latest(token)
+    assert raised.value is error
+    rpc.assert_awaited_once()

@@ -1,0 +1,46 @@
+{
+  "identical_543_test_ids": true,
+  "verified_current_source_files": 324,
+  "source_archive_sha256": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
+  "runs": [
+    {
+      "python": "3.11",
+      "run": "v3-inventory-final-311",
+      "source_archive_sha256": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
+      "image": "sha256:7733e7c3a22d67b83d79e2da12d9362162270189c77019e61ce9ee9fcd50f9c3",
+      "passed": 543,
+      "compiled_extensions": 10,
+      "supervisor_seconds": 222.99151587486267,
+      "command_seconds": 222.13666129299963,
+      "peak_cgroup_bytes": 1139884032,
+      "mypy_count": 1788,
+      "mypy_additions": 0
+    },
+    {
+      "python": "3.12",
+      "run": "v3-inventory-final-312",
+      "source_archive_sha256": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
+      "image": "sha256:1604c47a0df478205ab6e8be72017845c5bdeaea8779f72375eea7b9fd18713a",
+      "passed": 543,
+      "compiled_extensions": 10,
+      "supervisor_seconds": 202.06778597831726,
+      "command_seconds": 201.08812287599721,
+      "peak_cgroup_bytes": 1186885632,
+      "mypy_count": 1788,
+      "mypy_additions": 0
+    },
+    {
+      "python": "3.13",
+      "run": "v3-inventory-repaired-313",
+      "source_archive_sha256": "f464d5b194ea52de91d1290fac7fd0c1b0602e32cf5a053a4026914dafc53ca2",
+      "image": "sha256:5a7b0df3d3255bfb910604ff75ee0bfb6594c056ab27fe7233123517167ffb33",
+      "passed": 543,
+      "compiled_extensions": 10,
+      "supervisor_seconds": 211.36707210540771,
+      "command_seconds": 210.44303650100483,
+      "peak_cgroup_bytes": 1366507520,
+      "mypy_count": 1788,
+      "mypy_additions": 0
+    }
+  ]
+}

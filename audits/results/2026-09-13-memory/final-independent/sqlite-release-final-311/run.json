@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m aiosqlite.tests && python -m mypy"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789300817.8246589,
+  "source_sha": "b8265cce6f09bcc8015ea09036f5e05c4546d740",
+  "source_revision": "b8265cce6f09bcc8015ea09036f5e05c4546d740",
+  "source_archive_sha256": "166fa22e15c372f2080bae63b7aabf5daea5fc36b5fef49669ead26dc1ab4e2a",
+  "image": "sha256:4b31ed032261dfed0725fbb2b24d22081d4454dcd34d77ec2dacace144b97491",
+  "exit_code": 0,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 2.674014091491699
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "file": "owner-full.json",
+    "scrubbed_original_sha256": "708bd5a8a896bb709d60a3a0123f84bf2aac42a9a0811f940204d2d073bb42b1",
+    "published_sha256": "4d72d54bf2504db422a252f5e780a71253068b39cc30b53ddd553cf9718bf2a3"
+  },
+  {
+    "file": "pytest.xml",
+    "scrubbed_original_sha256": "2fef4a78067a58548233ba2f257fafd7c9b8cf06a5b43041bc7511010269b52b",
+    "published_sha256": "14f59635550b6374bf68265da8fb825c077f4046ec9ca0e2b55b6b5020a5f510"
+  }
+]

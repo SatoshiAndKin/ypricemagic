@@ -1,0 +1,23 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=/runner",
+    "python",
+    "-P",
+    "-c",
+    "import json,subprocess,sys\nfrom pathlib import Path\nimport a_sync\nfrom mypy import version\ncompleted=subprocess.run([sys.executable,'-P','-m','mypy'],capture_output=True,text=True)\nreport=Path('/reports')\n(report/'mypy-stdout.txt').write_text(completed.stdout)\n(report/'mypy-stderr.txt').write_text(completed.stderr)\n(report/'mypy-result.json').write_text(json.dumps({'exit_code':completed.returncode,'mypy_version':version.__version__,'plugin_dependency':a_sync.__file__})+'\\n')\nprint('\\n'.join(completed.stdout.splitlines()[-2:]))\nprint(completed.stderr[-500:])\nraise SystemExit(completed.returncode)\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789328614.445926,
+  "source_sha": "221f5e62e4ab53ee7ce0333700d471b22fa23757",
+  "source_revision": "worktree",
+  "source_archive_sha256": "58abaa055aedd392504cfa3a2d53117e73425353fe388fafda8287b30da55d65",
+  "image": "sha256:76c196313c114b21d4d5a95223cfee6b303c4b8241332791d82632b528415c3f",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 4.98482084274292
+}

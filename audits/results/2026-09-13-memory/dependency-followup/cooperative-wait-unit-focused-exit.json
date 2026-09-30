@@ -1,0 +1,19 @@
+{
+  "exit_code": 0,
+  "command": [
+    "docker",
+    "--context",
+    "colima-ypricemagic",
+    "exec",
+    "-w",
+    "/reports/cooperative-wait-repair",
+    "-e",
+    "PYTEST_PLUGINS=pytest_asyncio_cooperative.plugin",
+    "-e",
+    "PYTHONPATH=/reports/cooperative-wait-repair",
+    "ypricemagic-validation-job",
+    "sh",
+    "-c",
+    "python -m venv /reports/cooperative-unit && /reports/cooperative-unit/bin/python -m pip install -r /reports/cooperative-wait-unit-requirements.txt && /reports/cooperative-unit/bin/python /runner/focused.py"
+  ]
+}

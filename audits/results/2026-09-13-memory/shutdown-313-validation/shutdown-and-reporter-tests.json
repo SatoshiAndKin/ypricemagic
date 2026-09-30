@@ -1,0 +1,206 @@
+[
+  {
+    "phase": "setup",
+    "elapsed_seconds": 25.719488191999517,
+    "rss_peak_bytes": 211156992,
+    "live_tasks": 0,
+    "test": "tests/test_memory_release.py::test_database_worker_reuses_connection_and_allows_process_exit[False]",
+    "outcome": "passed",
+    "duration": 0.00021470999945449876,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 29.650738006999745,
+    "rss_peak_bytes": 211156992,
+    "live_tasks": 0,
+    "test": "tests/test_memory_release.py::test_database_worker_reuses_connection_and_allows_process_exit[False]",
+    "outcome": "passed",
+    "duration": 3.931051813000522,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "teardown",
+    "elapsed_seconds": 29.650911382999766,
+    "rss_peak_bytes": 211156992,
+    "live_tasks": 0,
+    "test": "tests/test_memory_release.py::test_database_worker_reuses_connection_and_allows_process_exit[False]",
+    "outcome": "passed",
+    "duration": 5.716699979529949e-05,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "setup",
+    "elapsed_seconds": 29.65121796800031,
+    "rss_peak_bytes": 211156992,
+    "live_tasks": 0,
+    "test": "tests/test_memory_release.py::test_database_worker_reuses_connection_and_allows_process_exit[True]",
+    "outcome": "passed",
+    "duration": 8.791799973550951e-05,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 33.5551437690001,
+    "rss_peak_bytes": 211156992,
+    "live_tasks": 0,
+    "test": "tests/test_memory_release.py::test_database_worker_reuses_connection_and_allows_process_exit[True]",
+    "outcome": "passed",
+    "duration": 3.903760842000338,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "teardown",
+    "elapsed_seconds": 33.55531056200016,
+    "rss_peak_bytes": 211156992,
+    "live_tasks": 0,
+    "test": "tests/test_memory_release.py::test_database_worker_reuses_connection_and_allows_process_exit[True]",
+    "outcome": "passed",
+    "duration": 5.983400023978902e-05,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 0,
+      "multicall_uid": 0,
+      "request_uid": 0,
+      "jsonrpc_batch_uid": 0
+    }
+  },
+  {
+    "phase": "setup",
+    "elapsed_seconds": 33.88199799100039,
+    "rss_peak_bytes": 213516288,
+    "live_tasks": 0,
+    "test": "tests/test_dank_import_guard.py::test_import_dank_w3_returns_underlying_object",
+    "outcome": "passed",
+    "duration": 8.416699984081788e-05,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 9,
+      "multicall_uid": 2,
+      "request_uid": 1,
+      "jsonrpc_batch_uid": 3
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 33.882219741999506,
+    "rss_peak_bytes": 213516288,
+    "live_tasks": 0,
+    "test": "tests/test_dank_import_guard.py::test_import_dank_w3_returns_underlying_object",
+    "outcome": "passed",
+    "duration": 0.00014595900029235054,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {}
+  },
+  {
+    "phase": "teardown",
+    "elapsed_seconds": 33.88231120099954,
+    "rss_peak_bytes": 213516288,
+    "live_tasks": 0,
+    "test": "tests/test_dank_import_guard.py::test_import_dank_w3_returns_underlying_object",
+    "outcome": "passed",
+    "duration": 3.783300053328276e-05,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 9,
+      "multicall_uid": 2,
+      "request_uid": 1,
+      "jsonrpc_batch_uid": 3
+    }
+  },
+  {
+    "phase": "setup",
+    "elapsed_seconds": 33.88255274400035,
+    "rss_peak_bytes": 213516288,
+    "live_tasks": 0,
+    "test": "tests/test_dank_import_guard.py::test_import_dank_w3_raises_actionable_error_with_cause",
+    "outcome": "passed",
+    "duration": 8.825099939713255e-05,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 9,
+      "multicall_uid": 2,
+      "request_uid": 1,
+      "jsonrpc_batch_uid": 3
+    }
+  },
+  {
+    "phase": "call",
+    "elapsed_seconds": 33.882792911999786,
+    "rss_peak_bytes": 213516288,
+    "live_tasks": 0,
+    "test": "tests/test_dank_import_guard.py::test_import_dank_w3_raises_actionable_error_with_cause",
+    "outcome": "passed",
+    "duration": 0.0001225420000992017,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {}
+  },
+  {
+    "phase": "teardown",
+    "elapsed_seconds": 33.88369204199989,
+    "rss_peak_bytes": 213516288,
+    "live_tasks": 0,
+    "test": "tests/test_dank_import_guard.py::test_import_dank_w3_raises_actionable_error_with_cause",
+    "outcome": "passed",
+    "duration": 3.8333000702550635e-05,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {},
+    "logical_rpc_counts": {
+      "call_uid": 9,
+      "multicall_uid": 2,
+      "request_uid": 1,
+      "jsonrpc_batch_uid": 3
+    }
+  }
+]

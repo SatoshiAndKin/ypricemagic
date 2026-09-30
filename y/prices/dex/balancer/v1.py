@@ -1,43 +1,49 @@
 import logging
 from decimal import Decimal
+from typing import Any, Literal, cast
 
 import a_sync
-from a_sync import cgather
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import chain
-from brownie.convert.datatypes import EthAddress
 from brownie.exceptions import VirtualMachineError
+from brownie.network.contract import Contract as BrownieContract
 from eth_abi.exceptions import InvalidPointer
-from typing_extensions import Self
 from web3.exceptions import ContractLogicError
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y._decorators import stuck_coro_debugger
 from y.classes.common import ERC20
 from y.constants import dai, usdc, wbtc, weth
-from y.contracts import Contract, contract_creation_block_async
-from y.datatypes import Address, AddressOrContract, AnyAddressType, Block, Pool, UsdPrice, UsdValue
+from y.contracts import Contract
+from y.datatypes import Address, AddressOrContract, AnyAddressType, Block, Pool, PriceResult
 from y.networks import Network
 from y.prices import magic
+from y.prices._candidates import derive_price, gather_owned, pool_is_ignored, valid_price
 from y.prices.dex.balancer._abc import BalancerABC, BalancerPool
 
-EXCHANGE_PROXY = {
-    Network.Mainnet: "0x3E66B66Fd1d0b02fDa6C811Da9E0547970DB2f21",
-}.get(chain.id)
+EXCHANGE_PROXY = dict[int, str](
+    {
+        Network.Mainnet: "0x3E66B66Fd1d0b02fDa6C811Da9E0547970DB2f21",
+    }
+).get(chain.id)
 
 SCALES_TO_TRY = [1.0, 0.5, 0.1]
-TOKENOUTS_TO_TRY = [weth, dai, usdc, wbtc]
+TOKENOUTS_TO_TRY = [token for token in (weth, dai, usdc, wbtc) if token is not None]
 
 logger = logging.getLogger(__name__)
 
 
+@stuck_coro_debugger
 async def _calc_out_value(
+    token_in: AddressOrContract,
     token_out: AddressOrContract,
     total_outout: int,
     scale: float,
     block: int,
     skip_cache: bool = ENVS.SKIP_CACHE,
-) -> float:
+    ignore_pools: tuple[Pool, ...] = (),
+    source: str = "Balancer V1 conversion",
+) -> PriceResult | None:
     """Calculate the output value for a given token.
 
     Args:
@@ -51,19 +57,27 @@ async def _calc_out_value(
         The calculated output value.
 
     Examples:
-        >>> await _calc_out_value(weth, 1000, 1.0, 12345678)
+        >>> await _calc_out_value("0xTokenAddress", weth, 1000, 1.0, 12345678)
         0.5
 
     See Also:
         - :func:`y.prices.magic.get_price`
     """
-    out_scale, out_price = await cgather(
-        ERC20._get_scale_for(token_out),
-        magic.get_price(
-            token_out, block, skip_cache=skip_cache, ignore_pools=ignore_pools, sync=False
-        ),
+    out_scale, out_price = await gather_owned(
+        [
+            ERC20._get_scale_for(token_out),
+            magic.get_price(
+                token_out, block, skip_cache=skip_cache, ignore_pools=ignore_pools, sync=False
+            ),
+        ]
     )
-    return (total_outout / out_scale) * float(out_price) / scale
+    out_scale = cast(int, out_scale)
+    out_price = cast(PriceResult | None, out_price)
+    if out_price is not None and valid_price(out_price):
+        return derive_price(
+            token_in, (total_outout / out_scale) * float(out_price) / scale, source, out_price
+        )
+    return None
 
 
 class BalancerV1Pool(BalancerPool):
@@ -91,12 +105,15 @@ class BalancerV1Pool(BalancerPool):
             ERC20(token, asynchronous=self.asynchronous) for token in await contract.getFinalTokens
         ]
 
-    __tokens__: HiddenMethodDescriptor[Self, list[ERC20]]
+    __tokens__: HiddenMethodDescriptor["BalancerV1Pool", list[ERC20]]
 
     @stuck_coro_debugger
     async def get_tvl(
-        self, block: Block | None = None, skip_cache: bool = ENVS.SKIP_CACHE
-    ) -> UsdValue | None:
+        self,
+        block: Block | None = None,
+        skip_cache: bool = ENVS.SKIP_CACHE,
+        ignore_pools: tuple[Pool, ...] = (),
+    ) -> Decimal | None:
         """Get the total value locked (TVL) in the pool.
 
         Args:
@@ -122,6 +139,7 @@ class BalancerV1Pool(BalancerPool):
                 block=block,
                 return_None_on_failure=True,
                 skip_cache=skip_cache,
+                ignore_pools=(*ignore_pools, self),
                 sync=False,
             )
             is not None
@@ -135,14 +153,16 @@ class BalancerV1Pool(BalancerPool):
             block=block,
             return_None_on_failure=True,
             skip_cache=skip_cache,
+            ignore_pools=(*ignore_pools, self),
         ).values()
 
         # in case we couldn't get prices for all tokens, we can extrapolate from the prices we did get
         good_value = sum(
-            balance * Decimal(float(price)) for balance, price in zip(good_balances.values(), prices)
+            balance * Decimal(float(cast(PriceResult, price)))
+            for balance, price in zip(good_balances.values(), prices)
         )
 
-        return good_value / len(good_balances) * len(token_balances)
+        return cast(Decimal, good_value / len(good_balances) * len(token_balances))
 
     @stuck_coro_debugger
     async def get_balances(self, block: Block | None = None) -> dict[ERC20, Decimal]:
@@ -162,10 +182,13 @@ class BalancerV1Pool(BalancerPool):
         See Also:
             - :class:`~y.classes.common.ERC20`
         """
-        return await a_sync.map(self.get_balance, self.__tokens__, block=block or "latest")
+        return cast(
+            dict[ERC20, Decimal],
+            await self.get_balance.map(self.__tokens__, block=block or "latest"),
+        )
 
     @stuck_coro_debugger
-    async def get_balance(self, token: AnyAddressType, block: Block) -> Decimal:
+    async def get_balance(self, token: AnyAddressType, block: Block | Literal["latest"]) -> Decimal:
         """Get the balance of a specific token in the pool.
 
         Args:
@@ -186,7 +209,7 @@ class BalancerV1Pool(BalancerPool):
 
     @stuck_coro_debugger
     @a_sync.a_sync(ram_cache_maxsize=10_000, ram_cache_ttl=10 * 60)
-    async def check_liquidity(self, token: Address, block: Block) -> int:
+    async def check_liquidity(self, token: Address, block: Block | Literal["latest"]) -> int:
         """Check the liquidity of a specific token in the pool.
 
         Args:
@@ -201,7 +224,7 @@ class BalancerV1Pool(BalancerPool):
             >>> await pool.check_liquidity("0xabcdefabcdefabcdefabcdefabcdefabcdef")
             1000
         """
-        if block < await self.deploy_block(sync=False):
+        if block != "latest" and block < await self.deploy_block(sync=False):
             return 0
         contract = await Contract.coroutine(self.address)
         try:
@@ -248,37 +271,34 @@ class BalancerV1(BalancerABC[BalancerV1Pool]):
         block: Block | None = None,
         skip_cache: bool = ENVS.SKIP_CACHE,
         ignore_pools: tuple[Pool, ...] = (),
-    ) -> UsdPrice | None:
-        """Get the price of a token in the pool.
+    ) -> PriceResult | None:
+        """Use one liquidity-ranked Balancer V1 pool for the full input."""
+        from y.prices._routing import liquidity_price
 
-        Args:
-            token_address: The token address or contract.
-            block: The block number to query.
-            skip_cache: Whether to skip the cache.
+        return await liquidity_price(
+            str(token_address),
+            block,
+            ignore_pools=ignore_pools,
+            skip_cache=skip_cache,
+            first_markets=("Balancer V1",),
+        )
 
-        Returns:
-            The price of the token in USD, or None if it cannot be determined.
-
-        Examples:
-            >>> balancer = BalancerV1(asynchronous=True)
-            >>> await balancer.get_token_price("0xabcdefabcdefabcdefabcdefabcdefabcdef")
-            1.23
-
-        See Also:
-            - :class:`~y.datatypes.UsdPrice`
-        """
-        if block is not None and block < await contract_creation_block_async(
-            self.exchange_proxy, True
-        ):
+    @stuck_coro_debugger
+    async def _get_split(
+        self,
+        token_in: AddressOrContract,
+        token_out: AddressOrContract,
+        amount_in: int,
+        block: Block | None,
+    ) -> dict[str, Any] | None:
+        if self.exchange_proxy is None:
             return None
-        for scale in SCALES_TO_TRY:
-            # Can we get an output if we try smaller size? try consecutively smaller
-            if output := await self.get_some_output(
-                token_address, block=block, scale=scale, sync=False
-            ):
-                return await _calc_out_value(
-                    *output, scale, block=block, skip_cache=skip_cache, ignore_pools=ignore_pools
-                )
+        try:
+            return await self.exchange_proxy.viewSplitExactIn.coroutine(
+                token_in, token_out, amount_in, 32, block_identifier=block
+            )
+        except (ValueError, VirtualMachineError, ContractLogicError, InvalidPointer):
+            return None
 
     @stuck_coro_debugger
     async def check_liquidity_against(
@@ -304,24 +324,14 @@ class BalancerV1(BalancerABC[BalancerV1Pool]):
             >>> await balancer.check_liquidity_against("0xabcdefabcdefabcdefabcdefabcdefabcdef", "0x1234567890abcdef1234567890abcdef12345678")
             1000
         """
-        amount_in = await ERC20._get_scale_for(token_in) * scale
-        try:
-            # across various dep versions we get these various excs
-            view_split_exact_in = await self.exchange_proxy.viewSplitExactIn.coroutine(
-                token_in,
-                token_out,
-                amount_in,
-                32,  # NOTE: 32 is max
-                block_identifier=block,
-            )
-            return view_split_exact_in["totalOutput"]
-        except (ValueError, VirtualMachineError, ContractLogicError, InvalidPointer):
-            return None
+        amount_in = int(Decimal(await ERC20._get_scale_for(token_in)) * Decimal(str(scale)))
+        split = await self._get_split(token_in, token_out, amount_in, block)
+        return split["totalOutput"] if split is not None else None
 
     @stuck_coro_debugger
     async def get_some_output(
         self, token_in: AddressOrContract, scale: int = 1, block: Block | None = None
-    ) -> tuple[EthAddress, int] | None:
+    ) -> tuple[BrownieContract, int] | None:
         """Get some output for a given input token.
 
         Args:
@@ -362,9 +372,25 @@ class BalancerV1(BalancerABC[BalancerV1Pool]):
             >>> await balancer.check_liquidity("0xabcdefabcdefabcdefabcdefabcdefabcdef", 12345678)
             1000
         """
-        pools = [pool for pool in pools if pool not in ignore_pools]
+        if self.exchange_proxy is None:
+            return 0
+        amount = await ERC20._get_scale_for(token)
+        splits = await gather_owned(
+            self._get_split(token, token_out, amount, block)
+            for token_out in TOKENOUTS_TO_TRY
+            if token_out != token
+        )
+        pools = {
+            BalancerV1Pool(swap["pool"], asynchronous=True)
+            for split in splits
+            if split is not None
+            for swap in split["swaps"]
+            if not pool_is_ignored(swap["pool"], ignore_pools)
+        }
         return (
-            await BalancerV1Pool.check_liquidity.max(pools, token=token, block=block, sync=False)
+            await BalancerV1Pool.check_liquidity.map(pools, token=token, block=block).max(
+                sync=False
+            )
             if pools
             else 0
         )

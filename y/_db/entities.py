@@ -1,4 +1,5 @@
 import logging
+from builtins import type as Type
 from collections.abc import Callable
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
@@ -16,17 +17,20 @@ from pony.orm import (
     TransactionIntegrityError,
     commit,
     composite_index,
-    db_session,
 )
 from typing_extensions import ParamSpec
 
 from y._db.decorators import retry_locked, ydb_write_threads
+from y._db.typing import db_session
 
 db = Database()
 
 # makes type checking work, see below for info:
 # https://pypi.org/project/pony-stubs/
-DbEntity = db.Entity
+if TYPE_CHECKING:
+    from pony.orm.core import Entity as DbEntity
+else:
+    DbEntity = db.Entity
 
 
 logger = logging.getLogger(__name__)
@@ -259,29 +263,31 @@ class BlockAtTimestamp(DbEntity):
 __write_threads_submit = ydb_write_threads.submit
 
 
-def insert_nowait(type: DbEntity, **kwargs: Any) -> typing_Optional[DbEntity]:
+def insert_nowait(type: Type[DbEntity], **kwargs: Any) -> None:
     # sourcery skip: simplify-boolean-comparison
     __write_threads_submit(exc_wrapper, insert, type, **kwargs, fire_and_forget=True)
 
 
 __P = ParamSpec("__P")
 __T = TypeVar("__T")
+_Entity = TypeVar("_Entity", bound=DbEntity)
 
 
 def exc_wrapper(
     func: Callable[__P, __T], *args: __P.args, **kwargs: __P.kwargs
-) -> typing_Optional[DbEntity]:
+) -> typing_Optional[__T]:
     try:
         return func(*args, **kwargs)
     except InvalidOperation:
         pass
     except Exception as e:
         logger.exception(e)
+    return None
 
 
 @db_session
 @retry_locked
-def insert(type: DbEntity, **kwargs: Any) -> typing_Optional[DbEntity]:
+def insert(type: Type[_Entity], **kwargs: Any) -> typing_Optional[_Entity]:
     """Inserts a new entity into the database with retry logic.
 
     This function attempts to insert a new entity of the specified type into the database.

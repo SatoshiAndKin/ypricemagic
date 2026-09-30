@@ -1,0 +1,10 @@
+{
+  "complete": true,
+  "functions": 1000,
+  "bytes_per_function": 65536,
+  "retained_functions": 1000,
+  "python_current_bytes": 65982172,
+  "python_peak_bytes": 65982598,
+  "rss_peak_bytes": 99151872,
+  "elapsed_seconds": 0.012815088004572317
+}

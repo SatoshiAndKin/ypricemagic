@@ -1,0 +1,129 @@
+{
+  "control": {
+    "complete": true,
+    "source_sha": "25b549a063a1775c2256be2906fec1bc2c998898",
+    "source_revision": "worktree",
+    "image": "sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b",
+    "exit_code": 1,
+    "peak_bytes": 1172873216,
+    "elapsed_seconds": 289.4279639720917,
+    "tests": {
+      "exit_code": 1,
+      "counts": {
+        "setup:passed": 251,
+        "call:passed": 247,
+        "teardown:passed": 251,
+        "call:failed": 4
+      },
+      "collected": 251
+    }
+  },
+  "312-focused": {
+    "complete": true,
+    "source_sha": "25b549a063a1775c2256be2906fec1bc2c998898",
+    "source_revision": "worktree",
+    "image": "sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b",
+    "exit_code": 0,
+    "peak_bytes": 1162887168,
+    "elapsed_seconds": 255.77203011512756,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 251,
+        "call:passed": 251,
+        "teardown:passed": 251
+      },
+      "collected": 251
+    }
+  },
+  "311-focused": {
+    "complete": true,
+    "source_sha": "25b549a063a1775c2256be2906fec1bc2c998898",
+    "source_revision": "worktree",
+    "image": "sha256:38f6e4cd7d2a9df84610e38783ff92bc8967e40b41ce5cda86581519c271a939",
+    "exit_code": 0,
+    "peak_bytes": 1127145472,
+    "elapsed_seconds": 257.59393310546875,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 251,
+        "call:passed": 251,
+        "teardown:passed": 251
+      },
+      "collected": 251
+    }
+  },
+  "313-focused": {
+    "complete": true,
+    "source_sha": "25b549a063a1775c2256be2906fec1bc2c998898",
+    "source_revision": "worktree",
+    "image": "sha256:24530dc2ccbee2734410f6507d181baa1172343f32d6bc3111f0fdcece817661",
+    "exit_code": 0,
+    "peak_bytes": 1166450688,
+    "elapsed_seconds": 290.1568877696991,
+    "tests": {
+      "exit_code": 0,
+      "counts": {
+        "setup:passed": 251,
+        "call:passed": 251,
+        "teardown:passed": 251
+      },
+      "collected": 251
+    }
+  },
+  "312-types": {
+    "complete": true,
+    "source_sha": "25b549a063a1775c2256be2906fec1bc2c998898",
+    "source_revision": "worktree",
+    "image": "sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b",
+    "exit_code": 1,
+    "peak_bytes": 564613120,
+    "elapsed_seconds": 25.98093295097351
+  },
+  "311-types": {
+    "complete": true,
+    "source_sha": "25b549a063a1775c2256be2906fec1bc2c998898",
+    "source_revision": "worktree",
+    "image": "sha256:38f6e4cd7d2a9df84610e38783ff92bc8967e40b41ce5cda86581519c271a939",
+    "exit_code": 1,
+    "peak_bytes": 540004352,
+    "elapsed_seconds": 41.559669971466064
+  },
+  "313-types": {
+    "complete": true,
+    "source_sha": "25b549a063a1775c2256be2906fec1bc2c998898",
+    "source_revision": "worktree",
+    "image": "sha256:24530dc2ccbee2734410f6507d181baa1172343f32d6bc3111f0fdcece817661",
+    "exit_code": 1,
+    "peak_bytes": 564719616,
+    "elapsed_seconds": 26.498361110687256
+  },
+  "312-types-final": {
+    "complete": true,
+    "source_sha": "25b549a063a1775c2256be2906fec1bc2c998898",
+    "source_revision": "worktree",
+    "image": "sha256:27ffa2884a5bf1a6538184ec79af495dc0d45839a5b20317e2526bdc5e7be46b",
+    "exit_code": 1,
+    "peak_bytes": 564416512,
+    "elapsed_seconds": 25.15342092514038
+  },
+  "311-types-final": {
+    "complete": true,
+    "source_sha": "25b549a063a1775c2256be2906fec1bc2c998898",
+    "source_revision": "worktree",
+    "image": "sha256:38f6e4cd7d2a9df84610e38783ff92bc8967e40b41ce5cda86581519c271a939",
+    "exit_code": 1,
+    "peak_bytes": 540438528,
+    "elapsed_seconds": 23.756932973861694
+  },
+  "313-types-final": {
+    "complete": true,
+    "source_sha": "25b549a063a1775c2256be2906fec1bc2c998898",
+    "source_revision": "worktree",
+    "image": "sha256:24530dc2ccbee2734410f6507d181baa1172343f32d6bc3111f0fdcece817661",
+    "exit_code": 1,
+    "peak_bytes": 564289536,
+    "elapsed_seconds": 24.568898916244507
+  }
+}

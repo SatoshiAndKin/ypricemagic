@@ -1,0 +1,19 @@
+F
+======================================================================
+FAIL: test_retry_sleep_patch_cannot_spin_or_fail_diagnostic_sampler (test_runner.SamplerTests.test_retry_sleep_patch_cannot_spin_or_fail_diagnostic_sampler)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/bryan/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/bryan/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/private/tmp/yprice-review3/sampler-negative/test_runner.py", line 33, in test_retry_sleep_patch_cannot_spin_or_fail_diagnostic_sampler
+    self.assertFalse(sampler.done())
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+FAILED (failures=1)

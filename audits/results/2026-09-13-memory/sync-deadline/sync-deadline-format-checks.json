@@ -1,0 +1,30 @@
+{
+  "source": "tools/validation/test_timeout.py",
+  "sha256": "81b7c048ab228edb70ae4f4fc72f86c774a88a14b0504250d80bb27f58eae63e",
+  "checks": [
+    {
+      "tool": "Black",
+      "version": "25.9.0",
+      "exit_code": 0,
+      "command": "black --check tools/validation/test_timeout.py"
+    },
+    {
+      "tool": "isort",
+      "version": "7.0.0",
+      "exit_code": 0,
+      "command": "isort --check-only tools/validation/test_timeout.py"
+    },
+    {
+      "tool": "autoflake",
+      "version": "2.2.1",
+      "exit_code": 0,
+      "command": "autoflake --check --remove-all-unused-imports --ignore-init-module-imports tools/validation/test_timeout.py"
+    }
+  ],
+  "input_verification": {
+    "all_three_frozen_runtime_requirements_match_worktree": true,
+    "all_three_frozen_development_requirements_match_worktree": true,
+    "task_config_diff_check_exit_code": 0,
+    "pre_existing_generated_c_patch_unchanged": true
+  }
+}

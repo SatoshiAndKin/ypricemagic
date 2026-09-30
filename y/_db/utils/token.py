@@ -2,6 +2,7 @@ import logging
 import threading
 import time
 from functools import lru_cache
+from operator import getitem
 
 import a_sync
 from cachetools import TTLCache, cached
@@ -67,7 +68,7 @@ def get_token(address: str) -> Token:
         except TransactionIntegrityError as e:
             if "Address.chain, Address.address" in str(e).split(":")[-1]:
                 try:
-                    addr = Address[CHAINID, address]  # type: ignore [type-arg]
+                    addr = getitem(Address, (CHAINID, address))
                 except ObjectNotFound:
                     raise RuntimeError(
                         "you probably have an eth-portfolio enhanced db but no eth-portfolio in your env"
@@ -77,8 +78,7 @@ def get_token(address: str) -> Token:
                 addr.delete()
                 commit()
                 continue
-        if entity is not None:
-            return entity
+            raise
         time.sleep(1)
 
 
@@ -136,7 +136,7 @@ def get_bucket(address: str) -> str | None:
         >>> print(bucket)
     """
     if address == constants.EEE_ADDRESS:
-        return
+        return None
     if (bucket := known_buckets().pop(address, None)) is None:
         get_token = _get_get_token()
         bucket = get_token(address, sync=True).bucket
@@ -195,7 +195,7 @@ def get_symbol(address: str) -> str | None:
     return symbol
 
 
-def set_symbol(address: str, symbol: str):
+def set_symbol(address: str, symbol: str) -> None:
     """Set the symbol for a given token address.
 
     This function updates the symbol associated with a token address in the
@@ -403,6 +403,7 @@ def _get_token_decimals(address: str) -> int | None:
     if decimals:
         _logger_debug("found %s decimals %s in ydb", address, decimals)
         return decimals
+    return None
 
 
 # startup caches
@@ -447,7 +448,7 @@ def known_buckets() -> dict[str, str]:
 
 @cached(TTLCache(maxsize=1, ttl=60 * 60), lock=threading.Lock())
 @log_result_count("token decimals")
-def known_decimals() -> dict[Address, int]:
+def known_decimals() -> dict[str, int]:
     """Cache and return all known token decimals for this chain.
 
     This function caches and returns all known token decimals for the current
@@ -467,7 +468,7 @@ def known_decimals() -> dict[Address, int]:
 
 @cached(TTLCache(maxsize=1, ttl=60 * 60), lock=threading.Lock())
 @log_result_count("token symbols")
-def known_symbols() -> dict[Address, str]:
+def known_symbols() -> dict[str, str]:
     """Cache and return all known token symbols for this chain.
 
     This function caches and returns all known token symbols for the current
@@ -485,7 +486,7 @@ def known_symbols() -> dict[Address, str]:
 
 @cached(TTLCache(maxsize=1, ttl=60 * 60), lock=threading.Lock())
 @log_result_count("token names")
-def known_names() -> dict[Address, str]:
+def known_names() -> dict[str, str]:
     """Cache and return all known token names for this chain.
 
     This function caches and returns all known token names for the current

@@ -2,17 +2,21 @@
 A Python CLI tool for managing the database and debugging price retrieval.
 """
 
+from y._db.typing import db_session
+
 __all__ = ["db_nuke", "db_clear", "db_info", "db_vacuum", "db_select", "main"]
 
 import argparse
 import os
 import subprocess
 import sys
+from pathlib import Path
 from pprint import pprint
+from typing import Any, cast
 
 from cchecksum import to_checksum_address
 from faster_eth_utils import is_address
-from pony.orm import commit, count, db_session, delete, select
+from pony.orm import commit, count, select
 
 from y.prices.utils.debug import debug_price
 
@@ -28,7 +32,7 @@ def db_info() -> None:
 
     provider = connection_settings["provider"]
 
-    def get_size(entity) -> str:
+    def get_size(entity: Any) -> str:
         """
         Returns storage size in bytes for the given entity's table.
         For PostgreSQL returns pg_total_relation_size; for SQLite returns the database file size; otherwise 'N/A'.
@@ -54,9 +58,9 @@ def db_info() -> None:
                 num = count(e for e in entity)
                 print(f"  Table {entity.__name__}: {num} rows")
             db_file = connection_settings.get("filename", "")
-            size = os.path.getsize(db_file)
+            file_size = os.path.getsize(cast(str, db_file))
             print("-------------------------")
-            print(f"  Total Size {size} bytes")
+            print(f"  Total Size {file_size} bytes")
 
     try:
         print_info()
@@ -80,7 +84,7 @@ def db_vacuum() -> None:
             import sqlite3
 
             db_file = connection_settings["filename"]
-            conn = sqlite3.connect(db_file)
+            conn = sqlite3.connect(cast(str, db_file))
             conn.execute("VACUUM;")
             conn.close()
         else:
@@ -120,7 +124,7 @@ def db_nuke(force: bool = False) -> None:
         print("All tables dropped; database cleared.")
 
 
-def db_clear(token: str = None, block: str = None) -> None:
+def db_clear(token: str | None = None, block: str | None = None) -> None:
     # sourcery skip: simplify-generator
     """
     Clears the 'Price' table rows based on token or block criteria.
@@ -144,8 +148,8 @@ def db_clear(token: str = None, block: str = None) -> None:
             print(f"Deleting prices for {token}")
             deleted = 0
             if is_address(token):
-                token = to_checksum_address(token)
-                for t in select(t for t in Token if t.chain.id == CHAINID and t.address == token):
+                address = to_checksum_address(token)
+                for t in select(t for t in Token if t.chain.id == CHAINID and t.address == address):
                     for p in select(p for p in Price if p.token == t and p.block):
                         print(f"Deleting {t.symbol} block {p.block.number} price {p.price}")
                         p.delete()
@@ -166,10 +170,11 @@ def db_clear(token: str = None, block: str = None) -> None:
             return deleted
         else:
             try:
-                block_number = int(block)
+                block_number = int(cast(str, block))
             except ValueError:
                 raise ValueError("Block must be an integer value.")
-            deleted = delete(p for p in Price if p.block.number == block_number)
+            # Delete rows directly: entity loading omits lazy composite-key fields.
+            deleted = select(p for p in Price if p.block.number == block_number).delete(bulk=True)
             return deleted
 
     total_deleted = clear_prices()
@@ -196,13 +201,29 @@ def db_select(target: str) -> None:
         else:
             details = {}
             # Extract token details from the entity's columns
-            for col in token.__class__._columns_:
+            for col in cast(list[str], getattr(token.__class__, "_columns_")):
                 try:
                     details[col] = getattr(token, col)
                 except AttributeError:
                     pass
             print("Token found:")
             pprint(details)
+
+
+def db_reset_prices(backup: str, chain: int) -> None:
+    """Back up the configured SQLite database and clear one chain's prices."""
+    from y._db.config import connection_settings
+    from y._db.price_cache import reset_prices
+
+    if connection_settings["provider"] != "sqlite":
+        raise ValueError("reset-prices requires a selected SQLite database")
+    database = Path(str(connection_settings["filename"]))
+    report = reset_prices(database, chain, Path(backup))
+    print(f"Database: {database}")
+    print(f"Backup: {backup}")
+    print(f"Chain {chain}: deleted {report['deleted']} of {report['before']} price rows")
+    print(f"Preserved {report['other_chain_rows']} price rows for other chains")
+    print("Restart writers to clear memory caches. Prices rebuild on demand.")
 
 
 def main() -> None:
@@ -213,6 +234,13 @@ def main() -> None:
         description="A CLI tool for managing the database and debugging operations."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
+
+    audit_parser = subparsers.add_parser(
+        "audit-prices", help="Audit historical prices against DeFiLlama"
+    )
+    audit_parser.add_argument("manifest", type=Path)
+    audit_parser.add_argument("--json", type=Path, required=True, dest="json_report")
+    audit_parser.add_argument("--csv", type=Path, required=True, dest="csv_report")
 
     # db command parser
     db_parser = subparsers.add_parser(
@@ -253,6 +281,12 @@ def main() -> None:
         "--block", type=str, help="Specify a block number to clear cached price data for."
     )
 
+    reset_parser = db_subparsers.add_parser(
+        "reset-prices", help="Back up SQLite and clear one chain's prices; stop writers first"
+    )
+    reset_parser.add_argument("--chain", type=int, required=True)
+    reset_parser.add_argument("--backup", required=True, help="New backup file path")
+
     # db nuke command
     nuke_parser = db_subparsers.add_parser("nuke", help="Drop all tables in the database")
     nuke_parser.add_argument("--force", action="store_true", help="Skip confirmation prompt")
@@ -286,8 +320,14 @@ def main() -> None:
     args = parser.parse_args()
 
     # Dispatch commands
-    if args.command == "db":
-        if args.db_command == "nuke":
+    if args.command == "audit-prices":
+        from y.audit import run_manifest
+
+        sys.exit(run_manifest(args.manifest, args.json_report, args.csv_report))
+    elif args.command == "db":
+        if args.db_command == "reset-prices":
+            db_reset_prices(args.backup, args.chain)
+        elif args.db_command == "nuke":
             db_nuke(force=args.force)
         elif args.db_command == "clear":
             db_clear(token=args.token, block=args.block)
@@ -319,7 +359,10 @@ def main() -> None:
 
             network = env.get("BROWNIE_NETWORK_ID")
             script = "debug-curve"
-            subprocess.run(["brownie", "run", script, "--network", network], env=env)
+            command = ["brownie", "run", script]
+            if network is not None:
+                command.extend(["--network", network])
+            subprocess.run(command, env=env)
         else:
             print("Unknown debug command.")
             sys.exit(1)

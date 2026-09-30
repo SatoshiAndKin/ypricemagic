@@ -1,0 +1,54 @@
+{
+  "source_archive_sha256": "707dffa857e3c6b5fc3801e90bd1e963d45fdf4fd816ade3c48fb36f0abeb37a",
+  "source_commit": "2d7784408172c9a7742493a490c3c54311832c94",
+  "failed": [
+    {
+      "test": "tests/test_v3_inventory_cache.py::test_cached_event_ranges_honor_both_inclusive_bounds[11-12-indices1-False-False]",
+      "error": "AssertionError: assert [<UniswapV3Po...00000123463'>] == [<UniswapV3Po...00000123463'>]\n  At index 0 diff: <UniswapV3Pool '0x0000000000000000000000000000000000123460'> != <UniswapV3Pool '0x0000000000000000000000000000000000123462'>\n  Left contains 2 more items, first extra item: <UniswapV3Pool '0x0000000000000000000000000000000000123462'>\n  Full diff:\n    [\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123460'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123461'>,\n     <UniswapV3Pool '0x0000000000000000000000000000000000123462'>,...\n  \n  ...Full output truncated (3 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests/test_v3_inventory_cache.py::test_cached_event_ranges_honor_both_inclusive_bounds[11-12-indices1-False-True]",
+      "error": "AssertionError: assert [<UniswapV3Po...00000123463'>] == [<UniswapV3Po...00000123463'>]\n  At index 0 diff: <UniswapV3Pool '0x0000000000000000000000000000000000123460'> != <UniswapV3Pool '0x0000000000000000000000000000000000123462'>\n  Left contains 2 more items, first extra item: <UniswapV3Pool '0x0000000000000000000000000000000000123462'>\n  Full diff:\n    [\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123460'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123461'>,\n     <UniswapV3Pool '0x0000000000000000000000000000000000123462'>,...\n  \n  ...Full output truncated (3 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests/test_v3_inventory_cache.py::test_cached_event_ranges_honor_both_inclusive_bounds[11-12-indices1-True-False]",
+      "error": "AssertionError: assert [<UniswapV3Po...00000123463'>] == [<UniswapV3Po...00000123463'>]\n  Left contains 2 more items, first extra item: <UniswapV3Pool '0x0000000000000000000000000000000000123462'>\n  Full diff:\n    [\n     <UniswapV3Pool '0x0000000000000000000000000000000000123462'>,\n     <UniswapV3Pool '0x0000000000000000000000000000000000123463'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123462'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123463'>,...\n  \n  ...Full output truncated (2 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests/test_v3_inventory_cache.py::test_cached_event_ranges_honor_both_inclusive_bounds[11-12-indices1-True-True]",
+      "error": "AssertionError: assert [<UniswapV3Po...00000123463'>] == [<UniswapV3Po...00000123463'>]\n  At index 0 diff: <UniswapV3Pool '0x0000000000000000000000000000000000123460'> != <UniswapV3Pool '0x0000000000000000000000000000000000123462'>\n  Left contains 2 more items, first extra item: <UniswapV3Pool '0x0000000000000000000000000000000000123462'>\n  Full diff:\n    [\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123460'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123461'>,\n     <UniswapV3Pool '0x0000000000000000000000000000000000123462'>,...\n  \n  ...Full output truncated (3 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests/test_v3_inventory_cache.py::test_cached_event_ranges_honor_both_inclusive_bounds[14-19-indices2-False-False]",
+      "error": "AssertionError: assert [<UniswapV3Po...00000123464'>] == []\n  Left contains 5 more items, first extra item: <UniswapV3Pool '0x0000000000000000000000000000000000123460'>\n  Full diff:\n    [\n  -  ,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123460'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123461'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123462'>,...\n  \n  ...Full output truncated (4 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests/test_v3_inventory_cache.py::test_cached_event_ranges_honor_both_inclusive_bounds[14-19-indices2-False-True]",
+      "error": "AssertionError: assert [<UniswapV3Po...00000123464'>] == []\n  Left contains 5 more items, first extra item: <UniswapV3Pool '0x0000000000000000000000000000000000123460'>\n  Full diff:\n    [\n  -  ,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123460'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123461'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123462'>,...\n  \n  ...Full output truncated (4 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests/test_v3_inventory_cache.py::test_cached_event_ranges_honor_both_inclusive_bounds[14-19-indices2-True-True]",
+      "error": "AssertionError: assert [<UniswapV3Po...00000123464'>] == []\n  Left contains 5 more items, first extra item: <UniswapV3Pool '0x0000000000000000000000000000000000123460'>\n  Full diff:\n    [\n  -  ,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123460'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123461'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123462'>,...\n  \n  ...Full output truncated (4 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests/test_v3_inventory_cache.py::test_v3_index_handles_adjacent_and_older_blocks[10-11]",
+      "error": "AssertionError: assert [<UniswapV3Po...00000123461'>] == [<UniswapV3Po...00000123461'>]\n  Left contains 2 more items, first extra item: <UniswapV3Pool '0x0000000000000000000000000000000000123460'>\n  Full diff:\n    [\n     <UniswapV3Pool '0x0000000000000000000000000000000000123460'>,\n     <UniswapV3Pool '0x0000000000000000000000000000000000123461'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123460'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123461'>,...\n  \n  ...Full output truncated (2 lines hidden), use '-vv' to show"
+    },
+    {
+      "test": "tests/test_v3_inventory_cache.py::test_v3_index_handles_adjacent_and_older_blocks[13-12]",
+      "error": "AssertionError: assert [<UniswapV3Po...00000123461'>] == [<UniswapV3Po...00000123463'>]\n  Right contains one more item: <UniswapV3Pool '0x0000000000000000000000000000000000123463'>\n  Full diff:\n    [\n     <UniswapV3Pool '0x0000000000000000000000000000000000123460'>,\n     <UniswapV3Pool '0x0000000000000000000000000000000000123461'>,\n  -  <UniswapV3Pool '0x0000000000000000000000000000000000123463'>,\n    ]"
+    },
+    {
+      "test": "tests/test_v3_inventory_cache.py::test_v3_partial_iterator_does_not_hide_other_pools_in_the_same_block",
+      "error": "AssertionError: assert [<UniswapV3Po...00000123460'>] == [<UniswapV3Po...00000123461'>]\n  Right contains one more item: <UniswapV3Pool '0x0000000000000000000000000000000000123461'>\n  Full diff:\n    [\n     <UniswapV3Pool '0x0000000000000000000000000000000000123460'>,\n  -  <UniswapV3Pool '0x0000000000000000000000000000000000123461'>,\n    ]"
+    },
+    {
+      "test": "tests/test_v3_inventory_cache.py::test_v3_concurrent_loads_do_not_duplicate_cached_pools",
+      "error": "AssertionError: assert [<UniswapV3Po...00000123461'>] == [<UniswapV3Po...00000123461'>]\n  Left contains 2 more items, first extra item: <UniswapV3Pool '0x0000000000000000000000000000000000123460'>\n  Full diff:\n    [\n     <UniswapV3Pool '0x0000000000000000000000000000000000123460'>,\n     <UniswapV3Pool '0x0000000000000000000000000000000000123461'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123460'>,\n  +  <UniswapV3Pool '0x0000000000000000000000000000000000123461'>,...\n  \n  ...Full output truncated (2 lines hidden), use '-vv' to show"
+    }
+  ],
+  "passed": 6,
+  "compiled_extensions": 10,
+  "same_assertions_after_repair": true,
+  "test_source_note": "Final source adds only explicit dynamic fixture annotations and BlockNumber NewType construction; all membership, ordering, boundary, concurrency, cancellation and partial-consumption assertions are unchanged."
+}

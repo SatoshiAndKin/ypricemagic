@@ -1,0 +1,20 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e\nexport PYTEST_PLUGINS= PYTEST_DISABLE_PLUGIN_AUTOLOAD=1\npython -m pip install --no-deps coverage==7.10.7\ncd tests/unit\nset +e\npython -m coverage run --branch --source=dank_mids -m pytest\nstatus=$?\npython -m coverage json -o /reports/unit-coverage.json\ncd /work\npython -m mypy\nexit \"$status\"\n"
+  ],
+  "docker_context": "colima-ypricemagic",
+  "builder": "ypricemagic-validation-55871f24db8c",
+  "complete": true,
+  "started_unix": 1789298730.543472,
+  "source_sha": "bc59c589ee631221b9aa4879fe1a0734afaaee04",
+  "source_revision": "worktree",
+  "source_archive_sha256": "ce8a071e4b5353ad337f89ed5f999954989ebd7187540ed7e114c0fc9c17c9a8",
+  "image": "sha256:915f84eec40d2c4460f4e4896b996878b73a0b6eb688039df86b71daa622badc",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 15.615026950836182
+}

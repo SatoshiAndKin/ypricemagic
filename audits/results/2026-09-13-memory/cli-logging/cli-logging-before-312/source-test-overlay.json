@@ -1,0 +1,12 @@
+[
+  {
+    "file": "pyproject.toml",
+    "original_sha256": "dcc84a4ae49a470fd87fff9a8bd8656a1890268278d0ab5d5717d8352a3b1af0",
+    "control_sha256": "44995bb8b32a6c98ccdbf5836e3020bf151d5487e059f6b7d8d6fa046dd62e5f"
+  },
+  {
+    "file": "tests/test_cli_logging.py",
+    "original_sha256": null,
+    "control_sha256": "a8ab3603d4d08190b5c8957871cdd0c1283cca95e1fff49bf53e53e939d75388"
+  }
+]

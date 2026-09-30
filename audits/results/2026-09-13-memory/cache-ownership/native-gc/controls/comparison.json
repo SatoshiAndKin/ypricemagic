@@ -1,0 +1,65 @@
+{
+  "results": {
+    "before": {
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "python -m venv /tmp/cache-tests-env && /tmp/cache-tests-env/bin/python -m pip install --no-deps -r /runner/cache-test-dependencies.lock -r /runner/cache-baseline-dependencies.lock && /tmp/cache-tests-env/bin/python /runner/cache_dependency_tests.py"
+        ],
+        "docker_context": "colima-ypricemagic",
+        "builder": "ypricemagic-validation-55871f24db8c",
+        "complete": true,
+        "started_unix": 1789376135.590077,
+        "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+        "source_revision": "worktree",
+        "source_archive_sha256": "aaddb0ef30b6adf5ec47dce113f635586fa5af05f3be26d737117c5574734a78",
+        "image": "sha256:64f83eee2f58777c21ffd35dfb23c630e832e94dfae68d581096a97f46c84b13",
+        "exit_code": 1,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 144.40226006507874
+      },
+      "ownership": {
+        "failed": 8,
+        "passed": 2
+      },
+      "native_gc": {
+        "failed": 14,
+        "passed": 7
+      }
+    },
+    "candidate": {
+      "run": {
+        "command": [
+          "sh",
+          "-c",
+          "python -m venv /tmp/cache-tests-env && /tmp/cache-tests-env/bin/python -m pip install --no-deps -r /runner/cache-test-dependencies.lock -r /runner/cache-candidate-dependencies.lock && /tmp/cache-tests-env/bin/python /runner/cache_dependency_tests.py"
+        ],
+        "docker_context": "colima-ypricemagic",
+        "builder": "ypricemagic-validation-55871f24db8c",
+        "complete": true,
+        "started_unix": 1789376280.039105,
+        "source_sha": "9f775132786c267aa99849a5778e6e975adbfda6",
+        "source_revision": "worktree",
+        "source_archive_sha256": "aaddb0ef30b6adf5ec47dce113f635586fa5af05f3be26d737117c5574734a78",
+        "image": "sha256:64f83eee2f58777c21ffd35dfb23c630e832e94dfae68d581096a97f46c84b13",
+        "exit_code": 1,
+        "oom_killed": false,
+        "missing_reports": [],
+        "below_memory_target": true,
+        "elapsed_seconds": 4.779970169067383
+      },
+      "ownership": {
+        "passed": 7,
+        "failed": 3
+      },
+      "native_gc": {
+        "failed": 9,
+        "passed": 12
+      }
+    }
+  },
+  "candidate_boundary": "These regressions use the version 5 API. Version 6 changes TTL construction and size callbacks. Those failures are API incompatibilities, not proof of a native GC defect in version 6."
+}

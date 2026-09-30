@@ -1,0 +1,10 @@
+{
+  "source": "Read-only SQLite query during validated-1800 after focused tests shared its database",
+  "values": {
+    "0xdAC17F958D2ee523a2206206994597C13D831ec7": 18,
+    "0xf939E0A03FB07F59A73314E73794Be0E57ac1b4E": 6,
+    "0x853d955aCEf822Db058eb8505911ED77F175b99e": 6,
+    "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8": 18,
+    "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599": 18
+  }
+}

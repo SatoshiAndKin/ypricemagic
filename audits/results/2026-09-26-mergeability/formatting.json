@@ -1,0 +1,50 @@
+{
+  "status": "pass",
+  "source": "worktree including both V1 contract-failure forms, Chainlink fixture repairs and 3600-second deadlines",
+  "tools": {
+    "black": "25.9.0",
+    "isort": "7.0.0",
+    "autoflake": "2.2.1"
+  },
+  "checks": [
+    "black --check (configured line length 100)",
+    "isort --profile=black --check-only",
+    "autoflake --check --remove-all-unused-imports --expand-star-imports --ignore-init-module-imports",
+    "git diff --check"
+  ],
+  "files": {
+    "tests/classes/test_loader.py": "9a279d1487bae7a2d6f506bee10f79b2cbbee57a8fdf1ff61fb0bf00cc69a589",
+    "tests/prices/dex/test_pool_tokens.py": "6c2734fab3621e3402924f5ac6e5d4d8ba99ca9a759e4fc6d6a4270e377913e4",
+    "tests/prices/dex/test_uniswap.py": "184cd14f642e2d85ef83d304e487b2236986433a36b9e922f5487399d5350083",
+    "tests/prices/stable_swap/test_factory_loading.py": "b970d04477401db87c1e2f3e21aaccb165cbbdb8b8242ae6b43f065e19c357e9",
+    "tests/prices/test_chainlink.py": "6094fc96ab3d897d19969ef19cb9d5b39cdcc004a0b94f15bc9c82990eca7640",
+    "tests/prices/utils/test_buckets.py": "e68f246adf2379f3bd6071409476fe764ef47f078f2f1ded1a8d440fd842e42e",
+    "tests/test_amount_quotes.py": "e149edd99b4574710c9b598b55be2d20823ce1f5a4c06db79dbb9baf7860cb72",
+    "tests/test_constants.py": "c4136e6572ca9563e2e409fa941181978337ad2675b3a10212c4c84e3eda5bed",
+    "tests/test_event_decode_executor.py": "71b55244ec746c672d2b7a69a9071461eb1923fb59683dc04e09ed2c0eaa7ab2",
+    "tests/test_filter_ranges.py": "a5b6310e40fb299e1dffe6c68568edb2d85b07f04c4958bf674d94ca5f18266e",
+    "tests/test_log_cache.py": "74121a645f913021f05170b3541efb92e0d6e66acbff19808e597841edaef821",
+    "tests/test_misc_fixes.py": "bc40f3721e3245a297a04c9d31a3f4b63e6abfe50de0acf4737ddf995eb0a192",
+    "tests/test_pricing_correctness.py": "e95109cd8479a96eea0ec1dd16d932d27df0ac5813c01b52beb4a9d88203ebf7",
+    "tests/test_quote_regressions.py": "463ba7d130daced6ea47471b414618e47c3500a2dfb0e35fbf500dfe2c355324",
+    "tests/test_quote_repairs.py": "b35246f011d7f40cc418317956bf0de071f9ae99929a73f3287086dff64dfc43",
+    "tests/test_uniswap_address_repairs.py": "1c34b1a40357fe188970d3d9966e5d154f066d857633a052ccbefabeb14b632c",
+    "tools/validation/native.py": "c8d96403c7bc708f104af1aef437f08f1a1e4e8bfbdcbcae557922168a673f7c",
+    "tools/validation/native_reviewed.py": "621c64e0eab3b51351824af0f4e0a3662d5694964097ba8aa5e92f87d5fe0cf6",
+    "tools/validation/price_waits.py": "9ed182afb8e1e4a0df7fda796b6f87db983dfc93e511086d157ad443305d9713",
+    "tools/validation/pytest_report.py": "920a9bedbef4e0327bf83b4ae6287491430a6085dee55d46be47dc0ee6d56f32",
+    "tools/validation/test_timeout.py": "aa28ddb84f6554dcbf34e79b9f4345a3822592e804e18fbd49a1728de3fe8e67",
+    "y/_db/utils/logs.py": "44d13381dc0576baee0795bec6df342c4866077bb289940c1b7afcc4057c55ce",
+    "y/classes/common.py": "965cd0da9ea1f58e79bac87ec8cccee91928000a8ab63fc93a88f47113380c36",
+    "y/exceptions.py": "17b588b46d07d59ecdb8f723915f8599c3c13abf6626103c43f7b39bb98a5235",
+    "y/prices/_markets.py": "108ccdb206c37a804c7ee52e517ff01438b578d45a6a3c315d216ba39202a12f",
+    "y/prices/_routing.py": "02e3723ffc3314fcd1833f7234265a946a4cede3a087af49af13ff8dfaa4d8e7",
+    "y/prices/chainlink.py": "f2089a0c22e9bcfe4fead323a7f03d236abaddeb493ee672e238ebe8dc60ecf8",
+    "y/prices/dex/uniswap/v2.py": "ac146a3e6edf516ff3822d7df7e272adae84f5218dfb26c4c0864abe163528cb",
+    "y/prices/exotic_tokens.py": "93f4e3d9391ecdbb62dbe78a640e6d771acc65e3e670d7416ffcd53c3886161d",
+    "y/prices/stable_swap/curve.py": "a607c4632fb8ceae00c30d1bb0c83c5727a4d2508d17a34820ba0b12c43ab6bf",
+    "y/prices/utils/buckets.py": "138d7fe4155aade04d052e8d4c701752b7b38fb2ba41f4fcf7f094a002851702",
+    "y/utils/events.py": "cbb3f459c76ec6df69e38e8e4b4aa64951ae30962747858a00695269fbe9cf10",
+    "y/utils/middleware.py": "ab96d38a5ed1768d4430d1bbd767ed5192d3375b226481949a0c962cf02b1bc7"
+  }
+}

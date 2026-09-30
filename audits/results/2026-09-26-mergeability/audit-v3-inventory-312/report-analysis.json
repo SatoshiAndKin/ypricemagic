@@ -1,0 +1,172 @@
+{
+  "source_commit": "d414e7d3c27bc335a253012dddd7c3e58aa1da57",
+  "source_archive_sha256": "1a0e22293863990c1d850e7cd788faefdac3231c7d39e25ba33c2fb037c97ba5",
+  "execution_complete": true,
+  "json_csv_rows_match": 2520,
+  "compiled_extensions": {
+    "y._db.brownie": "/work/y/_db/brownie.cpython-312-aarch64-linux-gnu.so",
+    "y._db.config": "/work/y/_db/config.cpython-312-aarch64-linux-gnu.so",
+    "y._db.decorators": "/work/y/_db/decorators.cpython-312-aarch64-linux-gnu.so",
+    "y._db.utils.stringify": "/work/y/_db/utils/stringify.cpython-312-aarch64-linux-gnu.so",
+    "y.ENVIRONMENT_VARIABLES": "/work/y/ENVIRONMENT_VARIABLES.cpython-312-aarch64-linux-gnu.so",
+    "y.convert": "/work/y/convert.cpython-312-aarch64-linux-gnu.so",
+    "y.exceptions": "/work/y/exceptions.cpython-312-aarch64-linux-gnu.so",
+    "y.networks": "/work/y/networks.cpython-312-aarch64-linux-gnu.so",
+    "y.prices.utils.sense_check": "/work/y/prices/utils/sense_check.cpython-312-aarch64-linux-gnu.so",
+    "y.utils.gather": "/work/y/utils/gather.cpython-312-aarch64-linux-gnu.so"
+  },
+  "resource_limits_verified": true,
+  "peak_bytes": 6723567616,
+  "supervisor_seconds": 35670.98947620392,
+  "audit_seconds": 35539.597785283,
+  "exit_code": 1,
+  "summary": {
+    "pass": 1615,
+    "price_failure": 81,
+    "incomplete": 824
+  },
+  "preparation_errors": [],
+  "rows_by_label_and_status": {
+    "March 2023 stablecoin depeg": {
+      "pass": 347,
+      "incomplete": 24,
+      "price_failure": 29
+    },
+    "quarter end": {
+      "incomplete": 568,
+      "pass": 1140,
+      "price_failure": 52
+    },
+    "deployment boundary": {
+      "incomplete": 160
+    },
+    "feed boundary": {
+      "incomplete": 72,
+      "pass": 128
+    }
+  },
+  "distinct_requested_samples": 117,
+  "failure_messages": [
+    {
+      "message": "reference unavailable for sizing",
+      "rows": 618
+    },
+    {
+      "message": "missing reference",
+      "rows": 104
+    },
+    {
+      "message": "invalid reference fields",
+      "rows": 97
+    },
+    {
+      "message": "stale reference",
+      "rows": 5
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 16797588",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet yvDAI 0xdA816459F1AB5631232FE5e97a05BBBb94970c95 at block 16803515",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 16803515",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet yvDAI 0xdA816459F1AB5631232FE5e97a05BBBb94970c95 at block 16804701",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 16804701",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 16811806",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 16818931",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 15649594",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 16308189",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 16950602",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 17595509",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 18251964",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 19557288",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 20207948",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 20866918",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 21525890",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 22170334",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 22820673",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 23479243",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 24136052",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet yvDAI 0xdA816459F1AB5631232FE5e97a05BBBb94970c95 at block 24781026",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 24781026",
+      "rows": 3
+    },
+    {
+      "message": "yPriceMagicError: PriceError while fetching Mainnet steCRV-gauge 0x182B723a58739a9c974cFDB385ceaDb237453c28 at block 25433938",
+      "rows": 3
+    },
+    {
+      "message": "ValueError: {'code': -32003, 'message': 'EVM error: OutOfOffset', 'dankmids_added_context': Request(method='eth_call', id=2788338, params=({'to': '0xA13a9247ea42D743238089903570127DdA72fE44', 'data': '0x6028bfd4a13a9247ea42d743238089903570127dda72fe4400000000000000000000035d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000f8d7ba00000000000000000000000000000000000000000000000006f05b59d3b20000000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000001cbfead9ae75014a0361de0000000000000000000000000000000000000000000fba2cb40941105fb062e60000000000000000000000000000000000007fffffc0cb1a8d667743273fd2de0000000000000000000000000000000000000000000ff3b9cba4ac6066fb0a20000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000008a0d75953d8ccc14'}, {'blockHash': '0x08e18ebab4778e0d622340fd63c591631747bb45334302ea96d3953362c4aa46', 'requireCanonical': True}))}",
+      "rows": 1
+    },
+    {
+      "message": "ValueError: {'code': -32003, 'message': 'EVM error: OutOfOffset', 'dankmids_added_context': Request(method='eth_call', id=2788496, params=({'to': '0xA13a9247ea42D743238089903570127DdA72fE44', 'data': '0x6028bfd4a13a9247ea42d743238089903570127dda72fe4400000000000000000000035d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000f8d7ba00000000000000000000000000000000000000000000000006f05b59d3b20000000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000001cbfead9ae75014a0361de0000000000000000000000000000000000000000000fba2cb40941105fb062e60000000000000000000000000000000000007fffffc0cb1a8d667743273fd2de0000000000000000000000000000000000000000000ff3b9cba4ac6066fb0a2000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000035e5699a20619d5bb7'}, {'blockHash': '0x08e18ebab4778e0d622340fd63c591631747bb45334302ea96d3953362c4aa46', 'requireCanonical': True}))}",
+      "rows": 1
+    },
+    {
+      "message": "ValueError: {'code': -32003, 'message': 'EVM error: OutOfOffset', 'dankmids_added_context': Request(method='eth_call', id=2788654, params=({'to': '0xA13a9247ea42D743238089903570127DdA72fE44', 'data': '0x6028bfd4a13a9247ea42d743238089903570127dda72fe4400000000000000000000035d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000f8d7ba00000000000000000000000000000000000000000000000006f05b59d3b20000000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000001cbfead9ae75014a0361de0000000000000000000000000000000000000000000fba2cb40941105fb062e60000000000000000000000000000000000007fffffc0cb1a8d667743273fd2de0000000000000000000000000000000000000000000ff3b9cba4ac6066fb0a20000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000013f38af27bc62f5650b7'}, {'blockHash': '0x08e18ebab4778e0d622340fd63c591631747bb45334302ea96d3953362c4aa46', 'requireCanonical': True}))}",
+      "rows": 1
+    }
+  ],
+  "limitation": "Complete execution and matching output files do not make failed comparisons or incomplete reference/boundary coverage pass. Exact rows remain in audit.json and audit.csv."
+}

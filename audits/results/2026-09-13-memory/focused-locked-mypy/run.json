@@ -1,0 +1,18 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m pip install --no-deps --no-build-isolation -e . && python /runner/focused.py && python -m unittest discover -s tools/validation && python -m mypy"
+  ],
+  "complete": true,
+  "started_unix": 1789280575.238135,
+  "source_sha": "61be7b520aba7f771a0bf96b326315e68767fae4",
+  "source_revision": "worktree",
+  "source_archive_sha256": "203fa30a5b03e0658a64b33a99c49be68330d869d1c1507f4b026d487347fbdb",
+  "image": "sha256:2fe46c86dd882f4aa70f6bd44fd8f812d65ca8e4c98e4061fc3819938b48c97e",
+  "exit_code": 1,
+  "oom_killed": false,
+  "missing_reports": [],
+  "below_memory_target": true,
+  "elapsed_seconds": 73.94288206100464
+}

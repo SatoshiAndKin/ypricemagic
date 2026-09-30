@@ -1,0 +1,30 @@
+{
+  "command": [
+    "sh",
+    "/runner/full_suite.sh"
+  ],
+  "exit_code": 2,
+  "interrupted": false,
+  "elapsed_seconds": 1468.1820452719985,
+  "peak_sampled_process_rss_bytes": 8610402304,
+  "cgroup_before": {
+    "memory.current": "8794112",
+    "memory.peak": "8900608",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "15093760",
+    "memory.peak": "8589959168",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 5232\noom 1\noom_kill 1\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

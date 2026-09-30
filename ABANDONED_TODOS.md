@@ -37,12 +37,7 @@ These deferred features exist on `abandoned-master` and are intentionally not be
 - Description: Query V2 factory directly instead of scanning 330k+ pairs.
 - Git refs on `abandoned-master`: `54e10f94`
 
-## Amount parameter for price impact
-
-- Description: Optional amount parameter for slippage-aware pricing.
-- Git refs on `abandoned-master`: `587a4349`
-
 ## VTTLCache per-key TTL
 
-- Description: Variable-TTL caching, only needed for amount-parameter pricing.
+- Description: Historical variable-TTL proposal. Exact amount quotes now use a bounded block-hash cache; this older implementation remains deferred.
 - Git refs on `abandoned-master`: `3eec7800`

@@ -1,0 +1,45 @@
+"""Small standard-library diagnostic; no project imports or performance claim."""
+import asyncio
+import gc
+import json
+import sys
+from pathlib import Path
+from weakref import ref
+
+class Entry:
+    pass
+
+async def check(capture_current):
+    references=[]
+    started=asyncio.Event()
+    async def worker():
+        observed=asyncio.current_task() if capture_current else None
+        entry=Entry()
+        references.append(ref(entry))
+        started.set()
+        await asyncio.Event().wait()
+    child=asyncio.create_task(worker())
+    await started.wait()
+    child.cancel()
+    await asyncio.gather(child,return_exceptions=True)
+    del child
+    for _ in range(40):
+        await asyncio.sleep(0)
+    before=references[0]() is not None
+    gc.collect()
+    return {'capture_current_task':capture_current,'retained_before_collection':before,
+            'retained_after_collection':references[0]() is not None}
+
+async def main():
+    return [await check(True),await check(False)]
+
+results=asyncio.run(main())
+assert results==[
+    {'capture_current_task':True,'retained_before_collection':True,'retained_after_collection':False},
+    {'capture_current_task':False,'retained_before_collection':False,'retained_after_collection':False},
+]
+Path('/private/tmp/yprice-memory/cancelled-observer.json').write_text(json.dumps({
+    'python':sys.version,'boundary':'Small host standard-library diagnostic; no project imports or performance claim',
+    'results':results,
+},indent=2)+'\n')
+print(results)

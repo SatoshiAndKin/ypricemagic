@@ -3,8 +3,10 @@ from typing import final
 import evmspec
 
 
+# evmspec.Log is frozen at runtime; its inherited dataclass-transform metadata
+# incorrectly marks it mutable (the dependency documents the same mypy limitation).
 @final
-class Log(evmspec.Log, frozen=True, kw_only=True, array_like=True, forbid_unknown_fields=True):
+class Log(evmspec.Log, frozen=True, kw_only=True, array_like=True, forbid_unknown_fields=True):  # type: ignore[misc]
     """
     Extends :class:`evmspec.Log` with additional configuration for immutability,
     keyword-only arguments, and array-like encoding behavior using :class:`msgspec.Struct`.

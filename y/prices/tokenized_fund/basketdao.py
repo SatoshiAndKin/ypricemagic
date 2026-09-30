@@ -68,7 +68,7 @@ async def get_price(
     """
     balances, total_supply = await cgather(
         Call(address, "getAssetsAndBalances()(address[],uint[])", block_id=block),
-        ERC20(address, asynchronous=True).total_supply_readable(block=block),
+        ERC20(address, asynchronous=True).total_supply_readable(block=block, sync=False),
     )
     balances = (
         WeiBalance(balance, token, block, skip_cache=skip_cache)

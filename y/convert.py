@@ -204,6 +204,6 @@ def _int_to_address(int_address: int) -> HexAddress:
         >>> _int_to_address(123456789)
         '0x000000000000000000000000000000000000075b'
     """
-    hex_value = HexBytes(int_address).hex()[2:]
+    hex_value = HexBytes(int_address).hex().removeprefix("0x")
     padding = "0" * (40 - len(hex_value))
     return f"0x{padding}{hex_value}"  # type: ignore [return-value]

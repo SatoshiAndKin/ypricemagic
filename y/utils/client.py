@@ -3,11 +3,13 @@ Utility functions for retrieving Ethereum client information.
 """
 
 import logging
+from typing import cast
 
 import cachebox
 from brownie import web3
-from dank_mids import dank_web3
+from dank_mids.brownie_patch import dank_web3
 from web3._utils.rpc_abi import RPC
+from web3.manager import RequestManager
 
 from y.utils.logging import yLazyLogger
 
@@ -39,7 +41,7 @@ def get_ethereum_client() -> str:
     """
     try:
         # web3py < 6.0
-        version = web3.clientVersion
+        version = cast(str, getattr(web3, "clientVersion"))
     except AttributeError:
         # web3py >= 6.0
         version = web3.client_version
@@ -68,7 +70,11 @@ async def get_ethereum_client_async() -> str:
     See Also:
         - :func:`get_ethereum_client` for the synchronous version of this function.
     """
-    return _get_ethereum_client(await dank_web3.manager.coro_request(RPC.web3_clientVersion, []))
+    return _get_ethereum_client(
+        await cast(RequestManager, getattr(dank_web3, "manager")).coro_request(
+            RPC.web3_clientVersion, []
+        )
+    )
 
 
 @yLazyLogger(logger)

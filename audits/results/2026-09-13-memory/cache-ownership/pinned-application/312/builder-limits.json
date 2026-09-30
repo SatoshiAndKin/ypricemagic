@@ -1,0 +1,9 @@
+{
+  "HostConfig": {
+    "Memory": 8589934592,
+    "MemorySwap": 8589934592,
+    "CpuPeriod": 100000,
+    "CpuQuota": 400000,
+    "PidsLimit": 512
+  }
+}

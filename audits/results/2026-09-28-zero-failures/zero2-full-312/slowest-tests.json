@@ -1,0 +1,52 @@
+[
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[24572972]",
+    "outcome": "passed",
+    "duration": 2799.631071805954
+  },
+  {
+    "test": "tests/prices/dex/test_balancer.py::test_balancer_v2_token_price",
+    "outcome": "passed",
+    "duration": 2795.741391181946
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[21556756]",
+    "outcome": "passed",
+    "duration": 2778.855035305023
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[18540540]",
+    "outcome": "passed",
+    "duration": 2775.914260864258
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[23064864]",
+    "outcome": "passed",
+    "duration": 2748.638832807541
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[20048648]",
+    "outcome": "passed",
+    "duration": 2707.682820558548
+  },
+  {
+    "test": "tests/prices/test_magic.py::test_get_prices[14016216]",
+    "outcome": "passed",
+    "duration": 2569.3092851638794
+  },
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2]",
+    "outcome": "passed",
+    "duration": 2510.765575647354
+  },
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02AAA39B223FE8D0A0E5C4F27EAD9083C756CC2]",
+    "outcome": "passed",
+    "duration": 2507.6810002326965
+  },
+  {
+    "test": "tests/prices/dex/test_uniswap.py::test_uniswap_v3[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc20]",
+    "outcome": "passed",
+    "duration": 2504.8979530334473
+  }
+]

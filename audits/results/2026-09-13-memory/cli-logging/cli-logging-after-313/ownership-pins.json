@@ -1,0 +1,26 @@
+{
+  "cooperative": {
+    "url": "https://github.com/SatoshiAndKin/pytest-asyncio-cooperative",
+    "vcs_info": {
+      "commit_id": "17677c7145d24c36917036877681eb83225ccdb3",
+      "requested_revision": "17677c7145d24c36917036877681eb83225ccdb3",
+      "vcs": "git"
+    }
+  },
+  "ez_a_sync": {
+    "url": "https://github.com/SatoshiAndKin/ez-a-sync.git",
+    "vcs_info": {
+      "commit_id": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "requested_revision": "ed3459ee74abec91c7675f57fee4b75595edbfdc",
+      "vcs": "git"
+    }
+  },
+  "native_modules": {
+    "a_sync.a_sync.property": "/usr/local/lib/python3.13/site-packages/a_sync/a_sync/property.cpython-313-aarch64-linux-gnu.so",
+    "a_sync.async_property.cached": "/usr/local/lib/python3.13/site-packages/a_sync/async_property/cached.cpython-313-aarch64-linux-gnu.so",
+    "a_sync._smart": "/usr/local/lib/python3.13/site-packages/a_sync/_smart.cpython-313-aarch64-linux-gnu.so",
+    "a_sync.a_sync._helpers": "/usr/local/lib/python3.13/site-packages/a_sync/a_sync/_helpers.cpython-313-aarch64-linux-gnu.so"
+  },
+  "cooperative_plugin_sha256": "3faeeccf9979f3f15e60bcc963433b29bd2413c28e7fdbe02e41079c6df10cb7",
+  "pytest_timeout_version": "2.2.0"
+}

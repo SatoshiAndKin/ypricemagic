@@ -1,0 +1,12 @@
+import importlib,json,shutil,subprocess,sys,tomllib
+from pathlib import Path
+source=Path('/work');target=Path('/tmp/smart-owner-full-tests');target.mkdir()
+config=tomllib.loads((source/'pyproject.toml').read_text())
+shutil.copytree(source/'tests',target/'tests')
+# Keep mypy settings for the dependency's existing type-plugin tests.
+(target/'pyproject.toml').write_text((source/'pyproject.toml').read_text()+'\n[tool.pytest.ini_options]\n'+''.join(key+' = '+json.dumps(value)+'\n' for key,value in config['tool']['validation']['full_pytest'].items()))
+status=subprocess.run([sys.executable,'-m','pytest'],cwd=target).returncode
+modules={name:importlib.import_module(name).__file__ for name in ['a_sync.a_sync.property','a_sync.async_property.cached','a_sync._smart','a_sync.a_sync._helpers']}
+assert all(path.endswith('.so') for path in modules.values()),modules
+Path('/reports/owner-full.json').write_text(json.dumps({'exit_code':status,'compiled_modules':modules},indent=2))
+raise SystemExit(status)

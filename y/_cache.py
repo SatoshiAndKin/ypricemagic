@@ -18,7 +18,7 @@ Example usage:
     ttl_cache = get_ttl_cache(ttl=300)
 """
 
-from typing import Literal
+from typing import Any, Literal
 
 import cachebox
 
@@ -36,7 +36,7 @@ __all__ = [
 CacheType = Literal["default", "block", "contract", "price"]
 
 
-def get_lru_cache(cache_type: CacheType = "default") -> cachebox.LRUCache:
+def get_lru_cache(cache_type: CacheType = "default") -> cachebox.LRUCache[Any, Any]:
     """
     Get an LRU cache configured with the appropriate maxsize from environment variables.
 
@@ -60,7 +60,9 @@ def get_lru_cache(cache_type: CacheType = "default") -> cachebox.LRUCache:
     return cachebox.LRUCache(maxsize)
 
 
-def get_ttl_cache(cache_type: CacheType = "default", ttl: int | None = None) -> cachebox.TTLCache:
+def get_ttl_cache(
+    cache_type: CacheType = "default", ttl: int | None = None
+) -> cachebox.TTLCache[Any, Any]:
     """
     Get a TTL cache configured with the appropriate maxsize and TTL.
 
@@ -85,7 +87,7 @@ def get_ttl_cache(cache_type: CacheType = "default", ttl: int | None = None) -> 
 
 
 # Pre-built default cache instances for convenience
-DEFAULT_LRU_CACHE: cachebox.LRUCache = get_lru_cache("default")
-BLOCK_LRU_CACHE: cachebox.LRUCache = get_lru_cache("block")
-CONTRACT_LRU_CACHE: cachebox.LRUCache = get_lru_cache("contract")
-PRICE_LRU_CACHE: cachebox.LRUCache = get_lru_cache("price")
+DEFAULT_LRU_CACHE: cachebox.LRUCache[Any, Any] = get_lru_cache("default")
+BLOCK_LRU_CACHE: cachebox.LRUCache[Any, Any] = get_lru_cache("block")
+CONTRACT_LRU_CACHE: cachebox.LRUCache[Any, Any] = get_lru_cache("contract")
+PRICE_LRU_CACHE: cachebox.LRUCache[Any, Any] = get_lru_cache("price")

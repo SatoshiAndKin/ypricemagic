@@ -1,0 +1,33 @@
+[
+  {
+    "phase": "call",
+    "elapsed_seconds": 6961.302670213976,
+    "rss_peak_bytes": 3567546368,
+    "live_tasks": 106,
+    "test": "tests/test_rpc_state_retry.py::test_archive_state_retry_is_bounded_and_never_optional",
+    "outcome": "passed",
+    "duration": 3599.998603685992,
+    "error": null,
+    "error_message": null,
+    "cache_occupancy": {
+      "market_cache": {
+        "values": 1071,
+        "flights": 0
+      },
+      "result_cache": {
+        "values": 278,
+        "flights": 0
+      },
+      "state_cache": {
+        "values": 16384,
+        "flights": 0
+      }
+    },
+    "logical_rpc_counts": {
+      "call_uid": 1790117,
+      "multicall_uid": 215289,
+      "request_uid": 108858,
+      "jsonrpc_batch_uid": 110694
+    }
+  }
+]

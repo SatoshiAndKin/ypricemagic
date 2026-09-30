@@ -1,0 +1,5 @@
+y/prices/magic.py:160: error: Invalid syntax  [syntax]
+                ignore_pools: tuple[Pool, ...],
+                             ^
+Warning: unused section(s) in pyproject.toml: module = ['a_sync_mypy_plugin', 'y.ENVIRONMENT_VARIABLES', 'y.convert', 'y.exceptions', 'y.networks', 'y.utils.gather']
+Found 1 error in 1 file (errors prevented further checking)

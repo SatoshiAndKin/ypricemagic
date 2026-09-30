@@ -1,0 +1,5 @@
+{
+  "first_attempt_complete": false,
+  "reason": "Diagnostic report subdirectory did not exist; reran after creating it",
+  "corrected_attempt_exit": 1
+}

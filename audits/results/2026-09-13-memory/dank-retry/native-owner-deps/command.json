@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "set -e; export PYTEST_PLUGINS= PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 MYPYC_STRICT_DUNDER_TYPING=1; python -m pip install --no-deps coverage==7.10.7; python -m pip install --no-build-isolation -r requirements-build.txt; python -c \"from scripts.run_mypyc_build import build_mypyc_command, run_checked; run_checked(build_mypyc_command())\"; cd tests/unit; set +e; python -m coverage run --branch --source=dank_mids -m pytest; status=$?; python -m coverage json -o /reports/unit-coverage.json; exit \"$status\""
+  ],
+  "exit_code": 1,
+  "interrupted": false,
+  "elapsed_seconds": 27.38327062099961,
+  "peak_sampled_process_rss_bytes": 693497856,
+  "cgroup_before": {
+    "memory.current": "8912896",
+    "memory.peak": "8912896",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "18087936",
+    "memory.peak": "738418688",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  }
+}

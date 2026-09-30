@@ -1,0 +1,171 @@
+{
+  "before_report": "async-full-tests-matched-before",
+  "after_report": "async-owner-final-full",
+  "before": {
+    "passed": 699,
+    "failed": 33,
+    "skipped": 1
+  },
+  "after": {
+    "passed": 717,
+    "failed": 15,
+    "skipped": 1
+  },
+  "added_failures": [],
+  "remaining_failures": {
+    "tests.asyncio.test_create_task::test_create_task_skip_gc_until_done": "AssertionError: assert 1 == 0\n +  where 1 = len({<Task finished name='' coro=<<coroutine without __name__>()> result='GC Test'>})",
+    "tests.primitives.test_semaphore::test_semaphore[3]": "assert (3 < 3 or 1.0034117698669434 > 3)",
+    "tests.primitives.test_semaphore::test_semaphore[4]": "assert (4 < 3 or 1.0039851665496826 > 4)",
+    "tests.primitives.test_semaphore::test_semaphore[5]": "assert (5 < 3 or 1.0025522708892822 > 5)",
+    "tests.primitives.test_semaphore::test_semaphore[6]": "assert (6 < 3 or 1.0064289569854736 > 6)",
+    "tests.primitives.test_semaphore::test_semaphore[7]": "assert (7 < 3 or 1.0065579414367676 > 7)",
+    "tests.primitives.test_semaphore::test_semaphore[8]": "assert (8 < 3 or 1.006298542022705 > 8)",
+    "tests.primitives.test_semaphore::test_semaphore[9]": "assert (9 < 3 or 1.0051939487457275 > 9)",
+    "tests.primitives.test_semaphore::test_semaphore_property[3]": "assert (3 < 3 or 1.0063400268554688 > 3)",
+    "tests.primitives.test_semaphore::test_semaphore_property[4]": "assert (4 < 3 or 1.0034198760986328 > 4)",
+    "tests.primitives.test_semaphore::test_semaphore_property[5]": "assert (5 < 3 or 1.0028648376464844 > 5)",
+    "tests.primitives.test_semaphore::test_semaphore_property[6]": "assert (6 < 3 or 1.0063142776489258 > 6)",
+    "tests.primitives.test_semaphore::test_semaphore_property[7]": "assert (7 < 3 or 1.006230115890503 > 7)",
+    "tests.primitives.test_semaphore::test_semaphore_property[8]": "assert (8 < 3 or 1.0061731338500977 > 8)",
+    "tests.primitives.test_semaphore::test_semaphore_property[9]": "assert (9 < 3 or 1.006401538848877 > 9)"
+  },
+  "timing_assertion_values": {
+    "before": {
+      "tests.primitives.test_semaphore::test_semaphore[3]": {
+        "limit_seconds": 3,
+        "elapsed_seconds": 1.0045139789581299
+      },
+      "tests.primitives.test_semaphore::test_semaphore[4]": {
+        "limit_seconds": 4,
+        "elapsed_seconds": 1.0066425800323486
+      },
+      "tests.primitives.test_semaphore::test_semaphore[5]": {
+        "limit_seconds": 5,
+        "elapsed_seconds": 1.0031535625457764
+      },
+      "tests.primitives.test_semaphore::test_semaphore[6]": {
+        "limit_seconds": 6,
+        "elapsed_seconds": 1.0062479972839355
+      },
+      "tests.primitives.test_semaphore::test_semaphore[7]": {
+        "limit_seconds": 7,
+        "elapsed_seconds": 1.0025756359100342
+      },
+      "tests.primitives.test_semaphore::test_semaphore[8]": {
+        "limit_seconds": 8,
+        "elapsed_seconds": 1.0055458545684814
+      },
+      "tests.primitives.test_semaphore::test_semaphore[9]": {
+        "limit_seconds": 9,
+        "elapsed_seconds": 1.0051000118255615
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[3]": {
+        "limit_seconds": 3,
+        "elapsed_seconds": 1.0014653205871582
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[4]": {
+        "limit_seconds": 4,
+        "elapsed_seconds": 1.006319284439087
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[5]": {
+        "limit_seconds": 5,
+        "elapsed_seconds": 1.0015757083892822
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[6]": {
+        "limit_seconds": 6,
+        "elapsed_seconds": 1.0061862468719482
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[7]": {
+        "limit_seconds": 7,
+        "elapsed_seconds": 1.005075454711914
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[8]": {
+        "limit_seconds": 8,
+        "elapsed_seconds": 1.0017385482788086
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[9]": {
+        "limit_seconds": 9,
+        "elapsed_seconds": 1.0065054893493652
+      }
+    },
+    "after": {
+      "tests.primitives.test_semaphore::test_semaphore[3]": {
+        "limit_seconds": 3,
+        "elapsed_seconds": 1.0034117698669434
+      },
+      "tests.primitives.test_semaphore::test_semaphore[4]": {
+        "limit_seconds": 4,
+        "elapsed_seconds": 1.0039851665496826
+      },
+      "tests.primitives.test_semaphore::test_semaphore[5]": {
+        "limit_seconds": 5,
+        "elapsed_seconds": 1.0025522708892822
+      },
+      "tests.primitives.test_semaphore::test_semaphore[6]": {
+        "limit_seconds": 6,
+        "elapsed_seconds": 1.0064289569854736
+      },
+      "tests.primitives.test_semaphore::test_semaphore[7]": {
+        "limit_seconds": 7,
+        "elapsed_seconds": 1.0065579414367676
+      },
+      "tests.primitives.test_semaphore::test_semaphore[8]": {
+        "limit_seconds": 8,
+        "elapsed_seconds": 1.006298542022705
+      },
+      "tests.primitives.test_semaphore::test_semaphore[9]": {
+        "limit_seconds": 9,
+        "elapsed_seconds": 1.0051939487457275
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[3]": {
+        "limit_seconds": 3,
+        "elapsed_seconds": 1.0063400268554688
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[4]": {
+        "limit_seconds": 4,
+        "elapsed_seconds": 1.0034198760986328
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[5]": {
+        "limit_seconds": 5,
+        "elapsed_seconds": 1.0028648376464844
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[6]": {
+        "limit_seconds": 6,
+        "elapsed_seconds": 1.0063142776489258
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[7]": {
+        "limit_seconds": 7,
+        "elapsed_seconds": 1.006230115890503
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[8]": {
+        "limit_seconds": 8,
+        "elapsed_seconds": 1.0061731338500977
+      },
+      "tests.primitives.test_semaphore::test_semaphore_property[9]": {
+        "limit_seconds": 9,
+        "elapsed_seconds": 1.006401538848877
+      }
+    }
+  },
+  "removed_failures": [
+    "tests.asyncio.test_as_completed::test_return_exceptions_preserves_cancelled_child_and_other_results[False-False]",
+    "tests.asyncio.test_as_completed::test_return_exceptions_preserves_cancelled_child_and_other_results[False-True]",
+    "tests.asyncio.test_as_completed::test_return_exceptions_preserves_cancelled_child_and_other_results[True-False]",
+    "tests.asyncio.test_as_completed::test_return_exceptions_preserves_cancelled_child_and_other_results[True-True]",
+    "tests.mypy.test_mypy_plugin_sync_default_regression::test_a_sync_callable_sync_default_preserves_signature",
+    "tests.mypy.test_mypy_plugin_sync_default_syncfn_regression::test_a_sync_callable_sync_default_syncfn_preserves_signature",
+    "tests.task.test_task::test_map_binds_constant_prefix[False-2-False]",
+    "tests.task.test_task::test_map_binds_constant_prefix[False-2-True]",
+    "tests.task.test_task::test_map_binds_constant_prefix[False-None-False]",
+    "tests.task.test_task::test_map_binds_constant_prefix[False-None-True]",
+    "tests.task.test_task::test_map_binds_constant_prefix[True-2-False]",
+    "tests.task.test_task::test_map_binds_constant_prefix[True-2-True]",
+    "tests.task.test_task::test_map_binds_constant_prefix[True-None-False]",
+    "tests.task.test_task::test_map_binds_constant_prefix[True-None-True]",
+    "tests.task.test_task::test_map_binds_prefix_of_bound_async_method",
+    "tests.task.test_task::test_map_bound_prefix_preserves_other_keywords_and_cancellation",
+    "tests.task.test_task::test_map_does_not_retry_type_errors_from_callable_body",
+    "tests.task.test_task::test_unwrap_does_not_retain_callable_or_its_captured_state"
+  ],
+  "note": "The same 15 assertions fail. Fourteen messages include elapsed measurements; their exact values are retained above. Two removed mypy regressions come from upstream plugin changes between the published package and this branch base."
+}
