@@ -5,10 +5,12 @@ from typing import Any
 from brownie import ZERO_ADDRESS
 from dank_mids.brownie_patch import dank_web3
 from eth_utils.address import to_checksum_address
+from eth_utils.crypto import keccak
 from multicall import Call
 from web3.exceptions import ContractLogicError
 
 from y._decorators import stuck_coro_debugger
+from y.datatypes import QuoteAsset, QuoteStep
 from y.prices._rpc import BlockRef, _retry_state_read
 from y.prices.chainlink import FEEDS, registries
 
@@ -79,3 +81,22 @@ async def expected_feed_price(feed: str, block: BlockRef) -> float | None:
         assert await native_read(feed, "aggregator()(address)", block) == ZERO_ADDRESS
         return None
     return float(answer / 10**decimals)
+
+
+@stuck_coro_debugger
+async def assert_native_weth_redemption(step: QuoteStep, block: BlockRef) -> None:
+    """Verify canonical WETH9's one-wei-for-one-wei withdrawal and ETH backing."""
+    weth = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+    eth = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    assert step.protocol == "Wrapped native asset"
+    assert step.contract == step.input.token == weth
+    assert step.method == "withdraw(uint256)" and step.fees == "none"
+    assert step.input.decimals == 18
+    assert step.outputs == (QuoteAsset(eth, step.input.amount, 18),)
+    # Pin the deployed immutable WETH9 implementation, whose withdraw(wad)
+    # transfers exactly wad wei: https://github.com/gnosis/canonical-weth
+    code = await dank_web3.eth.get_code(to_checksum_address(weth), block.identifier)
+    assert keccak(code).hex() == "d0a06b12ac47863b5c7be4185c2deaad1c61557033f56c7d4ea74429cbb25e23"
+    backing = await dank_web3.eth.get_balance(to_checksum_address(weth), block.identifier)
+    assert await native_read(weth, "totalSupply()(uint256)", block) == backing
+    assert backing >= step.input.amount
