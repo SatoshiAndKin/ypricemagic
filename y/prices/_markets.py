@@ -365,9 +365,10 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
             method = "getAmountsOut(uint256,(address,address,bool,address)[])"
         else:
             method = "getAmountsOut(uint256,(address,address,bool)[])"
-        result = int(
-            (await read(market.router, method + "(uint256[])", block, amount, [route]))[-1]
-        )
+        amounts = await read(market.router, method + "(uint256[])", block, amount, [route])
+        if amounts is None or not amounts:
+            return None
+        result = int(amounts[-1])
     elif protocol in ("Uniswap V3", "Slipstream"):
         from eth_abi.packed import encode_packed
 

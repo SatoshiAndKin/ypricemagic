@@ -94,50 +94,72 @@ def test_chainlink_get_feed_falls_back_to_static_feeds(monkeypatch: pytest.Monke
 async def test_latest_feed_validation_handles_legacy_and_removed_aggregators(
     monkeypatch: Any, response: str
 ) -> None:
+    from tests import price_expectations as reference
     from tests.prices import test_chainlink as fixture
     from y.prices import _rpc
-    from y.prices.chainlink import Feed
+    from y.prices.chainlink import Feed, registries
 
     token = "0x0000000000000000000000000000000000000101"
+    registry = registries[1]
     block = _rpc.BlockRef(1, 20_000_000, "0x" + "12" * 32, 1_700_000_000)
     feed = Feed(token, token, asynchronous=True)
     seen: list[bytes] = []
 
     async def rpc(transaction: dict[str, Any], *, block_identifier: Any) -> bytes:
         assert block_identifier == block.identifier
-        assert transaction["to"].lower() == token
         data = bytes(transaction["data"])
-        seen.append(data)
+        seen.append(data[:4])
+        if transaction["to"].lower() == registry.lower():
+            if data[:4] == keccak(text="getCurrentPhaseId(address,address)")[:4]:
+                return encode(["uint16"], [1])
+            assert data[:4] == keccak(text="getPhaseFeed(address,address,uint16)")[:4]
+            return encode(["address"], [token])
+        assert transaction["to"].lower() == token
         if data == keccak(text="aggregator()")[:4]:
             if response in ("legacy_revert", "legacy_fresh"):
                 raise ContractLogicError("execution reverted")
             if response == "legacy_empty":
                 return b""
             return encode(["address"], [ZERO_ADDRESS if response == "removed" else token])
-        assert response != "removed", "removed aggregators must not query a reverting timestamp"
-        assert data == keccak(text="latestTimestamp()")[:4]
-        return encode(
-            ["uint256"],
-            [block.timestamp if response.endswith("fresh") else block.timestamp - 86401],
-        )
+        if data == keccak(text="latestTimestamp()")[:4]:
+            if response == "removed":
+                raise ContractLogicError("execution reverted")
+            return encode(
+                ["uint256"],
+                [block.timestamp if response.endswith("fresh") else block.timestamp - 86401],
+            )
+        if data == keccak(text="latestAnswer()")[:4]:
+            return encode(["int256"], [125000000])
+        assert data == keccak(text="decimals()")[:4]
+        return encode(["uint8"], [8])
 
     price, get_feed = AsyncMock(return_value=None), AsyncMock(return_value=feed)
     monkeypatch.setattr(fixture, "chainlink", SimpleNamespace(get_price=price, get_feed=get_feed))
     monkeypatch.setattr(_rpc.BlockRef, "resolve", AsyncMock(return_value=block))
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
-    if response == "removed":
-        await fixture.test_chainlink_latest(token)
-    elif response.endswith("fresh"):
-        with pytest.raises(pytest.fail.Exception, match="active aggregator"):
+    monkeypatch.setattr(_rpc.BlockRef, "verify", AsyncMock())
+    code = AsyncMock(return_value=b"deployed")
+    monkeypatch.setattr(
+        reference, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc, get_code=code))
+    )
+    if response.endswith("fresh"):
+        with pytest.raises(AssertionError):
             await fixture.test_chainlink_latest(token)
     else:
-        with pytest.raises(pytest.skip.Exception, match="feed is stale"):
-            await fixture.test_chainlink_latest(token)
-    assert seen == [keccak(text="aggregator()")[:4]] + (
-        [] if response == "removed" else [keccak(text="latestTimestamp()")[:4]]
-    )
-    price.assert_awaited_once_with(token, block=block.number)
-    get_feed.assert_awaited_once_with(token, block=block)
+        # Staleness or a removed aggregator is independently proven, not skipped.
+        await fixture.test_chainlink_latest(token)
+    expected = [
+        "getCurrentPhaseId(address,address)",
+        "getPhaseFeed(address,address,uint16)",
+        "latestTimestamp()",
+    ]
+    if response == "removed":
+        expected.append("aggregator()")
+    elif response.endswith("fresh"):
+        expected.extend(["latestAnswer()", "decimals()"])
+    assert seen == [keccak(text=signature)[:4] for signature in expected]
+    price.assert_awaited_once_with(token, block=block, sync=False)
+    get_feed.assert_awaited_once_with(token, block=block, sync=False)
+    code.assert_awaited_once_with(convert.to_address(registry), block.identifier)
 
 
 @run_async_test
@@ -147,22 +169,21 @@ async def test_latest_feed_validation_handles_legacy_and_removed_aggregators(
 async def test_latest_feed_validation_propagates_unexpected_errors(
     monkeypatch: Any, error: BaseException
 ) -> None:
+    from tests import price_expectations as reference
     from tests.prices import test_chainlink as fixture
     from y.prices import _rpc
 
     token = "0x0000000000000000000000000000000000000101"
     block = _rpc.BlockRef(1, 20_000_000, "0x" + "12" * 32, 1_700_000_000)
     rpc = AsyncMock(side_effect=error)
+    monkeypatch.setattr(_rpc.BlockRef, "resolve", AsyncMock(return_value=block))
     monkeypatch.setattr(
-        fixture,
-        "chainlink",
+        reference,
+        "dank_web3",
         SimpleNamespace(
-            get_price=AsyncMock(return_value=None),
-            get_feed=AsyncMock(return_value=SimpleNamespace(address=token)),
+            eth=SimpleNamespace(call=rpc, get_code=AsyncMock(return_value=b"deployed"))
         ),
     )
-    monkeypatch.setattr(_rpc.BlockRef, "resolve", AsyncMock(return_value=block))
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
     with pytest.raises(type(error)) as raised:
         await fixture.test_chainlink_latest(token)
     assert raised.value is error

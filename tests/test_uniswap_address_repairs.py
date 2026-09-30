@@ -36,10 +36,16 @@ def address_form(kind: str) -> Any:
     }[kind]
 
 
-def empty_quote_graph(monkeypatch: Any, empty: str, viable: bool) -> tuple[Any, list[str]]:
-    pools = [replace(market("deep", depth=2), router=ROUTER)]
+def empty_quote_graph(
+    monkeypatch: Any, empty: str, viable: bool, protocol: str = "Uniswap V2"
+) -> tuple[Any, list[str]]:
+    pools = [replace(market("deep", depth=2, protocol=protocol), router=ROUTER, factory=TOKEN)]
     if viable:
-        pools.append(replace(market("later", depth=1), router=SECOND_ROUTER))
+        pools.append(
+            replace(
+                market("later", depth=1, protocol=protocol), router=SECOND_ROUTER, factory=TOKEN
+            )
+        )
     service, _, _ = graph(monkeypatch, pools)
     monkeypatch.setattr(_routing, "swap", _markets.swap)
     monkeypatch.setattr(_routing, "quote_service", lambda: service)
@@ -55,9 +61,14 @@ def empty_quote_graph(monkeypatch: Any, empty: str, viable: bool) -> tuple[Any, 
         calls.append(target)
         from eth_utils.crypto import keccak
 
-        assert transaction["data"] == keccak(text="getAmountsOut(uint256,address[])")[:4] + encode(
-            ["uint256", "address[]"], [1000001, [TOKEN, USD]]
-        )
+        route_type, route = {
+            "Uniswap V2": ("address[]", [TOKEN, USD]),
+            "Solidly": ("(address,address,bool)[]", [(TOKEN, USD, False)]),
+            "Velodrome V2": ("(address,address,bool,address)[]", [(TOKEN, USD, False, TOKEN)]),
+        }[protocol]
+        assert transaction["data"] == keccak(text=f"getAmountsOut(uint256,{route_type})")[
+            :4
+        ] + encode(["uint256", route_type], [1000001, route])
         if target == ROUTER:
             return b"" if empty == "rpc" else encode(["uint256[]"], [[]])
         assert target == SECOND_ROUTER
@@ -68,24 +79,31 @@ def empty_quote_graph(monkeypatch: Any, empty: str, viable: bool) -> tuple[Any, 
 
 
 @run_async_test
+@pytest.mark.parametrize("protocol", ["Uniswap V2", "Solidly", "Velodrome V2"])
 @pytest.mark.parametrize("empty", ["rpc", "array"])
-async def test_empty_v2_rpc_quote_tries_next_pool(monkeypatch: Any, empty: str) -> None:
-    service, calls = empty_quote_graph(monkeypatch, empty, True)
+async def test_empty_router_rpc_quote_tries_next_pool(
+    monkeypatch: Any, empty: str, protocol: str
+) -> None:
+    service, calls = empty_quote_graph(monkeypatch, empty, True, protocol)
     result = await service.price(TOKEN, BLOCK, Decimal("1.000001"))
     assert result is not None and result.quote is not None
     assert result.quote.input == QuoteAsset(TOKEN, 1000001, 6)
     assert result.quote.outputs == (QuoteAsset(USD, 997003, 6),)
     assert result.quote.total_usd == Decimal("0.997003")
     assert [step.contract for step in result.quote.steps] == ["later"]
+    assert result.quote.steps[0].protocol == protocol
     assert result.quote.steps[0].fees == "DEX fees included in native quote"
     assert calls == [ROUTER, SECOND_ROUTER]
 
 
 @run_async_test
+@pytest.mark.parametrize("protocol", ["Uniswap V2", "Solidly", "Velodrome V2"])
 @pytest.mark.parametrize("empty", ["rpc", "array"])
 @pytest.mark.parametrize("fail", [True, False])
-async def test_empty_v2_public_exhaustion(monkeypatch: Any, empty: str, fail: bool) -> None:
-    _, calls = empty_quote_graph(monkeypatch, empty, False)
+async def test_empty_router_public_exhaustion(
+    monkeypatch: Any, empty: str, fail: bool, protocol: str
+) -> None:
+    _, calls = empty_quote_graph(monkeypatch, empty, False, protocol)
     if fail:
         assert (
             await cast(Any, magic.get_price)(
@@ -102,18 +120,27 @@ async def test_empty_v2_public_exhaustion(monkeypatch: Any, empty: str, fail: bo
 
 
 @run_async_test
+@pytest.mark.parametrize("protocol", ["Uniswap V2", "Solidly", "Velodrome V2"])
 @pytest.mark.parametrize("empty", [None, [], ()])
-async def test_decoded_empty_v2_quote_is_unavailable(monkeypatch: Any, empty: Any) -> None:
+async def test_decoded_empty_router_quote_is_unavailable(
+    monkeypatch: Any, empty: Any, protocol: str
+) -> None:
     monkeypatch.setattr(_markets, "read", AsyncMock(return_value=empty))
-    assert await _markets.swap(market("pool"), QuoteAsset(TOKEN, 1, 6), USD, BLOCK) is None
+    assert (
+        await _markets.swap(market("pool", protocol=protocol), QuoteAsset(TOKEN, 1, 6), USD, BLOCK)
+        is None
+    )
 
 
 @run_async_test
+@pytest.mark.parametrize("protocol", ["Uniswap V2", "Solidly", "Velodrome V2"])
 @pytest.mark.parametrize(
     "error", [TypeError("bad decoder"), RuntimeError("RPC failed"), asyncio.CancelledError()]
 )
-async def test_v2_unexpected_errors_propagate(monkeypatch: Any, error: BaseException) -> None:
-    service, _ = empty_quote_graph(monkeypatch, "rpc", True)
+async def test_router_unexpected_errors_propagate(
+    monkeypatch: Any, error: BaseException, protocol: str
+) -> None:
+    service, _ = empty_quote_graph(monkeypatch, "rpc", True, protocol)
     monkeypatch.setattr(
         _rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=AsyncMock(side_effect=error)))
     )

@@ -109,6 +109,11 @@ profile = "black"
 line_length = 100
 
 [tool.validation]
+review_quote_tests = [
+  "tests/test_uniswap_address_repairs.py",
+  "tests/prices/test_chainlink.py",
+  "tests/prices/dex/test_uniswap.py::test_uniswap_v3",
+]
 repair_tests = [
   "tests/test_historical_price_repairs.py",
   "tests/prices/test_magic.py::test_bulk_fixture_releases_mapped_requests",

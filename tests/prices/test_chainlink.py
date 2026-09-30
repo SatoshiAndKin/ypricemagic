@@ -3,10 +3,10 @@ from typing import cast
 import pytest
 from brownie import ZERO_ADDRESS, chain
 
-from tests.fixtures import async_result, mainnet_only
-from y.contracts import contract_creation_block_async
+from tests.fixtures import mainnet_only
+from tests.price_expectations import REVIEW_BLOCK_HASH, expected_feed, expected_feed_price
 from y.networks import Network
-from y.prices._rpc import BlockRef, optional_read
+from y.prices._rpc import BlockRef
 from y.prices.chainlink import FEEDS as STATIC_FEEDS
 from y.prices.chainlink import Chainlink, chainlink
 
@@ -120,70 +120,41 @@ feeds.update(
 FEEDS = list(feeds)
 
 
+async def assert_native_chainlink(token: str, block: BlockRef, *, price: bool) -> None:
+    if block.chain == Network.Mainnet and block.number == 26_063_967:
+        assert block.hash == REVIEW_BLOCK_HASH
+    expected = await expected_feed(token, block)
+    feed = await cast(Chainlink, chainlink).get_feed(token, block=block, sync=False)
+    assert (feed.address.lower() if feed is not None else None) == expected
+    if price:
+        value = await cast(Chainlink, chainlink).get_price(token, block=block, sync=False)
+        native = await expected_feed_price(expected, block) if expected is not None else None
+        assert value == native
+    await block.verify()
+
+
 @pytest.mark.parametrize("token", FEEDS)
 @pytest.mark.asyncio_cooperative
 async def test_chainlink_get_feed(token: str) -> None:
-    """
-    Test ``chainlink.get_feed`` with both lowercase and checksum addresses.
-
-    This test verifies that ``chainlink.get_feed`` returns a valid Feed object by
-    asserting that the returned object is not equal to ZERO_ADDRESS.
-
-    See Also:
-        :func:`y.prices.chainlink.chainlink.get_feed`
-    """
-    feed = await cast(Chainlink, chainlink).get_feed(token, sync=False)
-    if feed is None:
-        assert await cast(Chainlink, chainlink).get_price(token, sync=False) is None
-    else:
-        assert feed.address != ZERO_ADDRESS
+    """Discovery must match the independently queried registry and static aliases."""
+    block = await BlockRef.resolve(26_063_967 if chain.id == Network.Mainnet else None)
+    await assert_native_chainlink(token, block, price=False)
 
 
 @pytest.mark.parametrize("token", FEEDS)
 @pytest.mark.asyncio_cooperative
 async def test_chainlink_latest(token: str) -> None:
-    """Unavailable feeds must be stale or have an explicitly removed aggregator."""
-    block = await BlockRef.resolve(None)
-    if not await async_result(cast(Chainlink, chainlink).get_price(token, block=block.number)):
-        feed = await async_result(cast(Chainlink, chainlink).get_feed(token, block=block))
-        if feed is None:
-            return  # The registry removed this feed.
-        if await optional_read(feed.address, "aggregator()(address)", block) == ZERO_ADDRESS:
-            return  # A removed aggregator's timestamp call can revert directly.
-        latest_timestamp = await feed.latest_timestamp(block)
-        if latest_timestamp and latest_timestamp + 24 * 60 * 60 < block.timestamp:
-            pytest.skip("feed is stale")
-        pytest.fail("no current price available from an active aggregator")
+    """Known-active feeds must return the native USD value at a pinned recent block."""
+    block = await BlockRef.resolve(26_063_967 if chain.id == Network.Mainnet else None)
+    await assert_native_chainlink(token, block, price=True)
 
 
 @mainnet_only
 @pytest.mark.parametrize("token", FEEDS)
 @pytest.mark.asyncio_cooperative
 async def test_chainlink_before_registry(token: str) -> None:
-    """
-    Test Chainlink price retrieval for a token at a block prior to the availability
-    of the Chainlink registry.
-
-    This test verifies that a price retrieval attempt using ``chainlink.get_price``
-    at a historical block (set to 12800000) either returns a valid price or, if not,
-    examines the Feed object. If the feed was deployed after the test block, the test
-    is skipped. Otherwise, if no price is returned and the feed is not stale, it asserts
-    that the feed's contract aggregator property equals the zero address, indicating
-    that no price is available before the registry.
-
-    See Also:
-        :func:`y.prices.chainlink.chainlink.get_price`
-    """
-    test_block = 12800000
-    feed = await cast(Chainlink, chainlink).get_feed(token, block=test_block, sync=False)
-    price = await cast(Chainlink, chainlink).get_price(token, block=test_block, sync=False)
-    if feed is None:
-        assert price is None
-        return
-    assert await contract_creation_block_async(feed.address) <= test_block
-    # Compare the selected historical feed directly, at the same block.
-    expected = await feed.get_price(block=test_block)
-    assert price == expected
+    """Before the registry, deployed static aliases alone determine availability."""
+    await assert_native_chainlink(token, await BlockRef.resolve(12_800_000), price=True)
 
 
 @pytest.mark.asyncio_cooperative

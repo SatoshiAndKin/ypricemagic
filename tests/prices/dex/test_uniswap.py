@@ -8,6 +8,7 @@ See Also:
     :class:`~y.prices.dex.uniswap.uniswap.UniswapMultiplexer`
 """
 
+from decimal import Decimal, localcontext
 from typing import Any
 
 import pytest
@@ -16,6 +17,12 @@ from brownie import chain
 from web3.exceptions import ContractLogicError
 
 from tests.fixtures import async_result, mutate_addresses
+from tests.price_expectations import (
+    REVIEW_BLOCK_HASH,
+    expected_feed,
+    expected_feed_price,
+    native_read,
+)
 from tests.test_amount_quotes import BLOCK, TOKEN, USD, market
 from tests.test_pricing_correctness import run_async_test
 from tests.test_quote_repairs import multiplexer_graph
@@ -137,19 +144,20 @@ async def test_uniswap_v3(token: Address) -> None:
     from eth_abi.packed import encode_packed
 
     from y.prices._routing import liquidity_price
-    from y.prices._rpc import read
     from y.prices.dex.uniswap.v3 import load_quoter
 
     block = await BlockRef.resolve(26_063_967)
+    assert block.hash == REVIEW_BLOCK_HASH
     assert v3.uniswap_v3 is not None
     price = await v3.uniswap_v3.get_price(token, block.number, skip_cache=True, sync=False)
-    quoter = await load_quoter(v3.uniswap_v3._quoter)
-    if price is None:
-        token_address = str(token).lower()
-        assert token_address in {
-            "0xec67005c4e498ec7f55e092bd1d35cbc47c91892",
-            "0xba11d00c5f74255f56a5e366f4f77f5a186d7f55",
-        }
+    token_address = str(token).lower()
+    unavailable_tokens = {
+        "0xec67005c4e498ec7f55e092bd1d35cbc47c91892",
+        "0xba11d00c5f74255f56a5e366f4f77f5a186d7f55",
+    }
+    if token_address in unavailable_tokens:
+        assert price is None
+        quoter = await load_quoter(v3.uniswap_v3._quoter)
         path = encode_packed(
             ["address", "uint24", "address"],
             [token, 3000, "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"],
@@ -172,6 +180,7 @@ async def test_uniswap_v3(token: Address) -> None:
             )
             assert small == large == 3838826218858
     else:
+        assert price is not None
         sale = await liquidity_price(
             str(token),
             block.number,
@@ -180,12 +189,33 @@ async def test_uniswap_v3(token: Address) -> None:
             first_markets=(str(v3.uniswap_v3._factory).lower(),),
         )
         assert sale is not None and sale.quote is not None
-        assert float(price) == float(sale)
-        for step in sale.quote.steps:
-            if step.protocol != "Uniswap V3":
-                continue
-            fee = await read(step.contract, "fee()(uint24)", block)
-            factory = await read(step.contract, "factory()(address)", block)
+        quote = sale.quote
+        decimals = await native_read(token_address, "decimals()(uint8)", block)
+        assert quote.input.token == token_address
+        assert quote.input.decimals == decimals
+        assert quote.input.amount == 10**decimals
+        assert quote.block_number == block.number and quote.block_hash == block.hash
+        assert quote.steps, "an available V3 price must execute a native trade"
+        current = quote.input
+        for index, step in enumerate(quote.steps):
+            assert step.kind == "swap" and step.protocol == "Uniswap V3"
+            assert step.input == current
+            assert len(step.outputs) == 1
+            output = step.outputs[0]
+            assert output.decimals == await native_read(output.token, "decimals()(uint8)", block)
+            fee = await native_read(step.contract, "fee()(uint24)", block)
+            factory = await native_read(step.contract, "factory()(address)", block)
+            if index == 0:
+                assert str(factory).lower() == str(v3.uniswap_v3._factory).lower()
+            pool = await native_read(
+                factory,
+                "getPool(address,address,uint24)(address)",
+                block,
+                current.token,
+                output.token,
+                fee,
+            )
+            assert str(pool).lower() == step.contract.lower()
             router = next(
                 router
                 for router in (uniswap_multiplexer.v3, *uniswap_multiplexer.v3_forks)
@@ -193,11 +223,34 @@ async def test_uniswap_v3(token: Address) -> None:
             )
             native_quoter = await load_quoter(router._quoter)
             path = encode_packed(
-                ["address", "uint24", "address"], [step.input.token, fee, step.outputs[0].token]
+                ["address", "uint24", "address"], [current.token, fee, output.token]
             )
             native: int | tuple[int, ...] = await native_quoter.quoteExactInput.coroutine(
-                path, step.input.amount, block_identifier=block.identifier
+                path, current.amount, block_identifier=block.identifier
             )
-            assert step.outputs[0].amount == (native if isinstance(native, int) else native[0])
-        assert sale.quote.input.amount == 10**sale.quote.input.decimals
+            assert output.amount == (native if isinstance(native, int) else native[0])
+            assert output.amount > 0
+            reverse = encode_packed(
+                ["address", "uint24", "address"], [output.token, fee, current.token]
+            )
+            required: int | tuple[int, ...] = await native_quoter.quoteExactOutput.coroutine(
+                reverse, output.amount + 1, block_identifier=block.identifier
+            )
+            assert (required if isinstance(required, int) else required[0]) > current.amount
+            current = output
+        assert quote.outputs == (current,)
+        if current.token == "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48":
+            usd = 1.0  # Explicit fixed-USDC policy, independent of routing.
+        else:
+            feed = await expected_feed(current.token, block)
+            assert feed is not None
+            native_usd = await expected_feed_price(feed, block)
+            assert native_usd is not None and native_usd > 0
+            usd = native_usd
+        with localcontext() as context:
+            context.prec = 100
+            expected_usd = Decimal(current.amount) / 10**current.decimals * Decimal(str(usd))
+        assert quote.total_usd == expected_usd
+        assert float(sale) == float(expected_usd)
+        assert float(price) == float(expected_usd)
     await block.verify()
