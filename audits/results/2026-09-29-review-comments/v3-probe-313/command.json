@@ -1,0 +1,31 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "python -m mypy > /reports/mypy.txt 2>&1 && python /runner/probe.py && python -m pip install --no-deps --no-build-isolation -e . && python /runner/check_compiled.py && python -c 'import asyncio,json\nfrom dataclasses import asdict\nfrom pathlib import Path\nfrom tests.prices.dex.test_uniswap import V2_TOKENS\nfrom y.prices.dex.uniswap.v3 import uniswap_v3\nfrom y.prices._rpc import BlockRef\nasync def main():\n b=await BlockRef.resolve(26063967)\n rows=[]\n for token in sorted({str(t).lower() for t in V2_TOKENS}):\n  p=await uniswap_v3.get_price(token,b.number,skip_cache=True,sync=False)\n  row={'\"'\"'token'\"'\"':token,'\"'\"'price'\"'\"':float(p) if p is not None else None,'\"'\"'quote'\"'\"':asdict(p.quote) if p is not None and p.quote else None}\n  rows.append(row)\n  Path('\"'\"'/reports/v3-paths.json'\"'\"').write_text(json.dumps({'\"'\"'block'\"'\"':asdict(b),'\"'\"'rows'\"'\"':rows},indent=2,default=str)+'\"'\"'\\n'\"'\"')\n  print('\"'\"'PROBED'\"'\"',token,flush=True)\n await b.verify()\nasyncio.get_event_loop().run_until_complete(main())\n'"
+  ],
+  "exit_code": -15,
+  "interrupted": true,
+  "elapsed_seconds": 988.1125015289872,
+  "peak_sampled_process_rss_bytes": 2434174976,
+  "cgroup_before": {
+    "memory.current": "8613888",
+    "memory.peak": "8708096",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "2"
+  },
+  "cgroup_after": {
+    "memory.current": "3306344448",
+    "memory.peak": "3307048960",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.max": "400000 100000",
+    "pids.max": "512",
+    "pids.current": "12"
+  }
+}

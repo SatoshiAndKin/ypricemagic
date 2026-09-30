@@ -200,3 +200,32 @@ The [follow-up checklist and evidence](results/2026-09-28-zero-failures/README.m
 track each repair, original-source regression control, immutable validation
 attempt, and final acceptance gates. Earlier failed and interrupted results
 above retain their original status; they are not relabelled as passing.
+
+## Review-comment follow-up
+
+All three review findings are repaired and independently verified. Chainlink
+availability and USD values come from pinned native state; V3 prices require an
+actual native swap/redemption path and independent terminal valuation; empty
+Solidly and Velodrome V2 results now allow routing fallback.
+
+- [x] Original adapter control: 18 failures reproduced; the same assertions pass
+      after repair, with exact native amounts and failure propagation preserved.
+- [x] All 450 review cases pass on Python 3.12 and Python 3.13.
+- [x] The always-None Chainlink mutation causes 162 assertion failures; the
+      constant-$123/empty-path V3 mutation fails all 84 cases.
+- [x] Required Python 3.12 full command: **2,161 passed, 17 skipped,
+      zero failures**, exit 0.
+- [x] Frozen Python 3.11–3.13 matrix: **691 focused tests passed per version**,
+      all ten compiled imports verified, strict mypy clean across 231 files,
+      and all 11 runner unit tests passed.
+- [x] All 15 sequential historical native checks passed.
+- [x] Fix and regress the diagnostic sampler's collision with mocked retry sleeps;
+      preserve the old configured-timeout result separately.
+- [x] All 13 GitHub checks passed on validated source `7d5074c0`; preserve the
+      unrelated generated C hash and keep delivery changes scoped to audit docs.
+
+The [review repair evidence](results/2026-09-29-review-comments/README.md) records
+source identities, exact failures, resource measurements, report completeness,
+negative controls, and final acceptance gates. Production pricing is identical
+between `5e809224` and `7d5074c0`; the latter adds only the sampler fix and its
+regression. No deadline or resource limit was increased.

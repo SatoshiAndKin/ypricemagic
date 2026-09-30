@@ -1,0 +1,15 @@
+{
+  "baseline_source": "5e809224bdc63576bf07dfcf4845e39b908ddbdb",
+  "repaired_source": "7d5074c0b31fa61b59a1a79ad9aaeccdeafb51ad",
+  "regression": "test_runner.SamplerTests.test_retry_sleep_patch_cannot_spin_or_fail_diagnostic_sampler",
+  "old_result": {
+    "exit_code": 1,
+    "failed": 1
+  },
+  "repaired_local_result": {
+    "exit_code": 0,
+    "passed": 11
+  },
+  "baseline_sampler_sha256": "d71933fc933ac59347eb7134ff4f5702925e6408f03c29f0a353ab2d8ded154f",
+  "regression_file_sha256": "2560883418b8f77070031903a3f33ed5fbe0c2f97aecad3e6ede09bae9272f44"
+}

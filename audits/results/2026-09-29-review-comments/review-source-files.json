@@ -1,0 +1,14 @@
+{
+  "committed_source": "03df6cdf79f7e5902dd4e439b8a10d9ab0e414e5",
+  "attempt": "review-positive4-312",
+  "files": {
+    "pyproject.toml": "3cb221db4b02715d3c1770ae1533b4c60811797b6eaf077ce6659b2339d72ce3",
+    "tests/price_expectations.py": "762c6dde58242f25e9622eb6431b5b421d1cd1b46de115a4be975397391a9bd4",
+    "tests/prices/test_chainlink.py": "e7a0af9434efdb22de1f0a3e39d701131c8bb1f0b04f1122fcacdba3882ed0d1",
+    "tests/prices/dex/test_uniswap.py": "2037723fa1d2e8fda440584165e6338317d93ce8ee4541c3c86899cd681ff3c5",
+    "tests/test_misc_fixes.py": "127aeaa011afb3dd80eadff8516020dc2f51fcf11465ed19435abd4342a4a03d",
+    "tests/test_uniswap_address_repairs.py": "e75aeb954a1ea1813263a312723b74005205226c648dee9d505e84d56b489dba",
+    "y/prices/_markets.py": "ca44fe128f27ebad60a0041b9b23cf723f1084c473842a7712e13ed9087f707e"
+  },
+  "all_match_committed_source": true
+}

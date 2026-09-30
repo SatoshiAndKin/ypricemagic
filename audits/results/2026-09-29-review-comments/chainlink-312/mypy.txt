@@ -1,0 +1,18 @@
+tests/price_expectations.py:7: error: Module "eth_abi" does not explicitly
+export attribute "decode"  [attr-defined]
+    from eth_abi import decode
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/price_expectations.py: note: In function "expected_feed":
+tests/price_expectations.py:37: error: Argument 1 to "get_code" of "DankEth"
+has incompatible type "str"; expected "ChecksumAddress"  [arg-type]
+        if registry and await dank_web3.eth.get_code(registry, block.ident...
+                                                     ^~~~~~~~
+tests/price_expectations.py:49: error: Need type annotation for "logs" 
+[var-annotated]
+                logs = await dank_web3.eth.get_logs(
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tests/price_expectations.py:65: error: Argument 1 to "get_code" of "DankEth"
+has incompatible type "str"; expected "ChecksumAddress"  [arg-type]
+        if static and await dank_web3.eth.get_code(static, block.identifie...
+                                                   ^~~~~~
+Found 4 errors in 1 file (checked 231 source files)

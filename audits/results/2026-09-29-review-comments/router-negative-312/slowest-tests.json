@@ -1,0 +1,52 @@
+[
+  {
+    "test": "tests/test_uniswap_address_repairs.py::test_router_unexpected_errors_propagate[error0-Velodrome V2]",
+    "outcome": "passed",
+    "duration": 0.03638399497140199
+  },
+  {
+    "test": "tests/test_uniswap_address_repairs.py::test_v2_index_normalizes_metadata_lookup[checksum]",
+    "outcome": "passed",
+    "duration": 0.004535573010798544
+  },
+  {
+    "test": "tests/test_uniswap_address_repairs.py::test_v2_index_normalizes_metadata_lookup[lower]",
+    "outcome": "passed",
+    "duration": 0.002611034957226366
+  },
+  {
+    "test": "tests/test_uniswap_address_repairs.py::test_v2_index_normalizes_metadata_lookup[bytes]",
+    "outcome": "passed",
+    "duration": 0.00255261902930215
+  },
+  {
+    "test": "tests/test_uniswap_address_repairs.py::test_empty_router_rpc_quote_tries_next_pool[rpc-Uniswap V2]",
+    "outcome": "passed",
+    "duration": 0.001456288038752973
+  },
+  {
+    "test": "tests/test_uniswap_address_repairs.py::test_v3_entry_normalizes_before_real_routing[15000000-True-hexbytes-Uniswap V3]",
+    "outcome": "passed",
+    "duration": 0.00120274699293077
+  },
+  {
+    "test": "tests/test_uniswap_address_repairs.py::test_v3_entry_normalizes_before_real_routing[None-False-bytes-Slipstream]",
+    "outcome": "passed",
+    "duration": 0.0011911219917237759
+  },
+  {
+    "test": "tests/test_uniswap_address_repairs.py::test_empty_router_rpc_quote_tries_next_pool[rpc-Velodrome V2]",
+    "outcome": "failed",
+    "duration": 0.0011374559835530818
+  },
+  {
+    "test": "tests/test_uniswap_address_repairs.py::test_empty_router_public_exhaustion[True-rpc-Uniswap V2]",
+    "outcome": "passed",
+    "duration": 0.001098914013709873
+  },
+  {
+    "test": "tests/test_uniswap_address_repairs.py::test_v2_index_normalizes_metadata_lookup[hexbytes]",
+    "outcome": "passed",
+    "duration": 0.0010321220033802092
+  }
+]

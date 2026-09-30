@@ -1,0 +1,35 @@
+{
+  "block": {
+    "chain": 1,
+    "number": 26063967,
+    "hash": "0xb70aaad0284471dfe63bac8acd9b3690445e79fe1fcbafd19c1b08a63e465817",
+    "timestamp": 1790453891
+  },
+  "rows": [
+    {
+      "token": "0x04fa0d235c4abf4bcf4787af4cf447de572ef828",
+      "price": 0.4274214527537384,
+      "quote": null
+    },
+    {
+      "token": "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e",
+      "price": 1931.6816090640475,
+      "quote": null
+    },
+    {
+      "token": "0x0f5d2fb29fb7d3cfee444a200298f468908cc942",
+      "price": 0.0909283146169271,
+      "quote": null
+    },
+    {
+      "token": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+      "price": 9.520117540492445,
+      "quote": null
+    },
+    {
+      "token": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+      "price": 83927.506183729,
+      "quote": null
+    }
+  ]
+}
