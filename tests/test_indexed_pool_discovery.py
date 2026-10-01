@@ -168,8 +168,10 @@ async def test_v2_latest_returns_copy_and_helper_fallback_keeps_block(monkeypatc
 
 
 @run_async_test
-@pytest.mark.parametrize("http", [False, True])
-async def test_large_range_rejection_splits_without_gaps(monkeypatch: Any, http: bool) -> None:
+@pytest.mark.parametrize("http", [False, True, "timeout"])
+async def test_large_range_rejection_splits_without_gaps(
+    monkeypatch: Any, http: bool | str
+) -> None:
     from aiohttp import ClientResponseError
 
     from y.utils import _log_ranges as _indexed
@@ -180,6 +182,8 @@ async def test_large_range_rejection_splits_without_gaps(monkeypatch: Any, http:
         start, end = int(args["fromBlock"], 16), int(args["toBlock"], 16)
         calls.append((start, end))
         if end - start + 1 > 10000:
+            if http == "timeout":
+                raise TimeoutError()
             if http:
                 raise ClientResponseError(
                     cast(Any, SimpleNamespace(real_url="https://example.invalid")), (), status=400
@@ -187,7 +191,7 @@ async def test_large_range_rejection_splits_without_gaps(monkeypatch: Any, http:
             raise ValueError("Log response size exceeded.")
         return [start, end]
 
-    monkeypatch.setattr(_indexed, "dank_eth", SimpleNamespace(get_logs=get_logs))
+    monkeypatch.setattr(_indexed, "_request_logs", get_logs)
     assert cast(Any, await _indexed.adaptive_logs([USD], ["signature", "token"], 1, 20001)) == [
         1,
         5001,
@@ -214,7 +218,7 @@ async def test_small_range_and_unexpected_errors_propagate(monkeypatch: Any, kin
     else:
         error = ValueError("invalid indexed topic") if kind == "rpc" else asyncio.CancelledError()
     request = AsyncMock(side_effect=error)
-    monkeypatch.setattr(_indexed, "dank_eth", SimpleNamespace(get_logs=request))
+    monkeypatch.setattr(_indexed, "_request_logs", request)
     with pytest.raises(type(error)):
         await _indexed.adaptive_logs(
             [USD], ["signature", "token"], 1, 10000 if kind == "http400" else 1000000
@@ -279,3 +283,82 @@ def test_indexed_range_respects_provider_and_explicit_limits(
     monkeypatch.setattr(envs, "GETLOGS_BATCH_SIZE", override)
     monkeypatch.setattr(middleware, "BATCH_SIZE", default)
     assert _log_ranges.indexed_chunk_size() == expected
+
+
+@run_async_test
+async def test_http_range_error_reaches_splitter_without_batch_retry(monkeypatch: Any) -> None:
+    from aiohttp import ClientSession, web
+    from web3 import AsyncHTTPProvider
+
+    from y.utils import _log_ranges
+
+    ranges: list[tuple[int, int]] = []
+
+    async def rpc(request: web.Request) -> web.Response:
+        body = await request.json()
+        assert isinstance(body, dict), "discovery entered a JSON RPC batch"
+        args = body["params"][0]
+        start, end = int(args["fromBlock"], 16), int(args["toBlock"], 16)
+        ranges.append((start, end))
+        if end - start + 1 > 10000:
+            return web.json_response(
+                {
+                    "jsonrpc": "2.0",
+                    "id": body["id"],
+                    "error": {"code": 400, "message": "invalid block range given"},
+                },
+                status=400,
+            )
+        result = [
+            {
+                "address": USD,
+                "topics": [],
+                "data": "0x",
+                "blockNumber": hex(block),
+                "blockHash": "0x" + "aa" * 32,
+                "transactionHash": "0x" + "bb" * 32,
+                "logIndex": "0x0",
+                "transactionIndex": "0x0",
+                "removed": False,
+            }
+            for block in (start, end)
+        ]
+        return web.json_response({"jsonrpc": "2.0", "id": body["id"], "result": result})
+
+    app = web.Application()
+    app.router.add_post("/", rpc)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    import socket
+
+    with socket.socket() as listener:
+        listener.bind(("127.0.0.1", 0))
+        site = web.SockSite(runner, listener)
+        await site.start()
+        port = listener.getsockname()[1]
+        provider = AsyncHTTPProvider(f"http://127.0.0.1:{port}")
+        session = await provider.cache_async_session(ClientSession())
+        monkeypatch.setattr(
+            _log_ranges,
+            "dank_web3",
+            SimpleNamespace(eth=SimpleNamespace(w3=SimpleNamespace(provider=provider))),
+        )
+        try:
+            logs = await asyncio.wait_for(_log_ranges.adaptive_logs([USD], [], 1, 20001), 5)
+            assert [log.blockNumber for log in logs] == [1, 5001, 5002, 10001, 10002, 20001]
+            assert ranges == [(1, 20001), (1, 10001), (1, 5001), (5002, 10001), (10002, 20001)]
+        finally:
+            await session.close()
+            await runner.cleanup()
+
+
+@run_async_test
+async def test_large_scan_preserves_transient_parse_error_retry(monkeypatch: Any) -> None:
+    from y.utils import _log_ranges
+    from y.utils.events import LogFilter
+
+    request = AsyncMock(side_effect=[ValueError("parse error"), ValueError("parse error"), []])
+    monkeypatch.setattr(_log_ranges, "adaptive_logs", request)
+    reader = LogFilter(addresses=[USD], topics=[], from_block=1)
+    assert await reader._fetch_range(1, 1000000) == []
+    assert request.await_count == 3

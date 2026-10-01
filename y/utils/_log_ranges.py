@@ -1,11 +1,15 @@
 """Sparse indexed creation events can use large ranges with bounded splitting."""
 
+from asyncio import timeout
 from collections.abc import Iterable, Sequence
 from typing import Any
 
 from aiohttp import ClientResponseError
-from dank_mids.brownie_patch import dank_eth
+from dank_mids.brownie_patch import dank_web3
 from evmspec import Log
+from evmspec.data._main import _decode_hook
+from msgspec import json
+from web3.types import RPCEndpoint
 
 from y._decorators import stuck_coro_debugger
 from y.datatypes import AnyAddressType, Block
@@ -26,6 +30,17 @@ def indexed_chunk_size() -> int:
 
 
 @stuck_coro_debugger
+async def _request_logs(args: dict[str, Any]) -> list[Log]:
+    """Keep range errors out of Dank's batch retry loop so callers can split."""
+    provider = dank_web3.eth.w3.provider
+    async with timeout(30):
+        response = await provider.make_request(RPCEndpoint("eth_getLogs"), [args])
+    if "error" in response:
+        raise ValueError(response["error"])
+    return json.decode(json.encode(response["result"]), type=list[Log], dec_hook=_decode_hook)
+
+
+@stuck_coro_debugger
 async def adaptive_logs(
     addresses: AnyAddressType | Iterable[AnyAddressType] | None,
     topics: Sequence[str | Sequence[str] | None] | None,
@@ -43,19 +58,20 @@ async def adaptive_logs(
     if addresses is not None:
         args["address"] = addresses
     try:
-        return await dank_eth.get_logs(args)
-    except (ClientResponseError, ValueError) as error:
+        return await _request_logs(args)
+    except (ClientResponseError, ValueError, TimeoutError) as error:
         if end - start + 1 <= SAFE_RANGE:
             raise
         if isinstance(error, ClientResponseError):
             if error.status != 400:
                 raise
-        elif not any(
+        elif isinstance(error, ValueError) and not any(
             message in str(error).lower()
             for message in (
                 "log response size exceeded",
                 "exceed maximum block range",
                 "block range is too wide",
+                "invalid block range given",
                 "query returned more than",
             )
         ):
