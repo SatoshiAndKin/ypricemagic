@@ -15,6 +15,9 @@ from y.prices.dex.uniswap.v3 import UniswapV3, UniswapV3Pool, UniV3Pools
 class BufferedPools(UniV3Pools):
     """Supply completed factory events without starting an RPC loader."""
 
+    def token_objects(self, token: Any, block: int, from_block: int) -> Any:
+        return self.objects(to_block=block, from_block=from_block)
+
     def _ensure_task(self) -> None:
         pass
 

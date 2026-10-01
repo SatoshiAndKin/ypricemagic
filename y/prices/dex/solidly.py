@@ -1,21 +1,46 @@
 from abc import abstractmethod
 from itertools import product
-from typing import cast
+from typing import Any, cast
 
+from brownie.network.event import _add_deployment_topics
 from dank_mids.brownie_patch import dank_eth
+from eth_typing import ABIElement
+from eth_utils import keccak
 
 from y import convert
 from y._decorators import continue_on_revert, stuck_coro_debugger
 from y.datatypes import Address, AddressOrContract, Block, Pool
 from y.exceptions import call_reverted
 from y.prices._candidates import gather_owned, pool_address
-from y.prices.dex.uniswap.v2 import Path, UniswapRouterV2, UniswapV2Pool
+from y.prices.dex.uniswap.v2 import Path, PoolsFromEvents, UniswapRouterV2, UniswapV2Pool
 from y.utils.cache import a_sync_ttl_cache
 
 Route = (
     tuple[AddressOrContract, AddressOrContract, bool]
     | tuple[AddressOrContract, AddressOrContract, bool, str]
 )
+
+
+class SolidlyPoolsFromEvents(PoolsFromEvents):
+    PairCreated = "0x" + keccak(text="PairCreated(address,address,bool,address,uint256)").hex()
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        abi = [
+            {
+                "anonymous": False,
+                "name": "PairCreated",
+                "type": "event",
+                "inputs": [
+                    {"name": "token0", "type": "address", "indexed": True},
+                    {"name": "token1", "type": "address", "indexed": True},
+                    {"name": "stable", "type": "bool", "indexed": False},
+                    {"name": "pair", "type": "address", "indexed": False},
+                    {"name": "", "type": "uint256", "indexed": False},
+                ],
+            }
+        ]
+        _add_deployment_topics(convert.to_address(args[0]), cast(list[ABIElement], abi))
 
 
 class SolidlyRouterBase(UniswapRouterV2):
@@ -31,6 +56,8 @@ class SolidlyRouterBase(UniswapRouterV2):
         - :class:`~y.prices.dex.uniswap.v2.UniswapRouterV2`
         - :class:`~y.prices.dex.uniswap.v2.UniswapV2Pool`
     """
+
+    _pool_events_type: type[PoolsFromEvents] = SolidlyPoolsFromEvents
 
     @continue_on_revert
     @stuck_coro_debugger

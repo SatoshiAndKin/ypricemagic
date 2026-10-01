@@ -714,6 +714,10 @@ class LogFilter(Filter[_StoredLog, "LogCache", Log]):
             >>> logs = await log_filter._fetch_range(1000000, 1000100)
             >>> print(logs)
         """
+        if range_end - range_start + 1 > 10_000:
+            from y.utils._log_ranges import adaptive_logs
+
+            return await adaptive_logs(self.addresses, self.topics, range_start, range_end)
         tries = 0
         while True:
             try:

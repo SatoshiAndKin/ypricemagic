@@ -172,6 +172,7 @@ async def test_v2_index_normalizes_metadata_lookup(monkeypatch: Any, kind: str) 
     router.address = ROUTER
     router._supports_factory_helper = False
     router.factory = ROUTER
+    router.pools = [first, second]
     monkeypatch.setattr(v2, "contract_creation_block_async", AsyncMock(return_value=90))
     # Only native reserves are controlled; indexing, deployment filtering and liquidity stay real.
     monkeypatch.setattr(first, "get_reserves", AsyncMock(return_value=(123456, 654321, 0)))

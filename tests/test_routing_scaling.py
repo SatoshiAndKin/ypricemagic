@@ -60,6 +60,7 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
     router.factory, router.address = data["factory"], "router"
     router._supports_factory_helper = False
     router.special_paths = {}
+    router.pools = pools
     monkeypatch.setattr(UniswapRouterV2, "__pools__", property(lambda _: Ready(pools)))
     # Discovery calls the existing all_pools_for and pools_by_token methods.
     multiplexer = SimpleNamespace(v2_routers={"sushi": router}, v3=None, v3_forks=[], v1=None)

@@ -20,7 +20,9 @@ from y.datatypes import Address, AnyAddressType, Block, Pool, PriceResult
 from y.exceptions import ContractNotVerified, NonStandardERC20, TokenNotFound
 from y.interfaces.uniswap.quoterv3 import UNIV3_QUOTER_ABI
 from y.networks import Network
+from y.utils._log_ranges import indexed_chunk_size
 from y.utils.events import ProcessedEvents
+from y.utils.middleware import BATCH_SIZE
 
 # https://github.com/Uniswap/uniswap-v3-periphery/blob/main/deploys.md
 UNISWAP_V3_FACTORY: Final = "0x1F98431c8aD98523631AE4a59f267346ea31F984"
@@ -457,6 +459,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
             >>> async for pool in uniswap_v3.pools_for_token("0xTokenAddress", 1234567):
             ...     print(pool)
         """
+        token = await convert.to_address_async(token)
         pools = await self.__pools__
 
         # we use a cache here to prevent unnecessary calls to __contains__
@@ -476,7 +479,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
         if block <= loaded_through:
             return
 
-        async for pool in pools.objects(to_block=block, from_block=loaded_through + 1):
+        async for pool in pools.token_objects(token, block, loaded_through + 1):
             if token in pool:
                 entries = cache[cast(int, pool._deploy_block)]
                 if pool not in entries:
@@ -553,8 +556,8 @@ class UniswapV3(a_sync.ASyncGenericBase):
         if weth is not None and usdc is not None and token == weth.address:
             # NOTE: we need to filter these or else we will be fetching every pool
             #       for now, we only focus on weth/usdc pools
-            filter_fn = (
-                lambda pool: pool._get_token_out(token) == usdc.address and pool not in ignore_pools
+            filter_fn = lambda pool: (
+                pool._get_token_out(token) == usdc.address and pool not in ignore_pools
             )
         else:
             filter_fn = lambda pool: pool not in ignore_pools
@@ -626,9 +629,22 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
     _pools_by_token_cache: DefaultDict[Address, dict[Block, list[UniswapV3Pool]]]
     _pools_loaded_through: dict[str, int]
 
-    __slots__ = "asynchronous", "_pools_by_token_cache", "_pools_loaded_through"
+    __slots__ = (
+        "asynchronous",
+        "_pools_by_token_cache",
+        "_pools_loaded_through",
+        "_factory_contract",
+        "_token_filters",
+    )
 
-    def __init__(self, factory: Contract, asynchronous: bool = False) -> None:
+    def __init__(
+        self,
+        factory: Contract,
+        asynchronous: bool = False,
+        *,
+        token: Address | None = None,
+        token_position: int = 1,
+    ) -> None:
         """
         Initialize a UniV3Pools instance.
 
@@ -644,9 +660,44 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
             :class:`SlipstreamPools`
         """
         self.asynchronous = asynchronous
-        super().__init__(addresses=[factory.address], topics=[factory.topics["PoolCreated"]])
+        topics: list[str | None] = [factory.topics["PoolCreated"]]
+        if token is not None:
+            topics.extend([None] * token_position)
+            topics[token_position] = "0x" + convert.to_address(token)[2:].lower().zfill(64)
+        super().__init__(
+            addresses=[factory.address],
+            topics=topics,
+            chunk_size=indexed_chunk_size() if token is not None else BATCH_SIZE,
+        )
+        self._factory_contract = factory
+        self._token_filters: dict[str, tuple[UniV3Pools, UniV3Pools]] = {}
         self._pools_by_token_cache = defaultdict(lambda: defaultdict(list))
         self._pools_loaded_through = {}
+
+    @stuck_coro_debugger
+    async def token_objects(
+        self, token: Address, block: Block, from_block: Block
+    ) -> AsyncIterator[UniswapV3Pool]:
+        """Read both indexed token positions using the protocol's event decoder."""
+        key = str(token)
+        filters = self._token_filters.get(key)
+        if filters is None:
+            filters = (
+                type(self)(
+                    self._factory_contract, self.asynchronous, token=token, token_position=1
+                ),
+                type(self)(
+                    self._factory_contract, self.asynchronous, token=token, token_position=2
+                ),
+            )
+            self._token_filters[key] = filters
+        objects = [
+            pool
+            for events in filters
+            async for pool in events.objects(to_block=block, from_block=from_block)
+        ]
+        for pool in sorted(objects, key=self._get_block_for_obj):
+            yield pool
 
     def _process_event(self, event: _EventItem[Any]) -> UniswapV3Pool:
         """

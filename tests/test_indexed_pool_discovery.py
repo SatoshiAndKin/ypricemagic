@@ -1,0 +1,281 @@
+"""Token indexes preserve both event positions and historical completeness."""
+
+import asyncio
+from collections.abc import AsyncIterator
+from types import SimpleNamespace
+from typing import Any, cast
+from unittest.mock import AsyncMock
+
+import pytest
+
+from tests.test_amount_quotes import CHILD, TOKEN, USD
+from tests.test_pricing_correctness import Ready, instance, run_async_test
+from y import convert
+from y.prices.dex.solidly import SolidlyRouter
+from y.prices.dex.uniswap import v2, v3
+from y.prices.dex.velodrome import VelodromeRouterV2
+from y.utils.events import ProcessedEvents
+
+
+class Event(dict[str, Any]):
+    block_number: int
+
+    def __init__(self, block: int, **kwargs: Any) -> None:
+        super().__init__(kwargs)
+        self.block_number = block
+
+
+def event_history(protocol: str) -> list[Event]:
+    rows = [(10, TOKEN, USD), (10, CHILD, TOKEN), (20, TOKEN, CHILD), (12, USD, CHILD)]
+    if protocol in ("v2", "solidly", "velodrome"):
+        return [
+            Event(
+                block,
+                token0=first,
+                token1=second,
+                **(
+                    {"pool": f"0x{0x448800+i:040x}", "stable": i % 2 == 0}
+                    if protocol == "velodrome"
+                    else {"pair": f"0x{0x445500+i:040x}", "stable": i % 2 == 0}
+                ),
+            )
+            for i, (block, first, second) in enumerate(rows)
+        ]
+    return [
+        Event(
+            block,
+            token0=first,
+            token1=second,
+            **({"fee": 3000, "tick_spacing": 60} if protocol == "v3" else {"tick_spacing": 60}),
+            pool=f"0x{0x446600+i+(100 if protocol == 'slipstream' else 0):040x}",
+        )
+        for i, (block, first, second) in enumerate(rows)
+    ]
+
+
+def setup_discovery(monkeypatch: Any, protocol: str) -> tuple[Any, list[Event], list[Any], Any]:
+    rows = event_history(protocol)
+    calls: list[Any] = []
+    state = SimpleNamespace(failure=None)
+    factory: Any = SimpleNamespace(address=USD, topics={"PoolCreated": "0x" + "12" * 32})
+    if protocol in ("v2", "solidly", "velodrome"):
+        router_type: Any = {
+            "v2": v2.UniswapRouterV2,
+            "solidly": SolidlyRouter,
+            "velodrome": VelodromeRouterV2,
+        }[protocol]
+        router = instance(router_type)
+        router.address, router.factory, router.label = CHILD, USD, "review"
+        router._supports_factory_helper = False
+        router._skip_factory_helper = set()
+        from brownie.network.event import _deployment_topics
+
+        monkeypatch.setitem(_deployment_topics, convert.to_address(USD), {})
+
+        def no_inventory(self: Any) -> Any:
+            raise AssertionError("started a full inventory")
+
+        monkeypatch.setattr(type(router), "__pools__", property(no_inventory))
+        monkeypatch.setattr(v2, "dank_eth", SimpleNamespace(block_number=Ready(30)))
+    else:
+        registry = (v3.UniV3Pools if protocol == "v3" else v3.SlipstreamPools)(factory, True)
+        router = SimpleNamespace(__pools__=Ready(registry))
+
+    async def objects(
+        self: Any, to_block: int, from_block: int | None = None
+    ) -> AsyncIterator[Any]:
+        topics = self.topics
+        assert len(topics) in (2, 3), "started an unfiltered full inventory"
+        position = len(topics) - 1
+        assert position == 1 or topics[1] is None
+        assert self.addresses == [convert.to_address(USD)]
+        calls.append((tuple(topics), from_block, to_block))
+        for row in rows:
+            token = row["token0" if position == 1 else "token1"]
+            if topics[position] == "0x" + token[2:].lower().zfill(64):
+                if (from_block or 0) <= row.block_number <= to_block:
+                    yield self._process_event(row)
+        if position == 2 and state.failure:
+            raise state.failure
+
+    monkeypatch.setattr(ProcessedEvents, "objects", objects)
+    return router, rows, calls, state
+
+
+async def discover(router: Any, protocol: str, token: Any, block: int) -> list[Any]:
+    if protocol in ("v2", "solidly", "velodrome"):
+        return list(await router.get_pools_for(token, block=block, sync=False))
+    return [pool async for pool in v3.UniswapV3.pools_for_token(router, token, block)]
+
+
+@run_async_test
+@pytest.mark.parametrize("protocol", ["v2", "solidly", "velodrome", "v3", "slipstream"])
+@pytest.mark.parametrize("form", ["str", "bytes"])
+async def test_indexed_positions_history_and_incremental_discovery(
+    monkeypatch: Any, protocol: str, form: str
+) -> None:
+    router, rows, calls, _ = setup_discovery(monkeypatch, protocol)
+    token = TOKEN if form == "str" else bytes.fromhex(TOKEN[2:])
+    expected = [row.get("pair", row.get("pool")) for row in rows[:3]]
+    for block, indices in [(10, [0, 1]), (9, []), (20, [0, 1, 2]), (10, [0, 1])]:
+        pools = await discover(router, protocol, token, block)
+        assert {pool.address for pool in pools} == {expected[i] for i in indices}
+        assert len(pools) == len(indices)
+        assert all(pool._deploy_block <= block for pool in pools)
+        if protocol == "slipstream":
+            assert all(isinstance(pool, v3.SlipstreamPool) and pool.fee == 0 for pool in pools)
+    assert len(calls) == (8 if protocol in ("v2", "solidly", "velodrome") else 4)
+    if protocol not in ("v2", "solidly", "velodrome"):
+        assert [entry[1:] for entry in calls] == [(0, 10), (0, 10), (11, 20), (11, 20)]
+
+
+@run_async_test
+@pytest.mark.parametrize("protocol", ["v2", "solidly", "velodrome", "v3", "slipstream"])
+@pytest.mark.parametrize("failure", [RuntimeError("RPC failed"), asyncio.CancelledError()])
+async def test_failed_second_position_can_be_retried(
+    monkeypatch: Any, protocol: str, failure: BaseException
+) -> None:
+    router, rows, _, state = setup_discovery(monkeypatch, protocol)
+    state.failure = failure
+    with pytest.raises(type(failure)):
+        await discover(router, protocol, TOKEN, 20)
+    if protocol not in ("v2", "solidly", "velodrome"):
+        registry = await router.__pools__
+        assert TOKEN not in registry._pools_loaded_through
+    state.failure = None
+    pools = await discover(router, protocol, TOKEN, 20)
+    assert len(pools) == 3
+    assert {pool._deploy_block for pool in pools} == {10, 20}
+
+
+@run_async_test
+async def test_v2_latest_returns_copy_and_helper_fallback_keeps_block(monkeypatch: Any) -> None:
+    router, _, calls, _ = setup_discovery(monkeypatch, "v2")
+    result = await router.all_pools_for(TOKEN, sync=False)
+    assert len(result) == 3
+    result.clear()
+    assert len(await router.all_pools_for(TOKEN, sync=False)) == 3
+    router._supports_factory_helper = True
+    monkeypatch.setattr(
+        v2,
+        "FACTORY_HELPER",
+        SimpleNamespace(
+            getPairsFor=SimpleNamespace(coroutine=AsyncMock(side_effect=ValueError("timeout")))
+        ),
+    )
+    assert len(await router.get_pools_for(TOKEN, block=10, sync=False)) == 2
+    assert [call[2] for call in calls[-2:]] == [10, 10]
+
+
+@run_async_test
+@pytest.mark.parametrize("http", [False, True])
+async def test_large_range_rejection_splits_without_gaps(monkeypatch: Any, http: bool) -> None:
+    from aiohttp import ClientResponseError
+
+    from y.utils import _log_ranges as _indexed
+
+    calls: list[tuple[int, int]] = []
+
+    async def get_logs(args: Any) -> Any:
+        start, end = int(args["fromBlock"], 16), int(args["toBlock"], 16)
+        calls.append((start, end))
+        if end - start + 1 > 10000:
+            if http:
+                raise ClientResponseError(
+                    cast(Any, SimpleNamespace(real_url="https://example.invalid")), (), status=400
+                )
+            raise ValueError("Log response size exceeded.")
+        return [start, end]
+
+    monkeypatch.setattr(_indexed, "dank_eth", SimpleNamespace(get_logs=get_logs))
+    assert cast(Any, await _indexed.adaptive_logs([USD], ["signature", "token"], 1, 20001)) == [
+        1,
+        5001,
+        5002,
+        10001,
+        10002,
+        20001,
+    ]
+    assert calls == [(1, 20001), (1, 10001), (1, 5001), (5002, 10001), (10002, 20001)]
+
+
+@run_async_test
+@pytest.mark.parametrize("kind", ["http400", "http401", "rpc", "cancel"])
+async def test_small_range_and_unexpected_errors_propagate(monkeypatch: Any, kind: str) -> None:
+    from aiohttp import ClientResponseError
+
+    from y.utils import _log_ranges as _indexed
+
+    error: BaseException
+    if kind.startswith("http"):
+        error = ClientResponseError(
+            cast(Any, SimpleNamespace(real_url="https://example.invalid")), (), status=int(kind[4:])
+        )
+    else:
+        error = ValueError("invalid indexed topic") if kind == "rpc" else asyncio.CancelledError()
+    request = AsyncMock(side_effect=error)
+    monkeypatch.setattr(_indexed, "dank_eth", SimpleNamespace(get_logs=request))
+    with pytest.raises(type(error)):
+        await _indexed.adaptive_logs(
+            [USD], ["signature", "token"], 1, 10000 if kind == "http400" else 1000000
+        )
+    request.assert_awaited_once()
+
+
+@pytest.mark.parametrize("protocol", ["solidly", "velodrome"])
+def test_native_stable_pool_creation_event_decodes(monkeypatch: Any, protocol: str) -> None:
+    from brownie.network.event import _deployment_topics
+    from evmspec import Log
+    from evmspec.data._main import _decode_hook
+    from faster_eth_abi import encode
+    from msgspec import json
+
+    from y.prices.dex.solidly import SolidlyPoolsFromEvents
+    from y.prices.dex.velodrome import VelodromePool, VelodromePoolsFromEvents
+    from y.utils.events import decode_logs
+
+    factory = convert.to_address(USD)
+    monkeypatch.setitem(_deployment_topics, factory, {})
+    reader = (VelodromePoolsFromEvents if protocol == "velodrome" else SolidlyPoolsFromEvents)(
+        factory, "review", True, token=TOKEN
+    )
+    pool_address = "0x0000000000000000000000000000000000449900"
+    topics = [reader.PairCreated, "0x" + TOKEN[2:].zfill(64), "0x" + USD[2:].zfill(64)]
+    if protocol == "velodrome":
+        topics.append("0x" + hex(1)[2:].zfill(64))
+        data = encode(["address", "uint256"], [pool_address, 1])
+    else:
+        data = encode(["bool", "address", "uint256"], [True, pool_address, 1])
+    payload = {
+        "address": factory,
+        "topics": topics,
+        "data": "0x" + data.hex(),
+        "blockNumber": "0xa",
+        "blockHash": "0x" + "aa" * 32,
+        "transactionHash": "0x" + "bb" * 32,
+        "logIndex": "0x0",
+        "transactionIndex": "0x0",
+        "removed": False,
+    }
+    log = json.decode(json.encode(payload), type=Log, dec_hook=_decode_hook)
+    pool = reader._process_event(decode_logs([log])[0])
+    assert pool.address == pool_address
+    assert pool._deploy_block == 10
+    assert str(pool.token0) == TOKEN and str(pool.token1) == USD
+    if protocol == "velodrome":
+        assert isinstance(pool, VelodromePool) and pool.is_stable is True
+
+
+@pytest.mark.parametrize(
+    "default,override,expected",
+    [(2000, 0, 2000), (10000, 0, 1000000), (800000, 0, 1000000), (10000, 12345, 12345)],
+)
+def test_indexed_range_respects_provider_and_explicit_limits(
+    monkeypatch: Any, default: int, override: int, expected: int
+) -> None:
+    from y import ENVIRONMENT_VARIABLES as envs
+    from y.utils import _log_ranges, middleware
+
+    monkeypatch.setattr(envs, "GETLOGS_BATCH_SIZE", override)
+    monkeypatch.setattr(middleware, "BATCH_SIZE", default)
+    assert _log_ranges.indexed_chunk_size() == expected
