@@ -21,7 +21,7 @@ from y.exceptions import ContractNotVerified, NonStandardERC20, TokenNotFound
 from y.interfaces.uniswap.quoterv3 import UNIV3_QUOTER_ABI
 from y.networks import Network
 from y.utils._log_ranges import indexed_chunk_size
-from y.utils.events import ProcessedEvents
+from y.utils.events import ProcessedEvents, indexed_pool_executor
 from y.utils.middleware import BATCH_SIZE
 
 # https://github.com/Uniswap/uniswap-v3-periphery/blob/main/deploys.md
@@ -668,6 +668,7 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
             addresses=[factory.address],
             topics=topics,
             chunk_size=indexed_chunk_size() if token is not None else BATCH_SIZE,
+            executor=indexed_pool_executor if token is not None else None,
         )
         self._factory_contract = factory
         self._token_filters: dict[str, tuple[UniV3Pools, UniV3Pools]] = {}

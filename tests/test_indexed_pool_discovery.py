@@ -362,3 +362,21 @@ async def test_large_scan_preserves_transient_parse_error_retry(monkeypatch: Any
     reader = LogFilter(addresses=[USD], topics=[], from_block=1)
     assert await reader._fetch_range(1, 1000000) == []
     assert request.await_count == 3
+
+
+@run_async_test
+async def test_many_token_indexes_bound_database_workers() -> None:
+    """Cold discovery across many tokens must not create a thread per filter."""
+    from threading import get_ident
+
+    factory: Any = SimpleNamespace(address=USD, topics={"PoolCreated": "0x" + "12" * 32})
+    filters: list[ProcessedEvents[Any]] = []
+    for token in (f"0x{number:040x}" for number in range(1, 129)):
+        filters.extend(
+            (
+                v2.PoolsFromEvents(USD, "bounded workers", token=token),
+                v3.UniV3Pools(factory, token=token),
+            )
+        )
+    workers = await asyncio.gather(*(events.executor.run(get_ident) for events in filters))
+    assert len(set(workers)) <= 4, "token count must not scale the database thread count"

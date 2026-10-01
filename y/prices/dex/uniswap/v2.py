@@ -56,7 +56,7 @@ from y.prices._quote import bounded_map
 from y.prices.dex.uniswap.v2_forks import ROUTER_TO_FACTORY, ROUTER_TO_PROTOCOL, special_paths
 from y.utils._log_ranges import indexed_chunk_size
 from y.utils.cache import memory
-from y.utils.events import ProcessedEvents
+from y.utils.events import ProcessedEvents, indexed_pool_executor
 from y.utils.middleware import BATCH_SIZE
 from y.utils.raw_calls import raw_call
 
@@ -488,6 +488,7 @@ class PoolsFromEvents(ProcessedEvents[UniswapV2Pool]):
             topics=topics,
             is_reusable=token is not None,
             chunk_size=indexed_chunk_size() if token is not None else BATCH_SIZE,
+            executor=indexed_pool_executor if token is not None else None,
         )
 
     def __repr__(self) -> str:
