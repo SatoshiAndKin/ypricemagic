@@ -54,8 +54,10 @@ from y.networks import Network
 from y.prices._candidates import pool_is_ignored
 from y.prices._quote import bounded_map
 from y.prices.dex.uniswap.v2_forks import ROUTER_TO_FACTORY, ROUTER_TO_PROTOCOL, special_paths
+from y.utils._log_ranges import indexed_chunk_size
 from y.utils.cache import memory
-from y.utils.events import ProcessedEvents
+from y.utils.events import ProcessedEvents, indexed_pool_executor
+from y.utils.middleware import BATCH_SIZE
 from y.utils.raw_calls import raw_call
 
 logger = getLogger(__name__)
@@ -466,10 +468,28 @@ class PoolsFromEvents(ProcessedEvents[UniswapV2Pool]):
     PairCreated = "0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9"
     __slots__ = "asynchronous", "label"
 
-    def __init__(self, factory: AnyAddressType, label: str, asynchronous: bool = False) -> None:
+    def __init__(
+        self,
+        factory: AnyAddressType,
+        label: str,
+        asynchronous: bool = False,
+        *,
+        token: Address | None = None,
+        token_position: int = 1,
+    ) -> None:
         self.asynchronous = asynchronous
         self.label = label
-        super().__init__(addresses=[factory], topics=[[self.PairCreated]], is_reusable=False)
+        topics: list[str | list[str] | None] = [[self.PairCreated]]
+        if token is not None:
+            topics.extend([None] * token_position)
+            topics[token_position] = "0x" + convert.to_address(token)[2:].lower().zfill(64)
+        super().__init__(
+            addresses=[factory],
+            topics=topics,
+            is_reusable=token is not None,
+            chunk_size=indexed_chunk_size() if token is not None else BATCH_SIZE,
+            executor=indexed_pool_executor if token is not None else None,
+        )
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__} label={self.label}>"
@@ -533,6 +553,8 @@ def _summarize_ignore_pools(
 
 
 class UniswapRouterV2(ContractBase):
+    _pool_events_type: type[PoolsFromEvents] = PoolsFromEvents
+
     def __init__(self, router_address: AnyAddressType, *, asynchronous: bool = False) -> None:
         super().__init__(router_address, asynchronous=asynchronous)
 
@@ -745,17 +767,46 @@ class UniswapRouterV2(ContractBase):
         "UniswapRouterV2", dict[str, dict[UniswapV2Pool, str]]
     ]
 
+    @cached_property
+    def _token_pool_events(self) -> dict[str, tuple[PoolsFromEvents, PoolsFromEvents]]:
+        return {}
+
     @stuck_coro_debugger
-    async def all_pools_for(self, token_in: Address) -> dict[UniswapV2Pool, AddressOrContract]:
+    async def all_pools_for(
+        self, token_in: Address, block: Block | None = None
+    ) -> dict[UniswapV2Pool, AddressOrContract]:
+        """Discover both indexed token positions without loading unrelated pairs."""
         token_in = await convert.to_address_async(token_in)
-        return dict((await self.__pools_by_token__).get(str(token_in), {}))
+        # Reuse a deliberately loaded full inventory, without starting one.
+        if type(self).pools.has_cache_value(self):
+            return dict((await self.__pools_by_token__).get(str(token_in), {}))
+        if block is None:
+            block = await dank_eth.block_number
+        key = str(token_in)
+        filters = self._token_pool_events.get(key)
+        if filters is None:
+            filters = (
+                self._pool_events_type(
+                    self.factory, self.label, self.asynchronous, token=token_in, token_position=1
+                ),
+                self._pool_events_type(
+                    self.factory, self.label, self.asynchronous, token=token_in, token_position=2
+                ),
+            )
+            self._token_pool_events[key] = filters
+        result: dict[UniswapV2Pool, AddressOrContract] = {}
+        for events in filters:
+            async for pool in events.objects(to_block=block):
+                token0, token1 = await type(pool).tokens.get(pool)
+                result[pool] = str(token1 if token_in == token0 else token0)
+        return result
 
     @stuck_coro_debugger
     async def get_pools_for(
         self, token_in: Address, block: Block | None = None
     ) -> dict[UniswapV2Pool, AddressOrContract]:
         if self._supports_factory_helper is False or token_in in self._skip_factory_helper:
-            return await self.all_pools_for(token_in, sync=False)
+            return await self.all_pools_for(token_in, block=block, sync=False)
         try:
             pools: list[HexAddress] = await cast(Contract, FACTORY_HELPER).getPairsFor.coroutine(
                 self.factory, token_in, block_identifier=block
@@ -770,7 +821,7 @@ class UniswapRouterV2(ContractBase):
                 pass
             else:
                 raise
-            return await self.all_pools_for(token_in, sync=False)
+            return await self.all_pools_for(token_in, block=block, sync=False)
 
         pool_to_token_out: dict[UniswapV2Pool, AddressOrContract] = {}
         for p in pools:

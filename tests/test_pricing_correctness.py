@@ -1052,6 +1052,7 @@ async def test_v2_pool_index_is_shared_and_results_are_copied(
     first, second = Pool(TOKEN, CHILD), Pool(TOKEN, "third")
     monkeypatch.setattr(UniswapRouterV2, "__pools__", property(lambda self: Ready([first, second])))
     router = instance(UniswapRouterV2)
+    router.pools = [first, second]
     by_token, by_child = await asyncio.gather(
         router.all_pools_for(TOKEN, sync=False), router.all_pools_for(CHILD, sync=False)
     )

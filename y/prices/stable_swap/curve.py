@@ -716,12 +716,19 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
         )
 
     @a_sync.aka.cached_property
+    @stuck_coro_debugger
     async def coin_to_pools(self) -> dict[str, list[CurvePool]]:
         mapping = defaultdict(set)
         await self.load_all(sync=False)
-        for pool in {CurvePool(pool) for pools in self.factories.values() for pool in pools}:
-            for coin in await pool.__coins__:
-                mapping[coin.address].add(pool)
+        pools = list({CurvePool(pool) for pools in self.factories.values() for pool in pools})
+        # Concurrent reads can share a Dank RPC batch. Bound each group rather
+        # than scheduling every pool or serializing thousands of round trips.
+        for start in range(0, len(pools), 32):
+            batch = pools[start : start + 32]
+            coins_by_pool = await igather(pool.__coins__ for pool in batch)
+            for pool, coins in zip(batch, coins_by_pool):
+                for coin in coins:
+                    mapping[coin.address].add(pool)
         return {coin: list(pools) for coin, pools in mapping.items()}
 
     __coin_to_pools__: HiddenMethodDescriptor["CurveRegistry", dict[str, list[CurvePool]]]

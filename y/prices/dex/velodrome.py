@@ -7,8 +7,10 @@ import eth_retry
 from a_sync import cgather
 from a_sync.a_sync.property import HiddenMethodDescriptor
 from brownie import chain
+from brownie.network.event import _add_deployment_topics, _EventItem
 from dank_mids.brownie_patch import dank_eth
 from eth_typing import ABIElement
+from eth_utils import keccak
 from multicall.call import Call
 from web3.exceptions import ContractLogicError
 
@@ -20,7 +22,7 @@ from y.interfaces.uniswap.velov2 import VELO_V2_FACTORY_ABI
 from y.networks import Network
 from y.prices._quote import bounded_map
 from y.prices.dex.solidly import Route, SolidlyRouterBase
-from y.prices.dex.uniswap.v2 import UniswapV2Pool
+from y.prices.dex.uniswap.v2 import PoolsFromEvents, UniswapV2Pool
 from y.utils import gather_methods
 from y.utils.cache import a_sync_ttl_cache
 from y.utils.raw_calls import raw_call
@@ -83,7 +85,28 @@ class VelodromePool(UniswapV2Pool):
         """Indicates if the pool is stable, as opposed to volatile."""
 
 
+class VelodromePoolsFromEvents(PoolsFromEvents):
+    PairCreated = "0x" + keccak(text="PoolCreated(address,address,bool,address,uint256)").hex()
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        _add_deployment_topics(
+            convert.to_address(args[0]), cast(list[ABIElement], VELO_V2_FACTORY_ABI)
+        )
+
+    def _process_event(self, event: _EventItem[Any]) -> UniswapV2Pool:
+        return VelodromePool(
+            event["pool"],
+            event["token0"],
+            event["token1"],
+            event["stable"],
+            cast(int, getattr(event, "block_number")),
+            asynchronous=self.asynchronous,
+        )
+
+
 class VelodromeRouterV2(SolidlyRouterBase):
+    _pool_events_type: type[PoolsFromEvents] = VelodromePoolsFromEvents
     _supports_uniswap_helper = False
 
     def _encode_route(

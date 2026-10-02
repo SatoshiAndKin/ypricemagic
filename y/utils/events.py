@@ -7,7 +7,7 @@ from inspect import isawaitable
 from itertools import zip_longest
 from logging import getLogger
 from threading import current_thread, main_thread
-from typing import TYPE_CHECKING, Any, NoReturn, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Final, NoReturn, TypeVar, cast
 
 import a_sync
 import dank_mids
@@ -51,6 +51,8 @@ logger = getLogger(__name__)
 
 # Event decoding must not wait behind writes on a filter's database executor.
 _decode_threads = make_executor(1, 1, "ypricemagic event decoder")
+# Sparse indexes are numerous; their disk jobs share a bounded worker pool.
+indexed_pool_executor: Final = make_executor(1, 1, "ypricemagic indexed pool cache")
 
 
 def decode_logs(logs: Iterable[LogReceipt | Log]) -> EventDict | list[_EventItem[Any]]:
@@ -717,6 +719,10 @@ class LogFilter(Filter[_StoredLog, "LogCache", Log]):
         tries = 0
         while True:
             try:
+                if range_end - range_start + 1 > 10_000:
+                    from y.utils._log_ranges import adaptive_logs
+
+                    return await adaptive_logs(self.addresses, self.topics, range_start, range_end)
                 return await _get_logs_async_no_cache(
                     self.addresses, self.topics, range_start, range_end
                 )
