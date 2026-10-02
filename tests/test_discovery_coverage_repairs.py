@@ -278,3 +278,74 @@ async def test_factory_scan_only_publishes_completed_ranges(
         assert rpc.await_count == 1
     assert coverage == ([(10, 20)] if failure == "empty" else [])
     assert not history.scans().flights
+
+
+@run_async_test
+@pytest.mark.parametrize(
+    "dense,ceiling,slow_seconds,expected,third",
+    [
+        (False, 40, 0, 20, 40),
+        (False, 10, 0, 10, 10),
+        (True, 40, 0, 10, 10),
+        (False, 40, 6, 20, 20),
+        (False, 40, 11, 20, 10),
+    ],
+)
+async def test_factory_windows_grow_after_sparse_success_and_bound_dense_history(
+    monkeypatch: Any, dense: bool, ceiling: int, slow_seconds: float, expected: int, third: int
+) -> None:
+    from dank_mids import brownie_patch
+
+    from tests.test_pricing_correctness import Ready
+    from y._db.log_coverage import completed_thru
+    from y.utils import _factory_history as history
+    from y.utils import _log_ranges
+
+    ranges: list[tuple[int, int]] = []
+    coverage: list[tuple[int, int]] = []
+    clock = [0.0]
+
+    class Cache:
+        def __init__(self, *args: Any) -> None:
+            pass
+
+        def is_cached_thru(self, start: int) -> int:
+            return completed_thru(start, coverage)
+
+        def set_metadata(self, start: int, end: int) -> None:
+            coverage.append((start, end))
+
+        def select(self, start: int, end: int) -> list[Any]:
+            return []
+
+    async def run(function: Any, *args: Any) -> Any:
+        return function(*args)
+
+    async def fetch(addresses: Any, topics: Any, start: int, end: int) -> list[Any]:
+        ranges.append((start, end))
+        if len(ranges) > 8:
+            clock[0] += slow_seconds
+        return [SimpleNamespace()] * (1025 if dense else 0)
+
+    history.scans.cache_clear()
+    monkeypatch.setattr(history, "monotonic", lambda: clock[0], raising=False)
+    monkeypatch.setattr(brownie_patch, "dank_eth", SimpleNamespace(block_number=Ready(10000)))
+    monkeypatch.setattr(history, "LogCache", Cache)
+    monkeypatch.setattr(history, "default_filter_threads", SimpleNamespace(run=run))
+    monkeypatch.setattr(history, "adaptive_logs", fetch)
+    monkeypatch.setattr(history, "bulk_insert", AsyncMock())
+    monkeypatch.setattr(_log_ranges, "indexed_chunk_size", lambda: 10)
+    monkeypatch.setattr(_log_ranges, "sparse_chunk_ceiling", lambda: ceiling, raising=False)
+    assert await history.factory_logs(FACTORY, [TOPIC], 1, 10) == []
+    assert max(last - first + 1 for first, last in ranges) == 10
+    first_count = len(ranges)
+    assert first_count == 8
+    assert completed_thru(1, coverage) == 80
+    assert await history.factory_logs(FACTORY, [TOPIC], 81, 90) == []
+    assert max(last - first + 1 for first, last in ranges[first_count:]) == expected
+    assert len(ranges) - first_count <= 8
+    second_count = len(ranges)
+    next_start = completed_thru(1, coverage) + 1
+    assert await history.factory_logs(FACTORY, [TOPIC], next_start, next_start + 9) == []
+    assert max(last - first + 1 for first, last in ranges[second_count:]) == third
+    assert len(ranges) - second_count <= 8

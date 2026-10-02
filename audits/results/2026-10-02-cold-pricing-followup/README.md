@@ -50,3 +50,40 @@ Full native validation, the complete candidate matrix, CI, follow-up merges,
 server lock refresh, production deployment, corrected public and direct
 Tailscale matrix/browser/timings, and a successful 60-minute production soak
 remain required before acceptance.
+
+Further fresh-cache validation exposed work that was absent from copied-cache
+measurements. The follow-up now grows sparse log ranges only after a bounded
+eight-range window commits, respecting known smaller provider limits and backing
+off on latency or event density. Curve preloads its address-provider history
+through the same raw disk cache. Token metadata consumers recheck completed
+coverage between pages instead of repeatedly reading tiny ranges after the
+shared owner has already filled a larger window. That paging regression was
+introduced by #47. Historical ceilings, ordering, and candidate sets remain
+covered by five protocol variants at pinned blocks.
+
+A live Ethereum reorg during the complete suite exposed an orphaned canonical
+hash. Native reads now report that exact provider error as a transient connection
+failure, without changing hash or disabling `requireCanonical`. The Chainlink
+comparison fixture uses one finalized block for its two independent reads;
+production current-price checks remain separate. Four regressions reproduce on
+`911a7a5` and all 100 tests in their modules pass after repair. The final scan
+policy module adds 27 passing cases. Each auxiliary run has a separate database
+and report directory.
+
+The expanded focused native run passed 712 tests with five skips, strict typing
+across 242 files, and all ten compiled extension imports. Its archive hash and
+results are in `sparse-focused-native.json`. A complete run against the earlier
+revision failed with six reorg comparisons and five synthetic cache assertions;
+the latter were caused by an auxiliary process incorrectly sharing that run's
+database. That failed run is retained, and the complete suite is being rerun
+against an immutable final source snapshot with isolated auxiliary databases.
+
+The newer truly empty-cache Base candidate became healthy in 33.44 seconds and
+returned the exact historical USDC amount result in 247.90 seconds. SIGTERM
+completed in 0.57 seconds with no OOM. Ethereum still failed cold readiness at
+602.84 seconds. Those reports explicitly identify the runtime overlays and are
+not production-image proof. Direct provider comparison then found that the
+production proxy excluded Geth from historical logs through an explicit
+128-block log-history setting. A separate infrastructure repair retains
+Ethereum on web3-proxy and Geth's 128-block state limit while correcting log
+eligibility, after matching nonempty pre-Merge event sets against Reth.

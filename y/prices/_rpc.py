@@ -61,6 +61,14 @@ async def _retry_state_read(request: Callable[[], Awaitable[_T]]) -> _T:
             raise
         except ValueError as exc:
             error = exc.args[0] if exc.args else None
+            if (
+                isinstance(error, dict)
+                and error.get("code") == -32000
+                and error.get("message") == "hash is not currently canonical"
+            ):
+                # Never read an orphan with requireCanonical disabled or switch
+                # a partially evaluated quote to a different hash.
+                raise ConnectionError("RPC block hash is no longer canonical") from exc
             if isinstance(error, dict) and error.get("code") == 429:
                 if attempt >= 4:
                     raise ConnectionError("RPC provider rate limit exceeded") from exc

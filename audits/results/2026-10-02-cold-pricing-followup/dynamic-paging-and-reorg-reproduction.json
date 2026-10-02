@@ -1,0 +1,18 @@
+{
+  "baseline": "911a7a5864ef6dc925e1141b96cc318d267c6368",
+  "failures": [
+    "tests/test_rpc_state_retry.py::test_orphaned_canonical_hash_is_a_transient_uncached_failure",
+    "tests/test_indexed_pool_discovery.py::test_compact_metadata_keeps_all_historical_candidates_without_pool_objects[False-20-v2]",
+    "tests/test_indexed_pool_discovery.py::test_compact_metadata_keeps_all_historical_candidates_without_pool_objects[False-20-v3]",
+    "tests/test_indexed_pool_discovery.py::test_compact_metadata_keeps_all_historical_candidates_without_pool_objects[False-20-slipstream]"
+  ],
+  "baseline_counts": {
+    "failed": 4,
+    "passed": 96
+  },
+  "repaired_counts": {
+    "passed": 100
+  },
+  "native_python": "3.12",
+  "database_isolation": "a distinct SQLite path and report directory for each child process; primary validation untouched"
+}

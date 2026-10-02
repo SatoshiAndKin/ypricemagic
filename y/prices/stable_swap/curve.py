@@ -1,9 +1,10 @@
-from asyncio import CancelledError, Task, create_task, gather, shield, sleep
+from asyncio import CancelledError, Task, create_task, sleep
 from collections import defaultdict
 from enum import IntEnum
 from functools import cached_property
 from itertools import filterfalse
 from logging import DEBUG, getLogger
+from time import monotonic
 from typing import Any, Generic, NoReturn, TypeVar, cast
 
 import a_sync
@@ -580,15 +581,15 @@ class CurvePool(ERC20):
 @stuck_coro_debugger
 async def _prefill_registry_logs(registries: list[Address]) -> None:
     """Scan overlapping registry history once, retaining each address's events."""
-    if len(registries) < 2:
+    if not registries:
         return
     from dank_mids.brownie_patch import dank_eth
 
     from y._db.common import default_filter_threads
     from y._db.utils.logs import LogCache
     from y.prices._quote import bounded_map
-    from y.utils._log_ranges import indexed_chunk_size
-    from y.utils.events import LogFilter
+    from y.utils._factory_history import factory_logs
+    from y.utils._log_ranges import indexed_chunk_size, sparse_chunk_ceiling
 
     head = int(await dank_eth.block_number)
 
@@ -599,24 +600,27 @@ async def _prefill_registry_logs(registries: list[Address]) -> None:
         )
         return max(deployed, covered + 1)
 
+    chunk = initial = indexed_chunk_size()
+    ceiling = sparse_chunk_ceiling()
     start = min(await bounded_map(missing, registries))
-    if start > head:
-        return
-    reader = LogFilter(
-        addresses=registries,
-        from_block=start,
-        chunk_size=indexed_chunk_size(),
-        is_reusable=False,
-    )
-    try:
-        async for _ in reader.logs(head):
-            pass
-    finally:
-        if reader._task is not None:
-            reader._task.cancel()
-            await gather(reader._task, return_exceptions=True)
-        if reader._db_task is not None:
-            await shield(reader._db_task)
+    while start <= head:
+        started = monotonic()
+        rows = await factory_logs(
+            registries, None, start, min(head, start + chunk - 1), chunk_size=chunk
+        )
+        next_start = min(await bounded_map(missing, registries))
+        if next_start <= start:
+            raise RuntimeError("Curve history scan did not commit completed coverage")
+        start = next_start
+        # The eight-range owner remains bounded. Only this sparse registry
+        # prefill starts at the same small range as ordinary pool discovery.
+        seconds = monotonic() - started
+        if len(rows) > 64:
+            chunk = initial
+        elif seconds > 20:
+            chunk = max(initial, chunk // 2)
+        elif seconds < 8:
+            chunk = min(ceiling, chunk * 2)
 
 
 class CurveRegistry(a_sync.ASyncGenericSingleton):
@@ -826,6 +830,7 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
         return task
 
     async def _load_all(self) -> NoReturn:
+        await _prefill_registry_logs([self.address_provider.address])
         await self.address_provider
         _startup_logger_debug(
             "curve address provider events loaded, now loading factories and pools"

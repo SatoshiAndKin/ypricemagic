@@ -880,25 +880,29 @@ class UniswapRouterV2(ContractBase):
             topics.extend([None] * position)
             topics[position] = topic
             cache = LogCache([self.factory], topics)
-            covered = await default_filter_threads.run(cache.is_cached_thru, start)
-            cached_end = min(covered, block)
 
             async def pages() -> AsyncIterator[list[Any]]:
-                if cached_end >= start:
-                    after: tuple[int, int, str] | None = None
-                    while rows := await default_filter_threads.run(
-                        cache.select_page, start, cached_end, after
-                    ):
-                        yield rows
-                        last = rows[-1]
-                        after = (
-                            int(last.blockNumber),
-                            int(last.logIndex),
-                            last.transactionHash.hex(),
-                        )
-                for first in range(max(start, cached_end + 1), block + 1, chunk):
+                first = start
+                while first <= block:
+                    covered = await default_filter_threads.run(cache.is_cached_thru, first)
+                    cached_end = min(covered, block)
+                    if cached_end >= first:
+                        after: tuple[int, int, str] | None = None
+                        while rows := await default_filter_threads.run(
+                            cache.select_page, first, cached_end, after
+                        ):
+                            yield rows
+                            last = rows[-1]
+                            after = (
+                                int(last.blockNumber),
+                                int(last.logIndex),
+                                last.transactionHash.hex(),
+                            )
+                        first = cached_end + 1
+                        continue
                     last_block = min(first + chunk - 1, block)
                     yield await factory_logs([self.factory], topics, first, last_block)
+                    first = last_block + 1
 
             async for rows in pages():
                 decoded = await _decode_threads.run(decode_logs, rows)

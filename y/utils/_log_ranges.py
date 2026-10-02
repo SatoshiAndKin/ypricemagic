@@ -36,6 +36,22 @@ def indexed_chunk_size() -> int:
     return min(SAFE_RANGE, BATCH_SIZE, int(ENVS.GETLOGS_BATCH_SIZE) or SAFE_RANGE, provider_limit)
 
 
+def sparse_chunk_ceiling() -> int:
+    """Allow sparse Curve history to grow while honoring smaller provider limits."""
+    from brownie import web3
+
+    from y import ENVIRONMENT_VARIABLES as ENVS
+    from y.utils.middleware import provider_specific_batch_sizes
+
+    endpoint = str(getattr(web3.provider, "endpoint_uri", "")).lower()
+    configured = int(ENVS.GETLOGS_BATCH_SIZE)
+    return min(
+        200_000,
+        configured if 0 < configured < SAFE_RANGE else 200_000,
+        *(size for provider, size in provider_specific_batch_sizes.items() if provider in endpoint),
+    )
+
+
 @stuck_coro_debugger
 async def _request_logs(args: dict[str, Any]) -> list[Log]:
     """Keep range errors out of Dank's batch retry loop so callers can split."""

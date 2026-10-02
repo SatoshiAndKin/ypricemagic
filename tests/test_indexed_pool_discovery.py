@@ -118,8 +118,9 @@ async def discover(router: Any, protocol: str, token: Any, block: int) -> list[A
 @run_async_test
 @pytest.mark.parametrize("protocol", ["v2", "solidly", "velodrome", "v3", "slipstream"])
 @pytest.mark.parametrize("block", [9, 10, 20])
+@pytest.mark.parametrize("cached", [True, False])
 async def test_compact_metadata_keeps_all_historical_candidates_without_pool_objects(
-    monkeypatch: Any, protocol: str, block: int
+    monkeypatch: Any, protocol: str, block: int, cached: bool
 ) -> None:
     from y import contracts
     from y._db import common
@@ -146,12 +147,15 @@ async def test_compact_metadata_keeps_all_historical_candidates_without_pool_obj
         lambda rows: [_EventItem("PairCreated", None, [row], (0,)) for row in rows],
     )
 
+    coverage = [1000 if cached else 0]
+    prefetched: list[Any] = []
+
     class Cache:
         def __init__(self, addresses: Any, topics: Any) -> None:
             self.position = len(topics) - 1
 
         def is_cached_thru(self, start: int) -> int:
-            return 1000  # Later cached history must not enter an earlier quote.
+            return coverage[0]  # Later history must not enter an earlier quote.
 
         def select(self, start: int, end: int) -> list[Event]:
             assert end <= block
@@ -175,6 +179,18 @@ async def test_compact_metadata_keeps_all_historical_candidates_without_pool_obj
     async def run(function: Any, *args: Any) -> Any:
         return function(*args)
 
+    from y.utils import _factory_history
+
+    async def fetch(addresses: Any, topics: Any, first: int, last: int) -> list[Event]:
+        assert not prefetched, "repeated tiny reads after the shared window was committed"
+        prefetched.append((first, last))
+        selected = Cache(addresses, topics).select(first, last)
+        coverage[0] = 1000
+        return selected
+
+    monkeypatch.setattr(_factory_history, "factory_logs", fetch)
+    monkeypatch.setattr(v2, "indexed_chunk_size", lambda: 2)
+    monkeypatch.setattr(v3, "indexed_chunk_size", lambda: 2)
     monkeypatch.setattr(logs, "LogCache", Cache)
     monkeypatch.setattr(common, "default_filter_threads", SimpleNamespace(run=run))
     monkeypatch.setattr(events, "_decode_threads", SimpleNamespace(run=run))
@@ -210,6 +226,7 @@ async def test_compact_metadata_keeps_all_historical_candidates_without_pool_obj
         expected
     )
     constructed.assert_not_called()
+    assert len(prefetched) == int(not cached and block >= 10)
 
 
 @run_async_test

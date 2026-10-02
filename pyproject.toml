@@ -115,6 +115,11 @@ cold_state_tests = [
   "tests/test_reserve_batches.py",
   "tests/test_quote_repairs.py",
   "tests/test_routing_scaling.py",
+  "tests/test_discovery_coverage_repairs.py",
+  "tests/test_curve_inventory_loading.py",
+  "tests/test_filter_ranges.py",
+  "tests/test_log_cache.py",
+  "tests/prices/utils/test_buckets.py::test_check_bucket_chainlink",
 ]
 review_quote_tests = [
   "tests/test_uniswap_address_repairs.py",

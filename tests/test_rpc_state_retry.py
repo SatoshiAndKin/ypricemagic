@@ -407,3 +407,23 @@ async def test_timeout_at_last_archive_attempt_propagates_original_error(
         await _rpc._retry_state_read(request)
     assert raised.value is timeout
     assert request.await_count == 10
+
+
+@run_async_test
+async def test_orphaned_canonical_hash_is_a_transient_uncached_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    error = ValueError({"code": -32000, "message": "hash is not currently canonical"})
+    rpc = AsyncMock(side_effect=error)
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(rpc))
+    cache: SharedCache[int] = SharedCache(8)
+    monkeypatch.setattr(_rpc, "state_cache", lambda: cache)
+    sleep = AsyncMock()
+    monkeypatch.setattr(asyncio, "sleep", sleep)
+    for _ in range(2):
+        with pytest.raises(ConnectionError, match="no longer canonical") as raised:
+            await _rpc.state(TOKEN, "totalSupply()(uint256)", BLOCK)
+        assert raised.value.__cause__ is error
+    assert rpc.await_count == 2
+    assert all(c.kwargs["block_identifier"] == BLOCK.identifier for c in rpc.await_args_list)
+    sleep.assert_not_awaited()
