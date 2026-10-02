@@ -187,7 +187,7 @@ async def test_compact_metadata_keeps_all_historical_candidates_without_pool_obj
         )
     else:
         batches = [batch async for batch in router.pool_metadata_batches(TOKEN, block)]
-        actual = set(item for batch in batches for item in batch)
+        actual = {item for batch in batches for item in batch}
     expected = {
         (
             str(row.get("pair", row.get("pool"))).lower(),
