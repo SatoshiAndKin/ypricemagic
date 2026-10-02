@@ -1,5 +1,6 @@
 from collections import defaultdict
 from collections.abc import AsyncIterator, Callable, Sequence
+from dataclasses import dataclass
 from functools import cached_property, lru_cache
 from logging import DEBUG, getLogger
 from typing import Any, DefaultDict, Final, TypedDict, cast
@@ -22,7 +23,6 @@ from y.interfaces.uniswap.quoterv3 import UNIV3_QUOTER_ABI
 from y.networks import Network
 from y.utils._log_ranges import indexed_chunk_size
 from y.utils.events import ProcessedEvents, indexed_pool_executor
-from y.utils.middleware import BATCH_SIZE
 
 # https://github.com/Uniswap/uniswap-v3-periphery/blob/main/deploys.md
 UNISWAP_V3_FACTORY: Final = "0x1F98431c8aD98523631AE4a59f267346ea31F984"
@@ -300,6 +300,16 @@ async def load_quoter(address: str) -> Contract:
         return from_abi("Quoter", address, UNIV3_QUOTER_ABI)
 
 
+@dataclass(frozen=True, slots=True)
+class V3PoolMetadata:
+    address: str
+    token0: str
+    token1: str
+    fee: int
+    tick_spacing: int
+    slipstream: bool
+
+
 class UniswapV3(a_sync.ASyncGenericBase):
     """Represents the Uniswap V3 protocol."""
 
@@ -442,6 +452,86 @@ class UniswapV3(a_sync.ASyncGenericBase):
         return UniV3Pools(factory, asynchronous=self.asynchronous)
 
     __pools__: HiddenMethodDescriptor["UniswapV3", "UniV3Pools"]
+
+    @stuck_coro_debugger
+    async def pool_metadata_batches(
+        self, token: Address, block: Block
+    ) -> AsyncIterator[list[V3PoolMetadata]]:
+        """Read both indexed positions through the quote's historical ceiling.
+
+        Keep raw events on disk and yield immutable metadata without starting
+        a live filter or retaining pool/token singletons for dust inventories.
+        """
+        from y._db.common import default_filter_threads
+        from y._db.utils.logs import LogCache
+        from y.contracts import contract_creation_block_async
+        from y.utils._factory_history import factory_logs
+        from y.utils.events import _decode_threads, decode_logs
+
+        token = await convert.to_address_async(token)
+        # Registers the protocol-specific event ABI without starting a loader.
+        factory = await Contract.coroutine(self._factory)
+        reader = (
+            SlipstreamPools(factory, self.asynchronous, token=token)
+            if isinstance(await self.__pools__, SlipstreamPools)
+            else UniV3Pools(factory, self.asynchronous, token=token)
+        )
+        start = await contract_creation_block_async(self._factory, sync=False)
+        if start > block:
+            return
+        topic = "0x" + token[2:].lower().zfill(64)
+        seen: set[str] = set()
+        chunk = indexed_chunk_size()
+        batch: list[V3PoolMetadata] = []
+        for position in (1, 2):
+            topics: list[str | list[str] | None] = [factory.topics["PoolCreated"]]
+            topics.extend([None] * position)
+            topics[position] = topic
+            cache = LogCache([self._factory], topics)
+            covered = await default_filter_threads.run(cache.is_cached_thru, start)
+            cached_end = min(covered, block)
+
+            async def pages() -> AsyncIterator[list[Any]]:
+                if cached_end >= start:
+                    after: tuple[int, int, str] | None = None
+                    while rows := await default_filter_threads.run(
+                        cache.select_page, start, cached_end, after
+                    ):
+                        yield rows
+                        last = rows[-1]
+                        after = (
+                            int(last.blockNumber),
+                            int(last.logIndex),
+                            last.transactionHash.hex(),
+                        )
+                for first in range(max(start, cached_end + 1), block + 1, chunk):
+                    last_block = min(first + chunk - 1, block)
+                    yield await factory_logs([self._factory], topics, first, last_block)
+
+            async for rows in pages():
+                decoded = await _decode_threads.run(decode_logs, rows)
+                del rows
+                for event in decoded:
+                    pair = str(event["pair" if "pair" in event else "pool"]).lower()
+                    if pair in seen:
+                        continue
+                    seen.add(pair)
+                    batch.append(
+                        V3PoolMetadata(
+                            pair,
+                            str(event["token0"]).lower(),
+                            str(event["token1"]).lower(),
+                            0 if isinstance(reader, SlipstreamPools) else int(event["fee"]),
+                            int(event["tickSpacing"]),
+                            isinstance(reader, SlipstreamPools),
+                        )
+                    )
+                    if len(batch) == 1024:
+                        yield batch
+                        batch = []
+                del decoded
+        if batch:
+            yield batch
 
     async def pools_for_token(self, token: Address, block: Block) -> AsyncIterator[UniswapV3Pool]:
         """
@@ -667,7 +757,8 @@ class UniV3Pools(ProcessedEvents[UniswapV3Pool]):
         super().__init__(
             addresses=[factory.address],
             topics=topics,
-            chunk_size=indexed_chunk_size() if token is not None else BATCH_SIZE,
+            chunk_size=indexed_chunk_size(),
+            shared_factory=True,
             executor=indexed_pool_executor if token is not None else None,
         )
         self._factory_contract = factory

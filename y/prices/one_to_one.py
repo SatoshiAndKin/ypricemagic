@@ -12,6 +12,8 @@ from y.prices._candidates import derive_price
 MAPPING = dict[int, dict[str, str]](
     {
         Network.Mainnet: {
+            "0x49d716DFe60b37379010A75329ae09428f17118d": "0x6B175474E89094C44Da98b954EedeAC495271d0F",  # plDAI -> DAI
+            "0xBD87447F48ad729C5c4b8bcb503e1395F62e8B98": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",  # plUSDC -> USDC
             "0x4da27a545c0c5B758a6BA100e3a049001de870f5": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",  # stkaave -> aave
             "0x27D22A7648e955E510a40bDb058333E9190d12D4": "0x0cec1a9154ff802e7934fc916ed7ca50bde6844e",  # ppool -> pool
             # TODO: algorithmically get gauges

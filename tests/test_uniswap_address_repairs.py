@@ -11,6 +11,7 @@ import pytest
 from eth_abi.abi import encode
 from hexbytes import HexBytes
 
+from tests.rpc_fixtures import native_rpc
 from tests.test_amount_quotes import BLOCK, TOKEN, USD, graph, market
 from tests.test_pricing_correctness import Ready, instance, run_async_test
 from y import convert
@@ -74,7 +75,7 @@ def empty_quote_graph(
         assert target == SECOND_ROUTER
         return encode(["uint256[]"], [[1000001, 997003]])
 
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(rpc))
     return service, calls
 
 
@@ -141,9 +142,7 @@ async def test_router_unexpected_errors_propagate(
     monkeypatch: Any, error: BaseException, protocol: str
 ) -> None:
     service, _ = empty_quote_graph(monkeypatch, "rpc", True, protocol)
-    monkeypatch.setattr(
-        _rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=AsyncMock(side_effect=error)))
-    )
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(AsyncMock(side_effect=error)))
     with pytest.raises(type(error), match=str(error)):
         await service.price(TOKEN, BLOCK, Decimal("1.000001"))
 

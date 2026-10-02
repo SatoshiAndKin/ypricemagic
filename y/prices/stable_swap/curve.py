@@ -1,4 +1,4 @@
-from asyncio import CancelledError, Task, create_task, sleep
+from asyncio import CancelledError, Task, create_task, gather, shield, sleep
 from collections import defaultdict
 from enum import IntEnum
 from functools import cached_property
@@ -577,6 +577,48 @@ class CurvePool(ERC20):
         return balance
 
 
+@stuck_coro_debugger
+async def _prefill_registry_logs(registries: list[Address]) -> None:
+    """Scan overlapping registry history once, retaining each address's events."""
+    if len(registries) < 2:
+        return
+    from dank_mids.brownie_patch import dank_eth
+
+    from y._db.common import default_filter_threads
+    from y._db.utils.logs import LogCache
+    from y.prices._quote import bounded_map
+    from y.utils._log_ranges import indexed_chunk_size
+    from y.utils.events import LogFilter
+
+    head = int(await dank_eth.block_number)
+
+    async def missing(address: Address) -> int:
+        deployed = int(await contract_creation_block_async(address, when_no_history_return_0=True))
+        covered = int(
+            await default_filter_threads.run(LogCache(address, None).is_cached_thru, deployed)
+        )
+        return max(deployed, covered + 1)
+
+    start = min(await bounded_map(missing, registries))
+    if start > head:
+        return
+    reader = LogFilter(
+        addresses=registries,
+        from_block=start,
+        chunk_size=indexed_chunk_size(),
+        is_reusable=False,
+    )
+    try:
+        async for _ in reader.logs(head):
+            pass
+    finally:
+        if reader._task is not None:
+            reader._task.cancel()
+            await gather(reader._task, return_exceptions=True)
+        if reader._db_task is not None:
+            await shield(reader._db_task)
+
+
 class CurveRegistry(a_sync.ASyncGenericSingleton):
     __slots__ = ("__task",)
 
@@ -802,6 +844,7 @@ class CurveRegistry(a_sync.ASyncGenericSingleton):
                     for i in [Ids.Main_Registry, Ids.CryptoSwap_Registry]
                     if self.identifiers[i]
                 ]:
+                    await _prefill_registry_logs(registries)
                     await a_sync.map(
                         Registry, registries, curve=self, asynchronous=self.asynchronous
                     )

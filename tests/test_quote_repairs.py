@@ -14,6 +14,7 @@ from eth_abi.exceptions import InsufficientDataBytes
 from web3.exceptions import ContractLogicError
 
 from tests.fixtures import async_result
+from tests.rpc_fixtures import native_rpc, quote_read
 from tests.test_amount_quotes import BLOCK, CHILD, TOKEN, USD, graph, market
 from tests.test_pricing_correctness import Ready, instance, run_async_test
 from y import constants
@@ -66,14 +67,21 @@ async def test_historical_v2_discovery_uses_known_deployment_boundaries(monkeypa
     reserves = AsyncMock(return_value=(2000000, 3000000, 0))
     monkeypatch.setattr(_markets, "deployed", deployed)
     monkeypatch.setattr(_markets, "state", reserves)
-    result = await _markets.discover(TOKEN, BLOCK)
     eligible = [pool.address.lower() for pool in (pools[0], pools[1], pools[3])]
+
+    async def metadata(self: Any, token: Any, block: int) -> AsyncIterator[Any]:
+        assert block == BLOCK.number
+        yield [(pair, (TOKEN, USD)) for pair in eligible]
+
+    monkeypatch.setattr(v2.UniswapRouterV2, "pool_metadata_batches", metadata)
+    batch = AsyncMock(return_value=tuple((2000000, 3000000, 0) for _ in eligible))
+    monkeypatch.setattr(_markets, "reserves_batch", batch)
+    result = await _markets.discover(TOKEN, BLOCK)
     assert [item.pool for item in result] == eligible
     assert all(item.balances == (2000000, 3000000) for item in result)
-    assert deployed.await_args_list == [call(USD, BLOCK), *[call(p, BLOCK) for p in eligible]]
-    assert reserves.await_args_list == [
-        call(p, "getReserves()(uint256,uint256,uint256)", BLOCK) for p in eligible
-    ]
+    assert deployed.await_args_list == [call(USD, BLOCK)]
+    batch.assert_awaited_once_with(tuple(eligible), BLOCK)
+    reserves.assert_not_called()
     assert len(await router.all_pools_for(TOKEN, sync=False)) == 4
 
 
@@ -162,6 +170,7 @@ async def test_pool_created_event_reaches_native_quoter(
 
     monkeypatch.setattr(_markets, "state", balance)
     native = AsyncMock(return_value=997000)
+    monkeypatch.setattr(_markets, "read", quote_read(native))
     monkeypatch.setattr(
         Contract,
         "coroutine",
@@ -172,7 +181,6 @@ async def test_pool_created_event_reaches_native_quoter(
             )
         ),
     )
-    monkeypatch.setattr(_markets, "read", AsyncMock(return_value=6))
     markets = await _markets.discover(TOKEN, BLOCK)
     if missing_balance is not None:
         assert markets == ()
@@ -506,7 +514,7 @@ async def test_curve_tries_later_fully_valued_native_exit(monkeypatch: Any, firs
 @pytest.mark.parametrize("unverified", [False, True])
 @pytest.mark.parametrize("quoted", [997000, (997000, [], [], 1)])
 @pytest.mark.parametrize("protocol,key", [("Uniswap V3", 3000), ("Slipstream", 60)])
-async def test_v3_shared_fallback_quotes_exact_amount_and_hash(
+async def test_v3_native_quotes_preserve_exact_amount_without_abi_lookup(
     monkeypatch: Any, unverified: bool, quoted: Any, protocol: str, key: int
 ) -> None:
     quote = AsyncMock(return_value=quoted)
@@ -520,7 +528,7 @@ async def test_v3_shared_fallback_quotes_exact_amount_and_hash(
     fallback = Mock(return_value=contract)
     monkeypatch.setattr(Contract, "coroutine", load)
     monkeypatch.setattr(Contract, "from_abi", fallback)
-    monkeypatch.setattr(_markets, "read", AsyncMock(return_value=6))
+    monkeypatch.setattr(_markets, "read", quote_read(quote))
     pool = replace(market("pool", protocol=protocol), router=CHILD, fee=3000, tick_spacing=60)
     result = await _markets.swap(pool, QuoteAsset(TOKEN, 1000001, 6), USD, BLOCK)
     assert result is not None
@@ -530,15 +538,13 @@ async def test_v3_shared_fallback_quotes_exact_amount_and_hash(
         1000001,
         block_identifier=BLOCK.identifier,
     )
-    assert fallback.call_count == int(unverified)
-    if unverified:
-        from y.interfaces.uniswap.quoterv3 import UNIV3_QUOTER_ABI
-
-        fallback.assert_called_once_with("Quoter", CHILD, UNIV3_QUOTER_ABI)
+    load.assert_not_awaited()
+    fallback.assert_not_called()
 
 
 @run_async_test
 async def test_quoter_unexpected_error_does_not_use_fallback(monkeypatch: Any) -> None:
+    monkeypatch.setattr(_markets, "read", AsyncMock(side_effect=RuntimeError("RPC disconnected")))
     monkeypatch.setattr(
         Contract, "coroutine", AsyncMock(side_effect=RuntimeError("RPC disconnected"))
     )
@@ -790,7 +796,7 @@ async def test_empty_rpc_decimals_obey_public_failure_policy(monkeypatch: Any, f
     cache: SharedCache[Any] = SharedCache(16)
     monkeypatch.setattr(_rpc, "state_cache", lambda: cache)
     call = AsyncMock(return_value=b"")
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=call)))
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(call))
     monkeypatch.setattr(magic, "ERC20", lambda *a, **kw: SimpleNamespace(symbol=Ready("USDC")))
     if fail:
         assert (

@@ -4,6 +4,7 @@ import importlib.util
 import sys
 from collections.abc import Iterator
 from types import ModuleType
+from typing import cast
 from unittest.mock import Mock
 
 import pytest
@@ -14,6 +15,7 @@ from msgspec import ValidationError, json
 from msgspec.structs import replace
 from pony.orm import db_session
 
+from tests.test_pricing_correctness import run_async_test
 from y._db.log import Log
 from y._db.utils import logs
 from y.constants import CHAINID
@@ -60,6 +62,74 @@ def test_cached_json_round_trip_needs_no_database(
 def test_invalid_cached_event_keeps_validation_error() -> None:
     with pytest.raises(ValidationError):
         logs._decode_log(b'["invalid topics"]')
+
+
+def test_log_preparation_retries_lock_but_propagates_other_errors(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from pony.orm import OperationalError
+
+    lookup = Mock(side_effect=[OperationalError(RuntimeError("database is locked")), {}, {}])
+    monkeypatch.setattr(logs, "_get_dbids", lookup)
+    assert logs._prepare_logs([], (), ()) == []
+    assert lookup.call_count == 3
+    lookup.side_effect = OperationalError(RuntimeError("invalid database schema"))
+    with pytest.raises(OperationalError, match="invalid database schema"):
+        logs._prepare_logs([], (), ())
+
+
+@run_async_test
+async def test_compact_factory_events_reuse_legacy_rows_and_deduplicate(event: Log) -> None:
+    from y._db.common import default_filter_threads
+    from y._db.entities import FactoryLog
+
+    await logs.bulk_insert([event])
+    await logs.bulk_insert_factory([event, event])
+    cache = logs.LogCache([event.address], [event.topics[0].hex()])
+    assert event.blockNumber is not None
+    restored = await default_filter_threads.run(
+        cache.select, int(event.blockNumber), int(event.blockNumber)
+    )
+    assert restored == [event]
+    with db_session:
+        assert FactoryLog.select(lambda row: row.address == str(event.address).lower()).count() == 1
+
+
+@run_async_test
+async def test_paged_factory_history_is_bounded_ordered_and_complete(event: Log) -> None:
+    from y._db.common import default_filter_threads
+
+    assert event.blockNumber is not None
+    address = Address("0x0000000000000000000000000000000000000002")
+    events = [
+        replace(
+            event,
+            address=address,
+            transactionHash=TransactionHash("0x" + "cd" * 32),
+            blockNumber=BlockNumber(int(event.blockNumber) + i // 256),
+            logIndex=LogIndex(i % 256),
+        )
+        for i in range(1027)
+    ]
+    from evmspec import Log as RpcLog
+
+    await logs.bulk_insert(cast(list[RpcLog], events[:600]))
+    await logs.bulk_insert_factory(cast(list[RpcLog], events[327:]))
+    cache = logs.LogCache([address], [event.topics[0].hex()])
+    pages = []
+    after = None
+    while page := await default_filter_threads.run(
+        cache.select_page, int(event.blockNumber), int(event.blockNumber) + 5, after
+    ):
+        assert len(page) <= 512
+        pages.extend(page)
+        last = page[-1]
+        after = (int(last.blockNumber), int(last.logIndex), last.transactionHash.hex())
+    assert pages == events
+    historical = await default_filter_threads.run(
+        cache.select_page, int(event.blockNumber), int(event.blockNumber), None
+    )
+    assert historical == events[:256]
 
 
 @pytest.fixture
@@ -149,7 +219,7 @@ def test_event_cache_reads_bodies_in_one_query(
                 result = cache._select(10, 11)
             finally:
                 connection.set_trace_callback(None)
-        assert result == [events[2], events[1], events[0], events[3]]
+        assert result == [events[1], events[2], events[0], events[3]]
         reads = [sql for sql in statements if sql.lstrip().upper().startswith("SELECT")]
         assert len(reads) == 1, reads
     finally:

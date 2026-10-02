@@ -16,6 +16,7 @@ from eth_utils.crypto import keccak
 from hexbytes import HexBytes
 from web3.exceptions import ContractLogicError
 
+from tests.rpc_fixtures import native_rpc, quote_read
 from tests.test_amount_quotes import BLOCK, CHILD, TOKEN, USD, graph, market
 from tests.test_pricing_correctness import Ready, run_async_test
 from y.datatypes import PriceResult, QuoteAsset, QuoteStep, UsdPrice
@@ -64,6 +65,7 @@ async def test_factory_restricted_price_does_not_scan_other_protocols(monkeypatc
     monkeypatch.setattr(_routing, "state", AsyncMock(return_value=6))
     monkeypatch.setattr(_markets, "read", AsyncMock(return_value=6))
     native = AsyncMock(return_value=997003)
+    monkeypatch.setattr(_markets, "read", quote_read(native))
     monkeypatch.setattr(
         Contract,
         "coroutine",
@@ -146,7 +148,7 @@ async def test_optional_rpc_recognizes_only_known_contract_execution_failures(
     monkeypatch: Any, error: BaseException, unavailable: bool
 ) -> None:
     rpc = AsyncMock(side_effect=error)
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(rpc))
     if unavailable:
         assert await _rpc.optional_read(TOKEN, "asset()(address)", BLOCK) is None
     else:
@@ -268,7 +270,7 @@ async def test_empty_feed_rpc_response_is_unavailable(monkeypatch: Any, empty: s
         signature = next(name for name in values if keccak(text=name)[:4] == selector)
         return b"" if signature == empty else encode(["uint256"], [values[signature]])
 
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=call)))
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(call))
     feed = module.Feed(TOKEN, USD, asynchronous=True)
     assert await feed.get_price(BLOCK) is None
 
@@ -374,6 +376,7 @@ async def test_v3_quote_encodes_the_protocol_pool_key(
     from y.contracts import Contract
 
     quote = AsyncMock(return_value=(997000, [], [], 1))
+    monkeypatch.setattr(_markets, "read", quote_read(quote))
     monkeypatch.setattr(
         Contract,
         "coroutine",
@@ -384,7 +387,6 @@ async def test_v3_quote_encodes_the_protocol_pool_key(
             )
         ),
     )
-    monkeypatch.setattr(_markets, "read", AsyncMock(return_value=6))
     pool = _markets.Market(
         protocol=protocol,
         pool="pool",
@@ -423,7 +425,7 @@ async def test_reorg_cannot_cache_number_based_state_under_another_hash(monkeypa
             return (111).to_bytes(32, "big")
         return (222 if current == other else 111).to_bytes(32, "big")
 
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=call)))
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(call))
     monkeypatch.setattr(_rpc, "state_cache", lambda: cache)
     from y.prices._quote import SharedCache
 
@@ -575,7 +577,7 @@ async def test_unavailable_v1_rpc_quote_uses_normal_fallback(
         )
         return encode(["uint256[]"], [[1000001, 997003]])
 
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(rpc))
     lookup: Any = magic.get_price
     if not viable and not fail_to_none:
         with pytest.raises(yPriceMagicError):
@@ -607,7 +609,7 @@ async def test_v1_unexpected_rpc_errors_propagate(monkeypatch: Any, error: BaseE
     from y.constants import EEE_ADDRESS
 
     rpc = AsyncMock(side_effect=error)
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(rpc))
     pool = market(TOKEN, second=EEE_ADDRESS.lower(), protocol="Uniswap V1")
     with pytest.raises(type(error)) as raised:
         await _markets.swap(pool, QuoteAsset(TOKEN, 1000001, 6), EEE_ADDRESS.lower(), BLOCK)

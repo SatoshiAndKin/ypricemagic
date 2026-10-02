@@ -95,6 +95,8 @@ async def check_bucket(token: AnyAddressType, block: int | None = None) -> str |
     import y._db.utils.token as db
 
     bucket = await db.get_bucket(token_address)
+    if bucket == "one to one" and not one_to_one.is_one_to_one_token(token_address):
+        bucket = None
     if bucket and bucket not in ("chainlink feed", "chainlink and band"):
         # These structural categories follow oracles in the normal priority order.
         # A category cached at an older block must not hide a subsequently added feed.

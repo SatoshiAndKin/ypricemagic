@@ -6,9 +6,11 @@ from types import SimpleNamespace
 from unittest.mock import AsyncMock, call
 
 import pytest
-from eth_abi.abi import encode
+from eth_abi.abi import decode, encode
+from eth_utils.crypto import keccak
 from hexbytes import HexBytes
 
+from tests.rpc_fixtures import native_rpc
 from tests.test_amount_quotes import BLOCK, TOKEN
 from tests.test_pricing_correctness import Ready, run_async_test
 from y.contracts import Contract
@@ -30,7 +32,11 @@ async def test_archive_state_retry_preserves_hash_and_decodes(
         HexBytes(encode(["uint256"], [123456789])) if method == "call" else HexBytes("0x6000")
     )
     rpc = AsyncMock(side_effect=[state_error(), state_error(), response])
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(**{method: rpc})))
+    monkeypatch.setattr(
+        _rpc,
+        "dank_web3",
+        native_rpc(rpc) if method == "call" else SimpleNamespace(eth=SimpleNamespace(get_code=rpc)),
+    )
     sleep = AsyncMock()
     monkeypatch.setattr(asyncio, "sleep", sleep)
     monkeypatch.setattr(_rpc, "state_cache", lambda: SharedCache(8))
@@ -51,7 +57,7 @@ async def test_archive_state_retry_is_bounded_and_never_optional(
 ) -> None:
     error = state_error()
     rpc = AsyncMock(side_effect=error)
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(rpc))
     sleep = AsyncMock()
     monkeypatch.setattr(asyncio, "sleep", sleep)
     with pytest.raises(ValueError) as raised:
@@ -79,7 +85,7 @@ async def test_archive_state_retry_propagates_other_errors(
     monkeypatch: pytest.MonkeyPatch, error: BaseException
 ) -> None:
     rpc = AsyncMock(side_effect=error)
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(rpc))
     sleep = AsyncMock()
     monkeypatch.setattr(asyncio, "sleep", sleep)
     with pytest.raises(type(error)) as raised:
@@ -94,7 +100,7 @@ async def test_archive_state_retry_cancellation_during_backoff(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     rpc = AsyncMock(side_effect=state_error())
-    monkeypatch.setattr(_rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(call=rpc)))
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(rpc))
     cancelled = asyncio.CancelledError()
     sleep = AsyncMock(side_effect=cancelled)
     monkeypatch.setattr(asyncio, "sleep", sleep)
@@ -103,6 +109,89 @@ async def test_archive_state_retry_cancellation_during_backoff(
     assert raised.value is cancelled
     rpc.assert_awaited_once()
     sleep.assert_awaited_once_with(0.5)
+
+
+@run_async_test
+@pytest.mark.parametrize("extra_outputs", [False, True])
+@pytest.mark.parametrize("protocol,key", [("Uniswap V3", 3000), ("Slipstream", 60)])
+async def test_native_quoter_transport_preserves_path_hash_and_full_input_proof(
+    monkeypatch: pytest.MonkeyPatch, extra_outputs: bool, protocol: str, key: int
+) -> None:
+    import socket
+
+    from aiohttp import ClientSession, web
+    from web3 import AsyncHTTPProvider
+
+    from tests.test_amount_quotes import CHILD, USD, market
+    from y.datatypes import QuoteAsset
+    from y.prices import _markets
+
+    path = bytes.fromhex(TOKEN[2:]) + key.to_bytes(3, "big") + bytes.fromhex(USD[2:])
+    reverse = path[-20:] + path[20:23] + path[:20]
+    observed: list[tuple[bytes, int]] = []
+
+    async def rpc(request: web.Request) -> web.Response:
+        body = await request.json()
+        assert body["method"] == "eth_call"
+        transaction, identifier = body["params"]
+        assert identifier == BLOCK.identifier
+        data = HexBytes(transaction["data"])
+        if data[:4] == keccak(text="decimals()")[:4]:
+            assert transaction["to"].lower() == USD
+            result = encode(["uint8"], [6])
+        else:
+            assert transaction["to"].lower() == CHILD
+            packed, amount = decode(["bytes", "uint256"], data[4:])
+            observed.append((packed, amount))
+            assert data[:4] in (
+                keccak(text="quoteExactInput(bytes,uint256)")[:4],
+                keccak(text="quoteExactOutput(bytes,uint256)")[:4],
+            )
+            output = (
+                997000 if data[:4] == keccak(text="quoteExactInput(bytes,uint256)")[:4] else 1000002
+            )
+            result = (
+                encode(
+                    ["uint256", "uint160[]", "uint32[]", "uint256"], [output, [12345], [1], 99999]
+                )
+                if extra_outputs
+                else encode(["uint256"], [output])
+            )
+        return web.json_response(
+            {"jsonrpc": "2.0", "id": body["id"], "result": "0x" + result.hex()}
+        )
+
+    app = web.Application()
+    app.router.add_post("/", rpc)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    with socket.socket() as listener:
+        listener.bind(("127.0.0.1", 0))
+        await web.SockSite(runner, listener).start()
+        provider = AsyncHTTPProvider(f"http://127.0.0.1:{listener.getsockname()[1]}")
+        session = await provider.cache_async_session(ClientSession())
+        sdk = AsyncMock(side_effect=AssertionError("entered SDK retry queue"))
+        abi = AsyncMock(side_effect=AssertionError("unnecessary ABI lookup"))
+        monkeypatch.setattr(Contract, "coroutine", abi)
+        monkeypatch.setattr(
+            _rpc,
+            "dank_web3",
+            SimpleNamespace(eth=SimpleNamespace(w3=SimpleNamespace(provider=provider), call=sdk)),
+        )
+        pool = market("pool", protocol=protocol)
+        from dataclasses import replace
+
+        pool = replace(pool, router=CHILD, fee=3000, tick_spacing=60)
+        try:
+            result = await _markets.swap(pool, QuoteAsset(TOKEN, 1000001, 6), USD, BLOCK)
+            assert result is not None and result.outputs == (QuoteAsset(USD, 997000, 6),)
+            assert observed == [(path, 1000001), (reverse, 997001)]
+            assert result.fees == "DEX fees included in native quote"
+            sdk.assert_not_awaited()
+            abi.assert_not_awaited()
+        finally:
+            await session.close()
+            await runner.cleanup()
 
 
 @run_async_test

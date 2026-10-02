@@ -11,7 +11,7 @@ from brownie.network.event import _EventItem
 from eth_typing import HexStr
 from eth_utils.toolz import concat
 from evmspec import Log as RpcLog
-from evmspec.data import Address, HexBytes32, uint
+from evmspec.data import Address, BlockNumber, HexBytes32, uint
 from evmspec.structs.log import Topic
 from hexbytes import HexBytes
 from msgspec import ValidationError, json
@@ -22,10 +22,11 @@ from y import ENVIRONMENT_VARIABLES as ENVS
 from y import convert
 from y._db.common import DiskCache, default_filter_threads, enc_hook, make_executor
 from y._db.decorators import db_session_retry_locked, retry_locked
-from y._db.entities import Block, Hashes
+from y._db.entities import Block, FactoryLog, Hashes
 from y._db.entities import Log as DbLog
-from y._db.entities import LogCacheInfo, LogTopic
+from y._db.entities import LogCacheInfo, LogCacheRange, LogTopic
 from y._db.log import Log
+from y._db.log_coverage import completed_thru, topics_cover
 from y._db.typing import db_session
 from y._db.utils._ep import _get_get_block
 from y._db.utils.bulk import insert as _bulk_insert
@@ -142,6 +143,7 @@ def _get_dbids(entity: Any, attribute: str, values: tuple[str, ...]) -> dict[str
     return result
 
 
+@retry_locked
 def _prepare_logs(
     logs: Sequence[RpcLog], hashes: tuple[tuple[str], ...], topics: tuple[tuple[str], ...]
 ) -> list[tuple[Any, ...]]:
@@ -198,6 +200,52 @@ async def bulk_insert(
         DbLog,
         LOG_COLS,
         await executor.run(_prepare_logs, logs, hashes, topics),
+        sync=True,
+    )
+
+
+async def bulk_insert_factory(logs: list[RpcLog]) -> None:
+    """Persist raw discovery history in one table instead of four reference tables."""
+    if not logs:
+        return
+
+    def prepare() -> list[tuple[Any, ...]]:
+        for log in logs:
+            if log.blockNumber is None:
+                raise ValueError("Factory event has no completed block")
+        return [
+            (
+                CHAINID,
+                str(log.address).lower(),
+                int(cast(BlockNumber, log.blockNumber)),
+                int(log.logIndex),
+                log.transactionHash.hex(),
+                *(
+                    _remove_0x_prefix(log.topics[i].strip()) if i < len(log.topics) else ""
+                    for i in range(4)
+                ),
+                _encode_log(Log(**log)),
+            )
+            for log in logs
+        ]
+
+    rows = await default_filter_threads.run(prepare)
+    await default_filter_threads.run(
+        _bulk_insert,
+        FactoryLog,
+        (
+            "chain",
+            "address",
+            "block",
+            "log_index",
+            "txhash",
+            "topic0",
+            "topic1",
+            "topic2",
+            "topic3",
+            "raw",
+        ),
+        rows,
         sync=True,
     )
 
@@ -313,42 +361,122 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
     def _is_cached_thru(self, from_block: int) -> int:
         from y._db.utils import utils as db
 
-        if self.addresses:
-            chain = db.get_chain(sync=True)
-            infos: list[LogCacheInfo]
-            if isinstance(self.addresses, str):
-                infos = [
-                    # If we cached all logs for this address...
-                    _get_log_cache_info(
-                        chain=chain,
-                        address=self.addresses,
-                        topics=_encode_generic(None),
-                    )
-                    # ... or we cached all logs for these specific topics for this address
-                    or _get_log_cache_info(
-                        chain=chain,
-                        address=self.addresses,
-                        topics=_encode_generic(self.topics),
-                    )
-                ]
-            else:
-                infos = [
-                    # If we cached all logs for this address...
-                    _get_log_cache_info(chain=chain, address=addr, topics=_encode_generic(None))
-                    # ... or we cached all logs for these specific topics for this address
-                    or _get_log_cache_info(
-                        chain=chain, address=addr, topics=_encode_generic(self.topics)
-                    )
-                    for addr in self.addresses
-                ]
-            if all(info and from_block >= info.cached_from for info in infos):
-                return min(info.cached_thru for info in infos)
-
-        elif (info := self.load_metadata()) and from_block >= info.cached_from:
-            return info.cached_thru
-        return 0
+        chain = db.get_chain(sync=True)
+        addresses = (
+            [self.addresses]
+            if isinstance(self.addresses, str)
+            else list(self.addresses or ["None"])
+        )
+        # The range table is authoritative once a legacy filter has been migrated.
+        scopes = ["none", *(str(address).lower() for address in addresses)]
+        modern: list[LogCacheRange] = list(
+            select(
+                row for row in LogCacheRange if row.chain == chain and row.address.lower() in scopes
+            )
+        )
+        migrated = {(row.address.lower(), row.topics) for row in modern}
+        legacy: list[LogCacheInfo] = [
+            row
+            for row in select(
+                row for row in LogCacheInfo if row.chain == chain and row.address.lower() in scopes
+            )
+            if (row.address.lower(), row.topics) not in migrated
+        ]
+        through = []
+        rows: list[LogCacheRange | LogCacheInfo] = [*modern, *legacy]
+        for address in addresses:
+            ranges = []
+            for row in rows:
+                if row.address != "None" and row.address.lower() != str(address).lower():
+                    continue
+                if topics_cover(json.decode(row.topics), self.topics):
+                    ranges.append((row.cached_from, row.cached_thru))
+            through.append(completed_thru(from_block, ranges))
+        result = min(through, default=0)
+        logger.debug(
+            "event cache reuse addresses=%s topics=%s from=%s thru=%s",
+            self.addresses,
+            self.topics,
+            from_block,
+            result,
+        )
+        return result
 
     def _select(self, from_block: int, to_block: int) -> list[Log]:
+        modern = [_decode_log(row[3]) for row in self._factory_query(from_block, to_block)]
+        legacy = self._select_legacy(from_block, to_block)
+        return self._merge_logs(legacy, modern)
+
+    @staticmethod
+    def _merge_logs(legacy: list[Log], modern: list[Log]) -> list[Log]:
+        if not modern:
+            return legacy
+        unique = {
+            (
+                int(cast(BlockNumber, log.blockNumber)),
+                int(log.logIndex),
+                log.transactionHash.hex(),
+            ): log
+            for log in [*legacy, *modern]
+        }
+        return [unique[key] for key in sorted(unique)]
+
+    @db_session_retry_locked
+    def select_page(
+        self, from_block: int, to_block: int, after: tuple[int, int, str] | None = None
+    ) -> list[Log]:
+        """Read at most 512 events, even across very sparse completed history."""
+        if after:
+            from_block = max(from_block, after[0])
+        modern_query = self._factory_query(from_block, to_block)
+        legacy_query = self._get_query(from_block, to_block)
+        if after:
+            last_block, last_index, last_tx = after
+            # Pony accepts unpacked projections; pony-stubs models one argument.
+            modern_query = modern_query.filter(
+                lambda block, index, txhash, raw: block > last_block  # type: ignore[misc,arg-type]
+                or (block == last_block and index > last_index)
+                or (block == last_block and index == last_index and txhash > last_tx)
+            )
+            # Legacy hashes omit the 0x prefix used by raw RPC events.
+            last_tx = _remove_0x_prefix(last_tx)
+            legacy_query = legacy_query.filter(
+                lambda block, txhash, index, raw: block > last_block  # type: ignore[misc,arg-type]
+                or (block == last_block and index > last_index)
+                or (block == last_block and index == last_index and txhash > last_tx)
+            )
+        modern = [_decode_log(row[3]) for row in modern_query.limit(512)]
+        legacy = [_decode_log(row[3]) for row in legacy_query.limit(512)]
+        return self._merge_logs(legacy, modern)[:512]
+
+    def _factory_query(self, from_block: int, to_block: int) -> "Query[Any, Any]":
+        from y._db.utils import utils as db
+
+        chain_id = db.get_chain(sync=True).id
+        generator: Iterable[FactoryLog] = (
+            row
+            for row in FactoryLog
+            if row.chain == chain_id and row.block >= from_block and row.block <= to_block
+        )
+        if self.addresses:
+            addresses = [self.addresses] if isinstance(self.addresses, str) else self.addresses
+            addresses = tuple(str(address).lower() for address in addresses)
+            generator = (row for row in generator if row.address in addresses)
+        for i in range(4):
+            generator = self._wrap_factory_topic(generator, f"topic{i}")
+        raw = select((row.block, row.log_index, row.txhash, row.raw) for row in generator)
+        return raw.order_by(1, 2, 3)
+
+    def _wrap_factory_topic(
+        self, generator: Iterable[FactoryLog], field: str
+    ) -> Iterable[FactoryLog]:
+        if not (constraint := getattr(self, field)):
+            return generator
+        values = [constraint] if isinstance(constraint, (bytes, str)) else constraint
+        choices = tuple(_remove_0x_prefix(HexBytes32(value).strip()) for value in values)
+        return (row for row in generator if getattr(row, field) in choices)
+
+    def _select_legacy(self, from_block: int, to_block: int) -> list[Log]:
         logger.info("executing select query for %s", self)
         try:
             return [_decode_log(row[3]) for row in self._get_query(from_block, to_block)]
@@ -384,7 +512,7 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
             # leave their lazy raw fields unloaded and issue one query per event.
             select((log.block.number, log.tx.hash, log.log_index, log.raw) for log in generator)
             .without_distinct()
-            .order_by(1, 2, 3)
+            .order_by(1, 3, 2)
         )
         logger.debug(query.get_sql())
         return query
@@ -394,52 +522,77 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
 
         chain = db.get_chain(sync=True)
         encoded_topics = _encode_generic(self.topics or None)
-        should_commit = False
-        if self.addresses:
-            addresses = self.addresses
-            if isinstance(addresses, str):
-                addresses = [addresses]
-            for address in addresses:
-                if e := _get_log_cache_info(chain=chain, address=address, topics=encoded_topics):
-                    if from_block < e.cached_from:
-                        e.cached_from = from_block
-                        should_commit = True
-                    if done_thru > e.cached_thru:
-                        e.cached_thru = done_thru
-                        should_commit = True
-                else:
-                    LogCacheInfo(
-                        chain=chain,
-                        address=address,
-                        topics=encoded_topics,
-                        cached_from=from_block,
-                        cached_thru=done_thru,
-                    )
-                    should_commit = True
-        elif info := _get_log_cache_info(
-            chain=chain,
-            address="None",
-            topics=encoded_topics,
-        ):
-            if from_block < info.cached_from:
-                info.cached_from = from_block
-                should_commit = True
-            if done_thru > info.cached_thru:
-                info.cached_thru = done_thru
-                should_commit = True
-        else:
-            LogCacheInfo(
-                chain=chain,
-                address="None",
-                topics=encoded_topics,
-                cached_from=from_block,
-                cached_thru=done_thru,
+        addresses = (
+            [self.addresses]
+            if isinstance(self.addresses, str)
+            else list(self.addresses or ["None"])
+        )
+        for address in addresses:
+            existing = list(
+                select(
+                    row
+                    for row in LogCacheRange
+                    if row.chain == chain
+                    and row.address == address
+                    and row.topics == encoded_topics
+                )
             )
-            should_commit = True
-        if should_commit:
+            legacy = _get_log_cache_info(chain=chain, address=address, topics=encoded_topics)
+            if not existing and legacy:
+                LogCacheRange(
+                    chain=chain,
+                    address=address,
+                    topics=encoded_topics,
+                    cached_from=legacy.cached_from,
+                    cached_thru=legacy.cached_thru,
+                )
+                # Flush before merging, so a matching start is not inserted twice.
+                commit()
+                existing = list(
+                    select(
+                        row
+                        for row in LogCacheRange
+                        if row.chain == chain
+                        and row.address == address
+                        and row.topics == encoded_topics
+                    )
+                )
+            first, last = from_block, done_thru
+            for row in existing:
+                if row.cached_from <= last + 1 and row.cached_thru + 1 >= first:
+                    first, last = (
+                        min(first, row.cached_from),
+                        max(last, row.cached_thru),
+                    )
+                    row.delete()
+            # Flush deletes before reusing a range's primary key.
             commit()
-            logger.debug("cached %s %s thru %s", self.addresses, self.topics, done_thru)
-        return
+            LogCacheRange(
+                chain=chain,
+                address=address,
+                topics=encoded_topics,
+                cached_from=first,
+                cached_thru=last,
+            )
+            if legacy is None:
+                LogCacheInfo(
+                    chain=chain,
+                    address=address,
+                    topics=encoded_topics,
+                    cached_from=first,
+                    cached_thru=last,
+                )
+            elif legacy.cached_from <= last + 1 and legacy.cached_thru + 1 >= first:
+                legacy.cached_from = min(first, legacy.cached_from)
+                legacy.cached_thru = max(last, legacy.cached_thru)
+        commit()
+        logger.debug(
+            "cached %s %s range %s to %s",
+            self.addresses,
+            self.topics,
+            from_block,
+            done_thru,
+        )
 
     def _wrap_query_with_addresses(self, generator: Iterable[DbLog]) -> Iterable[DbLog]:
         if not (addresses := self.addresses):

@@ -4,7 +4,7 @@ import asyncio
 from collections.abc import AsyncIterator
 from types import SimpleNamespace
 from typing import Any
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, call
 
 import pytest
 from brownie import ZERO_ADDRESS
@@ -68,20 +68,31 @@ def test_chainlink_get_feed_falls_back_to_static_feeds(monkeypatch: pytest.Monke
 
     chainlink._feeds_from_events = SimpleNamespace(objects=events)
     deployed = AsyncMock(return_value=True)
-    registered = AsyncMock(return_value=module.ZERO_ADDRESS)
+    # A registry without phase data must still consult its events before using
+    # the static alias. The phase query returns an optional integer, not an address.
+    registered = AsyncMock(side_effect=[module.ZERO_ADDRESS, None])
     monkeypatch.setattr(module, "deployed", deployed)
     monkeypatch.setattr(module, "optional_read", registered)
     result = asyncio.get_event_loop().run_until_complete(
         chainlink.get_feed(asset, block, sync=False)
     )
     assert result is static
-    registered.assert_awaited_once_with(
-        chainlink.registry,
-        "getFeed(address,address)(address)",
-        block,
-        asset,
-        module.DENOMINATIONS["USD"],
-    )
+    assert registered.await_args_list == [
+        call(
+            chainlink.registry,
+            "getFeed(address,address)(address)",
+            block,
+            asset,
+            module.DENOMINATIONS["USD"],
+        ),
+        call(
+            chainlink.registry,
+            "getCurrentPhaseId(address,address)(uint16)",
+            block,
+            asset,
+            module.DENOMINATIONS["USD"],
+        ),
+    ]
     assert deployed.await_count == 2
     deployed.assert_awaited_with(static.address, block)
 

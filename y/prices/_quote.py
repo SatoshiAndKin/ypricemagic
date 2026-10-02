@@ -1,7 +1,15 @@
 """Exact quantities, bounded work, and shared immutable quote data."""
 
 import asyncio
-from collections.abc import Awaitable, Callable, Coroutine, Hashable, Iterable
+from collections.abc import (
+    AsyncIterable,
+    AsyncIterator,
+    Awaitable,
+    Callable,
+    Coroutine,
+    Hashable,
+    Iterable,
+)
 from copy import deepcopy
 from dataclasses import dataclass
 from decimal import Decimal
@@ -59,6 +67,33 @@ async def bounded_map(
                 task.cancel()
         await asyncio.gather(*tasks, return_exceptions=True)
     return [results[index] for index in range(len(results))]
+
+
+async def bounded_async_map(
+    function: Callable[[T], Awaitable[U]], values: AsyncIterable[T], workers: int = 8
+) -> AsyncIterator[U]:
+    """Overlap bounded batches while retaining the iterator's result order."""
+    if not 1 <= workers <= 64:
+        raise ValueError("workers must be between 1 and 64")
+    pending: list[asyncio.Task[U]] = []
+
+    async def run(value: T) -> U:
+        return await function(value)
+
+    try:
+        async for value in values:
+            pending.append(asyncio.create_task(run(value)))
+            if len(pending) == workers:
+                task = pending[0]
+                yield await task
+                pending.pop(0)
+        while pending:
+            yield await pending[0]
+            pending.pop(0)
+    finally:
+        for task in pending:
+            task.cancel()
+        await asyncio.gather(*pending, return_exceptions=True)
 
 
 @dataclass

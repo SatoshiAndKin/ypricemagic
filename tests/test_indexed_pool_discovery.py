@@ -4,13 +4,14 @@ import asyncio
 from collections.abc import AsyncIterator
 from types import SimpleNamespace
 from typing import Any, cast
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, Mock
 
 import pytest
 
 from tests.test_amount_quotes import CHILD, TOKEN, USD
 from tests.test_pricing_correctness import Ready, instance, run_async_test
 from y import convert
+from y.contracts import Contract
 from y.prices.dex.solidly import SolidlyRouter
 from y.prices.dex.uniswap import v2, v3
 from y.prices.dex.velodrome import VelodromeRouterV2
@@ -19,6 +20,9 @@ from y.utils.events import ProcessedEvents
 
 class Event(dict[str, Any]):
     block_number: int
+    blockNumber: int
+    logIndex: int
+    transactionHash: Any
 
     def __init__(self, block: int, **kwargs: Any) -> None:
         super().__init__(kwargs)
@@ -106,6 +110,97 @@ async def discover(router: Any, protocol: str, token: Any, block: int) -> list[A
     if protocol in ("v2", "solidly", "velodrome"):
         return list(await router.get_pools_for(token, block=block, sync=False))
     return [pool async for pool in v3.UniswapV3.pools_for_token(router, token, block)]
+
+
+@run_async_test
+@pytest.mark.parametrize("protocol", ["v2", "solidly", "velodrome", "v3", "slipstream"])
+@pytest.mark.parametrize("block", [9, 10, 20])
+async def test_compact_metadata_keeps_all_historical_candidates_without_pool_objects(
+    monkeypatch: Any, protocol: str, block: int
+) -> None:
+    from y import contracts
+    from y._db import common
+    from y._db.utils import logs
+    from y.utils import events
+
+    router, rows, _, _ = setup_discovery(monkeypatch, protocol)
+    monkeypatch.setattr(contracts, "contract_creation_block_async", AsyncMock(return_value=10))
+    constructed = Mock(side_effect=AssertionError("constructed a pool object"))
+    monkeypatch.setattr(v2, "UniswapV2Pool", constructed)
+    monkeypatch.setattr(v3, "UniswapV3Pool", constructed)
+    if protocol in ("v3", "slipstream"):
+        router._factory = USD
+        router.asynchronous = True
+        factory = SimpleNamespace(address=USD, topics={"PoolCreated": "0x" + "12" * 32})
+        monkeypatch.setattr(Contract, "coroutine", AsyncMock(return_value=factory))
+        for row in rows:
+            row["tickSpacing"] = row.pop("tick_spacing")
+    from brownie.network.event import _EventItem
+
+    monkeypatch.setattr(
+        events,
+        "decode_logs",
+        lambda rows: [_EventItem("PairCreated", None, [row], (0,)) for row in rows],
+    )
+
+    class Cache:
+        def __init__(self, addresses: Any, topics: Any) -> None:
+            self.position = len(topics) - 1
+
+        def is_cached_thru(self, start: int) -> int:
+            return 1000  # Later cached history must not enter an earlier quote.
+
+        def select(self, start: int, end: int) -> list[Event]:
+            assert end <= block
+            return [
+                row
+                for row in rows
+                if start <= row.block_number <= end
+                and row["token0" if self.position == 1 else "token1"] == TOKEN
+            ]
+
+        def select_page(self, start: int, end: int, after: Any) -> list[Event]:
+            from hexbytes import HexBytes
+
+            selected = [] if after else self.select(start, end)
+            for index, row in enumerate(selected):
+                row.blockNumber = row.block_number
+                row.logIndex = index
+                row.transactionHash = HexBytes("0x01")
+            return selected
+
+    async def run(function: Any, *args: Any) -> Any:
+        return function(*args)
+
+    monkeypatch.setattr(logs, "LogCache", Cache)
+    monkeypatch.setattr(common, "default_filter_threads", SimpleNamespace(run=run))
+    monkeypatch.setattr(events, "_decode_threads", SimpleNamespace(run=run))
+    if protocol in ("v3", "slipstream"):
+        v3_batches = [
+            batch async for batch in v3.UniswapV3.pool_metadata_batches(router, TOKEN, block)
+        ]
+        actual = {
+            (item.address, (item.token0, item.token1)) for batch in v3_batches for item in batch
+        }
+        assert all(
+            item.slipstream == (protocol == "slipstream") for batch in v3_batches for item in batch
+        )
+    else:
+        batches = [batch async for batch in router.pool_metadata_batches(TOKEN, block)]
+        actual = {item for batch in batches for item in batch}
+    expected = {
+        (
+            str(row.get("pair", row.get("pool"))).lower(),
+            (row["token0"].lower(), row["token1"].lower()),
+        )
+        for row in rows
+        if row.block_number <= block and TOKEN in (row["token0"], row["token1"])
+    }
+    assert actual == expected
+    assert sum(map(len, v3_batches if protocol in ("v3", "slipstream") else batches)) == len(
+        expected
+    )
+    constructed.assert_not_called()
 
 
 @run_async_test
@@ -272,7 +367,14 @@ def test_native_stable_pool_creation_event_decodes(monkeypatch: Any, protocol: s
 
 @pytest.mark.parametrize(
     "default,override,expected",
-    [(2000, 0, 2000), (10000, 0, 1000000), (800000, 0, 1000000), (10000, 12345, 12345)],
+    [
+        (2000, 0, 2000),
+        (10000, 0, 10000),
+        (800000, 0, 10000),
+        (10000, 12345, 10000),
+        (2000, 10000, 2000),
+        (10000, 1000, 1000),
+    ],
 )
 def test_indexed_range_respects_provider_and_explicit_limits(
     monkeypatch: Any, default: int, override: int, expected: int
@@ -350,6 +452,38 @@ async def test_http_range_error_reaches_splitter_without_batch_retry(monkeypatch
         finally:
             await session.close()
             await runner.cleanup()
+
+
+@run_async_test
+@pytest.mark.parametrize("recover", [True, False])
+async def test_log_rate_limit_retries_same_range_and_propagates_exhaustion(
+    monkeypatch: pytest.MonkeyPatch, recover: bool
+) -> None:
+    from y.utils import _log_ranges
+
+    rate_limit = {"error": {"code": 429, "message": "capacity exceeded"}}
+    provider = SimpleNamespace(
+        make_request=AsyncMock(
+            side_effect=[rate_limit, {"result": []}] if recover else [rate_limit] * 5
+        )
+    )
+    monkeypatch.setattr(
+        _log_ranges,
+        "dank_web3",
+        SimpleNamespace(eth=SimpleNamespace(w3=SimpleNamespace(provider=provider))),
+    )
+    monkeypatch.setattr(asyncio, "sleep", AsyncMock())
+    if recover:
+        assert await _log_ranges.adaptive_logs([USD], [], 10, 20) == []
+    else:
+        with pytest.raises(ConnectionError, match="rate limit exceeded"):
+            await _log_ranges.adaptive_logs([USD], [], 10, 20)
+    calls = provider.make_request.await_args_list
+    assert len(calls) == (2 if recover else 5)
+    assert all(call.args == calls[0].args for call in calls)
+    assert calls[0].args[1] == [
+        {"address": [USD], "topics": [], "fromBlock": "0xa", "toBlock": "0x14"}
+    ]
 
 
 @run_async_test

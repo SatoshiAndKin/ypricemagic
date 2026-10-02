@@ -11,8 +11,21 @@ from y import ENVIRONMENT_VARIABLES as ENVS
 from y._decorators import stuck_coro_debugger
 from y.constants import EEE_ADDRESS
 from y.datatypes import QuoteAsset, QuoteStep
-from y.prices._quote import bounded_map
-from y.prices._rpc import BlockRef, deployed, optional_read, read, state, state_cache, unavailable
+from y.prices._candidates import gather_owned
+from y.prices._quote import bounded_async_map, bounded_map
+from y.prices._rpc import (
+    BlockRef,
+    balances_batch,
+    deployed,
+    deployed_batch,
+    optional_read,
+    read,
+    reserves_batch,
+    state,
+    state_cache,
+    unavailable,
+)
+from y.utils._timing import timed
 
 
 @dataclass(frozen=True, slots=True)
@@ -82,6 +95,7 @@ async def curve_pool_state(pool: str, block: BlockRef) -> Market | None:
 
 
 @stuck_coro_debugger
+@timed("discovery")
 async def discover(
     token: str, block: BlockRef, first_markets: tuple[str, ...] = ()
 ) -> tuple[Market, ...]:
@@ -95,7 +109,8 @@ async def discover(
     from y.prices.dex.balancer import balancer_multiplexer
     from y.prices.dex.solidly import SolidlyRouterBase
     from y.prices.dex.uniswap import uniswap_multiplexer
-    from y.prices.dex.uniswap.v3 import SlipstreamPool
+    from y.prices.dex.uniswap.v2 import UniswapRouterV2
+    from y.prices.dex.uniswap.v3 import SlipstreamPool, UniswapV3, V3PoolMetadata
     from y.prices.dex.velodrome import VelodromeRouterV2
     from y.prices.stable_swap.curve import CurveRegistry, curve
 
@@ -165,8 +180,44 @@ async def discover(
             continue
         if not await deployed(address(router.factory), block):
             continue
-        # The existing immutable token index contains deployment data, including
-        # cached Sushi tuples. Avoid pools_for_token's task-per-pool filter.
+        if isinstance(router, UniswapRouterV2):
+
+            async def metadata_snapshot(item: tuple[str, tuple[str, str], Any]) -> Market | None:
+                pair, tokens, reserves = item
+                if token not in tokens:
+                    return None
+                if not reserves or not reserves[tokens.index(token)]:
+                    return None
+                # The event predates this block, and a successfully decoded
+                # native getter proves code exists there. A second getCode for
+                # every dust pair only consumes provider throughput.
+                kind, stable = "Uniswap V2", False
+                if isinstance(router, SolidlyRouterBase):
+                    stable = bool(await state(pair, "stable()(bool)", block))
+                    kind = "Velodrome V2" if isinstance(router, VelodromeRouterV2) else "Solidly"
+                return Market(
+                    kind,
+                    pair,
+                    tokens,
+                    tuple(map(int, reserves[:2])),
+                    address(router),
+                    stable=stable,
+                    factory=address(router.factory),
+                )
+
+            async def snapshots(batch: list[tuple[str, tuple[str, str]]]) -> list[Market | None]:
+                reserves = await reserves_batch(tuple(pair for pair, _ in batch), block)
+                return await bounded_map(
+                    lambda item: safely(metadata_snapshot, item),
+                    [(pair, tokens, reserve) for (pair, tokens), reserve in zip(batch, reserves)],
+                )
+
+            async for batch_markets in bounded_async_map(
+                snapshots, router.pool_metadata_batches(checksum, block.number)
+            ):
+                markets.extend(market for market in batch_markets if market)
+            continue
+
         pools = await loaded(router.get_pools_for(checksum, block=block.number, sync=False), {})
 
         async def v2_snapshot(pool: Any) -> Market | None:
@@ -210,15 +261,73 @@ async def discover(
             continue
         if not await deployed(address(router._factory), block):
             continue
+
+        async def v3_batches(batch: list[Any]) -> list[Market | None]:
+            requests = tuple(
+                (address(t), address(pool)) for pool in batch for t in (pool.token0, pool.token1)
+            )
+            raw_balances = await balances_batch(requests, block)
+            eligible = [
+                i
+                for i, pool in enumerate(batch)
+                if all(value is not None for value in raw_balances[2 * i : 2 * i + 2])
+                and raw_balances[2 * i + (address(pool.token1) == token)]
+            ]
+            codes = await deployed_batch(tuple(address(batch[i]) for i in eligible), block)
+            live = {i for i, code in zip(eligible, codes) if code}
+
+            async def snapshot(item: tuple[Any, tuple[Any, ...]]) -> Market | None:
+                pool, values = item
+                tokens = (address(pool.token0), address(pool.token1))
+                if any(value is None for value in values):
+                    return None
+                balances = tuple(map(int, values))
+                if not balances[tokens.index(token)]:
+                    return None
+                return Market(
+                    (
+                        "Slipstream"
+                        if isinstance(pool, SlipstreamPool)
+                        or isinstance(pool, V3PoolMetadata)
+                        and pool.slipstream
+                        else "Uniswap V3"
+                    ),
+                    address(pool),
+                    tokens,
+                    balances,
+                    address(router._quoter),
+                    int(pool.fee),
+                    factory=address(router._factory),
+                    tick_spacing=(
+                        pool.tick_spacing
+                        if isinstance(pool, SlipstreamPool)
+                        or isinstance(pool, V3PoolMetadata)
+                        and pool.slipstream
+                        else None
+                    ),
+                )
+
+            return await bounded_map(
+                lambda item: safely(snapshot, item),
+                [(batch[i], raw_balances[2 * i : 2 * i + 2]) for i in eligible if i in live],
+            )
+
+        if isinstance(router, UniswapV3):
+            async for batch_markets in bounded_async_map(
+                v3_batches, router.pool_metadata_batches(checksum, block.number)
+            ):
+                markets.extend(market for market in batch_markets if market)
+            continue
+
         pools = await loaded(collect(router.pools_for_token(checksum, block.number)), [])
 
         async def v3_snapshot(pool: Any) -> Market | None:
             if not await deployed(address(pool), block):
                 return None
             tokens = (address(pool.token0), address(pool.token1))
-            raw_balances = [
-                await state(t, "balanceOf(address)(uint256)", block, address(pool)) for t in tokens
-            ]
+            raw_balances = await gather_owned(
+                state(t, "balanceOf(address)(uint256)", block, address(pool)) for t in tokens
+            )
             if any(balance is None for balance in raw_balances):
                 return None
             balances = tuple(map(int, raw_balances))
@@ -346,6 +455,7 @@ async def discover(
 
 
 @stuck_coro_debugger
+@timed("native_quote")
 async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) -> QuoteStep | None:
     """Pass the full integer amount to the pool's native quote method."""
     token, amount, protocol = asset.token, asset.amount, market.protocol
@@ -372,20 +482,23 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
     elif protocol in ("Uniswap V3", "Slipstream"):
         from eth_abi.packed import encode_packed
 
-        from y.prices.dex.uniswap.v3 import load_quoter
-
         method = "quoteExactInput(bytes,uint256)"
-        quoter = await load_quoter(market.router)
         index_type, pool_key = (
             ("int24", market.tick_spacing) if protocol == "Slipstream" else ("uint24", market.fee)
         )
         if pool_key is None:
             raise ValueError(f"missing pool key for {protocol} {pool}")
-        quoted: int | tuple[int, ...] = await quoter.quoteExactInput.coroutine(
+        # V1, V2 and Slipstream share these selectors and first uint256 output.
+        # V2's remaining diagnostic outputs do not change the native quote.
+        quoted: int | tuple[int, ...] | None = await read(
+            market.router,
+            method + "(uint256)",
+            block,
             encode_packed(["address", index_type, "address"], [token, pool_key, output]),
             amount,
-            block_identifier=block.identifier,
         )
+        if quoted is None:
+            return None
         result = int(quoted if isinstance(quoted, int) else quoted[0])
         if result <= 0:
             return None
@@ -395,14 +508,18 @@ async def swap(market: Market, asset: QuoteAsset, output: str, block: BlockRef) 
         # Exact-output callbacks enforce delivery of the entire requested output;
         # a revert or a cheaper next atom cannot prove a full sale.
         try:
-            required: int | tuple[int, ...] = await quoter.quoteExactOutput.coroutine(
+            required: int | tuple[int, ...] | None = await read(
+                market.router,
+                "quoteExactOutput(bytes,uint256)(uint256)",
+                block,
                 encode_packed(["address", index_type, "address"], [output, pool_key, token]),
                 result + 1,
-                block_identifier=block.identifier,
             )
         except Exception as exc:
             if not unavailable(exc):
                 raise
+            return None
+        if required is None:
             return None
         if int(required if isinstance(required, int) else required[0]) <= amount:
             return None
