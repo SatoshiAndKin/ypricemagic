@@ -1,0 +1,35 @@
+{
+  "source_archive_sha256": "fdcafb61dbe81ee90b0bb05ee49e612218d93100a303dcd003e3c175c6673ccc",
+  "image": "sha256:96ec7aab0eb97e9928dedea70edbceeaf3e26e6a4babccc1729fe7f9c5a4c0db",
+  "complete": true,
+  "exit_code": 0,
+  "oom_killed": false,
+  "below_memory_target": true,
+  "elapsed_seconds": 178.25014400482178,
+  "python": "3.12",
+  "source_implementation_commit": "9f0b502e6d8113830ef6582e998eb5013e8a51b0",
+  "boundary": "All changed quote, RPC, discovery, cache and scaling tests; full-suite final validation is separate.",
+  "pytest": {
+    "exit_code": 0,
+    "counts": {
+      "setup:passed": 404,
+      "call:passed": 404,
+      "teardown:passed": 404
+    },
+    "collected": 404
+  },
+  "compiled_modules": {
+    "y._db.brownie": "/work/y/_db/brownie.cpython-312-aarch64-linux-gnu.so",
+    "y._db.config": "/work/y/_db/config.cpython-312-aarch64-linux-gnu.so",
+    "y._db.decorators": "/work/y/_db/decorators.cpython-312-aarch64-linux-gnu.so",
+    "y._db.utils.stringify": "/work/y/_db/utils/stringify.cpython-312-aarch64-linux-gnu.so",
+    "y.ENVIRONMENT_VARIABLES": "/work/y/ENVIRONMENT_VARIABLES.cpython-312-aarch64-linux-gnu.so",
+    "y.convert": "/work/y/convert.cpython-312-aarch64-linux-gnu.so",
+    "y.exceptions": "/work/y/exceptions.cpython-312-aarch64-linux-gnu.so",
+    "y.networks": "/work/y/networks.cpython-312-aarch64-linux-gnu.so",
+    "y.prices.utils.sense_check": "/work/y/prices/utils/sense_check.cpython-312-aarch64-linux-gnu.so",
+    "y.utils.gather": "/work/y/utils/gather.cpython-312-aarch64-linux-gnu.so"
+  },
+  "mypy_files": 240,
+  "companion_server_pr": "https://github.com/SatoshiAndKin/ypricemagic-server/pull/158"
+}
