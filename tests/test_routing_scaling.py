@@ -9,6 +9,7 @@ import importlib
 import json
 import os
 import tracemalloc
+from collections.abc import AsyncIterator
 from pathlib import Path
 from time import perf_counter
 from types import SimpleNamespace
@@ -20,6 +21,7 @@ from tests.test_amount_quotes import BLOCK
 from tests.test_pricing_correctness import Ready, instance, run_async_test
 from y.datatypes import PriceResult, QuoteAsset, QuoteStep, UsdPrice
 from y.prices import _markets, _routing
+from y.prices._quote import bounded_map
 from y.prices._routing import QuoteService
 from y.prices._rpc import BlockRef
 
@@ -43,6 +45,7 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
             self.pair = tuple(t.lower() for t in row[1:3])
             self._tokens = tuple(row[1:3])
             self.__tokens__ = Ready(self._tokens)
+            self._deploy_block = row[3]
 
         @a_sync.property
         async def tokens(self) -> tuple[str, ...]:
@@ -62,7 +65,19 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
     router.special_paths = {}
     router.pools = pools
     monkeypatch.setattr(UniswapRouterV2, "__pools__", property(lambda _: Ready(pools)))
-    # Discovery calls the existing all_pools_for and pools_by_token methods.
+
+    async def metadata(
+        self: Any, token: str, block: int
+    ) -> AsyncIterator[list[tuple[str, tuple[str, ...]]]]:
+        selected = [
+            (pool.address, pool.pair)
+            for pool in pools
+            if token.lower() in pool.pair and pool._deploy_block <= block
+        ]
+        for start in range(0, len(selected), 128):
+            yield selected[start : start + 128]
+
+    monkeypatch.setattr(UniswapRouterV2, "pool_metadata_batches", metadata)
     multiplexer = SimpleNamespace(v2_routers={"sushi": router}, v3=None, v3_forks=[], v1=None)
     module = importlib.import_module("y.prices.dex.uniswap")
     monkeypatch.setattr(module, "uniswap_multiplexer", multiplexer)
@@ -113,6 +128,11 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
         return None
 
     monkeypatch.setattr(_markets, "state", state)
+
+    async def reserves(addresses: tuple[str, ...], block: BlockRef) -> tuple[Any, ...]:
+        return tuple(await bounded_map(lambda pool: state(pool, "getReserves", block), addresses))
+
+    monkeypatch.setattr(_markets, "reserves_batch", reserves)
     # Exact counters live at the state/quote boundary above. Mock call histories
     # would retain hundreds of thousands of arguments without adding coverage.
     monkeypatch.setattr(_markets, "deployed", deployed)
@@ -129,7 +149,7 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
     count = reads
     assert first is not None and first.quote is not None
     assert first.quote.total_usd == 1994
-    assert count == sum(token in pool.pair for pool in pools)
+    assert count == sum(token in pool.pair and pool._deploy_block <= BLOCK.number for pool in pools)
     assert peak <= 64 and active == 0
     assert quotes == 1
 

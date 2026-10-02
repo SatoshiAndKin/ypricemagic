@@ -53,11 +53,14 @@ from y.interfaces.uniswap.factoryv2 import UNIV2_FACTORY_ABI
 from y.networks import Network
 from y.prices._candidates import pool_is_ignored
 from y.prices._quote import bounded_map
-from y.prices.dex.uniswap.v2_forks import ROUTER_TO_FACTORY, ROUTER_TO_PROTOCOL, special_paths
+from y.prices.dex.uniswap.v2_forks import (
+    ROUTER_TO_FACTORY,
+    ROUTER_TO_PROTOCOL,
+    special_paths,
+)
 from y.utils._log_ranges import indexed_chunk_size
 from y.utils.cache import memory
 from y.utils.events import ProcessedEvents, indexed_pool_executor
-from y.utils.middleware import BATCH_SIZE
 from y.utils.raw_calls import raw_call
 
 logger = getLogger(__name__)
@@ -487,7 +490,8 @@ class PoolsFromEvents(ProcessedEvents[UniswapV2Pool]):
             addresses=[factory],
             topics=topics,
             is_reusable=token is not None,
-            chunk_size=indexed_chunk_size() if token is not None else BATCH_SIZE,
+            chunk_size=indexed_chunk_size(),
+            shared_factory=True,
             executor=indexed_pool_executor if token is not None else None,
         )
 
@@ -833,6 +837,75 @@ class UniswapRouterV2(ContractBase):
             elif token_in == token1:
                 pool_to_token_out[pool] = token0
         return pool_to_token_out
+
+    @stuck_coro_debugger
+    async def pool_metadata_batches(
+        self, token: Address, block: Block
+    ) -> AsyncIterator[list[tuple[str, tuple[str, str]]]]:
+        """Read immutable pair metadata in bounded batches without pool objects.
+
+        Large wrapped-gas inventories contain mostly empty pairs. Quotes can
+        inspect their native reserves without retaining a singleton per pair.
+        Keep the full factory event set and both indexed token positions.
+        """
+        from y._db.common import default_filter_threads
+        from y._db.utils.logs import LogCache
+        from y.contracts import contract_creation_block_async
+        from y.utils._factory_history import factory_logs
+        from y.utils.events import _decode_threads, decode_logs
+
+        token = await convert.to_address_async(token)
+        # Registers the protocol-specific event ABI without starting a loader.
+        reader = self._pool_events_type(self.factory, self.label, self.asynchronous, token=token)
+        start = await contract_creation_block_async(self.factory, sync=False)
+        if start > block:
+            return
+        topic = "0x" + token[2:].lower().zfill(64)
+        seen: set[str] = set()
+        chunk = indexed_chunk_size()
+        batch: list[tuple[str, tuple[str, str]]] = []
+        for position in (1, 2):
+            topics: list[str | list[str] | None] = [[reader.PairCreated]]
+            topics.extend([None] * position)
+            topics[position] = topic
+            cache = LogCache([self.factory], topics)
+            covered = await default_filter_threads.run(cache.is_cached_thru, start)
+            cached_end = min(covered, block)
+
+            async def pages() -> AsyncIterator[list[Any]]:
+                if cached_end >= start:
+                    after: tuple[int, int, str] | None = None
+                    while rows := await default_filter_threads.run(
+                        cache.select_page, start, cached_end, after
+                    ):
+                        yield rows
+                        last = rows[-1]
+                        after = (
+                            int(last.blockNumber),
+                            int(last.logIndex),
+                            last.transactionHash.hex(),
+                        )
+                for first in range(max(start, cached_end + 1), block + 1, chunk):
+                    last_block = min(first + chunk - 1, block)
+                    yield await factory_logs([self.factory], topics, first, last_block)
+
+            async for rows in pages():
+                decoded = await _decode_threads.run(decode_logs, rows)
+                del rows
+                for event in decoded:
+                    pair = str(event["pair" if "pair" in event else "pool"]).lower()
+                    if pair in seen:
+                        continue
+                    seen.add(pair)
+                    batch.append(
+                        (pair, (str(event["token0"]).lower(), str(event["token1"]).lower()))
+                    )
+                    if len(batch) == 2048:
+                        yield batch
+                        batch = []
+                del decoded
+        if batch:
+            yield batch
 
     @stuck_coro_debugger
     async def pools_for_token(

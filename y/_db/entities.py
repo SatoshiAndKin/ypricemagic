@@ -73,11 +73,13 @@ class Chain(DbEntity, _AsyncEntityMixin):
         blocks: Set["Block"]
         addresses: Set["Address"]
         log_cached: Set["LogCacheInfo"]
+        log_ranges: Set["LogCacheRange"]
         trace_caches: Set["TraceCacheInfo"]
 
     blocks = Set("Block")
     addresses = Set("Address")
     log_cached = Set("LogCacheInfo")
+    log_ranges = Set("LogCacheRange")
     trace_caches = Set("TraceCacheInfo")
 
 
@@ -173,6 +175,36 @@ class LogCacheInfo(DbEntity):
     cached_thru = Required(int, size=64)
 
 
+class FactoryLog(DbEntity):
+    """Compact immutable factory events, without per-event ORM references."""
+
+    chain = Required(int)
+    address = Required(str)
+    block = Required(int, size=64)
+    log_index = Required(int)
+    txhash = Required(str)
+    PrimaryKey(chain, address, block, log_index, txhash)
+    topic0 = Optional(str)
+    topic1 = Optional(str)
+    topic2 = Optional(str)
+    topic3 = Optional(str)
+    raw = Required(bytes, lazy=True)
+
+    composite_index(chain, address, topic0, topic1, block, log_index)
+    composite_index(chain, address, topic0, topic2, block, log_index)
+
+
+class LogCacheRange(DbEntity):
+    """Completed ranges, including empty results; disjoint scans cannot imply a gap."""
+
+    chain = Required(Chain, index=True)
+    address = Required(str, 42, index=True)
+    topics = Required(bytes)
+    cached_from = Required(int, size=64)
+    cached_thru = Required(int, size=64)
+    PrimaryKey(chain, address, topics, cached_from)
+
+
 class LogTopic(DbEntity):
     """Represents a log topic entity in the database.
 
@@ -228,10 +260,13 @@ class Log(DbEntity):
     topic2 = Optional(LogTopic, index=True, lazy=True)
     topic3 = Optional(LogTopic, index=True, lazy=True)
     composite_index(address, topic0)
+    composite_index(address, topic0, topic1, block, log_index)
+    composite_index(address, topic0, topic2, block, log_index)
     composite_index(topic0, topic1)
     composite_index(topic0, topic2)
     composite_index(topic0, topic3)
     composite_index(block, address, topic0)
+    composite_index(block, log_index)
     composite_index(block, topic0, topic1)
     composite_index(block, topic0, topic2)
     composite_index(block, topic0, topic3)

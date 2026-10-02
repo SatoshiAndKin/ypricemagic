@@ -1,7 +1,14 @@
 from abc import abstractmethod
 from asyncio import AbstractEventLoop, as_completed, get_event_loop, sleep
 from collections import Counter, defaultdict
-from collections.abc import AsyncGenerator, Awaitable, Callable, Iterable, Mapping, Sequence
+from collections.abc import (
+    AsyncGenerator,
+    Awaitable,
+    Callable,
+    Iterable,
+    Mapping,
+    Sequence,
+)
 from functools import cached_property, wraps
 from inspect import isawaitable
 from itertools import zip_longest
@@ -353,7 +360,7 @@ def _get_logs(
 
 get_logs_semaphore: defaultdict[AbstractEventLoop, dank_mids.BlockSemaphore] = defaultdict(
     lambda: dank_mids.BlockSemaphore(
-        int(ENVS.GETLOGS_DOP),
+        min(8, int(ENVS.GETLOGS_DOP)),
         # We need to do this in case users use the sync api in a multithread context
         name="y.get_logs" + ("" if current_thread() == main_thread() else f".{current_thread()}"),
     )
@@ -555,7 +562,7 @@ class LogFilter(Filter[_StoredLog, "LogCache", Log]):
     This class provides methods to fetch logs from the blockchain and process them.
     """
 
-    __slots__ = "addresses", "topics", "from_block"
+    __slots__: tuple[str, ...] = "addresses", "topics", "from_block", "shared_factory"
 
     def __init__(
         self,
@@ -566,6 +573,7 @@ class LogFilter(Filter[_StoredLog, "LogCache", Log]):
         chunk_size: int = BATCH_SIZE,
         chunks_per_batch: int | None = None,
         semaphore: dank_mids.BlockSemaphore | None = None,
+        shared_factory: bool = False,
         executor: _AsyncExecutorMixin | None = None,
         is_reusable: bool = True,
         verbose: bool = False,
@@ -591,6 +599,7 @@ class LogFilter(Filter[_StoredLog, "LogCache", Log]):
         """
         self.addresses = _clean_addresses(addresses)
         self.topics = topics
+        self.shared_factory = shared_factory
         super().__init__(
             from_block,
             chunk_size=chunk_size,
@@ -668,6 +677,11 @@ class LogFilter(Filter[_StoredLog, "LogCache", Log]):
 
         @wraps(bulk_insert)
         async def bulk_insert_wrapped(logs: list[Log]) -> None:
+            if self.shared_factory:
+                # The factory owner committed these raw events before returning
+                # them. Rewriting the filtered subset through the legacy schema
+                # duplicates both disk storage and reference-table work.
+                return
             return await bulk_insert(logs, executor=executor)
 
         return bulk_insert_wrapped
@@ -700,6 +714,15 @@ class LogFilter(Filter[_StoredLog, "LogCache", Log]):
                 )
         return self.from_block
 
+    async def _fetch_range_wrapped(
+        self, i: int, range_start: Block, range_end: Block, debug_logs: bool
+    ) -> tuple[int, Block, list[Log]]:
+        if self.shared_factory:
+            # The shared raw scanner owns the eight RPC permits. Waiting token
+            # filters must not hold those same permits and deadlock the scan.
+            return i, range_end, await self._fetch_range(range_start, range_end)
+        return await super()._fetch_range_wrapped(i, range_start, range_end, debug_logs)
+
     async def _fetch_range(self, range_start: Block, range_end: Block) -> list[Log]:
         """
         Fetch logs for a given block range.
@@ -716,16 +739,19 @@ class LogFilter(Filter[_StoredLog, "LogCache", Log]):
             >>> logs = await log_filter._fetch_range(1000000, 1000100)
             >>> print(logs)
         """
+        if self.shared_factory:
+            from y.utils._factory_history import factory_logs
+
+            return await factory_logs(self.addresses, self.topics, range_start, range_end)
         tries = 0
         while True:
             try:
-                if range_end - range_start + 1 > 10_000:
-                    from y.utils._log_ranges import adaptive_logs
+                from y.utils._log_ranges import adaptive_logs
 
-                    return await adaptive_logs(self.addresses, self.topics, range_start, range_end)
-                return await _get_logs_async_no_cache(
-                    self.addresses, self.topics, range_start, range_end
-                )
+                # All filter backfills use the bounded transport. Sending an
+                # ordinary 10,000-block range through Dank's retrying batch path
+                # can hold a shared scan permit for its 1,200-second timeout.
+                return await adaptive_logs(self.addresses, self.topics, range_start, range_end)
             except ValueError as e:
                 if "parse error" not in str(e) or tries >= 50:
                     raise
@@ -741,8 +767,6 @@ class LogFilter(Filter[_StoredLog, "LogCache", Log]):
         """
         from_block = await self._from_block
         await self._loop(from_block)
-
-    __slots__ = "addresses", "topics", "from_block"
 
 
 class Events(LogFilter[_StoredEvent]):

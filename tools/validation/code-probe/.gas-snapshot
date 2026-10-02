@@ -1,0 +1,3 @@
+CodeProbeTest:testFuzzNativeCodePresence(address) (runs: 256, μ: 8427, ~: 8476)
+CodeProbeTest:testOrderedPresenceAndEmptyInput() (gas: 43632)
+CodeProbeTest:testRejectMalformedInput() (gas: 5108)

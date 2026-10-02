@@ -14,6 +14,7 @@ from y.prices._markets import Market, address, discover, swap
 from y.prices._quote import SharedCache, to_base_units
 from y.prices._rpc import BlockRef, state, unavailable
 from y.prices._usdc import USDC_VALUATION, fixed_usdc_price
+from y.utils._timing import timed
 
 
 @dataclass(frozen=True)
@@ -161,6 +162,7 @@ class QuoteService:
         return direct
 
     @stuck_coro_debugger
+    @timed("redemption")
     async def redeem(
         self,
         asset: QuoteAsset,

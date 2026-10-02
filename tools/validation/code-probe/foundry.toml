@@ -1,0 +1,7 @@
+[profile.default]
+solc_version = "0.8.26"
+evm_version = "paris"
+optimizer = true
+optimizer_runs = 200
+bytecode_hash = "none"
+cbor_metadata = false

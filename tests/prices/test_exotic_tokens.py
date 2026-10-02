@@ -177,6 +177,28 @@ async def test_xpremia_price() -> None:
 
 @mainnet_only
 @pytest.mark.asyncio_cooperative
+@pytest.mark.parametrize("block", [11_807_486, 11_807_487])
+async def test_xpremia_deployment_boundary_without_backing(block: int) -> None:
+    """No code before deployment and zero supply at deployment are unavailable."""
+    code = await dank_eth.get_code(convert.to_address(XPREMIA), block_identifier=block)
+    if block == 11_807_486:
+        assert not code
+    else:
+        assert code
+        assert await raw_call(XPREMIA, "totalSupply()", output="int", block=block, sync=False) == 0
+        assert (
+            await raw_call(
+                PREMIA, "balanceOf(address)", inputs=XPREMIA, output="int", block=block, sync=False
+            )
+            == 0
+        )
+    assert (
+        await exotic_tokens.get_price_xpremia(XPREMIA, block, skip_cache=True, sync=False) is None
+    )
+
+
+@mainnet_only
+@pytest.mark.asyncio_cooperative
 async def test_xpremia_returns_price_result() -> None:
     """xPREMIA pricing should return a PriceResult with descriptive source."""
     result = await magic.get_price(
