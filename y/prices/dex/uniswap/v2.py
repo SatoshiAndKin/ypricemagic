@@ -4,6 +4,7 @@ import tempfile
 from asyncio import gather, sleep
 from collections.abc import AsyncIterator, Awaitable, Callable, Collection, Sequence
 from contextlib import suppress
+from dataclasses import dataclass
 from decimal import Decimal
 from functools import cached_property
 from itertools import islice
@@ -64,6 +65,16 @@ from y.utils.events import ProcessedEvents, indexed_pool_executor
 from y.utils.raw_calls import raw_call
 
 logger = getLogger(__name__)
+
+
+@dataclass(frozen=True)
+class V2PoolMetadata:
+    """Immutable values attested by the factory's pair creation event."""
+
+    address: str
+    tokens: tuple[str, str]
+    stable: bool | None = None
+
 
 _PoolTuple = list[Any]  # JSON row: [address, token0, token1, deploy_block | None]
 
@@ -841,7 +852,7 @@ class UniswapRouterV2(ContractBase):
     @stuck_coro_debugger
     async def pool_metadata_batches(
         self, token: Address, block: Block
-    ) -> AsyncIterator[list[tuple[str, tuple[str, str]]]]:
+    ) -> AsyncIterator[list[V2PoolMetadata]]:
         """Read immutable pair metadata in bounded batches without pool objects.
 
         Large wrapped-gas inventories contain mostly empty pairs. Quotes can
@@ -863,7 +874,7 @@ class UniswapRouterV2(ContractBase):
         topic = "0x" + token[2:].lower().zfill(64)
         seen: set[str] = set()
         chunk = indexed_chunk_size()
-        batch: list[tuple[str, tuple[str, str]]] = []
+        batch: list[V2PoolMetadata] = []
         for position in (1, 2):
             topics: list[str | list[str] | None] = [[reader.PairCreated]]
             topics.extend([None] * position)
@@ -898,7 +909,14 @@ class UniswapRouterV2(ContractBase):
                         continue
                     seen.add(pair)
                     batch.append(
-                        (pair, (str(event["token0"]).lower(), str(event["token1"]).lower()))
+                        V2PoolMetadata(
+                            pair,
+                            (
+                                str(event["token0"]).lower(),
+                                str(event["token1"]).lower(),
+                            ),
+                            bool(event["stable"]) if "stable" in event else None,
+                        )
                     )
                     if len(batch) == 2048:
                         yield batch

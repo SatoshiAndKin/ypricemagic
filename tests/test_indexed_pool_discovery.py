@@ -40,7 +40,10 @@ def event_history(protocol: str) -> list[Event]:
                 **(
                     {"pool": f"0x{0x448800+i:040x}", "stable": i % 2 == 0}
                     if protocol == "velodrome"
-                    else {"pair": f"0x{0x445500+i:040x}", "stable": i % 2 == 0}
+                    else {
+                        "pair": f"0x{0x445500+i:040x}",
+                        **({"stable": i % 2 == 0} if protocol == "solidly" else {}),
+                    }
                 ),
             )
             for i, (block, first, second) in enumerate(rows)
@@ -187,7 +190,13 @@ async def test_compact_metadata_keeps_all_historical_candidates_without_pool_obj
         )
     else:
         batches = [batch async for batch in router.pool_metadata_batches(TOKEN, block)]
-        actual = {item for batch in batches for item in batch}
+        actual = {(item.address, item.tokens) for batch in batches for item in batch}
+        expected_stable = {
+            str(row.get("pair", row.get("pool"))).lower(): row.get("stable") for row in rows
+        }
+        assert all(
+            item.stable is expected_stable[item.address] for batch in batches for item in batch
+        )
     expected = {
         (
             str(row.get("pair", row.get("pool"))).lower(),

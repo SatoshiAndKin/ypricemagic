@@ -109,6 +109,7 @@ profile = "black"
 line_length = 100
 
 [tool.validation]
+cold_state_tests = ["tests/test_rpc_state_retry.py", "tests/test_indexed_pool_discovery.py", "tests/test_reserve_batches.py", "tests/test_quote_repairs.py", "tests/test_routing_scaling.py"]
 review_quote_tests = [
   "tests/test_uniswap_address_repairs.py",
   "tests/prices/test_chainlink.py",

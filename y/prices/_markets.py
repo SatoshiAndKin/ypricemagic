@@ -109,7 +109,7 @@ async def discover(
     from y.prices.dex.balancer import balancer_multiplexer
     from y.prices.dex.solidly import SolidlyRouterBase
     from y.prices.dex.uniswap import uniswap_multiplexer
-    from y.prices.dex.uniswap.v2 import UniswapRouterV2
+    from y.prices.dex.uniswap.v2 import UniswapRouterV2, V2PoolMetadata
     from y.prices.dex.uniswap.v3 import SlipstreamPool, UniswapV3, V3PoolMetadata
     from y.prices.dex.velodrome import VelodromeRouterV2
     from y.prices.stable_swap.curve import CurveRegistry, curve
@@ -182,8 +182,11 @@ async def discover(
             continue
         if isinstance(router, UniswapRouterV2):
 
-            async def metadata_snapshot(item: tuple[str, tuple[str, str], Any]) -> Market | None:
-                pair, tokens, reserves = item
+            async def metadata_snapshot(
+                item: tuple[V2PoolMetadata, Any],
+            ) -> Market | None:
+                metadata, reserves = item
+                pair, tokens = metadata.address, metadata.tokens
                 if token not in tokens:
                     return None
                 if not reserves or not reserves[tokens.index(token)]:
@@ -193,7 +196,9 @@ async def discover(
                 # every dust pair only consumes provider throughput.
                 kind, stable = "Uniswap V2", False
                 if isinstance(router, SolidlyRouterBase):
-                    stable = bool(await state(pair, "stable()(bool)", block))
+                    if metadata.stable is None:
+                        raise RuntimeError("Solidly factory event omitted stable pool metadata")
+                    stable = metadata.stable
                     kind = "Velodrome V2" if isinstance(router, VelodromeRouterV2) else "Solidly"
                 return Market(
                     kind,
@@ -205,11 +210,11 @@ async def discover(
                     factory=address(router.factory),
                 )
 
-            async def snapshots(batch: list[tuple[str, tuple[str, str]]]) -> list[Market | None]:
-                reserves = await reserves_batch(tuple(pair for pair, _ in batch), block)
+            async def snapshots(batch: list[V2PoolMetadata]) -> list[Market | None]:
+                reserves = await reserves_batch(tuple(item.address for item in batch), block)
                 return await bounded_map(
                     lambda item: safely(metadata_snapshot, item),
-                    [(pair, tokens, reserve) for (pair, tokens), reserve in zip(batch, reserves)],
+                    list(zip(batch, reserves)),
                 )
 
             async for batch_markets in bounded_async_map(
@@ -263,18 +268,34 @@ async def discover(
             continue
 
         async def v3_batches(batch: list[Any]) -> list[Market | None]:
-            requests = tuple(
-                (address(t), address(pool)) for pool in batch for t in (pool.token0, pool.token1)
-            )
-            raw_balances = await balances_batch(requests, block)
-            eligible = [
-                i
-                for i, pool in enumerate(batch)
-                if all(value is not None for value in raw_balances[2 * i : 2 * i + 2])
-                and raw_balances[2 * i + (address(pool.token1) == token)]
-            ]
+            # An empty input balance cannot be a sale candidate. Probe the
+            # requested token first, without calling every dust companion token.
+            inputs = await balances_batch(tuple((token, address(pool)) for pool in batch), block)
+            eligible = [i for i, balance in enumerate(inputs) if balance]
+            if not eligible:
+                return []
             codes = await deployed_batch(tuple(address(batch[i]) for i in eligible), block)
-            live = {i for i, code in zip(eligible, codes) if code}
+            live = [i for i, code in zip(eligible, codes) if code]
+            if not live:
+                return []
+            companion_requests = tuple(
+                (
+                    address(
+                        batch[i].token1 if address(batch[i].token0) == token else batch[i].token0
+                    ),
+                    address(batch[i]),
+                )
+                for i in live
+            )
+            companions = await balances_batch(companion_requests, block)
+            raw_balances = [
+                (
+                    (inputs[i], companion)
+                    if address(batch[i].token0) == token
+                    else (companion, inputs[i])
+                )
+                for i, companion in zip(live, companions)
+            ]
 
             async def snapshot(item: tuple[Any, tuple[Any, ...]]) -> Market | None:
                 pool, values = item
@@ -309,7 +330,7 @@ async def discover(
 
             return await bounded_map(
                 lambda item: safely(snapshot, item),
-                [(batch[i], raw_balances[2 * i : 2 * i + 2]) for i in eligible if i in live],
+                [(batch[i], values) for i, values in zip(live, raw_balances)],
             )
 
         if isinstance(router, UniswapV3):

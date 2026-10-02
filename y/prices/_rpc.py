@@ -33,14 +33,23 @@ _T = TypeVar("_T")
 
 @stuck_coro_debugger
 async def _retry_state_read(request: Callable[[], Awaitable[_T]]) -> _T:
-    """Retry archive-state misses at the unchanged block identifier, for at most 121.5s of backoff.
+    """Retry archive misses and one transport timeout at the unchanged block identifier.
 
     Failures during concurrent historical reads can outlast a short retry burst.
     Keep a bounded recovery window while propagating a persistent archive miss.
     """
+    transport_timeouts = 0
     for attempt in range(10):
         try:
             return await request()
+        except TimeoutError:
+            # One transport retry fits inside the caller's existing deadline.
+            # A task cancellation remains CancelledError and is never retried.
+            if transport_timeouts or attempt == 9:
+                raise
+            transport_timeouts += 1
+            getLogger(__name__).debug("RPC transport timeout; retrying the same block identifier")
+            await asyncio.sleep(0.25)
         except ClientConnectionError as exc:
             raise ConnectionError("RPC connection failed") from exc
         except ClientResponseError as exc:
