@@ -34,3 +34,18 @@ def quote_read(quote: Any) -> Any:
         return 6
 
     return read
+
+
+def quoter_read(exact_input: Any, exact_output: Any) -> Any:
+    """Bridge controlled quoter results while preserving path and block assertions."""
+
+    async def read(target: str, signature: str, block: BlockRef, *args: Any) -> Any:
+        if signature == "decimals()(uint8)":
+            return 6
+        calls = {
+            "quoteExactInput(bytes,uint256)(uint256)": exact_input,
+            "quoteExactOutput(bytes,uint256)(uint256)": exact_output,
+        }
+        return await calls[signature](*args, block_identifier=block.identifier)
+
+    return read

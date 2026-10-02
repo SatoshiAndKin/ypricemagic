@@ -13,6 +13,7 @@ from eth_typing import BlockNumber, ChecksumAddress
 from multicall import Call
 from web3.exceptions import ContractLogicError
 
+from tests.rpc_fixtures import quoter_read
 from tests.test_amount_quotes import BLOCK, CHILD, TOKEN, USD
 from tests.test_pricing_correctness import Ready, instance, run_async_test
 from y.constants import EEE_ADDRESS
@@ -96,7 +97,6 @@ async def test_partial_fill_falls_back_to_later_pool(monkeypatch: Any, viable: b
     from tests.test_amount_quotes import graph
     from y.prices import _routing
 
-    module = importlib.import_module("y.prices.dex.uniswap.v3")
     pools = [
         Market("Uniswap V3", name, (TOKEN, USD), (depth, depth), name, 3000)
         for name, depth in (("deep", 2 * 10**9), ("later", 10**9))
@@ -106,25 +106,19 @@ async def test_partial_fill_falls_back_to_later_pool(monkeypatch: Any, viable: b
     monkeypatch.setattr(_markets, "read", AsyncMock(return_value=6))
     calls = []
 
-    async def load(pool: str) -> Any:
-        calls.append(pool)
-        return SimpleNamespace(
-            quoteExactInput=SimpleNamespace(
-                coroutine=AsyncMock(return_value=42 if pool == "deep" else 997000)
-            ),
-            quoteExactOutput=SimpleNamespace(
-                coroutine=AsyncMock(
-                    return_value=1000001,
-                    side_effect=(
-                        ContractLogicError("execution reverted")
-                        if pool == "deep" or not viable
-                        else None
-                    ),
-                )
-            ),
-        )
+    async def read(pool: str, signature: str, block: BlockRef, *args: Any) -> Any:
+        assert block == BLOCK
+        if signature == "decimals()(uint8)":
+            return 6
+        if signature == "quoteExactInput(bytes,uint256)(uint256)":
+            calls.append(pool)
+            return 42 if pool == "deep" else 997000
+        assert signature == "quoteExactOutput(bytes,uint256)(uint256)"
+        if pool == "deep" or not viable:
+            raise ContractLogicError("execution reverted")
+        return 1000001
 
-    monkeypatch.setattr(module, "load_quoter", load)
+    monkeypatch.setattr(_markets, "read", read)
     result = await service.price(TOKEN, BLOCK, 1)
     if viable:
         assert result is not None and result.quote is not None
@@ -494,7 +488,6 @@ async def test_aave_sync_default_registry_async_dispatch(monkeypatch: Any, versi
 async def test_v3_requires_full_input(
     monkeypatch: Any, protocol: str, shape: str, capacity: int | None
 ) -> None:
-    module = importlib.import_module("y.prices.dex.uniswap.v3")
     quoted = 997000 if shape == "scalar" else (997000, [12345], [1], 45000)
     exact_input = AsyncMock(return_value=quoted)
     exact_output = AsyncMock(
@@ -503,17 +496,7 @@ async def test_v3_requires_full_input(
             ContractLogicError("execution reverted: Unexpected error") if capacity is None else None
         ),
     )
-    monkeypatch.setattr(
-        module,
-        "load_quoter",
-        AsyncMock(
-            return_value=SimpleNamespace(
-                quoteExactInput=SimpleNamespace(coroutine=exact_input),
-                quoteExactOutput=SimpleNamespace(coroutine=exact_output),
-            )
-        ),
-    )
-    monkeypatch.setattr(_markets, "read", AsyncMock(return_value=6))
+    monkeypatch.setattr(_markets, "read", quoter_read(exact_input, exact_output))
     market = Market(protocol, CHILD, (TOKEN, USD), (10**9, 10**9), USD, 3000, tick_spacing=60)
     asset = QuoteAsset(TOKEN, 1000000, 6)
     result = await _markets.swap(market, asset, USD, BLOCK)
@@ -538,18 +521,11 @@ async def test_v3_requires_full_input(
 async def test_v3_capacity_unexpected_errors_propagate(
     monkeypatch: Any, error: BaseException
 ) -> None:
-    module = importlib.import_module("y.prices.dex.uniswap.v3")
     monkeypatch.setattr(
-        module,
-        "load_quoter",
-        AsyncMock(
-            return_value=SimpleNamespace(
-                quoteExactInput=SimpleNamespace(coroutine=AsyncMock(return_value=997000)),
-                quoteExactOutput=SimpleNamespace(coroutine=AsyncMock(side_effect=error)),
-            )
-        ),
+        _markets,
+        "read",
+        quoter_read(AsyncMock(return_value=997000), AsyncMock(side_effect=error)),
     )
-    monkeypatch.setattr(_markets, "read", AsyncMock(return_value=6))
     market = Market("Uniswap V3", CHILD, (TOKEN, USD), (10**9, 10**9), USD, 3000)
     with pytest.raises(type(error), match=str(error)):
         await _markets.swap(market, QuoteAsset(TOKEN, 1000000, 6), USD, BLOCK)

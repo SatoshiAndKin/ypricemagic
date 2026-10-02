@@ -385,18 +385,9 @@ class Chainlink(a_sync.ASyncGenericBase):
     @stuck_coro_debugger
     async def _get_feed(self, asset: AnyAddressType, block: BlockRef) -> Feed | None:
         selected: Feed | None = None
-        if self._feeds_from_events:
-            async for feed in cast(
-                AsyncIterator[Feed], self._feeds_from_events.objects(to_block=block.number)
-            ):
-                if asset == feed.asset and feed.start_block <= block.number:
-                    selected = feed
-        if selected is None:
-            selected = next((feed for feed in self._feeds if asset == feed.asset), None)
-        # The registry is authoritative at this hash. Event metadata identifies
-        # removals and static-feed eligibility, but cannot supply another fork's
-        # currently active aggregator.
-        if self.registry is not None and await deployed(str(self.registry), block):
+        registry_active = self.registry is not None and await deployed(str(self.registry), block)
+        authoritative = False
+        if registry_active:
             registered = await optional_read(
                 str(self.registry),
                 "getFeed(address,address)(address)",
@@ -405,10 +396,34 @@ class Chainlink(a_sync.ASyncGenericBase):
                 DENOMINATIONS["USD"],
             )
             if registered and str(registered).lower() != ZERO_ADDRESS.lower():
-                if selected is None or selected.address.lower() != str(registered).lower():
-                    selected = Feed(registered, asset, asynchronous=self.asynchronous)
-            elif selected is not None and selected.start_block:
-                return None
+                selected = Feed(registered, asset, asynchronous=self.asynchronous)
+                authoritative = True
+            else:
+                # A phase survives feed removal. Zero means this asset has never
+                # had registry history at this hash, so its static alias is valid.
+                phase = await optional_read(
+                    str(self.registry),
+                    "getCurrentPhaseId(address,address)(uint16)",
+                    block,
+                    asset,
+                    DENOMINATIONS["USD"],
+                )
+                if phase is not None:
+                    if phase:
+                        return None
+                    authoritative = True
+        # Quotes with authoritative registry state do not wait for unrelated
+        # catalog backfills. Preserve event selection when phase data is unavailable.
+        if not authoritative and self._feeds_from_events:
+            async for feed in cast(
+                AsyncIterator[Feed], self._feeds_from_events.objects(to_block=block.number)
+            ):
+                if asset == feed.asset and feed.start_block <= block.number:
+                    selected = feed
+        if selected is None:
+            selected = next((feed for feed in self._feeds if asset == feed.asset), None)
+        if registry_active and not authoritative and selected is not None and selected.start_block:
+            return None
         if selected is None or selected.address == ZERO_ADDRESS:
             return None
         if not await deployed(selected.address, block):

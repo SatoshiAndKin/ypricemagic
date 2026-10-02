@@ -1,0 +1,142 @@
+{
+  "python": "3.12",
+  "platform": "linux-aarch64",
+  "boundary": "Additional Curve and Chainlink native regression groups. Full final-runtime suite remains a separate merge gate.",
+  "source_files_sha256": {
+    "y/prices/chainlink.py": "e07d0e09d9a99002ac9c791c07c4f912db3558db36a7b5859fadacc605ef6aff",
+    "y/prices/stable_swap/curve.py": "63112a7879f20da36a23fa66e3a35d0a1f9249aa073af3eafda8e0ac8c76680c",
+    "tests/test_chainlink_registry_fast_path.py": "3183d0cc9577841e3c546866b1e35d8563b1ca79e46c7bc2232070bb79ad7971",
+    "tests/test_historical_price_repairs.py": "267ece35fc6c5bbb6fc164b9aa921a743be1c8628309e9b59323ed4ad4317efd",
+    "tests/test_uniswap_address_repairs.py": "6ce2dd2f10490d9c23a29235d6390e498510579e0b4dedb66b54d07b31db9926"
+  },
+  "groups": [
+    {
+      "scope": "Curve registry integration, coverage, cancellation, inventory, filters and discovery",
+      "passed": 47
+    },
+    {
+      "scope": "historical and address quote regressions after native transport fixture repair",
+      "passed": 128
+    },
+    {
+      "scope": "Chainlink, native independent feed comparisons, quote correctness and regressions",
+      "passed": 436
+    },
+    {
+      "scope": "final Chainlink fixture audit plus recovery after transient errors",
+      "passed": 17
+    }
+  ],
+  "baseline": {
+    "Chainlink_quote_catalog_order": {
+      "failed": 15,
+      "passed": 2
+    },
+    "Curve_registry_prefill_integration": {
+      "failed": 1
+    },
+    "obsolete_SDK_quote_fixtures_full_run": {
+      "failed": 44,
+      "passed": 2225,
+      "skipped": 17
+    }
+  },
+  "mypy": {
+    "passed": true,
+    "files": 241
+  },
+  "black": {
+    "passed": true
+  },
+  "isort": {
+    "passed": true
+  },
+  "compiled_modules": {
+    "y._db.brownie": "/work/y/_db/brownie.cpython-312-aarch64-linux-gnu.so",
+    "y._db.config": "/work/y/_db/config.cpython-312-aarch64-linux-gnu.so",
+    "y._db.decorators": "/work/y/_db/decorators.cpython-312-aarch64-linux-gnu.so",
+    "y._db.utils.stringify": "/work/y/_db/utils/stringify.cpython-312-aarch64-linux-gnu.so",
+    "y.ENVIRONMENT_VARIABLES": "/work/y/ENVIRONMENT_VARIABLES.cpython-312-aarch64-linux-gnu.so",
+    "y.convert": "/work/y/convert.cpython-312-aarch64-linux-gnu.so",
+    "y.exceptions": "/work/y/exceptions.cpython-312-aarch64-linux-gnu.so",
+    "y.networks": "/work/y/networks.cpython-312-aarch64-linux-gnu.so",
+    "y.prices.utils.sense_check": "/work/y/prices/utils/sense_check.cpython-312-aarch64-linux-gnu.so",
+    "y.utils.gather": "/work/y/utils/gather.cpython-312-aarch64-linux-gnu.so"
+  },
+  "candidate_empty_startup": {
+    "ethereum": {
+      "chain": "ethereum",
+      "empty_cache": true,
+      "provider": "production web3-proxy",
+      "passed": true,
+      "startup_seconds": 534.9544509160332,
+      "healthy_within_600": true,
+      "shutdown_seconds": 1.2088970000622794,
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-02T18:03:01.356757843Z",
+        "FinishedAt": "2026-10-02T18:11:57.183986127Z"
+      }
+    },
+    "base": {
+      "chain": "base",
+      "empty_cache": true,
+      "provider": "production Base provider",
+      "passed": true,
+      "startup_seconds": 587.035340124974,
+      "healthy_within_600": true,
+      "shutdown_seconds": 0.6754347499227151,
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-02T18:13:56.371166011Z",
+        "FinishedAt": "2026-10-02T18:23:43.909673921Z"
+      }
+    }
+  },
+  "Curve_inventory": {
+    "passed": true,
+    "before": {
+      "chain": "ethereum",
+      "head": 26106364,
+      "hash": "0xb8733709037b8235d6b5c91032fad919719fbca9b27c0b4b81ef1de07efc029e",
+      "seconds": 5.765029245056212,
+      "sha256": "598109f9027d91191ba3b1991da17674d700430294af1a62ca80afda89c9085a"
+    },
+    "after": {
+      "chain": "ethereum",
+      "head": 26106364,
+      "hash": "0xb8733709037b8235d6b5c91032fad919719fbca9b27c0b4b81ef1de07efc029e",
+      "seconds": 4.764454117976129,
+      "sha256": "598109f9027d91191ba3b1991da17674d700430294af1a62ca80afda89c9085a"
+    },
+    "counts": {
+      "tokens": 2564,
+      "registries": 2,
+      "factories": 7,
+      "coins": 1416
+    }
+  },
+  "matrix": {
+    "comparisons": 104,
+    "reference_passed": 96,
+    "api_only_passed": 8,
+    "failed": 0
+  },
+  "companion_server_pr": "https://github.com/SatoshiAndKin/ypricemagic-server/pull/158"
+}
