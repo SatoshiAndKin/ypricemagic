@@ -2,6 +2,7 @@
 
 import asyncio
 from collections.abc import AsyncGenerator, AsyncIterator
+from types import SimpleNamespace
 from typing import Any, cast
 from unittest.mock import AsyncMock
 
@@ -15,6 +16,34 @@ from y.prices._quote import bounded_async_map
 
 ADDRESSES = tuple(f"0x{i:040x}" for i in range(1, 4))
 BLOCK = _rpc.BlockRef(1, 20_000_000, "0x" + "12" * 32, 1)
+
+
+@run_async_test
+@pytest.mark.parametrize("encoding", ["native", "poa", "decimal"])
+@pytest.mark.parametrize("requested", [None, 20_000_000])
+async def test_block_ref_normalizes_poa_header_and_preserves_canonical_identity(
+    monkeypatch: pytest.MonkeyPatch, encoding: str, requested: int | None
+) -> None:
+    timestamp = 1_726_789_347
+    header: dict[str, Any] = {
+        "number": BLOCK.number,
+        "timestamp": timestamp,
+        "hash": bytes.fromhex(BLOCK.hash[2:]),
+    }
+    if encoding != "native":
+        formatter = hex if encoding == "poa" else str
+        header.update(
+            number=formatter(BLOCK.number), timestamp=formatter(timestamp), hash=BLOCK.hash
+        )
+    get_block = AsyncMock(return_value=header)
+    monkeypatch.setattr(
+        _rpc, "dank_web3", SimpleNamespace(eth=SimpleNamespace(get_block=get_block))
+    )
+    monkeypatch.setattr(_rpc, "chain", SimpleNamespace(id=8453))
+    resolved = await _rpc.BlockRef.resolve(requested)
+    assert resolved == _rpc.BlockRef(8453, BLOCK.number, BLOCK.hash, timestamp)
+    assert resolved.identifier == {"blockHash": BLOCK.hash, "requireCanonical": True}
+    get_block.assert_awaited_once_with("latest" if requested is None else requested)
 
 
 @run_async_test
@@ -253,7 +282,7 @@ async def test_code_batch_matches_response_ids_and_canonical_hash(monkeypatch: A
             [{"id": 2, "result": "0x01"}, {"id": 0, "result": "0x"}, {"id": 1, "result": "0x00"}]
         )
     )
-    provider._request_session_manager = SimpleNamespace(async_make_post_request=post)
+    monkeypatch.setattr(_rpc, "_post_once", post)
     assert await _rpc._codes_batch(ADDRESSES, BLOCK) == (False, True, True)
     assert encoded == [("eth_getCode", [address, BLOCK.identifier]) for address in ADDRESSES]
     assert len(json.decode(post.call_args.args[1])) == 3
@@ -283,11 +312,9 @@ async def test_rate_limit_recovery_and_exhaustion_remain_transient(monkeypatch: 
 async def test_code_probe_preserves_hash_values_and_checks_shape(
     monkeypatch: Any, output: bytes
 ) -> None:
-    from web3 import AsyncHTTPProvider
-
-    provider = AsyncHTTPProvider("test")
+    provider = type("Provider", (), {})()
     request = AsyncMock(return_value={"result": "0x" + output.hex()})
-    monkeypatch.setattr(provider, "make_request", request)
+    provider.make_request = request
     monkeypatch.setattr(dank_web3.eth.w3, "provider", provider)
     if len(output) != 64 or output[:32] == (2).to_bytes(32):
         with pytest.raises(RuntimeError):
@@ -308,11 +335,9 @@ async def test_code_probe_preserves_hash_values_and_checks_shape(
 async def test_code_probe_falls_back_only_for_unsupported_providers(
     monkeypatch: Any, error: str, fallback: bool
 ) -> None:
-    from web3 import AsyncHTTPProvider
-
-    provider = AsyncHTTPProvider("test")
+    provider = type("Provider", (), {})()
     request = AsyncMock(return_value={"error": {"code": -32602, "message": error}})
-    monkeypatch.setattr(provider, "make_request", request)
+    provider.make_request = request
     monkeypatch.setattr(dank_web3.eth.w3, "provider", provider)
     native = AsyncMock(return_value=(True, False, True))
     monkeypatch.setattr(_rpc, "_codes_batch", native)
@@ -387,4 +412,110 @@ async def test_v7_http_code_batch_preserves_attempts_ids_and_hash(
             assert sleep.await_count == len(observed) - 1
         finally:
             await session.close()
+            await runner.cleanup()
+
+
+@run_async_test
+@pytest.mark.parametrize("batch", [False, True])
+@pytest.mark.parametrize("failure", ["cancel", "timeout", "http"])
+async def test_bounded_http_releases_failed_attempt_and_recovers_with_locked_web3_cache(
+    monkeypatch: pytest.MonkeyPatch, batch: bool, failure: str
+) -> None:
+    import socket
+    import threading
+
+    from aiohttp import ClientResponseError, ClientSession, ClientTimeout, web
+    from web3 import AsyncHTTPProvider
+    from web3.types import RPCEndpoint
+
+    observed: list[Any] = []
+    sessions: list[ClientSession] = []
+    started = asyncio.Event()
+    release = asyncio.Event()
+
+    def owned_session(**kwargs: Any) -> ClientSession:
+        session = ClientSession(**kwargs)
+        sessions.append(session)
+        return session
+
+    async def rpc(request: web.Request) -> web.Response:
+        assert request.headers["X-Pricing-Test"] == "retained"
+        body = await request.json()
+        observed.append(body)
+        if len(observed) == 1:
+            started.set()
+            if failure == "http":
+                return web.Response(status=500)
+            await release.wait()
+        rows = body if isinstance(body, list) else [body]
+        response = [{"jsonrpc": "2.0", "id": row["id"], "result": "0x6000"} for row in rows]
+        return web.json_response(response if batch else response[0])
+
+    app = web.Application()
+    app.router.add_post("/", rpc)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    with socket.socket() as listener:
+        listener.bind(("127.0.0.1", 0))
+        await web.SockSite(runner, listener).start()
+        provider = AsyncHTTPProvider(
+            f"http://127.0.0.1:{listener.getsockname()[1]}",
+            request_kwargs={
+                "headers": {"X-Pricing-Test": "retained"},
+                "timeout": ClientTimeout(total=0.03 if failure == "timeout" else 5),
+            },
+        )
+        # A cancelled Web3 lock waiter can strand this cache. Pricing transport
+        # must remain usable even then, without adding automatic HTTP retries.
+        lock = threading.Lock()
+        lock.acquire()
+        monkeypatch.setattr(provider._request_session_manager, "_lock", lock)
+        monkeypatch.setattr(_rpc, "ClientSession", owned_session)
+        monkeypatch.setattr(
+            _rpc,
+            "dank_web3",
+            SimpleNamespace(eth=SimpleNamespace(w3=SimpleNamespace(provider=provider))),
+        )
+
+        async def read() -> Any:
+            if batch:
+                return await _rpc._codes_batch(ADDRESSES, BLOCK)
+            return await _rpc._request_once(
+                provider, RPCEndpoint("eth_getCode"), [ADDRESSES[0], BLOCK.identifier]
+            )
+
+        try:
+            task = asyncio.create_task(read())
+            await asyncio.wait_for(started.wait(), 2)
+            if failure == "cancel":
+                task.cancel()
+                expected: type[BaseException] = asyncio.CancelledError
+            else:
+                expected = (
+                    TimeoutError
+                    if failure == "timeout"
+                    else ConnectionError if batch else ClientResponseError
+                )
+            with pytest.raises(expected):
+                await task
+            assert len(observed) == 1
+            assert sessions[0].closed
+            release.set()
+            result = await asyncio.wait_for(read(), 2)
+            if batch:
+                assert result == (True, True, True)
+            else:
+                assert result["result"] == "0x6000"
+            assert len(observed) == 2
+            assert all(session.closed for session in sessions)
+            for body in observed:
+                rows = body if batch else [body]
+                assert [row["params"] for row in rows] == [
+                    [address, BLOCK.identifier]
+                    for address in (ADDRESSES if batch else ADDRESSES[:1])
+                ]
+                assert len({row["id"] for row in rows}) == len(rows)
+        finally:
+            release.set()
+            lock.release()
             await runner.cleanup()

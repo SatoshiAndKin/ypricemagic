@@ -9,16 +9,22 @@ from logging import getLogger
 from typing import Any, TypeVar, cast
 from weakref import WeakKeyDictionary
 
-from aiohttp import ClientConnectionError, ClientResponseError
+from aiohttp import (
+    ClientConnectionError,
+    ClientResponseError,
+    ClientSession,
+    ClientTimeout,
+    TCPConnector,
+)
 from brownie import chain
 from dank_mids.brownie_patch import dank_web3
 from eth_abi.exceptions import DecodingError
-from eth_typing import URI
 from hexbytes import HexBytes
 from msgspec import json
 from multicall import Call
 from multicall.constants import MULTICALL2_ADDRESSES, MULTICALL3_ADDRESSES
 from web3 import AsyncHTTPProvider
+from web3._utils.http import DEFAULT_HTTP_TIMEOUT
 from web3.types import RPCEndpoint, RPCResponse
 
 from y._decorators import stuck_coro_debugger
@@ -32,11 +38,23 @@ _T = TypeVar("_T")
 
 async def _request_once(provider: Any, method: RPCEndpoint, params: list[Any]) -> RPCResponse:
     """Let pricing's bounded retry policy own every transport attempt."""
-    if isinstance(provider, AsyncHTTPProvider):
-        # Web3 v7 adds automatic HTTP retries. Keep the existing pricing window
-        # and let range errors reach the splitter after exactly one attempt.
-        setattr(provider, "exception_retry_configuration", None)
-    return cast(RPCResponse, await provider.make_request(method, params))
+    if not isinstance(provider, AsyncHTTPProvider):
+        return cast(RPCResponse, await provider.make_request(method, params))
+    data = provider.encode_rpc_request(method, params)
+    return provider.decode_rpc_response(await _post_once(provider, data))
+
+
+async def _post_once(provider: AsyncHTTPProvider, data: bytes) -> bytes:
+    """Own the HTTP attempt so cancellation cannot strand Web3's session-cache lock."""
+    kwargs = provider.get_request_kwargs()
+    kwargs.setdefault("timeout", ClientTimeout(DEFAULT_HTTP_TIMEOUT))
+    # Match Web3's connector policy. Provider headers, auth and timeouts still
+    # apply; closing the session releases both successful and cancelled attempts.
+    async with ClientSession(
+        raise_for_status=True, connector=TCPConnector(force_close=True, enable_cleanup_closed=True)
+    ) as session:
+        async with session.post(str(provider.endpoint_uri), data=data, **kwargs) as response:
+            return await response.read()
 
 
 @stuck_coro_debugger
@@ -105,9 +123,9 @@ class BlockRef:
         block = await dank_web3.eth.get_block("latest" if number is None else int(number))
         return cls(
             int(chain.id),
-            int(block["number"]),
-            "0x" + bytes(block["hash"]).hex(),
-            int(block["timestamp"]),
+            _block_quantity(block["number"]),
+            "0x" + bytes(HexBytes(block["hash"])).hex(),
+            _block_quantity(block["timestamp"]),
         )
 
     async def verify(self) -> None:
@@ -116,6 +134,11 @@ class BlockRef:
         current = await BlockRef.resolve(self.number)
         if self.hash != current.hash:
             raise RuntimeError(f"block {self.number} changed from {self.hash} to {current.hash}")
+
+
+def _block_quantity(value: int | str) -> int:
+    """POA block formatting retains RPC hex quantities; decoded blocks use ints."""
+    return int(value, 16) if isinstance(value, str) and value.startswith("0x") else int(value)
 
 
 def unavailable(exc: Exception) -> bool:
@@ -227,9 +250,7 @@ async def _codes_batch(addresses: tuple[str, ...], block: BlockRef) -> tuple[boo
         for attempt in range(5):
             try:
                 async with semaphore, asyncio.timeout(30):
-                    raw = await provider._request_session_manager.async_make_post_request(
-                        URI(str(provider.endpoint_uri)), data, **provider.get_request_kwargs()
-                    )
+                    raw = await _post_once(provider, data)
                 responses = json.decode(raw)
                 if isinstance(responses, dict):
                     responses = [responses]

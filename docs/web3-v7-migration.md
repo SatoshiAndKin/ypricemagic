@@ -15,23 +15,31 @@ The code cache uses Web3 v7's middleware class interface, retaining the public
 Historical, pending and hash/canonical selectors bypass the code cache as before.
 POA uses `ExtraDataToPOAMiddleware` directly.
 
-Raw code batches use the provider's HTTP session manager in place of the removed
-Web3 v6 helper. Bounded native reserve/code/log reads disable Web3 v7's added
-provider retry layer so the existing pricing retry window and log-range splitter
-continue to own each HTTP attempt. Hash/canonical parameters and batch IDs remain
-unchanged. The stale dict-item typing suppression for historical multicall
-state overrides was removed; the required typed-dict suppression remains.
-Pricing recognizes Dank's typed `ExecutionReverted`, including legacy invalid
-opcode/jump responses, while propagating out-of-gas and unrelated failures.
+Bounded reserve/code/log reads use Web3 v7's request encoder/decoder and provider
+HTTP configuration with one owned aiohttp session per attempt. They preserve
+Web3's force-close connector policy, provider headers/auth/timeouts, exact IDs and
+hash/canonical parameters. They avoid Web3 7.16's cancellation-unsafe session-cache
+lock: cancelling a pending executor lock acquisition can leave the cache locked
+and block unrelated later callers. Every completed, failed and cancelled attempt
+closes its session. The existing pricing retry window and log-range splitter own
+each attempt, without Web3's added automatic retry layer.
 
-Migration-specific native checks passed 164 tests after a fresh extension rebuild,
-covering typed contract reverts, the middleware cache,
-real HTTP batch order and retry counts, canonical selectors, archive-state retries
-and provider range splitting. The configured strict mypy check passed all 241
-source files. The dependency image also passed all 44 Brownie compiled bytecode
-safety and memory regressions. A separate source coverage run passed the same
-164 cases and covered every changed runtime statement; it is independent of
-compiled-runtime verification. Live pricing tests admit eight cases concurrently
-to retain the existing 30-second transport deadline on bounded validation hosts.
-Full native pricing and server acceptance remain
-required before the migration is ready. Deployment is separate.
+Block references normalize native integers/bytes and POA hex quantities/hashes,
+retaining canonical hash identity on Base. The stale dict-item typing suppression
+for historical multicall state overrides was removed; the required typed-dict
+suppression remains. Pricing recognizes Dank's typed `ExecutionReverted`, including
+legacy invalid opcode/jump responses, while propagating unrelated failures.
+
+The configured focused native suite passed all 803 cases, including controlled
+HTTP cancellation, timeout, recovery with a locked Web3 session cache, batch order,
+exact retry counts, canonical selectors, archive-state retries and range splitting.
+Strict mypy passed all 241 source files. The dependency image passed all 44 Brownie
+compiled bytecode safety and memory regressions. A separate source coverage run
+passed all 189 migration cases and covered all 31 changed executable runtime
+statements (100%); this is independent of compiled-runtime verification. Live tests
+admit eight cases concurrently, preserving the existing 30-second transport deadline.
+
+The complete native pricing suite is being repeated after the session-lock repair.
+Server Ethereum price/batch/amount/cache scenarios passed with the native v7 stack;
+Base scenarios passed after the POA repair. Final immutable server-image acceptance
+and the complete pricing run remain required. Deployment is separate.

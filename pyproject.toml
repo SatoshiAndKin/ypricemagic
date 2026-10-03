@@ -92,7 +92,7 @@ files = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "-W ignore -s -p no:pytest_ethereum"
+addopts = "-W ignore -s --disable-plugin-autoload -p timeout -p pytest_asyncio_cooperative.plugin -p no:pytest_ethereum"
 required_plugins = ["pytest-timeout"]
 testpaths = ["tests"]
 norecursedirs = ["env", "build", "cache", ".worktrees"]
@@ -133,6 +133,9 @@ slow_erc20_cases = [
   { token = "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8", block = 18465234 },
 ]
 focused_tests = [
+  "tests/test_middleware.py",
+  "tests/test_reserve_batches.py",
+  "tests/test_indexed_pool_discovery.py",
   "tests/test_trace_interfaces.py",
   "tests/test_time.py",
   "tests/test_typed_interfaces.py",
