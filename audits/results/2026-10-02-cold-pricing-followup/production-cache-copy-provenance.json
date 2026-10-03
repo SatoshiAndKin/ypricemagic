@@ -1,0 +1,63 @@
+{
+  "ethereum": {
+    "sqlite_backup": {
+      "source_opened_read_only": true,
+      "seconds": 1.70732626109384,
+      "copies": [
+        {
+          "source_name": "ypricemagic.sqlite",
+          "copied_name": "/copy/prices.sqlite",
+          "bytes": 626409472,
+          "quick_check": "ok"
+        },
+        {
+          "source_name": "cache.db",
+          "copied_name": "/copy/cache/cache.db",
+          "bytes": 614400,
+          "quick_check": "ok"
+        }
+      ]
+    },
+    "metadata": {
+      "source_opened_read_only": true,
+      "copied_abi_files": [
+        "deployments.db",
+        "topics.json",
+        "errors.json"
+      ],
+      "api_external_files": 0
+    },
+    "owned_volume": "ypm-ethereum-acceptance-productioncopy92"
+  },
+  "base": {
+    "sqlite_backup": {
+      "source_opened_read_only": true,
+      "seconds": 33.4910943871364,
+      "copies": [
+        {
+          "source_name": "ypricemagic.sqlite",
+          "copied_name": "/copy/prices.sqlite",
+          "bytes": 3560198144,
+          "quick_check": "ok"
+        },
+        {
+          "source_name": "cache.db",
+          "copied_name": "/copy/cache/cache.db",
+          "bytes": 40960,
+          "quick_check": "ok"
+        }
+      ]
+    },
+    "metadata": {
+      "source_opened_read_only": true,
+      "copied_abi_files": [
+        "deployments.db",
+        "topics.json",
+        "errors.json"
+      ],
+      "api_external_files": 0
+    },
+    "owned_volume": "ypm-base-acceptance-productioncopy92"
+  },
+  "boundary": "Live production SQLite sources opened read-only and copied with sqlite3.backup; each copy quick_check=ok. Three ABI metadata files copied read-only; zero external API-cache files. Candidate mounts explicitly map the owned cache subdirectory to /data/cache, overriding the image VOLUME. Ethereum standard benchmark had previously exercised this owned copy in run96; run99 starts a new process on that same copy. Base benchmark100 exercises historical cases before its current WETH failure. Production volumes were not cleared or modified by validation."
+}
