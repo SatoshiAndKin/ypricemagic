@@ -39,7 +39,23 @@ passed all 189 migration cases and covered all 31 changed executable runtime
 statements (100%); this is independent of compiled-runtime verification. Live tests
 admit eight cases concurrently, preserving the existing 30-second transport deadline.
 
-The complete native pricing suite is being repeated after the session-lock repair.
-Server Ethereum price/batch/amount/cache scenarios passed with the native v7 stack;
-Base scenarios passed after the POA repair. Final immutable server-image acceptance
-and the complete pricing run remain required. Deployment is separate.
+The immutable Linux ARM64 server image passed health, historical spot prices,
+ordered/duplicate batches, single/mixed amounts and spot-cache preservation on
+Ethereum and Base. Independent native SDK checks preserved raw amounts 1,000,001
+and 2,000,001 and canonical block hashes on both chains. All 333 server tests passed.
+Base's first cold amount request hit the unchanged 300-second deadline while its
+catalog loaded; the same request passed after catalog loading. These checks do not
+prove that empty-cache Base amount requests always finish within that deadline.
+
+The complete native pricing suite remains required. Earlier attempts encountered
+validation-VM disk exhaustion and the original archive provider's exhausted monthly
+capacity. An independent archive run completed 2,310 passing cases and 17 skips,
+with one batch/individual price discrepancy for fOUSG at block 21,578,484. Three
+full token-list replays at that exact block and all ten concurrent historical
+batch/individual tests passed unchanged. A complete repeat captures that token's
+bucket, oracle reads and DEX fallback without relaxing assertions or retry limits.
+The independent run uses an encrypted loopback SSH connection to the operator's
+archive Reth, a separate populated catalog snapshot, eight concurrent cases and a
+1,000-call multicall limit. Default thresholds are verified by controlled SDK tests.
+These archive runs do not establish empty-cache startup performance. Deployment
+is separate; this migration remains draft pending full acceptance.
