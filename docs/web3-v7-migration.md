@@ -1,18 +1,18 @@
 # Immutable Web3 v7 native stack
 
-The migration retains current fork master
-`cb4a12376b807b1b9f27d9963f0c457edf02fda7`, including its latest pricing,
+This follow-up retains merged pricing master
+`9fdfeb101751a1d82eb41dccb87c8c06fbac9e75`, including its latest pricing,
 discovery, canonical log pagination, indexed inventory and cold-state repairs.
 Web3 v7 is the only supported Web3 major version.
 
 ## Immutable dependencies
 
-The tested pricing revision is `8c8387ec15f4f8a119214df5971f10b79cfb6962`.
-Its dependency pins are:
+Original migration acceptance used pricing
+`8c8387ec15f4f8a119214df5971f10b79cfb6962`. Current dependency pins are:
 
 | Dependency | Revision |
 | --- | --- |
-| dank-mids | `90baeae436f4d359538b11988c13a86004e2e087` |
+| dank-mids | `33d64a962a2ff2a60f4ddb0d1d17e6b0fbbd89c0` |
 | Brownie | `7e529be8dfc1afa7bda2d6660c8a11c59a653a6e` |
 | evmspec | `31c8540a14228ca49c77c19d565a6aaee3d0079f` |
 | cchecksum | `fff7e1fe87f4679ec96de1cebb1cdd8f5e94be44` |
@@ -85,5 +85,22 @@ unchanged assertions/retries and the default 10,000-call multicall limit. The SD
 archive batching workload separately caps groups at 1,000; controlled HTTP tests
 verify default thresholds. These runs do not establish empty-cache startup timing.
 Final Base acceptance is deferred at the user's explicit request after provider
-quota exhaustion. No migration PR has been merged or deployed; original drafts
+quota exhaustion. The SDK and original pricing/server migration PRs have been
+merged. This follow-up does not deploy the applications; original draft branches
 remain available.
+
+## Merged SDK dependency
+
+Build requirements, runtime requirements and Python 3.11–3.13 native constraints
+now use merged dank-mids master `33d64a962a2ff2a60f4ddb0d1d17e6b0fbbd89c0`.
+This retains the reviewed synchronization and hash-header RPC error repair,
+preserving provider error code, message, arbitrary data and request context.
+Current pricing master, including the merged concurrent event-query repair,
+is retained. Existing native repair pins and pricing behavior are unchanged.
+The acceptance counts above describe the original migration. This follow-up
+passes the complete freshly rebuilt Linux ARM64 suite (**2,664 passed, 17 skipped**),
+strict mypy (**246 files**) and all **11 hash-header error cases** through the
+installed native SDK controller. Compiled import audits verify all ten pricing
+extensions, the SDK controller and vendored aiolimiter, Brownie, evmspec and
+ez-a-sync. Direct-URL metadata verifies the immutable SDK and native repair pins.
+The debug allocator and the same archive/cache/concurrency boundaries apply.

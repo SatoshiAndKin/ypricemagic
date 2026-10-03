@@ -5,7 +5,7 @@ cachebox @ git+https://github.com/SatoshiAndKin/cachebox.git@10be25afe46afb32c81
 cchecksum @ git+https://github.com/SatoshiAndKin/cchecksum.git@fff7e1fe87f4679ec96de1cebb1cdd8f5e94be44
 checksum_dict>=2.1.9,<3
 click==8.5.0
-dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@90baeae436f4d359538b11988c13a86004e2e087
+dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@33d64a962a2ff2a60f4ddb0d1d17e6b0fbbd89c0
 eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@7e529be8dfc1afa7bda2d6660c8a11c59a653a6e
 eth_retry>=0.2.1
 evmspec @ git+https://github.com/SatoshiAndKin/evmspec.git@31c8540a14228ca49c77c19d565a6aaee3d0079f
