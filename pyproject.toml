@@ -161,6 +161,7 @@ slow_erc20_cases = [
   { token = "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8", block = 18465234 },
 ]
 focused_tests = [
+  "tests/test_event_query_race.py",
   "tests/test_trace_interfaces.py",
   "tests/test_time.py",
   "tests/test_typed_interfaces.py",
