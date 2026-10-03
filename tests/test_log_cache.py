@@ -163,8 +163,9 @@ async def test_factory_writer_bounds_cache_without_changing_durability(event: Lo
 
 @run_async_test
 @pytest.mark.parametrize("limit", [512, 2048, 4096])
+@pytest.mark.parametrize("raw_pages", [False, True])
 async def test_paged_factory_history_is_bounded_ordered_and_complete(
-    event: Log, limit: int
+    event: Log, limit: int, raw_pages: bool
 ) -> None:
     from y._db.common import default_filter_threads
 
@@ -187,13 +188,30 @@ async def test_paged_factory_history_is_bounded_ordered_and_complete(
     cache = logs.LogCache([address], [event.topics[0].hex()])
     pages = []
     after = None
-    while page := await default_filter_threads.run(
-        cache.select_page, int(event.blockNumber), int(event.blockNumber) + 40, after, limit
-    ):
+    while True:
+        if raw_pages:
+            raw, after = await default_filter_threads.run(
+                cache.select_raw_page,
+                int(event.blockNumber),
+                int(event.blockNumber) + 40,
+                after,
+                limit,
+            )
+            page = [logs._decode_log(value) for value in raw]
+        else:
+            page = await default_filter_threads.run(
+                cache.select_page, int(event.blockNumber), int(event.blockNumber) + 40, after, limit
+            )
+        if not page:
+            break
         assert len(page) <= limit
         pages.extend(page)
         last = page[-1]
-        after = (int(last.blockNumber), int(last.logIndex), last.transactionHash.hex())
+        assert last.blockNumber is not None
+        cursor = (int(last.blockNumber), int(last.logIndex), last.transactionHash.hex())
+        if raw_pages:
+            assert after == cursor
+        after = cursor
     assert pages == events
     historical = await default_filter_threads.run(
         cache.select_page, int(event.blockNumber), int(event.blockNumber), None

@@ -120,8 +120,14 @@ async def discover(router: Any, protocol: str, token: Any, block: int) -> list[A
 @pytest.mark.parametrize("block", [9, 10, 20])
 @pytest.mark.parametrize("cached", [True, False])
 @pytest.mark.parametrize("large_inventory", [False, True])
+@pytest.mark.parametrize("raw_pages", [False, True])
 async def test_compact_metadata_keeps_all_historical_candidates_without_pool_objects(
-    monkeypatch: Any, protocol: str, block: int, cached: bool, large_inventory: bool
+    monkeypatch: Any,
+    protocol: str,
+    block: int,
+    cached: bool,
+    large_inventory: bool,
+    raw_pages: bool,
 ) -> None:
     from y import contracts
     from y._db import common
@@ -185,6 +191,22 @@ async def test_compact_metadata_keeps_all_historical_candidates_without_pool_obj
             if after:
                 selected = [row for row in selected if (row.blockNumber, row.logIndex) > after[:2]]
             return selected[:limit]
+
+    if raw_pages:
+        from msgspec import json
+
+        from y.utils import _pool_events
+
+        def raw_page(
+            self: Cache, start: int, end: int, after: Any, limit: int
+        ) -> tuple[list[bytes], Any]:
+            page = self.select_page(start, end, after, limit)
+            last = page[-1] if page else None
+            cursor = (last.blockNumber, last.logIndex, last.transactionHash.hex()) if last else None
+            return [json.encode(dict(row)) for row in page], cursor
+
+        monkeypatch.setattr(Cache, "select_raw_page", raw_page, raising=False)
+        monkeypatch.setattr(_pool_events, "decode_pool_raws", lambda raws: map(json.decode, raws))
 
     async def run(function: Any, *args: Any) -> Any:
         return function(*args)

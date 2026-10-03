@@ -62,8 +62,9 @@ def event(
 
 
 @pytest.mark.parametrize("protocol", ["v2", "solidly", "velodrome", "v3", "slipstream"])
+@pytest.mark.parametrize("raw_page", [False, True])
 def test_static_fields_match_registered_factory_abi_without_mutation(
-    monkeypatch: pytest.MonkeyPatch, protocol: str
+    monkeypatch: pytest.MonkeyPatch, protocol: str, raw_page: bool
 ) -> None:
     fields: list[tuple[str, str, bool, Any]] = [
         ("token0", "address", True, TOKEN0),
@@ -88,7 +89,12 @@ def test_static_fields_match_registered_factory_abi_without_mutation(
         assert (str(value).lower() if kind == "address" else value) == expected[name]
     fallback = Mock(side_effect=AssertionError("static metadata used the generic decoder"))
     monkeypatch.setattr(events, "decode_logs", fallback)
-    assert list(decode_pool_logs([row, row])) == [expected, expected]
+    if raw_page:
+        from y._db.utils.logs import _encode_factory_log
+
+        assert list(metadata.decode_pool_raws([_encode_factory_log(row)] * 2)) == [expected] * 2
+    else:
+        assert list(decode_pool_logs([row, row])) == [expected, expected]
     assert row.topics == topics
     fallback.assert_not_called()
 
@@ -124,6 +130,53 @@ def test_empty_metadata_has_no_decoder_or_database_work(monkeypatch: pytest.Monk
     monkeypatch.setattr(events, "decode_logs", fallback)
     assert list(decode_pool_logs([])) == []
     fallback.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    "position,value",
+    [
+        (2, "01"),
+        (2, "zz"),
+        (2, "1"),
+        (2, None),
+        (3, 1),
+        (4, "0x1234"),
+        (5, "zz"),
+        (6, "0x2"),
+    ],
+)
+def test_raw_metadata_retains_legacy_values_and_native_errors(
+    monkeypatch: pytest.MonkeyPatch, position: int, value: Any
+) -> None:
+    from y._db.utils.logs import _decode_log, _encode_factory_log
+
+    row, _ = event(monkeypatch, [("stable", "bool", False, True)])
+    fields = json.decode(_encode_factory_log(row))
+    fields[position] = value
+    raw = json.encode(fields)
+    try:
+        expected = list(decode_pool_logs([_decode_log(raw)]))
+    except Exception as exc:
+        with pytest.raises(type(exc)):
+            list(metadata.decode_pool_raws([raw]))
+    else:
+        assert list(metadata.decode_pool_raws([raw])) == expected
+
+
+def test_raw_and_wrapped_pages_share_exact_metadata_cache(monkeypatch: pytest.MonkeyPatch) -> None:
+    from y._db.utils.logs import _encode_factory_log
+
+    row, expected = event(monkeypatch, [("value", "uint256", False, 2**255)])
+    cache = metadata._MetadataCache()
+    monkeypatch.setattr(metadata, "_metadata_cache", lambda: cache)
+    decoder = Mock(wraps=metadata._decode_static_word)
+    monkeypatch.setattr(metadata, "_decode_static_word", decoder)
+    raw = _encode_factory_log(row)
+    assert list(decode_pool_logs([row, row])) == [expected] * 2
+    keys = tuple(cache.pages)
+    assert list(metadata.decode_pool_raws([raw, raw])) == [expected] * 2
+    assert tuple(cache.pages) == keys
+    assert decoder.call_count == 2
 
 
 def test_metadata_reuse_preserves_changed_events_and_registered_abi(

@@ -555,6 +555,37 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
         limit: int = 512,
     ) -> list[Log]:
         """Read a bounded event page, even across very sparse completed history."""
+        modern_query, legacy_query = self._page_queries(from_block, to_block, after, limit)
+        modern = [_decode_log(row[3]) for row in modern_query.limit(limit)]
+        legacy = [_decode_log(row[3]) for row in legacy_query.limit(limit)]
+        return self._merge_logs(legacy, modern)[:limit]
+
+    @db_session_retry_locked
+    def select_raw_page(
+        self,
+        from_block: int,
+        to_block: int,
+        after: tuple[int, int, str] | None = None,
+        limit: int = 512,
+    ) -> tuple[list[bytes], tuple[int, int, str] | None]:
+        """Read the same ordered event page without constructing log wrappers."""
+        modern_query, legacy_query = self._page_queries(from_block, to_block, after, limit)
+        # Both projections already carry their full ordering keys. Normalize
+        # legacy unprefixed hashes before deduplicating, with modern rows taking
+        # precedence exactly as in _merge_logs.
+        unique = {
+            (block, index, "0x" + txhash.removeprefix("0x").zfill(64)): raw
+            for block, txhash, index, raw in legacy_query.limit(limit)
+        }
+        unique.update(
+            {(block, index, txhash): raw for block, index, txhash, raw in modern_query.limit(limit)}
+        )
+        keys = sorted(unique)[:limit]
+        return [unique[key] for key in keys], keys[-1] if keys else None
+
+    def _page_queries(
+        self, from_block: int, to_block: int, after: tuple[int, int, str] | None, limit: int
+    ) -> tuple["Query[Any, Any]", "Query[Any, Any]"]:
         if not 1 <= limit <= 4096:
             raise ValueError("event page limit must be between 1 and 4096")
         database = cast(Database, getattr(FactoryLog, "_database_"))
@@ -578,9 +609,7 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
                 or (block == last_block and index > last_index)
                 or (block == last_block and index == last_index and txhash > last_tx)
             )
-        modern = [_decode_log(row[3]) for row in modern_query.limit(limit)]
-        legacy = [_decode_log(row[3]) for row in legacy_query.limit(limit)]
-        return self._merge_logs(legacy, modern)[:limit]
+        return modern_query, legacy_query
 
     def _factory_query(self, from_block: int, to_block: int) -> "Query[Any, Any]":
         from y._db.utils import utils as db

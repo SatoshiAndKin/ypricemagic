@@ -2,7 +2,7 @@ import json
 import os
 import tempfile
 from asyncio import gather, sleep
-from collections.abc import AsyncIterator, Awaitable, Callable, Collection, Sequence
+from collections.abc import AsyncIterator, Awaitable, Callable, Collection, Iterable, Sequence
 from contextlib import suppress
 from dataclasses import dataclass
 from decimal import Decimal
@@ -864,7 +864,7 @@ class UniswapRouterV2(ContractBase):
         from y.contracts import contract_creation_block_async
         from y.prices._rpc import _MAX_RESERVE_BATCH
         from y.utils._factory_history import factory_logs
-        from y.utils._pool_events import decode_pool_logs
+        from y.utils._pool_events import decode_pool_logs, decode_pool_raws
         from y.utils.events import _decode_threads
 
         token = await convert.to_address_async(token)
@@ -883,32 +883,40 @@ class UniswapRouterV2(ContractBase):
             topics[position] = topic
             cache = LogCache([self.factory], topics)
 
-            async def pages() -> AsyncIterator[list[Any]]:
+            async def pages() -> AsyncIterator[Iterable[Any]]:
                 first = start
                 while first <= block:
                     covered = await default_filter_threads.run(cache.is_cached_thru, first)
                     cached_end = min(covered, block)
                     if cached_end >= first:
                         after: tuple[int, int, str] | None = None
-                        while rows := await default_filter_threads.run(
-                            cache.select_page, first, cached_end, after, 4096
-                        ):
-                            yield rows
-                            last = rows[-1]
-                            after = (
-                                int(last.blockNumber),
-                                int(last.logIndex),
-                                last.transactionHash.hex(),
-                            )
+                        if raw_page := getattr(cache, "select_raw_page", None):
+                            while True:
+                                raws, after = await default_filter_threads.run(
+                                    raw_page, first, cached_end, after, 4096
+                                )
+                                if not raws:
+                                    break
+                                yield await _decode_threads.run(decode_pool_raws, raws)
+                        else:
+                            while rows := await default_filter_threads.run(
+                                cache.select_page, first, cached_end, after, 4096
+                            ):
+                                yield await _decode_threads.run(decode_pool_logs, rows)
+                                last = rows[-1]
+                                after = (
+                                    int(last.blockNumber),
+                                    int(last.logIndex),
+                                    last.transactionHash.hex(),
+                                )
                         first = cached_end + 1
                         continue
                     last_block = min(first + chunk - 1, block)
-                    yield await factory_logs([self.factory], topics, first, last_block)
+                    rows = await factory_logs([self.factory], topics, first, last_block)
+                    yield await _decode_threads.run(decode_pool_logs, rows)
                     first = last_block + 1
 
-            async for rows in pages():
-                decoded = await _decode_threads.run(decode_pool_logs, rows)
-                del rows
+            async for decoded in pages():
                 for event in decoded:
                     pair = str(event["pair" if "pair" in event else "pool"]).lower()
                     if pair in seen:
