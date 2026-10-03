@@ -19,8 +19,7 @@ from msgspec import json
 from multicall import Call
 from multicall.constants import MULTICALL2_ADDRESSES, MULTICALL3_ADDRESSES
 from web3 import AsyncHTTPProvider
-from web3._utils.request import async_make_post_request
-from web3.types import RPCEndpoint
+from web3.types import RPCEndpoint, RPCResponse
 
 from y._decorators import stuck_coro_debugger
 from y.exceptions import call_reverted
@@ -29,6 +28,15 @@ from y.prices._quote import SharedCache, bounded_map
 from y.utils._timing import timed
 
 _T = TypeVar("_T")
+
+
+async def _request_once(provider: Any, method: RPCEndpoint, params: list[Any]) -> RPCResponse:
+    """Let pricing's bounded retry policy own every transport attempt."""
+    if isinstance(provider, AsyncHTTPProvider):
+        # Web3 v7 adds automatic HTTP retries. Keep the existing pricing window
+        # and let range errors reach the splitter after exactly one attempt.
+        setattr(provider, "exception_retry_configuration", None)
+    return cast(RPCResponse, await provider.make_request(method, params))
 
 
 @stuck_coro_debugger
@@ -168,8 +176,10 @@ async def _reserve_aggregate(address: str, signature: str, block: BlockRef, *arg
     async def request() -> HexBytes:
         for attempt in range(5):
             async with semaphore, asyncio.timeout(30):
-                response = await provider.make_request(
-                    RPCEndpoint("eth_call"), [{"to": call.target, "data": data}, block.identifier]
+                response = await _request_once(
+                    provider,
+                    RPCEndpoint("eth_call"),
+                    [{"to": call.target, "data": data}, block.identifier],
                 )
             if "error" not in response:
                 return HexBytes(response["result"])
@@ -217,7 +227,7 @@ async def _codes_batch(addresses: tuple[str, ...], block: BlockRef) -> tuple[boo
         for attempt in range(5):
             try:
                 async with semaphore, asyncio.timeout(30):
-                    raw = await async_make_post_request(
+                    raw = await provider._request_session_manager.async_make_post_request(
                         URI(str(provider.endpoint_uri)), data, **provider.get_request_kwargs()
                     )
                 responses = json.decode(raw)
@@ -281,7 +291,8 @@ async def _code_presence(addresses: tuple[str, ...], block: BlockRef) -> tuple[b
 
     async def request() -> tuple[bool, ...]:
         async with semaphore, asyncio.timeout(30):
-            response = await provider.make_request(
+            response = await _request_once(
+                provider,
                 RPCEndpoint("eth_call"),
                 [
                     {"to": _CODE_PROBE, "data": data},

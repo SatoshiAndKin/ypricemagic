@@ -187,7 +187,7 @@ async def fetch_multicall(*calls: Any, block: Block | None = None) -> list[Any |
         call = await dank_eth.call(
             {"to": str(multicall2), "data": HexStr(data)},
             block or "latest",
-            {str(multicall2): {"code": f"0x{multicall2.bytecode}"}},  # type: ignore [dict-item, typeddict-item]
+            {str(multicall2): {"code": f"0x{multicall2.bytecode}"}},  # type: ignore [typeddict-item]
         )
         result = multicall2.tryAggregate.decode_output(call.hex())
     else:

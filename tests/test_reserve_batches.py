@@ -253,7 +253,7 @@ async def test_code_batch_matches_response_ids_and_canonical_hash(monkeypatch: A
             [{"id": 2, "result": "0x01"}, {"id": 0, "result": "0x"}, {"id": 1, "result": "0x00"}]
         )
     )
-    monkeypatch.setattr(_rpc, "async_make_post_request", post)
+    provider._request_session_manager = SimpleNamespace(async_make_post_request=post)
     assert await _rpc._codes_batch(ADDRESSES, BLOCK) == (False, True, True)
     assert encoded == [("eth_getCode", [address, BLOCK.identifier]) for address in ADDRESSES]
     assert len(json.decode(post.call_args.args[1])) == 3
@@ -326,3 +326,65 @@ async def test_code_probe_falls_back_only_for_unsupported_providers(
         with pytest.raises(ValueError, match="bad state"):
             await _rpc._code_presence(ADDRESSES, BLOCK)
         native.assert_not_called()
+
+
+@run_async_test
+@pytest.mark.parametrize("recover", [False, True])
+async def test_v7_http_code_batch_preserves_attempts_ids_and_hash(
+    monkeypatch: pytest.MonkeyPatch, recover: bool
+) -> None:
+    import socket
+    from types import SimpleNamespace
+
+    from aiohttp import ClientSession, web
+    from web3 import AsyncHTTPProvider
+
+    observed: list[list[Any]] = []
+
+    async def rpc(request: web.Request) -> web.Response:
+        body = await request.json()
+        observed.append(body)
+        assert [row["method"] for row in body] == ["eth_getCode"] * 3
+        assert [row["params"] for row in body] == [
+            [address, BLOCK.identifier] for address in ADDRESSES
+        ]
+        if not recover or len(observed) == 1:
+            return web.json_response(
+                [{"jsonrpc": "2.0", "id": row["id"], "error": {"code": 429}} for row in body]
+            )
+        return web.json_response(
+            [
+                {"jsonrpc": "2.0", "id": row["id"], "result": value}
+                for row, value in reversed(list(zip(body, ("0x", "0x00", "0x6000"))))
+            ]
+        )
+
+    app = web.Application()
+    app.router.add_post("/", rpc)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    with socket.socket() as listener:
+        listener.bind(("127.0.0.1", 0))
+        site = web.SockSite(runner, listener)
+        await site.start()
+        provider = AsyncHTTPProvider(f"http://127.0.0.1:{listener.getsockname()[1]}")
+        session = await provider.cache_async_session(ClientSession())
+        monkeypatch.setattr(
+            _rpc,
+            "dank_web3",
+            SimpleNamespace(eth=SimpleNamespace(w3=SimpleNamespace(provider=provider))),
+        )
+        sleep = AsyncMock()
+        monkeypatch.setattr(asyncio, "sleep", sleep)
+        try:
+            if recover:
+                assert await _rpc._codes_batch(ADDRESSES, BLOCK) == (False, True, True)
+            else:
+                with pytest.raises(ConnectionError, match="rate limit exceeded"):
+                    await _rpc._codes_batch(ADDRESSES, BLOCK)
+            assert len(observed) == (2 if recover else 5)
+            assert observed == [observed[0]] * len(observed)
+            assert sleep.await_count == len(observed) - 1
+        finally:
+            await session.close()
+            await runner.cleanup()
