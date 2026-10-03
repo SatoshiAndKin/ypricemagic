@@ -4,10 +4,14 @@ This migration starts from fork master `073c7ac8`, retaining its indexed pool
 inventory, bounded cold-state reads, historical state retries and pricing repairs.
 It supports Web3 v7 exclusively.
 
-The runtime/build pins are dank-mids `2a5a4d21fc8aa1d12a9146043871ade23084323c`,
+The runtime/build pins are dank-mids `fa4b454fb8d33c2f412709da4daca522cd4f7e47`,
 Brownie `7e529be8dfc1afa7bda2d6660c8a11c59a653a6e`, and evmspec
 `f0df0d9d8e4e7a7000580054ce2c0b6b6193a14c`. The ez-a-sync, aiosqlite,
-cachebox and mypy native repair pins are retained. Python 3.11–3.13 Linux ARM64
+cachebox and mypy native repair pins are retained. cchecksum is pinned to
+`fff7e1fe87f4679ec96de1cebb1cdd8f5e94be44`, which keeps the normalized address
+buffer alive through scalar and bulk checksum conversion. Both published 0.4.4
+and 0.4.5 expose a freed-buffer read with Python's debug allocator. The backport
+retains the ABI stack's 0.4.4 requirement. Python 3.11–3.13 Linux ARM64
 validation constraints were resolved anew for these immutable dependencies.
 
 The code cache uses Web3 v7's middleware class interface, retaining the public
@@ -57,5 +61,13 @@ bucket, oracle reads and DEX fallback without relaxing assertions or retry limit
 The independent run uses an encrypted loopback SSH connection to the operator's
 archive Reth, a separate populated catalog snapshot, eight concurrent cases and a
 1,000-call multicall limit. Default thresholds are verified by controlled SDK tests.
+The repeat also exposed synthetic factory metadata retained by discovery tests
+from earlier runs. Their fixture now clears only their three test factories before
+and after each case; a regression verifies that unrelated metadata survives. All
+23 native cases passed twice against the contaminated database, and strict mypy
+passed 241 files. The final SDK pin passed all 37 hosted native matrix jobs under
+the debug allocator. A fresh Linux ARM64 pricing rebuild and complete original
+suite are running against the repaired immutable dependencies, with passive
+full-value/path failure reporting and no runtime wrappers.
 These archive runs do not establish empty-cache startup performance. Deployment
 is separate; this migration remains draft pending full acceptance.

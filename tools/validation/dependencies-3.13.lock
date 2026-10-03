@@ -1,5 +1,5 @@
 # Linux ARM64 Python 3.13 native validation dependencies.
-# Resolved for the immutable Web3 v7 pricing stack.
+# Resolved for the immutable Web3 v7 stack with owned native checksum buffers.
 aiofiles==25.1.0
 aiohappyeyeballs==2.7.1
 aiohttp==3.14.3
@@ -18,7 +18,7 @@ bobs-lazy-logging==0.0.5
 cachebox @ git+https://github.com/SatoshiAndKin/cachebox.git@10be25afe46afb32c8135db4d1b8e2d94431b9c1
 cachetools==6.2.6
 cbor2==5.9.0
-cchecksum==0.4.4
+cchecksum @ git+https://github.com/SatoshiAndKin/cchecksum.git@fff7e1fe87f4679ec96de1cebb1cdd8f5e94be44
 certifi==2026.7.22
 charset-normalizer==3.5.1
 checksum-dict==2.1.16
@@ -26,7 +26,7 @@ ckzg==2.1.8
 click==8.5.0
 cloudpickle==3.1.2
 cytoolz==1.1.0
-dank-mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@2a5a4d21fc8aa1d12a9146043871ade23084323c
+dank-mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@fa4b454fb8d33c2f412709da4daca522cd4f7e47
 dictstruct==0.0.9
 eip712==0.3.3
 eth-abi==5.2.0
