@@ -6,6 +6,7 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from functools import lru_cache
 from logging import getLogger
+from time import monotonic
 from typing import Any, TypeVar, cast
 from weakref import WeakKeyDictionary
 
@@ -35,6 +36,23 @@ from y.utils._timing import timed
 
 _T = TypeVar("_T")
 
+# These canonical getter layouts stay below 2.4 MiB of hexadecimal calldata,
+# leaving room for JSON overhead under the measured provider payload limit.
+_MAX_RESERVE_BATCH = 7500
+_MAX_BALANCE_BATCH = 6250
+_MAX_CODE_BATCH = 8192
+
+
+def _batch_limit_error(error: Exception) -> bool:
+    if isinstance(error, TimeoutError):
+        return True
+    if isinstance(error, ClientResponseError):
+        return error.status == 413
+    return isinstance(error, ValueError) and any(
+        text in str(error).lower()
+        for text in ("out of gas", "gas limit", "execution reverted", "response size")
+    )
+
 
 async def _request_once(provider: Any, method: RPCEndpoint, params: list[Any]) -> RPCResponse:
     """Let pricing's bounded retry policy own every transport attempt."""
@@ -58,15 +76,26 @@ async def _post_once(provider: AsyncHTTPProvider, data: bytes) -> bytes:
 
 
 @stuck_coro_debugger
-async def _retry_state_read(request: Callable[[], Awaitable[_T]]) -> _T:
-    """Retry archive-state misses at the unchanged block identifier, for at most 121.5s of backoff.
+async def _retry_state_read(
+    request: Callable[[], Awaitable[_T]], *, retry_timeouts: bool = True
+) -> _T:
+    """Retry archive misses and one transport timeout at the unchanged block identifier.
 
     Failures during concurrent historical reads can outlast a short retry burst.
     Keep a bounded recovery window while propagating a persistent archive miss.
     """
+    transport_timeouts = 0
     for attempt in range(10):
         try:
             return await request()
+        except TimeoutError:
+            # One transport retry fits inside the caller's existing deadline.
+            # A task cancellation remains CancelledError and is never retried.
+            if not retry_timeouts or transport_timeouts or attempt == 9:
+                raise
+            transport_timeouts += 1
+            getLogger(__name__).debug("RPC transport timeout; retrying the same block identifier")
+            await asyncio.sleep(0.25)
         except ClientConnectionError as exc:
             raise ConnectionError("RPC connection failed") from exc
         except ClientResponseError as exc:
@@ -78,6 +107,14 @@ async def _retry_state_read(request: Callable[[], Awaitable[_T]]) -> _T:
             raise
         except ValueError as exc:
             error = exc.args[0] if exc.args else None
+            if (
+                isinstance(error, dict)
+                and error.get("code") == -32000
+                and error.get("message") == "hash is not currently canonical"
+            ):
+                # Never read an orphan with requireCanonical disabled or switch
+                # a partially evaluated quote to a different hash.
+                raise ConnectionError("RPC block hash is no longer canonical") from exc
             if isinstance(error, dict) and error.get("code") == 429:
                 if attempt >= 4:
                     raise ConnectionError("RPC provider rate limit exceeded") from exc
@@ -191,8 +228,10 @@ def _reserve_semaphores() -> WeakKeyDictionary[Any, asyncio.Semaphore]:
 @stuck_coro_debugger
 async def _reserve_aggregate(address: str, signature: str, block: BlockRef, *args: Any) -> Any:
     """Use native calls and decoding without the SDK's batching and retry queue."""
+    started = monotonic()
     call = await asyncio.to_thread(Call, address, [signature, *args])
-    data = await asyncio.to_thread(lambda: "0x" + call.data.hex())
+    data = await asyncio.to_thread(lambda: "0x" + _batch_call_data(call).hex())
+    encoded = monotonic()
     provider = dank_web3.eth.w3.provider
     semaphore = _reserve_semaphores().setdefault(asyncio.get_running_loop(), asyncio.Semaphore(8))
 
@@ -216,7 +255,139 @@ async def _reserve_aggregate(address: str, signature: str, block: BlockRef, *arg
         raise AssertionError("unreachable")
 
     output = await _retry_state_read(request)
-    return await asyncio.to_thread(Call.decode_output, output, call.signature, call.returns)
+    received = monotonic()
+    result = await asyncio.to_thread(_decode_batch_output, output, call)
+    getLogger(__name__).debug(
+        "native RPC signature=%s encode_seconds=%.6f transport_seconds=%.6f "
+        "decode_seconds=%.6f bytes=%s",
+        signature,
+        encoded - started,
+        received - encoded,
+        monotonic() - received,
+        len(output),
+    )
+    return result
+
+
+def _batch_call_data(call: Call) -> bytes:
+    """Encode canonical getter aggregates with exactly the native ABI layout."""
+    if (
+        call.function
+        != "tryBlockAndAggregate(bool,(address,bytes)[])(uint256,uint256,(bool,bytes)[])"
+        or not call.args
+        or len(call.args) != 2
+        or call.args[0] is not False
+        or not isinstance(call.args[1], (list, tuple))
+    ):
+        return call.data
+    bodies = []
+    for member in call.args[1]:
+        if not isinstance(member, (list, tuple)) or len(member) != 2:
+            return call.data
+        target, payload = member
+        if not isinstance(target, str) or len(target) != 42 or not target.startswith("0x"):
+            return call.data
+        if not isinstance(payload, bytes):
+            return call.data
+        try:
+            address_bytes = bytes.fromhex(target[2:])
+        except ValueError:
+            return call.data
+        if len(address_bytes) != 20:
+            return call.data
+        bodies.append(
+            bytes(12)
+            + address_bytes
+            + (64).to_bytes(32, "big")
+            + len(payload).to_bytes(32, "big")
+            + payload
+            + bytes(-len(payload) % 32)
+        )
+    cursor = 32 * len(bodies)
+    offsets = []
+    for body in bodies:
+        offsets.append(cursor.to_bytes(32, "big"))
+        cursor += len(body)
+    return (
+        call.signature.fourbyte
+        + bytes(32)
+        + (64).to_bytes(32, "big")
+        + len(bodies).to_bytes(32, "big")
+        + b"".join(offsets)
+        + b"".join(bodies)
+    )
+
+
+def _getter_call_data(call: Call) -> bytes:
+    """Encode canonical balance getter inputs without repeated ABI validation."""
+    if call.function == "balanceOf(address)(uint256)" and call.args and len(call.args) == 1:
+        holder = call.args[0]
+        if isinstance(holder, str) and len(holder) == 42 and holder.startswith("0x"):
+            try:
+                value = bytes.fromhex(holder[2:])
+            except ValueError:
+                return call.data
+            if len(value) == 20:
+                return call.signature.fourbyte + bytes(12) + value
+    return call.data
+
+
+def _decode_batch_output(output: bytes, call: Call) -> Any:
+    """Decode canonical batch results, with the native decoder as the fallback.
+
+    Check every dynamic offset, boolean, length and padding byte before using
+    the fast path. Unusual layouts and malformed responses retain Call's result
+    and error behavior, including its unavailable result on decoding failure.
+    """
+    if call.returns is None:
+        if call.function == (
+            "tryBlockAndAggregate(bool,(address,bytes)[])(uint256,uint256,(bool,bytes)[])"
+        ):
+            decoded = _canonical_aggregate(output)
+            if decoded is not None:
+                return decoded
+        words = {
+            "getReserves()(uint256,uint256,uint256)": 3,
+            "balanceOf(address)(uint256)": 1,
+        }.get(call.function)
+        if words is not None and len(output) == 32 * words:
+            values = tuple(
+                int.from_bytes(output[i : i + 32], "big") for i in range(0, len(output), 32)
+            )
+            return values if words > 1 else values[0]
+    return Call.decode_output(output, call.signature, call.returns)
+
+
+def _canonical_aggregate(output: bytes) -> tuple[int, int, tuple[tuple[bool, bytes], ...]] | None:
+    # RPC results are HexBytes. Slice ordinary bytes so each ABI word does not
+    # construct another wrapper, and nested payloads retain the native bytes type.
+    output = bytes(output)
+    if len(output) < 128 or int.from_bytes(output[64:96], "big") != 96:
+        return None
+    size = int.from_bytes(output[96:128], "big")
+    cursor = 128 + 32 * size
+    if cursor > len(output):
+        return None
+    values = []
+    for index in range(size):
+        offset = 128 + 32 * index
+        if int.from_bytes(output[offset : offset + 32], "big") != cursor - 128:
+            return None
+        if cursor + 96 > len(output):
+            return None
+        flag = int.from_bytes(output[cursor : cursor + 32], "big")
+        if flag > 1 or int.from_bytes(output[cursor + 32 : cursor + 64], "big") != 64:
+            return None
+        length = int.from_bytes(output[cursor + 64 : cursor + 96], "big")
+        end = cursor + 96 + length
+        aligned = cursor + 96 + (length + 31) // 32 * 32
+        if aligned > len(output) or any(output[end:aligned]):
+            return None
+        values.append((bool(flag), output[cursor + 96 : end]))
+        cursor = aligned
+    if cursor != len(output):
+        return None
+    return int.from_bytes(output[:32], "big"), int.from_bytes(output[32:64], "big"), tuple(values)
 
 
 @lru_cache(maxsize=1)
@@ -279,7 +450,9 @@ async def _codes_batch(addresses: tuple[str, ...], block: BlockRef) -> tuple[boo
 
 async def deployed_batch(addresses: tuple[str, ...], block: BlockRef) -> tuple[bool, ...]:
     async def load() -> tuple[bool, ...]:
-        chunks = [addresses[i : i + 1024] for i in range(0, len(addresses), 1024)]
+        chunks = [
+            addresses[i : i + _MAX_CODE_BATCH] for i in range(0, len(addresses), _MAX_CODE_BATCH)
+        ]
         values = await bounded_map(lambda chunk: _code_presence(chunk, block), chunks, workers=2)
         return tuple(value for chunk in values for value in chunk)
 
@@ -323,7 +496,7 @@ async def _code_presence(addresses: tuple[str, ...], block: BlockRef) -> tuple[b
             )
         if "error" in response:
             raise ValueError(response["error"])
-        output = HexBytes(response["result"])
+        output = bytes(HexBytes(response["result"]))
         if len(output) != 32 * len(addresses):
             raise RuntimeError("Code probe returned a different result count")
         words = tuple(int.from_bytes(output[i : i + 32]) for i in range(0, len(output), 32))
@@ -333,10 +506,9 @@ async def _code_presence(addresses: tuple[str, ...], block: BlockRef) -> tuple[b
 
     try:
         return await _retry_state_read(request)
-    except ValueError as exc:
-        text = str(exc).lower()
-        if not any(
-            phrase in text
+    except (TimeoutError, ValueError, ClientResponseError) as exc:
+        if isinstance(exc, ValueError) and any(
+            phrase in str(exc).lower()
             for phrase in (
                 "state override is not supported",
                 "state overrides are not supported",
@@ -344,9 +516,15 @@ async def _code_presence(addresses: tuple[str, ...], block: BlockRef) -> tuple[b
                 "expected 2 arguments",
             )
         ):
-            raise
-        _unsupported_code_probes()[provider] = True
-        return await _code_presence(addresses, block)
+            _unsupported_code_probes()[provider] = True
+            return await _code_presence(addresses, block)
+        if len(addresses) > 1 and _batch_limit_error(exc):
+            middle = len(addresses) // 2
+            return (
+                *await _code_presence(addresses[:middle], block),
+                *await _code_presence(addresses[middle:], block),
+            )
+        raise
 
 
 @timed("pool_state")
@@ -357,8 +535,8 @@ async def reserves_batch(addresses: tuple[str, ...], block: BlockRef) -> tuple[A
     do not depend on the caller. Individual failures use the ordinary read path
     so transport failures and unavailable contracts retain their existing meaning.
     """
-    if len(addresses) > 4096:
-        raise ValueError("reserve batches cannot exceed 4096 pairs")
+    if len(addresses) > _MAX_RESERVE_BATCH:
+        raise ValueError(f"reserve batches cannot exceed {_MAX_RESERVE_BATCH} pairs")
     signature = "getReserves()(uint256,uint256,uint256)"
 
     async def individual(address: str) -> Any:
@@ -380,16 +558,10 @@ async def reserves_batch(addresses: tuple[str, ...], block: BlockRef) -> tuple[A
                 "tryBlockAndAggregate(bool,(address,bytes)[])(uint256,uint256,(bool,bytes)[])",
                 block,
                 False,
-                [[call.target, call.data] for call in calls],
+                [[call.target, _getter_call_data(call)] for call in calls],
             )
-        except (TimeoutError, ValueError) as exc:
-            if len(addresses) <= 1 or (
-                not isinstance(exc, TimeoutError)
-                and not any(
-                    text in str(exc).lower()
-                    for text in ("out of gas", "gas limit", "execution reverted", "response size")
-                )
-            ):
+        except (TimeoutError, ValueError, ClientResponseError) as exc:
+            if len(addresses) <= 1 or not _batch_limit_error(exc):
                 raise
             middle = len(addresses) // 2
             getLogger(__name__).debug("reserve batch split pairs=%s", len(addresses))
@@ -403,7 +575,7 @@ async def reserves_batch(addresses: tuple[str, ...], block: BlockRef) -> tuple[A
         for address, call, (success, output) in zip(addresses, calls, outputs):
             if success:
                 try:
-                    value = Call.decode_output(output, call.signature, call.returns)
+                    value = _decode_batch_output(output, call)
                 except DecodingError:
                     value = await individual(address)
             else:
@@ -419,11 +591,68 @@ def balance_cache() -> SharedCache[tuple[Any, ...]]:
     return SharedCache(128, immutable=True, maxweight=16384, getsizeof=len)
 
 
+@lru_cache(maxsize=1)
+def vault_cache() -> SharedCache[tuple[Any, ...]]:
+    return SharedCache(128, immutable=True, maxweight=16384, getsizeof=len)
+
+
+@stuck_coro_debugger
+@timed("pool_state")
+async def pool_tokens_batch(
+    vault: str, pool_ids: tuple[bytes, ...], block: BlockRef
+) -> tuple[Any, ...]:
+    """Batch Balancer's caller-independent vault inventory getter at one hash."""
+    if len(pool_ids) > 128:
+        raise ValueError("vault batches cannot exceed 128 pools")
+    signature = "getPoolTokens(bytes32)(address[],uint256[],uint256)"
+
+    async def individual(pool_id: bytes) -> Any:
+        try:
+            return await state(vault, signature, block, pool_id)
+        except Exception as exc:
+            if not unavailable(exc):
+                raise
+            return None
+
+    async def load() -> tuple[Any, ...]:
+        aggregate = MULTICALL3_ADDRESSES.get(block.chain) or MULTICALL2_ADDRESSES.get(block.chain)
+        if not aggregate or not await deployed(aggregate, block):
+            return tuple(await bounded_map(individual, pool_ids))
+        calls = [Call(vault, [signature, pool_id]) for pool_id in pool_ids]
+        try:
+            number, _, outputs = await _reserve_aggregate(
+                aggregate,
+                "tryBlockAndAggregate(bool,(address,bytes)[])(uint256,uint256,(bool,bytes)[])",
+                block,
+                False,
+                [[call.target, _getter_call_data(call)] for call in calls],
+            )
+        except (TimeoutError, ValueError, ClientResponseError) as exc:
+            if len(pool_ids) <= 1 or not _batch_limit_error(exc):
+                raise
+            middle = len(pool_ids) // 2
+            return (
+                *await pool_tokens_batch(vault, pool_ids[:middle], block),
+                *await pool_tokens_batch(vault, pool_ids[middle:], block),
+            )
+        if number != block.number or len(outputs) != len(calls):
+            raise RuntimeError("Vault aggregate returned a different block or result count")
+        values = []
+        for pool_id, call, (success, output) in zip(pool_ids, calls, outputs):
+            value = Call.decode_output(output, call.signature, call.returns) if success else None
+            if value is None:
+                value = await individual(pool_id)
+            values.append(value)
+        return tuple(values)
+
+    return await vault_cache().get((block.chain, block.hash, vault, pool_ids), load)
+
+
 @timed("pool_state")
 async def balances_batch(requests: tuple[tuple[str, str], ...], block: BlockRef) -> tuple[Any, ...]:
     """Batch ERC-20 balance getters without retaining token or pool objects."""
-    if len(requests) > 2048:
-        raise ValueError("balance batches cannot exceed 2048 getters")
+    if len(requests) > _MAX_BALANCE_BATCH:
+        raise ValueError(f"balance batches cannot exceed {_MAX_BALANCE_BATCH} getters")
     signature = "balanceOf(address)(uint256)"
 
     async def individual(request: tuple[str, str]) -> Any:
@@ -445,16 +674,10 @@ async def balances_batch(requests: tuple[tuple[str, str], ...], block: BlockRef)
                 "tryBlockAndAggregate(bool,(address,bytes)[])(uint256,uint256,(bool,bytes)[])",
                 block,
                 False,
-                [[call.target, call.data] for call in calls],
+                [[call.target, _getter_call_data(call)] for call in calls],
             )
-        except (TimeoutError, ValueError) as exc:
-            if len(requests) <= 1 or (
-                not isinstance(exc, TimeoutError)
-                and not any(
-                    text in str(exc).lower()
-                    for text in ("out of gas", "gas limit", "execution reverted", "response size")
-                )
-            ):
+        except (TimeoutError, ValueError, ClientResponseError) as exc:
+            if len(requests) <= 1 or not _batch_limit_error(exc):
                 raise
             middle = len(requests) // 2
             return (
@@ -467,7 +690,7 @@ async def balances_batch(requests: tuple[tuple[str, str], ...], block: BlockRef)
         for request, call, (success, output) in zip(requests, calls, outputs):
             if success:
                 try:
-                    value = Call.decode_output(output, call.signature, call.returns)
+                    value = _decode_batch_output(output, call)
                 except DecodingError:
                     value = await individual(request)
             else:

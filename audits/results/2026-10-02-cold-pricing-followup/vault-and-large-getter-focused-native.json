@@ -1,0 +1,77 @@
+{
+  "run": {
+    "command": [
+      "sh",
+      "-c",
+      "python -m pip install --no-deps --no-build-isolation -e . && mypy && python -c 'import pytest,tomllib;from pathlib import Path;c=tomllib.loads(Path(\"pyproject.toml\").read_text());raise SystemExit(pytest.main(c[\"tool\"][\"validation\"][\"protocol_discovery_tests\"]+c[\"tool\"][\"validation\"][\"cold_discovery_tests\"]))' && python /runner/check_compiled.py"
+    ],
+    "docker_context": "colima-rpc-tune",
+    "builder": "ypricemagic-validation-4168ea425aa6",
+    "complete": true,
+    "started_unix": 1791018500.059458,
+    "source_sha": "63e3e4bbf2425693d8b0c280f0fdfff716c5d01a",
+    "source_revision": "worktree",
+    "source_archive_sha256": "17c1011f8b6b80b894b7e7c06f240f646a5072fbd6bb68c4252469804f2f7c10",
+    "image": "sha256:96ec7aab0eb97e9928dedea70edbceeaf3e26e6a4babccc1729fe7f9c5a4c0db",
+    "exit_code": 0,
+    "oom_killed": false,
+    "missing_reports": [],
+    "below_memory_target": true,
+    "elapsed_seconds": 157.23533606529236
+  },
+  "pytest-summary": {
+    "exit_code": 0,
+    "counts": {
+      "setup:passed": 551,
+      "call:passed": 551,
+      "teardown:passed": 551
+    },
+    "collected": 551
+  },
+  "compiled-modules": {
+    "y._db.brownie": "/work/y/_db/brownie.cpython-312-aarch64-linux-gnu.so",
+    "y._db.config": "/work/y/_db/config.cpython-312-aarch64-linux-gnu.so",
+    "y._db.decorators": "/work/y/_db/decorators.cpython-312-aarch64-linux-gnu.so",
+    "y._db.utils.stringify": "/work/y/_db/utils/stringify.cpython-312-aarch64-linux-gnu.so",
+    "y.ENVIRONMENT_VARIABLES": "/work/y/ENVIRONMENT_VARIABLES.cpython-312-aarch64-linux-gnu.so",
+    "y.convert": "/work/y/convert.cpython-312-aarch64-linux-gnu.so",
+    "y.exceptions": "/work/y/exceptions.cpython-312-aarch64-linux-gnu.so",
+    "y.networks": "/work/y/networks.cpython-312-aarch64-linux-gnu.so",
+    "y.prices.utils.sense_check": "/work/y/prices/utils/sense_check.cpython-312-aarch64-linux-gnu.so",
+    "y.utils.gather": "/work/y/utils/gather.cpython-312-aarch64-linux-gnu.so"
+  },
+  "container-state": {
+    "State": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-03T09:08:20.793954899Z",
+      "FinishedAt": "2026-10-03T09:10:57.085886845Z"
+    },
+    "Image": "sha256:96ec7aab0eb97e9928dedea70edbceeaf3e26e6a4babccc1729fe7f9c5a4c0db",
+    "HostConfig": {
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 4000000000,
+      "PidsLimit": 512,
+      "LogConfig": {
+        "Type": "json-file",
+        "Config": {
+          "max-file": "5",
+          "max-size": "100m"
+        }
+      }
+    }
+  },
+  "mypy": {
+    "files": 244,
+    "passed": true
+  },
+  "scope": "Bounded 128-pool Balancer vault state, phase tracing, and 4096-balance/code-batch controls. Later provider-sized batch changes are outside this snapshot."
+}

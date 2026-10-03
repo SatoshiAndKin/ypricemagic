@@ -1,0 +1,35 @@
+{
+  "params": {
+    "token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "block": 26107234,
+    "amount": "1000.000001"
+  },
+  "seconds": 11.020037374924868,
+  "status": 200,
+  "body": {
+    "token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "price": 0.999893958423049,
+    "block": 26107234,
+    "chain": "ethereum",
+    "block_timestamp": 1790975399,
+    "cached": false,
+    "trade_path": [
+      {
+        "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "price": 0.999893958423049,
+        "source": "Liquidity-based sale estimate"
+      },
+      {
+        "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "price": 0.999893958423049,
+        "source": "Uniswap V3 0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640 via quoteExactInput(bytes,uint256)"
+      },
+      {
+        "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "price": 2664.98780095,
+        "source": "Chainlink historical USD for 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+      }
+    ]
+  },
+  "passed": true
+}

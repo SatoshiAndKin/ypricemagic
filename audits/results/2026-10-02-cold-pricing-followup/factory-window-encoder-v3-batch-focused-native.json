@@ -1,0 +1,45 @@
+{
+  "run": {
+    "command": [
+      "sh",
+      "-c",
+      "python -m pip install --no-deps --no-build-isolation -e . && mypy && python -c 'import pytest,tomllib;from pathlib import Path;c=tomllib.loads(Path(\"pyproject.toml\").read_text());raise SystemExit(pytest.main(c[\"tool\"][\"validation\"][\"protocol_discovery_tests\"]+c[\"tool\"][\"validation\"][\"cold_discovery_tests\"]))' && python /runner/check_compiled.py"
+    ],
+    "docker_context": "colima-rpc-tune",
+    "builder": "ypricemagic-validation-4168ea425aa6",
+    "complete": true,
+    "started_unix": 1791014053.673922,
+    "source_sha": "63e3e4bbf2425693d8b0c280f0fdfff716c5d01a",
+    "source_revision": "worktree",
+    "source_archive_sha256": "405c730ad778a1f3f62504d763aef7b4d28dc71b4d9aacaf2996c5df71e4a231",
+    "image": "sha256:96ec7aab0eb97e9928dedea70edbceeaf3e26e6a4babccc1729fe7f9c5a4c0db",
+    "exit_code": 0,
+    "oom_killed": false,
+    "missing_reports": [],
+    "below_memory_target": true,
+    "elapsed_seconds": 160.57413411140442
+  },
+  "pytest": {
+    "exit_code": 0,
+    "counts": {
+      "setup:passed": 476,
+      "call:passed": 476,
+      "teardown:passed": 476
+    },
+    "collected": 476
+  },
+  "compiled_modules": {
+    "y._db.brownie": "/work/y/_db/brownie.cpython-312-aarch64-linux-gnu.so",
+    "y._db.config": "/work/y/_db/config.cpython-312-aarch64-linux-gnu.so",
+    "y._db.decorators": "/work/y/_db/decorators.cpython-312-aarch64-linux-gnu.so",
+    "y._db.utils.stringify": "/work/y/_db/utils/stringify.cpython-312-aarch64-linux-gnu.so",
+    "y.ENVIRONMENT_VARIABLES": "/work/y/ENVIRONMENT_VARIABLES.cpython-312-aarch64-linux-gnu.so",
+    "y.convert": "/work/y/convert.cpython-312-aarch64-linux-gnu.so",
+    "y.exceptions": "/work/y/exceptions.cpython-312-aarch64-linux-gnu.so",
+    "y.networks": "/work/y/networks.cpython-312-aarch64-linux-gnu.so",
+    "y.prices.utils.sense_check": "/work/y/prices/utils/sense_check.cpython-312-aarch64-linux-gnu.so",
+    "y.utils.gather": "/work/y/utils/gather.cpython-312-aarch64-linux-gnu.so"
+  },
+  "mypy": "Success: no issues found in 244 source files",
+  "exact_worktree_archive_reproduced": true
+}

@@ -1,0 +1,29 @@
+{
+  "boundary": "Host Python 3.12 replay of 10000 real native factory events, eight passes per measurement; identical values. Complete native Linux boundary tests independently pass.",
+  "measurements": [
+    {
+      "decoder": "ABI",
+      "events": 80000,
+      "seconds": 1.1146582500077784,
+      "exact_match": true
+    },
+    {
+      "decoder": "static",
+      "events": 80000,
+      "seconds": 0.046929792035371065,
+      "exact_match": true
+    },
+    {
+      "decoder": "ABI",
+      "events": 80000,
+      "seconds": 1.0982200830476359,
+      "exact_match": true
+    },
+    {
+      "decoder": "static",
+      "events": 80000,
+      "seconds": 0.0467108340235427,
+      "exact_match": true
+    }
+  ]
+}

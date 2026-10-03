@@ -1,0 +1,76 @@
+{
+  "run": {
+    "command": [
+      "sh",
+      "-c",
+      "python -m pip install --no-deps --no-build-isolation -e . && mypy && python -c 'import pytest,tomllib;from pathlib import Path;c=tomllib.loads(Path(\"pyproject.toml\").read_text());raise SystemExit(pytest.main(c[\"tool\"][\"validation\"][\"protocol_discovery_tests\"]+c[\"tool\"][\"validation\"][\"cold_discovery_tests\"]))' && python /runner/check_compiled.py"
+    ],
+    "docker_context": "colima-rpc-tune",
+    "builder": "ypricemagic-validation-4168ea425aa6",
+    "complete": true,
+    "started_unix": 1791008346.4738932,
+    "source_sha": "1457e8eb37093177853deebaae7d18929dcf2dc1",
+    "source_revision": "worktree",
+    "source_archive_sha256": "87a7d7d9c7f42fc114418fd693d9652f7152de089186909357cafcd2b4b71d1b",
+    "image": "sha256:96ec7aab0eb97e9928dedea70edbceeaf3e26e6a4babccc1729fe7f9c5a4c0db",
+    "exit_code": 0,
+    "oom_killed": false,
+    "missing_reports": [],
+    "below_memory_target": true,
+    "elapsed_seconds": 209.85445380210876
+  },
+  "pytest-summary": {
+    "exit_code": 0,
+    "counts": {
+      "setup:passed": 452,
+      "call:passed": 452,
+      "teardown:passed": 452
+    },
+    "collected": 452
+  },
+  "compiled-modules": {
+    "y._db.brownie": "/work/y/_db/brownie.cpython-312-aarch64-linux-gnu.so",
+    "y._db.config": "/work/y/_db/config.cpython-312-aarch64-linux-gnu.so",
+    "y._db.decorators": "/work/y/_db/decorators.cpython-312-aarch64-linux-gnu.so",
+    "y._db.utils.stringify": "/work/y/_db/utils/stringify.cpython-312-aarch64-linux-gnu.so",
+    "y.ENVIRONMENT_VARIABLES": "/work/y/ENVIRONMENT_VARIABLES.cpython-312-aarch64-linux-gnu.so",
+    "y.convert": "/work/y/convert.cpython-312-aarch64-linux-gnu.so",
+    "y.exceptions": "/work/y/exceptions.cpython-312-aarch64-linux-gnu.so",
+    "y.networks": "/work/y/networks.cpython-312-aarch64-linux-gnu.so",
+    "y.prices.utils.sense_check": "/work/y/prices/utils/sense_check.cpython-312-aarch64-linux-gnu.so",
+    "y.utils.gather": "/work/y/utils/gather.cpython-312-aarch64-linux-gnu.so"
+  },
+  "command": {
+    "command": [
+      "sh",
+      "-c",
+      "python -m pip install --no-deps --no-build-isolation -e . && mypy && python -c 'import pytest,tomllib;from pathlib import Path;c=tomllib.loads(Path(\"pyproject.toml\").read_text());raise SystemExit(pytest.main(c[\"tool\"][\"validation\"][\"protocol_discovery_tests\"]+c[\"tool\"][\"validation\"][\"cold_discovery_tests\"]))' && python /runner/check_compiled.py"
+    ],
+    "exit_code": 0,
+    "interrupted": false,
+    "elapsed_seconds": 208.22960607195273,
+    "peak_sampled_process_rss_bytes": 1096163328,
+    "cgroup_before": {
+      "memory.current": "8851456",
+      "memory.peak": "8953856",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "cgroup_after": {
+      "memory.current": "186937344",
+      "memory.peak": "1179820032",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    }
+  },
+  "source_archive_matches_current_worktree": true,
+  "validation_boundary": "Focused native Python 3.12 tests at exact source archive; final complete-suite rerun and production acceptance remain required."
+}

@@ -30,7 +30,7 @@ from y.prices._rpc import BlockRef
 async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
     monkeypatch: Any, tmp_path: Any
 ) -> None:
-    from y.prices.dex.uniswap.v2 import UniswapRouterV2
+    from y.prices.dex.uniswap.v2 import UniswapRouterV2, V2PoolMetadata
 
     data = json.loads((Path(__file__).parent / "data/sushi-mainnet-topology.json").read_text())
     rows = data["pools"]
@@ -66,11 +66,9 @@ async def test_cached_sushi_topology_bounds_tasks_and_shares_block_data(
     router.pools = pools
     monkeypatch.setattr(UniswapRouterV2, "__pools__", property(lambda _: Ready(pools)))
 
-    async def metadata(
-        self: Any, token: str, block: int
-    ) -> AsyncIterator[list[tuple[str, tuple[str, ...]]]]:
+    async def metadata(self: Any, token: str, block: int) -> AsyncIterator[list[V2PoolMetadata]]:
         selected = [
-            (pool.address, pool.pair)
+            V2PoolMetadata(pool.address, pool.pair)
             for pool in pools
             if token.lower() in pool.pair and pool._deploy_block <= block
         ]

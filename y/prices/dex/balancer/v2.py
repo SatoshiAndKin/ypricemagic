@@ -1,6 +1,7 @@
 from asyncio import Task, create_task
 from collections.abc import AsyncIterator, Awaitable, Callable, Sequence
 from contextlib import suppress
+from dataclasses import dataclass
 from decimal import Decimal
 from enum import IntEnum
 from logging import DEBUG, getLogger
@@ -98,6 +99,14 @@ class PoolSpecialization(IntEnum):
         ]
 
 
+@dataclass(frozen=True, slots=True)
+class BalancerV2PoolMetadata:
+    address: str
+    pool_id: bytes
+    specialization: int
+    created: int
+
+
 class BalancerV2Vault(ContractBase):
     def __init__(self, address: AnyAddressType, *, asynchronous: bool = False) -> None:
         """
@@ -119,6 +128,33 @@ class BalancerV2Vault(ContractBase):
         if not self._is_cached:
             # we need the contract cached so we can decode logs correctly
             self.contract
+
+    @stuck_coro_debugger
+    async def pool_metadata_batches(
+        self, block: Block
+    ) -> AsyncIterator[list[BalancerV2PoolMetadata]]:
+        """Read immutable registrations through this block without a live loader."""
+        from y.utils._factory_history import factory_log_batches
+        from y.utils.events import _decode_threads, decode_logs
+
+        start = await contracts.contract_creation_block_async(
+            self.address, when_no_history_return_0=True
+        )
+        if start > block:
+            return
+        topics = ["0x3c13bc30b8e878c53fd2a36b679409c073afd75950be43d8858768e956fbc20e"]
+        async for rows in factory_log_batches([self.address], topics, start, block):
+            decoded = await _decode_threads.run(decode_logs, rows)
+            yield [
+                BalancerV2PoolMetadata(
+                    str(event["poolAddress"]).lower(),
+                    bytes(HexBytes(event["poolId"])),
+                    int(event["specialization"]),
+                    int(getattr(event, "block_number")),
+                )
+                for event in decoded
+                if event["poolAddress"] not in MESSED_UP_POOLS
+            ]
 
     @stuck_coro_debugger
     async def pools(self, block: Block | None = None) -> AsyncIterator["BalancerV2Pool"]:

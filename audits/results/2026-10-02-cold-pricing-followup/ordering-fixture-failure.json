@@ -1,0 +1,32 @@
+{
+  "run": {
+    "command": [
+      "sh",
+      "-c",
+      "python -m pip install --no-deps --no-build-isolation -e . && python /runner/cold_state.py && mypy && python /runner/check_compiled.py"
+    ],
+    "docker_context": "colima-ypricemagic",
+    "builder": "ypricemagic-validation-55871f24db8c",
+    "complete": true,
+    "started_unix": 1790978477.158755,
+    "source_sha": "073c7ac801ca36128eb27efc64031851ab6f2101",
+    "source_revision": "worktree",
+    "source_archive_sha256": "0a91a5767e0c314b2666babf2fe5ab12218d667ca2c6a0d1b408c850fd7048c5",
+    "image": "sha256:96ec7aab0eb97e9928dedea70edbceeaf3e26e6a4babccc1729fe7f9c5a4c0db",
+    "exit_code": 1,
+    "oom_killed": false,
+    "missing_reports": [],
+    "below_memory_target": true,
+    "elapsed_seconds": 123.22240376472473
+  },
+  "pytest": {
+    "exit_code": 1,
+    "counts": {
+      "setup:passed": 232,
+      "call:passed": 230,
+      "teardown:passed": 232,
+      "call:failed": 2
+    },
+    "collected": 232
+  }
+}

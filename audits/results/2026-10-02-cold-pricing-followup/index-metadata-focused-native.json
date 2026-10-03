@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "python": "3.12",
+  "tests_passed": 413,
+  "mypy_source_files": 244,
+  "native_compiled_modules": {
+    "y._db.brownie": "/work/y/_db/brownie.cpython-312-aarch64-linux-gnu.so",
+    "y._db.config": "/work/y/_db/config.cpython-312-aarch64-linux-gnu.so",
+    "y._db.decorators": "/work/y/_db/decorators.cpython-312-aarch64-linux-gnu.so",
+    "y._db.utils.stringify": "/work/y/_db/utils/stringify.cpython-312-aarch64-linux-gnu.so",
+    "y.ENVIRONMENT_VARIABLES": "/work/y/ENVIRONMENT_VARIABLES.cpython-312-aarch64-linux-gnu.so",
+    "y.convert": "/work/y/convert.cpython-312-aarch64-linux-gnu.so",
+    "y.exceptions": "/work/y/exceptions.cpython-312-aarch64-linux-gnu.so",
+    "y.networks": "/work/y/networks.cpython-312-aarch64-linux-gnu.so",
+    "y.prices.utils.sense_check": "/work/y/prices/utils/sense_check.cpython-312-aarch64-linux-gnu.so",
+    "y.utils.gather": "/work/y/utils/gather.cpython-312-aarch64-linux-gnu.so"
+  },
+  "source_sha256": {
+    "y/_db/utils/logs.py": "6dc2ea24214434b550e1bd9c5f1b3f29488ec679f4e840c5b1b50bd04988ab7b",
+    "y/prices/dex/balancer/v2.py": "c63a84d41d95c5aadc9421055c5a65a0370e24ceb1890404df0fdc3588c8d825",
+    "y/prices/_rpc.py": "7c1fd469702c4bfc5fc7ce7a7f0051cd95ae29404dc18a912b5e90096e3f0fb2",
+    "y/prices/_markets.py": "bd6181e6497a428b697706e083d71774ff824f83efbe1088f417dc130f6793bf",
+    "y/prices/dex/uniswap/v2.py": "3e39b900a3385002e88c97303491147bc55acbf4f30cc23e715c35af0fe97e7c",
+    "y/prices/dex/uniswap/v3.py": "f81481fc401d2e4333b55f5617ba8d27067620ef370b4b2b76f36f05dc0f070d",
+    "y/prices/stable_swap/curve.py": "b9817d6b249b9e2bd0a19509d2ebb2ea966aef2c8c23a62ad38d918770c630eb",
+    "y/utils/_factory_history.py": "f430ed42616f1c9afd4417f8086a00a1b88d137444ce9da468d3581c3638e71d",
+    "y/utils/_log_ranges.py": "8b4a7ffdc72597ca01e62395b1b718a06d08d06c828893ff0a99bffc0902791b",
+    "y/utils/_pool_events.py": "30cdc60af6048f9e6980f556253c31272c2be8eb9dc22243f8485dfb23415e8d",
+    "tests/test_log_cache.py": "83e0f284a312fcc63261a467da3bde0eb4a5b08db407d6ca0bd8cc670fb770b7",
+    "tests/test_pool_event_metadata.py": "aeb1b12b7b2eb05a079904dda811d2bad744a95ffcfc61f101575fd60ba69271",
+    "tests/test_discovery_coverage_repairs.py": "485e95d617671db4b05c18c991956c8cb0e769aab1f63ab111c815f2e2f1051f",
+    "pyproject.toml": "ea53fd8b740557b4218f46dee1d5ab71212ae4406878b234e7ed2d38bc2b5be2"
+  },
+  "database_isolation": "separate auxiliary database, no parent test data",
+  "full_suite_boundary": "complete suite still running at preceding committed revision; final source requires complete native rerun"
+}

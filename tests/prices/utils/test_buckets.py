@@ -1,7 +1,7 @@
 from typing import cast
 
 import pytest
-from brownie import chain
+from brownie import web3
 
 from tests.fixtures import async_result, mainnet_only, mutate_address, mutate_contract
 from tests.prices.lending.test_aave import ATOKENS
@@ -28,9 +28,15 @@ async def test_check_bucket_aave(token: str) -> None:
     assert await check_bucket(token, sync=False) == "atoken"
 
 
+@pytest.fixture(scope="module")
+def finalized_feed_block() -> int:
+    """Keep the live comparison at one canonical block across both lookups."""
+    return int(web3.eth.get_block("finalized")["number"])
+
+
 @pytest.mark.parametrize("token", FEEDS)
 @pytest.mark.asyncio_cooperative
-async def test_check_bucket_chainlink(token: str) -> None:
+async def test_check_bucket_chainlink(token: str, finalized_feed_block: int) -> None:
     if await convert.to_address_async(token) in [
         stable for stable in STABLECOINS if not isinstance(stable, int)
     ]:
@@ -39,7 +45,7 @@ async def test_check_bucket_chainlink(token: str) -> None:
         pytest.skip(f"Not applicable to native token.")
     # FEEDS includes historical registry entries that may since have been removed.
     # Compare both lookups at one block rather than requiring a retired feed.
-    block = int(chain.height)
+    block = finalized_feed_block
     expected = (
         "chainlink feed"
         if await async_result(cast(Chainlink, chainlink).has_feed(token, block))

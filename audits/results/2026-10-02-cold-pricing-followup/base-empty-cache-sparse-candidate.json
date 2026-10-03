@@ -1,0 +1,50 @@
+{
+  "chain": "base",
+  "empty_cache": true,
+  "provider": "production Base provider",
+  "passed": true,
+  "startup_seconds": 33.43614166579209,
+  "healthy_within_600": true,
+  "shutdown_seconds": 0.5645383329829201,
+  "historical_usdc_amount": {
+    "status": 200,
+    "body": {
+      "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "price": 0.990993596876513,
+      "block": 24000000,
+      "chain": "base",
+      "block_timestamp": 1734789347,
+      "cached": false,
+      "trade_path": [
+        {
+          "token": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "price": 0.990993596876513,
+          "source": "Liquidity-based sale estimate"
+        },
+        {
+          "token": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "price": 0.990993596876513,
+          "source": "Velodrome V2 0x6cdcb1c4a4d1c3c6d054b27ac5b77e89eafb971d via getAmountsOut(uint256,(address,address,bool,address)[])"
+        },
+        {
+          "token": "0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+          "price": 1.6059661934262666,
+          "source": "Velodrome V2 0x7f670f78b17dec44d5ef68a48740b6f8849cc2e6 via getAmountsOut(uint256,(address,address,bool,address)[])"
+        },
+        {
+          "token": "0x4200000000000000000000000000000000000006",
+          "price": 3381.75140527,
+          "source": "Chainlink historical USD for 0x4200000000000000000000000000000000000006"
+        }
+      ]
+    },
+    "seconds": 247.899486084003,
+    "passed": true
+  },
+  "candidate": "original merged fork 073c7ac8 image with seven interpreted runtime overlays; not a production build",
+  "cleanup": {
+    "Status": "exited",
+    "OOMKilled": false,
+    "ExitCode": 0
+  }
+}

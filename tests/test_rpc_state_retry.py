@@ -327,3 +327,103 @@ async def test_compound_contract_fallback_retries_same_block(
     rpc.assert_awaited_once()
     assert fallback.await_args_list == [call(block_identifier=BLOCK.number)] * 2
     sleep.assert_awaited_once_with(0.5)
+
+
+@run_async_test
+async def test_transient_transport_timeout_retries_identical_canonical_read(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    rpc = AsyncMock(
+        side_effect=[
+            TimeoutError("temporary read timeout"),
+            HexBytes(encode(["uint256"], [123])),
+        ]
+    )
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(rpc))
+    sleep = AsyncMock()
+    monkeypatch.setattr(asyncio, "sleep", sleep)
+    assert await _rpc.read(TOKEN, "totalSupply()(uint256)", BLOCK) == 123
+    assert rpc.await_count == 2
+    assert rpc.await_args_list == [rpc.await_args_list[0]] * 2
+    assert rpc.await_args_list[0].kwargs["block_identifier"] == BLOCK.identifier
+    sleep.assert_awaited_once_with(0.25)
+
+
+@run_async_test
+async def test_persistent_transport_timeout_is_bounded_and_not_cached(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    error = TimeoutError("persistent read timeout")
+    rpc = AsyncMock(side_effect=error)
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(rpc))
+    cache: SharedCache[int] = SharedCache(8)
+    monkeypatch.setattr(_rpc, "state_cache", lambda: cache)
+    sleep = AsyncMock()
+    monkeypatch.setattr(asyncio, "sleep", sleep)
+    for _ in range(2):
+        with pytest.raises(TimeoutError) as raised:
+            await _rpc.state(TOKEN, "totalSupply()(uint256)", BLOCK)
+        assert raised.value is error
+    assert rpc.await_count == 4
+    assert sleep.await_args_list == [call(0.25)] * 2
+
+
+@run_async_test
+async def test_transport_retry_backoff_cancellation_never_starts_another_read(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    request = AsyncMock(side_effect=TimeoutError("read timeout"))
+    sleep = AsyncMock(side_effect=asyncio.CancelledError())
+    monkeypatch.setattr(asyncio, "sleep", sleep)
+    with pytest.raises(asyncio.CancelledError):
+        await _rpc._retry_state_read(request)
+    request.assert_awaited_once()
+    sleep.assert_awaited_once_with(0.25)
+
+
+@run_async_test
+async def test_outer_deadline_cancellation_is_not_a_transport_timeout() -> None:
+    calls = 0
+
+    async def request() -> None:
+        nonlocal calls
+        calls += 1
+        await asyncio.Event().wait()
+
+    with pytest.raises(TimeoutError):
+        async with asyncio.timeout(0.01):
+            await _rpc._retry_state_read(request)
+    assert calls == 1
+
+
+@run_async_test
+async def test_timeout_at_last_archive_attempt_propagates_original_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    timeout = TimeoutError("last read timeout")
+    request = AsyncMock(side_effect=[state_error()] * 9 + [timeout])
+    monkeypatch.setattr(asyncio, "sleep", AsyncMock())
+    with pytest.raises(TimeoutError) as raised:
+        await _rpc._retry_state_read(request)
+    assert raised.value is timeout
+    assert request.await_count == 10
+
+
+@run_async_test
+async def test_orphaned_canonical_hash_is_a_transient_uncached_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    error = ValueError({"code": -32000, "message": "hash is not currently canonical"})
+    rpc = AsyncMock(side_effect=error)
+    monkeypatch.setattr(_rpc, "dank_web3", native_rpc(rpc))
+    cache: SharedCache[int] = SharedCache(8)
+    monkeypatch.setattr(_rpc, "state_cache", lambda: cache)
+    sleep = AsyncMock()
+    monkeypatch.setattr(asyncio, "sleep", sleep)
+    for _ in range(2):
+        with pytest.raises(ConnectionError, match="no longer canonical") as raised:
+            await _rpc.state(TOKEN, "totalSupply()(uint256)", BLOCK)
+        assert raised.value.__cause__ is error
+    assert rpc.await_count == 2
+    assert all(c.kwargs["block_identifier"] == BLOCK.identifier for c in rpc.await_args_list)
+    sleep.assert_not_awaited()

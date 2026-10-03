@@ -1,0 +1,66 @@
+{
+  "scope": "Physical production host own copied diagnostic cache, failed 300-second quote; durations include shared semaphore and thread queueing and overlap. Not additive wall times.",
+  "components": {
+    "decimals()(uint8)": {
+      "count": 1,
+      "encode_seconds": 0.001772,
+      "transport_seconds": 0.025717,
+      "decode_seconds": 0.000832
+    },
+    "tryBlockAndAggregate(bool,(address,bytes)[])(uint256,uint256,(bool,bytes)[])": {
+      "count": 1560,
+      "encode_seconds": 84.90099499999994,
+      "transport_seconds": 1290.0216650000004,
+      "decode_seconds": 124.84541799999977
+    },
+    "getPoolTokens(bytes32)(address[],uint256[],uint256)": {
+      "count": 896,
+      "encode_seconds": 13.316499999999985,
+      "transport_seconds": 1625.2983600000018,
+      "decode_seconds": 31.590528000000017
+    }
+  },
+  "balancer_getter_source": "https://github.com/balancer/balancer-v2-monorepo/blob/master/pkg/vault/contracts/PoolTokens.sol",
+  "balance_batch_provider_probe": [
+    {
+      "getters": 1024,
+      "transport_seconds": 0.5768067589960992,
+      "decode_seconds": 0.008637977996841073,
+      "response_bytes": 163968,
+      "exact_prefix_match": true,
+      "positive": 986
+    },
+    {
+      "getters": 2048,
+      "transport_seconds": 0.6720998960081488,
+      "decode_seconds": 0.013497770065441728,
+      "response_bytes": 327808,
+      "exact_prefix_match": true,
+      "positive": 1941
+    },
+    {
+      "getters": 4096,
+      "transport_seconds": 2.0486836777999997,
+      "decode_seconds": 0.02841322380118072,
+      "response_bytes": 655488,
+      "exact_prefix_match": true,
+      "positive": 3613
+    },
+    {
+      "getters": 2048,
+      "transport_seconds": 1.2568756130058318,
+      "decode_seconds": 0.014283271040767431,
+      "response_bytes": 327808,
+      "exact_prefix_match": true,
+      "positive": 1941
+    },
+    {
+      "getters": 4096,
+      "transport_seconds": 0.6868284330703318,
+      "decode_seconds": 0.04183693090453744,
+      "response_bytes": 655488,
+      "exact_prefix_match": true,
+      "positive": 3613
+    }
+  ]
+}

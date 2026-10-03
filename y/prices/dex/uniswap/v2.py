@@ -2,8 +2,9 @@ import json
 import os
 import tempfile
 from asyncio import gather, sleep
-from collections.abc import AsyncIterator, Awaitable, Callable, Collection, Sequence
+from collections.abc import AsyncIterator, Awaitable, Callable, Collection, Iterable, Sequence
 from contextlib import suppress
+from dataclasses import dataclass
 from decimal import Decimal
 from functools import cached_property
 from itertools import islice
@@ -64,6 +65,16 @@ from y.utils.events import ProcessedEvents, indexed_pool_executor
 from y.utils.raw_calls import raw_call
 
 logger = getLogger(__name__)
+
+
+@dataclass(frozen=True)
+class V2PoolMetadata:
+    """Immutable values attested by the factory's pair creation event."""
+
+    address: str
+    tokens: tuple[str, str]
+    stable: bool | None = None
+
 
 _PoolTuple = list[Any]  # JSON row: [address, token0, token1, deploy_block | None]
 
@@ -841,7 +852,7 @@ class UniswapRouterV2(ContractBase):
     @stuck_coro_debugger
     async def pool_metadata_batches(
         self, token: Address, block: Block
-    ) -> AsyncIterator[list[tuple[str, tuple[str, str]]]]:
+    ) -> AsyncIterator[list[V2PoolMetadata]]:
         """Read immutable pair metadata in bounded batches without pool objects.
 
         Large wrapped-gas inventories contain mostly empty pairs. Quotes can
@@ -851,8 +862,10 @@ class UniswapRouterV2(ContractBase):
         from y._db.common import default_filter_threads
         from y._db.utils.logs import LogCache
         from y.contracts import contract_creation_block_async
+        from y.prices._rpc import _MAX_RESERVE_BATCH
         from y.utils._factory_history import factory_logs
-        from y.utils.events import _decode_threads, decode_logs
+        from y.utils._pool_events import decode_pool_logs, decode_pool_raws
+        from y.utils.events import _decode_threads
 
         token = await convert.to_address_async(token)
         # Registers the protocol-specific event ABI without starting a loader.
@@ -863,44 +876,63 @@ class UniswapRouterV2(ContractBase):
         topic = "0x" + token[2:].lower().zfill(64)
         seen: set[str] = set()
         chunk = indexed_chunk_size()
-        batch: list[tuple[str, tuple[str, str]]] = []
+        batch: list[V2PoolMetadata] = []
         for position in (1, 2):
             topics: list[str | list[str] | None] = [[reader.PairCreated]]
             topics.extend([None] * position)
             topics[position] = topic
             cache = LogCache([self.factory], topics)
-            covered = await default_filter_threads.run(cache.is_cached_thru, start)
-            cached_end = min(covered, block)
 
-            async def pages() -> AsyncIterator[list[Any]]:
-                if cached_end >= start:
-                    after: tuple[int, int, str] | None = None
-                    while rows := await default_filter_threads.run(
-                        cache.select_page, start, cached_end, after
-                    ):
-                        yield rows
-                        last = rows[-1]
-                        after = (
-                            int(last.blockNumber),
-                            int(last.logIndex),
-                            last.transactionHash.hex(),
-                        )
-                for first in range(max(start, cached_end + 1), block + 1, chunk):
+            async def pages() -> AsyncIterator[Iterable[Any]]:
+                first = start
+                while first <= block:
+                    covered = await default_filter_threads.run(cache.is_cached_thru, first)
+                    cached_end = min(covered, block)
+                    if cached_end >= first:
+                        after: tuple[int, int, str] | None = None
+                        if raw_page := getattr(cache, "select_raw_page", None):
+                            while True:
+                                raws, after = await default_filter_threads.run(
+                                    raw_page, first, cached_end, after, 4096
+                                )
+                                if not raws:
+                                    break
+                                yield await _decode_threads.run(decode_pool_raws, raws)
+                        else:
+                            while rows := await default_filter_threads.run(
+                                cache.select_page, first, cached_end, after, 4096
+                            ):
+                                yield await _decode_threads.run(decode_pool_logs, rows)
+                                last = rows[-1]
+                                after = (
+                                    int(last.blockNumber),
+                                    int(last.logIndex),
+                                    last.transactionHash.hex(),
+                                )
+                        first = cached_end + 1
+                        continue
                     last_block = min(first + chunk - 1, block)
-                    yield await factory_logs([self.factory], topics, first, last_block)
+                    rows = await factory_logs([self.factory], topics, first, last_block)
+                    yield await _decode_threads.run(decode_pool_logs, rows)
+                    first = last_block + 1
 
-            async for rows in pages():
-                decoded = await _decode_threads.run(decode_logs, rows)
-                del rows
+            async for decoded in pages():
                 for event in decoded:
                     pair = str(event["pair" if "pair" in event else "pool"]).lower()
                     if pair in seen:
                         continue
                     seen.add(pair)
                     batch.append(
-                        (pair, (str(event["token0"]).lower(), str(event["token1"]).lower()))
+                        V2PoolMetadata(
+                            pair,
+                            (
+                                str(event["token0"]).lower(),
+                                str(event["token1"]).lower(),
+                            ),
+                            bool(event["stable"]) if "stable" in event else None,
+                        )
                     )
-                    if len(batch) == 2048:
+                    if len(batch) == _MAX_RESERVE_BATCH:
                         yield batch
                         batch = []
                 del decoded

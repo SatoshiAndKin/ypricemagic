@@ -1,0 +1,299 @@
+{
+  "required_chains": [
+    "base"
+  ],
+  "live_chains": [
+    "base"
+  ],
+  "passed": true,
+  "results": [
+    {
+      "token": {
+        "name": "USDC",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "tolerance": 0.02,
+        "chain": "base",
+        "earliest_timestamp": 1692383789
+      },
+      "timestamp": 1692383863,
+      "ypm_price": 1.0,
+      "ref_price": 1.0,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.595160661963746
+    },
+    {
+      "token": {
+        "name": "USDC",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "tolerance": 0.02,
+        "chain": "base",
+        "earliest_timestamp": 1692383789
+      },
+      "timestamp": 1700159727,
+      "ypm_price": 1.0,
+      "ref_price": 1.0,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.4120568549260497
+    },
+    {
+      "token": {
+        "name": "USDC",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "tolerance": 0.02,
+        "chain": "base",
+        "earliest_timestamp": 1692383789
+      },
+      "timestamp": 1707935714,
+      "ypm_price": 1.0,
+      "ref_price": 1.0,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.6459425010252744
+    },
+    {
+      "token": {
+        "name": "USDC",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "tolerance": 0.02,
+        "chain": "base",
+        "earliest_timestamp": 1692383789
+      },
+      "timestamp": 1715711778,
+      "ypm_price": 1.0,
+      "ref_price": 1.0001503943569592,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.6214251650962979
+    },
+    {
+      "token": {
+        "name": "USDC",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "tolerance": 0.02,
+        "chain": "base",
+        "earliest_timestamp": 1692383789
+      },
+      "timestamp": 1723487761,
+      "ypm_price": 1.0,
+      "ref_price": 1.0,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.5161799979396164
+    },
+    {
+      "token": {
+        "name": "USDC",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "tolerance": 0.02,
+        "chain": "base",
+        "earliest_timestamp": 1692383789
+      },
+      "timestamp": 1731263776,
+      "ypm_price": 1.0,
+      "ref_price": 0.9998232280327911,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.5979680509772152
+    },
+    {
+      "token": {
+        "name": "USDC",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "tolerance": 0.02,
+        "chain": "base",
+        "earliest_timestamp": 1692383789
+      },
+      "timestamp": 1739039776,
+      "ypm_price": 1.0,
+      "ref_price": 1.0000003209846202,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.710452748928219
+    },
+    {
+      "token": {
+        "name": "USDC",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "tolerance": 0.02,
+        "chain": "base",
+        "earliest_timestamp": 1692383789
+      },
+      "timestamp": 1746815765,
+      "ypm_price": 1.0,
+      "ref_price": 0.999996,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.7614655368961394
+    },
+    {
+      "token": {
+        "name": "WETH",
+        "address": "0x4200000000000000000000000000000000000006",
+        "tolerance": 0.1,
+        "chain": "base",
+        "earliest_timestamp": 0
+      },
+      "timestamp": 1692383870,
+      "ypm_price": 1656.04838762,
+      "ref_price": 1658.29,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 0.6247701498214155
+    },
+    {
+      "token": {
+        "name": "WETH",
+        "address": "0x4200000000000000000000000000000000000006",
+        "tolerance": 0.1,
+        "chain": "base",
+        "earliest_timestamp": 0
+      },
+      "timestamp": 1700159727,
+      "ypm_price": 1987.1,
+      "ref_price": 1975.58,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 0.3018917250446975
+    },
+    {
+      "token": {
+        "name": "WETH",
+        "address": "0x4200000000000000000000000000000000000006",
+        "tolerance": 0.1,
+        "chain": "base",
+        "earliest_timestamp": 0
+      },
+      "timestamp": 1707935727,
+      "ypm_price": 2741.0053,
+      "ref_price": 2731.81,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.7289765689056367
+    },
+    {
+      "token": {
+        "name": "WETH",
+        "address": "0x4200000000000000000000000000000000000006",
+        "tolerance": 0.1,
+        "chain": "base",
+        "earliest_timestamp": 0
+      },
+      "timestamp": 1715711780,
+      "ypm_price": 2878.03989202,
+      "ref_price": 2880.23,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.8252794139552861
+    },
+    {
+      "token": {
+        "name": "WETH",
+        "address": "0x4200000000000000000000000000000000000006",
+        "tolerance": 0.1,
+        "chain": "base",
+        "earliest_timestamp": 0
+      },
+      "timestamp": 1723489127,
+      "ypm_price": 2633.83570569,
+      "ref_price": 2634.95,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.6839225909207016
+    },
+    {
+      "token": {
+        "name": "WETH",
+        "address": "0x4200000000000000000000000000000000000006",
+        "tolerance": 0.1,
+        "chain": "base",
+        "earliest_timestamp": 0
+      },
+      "timestamp": 1731263822,
+      "ypm_price": 3243.5718,
+      "ref_price": 3232.37,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 2.0265811709687114
+    },
+    {
+      "token": {
+        "name": "WETH",
+        "address": "0x4200000000000000000000000000000000000006",
+        "tolerance": 0.1,
+        "chain": "base",
+        "earliest_timestamp": 0
+      },
+      "timestamp": 1739039799,
+      "ypm_price": 2629.54,
+      "ref_price": 2636.1175141324475,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.9561620359309018
+    },
+    {
+      "token": {
+        "name": "WETH",
+        "address": "0x4200000000000000000000000000000000000006",
+        "tolerance": 0.1,
+        "chain": "base",
+        "earliest_timestamp": 0
+      },
+      "timestamp": 1746815788,
+      "ypm_price": 2339.05122285,
+      "ref_price": 2336.2501813071235,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 1.9688668160233647
+    },
+    {
+      "token": {
+        "name": "USDC",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "tolerance": 0.02,
+        "chain": "base",
+        "earliest_timestamp": 1692383789
+      },
+      "timestamp": 1791024841,
+      "ypm_price": 1.0,
+      "ref_price": 0.9999889366794119,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 0.08624200313352048
+    },
+    {
+      "token": {
+        "name": "WETH",
+        "address": "0x4200000000000000000000000000000000000006",
+        "tolerance": 0.1,
+        "chain": "base",
+        "earliest_timestamp": 0
+      },
+      "timestamp": 1791024841,
+      "ypm_price": 2682.90669795,
+      "ref_price": 2682.7057431026337,
+      "ypm_error": null,
+      "ref_error": null,
+      "passed": true,
+      "ypm_seconds": 0.28836382599547505
+    }
+  ]
+}

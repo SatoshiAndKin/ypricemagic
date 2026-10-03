@@ -1,0 +1,41 @@
+{
+  "scope": "latest-source focused native Python 3.12, auxiliary database isolated from full suite",
+  "passed": true,
+  "tests_passed": 401,
+  "seconds": 6.75,
+  "mypy_files": 242,
+  "compiled_modules": {
+    "y._db.brownie": "/tmp/ypm-full4-controls/y/_db/brownie.cpython-312-aarch64-linux-gnu.so",
+    "y._db.config": "/tmp/ypm-full4-controls/y/_db/config.cpython-312-aarch64-linux-gnu.so",
+    "y._db.decorators": "/tmp/ypm-full4-controls/y/_db/decorators.cpython-312-aarch64-linux-gnu.so",
+    "y._db.utils.stringify": "/tmp/ypm-full4-controls/y/_db/utils/stringify.cpython-312-aarch64-linux-gnu.so",
+    "y.ENVIRONMENT_VARIABLES": "/tmp/ypm-full4-controls/y/ENVIRONMENT_VARIABLES.cpython-312-aarch64-linux-gnu.so",
+    "y.convert": "/tmp/ypm-full4-controls/y/convert.cpython-312-aarch64-linux-gnu.so",
+    "y.exceptions": "/tmp/ypm-full4-controls/y/exceptions.cpython-312-aarch64-linux-gnu.so",
+    "y.networks": "/tmp/ypm-full4-controls/y/networks.cpython-312-aarch64-linux-gnu.so",
+    "y.prices.utils.sense_check": "/tmp/ypm-full4-controls/y/prices/utils/sense_check.cpython-312-aarch64-linux-gnu.so",
+    "y.utils.gather": "/tmp/ypm-full4-controls/y/utils/gather.cpython-312-aarch64-linux-gnu.so"
+  },
+  "source_hashes": {
+    "pyproject.toml": "53283c565a279f9c1471650ce357c40e2bff356dfe1f02ab819ad0cf9bbecccb",
+    "tests/prices/stable_swap/test_factory_loading.py": "1f507d0925cce3f0694e5035eecb95bcd04960ba06783aa8683ebe4caace5780",
+    "tests/test_curve_inventory_loading.py": "6d37505f23588a0f907acf4cd892582c1b6ec582aec4bbdb7f2302c70cddfa73",
+    "tests/test_discovery_coverage_repairs.py": "485e95d617671db4b05c18c991956c8cb0e769aab1f63ab111c815f2e2f1051f",
+    "tests/test_indexed_pool_discovery.py": "ad2a975279df7faaebf70b80b115f5b39022041c37edfb86dc7acde28f085336",
+    "tests/test_log_cache.py": "fc5277a146f5b01d16d881c0d14b44232e4c11775281c48d8f873ab41acfbbdf",
+    "tests/test_quote_repairs.py": "458811fdf2d9cad12f98bb52b48c485a5f0b1ac9d52349cf938f3ca91c5d1d8d",
+    "y/_db/utils/logs.py": "ed4502aa0fe6b9f069991e885c28375f1435b4d8fbd6d580822ca12e8ea0371a",
+    "y/prices/_markets.py": "bd6181e6497a428b697706e083d71774ff824f83efbe1088f417dc130f6793bf",
+    "y/prices/_rpc.py": "7c1fd469702c4bfc5fc7ce7a7f0051cd95ae29404dc18a912b5e90096e3f0fb2",
+    "y/prices/dex/balancer/v2.py": "c63a84d41d95c5aadc9421055c5a65a0370e24ceb1890404df0fdc3588c8d825",
+    "y/prices/dex/uniswap/v2.py": "d69c50c24f4613cffd350cd01788dda5d1b7c94f1b30360e6787a2f0b5638537",
+    "y/prices/dex/uniswap/v3.py": "b260950d369e542179b950630b5a6195feabf44d702ca68a7c9197385f5958f3",
+    "y/prices/stable_swap/curve.py": "b9817d6b249b9e2bd0a19509d2ebb2ea966aef2c8c23a62ad38d918770c630eb",
+    "y/utils/_factory_history.py": "f430ed42616f1c9afd4417f8086a00a1b88d137444ce9da468d3581c3638e71d",
+    "y/utils/_log_ranges.py": "8b4a7ffdc72597ca01e62395b1b718a06d08d06c828893ff0a99bffc0902791b"
+  },
+  "full_suite_passed": false,
+  "production_acceptance_passed": false,
+  "source_base_commit": "c196667708e61e8c3a7a2789f4b717123c3eadca",
+  "provider": "existing production Ethereum web3-proxy host, Fastest request mode, unchanged canonical block requirements"
+}

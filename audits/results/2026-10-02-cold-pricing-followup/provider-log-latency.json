@@ -1,0 +1,72 @@
+{
+  "chain": "ethereum",
+  "from_block": 26097512,
+  "to_block": 26107511,
+  "range_blocks": 10000,
+  "identical_events": true,
+  "samples": [
+    {
+      "provider": "proxy",
+      "sample": 0,
+      "seconds": 0.6076097120021586,
+      "events": 24,
+      "result_sha256": "31d9b938b1353abf8c738b4d3d5626547919d283ac045ce6c8766fe85bf90b28"
+    },
+    {
+      "provider": "proxy",
+      "sample": 1,
+      "seconds": 0.5103519359981874,
+      "events": 24,
+      "result_sha256": "31d9b938b1353abf8c738b4d3d5626547919d283ac045ce6c8766fe85bf90b28"
+    },
+    {
+      "provider": "proxy",
+      "sample": 2,
+      "seconds": 0.47793292500136886,
+      "events": 24,
+      "result_sha256": "31d9b938b1353abf8c738b4d3d5626547919d283ac045ce6c8766fe85bf90b28"
+    },
+    {
+      "provider": "geth",
+      "sample": 0,
+      "seconds": 0.09393987899966305,
+      "events": 24,
+      "result_sha256": "31d9b938b1353abf8c738b4d3d5626547919d283ac045ce6c8766fe85bf90b28"
+    },
+    {
+      "provider": "geth",
+      "sample": 1,
+      "seconds": 0.0019263799986219965,
+      "events": 24,
+      "result_sha256": "31d9b938b1353abf8c738b4d3d5626547919d283ac045ce6c8766fe85bf90b28"
+    },
+    {
+      "provider": "geth",
+      "sample": 2,
+      "seconds": 0.0017136909991677385,
+      "events": 24,
+      "result_sha256": "31d9b938b1353abf8c738b4d3d5626547919d283ac045ce6c8766fe85bf90b28"
+    },
+    {
+      "provider": "reth",
+      "sample": 0,
+      "seconds": 0.508907907998946,
+      "events": 24,
+      "result_sha256": "31d9b938b1353abf8c738b4d3d5626547919d283ac045ce6c8766fe85bf90b28"
+    },
+    {
+      "provider": "reth",
+      "sample": 1,
+      "seconds": 0.5173158769975998,
+      "events": 24,
+      "result_sha256": "31d9b938b1353abf8c738b4d3d5626547919d283ac045ce6c8766fe85bf90b28"
+    },
+    {
+      "provider": "reth",
+      "sample": 2,
+      "seconds": 0.5217116789972351,
+      "events": 24,
+      "result_sha256": "31d9b938b1353abf8c738b4d3d5626547919d283ac045ce6c8766fe85bf90b28"
+    }
+  ]
+}

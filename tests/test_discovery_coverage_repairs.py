@@ -323,3 +323,212 @@ async def test_factory_scan_only_publishes_completed_ranges(
         assert rpc.await_count == 1
     assert coverage == ([(10, 20)] if failure == "empty" else [])
     assert not history.scans().flights
+
+
+@run_async_test
+@pytest.mark.parametrize("cancel", [False, True])
+async def test_factory_window_failure_retains_prior_coverage_and_restarts_missing_only(
+    monkeypatch: pytest.MonkeyPatch, cancel: bool
+) -> None:
+    import asyncio
+
+    from dank_mids import brownie_patch
+
+    from tests.test_pricing_correctness import Ready
+    from y._db.log_coverage import completed_thru
+    from y.utils import _factory_history as history
+    from y.utils import _log_ranges
+
+    coverage: list[tuple[int, int]] = []
+    requested: list[tuple[int, int]] = []
+    entered = asyncio.Event()
+    failing = True
+
+    class Cache:
+        def __init__(self, *args: object) -> None:
+            pass
+
+        def is_cached_thru(self, start: int) -> int:
+            return completed_thru(start, coverage)
+
+        def set_metadata(self, start: int, end: int) -> None:
+            coverage.append((start, end))
+
+        def select(self, start: int, end: int) -> list[object]:
+            return []
+
+    async def run(function: Any, *args: Any) -> Any:
+        return function(*args)
+
+    async def fetch(addresses: Any, topics: Any, start: int, end: int) -> list[Any]:
+        requested.append((start, end))
+        if failing and start > 80:
+            entered.set()
+            if cancel:
+                await asyncio.Event().wait()
+            raise ConnectionError("second window unavailable")
+        return []
+
+    history.scans.cache_clear()
+    monkeypatch.setattr(brownie_patch, "dank_eth", SimpleNamespace(block_number=Ready(160)))
+    monkeypatch.setattr(history, "LogCache", Cache)
+    monkeypatch.setattr(history, "default_filter_threads", SimpleNamespace(run=run))
+    monkeypatch.setattr(history, "adaptive_logs", fetch)
+    monkeypatch.setattr(history, "bulk_insert", AsyncMock())
+    monkeypatch.setattr(_log_ranges, "indexed_chunk_size", lambda: 10)
+    monkeypatch.setattr(_log_ranges, "sparse_chunk_ceiling", lambda: 10)
+    task = asyncio.create_task(history.factory_logs(FACTORY, [TOPIC, TOKEN], 1, 160))
+    await entered.wait()
+    if cancel:
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+    else:
+        with pytest.raises(ConnectionError, match="second window unavailable"):
+            await task
+    assert completed_thru(1, coverage) == 80
+    assert not history.scans().flights
+    failing = False
+    requested.clear()
+    assert await history.factory_logs(FACTORY, [TOPIC, TOKEN], 1, 160) == []
+    assert requested and all(start > 80 for start, _ in requested)
+    assert completed_thru(1, coverage) == 160
+
+
+@run_async_test
+@pytest.mark.parametrize(
+    "event_counts,ceiling,slow_seconds,expected,third",
+    [
+        ((0, 0, 0), 40, 0, 20, 40),
+        ((1025, 1025, 1025), 40, 0, 20, 40),
+        ((4096, 4096, 4096), 40, 0, 20, 40),
+        ((4097, 4097, 4097), 40, 0, 10, 10),
+        ((8192, 8192, 8192), 40, 0, 10, 10),
+        ((0, 8193, 0), 40, 0, 20, 10),
+        ((0, 0, 0), 10, 0, 10, 10),
+        ((8193, 8193, 8193), 40, 0, 10, 10),
+        ((0, 0, 0), 40, 6, 20, 20),
+        ((0, 0, 0), 40, 11, 20, 10),
+    ],
+)
+async def test_factory_windows_grow_after_sparse_success_and_bound_dense_history(
+    monkeypatch: Any,
+    event_counts: tuple[int, int, int],
+    ceiling: int,
+    slow_seconds: float,
+    expected: int,
+    third: int,
+) -> None:
+    from dank_mids import brownie_patch
+
+    from tests.test_pricing_correctness import Ready
+    from y._db.log_coverage import completed_thru
+    from y.utils import _factory_history as history
+    from y.utils import _log_ranges
+
+    ranges: list[tuple[int, int]] = []
+    coverage: list[tuple[int, int]] = []
+    clock = [0.0]
+
+    class Cache:
+        def __init__(self, *args: Any) -> None:
+            pass
+
+        def is_cached_thru(self, start: int) -> int:
+            return completed_thru(start, coverage)
+
+        def set_metadata(self, start: int, end: int) -> None:
+            coverage.append((start, end))
+
+        def select(self, start: int, end: int) -> list[Any]:
+            return []
+
+    async def run(function: Any, *args: Any) -> Any:
+        return function(*args)
+
+    async def fetch(addresses: Any, topics: Any, start: int, end: int) -> list[Any]:
+        ranges.append((start, end))
+        if len(ranges) > 8:
+            clock[0] += slow_seconds
+        return [SimpleNamespace()] * event_counts[min((len(ranges) - 1) // 8, 2)]
+
+    history.scans.cache_clear()
+    monkeypatch.setattr(history, "monotonic", lambda: clock[0], raising=False)
+    monkeypatch.setattr(brownie_patch, "dank_eth", SimpleNamespace(block_number=Ready(10000)))
+    monkeypatch.setattr(history, "LogCache", Cache)
+    monkeypatch.setattr(history, "default_filter_threads", SimpleNamespace(run=run))
+    monkeypatch.setattr(history, "adaptive_logs", fetch)
+    monkeypatch.setattr(history, "bulk_insert", AsyncMock())
+    monkeypatch.setattr(_log_ranges, "indexed_chunk_size", lambda: 10)
+    monkeypatch.setattr(_log_ranges, "sparse_chunk_ceiling", lambda: ceiling, raising=False)
+    assert await history.factory_logs(FACTORY, [TOPIC], 1, 10) == []
+    assert max(last - first + 1 for first, last in ranges) == 10
+    first_count = len(ranges)
+    assert first_count == 8
+    assert completed_thru(1, coverage) == 80
+    assert await history.factory_logs(FACTORY, [TOPIC], 81, 90) == []
+    assert max(last - first + 1 for first, last in ranges[first_count:]) == expected
+    assert len(ranges) - first_count <= 8
+    second_count = len(ranges)
+    next_start = completed_thru(1, coverage) + 1
+    assert await history.factory_logs(FACTORY, [TOPIC], next_start, next_start + 9) == []
+    assert max(last - first + 1 for first, last in ranges[second_count:]) == third
+    assert len(ranges) - second_count <= 8
+
+
+@run_async_test
+@pytest.mark.parametrize("cached,empty", [(True, False), (False, False), (True, True)])
+async def test_factory_event_batches_are_bounded_and_reuse_completed_history(
+    monkeypatch: pytest.MonkeyPatch, cached: bool, empty: bool
+) -> None:
+    from y.utils import _factory_history as history
+
+    rows = (
+        []
+        if empty
+        else [
+            SimpleNamespace(
+                blockNumber=10 + index // 1000,
+                logIndex=index,
+                transactionHash=SimpleNamespace(hex=lambda: "0x" + "aa" * 32),
+            )
+            for index in range(8201)
+        ]
+    )
+    reads: list[Any] = []
+    fetches: list[Any] = []
+
+    class Cache:
+        def __init__(self, addresses: Any, topics: Any) -> None:
+            assert addresses == [FACTORY] and topics == [TOPIC]
+
+        def is_cached_thru(self, first: int) -> int:
+            return 20 if cached else 0
+
+        def select_page(self, first: int, last: int, after: Any, limit: int) -> list[Any]:
+            reads.append((first, last, limit))
+            assert last == 20 and limit == 4096
+            index = after[1] + 1 if after else 0
+            return rows[index : index + limit]
+
+    async def run(function: Any, *args: Any) -> Any:
+        return function(*args)
+
+    async def fetch(addresses: Any, topics: Any, first: int, last: int) -> list[Any]:
+        fetches.append((addresses, topics, first, last))
+        assert last == 20
+        return rows
+
+    monkeypatch.setattr(history, "LogCache", Cache)
+    monkeypatch.setattr(history, "default_filter_threads", SimpleNamespace(run=run))
+    monkeypatch.setattr(history, "factory_logs", fetch)
+    batches = [batch async for batch in history.factory_log_batches([FACTORY], [TOPIC], 10, 20)]
+    assert [row for batch in batches for row in batch] == rows
+    assert all(len(batch) <= 4096 for batch in batches)
+    if cached:
+        assert fetches == []
+        assert len(reads) == (1 if empty else 4)
+        assert all(len(batch) <= 4096 for batch in batches)
+    else:
+        assert reads == []
+        assert fetches == [([FACTORY], [TOPIC], 10, 20)]

@@ -17,7 +17,7 @@ from tests.fixtures import async_result
 from tests.rpc_fixtures import native_rpc, quote_read
 from tests.test_amount_quotes import BLOCK, CHILD, TOKEN, USD, graph, market
 from tests.test_pricing_correctness import Ready, instance, run_async_test
-from y import constants
+from y import constants, contracts
 from y.contracts import Contract
 from y.datatypes import AnyAddressType, QuoteAsset
 from y.exceptions import ContractNotVerified, yPriceMagicError
@@ -36,7 +36,10 @@ USDC_CASES = [
 
 
 @run_async_test
-async def test_historical_v2_discovery_uses_known_deployment_boundaries(monkeypatch: Any) -> None:
+@pytest.mark.parametrize("protocol", ["Uniswap V2", "Solidly", "Velodrome V2"])
+async def test_historical_v2_discovery_uses_known_deployment_boundaries(
+    monkeypatch: Any, protocol: str
+) -> None:
     from y.classes.common import ERC20
     from y.prices.dex.uniswap import uniswap_multiplexer, v2
 
@@ -50,7 +53,15 @@ async def test_historical_v2_discovery_uses_known_deployment_boundaries(monkeypa
         )
         for i, created in enumerate((BLOCK.number - 1, BLOCK.number, BLOCK.number + 1, None))
     ]
-    router = instance(v2.UniswapRouterV2)
+    from y.prices.dex.solidly import SolidlyRouter
+    from y.prices.dex.velodrome import VelodromeRouterV2
+
+    router_type: Any = {
+        "Uniswap V2": v2.UniswapRouterV2,
+        "Solidly": SolidlyRouter,
+        "Velodrome V2": VelodromeRouterV2,
+    }[protocol]
+    router = instance(router_type)
     router.address, router.factory, router.pools = CHILD, USD, pools
     router._supports_factory_helper = False
     monkeypatch.setattr(uniswap_multiplexer, "v2_routers", {"test": router})
@@ -71,7 +82,9 @@ async def test_historical_v2_discovery_uses_known_deployment_boundaries(monkeypa
 
     async def metadata(self: Any, token: Any, block: int) -> AsyncIterator[Any]:
         assert block == BLOCK.number
-        yield [(pair, (TOKEN, USD)) for pair in eligible]
+        yield [
+            v2.V2PoolMetadata(pair, (TOKEN, USD), bool(i % 2)) for i, pair in enumerate(eligible)
+        ]
 
     monkeypatch.setattr(v2.UniswapRouterV2, "pool_metadata_batches", metadata)
     batch = AsyncMock(return_value=tuple((2000000, 3000000, 0) for _ in eligible))
@@ -79,6 +92,10 @@ async def test_historical_v2_discovery_uses_known_deployment_boundaries(monkeypa
     result = await _markets.discover(TOKEN, BLOCK)
     assert [item.pool for item in result] == eligible
     assert all(item.balances == (2000000, 3000000) for item in result)
+    assert all(item.protocol == protocol for item in result)
+    assert [item.stable for item in result] == (
+        [False, False, False] if protocol == "Uniswap V2" else [False, True, False]
+    )
     assert deployed.await_args_list == [call(USD, BLOCK)]
     batch.assert_awaited_once_with(tuple(eligible), BLOCK)
     reserves.assert_not_called()
@@ -108,7 +125,8 @@ async def test_undeployed_factories_do_not_load_pool_indexes(monkeypatch: Any, e
     if error:
         with pytest.raises(RuntimeError, match="RPC unavailable"):
             await _markets.discover(TOKEN, BLOCK)
-        deployed.assert_awaited_once_with(TOKEN, BLOCK)
+        deployed.assert_has_awaits([call(TOKEN, BLOCK), call(CHILD, BLOCK)], any_order=True)
+        assert deployed.await_count == 2
     else:
         assert await _markets.discover(TOKEN, BLOCK) == ()
         assert deployed.await_args_list == [call(TOKEN, BLOCK), call(CHILD, BLOCK)]
@@ -592,16 +610,19 @@ async def test_redemption_candidates_close_and_isolate_state(
                 outputs: tuple[QuoteAsset, ...] = (QuoteAsset(CHILD, 1000000, 6),)
                 if index == 1 or outcome == "exhausted":
                     outputs += (QuoteAsset(dead, 1000000, 6),)
-                yield QuoteStep(
-                    "redemption",
-                    "LP",
-                    f"exit-{index}",
-                    asset,
-                    outputs,
-                    "withdraw",
-                    "included",
-                    "unverified",
-                ), (f"changed-{index}",)
+                yield (
+                    QuoteStep(
+                        "redemption",
+                        "LP",
+                        f"exit-{index}",
+                        asset,
+                        outputs,
+                        "withdraw",
+                        "included",
+                        "unverified",
+                    ),
+                    (f"changed-{index}",),
+                )
         finally:
             closed.append(True)
 
@@ -820,3 +841,353 @@ async def test_empty_swap_output_metadata_is_unavailable(monkeypatch: Any) -> No
 
     monkeypatch.setattr(_markets, "read", read)
     assert await _markets.swap(market("pool"), QuoteAsset(TOKEN, 1000000, 6), USD, BLOCK) is None
+
+
+@run_async_test
+@pytest.mark.parametrize("slipstream", [False, True])
+@pytest.mark.parametrize(
+    "mode,failure",
+    [
+        ("active", None),
+        ("active", TimeoutError("active companion timeout")),
+        ("active", asyncio.CancelledError()),
+        ("empty", None),
+        ("undeployed", None),
+    ],
+)
+async def test_compact_v3_discovery_reads_companion_balances_only_for_live_funded_inputs(
+    monkeypatch: Any, slipstream: bool, mode: str, failure: BaseException | None
+) -> None:
+    from y.prices.dex.uniswap import uniswap_multiplexer, v3
+
+    holders = [f"0x{0xF100+i:040x}" for i in range(6)]
+    inputs = dict(zip(holders, (0, None, 5, 9, 10, 11)))
+    if mode == "empty":
+        inputs = dict.fromkeys(holders, 0)
+    companions = {holders[3]: 0, holders[4]: None, holders[5]: 27}
+    pools = [
+        v3.V3PoolMetadata(
+            holder,
+            *((USD, TOKEN) if i % 2 else (TOKEN, USD)),
+            0 if slipstream else 3000,
+            60,
+            slipstream,
+        )
+        for i, holder in enumerate(holders)
+    ]
+    router = instance(v3.UniswapV3)
+    router._factory, router._quoter = USD, CHILD
+
+    async def metadata(self: Any, token: Any, block: int) -> AsyncIterator[Any]:
+        assert token.lower() == TOKEN and block == BLOCK.number
+        yield pools
+
+    monkeypatch.setattr(v3.UniswapV3, "pool_metadata_batches", metadata)
+    monkeypatch.setattr(uniswap_multiplexer, "v2_routers", {})
+    monkeypatch.setattr(uniswap_multiplexer, "v1", None)
+    monkeypatch.setattr(uniswap_multiplexer, "v3", router)
+    monkeypatch.setattr(uniswap_multiplexer, "v3_forks", [])
+    monkeypatch.setattr(
+        importlib.import_module("y.prices.dex.balancer"),
+        "balancer_multiplexer",
+        SimpleNamespace(__v1__=Ready(None), __v2__=Ready(None)),
+    )
+    monkeypatch.setattr(importlib.import_module("y.prices.stable_swap.curve"), "curve", None)
+    monkeypatch.setattr(_markets, "deployed", AsyncMock(return_value=True))
+    reads = []
+
+    async def balances(requests: tuple[tuple[str, str], ...], block: BlockRef) -> tuple[Any, ...]:
+        assert block is BLOCK
+        values = []
+        for target, holder in requests:
+            reads.append((target, holder))
+            if target == TOKEN:
+                values.append(inputs[holder])
+            else:
+                assert holder in companions, "read companion of empty or undeployed pool"
+                if failure is not None:
+                    raise failure
+                values.append(companions[holder])
+        return tuple(values)
+
+    codes = AsyncMock(
+        side_effect=lambda addresses, block: tuple(
+            mode != "undeployed" and holder != holders[2] for holder in addresses
+        )
+    )
+    monkeypatch.setattr(_markets, "deployed_batch", codes)
+    monkeypatch.setattr(_markets, "balances_batch", balances)
+    if failure is not None:
+        with pytest.raises(type(failure)) as raised:
+            await _markets.discover(TOKEN, BLOCK)
+        assert raised.value is failure
+        return
+    markets = await _markets.discover(TOKEN, BLOCK)
+    if mode != "active":
+        assert markets == ()
+        assert reads == [(TOKEN, holder) for holder in holders]
+        if mode == "empty":
+            codes.assert_not_awaited()
+        else:
+            codes.assert_awaited_once_with(tuple(holders[2:]), BLOCK)
+        return
+    assert [market.pool for market in markets] == [holders[5], holders[3]]
+    assert [market.balances for market in markets] == [(27, 11), (0, 9)]
+    assert all(
+        market.protocol == ("Slipstream" if slipstream else "Uniswap V3") for market in markets
+    )
+    assert codes.await_args_list == [call(tuple(holders[2:]), BLOCK)]
+    assert reads == [(TOKEN, holder) for holder in holders] + [
+        (USD, holder) for holder in holders[3:]
+    ]
+
+
+@run_async_test
+@pytest.mark.parametrize("outcome", ["success", "failure", "cancellation"])
+async def test_independent_factory_discovery_overlaps_and_drains_owned_work(
+    monkeypatch: Any, outcome: str
+) -> None:
+    from y import convert
+    from y.prices.dex.uniswap import uniswap_multiplexer
+
+    entered_v2, entered_v3, closed_v3 = asyncio.Event(), asyncio.Event(), asyncio.Event()
+    entered_curve, entered_balancer = asyncio.Event(), asyncio.Event()
+    closed_curve, closed_balancer = asyncio.Event(), asyncio.Event()
+    curve_pool, balancer_pool = f"0x{0xD202:040x}", f"0x{0xD203:040x}"
+    pair = SimpleNamespace(
+        address=f"0x{0xD200:040x}",
+        _deploy_block=BLOCK.number - 1,
+        __tokens__=Ready((TOKEN, USD)),
+    )
+    concentrated = SimpleNamespace(address=f"0x{0xD201:040x}", token0=TOKEN, token1=USD, fee=3000)
+
+    async def pairs(*args: Any, **kwargs: Any) -> list[Any]:
+        entered_v2.set()
+        await entered_v3.wait()
+        await entered_curve.wait()
+        await entered_balancer.wait()
+        if outcome == "failure":
+            raise ConnectionError("factory discovery failed")
+        if outcome == "cancellation":
+            await asyncio.Future()
+        return [pair]
+
+    async def concentrated_pools(*args: Any) -> AsyncIterator[Any]:
+        entered_v3.set()
+        try:
+            await entered_v2.wait()
+            if outcome != "success":
+                await asyncio.Future()
+            yield concentrated
+        finally:
+            closed_v3.set()
+
+    async def curve_index() -> dict[str, list[str]]:
+        entered_curve.set()
+        try:
+            await entered_v2.wait()
+            if outcome != "success":
+                await asyncio.Future()
+            return {convert.to_address(TOKEN): [curve_pool]}
+        finally:
+            closed_curve.set()
+
+    async def balancer_pools(*args: Any, **kwargs: Any) -> AsyncIterator[Any]:
+        assert kwargs == {"block": BLOCK.number}
+        entered_balancer.set()
+        try:
+            await entered_v2.wait()
+            if outcome != "success":
+                await asyncio.Future()
+            yield SimpleNamespace(address=balancer_pool, __id__=Ready(bytes(32)))
+        finally:
+            closed_balancer.set()
+
+    monkeypatch.setattr(
+        uniswap_multiplexer,
+        "v2_routers",
+        {"controlled": SimpleNamespace(address=CHILD, factory=USD, get_pools_for=pairs)},
+    )
+    monkeypatch.setattr(
+        uniswap_multiplexer,
+        "v3",
+        SimpleNamespace(_factory=CHILD, _quoter=USD, pools_for_token=concentrated_pools),
+    )
+    monkeypatch.setattr(uniswap_multiplexer, "v3_forks", [])
+    monkeypatch.setattr(uniswap_multiplexer, "v1", None)
+    monkeypatch.setattr(
+        importlib.import_module("y.prices.dex.balancer"),
+        "balancer_multiplexer",
+        SimpleNamespace(
+            __v1__=Ready(None),
+            __v2__=Ready(
+                SimpleNamespace(vaults=[SimpleNamespace(address=USD, pools=balancer_pools)])
+            ),
+        ),
+    )
+    monkeypatch.setattr(
+        importlib.import_module("y.prices.stable_swap.curve"),
+        "curve",
+        SimpleNamespace(__coin_to_pools__=curve_index()),
+    )
+    monkeypatch.setattr(_markets, "deployed", AsyncMock(return_value=True))
+    monkeypatch.setattr(
+        _markets,
+        "curve_pool_state",
+        AsyncMock(
+            return_value=_markets.Market("Curve", curve_pool, (TOKEN, USD), (6_000_000, 7_000_000))
+        ),
+    )
+
+    async def state(target: str, signature: str, block: BlockRef, *args: Any) -> Any:
+        assert block == BLOCK
+        if signature.startswith("getReserves"):
+            assert target == pair.address
+            return (2_000_000, 3_000_000, 0)
+        if signature.startswith("getPoolTokens"):
+            assert target == USD and args == (bytes(32),)
+            return (TOKEN, USD), (8_000_000, 9_000_000), BLOCK.number
+        assert signature == "balanceOf(address)(uint256)"
+        assert args == (concentrated.address,)
+        return 4_000_000 if target == TOKEN else 5_000_000
+
+    monkeypatch.setattr(_markets, "state", state)
+    task = asyncio.create_task(_markets.discover(TOKEN, BLOCK))
+    try:
+        if outcome == "cancellation":
+            await asyncio.wait_for(entered_v3.wait(), 1)
+            task.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await task
+        elif outcome == "failure":
+            with pytest.raises(ConnectionError, match="factory discovery failed"):
+                await asyncio.wait_for(task, 1)
+        else:
+            result = await asyncio.wait_for(task, 1)
+            assert [(m.protocol, m.pool, m.balances) for m in result] == [
+                ("Balancer V2", balancer_pool, (8_000_000, 9_000_000)),
+                ("Curve", curve_pool, (6_000_000, 7_000_000)),
+                ("Uniswap V3", concentrated.address, (4_000_000, 5_000_000)),
+                ("Uniswap V2", pair.address, (2_000_000, 3_000_000)),
+            ]
+        assert entered_v2.is_set() and entered_v3.is_set() and closed_v3.is_set()
+        assert entered_curve.is_set() and entered_balancer.is_set()
+        assert closed_curve.is_set() and closed_balancer.is_set()
+    finally:
+        task.cancel()
+        await asyncio.gather(task, return_exceptions=True)
+
+
+@run_async_test
+@pytest.mark.parametrize("created", [BLOCK.number - 1, BLOCK.number + 1])
+async def test_balancer_metadata_respects_requested_history_without_live_pool_loader(
+    monkeypatch: Any, created: int
+) -> None:
+    from y.prices.dex.balancer import v2
+    from y.utils import _factory_history, events
+
+    vault = SimpleNamespace(address=USD)
+    registrations = [
+        {
+            "poolAddress": CHILD,
+            "poolId": "0x" + "ab" * 32,
+            "specialization": 2,
+        },
+        {
+            "poolAddress": v2.MESSED_UP_POOLS[0],
+            "poolId": "0x" + "cd" * 32,
+            "specialization": 1,
+        },
+    ]
+
+    class Registration(dict[str, Any]):
+        block_number = BLOCK.number - 1
+
+    registrations = [Registration(row) for row in registrations]
+    calls: list[Any] = []
+
+    async def batches(addresses: Any, topics: Any, start: int, end: int) -> AsyncIterator[Any]:
+        calls.append((addresses, topics, start, end))
+        yield registrations
+
+    monkeypatch.setattr(contracts, "contract_creation_block_async", AsyncMock(return_value=created))
+    monkeypatch.setattr(_factory_history, "factory_log_batches", batches)
+    monkeypatch.setattr(events, "decode_logs", lambda rows: rows)
+    constructor = Mock(side_effect=AssertionError("metadata must not construct pool objects"))
+    monkeypatch.setattr(v2, "BalancerV2Pool", constructor)
+    result = [
+        pool
+        async for batch in v2.BalancerV2Vault.pool_metadata_batches(cast(Any, vault), BLOCK.number)
+        for pool in batch
+    ]
+    if created > BLOCK.number:
+        assert result == [] and calls == []
+    else:
+        assert result == [
+            v2.BalancerV2PoolMetadata(CHILD, bytes.fromhex("ab" * 32), 2, BLOCK.number - 1)
+        ]
+        assert calls == [
+            (
+                [USD],
+                ["0x3c13bc30b8e878c53fd2a36b679409c073afd75950be43d8858768e956fbc20e"],
+                created,
+                BLOCK.number,
+            )
+        ]
+    constructor.assert_not_called()
+
+
+@run_async_test
+async def test_balancer_vault_discovery_batches_every_live_pool_and_retains_depth_order(
+    monkeypatch: Any,
+) -> None:
+    from y.prices.dex.balancer import v2
+
+    vault = instance(v2.BalancerV2Vault)
+    vault.address = USD
+    pools = [
+        v2.BalancerV2PoolMetadata(
+            f"0x{index + 1000:040x}", index.to_bytes(32, "big"), 2, BLOCK.number - 1
+        )
+        for index in range(900)
+    ]
+
+    async def metadata(self: Any, block: int) -> AsyncIterator[Any]:
+        assert self is vault and block == BLOCK.number
+        yield pools[:500]
+        yield pools[500:]
+
+    monkeypatch.setattr(v2.BalancerV2Vault, "pool_metadata_batches", metadata)
+    module = importlib.import_module("y.prices.dex.uniswap")
+    monkeypatch.setattr(
+        module, "uniswap_multiplexer", SimpleNamespace(v2_routers={}, v3=None, v3_forks=[], v1=None)
+    )
+    module = importlib.import_module("y.prices.dex.balancer")
+    monkeypatch.setattr(
+        module,
+        "balancer_multiplexer",
+        SimpleNamespace(__v1__=Ready(None), __v2__=Ready(SimpleNamespace(vaults=[vault]))),
+    )
+    monkeypatch.setattr(importlib.import_module("y.prices.stable_swap.curve"), "curve", None)
+    monkeypatch.setattr(_markets, "deployed", AsyncMock(return_value=True))
+    selected: list[bytes] = []
+
+    async def codes(addresses: tuple[str, ...], block: BlockRef) -> tuple[bool, ...]:
+        assert block is BLOCK and len(addresses) <= 128
+        return tuple(int(pool, 16) % 7 != 0 for pool in addresses)
+
+    async def values(target: str, ids: tuple[bytes, ...], block: BlockRef) -> tuple[Any, ...]:
+        assert target == USD and block is BLOCK and len(ids) <= 128
+        selected.extend(ids)
+        return tuple(((TOKEN, USD), (int.from_bytes(pool_id, "big"), 999), 10) for pool_id in ids)
+
+    monkeypatch.setattr(_markets, "deployed_batch", codes)
+    monkeypatch.setattr(_markets, "pool_tokens_batch", values)
+    forbidden = AsyncMock(side_effect=AssertionError("batched discovery entered individual getter"))
+    monkeypatch.setattr(_markets, "state", forbidden)
+    result = await _markets.discover(TOKEN, BLOCK)
+    expected = [pool for index, pool in enumerate(pools) if int(pool.address, 16) % 7 and index]
+    assert [market.pool for market in result] == [pool.address for pool in reversed(expected)]
+    assert set(selected) == {pool.pool_id for pool in pools if int(pool.address, 16) % 7}
+    assert all(market.protocol == "Balancer V2" and market.router == USD for market in result)
+    forbidden.assert_not_awaited()

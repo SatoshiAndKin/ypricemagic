@@ -1,0 +1,15 @@
+{
+  "chain": "ethereum",
+  "empty_cache": true,
+  "provider": "production Ethereum web3-proxy",
+  "passed": false,
+  "startup_seconds": 602.8409798777429,
+  "healthy_within_600": false,
+  "memory_before_cleanup": "226295808\nlow 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+  "candidate": "original merged fork 073c7ac8 image with seven interpreted runtime overlays; not a production build",
+  "cleanup": {
+    "Status": "exited",
+    "OOMKilled": false,
+    "ExitCode": 3
+  }
+}

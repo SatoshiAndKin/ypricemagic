@@ -1,7 +1,10 @@
 import itertools
 import logging
 from collections.abc import Iterable, Sequence
+from functools import lru_cache
 from operator import getitem
+from threading import Lock, local
+from time import monotonic
 from typing import Any, cast
 
 import cachebox
@@ -15,7 +18,7 @@ from evmspec.data import Address, BlockNumber, HexBytes32, uint
 from evmspec.structs.log import Topic
 from hexbytes import HexBytes
 from msgspec import ValidationError, json
-from pony.orm import commit, select
+from pony.orm import Database, DatabaseError, commit, select
 from pony.orm.core import Query
 
 from y import ENVIRONMENT_VARIABLES as ENVS
@@ -61,6 +64,72 @@ _encode_generic = json.Encoder().encode
 _encode_log = json.Encoder(enc_hook=enc_hook).encode
 
 
+def _encode_factory_log(log: RpcLog) -> bytes:
+    """Encode canonical RPC fields in the existing JSON array format."""
+    numbers = (log.blockNumber, log.logIndex, log.transactionIndex)
+    if (
+        getattr(type(log), "__struct_fields__", None) == Log.__struct_fields__
+        and isinstance(log.address, Address)
+        and isinstance(log.data, HexBytes)
+        and isinstance(log.transactionHash, HexBytes32)
+        and isinstance(log.topics, (list, tuple))
+        and all(isinstance(topic, HexBytes32) for topic in log.topics)
+        and type(log.removed) is bool
+        and all(isinstance(number, int) and not isinstance(number, bool) for number in numbers)
+    ):
+        return _encode_generic(
+            (
+                tuple(_remove_0x_prefix(topic.strip()) for topic in log.topics),
+                log.address[2:],
+                bytes(log.data).hex(),
+                log.removed,
+                int(cast(BlockNumber, log.blockNumber)),
+                _remove_0x_prefix(log.transactionHash.strip()),
+                int(log.logIndex),
+                int(log.transactionIndex),
+            )
+        )
+    # Keep the original codec's support and errors for noncanonical values.
+    return _encode_log(Log(**log))
+
+
+@lru_cache(maxsize=1)
+def _factory_writer() -> _AsyncExecutorMixin:
+    # One connection owns the enlarged SQLite page cache. Sharing the filter
+    # executor would multiply this budget across its four connections.
+    return make_executor(1, 8, "ypricemagic db executor [factory]")
+
+
+@db_session_retry_locked
+def _insert_factory_rows(rows: list[tuple[Any, ...]]) -> None:
+    started = monotonic()
+    database = cast(Database, getattr(FactoryLog, "_database_"))
+    if getattr(database, "provider_name", None) == "sqlite":
+        # Bound the page cache at 64 MiB while retaining the existing journal
+        # and synchronous durability settings. Random token-index writes to a
+        # multi-million-event catalog otherwise churn the default 2 MiB cache.
+        database.execute("PRAGMA cache_size=-65536")
+    _bulk_insert(
+        FactoryLog,
+        (
+            "chain",
+            "address",
+            "block",
+            "log_index",
+            "txhash",
+            "topic0",
+            "topic1",
+            "topic2",
+            "topic3",
+            "raw",
+        ),
+        rows,
+        db=database,
+        sync=True,
+    )
+    logger.debug("factory SQL rows=%s seconds=%.3f", len(rows), monotonic() - started)
+
+
 def _decode_hook_unsafe(typ: type[Any], obj: Any) -> Any:
     """This decode hook does NOT ensure addresses are checksummed. They must be stored that way."""
     try:
@@ -82,6 +151,74 @@ def _decode_hook_unsafe(typ: type[Any], obj: Any) -> Any:
 
 # Match the JSON writer. Decoding cached data must not query or modify the database.
 _decode_log = json.Decoder(type=Log, dec_hook=_decode_hook_unsafe).decode
+
+
+class _FactoryStatistics:
+    """Keep SQLite's bounded index samples current without retaining event rows."""
+
+    def __init__(self) -> None:
+        self.ready = False
+        self.large_sample = False
+        self.pending_rows = 0
+        self.lock = Lock()
+        self.generation = 0
+        self.connections = local()
+
+    def _reload(self, database: Database) -> None:
+        connection = database.get_connection()
+        if (
+            getattr(self.connections, "connection", None) is connection
+            and getattr(self.connections, "generation", -1) == self.generation
+        ):
+            return
+        try:
+            # ANALYZE updates the analyzing connection's planner. Other
+            # long-lived readers must reload the persisted samples themselves.
+            database.execute("ANALYZE sqlite_schema")
+            commit()
+        except DatabaseError as error:
+            logger.warning("factory cache index statistics reload unavailable: %s", error)
+        else:
+            self.connections.connection = connection
+            self.connections.generation = self.generation
+
+    def ensure(self, database: Database, *, added_rows: int = 0) -> None:
+        if getattr(database, "provider_name", None) != "sqlite":
+            return
+        with self.lock:
+            self.pending_rows += added_rows
+            if self.ready and (
+                not added_rows or (self.large_sample and self.pending_rows < 1_000_000)
+            ):
+                self._reload(database)
+                return
+            try:
+                # Without statistics SQLite can prefer scanning every raw event
+                # to the selective token index, even for an empty token page.
+                # Limit samples per index instead of scanning the full catalog.
+                database.execute("PRAGMA analysis_limit=1000")
+                database.execute('ANALYZE "FactoryLog"')
+                commit()
+            except DatabaseError as error:
+                logger.warning("factory cache index statistics unavailable: %s", error)
+            else:
+                self.ready = True
+                self.large_sample = self.large_sample or bool(self.pending_rows)
+                self.pending_rows = 0
+                self.generation += 1
+                self.connections.connection = database.get_connection()
+                self.connections.generation = self.generation
+
+
+@lru_cache(maxsize=32)
+def _factory_statistics(database: Database) -> _FactoryStatistics:
+    return _FactoryStatistics()
+
+
+@db_session_retry_locked
+def _refresh_factory_statistics(added_rows: int) -> None:
+    database = cast(Database, getattr(FactoryLog, "_database_"))
+    _factory_statistics(database).ensure(database, added_rows=added_rows)
 
 
 def _prepare_log(
@@ -210,10 +347,11 @@ async def bulk_insert_factory(logs: list[RpcLog]) -> None:
         return
 
     def prepare() -> list[tuple[Any, ...]]:
+        started = monotonic()
         for log in logs:
             if log.blockNumber is None:
                 raise ValueError("Factory event has no completed block")
-        return [
+        rows = [
             (
                 CHAINID,
                 str(log.address).lower(),
@@ -224,30 +362,17 @@ async def bulk_insert_factory(logs: list[RpcLog]) -> None:
                     _remove_0x_prefix(log.topics[i].strip()) if i < len(log.topics) else ""
                     for i in range(4)
                 ),
-                _encode_log(Log(**log)),
+                _encode_factory_log(log),
             )
             for log in logs
         ]
+        logger.debug("factory prepare rows=%s seconds=%.3f", len(rows), monotonic() - started)
+        return rows
 
     rows = await default_filter_threads.run(prepare)
-    await default_filter_threads.run(
-        _bulk_insert,
-        FactoryLog,
-        (
-            "chain",
-            "address",
-            "block",
-            "log_index",
-            "txhash",
-            "topic0",
-            "topic1",
-            "topic2",
-            "topic3",
-            "raw",
-        ),
-        rows,
-        sync=True,
-    )
+    await _factory_writer().run(_insert_factory_rows, rows)
+    if len(logs) >= 4096:
+        await default_filter_threads.run(_refresh_factory_statistics, len(logs))
 
 
 # Cache completed IDs once for both synchronous and asynchronous callers.
@@ -423,9 +548,48 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
 
     @db_session_retry_locked
     def select_page(
-        self, from_block: int, to_block: int, after: tuple[int, int, str] | None = None
+        self,
+        from_block: int,
+        to_block: int,
+        after: tuple[int, int, str] | None = None,
+        limit: int = 512,
     ) -> list[Log]:
-        """Read at most 512 events, even across very sparse completed history."""
+        """Read a bounded event page, even across very sparse completed history."""
+        modern_query, legacy_query = self._page_queries(from_block, to_block, after, limit)
+        modern = [_decode_log(row[3]) for row in modern_query.limit(limit)]
+        legacy = [_decode_log(row[3]) for row in legacy_query.limit(limit)]
+        return self._merge_logs(legacy, modern)[:limit]
+
+    @db_session_retry_locked
+    def select_raw_page(
+        self,
+        from_block: int,
+        to_block: int,
+        after: tuple[int, int, str] | None = None,
+        limit: int = 512,
+    ) -> tuple[list[bytes], tuple[int, int, str] | None]:
+        """Read the same ordered event page without constructing log wrappers."""
+        modern_query, legacy_query = self._page_queries(from_block, to_block, after, limit)
+        # Both projections already carry their full ordering keys. Normalize
+        # legacy unprefixed hashes before deduplicating, with modern rows taking
+        # precedence exactly as in _merge_logs.
+        unique = {
+            (block, index, "0x" + txhash.removeprefix("0x").zfill(64)): raw
+            for block, txhash, index, raw in legacy_query.limit(limit)
+        }
+        unique.update(
+            {(block, index, txhash): raw for block, index, txhash, raw in modern_query.limit(limit)}
+        )
+        keys = sorted(unique)[:limit]
+        return [unique[key] for key in keys], keys[-1] if keys else None
+
+    def _page_queries(
+        self, from_block: int, to_block: int, after: tuple[int, int, str] | None, limit: int
+    ) -> tuple["Query[Any, Any]", "Query[Any, Any]"]:
+        if not 1 <= limit <= 4096:
+            raise ValueError("event page limit must be between 1 and 4096")
+        database = cast(Database, getattr(FactoryLog, "_database_"))
+        _factory_statistics(database).ensure(database)
         if after:
             from_block = max(from_block, after[0])
         modern_query = self._factory_query(from_block, to_block)
@@ -445,9 +609,7 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
                 or (block == last_block and index > last_index)
                 or (block == last_block and index == last_index and txhash > last_tx)
             )
-        modern = [_decode_log(row[3]) for row in modern_query.limit(512)]
-        legacy = [_decode_log(row[3]) for row in legacy_query.limit(512)]
-        return self._merge_logs(legacy, modern)[:512]
+        return modern_query, legacy_query
 
     def _factory_query(self, from_block: int, to_block: int) -> "Query[Any, Any]":
         from y._db.utils import utils as db
