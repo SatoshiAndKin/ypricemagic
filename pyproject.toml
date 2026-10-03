@@ -10,7 +10,7 @@ requires = [
   "types-PyYAML==6.0.12.20260906",
   "aiosqlite @ git+https://github.com/SatoshiAndKin/aiosqlite.git@b8265cce6f09bcc8015ea09036f5e05c4546d740",
   "bobs_lazy_logging==0.0.5",
-  "dank-mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@fa4b454fb8d33c2f412709da4daca522cd4f7e47 ; platform_system == 'Darwin' or (platform_system == 'Linux' and platform_machine != 'i686')",
+  "dank-mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@90baeae436f4d359538b11988c13a86004e2e087 ; platform_system == 'Darwin' or (platform_system == 'Linux' and platform_machine != 'i686')",
   "eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@7e529be8dfc1afa7bda2d6660c8a11c59a653a6e ; platform_system == 'Linux' and platform_machine != 'i686'",
   "eth-retry==0.3.7",
   "eth-typing==5.2.1",
