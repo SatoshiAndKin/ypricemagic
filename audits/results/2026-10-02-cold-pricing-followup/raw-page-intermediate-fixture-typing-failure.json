@@ -1,0 +1,53 @@
+{
+  "run": {
+    "command": [
+      "sh",
+      "-c",
+      "python -m pip install --no-deps --no-build-isolation -e . && mypy && python -c 'import pytest,tomllib;from pathlib import Path;c=tomllib.loads(Path(\"pyproject.toml\").read_text());raise SystemExit(pytest.main(c[\"tool\"][\"validation\"][\"protocol_discovery_tests\"]+c[\"tool\"][\"validation\"][\"cold_discovery_tests\"]))' && python /runner/check_compiled.py"
+    ],
+    "docker_context": "colima-rpc-tune",
+    "builder": "ypricemagic-validation-4168ea425aa6",
+    "complete": false,
+    "started_unix": 1791022185.7064698,
+    "source_sha": "edb84427d69f35c75fe1cda78aad1962758a83e5",
+    "source_revision": "worktree",
+    "source_archive_sha256": "0caab1cda40eeb52b64398e8e2df23681369f285cc8a8e42f3184a49777a660d",
+    "image": "sha256:96ec7aab0eb97e9928dedea70edbceeaf3e26e6a4babccc1729fe7f9c5a4c0db",
+    "exit_code": 1,
+    "oom_killed": false,
+    "missing_reports": [
+      "pytest-summary.json",
+      "compiled-modules.json"
+    ],
+    "elapsed_seconds": 143.93039226531982
+  },
+  "container-state": {
+    "State": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 1,
+      "Error": "",
+      "StartedAt": "2026-10-03T10:09:46.640780726Z",
+      "FinishedAt": "2026-10-03T10:12:09.452284291Z"
+    },
+    "Image": "sha256:96ec7aab0eb97e9928dedea70edbceeaf3e26e6a4babccc1729fe7f9c5a4c0db",
+    "HostConfig": {
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 4000000000,
+      "PidsLimit": 512,
+      "LogConfig": {
+        "Type": "json-file",
+        "Config": {
+          "max-file": "5",
+          "max-size": "100m"
+        }
+      }
+    }
+  }
+}

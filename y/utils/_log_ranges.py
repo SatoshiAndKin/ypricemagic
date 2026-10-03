@@ -36,6 +36,22 @@ def indexed_chunk_size() -> int:
     return min(SAFE_RANGE, BATCH_SIZE, int(ENVS.GETLOGS_BATCH_SIZE) or SAFE_RANGE, provider_limit)
 
 
+def sparse_chunk_ceiling() -> int:
+    """Allow sparse Curve history to grow while honoring smaller provider limits."""
+    from brownie import web3
+
+    from y import ENVIRONMENT_VARIABLES as ENVS
+    from y.utils.middleware import provider_specific_batch_sizes
+
+    endpoint = str(getattr(web3.provider, "endpoint_uri", "")).lower()
+    configured = int(ENVS.GETLOGS_BATCH_SIZE)
+    return min(
+        200_000,
+        configured if 0 < configured < SAFE_RANGE else 200_000,
+        *(size for provider, size in provider_specific_batch_sizes.items() if provider in endpoint),
+    )
+
+
 @stuck_coro_debugger
 async def _request_logs(args: dict[str, Any]) -> list[Log]:
     """Keep range errors out of Dank's batch retry loop so callers can split."""
@@ -47,10 +63,24 @@ async def _request_logs(args: dict[str, Any]) -> list[Log]:
         async with timeout(30):
             response = await provider.make_request(RPCEndpoint("eth_getLogs"), [args])
         if "error" in response:
-            raise ValueError(response["error"])
+            error = response["error"]
+            if (
+                isinstance(error, dict)
+                and error.get("code") == -32002
+                and error.get("message") == "request timed out"
+            ):
+                # Geth can report its own deadline before the transport expires.
+                # Use the same bounded retry and range splitting as a transport
+                # timeout; do not classify it as missing event history.
+                raise TimeoutError("RPC log request timed out") from ValueError(error)
+            raise ValueError(error)
         return json.decode(json.encode(response["result"]), type=list[Log], dec_hook=_decode_hook)
 
-    return await _retry_state_read(request)
+    # A large timed-out scan has a bounded smaller-range recovery path.
+    # Split it immediately instead of spending another transport deadline on
+    # the same range. Ordinary reads retain their single timeout retry.
+    width = int(args["toBlock"], 16) - int(args["fromBlock"], 16) + 1
+    return await _retry_state_read(request, retry_timeouts=width <= SAFE_RANGE)
 
 
 @stuck_coro_debugger

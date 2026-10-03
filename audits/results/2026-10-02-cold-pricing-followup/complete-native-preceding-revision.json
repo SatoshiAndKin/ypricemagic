@@ -1,0 +1,78 @@
+{
+  "run": {
+    "command": [
+      "sh",
+      "-c",
+      "python -m pip install --no-deps --no-build-isolation -e . && mypy && sh /runner/full_suite.sh && python /runner/check_compiled.py"
+    ],
+    "docker_context": "colima-rpc-tune",
+    "builder": "ypricemagic-validation-4168ea425aa6",
+    "complete": true,
+    "started_unix": 1790997498.9533088,
+    "source_sha": "82a0543ea85ae90d39c54ce81a6becf8d4da3063",
+    "source_revision": "HEAD",
+    "source_archive_sha256": "a7c520f5afec8ad0a28d784b8fcbe651ff769ff9921477d4564d821572c4c5d7",
+    "image": "sha256:96ec7aab0eb97e9928dedea70edbceeaf3e26e6a4babccc1729fe7f9c5a4c0db",
+    "exit_code": 0,
+    "oom_killed": false,
+    "missing_reports": [],
+    "below_memory_target": true,
+    "elapsed_seconds": 5243.1328892707825
+  },
+  "pytest-summary": {
+    "exit_code": 0,
+    "counts": {
+      "setup:passed": 2400,
+      "call:skipped": 11,
+      "teardown:passed": 2400,
+      "call:passed": 2389,
+      "setup:skipped": 6,
+      "teardown:skipped": 6
+    },
+    "collected": 2406
+  },
+  "compiled-modules": {
+    "y._db.brownie": "/work/y/_db/brownie.cpython-312-aarch64-linux-gnu.so",
+    "y._db.config": "/work/y/_db/config.cpython-312-aarch64-linux-gnu.so",
+    "y._db.decorators": "/work/y/_db/decorators.cpython-312-aarch64-linux-gnu.so",
+    "y._db.utils.stringify": "/work/y/_db/utils/stringify.cpython-312-aarch64-linux-gnu.so",
+    "y.ENVIRONMENT_VARIABLES": "/work/y/ENVIRONMENT_VARIABLES.cpython-312-aarch64-linux-gnu.so",
+    "y.convert": "/work/y/convert.cpython-312-aarch64-linux-gnu.so",
+    "y.exceptions": "/work/y/exceptions.cpython-312-aarch64-linux-gnu.so",
+    "y.networks": "/work/y/networks.cpython-312-aarch64-linux-gnu.so",
+    "y.prices.utils.sense_check": "/work/y/prices/utils/sense_check.cpython-312-aarch64-linux-gnu.so",
+    "y.utils.gather": "/work/y/utils/gather.cpython-312-aarch64-linux-gnu.so"
+  },
+  "command": {
+    "command": [
+      "sh",
+      "-c",
+      "python -m pip install --no-deps --no-build-isolation -e . && mypy && sh /runner/full_suite.sh && python /runner/check_compiled.py"
+    ],
+    "exit_code": 0,
+    "interrupted": false,
+    "elapsed_seconds": 5235.033106290968,
+    "peak_sampled_process_rss_bytes": 2333650944,
+    "cgroup_before": {
+      "memory.current": "8994816",
+      "memory.peak": "8994816",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    },
+    "cgroup_after": {
+      "memory.current": "1371189248",
+      "memory.peak": "3603099648",
+      "memory.max": "8589934592",
+      "memory.swap.max": "0",
+      "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+      "cpu.max": "400000 100000",
+      "pids.max": "512",
+      "pids.current": "2"
+    }
+  },
+  "validation_boundary": "Complete required native Python 3.12 suite at preceding committed 82a0543e; newer index and metadata repairs still require final complete-suite rerun."
+}

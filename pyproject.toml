@@ -109,6 +109,36 @@ profile = "black"
 line_length = 100
 
 [tool.validation]
+protocol_discovery_tests = [
+  "tests/test_pool_event_metadata.py",
+  "tests/test_quote_repairs.py",
+  "tests/test_amount_quotes.py",
+  "tests/test_routing_scaling.py",
+  "tests/test_inventory_cache.py",
+  "tests/test_rpc_state_retry.py",
+  "tests/test_reserve_batches.py",
+]
+cold_discovery_tests = [
+  "tests/test_curve_inventory_loading.py",
+  "tests/test_indexed_pool_discovery.py",
+  "tests/test_discovery_coverage_repairs.py",
+  "tests/test_log_cache.py",
+  "tests/prices/stable_swap/test_factory_loading.py",
+]
+cold_state_tests = [
+  "tests/test_pool_event_metadata.py",
+  "tests/test_rpc_state_retry.py",
+  "tests/test_indexed_pool_discovery.py",
+  "tests/test_reserve_batches.py",
+  "tests/test_quote_repairs.py",
+  "tests/test_routing_scaling.py",
+  "tests/test_discovery_coverage_repairs.py",
+  "tests/test_curve_inventory_loading.py",
+  "tests/test_filter_ranges.py",
+  "tests/test_log_cache.py",
+  "tests/prices/stable_swap/test_factory_loading.py",
+  "tests/prices/utils/test_buckets.py",
+]
 review_quote_tests = [
   "tests/test_uniswap_address_repairs.py",
   "tests/prices/test_chainlink.py",

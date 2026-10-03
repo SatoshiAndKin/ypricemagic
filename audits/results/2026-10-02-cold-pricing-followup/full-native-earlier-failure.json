@@ -1,0 +1,30 @@
+{
+  "run": {
+    "source_sha": "911a7a5864ef6dc925e1141b96cc318d267c6368",
+    "source_revision": "911a7a58",
+    "source_archive_sha256": "93dce5b89cf41a50c8e241fe7845953d952f7449ec503212ac2fd059c943947a",
+    "elapsed_seconds": 3530.063910007477,
+    "exit_code": 2,
+    "oom_killed": false,
+    "complete": true
+  },
+  "pytest": {
+    "exit_code": 1,
+    "counts": {
+      "setup:passed": 2320,
+      "call:skipped": 11,
+      "teardown:passed": 2320,
+      "call:passed": 2298,
+      "call:failed": 11,
+      "setup:skipped": 6,
+      "teardown:skipped": 6
+    },
+    "collected": 2326
+  },
+  "failure_classification": {
+    "real_reorg_comparisons": 6,
+    "auxiliary_process_shared_database_collision": 5
+  },
+  "accepted": false,
+  "next_action": "rerun full required suite with distinct auxiliary databases"
+}

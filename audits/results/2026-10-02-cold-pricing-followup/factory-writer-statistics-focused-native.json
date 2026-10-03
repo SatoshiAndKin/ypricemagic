@@ -1,0 +1,32 @@
+{
+  "scope": "isolated auxiliary Python 3.12 controls in the preceding native container; the two changed files match their recorded host hashes; ten unchanged compiled extensions remain from committed 4569534b",
+  "source_sha": "4569534bc7079a8caf33ba57a42c8814121e9b32",
+  "changed_source_sha256": {
+    "y/_db/utils/logs.py": "ca5fdcc42efb8989cc594bfc25dd8a51ca430fc38bb32a062adff8835b7edc6c",
+    "tests/test_log_cache.py": "aa3f803d5776a97f6341aff45fba963e693344483b8e76679104e6f072252e8c"
+  },
+  "pytest": {
+    "exit_code": 0,
+    "counts": {
+      "setup:passed": 454,
+      "call:passed": 454,
+      "teardown:passed": 454
+    },
+    "collected": 454
+  },
+  "compiled_modules": {
+    "y._db.brownie": "/work/y/_db/brownie.cpython-312-aarch64-linux-gnu.so",
+    "y._db.config": "/work/y/_db/config.cpython-312-aarch64-linux-gnu.so",
+    "y._db.decorators": "/work/y/_db/decorators.cpython-312-aarch64-linux-gnu.so",
+    "y._db.utils.stringify": "/work/y/_db/utils/stringify.cpython-312-aarch64-linux-gnu.so",
+    "y.ENVIRONMENT_VARIABLES": "/work/y/ENVIRONMENT_VARIABLES.cpython-312-aarch64-linux-gnu.so",
+    "y.convert": "/work/y/convert.cpython-312-aarch64-linux-gnu.so",
+    "y.exceptions": "/work/y/exceptions.cpython-312-aarch64-linux-gnu.so",
+    "y.networks": "/work/y/networks.cpython-312-aarch64-linux-gnu.so",
+    "y.prices.utils.sense_check": "/work/y/prices/utils/sense_check.cpython-312-aarch64-linux-gnu.so",
+    "y.utils.gather": "/work/y/utils/gather.cpython-312-aarch64-linux-gnu.so"
+  },
+  "mypy": "Success: no issues found in 244 source files",
+  "baseline_regression": "original committed _FactoryStatistics injected only into an isolated test process; existing-reader plan remains primary index and the new regression fails",
+  "baseline_failure_log": "/private/tmp/ypm-statistics-red43.log"
+}

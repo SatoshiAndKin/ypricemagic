@@ -19,6 +19,7 @@ from y.prices._rpc import (
     deployed,
     deployed_batch,
     optional_read,
+    pool_tokens_batch,
     read,
     reserves_batch,
     state,
@@ -107,9 +108,10 @@ async def discover(
     """
     from y import convert
     from y.prices.dex.balancer import balancer_multiplexer
+    from y.prices.dex.balancer.v2 import BalancerV2PoolMetadata, BalancerV2Vault
     from y.prices.dex.solidly import SolidlyRouterBase
     from y.prices.dex.uniswap import uniswap_multiplexer
-    from y.prices.dex.uniswap.v2 import UniswapRouterV2
+    from y.prices.dex.uniswap.v2 import UniswapRouterV2, V2PoolMetadata
     from y.prices.dex.uniswap.v3 import SlipstreamPool, UniswapV3, V3PoolMetadata
     from y.prices.dex.velodrome import VelodromeRouterV2
     from y.prices.stable_swap.curve import CurveRegistry, curve
@@ -170,20 +172,25 @@ async def discover(
     async def collect(iterator: AsyncIterator[Any]) -> list[Any]:
         return [item async for item in iterator]
 
-    for router in uniswap_multiplexer.v2_routers.values():
+    @stuck_coro_debugger
+    async def v2_markets(router: Any) -> list[Market]:
+        markets: list[Market] = []
         protocol = (
             "Velodrome V2"
             if isinstance(router, VelodromeRouterV2)
             else "Solidly" if isinstance(router, SolidlyRouterBase) else "Uniswap V2"
         )
         if first_markets and not allowed(protocol, address(router), address(router.factory)):
-            continue
+            return markets
         if not await deployed(address(router.factory), block):
-            continue
+            return markets
         if isinstance(router, UniswapRouterV2):
 
-            async def metadata_snapshot(item: tuple[str, tuple[str, str], Any]) -> Market | None:
-                pair, tokens, reserves = item
+            async def metadata_snapshot(
+                item: tuple[V2PoolMetadata, Any],
+            ) -> Market | None:
+                metadata, reserves = item
+                pair, tokens = metadata.address, metadata.tokens
                 if token not in tokens:
                     return None
                 if not reserves or not reserves[tokens.index(token)]:
@@ -193,7 +200,9 @@ async def discover(
                 # every dust pair only consumes provider throughput.
                 kind, stable = "Uniswap V2", False
                 if isinstance(router, SolidlyRouterBase):
-                    stable = bool(await state(pair, "stable()(bool)", block))
+                    if metadata.stable is None:
+                        raise RuntimeError("Solidly factory event omitted stable pool metadata")
+                    stable = metadata.stable
                     kind = "Velodrome V2" if isinstance(router, VelodromeRouterV2) else "Solidly"
                 return Market(
                     kind,
@@ -205,18 +214,18 @@ async def discover(
                     factory=address(router.factory),
                 )
 
-            async def snapshots(batch: list[tuple[str, tuple[str, str]]]) -> list[Market | None]:
-                reserves = await reserves_batch(tuple(pair for pair, _ in batch), block)
+            async def snapshots(batch: list[V2PoolMetadata]) -> list[Market | None]:
+                reserves = await reserves_batch(tuple(item.address for item in batch), block)
                 return await bounded_map(
                     lambda item: safely(metadata_snapshot, item),
-                    [(pair, tokens, reserve) for (pair, tokens), reserve in zip(batch, reserves)],
+                    list(zip(batch, reserves)),
                 )
 
             async for batch_markets in bounded_async_map(
                 snapshots, router.pool_metadata_batches(checksum, block.number)
             ):
                 markets.extend(market for market in batch_markets if market)
-            continue
+            return markets
 
         pools = await loaded(router.get_pools_for(checksum, block=block.number, sync=False), {})
 
@@ -251,30 +260,50 @@ async def discover(
 
         markets.extend(m for m in await bounded_map(lambda p: safely(v2_snapshot, p), pools) if m)
 
-    for router in [uniswap_multiplexer.v3, *uniswap_multiplexer.v3_forks]:
+        return markets
+
+    @stuck_coro_debugger
+    async def v3_markets(router: Any) -> list[Market]:
+        markets: list[Market] = []
         if router is None:
-            continue
+            return markets
         # Slipstream uses the same router class; the pool determines its protocol.
         if first_markets and not allowed(
             "Uniswap V3", "Slipstream", address(router._quoter), address(router._factory)
         ):
-            continue
+            return markets
         if not await deployed(address(router._factory), block):
-            continue
+            return markets
 
         async def v3_batches(batch: list[Any]) -> list[Market | None]:
-            requests = tuple(
-                (address(t), address(pool)) for pool in batch for t in (pool.token0, pool.token1)
-            )
-            raw_balances = await balances_batch(requests, block)
-            eligible = [
-                i
-                for i, pool in enumerate(batch)
-                if all(value is not None for value in raw_balances[2 * i : 2 * i + 2])
-                and raw_balances[2 * i + (address(pool.token1) == token)]
-            ]
+            # An empty input balance cannot be a sale candidate. Probe the
+            # requested token first, without calling every dust companion token.
+            inputs = await balances_batch(tuple((token, address(pool)) for pool in batch), block)
+            eligible = [i for i, balance in enumerate(inputs) if balance]
+            if not eligible:
+                return []
             codes = await deployed_batch(tuple(address(batch[i]) for i in eligible), block)
-            live = {i for i, code in zip(eligible, codes) if code}
+            live = [i for i, code in zip(eligible, codes) if code]
+            if not live:
+                return []
+            companion_requests = tuple(
+                (
+                    address(
+                        batch[i].token1 if address(batch[i].token0) == token else batch[i].token0
+                    ),
+                    address(batch[i]),
+                )
+                for i in live
+            )
+            companions = await balances_batch(companion_requests, block)
+            raw_balances = [
+                (
+                    (inputs[i], companion)
+                    if address(batch[i].token0) == token
+                    else (companion, inputs[i])
+                )
+                for i, companion in zip(live, companions)
+            ]
 
             async def snapshot(item: tuple[Any, tuple[Any, ...]]) -> Market | None:
                 pool, values = item
@@ -309,7 +338,7 @@ async def discover(
 
             return await bounded_map(
                 lambda item: safely(snapshot, item),
-                [(batch[i], raw_balances[2 * i : 2 * i + 2]) for i in eligible if i in live],
+                [(batch[i], values) for i, values in zip(live, raw_balances)],
             )
 
         if isinstance(router, UniswapV3):
@@ -317,7 +346,7 @@ async def discover(
                 v3_batches, router.pool_metadata_batches(checksum, block.number)
             ):
                 markets.extend(market for market in batch_markets if market)
-            continue
+            return markets
 
         pools = await loaded(collect(router.pools_for_token(checksum, block.number)), [])
 
@@ -346,105 +375,188 @@ async def discover(
 
         markets.extend(m for m in await bounded_map(lambda p: safely(v3_snapshot, p), pools) if m)
 
-    if curve and allowed("Curve", ""):
-        pools = (await loaded(cast(CurveRegistry, curve).__coin_to_pools__, {})).get(checksum, ())
+        return markets
 
-        async def curve_snapshot(pool: Any) -> Market | None:
-            if not await deployed(address(pool), block):
-                return None
-            market = await curve_pool_state(address(pool), block)
-            if market is None or token not in market.tokens or not market.depth(token):
-                return None
-            return market
+    @stuck_coro_debugger
+    async def curve_markets() -> list[Market]:
+        markets: list[Market] = []
+        if curve and allowed("Curve", ""):
+            pools = (await loaded(cast(CurveRegistry, curve).__coin_to_pools__, {})).get(
+                checksum, ()
+            )
 
-        markets.extend(
-            m for m in await bounded_map(lambda p: safely(curve_snapshot, p), pools) if m
-        )
-
-    balancer_v2 = await loaded(balancer_multiplexer.__v2__, None)
-    if balancer_v2:
-        for vault in balancer_v2.vaults:
-            if not allowed("Balancer V2", address(vault), ""):
-                continue
-            if not await deployed(address(vault), block):
-                continue
-            pools = await loaded(collect(vault.pools(block=block.number)), [])
-
-            async def balancer_snapshot(pool: Any) -> Market | None:
+            async def curve_snapshot(pool: Any) -> Market | None:
                 if not await deployed(address(pool), block):
                     return None
-                pool_id = bytes(await pool.__id__)
-                tokens, balances, _ = await state(
-                    address(vault),
-                    "getPoolTokens(bytes32)(address[],uint256[],uint256)",
-                    block,
-                    pool_id,
-                )
-                tokens = tuple(map(address, tokens))
-                if token not in tokens or not balances[tokens.index(token)]:
+                market = await curve_pool_state(address(pool), block)
+                if market is None or token not in market.tokens or not market.depth(token):
                     return None
-                return Market(
-                    "Balancer V2",
-                    address(pool),
-                    tokens,
-                    tuple(map(int, balances)),
-                    address(vault),
-                    pool_id=pool_id,
-                )
+                return market
 
             markets.extend(
-                m for m in await bounded_map(lambda p: safely(balancer_snapshot, p), pools) if m
+                m for m in await bounded_map(lambda p: safely(curve_snapshot, p), pools) if m
             )
+        return markets
 
-    balancer_v1 = (
-        await loaded(balancer_multiplexer.__v1__, None) if allowed("Balancer V1", "") else None
-    )
-    if balancer_v1 and balancer_v1.exchange_proxy:
-        from y.prices.dex.balancer.v1 import TOKENOUTS_TO_TRY
+    @stuck_coro_debugger
+    async def balancer_v2_markets() -> list[Market]:
+        markets: list[Market] = []
+        balancer_v2 = await loaded(balancer_multiplexer.__v2__, None)
+        if balancer_v2:
+            for vault in balancer_v2.vaults:
+                if not allowed("Balancer V2", address(vault), ""):
+                    continue
+                if not await deployed(address(vault), block):
+                    continue
+                if isinstance(vault, BalancerV2Vault):
 
-        pools = set()
-        for other in TOKENOUTS_TO_TRY:
-            if address(other) != token:
-                split = await loaded(
-                    balancer_v1._get_split(
-                        checksum,
-                        other.address,
-                        10 ** int(await state(checksum, "decimals()(uint256)", block)),
-                        block.identifier,
-                    ),
-                    None,
-                )
-                if split:
-                    pools.update(address(swap["pool"]) for swap in split["swaps"])
+                    async def vault_batches() -> AsyncIterator[list[BalancerV2PoolMetadata]]:
+                        async for batch in vault.pool_metadata_batches(block.number):
+                            for start in range(0, len(batch), 128):
+                                yield batch[start : start + 128]
 
-        async def balancer_v1_snapshot(pool: str) -> Market | None:
-            tokens = tuple(map(address, await state(pool, "getCurrentTokens()(address[])", block)))
-            balances = tuple(
-                [int(await state(pool, "getBalance(address)(uint256)", block, t)) for t in tokens]
-            )
-            return Market("Balancer V1", pool, tokens, balances)
+                    async def vault_snapshots(
+                        batch: list[BalancerV2PoolMetadata],
+                    ) -> list[Market]:
+                        codes = await deployed_batch(tuple(address(pool) for pool in batch), block)
+                        live = [pool for pool, code in zip(batch, codes) if code]
+                        if not live:
+                            return []
+                        values = await pool_tokens_batch(
+                            address(vault), tuple(pool.pool_id for pool in live), block
+                        )
+                        snapshots = []
+                        for pool, value in zip(live, values):
+                            if value is None:
+                                continue
+                            tokens, balances, _ = value
+                            tokens = tuple(map(address, tokens))
+                            if token not in tokens or not balances[tokens.index(token)]:
+                                continue
+                            snapshots.append(
+                                Market(
+                                    "Balancer V2",
+                                    address(pool),
+                                    tokens,
+                                    tuple(map(int, balances)),
+                                    address(vault),
+                                    pool_id=pool.pool_id,
+                                )
+                            )
+                        return snapshots
 
-        markets.extend(
-            m
-            for m in await bounded_map(lambda p: safely(balancer_v1_snapshot, p), sorted(pools))
-            if m
-        )
+                    async for snapshots in bounded_async_map(vault_snapshots, vault_batches()):
+                        markets.extend(snapshots)
+                    continue
 
-    if uniswap_multiplexer.v1 and allowed("Uniswap V1", "") and token != address(EEE_ADDRESS):
-        exchange = await optional_read(
-            uniswap_multiplexer.v1.factory, "getExchange(address)(address)", block, token
-        )
-        if exchange and address(exchange) != address(ZERO_ADDRESS):
-            balance = await loaded(state(token, "balanceOf(address)(uint256)", block, exchange), 0)
-            if balance:
-                markets.append(
-                    Market(
-                        "Uniswap V1",
-                        address(exchange),
-                        (token, address(EEE_ADDRESS)),
-                        (int(balance), 0),
+                pools = await loaded(collect(vault.pools(block=block.number)), [])
+
+                async def balancer_snapshot(pool: Any) -> Market | None:
+                    if not await deployed(address(pool), block):
+                        return None
+                    pool_id = (
+                        pool.pool_id
+                        if isinstance(pool, BalancerV2PoolMetadata)
+                        else bytes(await pool.__id__)
                     )
+                    tokens, balances, _ = await state(
+                        address(vault),
+                        "getPoolTokens(bytes32)(address[],uint256[],uint256)",
+                        block,
+                        pool_id,
+                    )
+                    tokens = tuple(map(address, tokens))
+                    if token not in tokens or not balances[tokens.index(token)]:
+                        return None
+                    return Market(
+                        "Balancer V2",
+                        address(pool),
+                        tokens,
+                        tuple(map(int, balances)),
+                        address(vault),
+                        pool_id=pool_id,
+                    )
+
+                markets.extend(
+                    m for m in await bounded_map(lambda p: safely(balancer_snapshot, p), pools) if m
                 )
+        return markets
+
+    @stuck_coro_debugger
+    async def balancer_v1_markets() -> list[Market]:
+        markets: list[Market] = []
+        balancer_v1 = (
+            await loaded(balancer_multiplexer.__v1__, None) if allowed("Balancer V1", "") else None
+        )
+        if balancer_v1 and balancer_v1.exchange_proxy:
+            from y.prices.dex.balancer.v1 import TOKENOUTS_TO_TRY
+
+            pools: set[str] = set()
+            for other in TOKENOUTS_TO_TRY:
+                if address(other) != token:
+                    split = await loaded(
+                        balancer_v1._get_split(
+                            checksum,
+                            other.address,
+                            10 ** int(await state(checksum, "decimals()(uint256)", block)),
+                            block.identifier,
+                        ),
+                        None,
+                    )
+                    if split:
+                        pools.update(address(swap["pool"]) for swap in split["swaps"])
+
+            async def balancer_v1_snapshot(pool: str) -> Market | None:
+                tokens = tuple(
+                    map(address, await state(pool, "getCurrentTokens()(address[])", block))
+                )
+                balances = tuple(
+                    [
+                        int(await state(pool, "getBalance(address)(uint256)", block, t))
+                        for t in tokens
+                    ]
+                )
+                return Market("Balancer V1", pool, tokens, balances)
+
+            markets.extend(
+                m
+                for m in await bounded_map(lambda p: safely(balancer_v1_snapshot, p), sorted(pools))
+                if m
+            )
+        return markets
+
+    @stuck_coro_debugger
+    async def v1_markets() -> list[Market]:
+        markets: list[Market] = []
+        if uniswap_multiplexer.v1 and allowed("Uniswap V1", "") and token != address(EEE_ADDRESS):
+            exchange = await optional_read(
+                uniswap_multiplexer.v1.factory, "getExchange(address)(address)", block, token
+            )
+            if exchange and address(exchange) != address(ZERO_ADDRESS):
+                balance = await loaded(
+                    state(token, "balanceOf(address)(uint256)", block, exchange), 0
+                )
+                if balance:
+                    markets.append(
+                        Market(
+                            "Uniswap V1",
+                            address(exchange),
+                            (token, address(EEE_ADDRESS)),
+                            (int(balance), 0),
+                        )
+                    )
+        return markets
+
+    # Protocols are independent. Start sparse registries with dense factories
+    # so a late Balancer/Curve backfill cannot consume the remaining deadline.
+    # Owned cancellation joins every producer, and shared RPC limits still apply.
+    inventories = await gather_owned(
+        [v2_markets(router) for router in uniswap_multiplexer.v2_routers.values()]
+        + [v3_markets(router) for router in [uniswap_multiplexer.v3, *uniswap_multiplexer.v3_forks]]
+        + [curve_markets(), balancer_v2_markets(), balancer_v1_markets(), v1_markets()]
+    )
+    for inventory in inventories:
+        markets.extend(inventory)
 
     return tuple(
         sorted(

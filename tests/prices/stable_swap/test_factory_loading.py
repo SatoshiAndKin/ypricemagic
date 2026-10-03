@@ -1,11 +1,11 @@
 """Factory discovery must register LP tokens for each supported factory interface."""
 
 from collections import defaultdict
-from collections.abc import AsyncIterator, Callable, Generator
+from collections.abc import Callable, Generator
 from importlib import import_module
 from types import SimpleNamespace
 from typing import Any
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, call
 
 import pytest
 
@@ -71,6 +71,7 @@ async def test_registry_initialization_shares_backfill_before_loading_each_regis
         pass
 
     class Provider:
+        address = TOKEN
         identifiers = defaultdict(
             list, {module.Ids.Main_Registry: [FACTORY], module.Ids.CryptoSwap_Registry: [POOL]}
         )
@@ -105,7 +106,7 @@ async def test_registry_initialization_shares_backfill_before_loading_each_regis
     monkeypatch.setattr(module, "sleep", stop)
     with pytest.raises(StopLoading):
         await module.CurveRegistry._load_all(registry)
-    prefill.assert_awaited_once_with([FACTORY, POOL])
+    assert prefill.await_args_list == [call([TOKEN]), call([FACTORY, POOL])]
     assert loaded == [FACTORY, POOL]
     assert registry._done.is_set()
 
@@ -114,20 +115,20 @@ async def test_registry_initialization_shares_backfill_before_loading_each_regis
 @pytest.mark.parametrize(
     "coverage, expected_start", [((100, 200), 101), ((0, 0), 10), ((500, 600), None)]
 )
-async def test_registry_prefill_reuses_coverage_and_joins_its_reader(
+async def test_registry_prefill_reuses_and_commits_shared_coverage(
     monkeypatch: pytest.MonkeyPatch, coverage: tuple[int, int], expected_start: int | None
 ) -> None:
     import asyncio
-    from unittest.mock import Mock
 
     import dank_mids.brownie_patch
 
     import y._db.common
     import y._db.utils.logs
-    import y.utils.events
+    import y.utils._factory_history
 
     addresses = [FACTORY, POOL]
     caches: dict[str, object] = {}
+    completed = list(coverage)
 
     class Cache:
         def __init__(self, address: str, topics: object) -> None:
@@ -136,44 +137,39 @@ async def test_registry_prefill_reuses_coverage_and_joins_its_reader(
 
         def is_cached_thru(self, start: int) -> int:
             assert start == (10 if self.address == FACTORY else 30)
-            return coverage[addresses.index(self.address)]
+            return completed[addresses.index(self.address)]
 
     async def run(function: Callable[..., Any], *args: Any) -> Any:
         return function(*args)
 
-    gate = asyncio.Event()
-    task = asyncio.create_task(gate.wait())
-    write = asyncio.create_task(asyncio.sleep(0))
+    async def scan(
+        requested: list[str], topics: object, first: int, last: int, *, chunk_size: int
+    ) -> list[object]:
+        assert requested == addresses and topics is None
+        assert first == expected_start and last == 500
+        assert chunk_size >= 500
+        completed[:] = [max(value, 500) for value in completed]
+        return []
 
-    class Reader:
-        _task = task
-        _db_task = write
-
-        async def logs(self, head: int) -> AsyncIterator[object]:
-            assert head == 500
-            yield object()
-
-    reader = Mock(return_value=Reader())
+    owner = AsyncMock(side_effect=scan)
     future = asyncio.get_running_loop().create_future()
     future.set_result(500)
     monkeypatch.setattr(dank_mids.brownie_patch, "dank_eth", SimpleNamespace(block_number=future))
     monkeypatch.setattr(y._db.utils.logs, "LogCache", Cache)
     monkeypatch.setattr(y._db.common, "default_filter_threads", SimpleNamespace(run=run))
-    monkeypatch.setattr(y.utils.events, "LogFilter", reader)
-    monkeypatch.setattr(module, "contract_creation_block_async", AsyncMock(side_effect=[10, 30]))
-    try:
-        await module._prefill_registry_logs(addresses)
-        assert caches == {FACTORY: None, POOL: None}
-        if expected_start is None:
-            reader.assert_not_called()
-        else:
-            assert reader.call_args.kwargs["addresses"] == addresses
-            assert reader.call_args.kwargs["from_block"] == expected_start
-            assert reader.call_args.kwargs["is_reusable"] is False
-            assert task.cancelled() and write.done()
-    finally:
-        task.cancel()
-        await asyncio.gather(task, write, return_exceptions=True)
+    monkeypatch.setattr(y.utils._factory_history, "factory_logs", owner)
+    monkeypatch.setattr(
+        module,
+        "contract_creation_block_async",
+        AsyncMock(side_effect=lambda address, **kwargs: 10 if address == FACTORY else 30),
+    )
+    await module._prefill_registry_logs(addresses)
+    assert caches == {FACTORY: None, POOL: None}
+    assert completed == [max(value, 500) for value in coverage]
+    if expected_start is None:
+        owner.assert_not_awaited()
+    else:
+        owner.assert_awaited_once()
 
 
 @run_async_test
@@ -187,26 +183,23 @@ async def test_registry_prefill_propagates_failure_and_releases_loader(
 
     import y._db.common
     import y._db.utils.logs
-    import y.utils.events
+    import y.utils._factory_history
 
     async def run(function: Callable[..., Any], *args: Any) -> Any:
         return function(*args)
 
     entered = asyncio.Event()
     released = asyncio.Event()
-    loader = asyncio.create_task(asyncio.Event().wait())
-    writer = asyncio.create_task(asyncio.sleep(0))
+    exited = asyncio.Event()
 
-    class Reader:
-        _task = loader
-        _db_task = writer
-
-        async def logs(self, head: int) -> AsyncIterator[object]:
-            entered.set()
+    async def scan(*args: Any, **kwargs: Any) -> list[object]:
+        entered.set()
+        try:
             if cancel:
                 await released.wait()
             raise ConnectionError("registry scan unavailable")
-            yield  # Keep the fake reader an async iterator.
+        finally:
+            exited.set()
 
     future = asyncio.get_running_loop().create_future()
     future.set_result(500)
@@ -215,17 +208,16 @@ async def test_registry_prefill_propagates_failure_and_releases_loader(
         y._db.utils.logs, "LogCache", lambda *args: SimpleNamespace(is_cached_thru=lambda start: 0)
     )
     monkeypatch.setattr(y._db.common, "default_filter_threads", SimpleNamespace(run=run))
-    monkeypatch.setattr(y.utils.events, "LogFilter", lambda **kwargs: Reader())
+    monkeypatch.setattr(y.utils._factory_history, "factory_logs", scan)
     monkeypatch.setattr(module, "contract_creation_block_async", AsyncMock(return_value=10))
     work = asyncio.create_task(module._prefill_registry_logs([FACTORY, POOL]))
-    await entered.wait()
+    await asyncio.wait_for(entered.wait(), 1)
     if cancel:
         work.cancel()
     try:
         with pytest.raises(asyncio.CancelledError if cancel else ConnectionError):
             await work
-        assert loader.cancelled() and writer.done()
+        assert exited.is_set()
     finally:
         released.set()
-        loader.cancel()
-        await asyncio.gather(work, loader, writer, return_exceptions=True)
+        await asyncio.gather(work, return_exceptions=True)

@@ -1,0 +1,18 @@
+{
+  "observed_at_utc": "2026-10-03T11:03:00Z",
+  "provider": "existing Base Alchemy endpoint",
+  "http_status": 429,
+  "json_rpc_error_code": 429,
+  "message": "Monthly capacity limit exceeded. Visit [URL_REDACTED] to upgrade your scaling policy for continued service.",
+  "production_ethereum_health": "healthy",
+  "production_base_health": "unhealthy",
+  "production_restarts": {
+    "ethereum": 0,
+    "base": 0
+  },
+  "production_oom_killed": {
+    "ethereum": false,
+    "base": false
+  },
+  "causality_boundary": "The copied-cache current WETH timeout ended about 10:41 UTC; the provider capacity denial was confirmed later. The earlier timeout remains an acceptance failure and is not attributed to capacity without further evidence. A GC diagnostic failed during startup and produced no quote profile. Required capacity restoration question is pending; provider and billing were not changed."
+}

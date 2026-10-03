@@ -1,0 +1,89 @@
+{
+  "chain": "base",
+  "empty_cache": false,
+  "cache_source": "own completed uncapped26 raw inventory; diagnostic recovery, not empty-cache acceptance",
+  "diagnostic_protocol_times": true,
+  "cpu_limit": null,
+  "matches_production_cpu_policy": true,
+  "parallel_inventories": true,
+  "required_base_factory_warmup": true,
+  "provider": "production Base current provider",
+  "passed": true,
+  "server_overlay_sha256": "8c80cf7b02db19a4e891d2b02740713f2a488c454caaf466c54fceb53a76c6ee",
+  "overlay_commit": "1457e8eb37093177853deebaae7d18929dcf2dc1 plus checked static ABI word decoder and concurrent independent protocol inventories",
+  "overlay_sha256": {
+    "_db/utils/logs.py": "6dc2ea24214434b550e1bd9c5f1b3f29488ec679f4e840c5b1b50bd04988ab7b",
+    "prices/dex/balancer/v2.py": "c63a84d41d95c5aadc9421055c5a65a0370e24ceb1890404df0fdc3588c8d825",
+    "prices/_rpc.py": "7c1fd469702c4bfc5fc7ce7a7f0051cd95ae29404dc18a912b5e90096e3f0fb2",
+    "prices/_markets.py": "04512335fd4cc2dafcda471492ef04826882b8ca9bb5a62c5970fb903cefddab",
+    "prices/dex/uniswap/v2.py": "3e39b900a3385002e88c97303491147bc55acbf4f30cc23e715c35af0fe97e7c",
+    "prices/dex/uniswap/v3.py": "f81481fc401d2e4333b55f5617ba8d27067620ef370b4b2b76f36f05dc0f070d",
+    "prices/stable_swap/curve.py": "b9817d6b249b9e2bd0a19509d2ebb2ea966aef2c8c23a62ad38d918770c630eb",
+    "utils/_factory_history.py": "f430ed42616f1c9afd4417f8086a00a1b88d137444ce9da468d3581c3638e71d",
+    "utils/_log_ranges.py": "8b4a7ffdc72597ca01e62395b1b718a06d08d06c828893ff0a99bffc0902791b",
+    "utils/_pool_events.py": "cd7469c25e878ea993241c8f0cd74804abc23ec2a0f71bc015a71b11c2b220aa"
+  },
+  "base_image_installed_fork": "073c7ac801ca36128eb27efc64031851ab6f2101",
+  "proof_scope": "empty-cache candidate with ten interpreted runtime overlays with bounded index sampling and static ABI decoding and server runtime priority control, not final production image",
+  "server_runtime_sha256": "811d4088046551efdb246cabfa4492423a0bbc1efb89aa1e080e830ce8a189b7",
+  "startup_seconds": 15.36487444723025,
+  "healthy_within_600": true,
+  "current_weth_amount": {
+    "status": 200,
+    "body": {
+      "token": "0x4200000000000000000000000000000000000006",
+      "price": 2668.1196,
+      "block": 52109406,
+      "chain": "base",
+      "block_timestamp": 1791008159,
+      "cached": false,
+      "trade_path": [
+        {
+          "token": "0x4200000000000000000000000000000000000006",
+          "price": 2668.1196,
+          "source": "Liquidity-based sale estimate"
+        },
+        {
+          "token": "0x4200000000000000000000000000000000000006",
+          "price": 2668.1196,
+          "source": "Uniswap V3 0x6c561b446416e1a00e8e93e221854d6ea4171372 via quoteExactInput(bytes,uint256)"
+        },
+        {
+          "token": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "price": 1.0,
+          "source": "Fixed USDC valuation policy: 1 USDC = $1"
+        }
+      ]
+    },
+    "seconds": 284.0011395419715,
+    "passed": true
+  },
+  "memory_before_shutdown": "7129616384\nlow 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n8589934592\n0\n",
+  "shutdown_seconds": 1.6435679170535877,
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-03T06:15:44.186746146Z",
+    "FinishedAt": "2026-10-03T06:20:45.173066586Z"
+  },
+  "cleanup_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-03T06:15:44.186746146Z",
+    "FinishedAt": "2026-10-03T06:20:45.173066586Z"
+  }
+}
