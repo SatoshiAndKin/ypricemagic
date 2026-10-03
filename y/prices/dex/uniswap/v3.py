@@ -465,6 +465,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
         from y._db.common import default_filter_threads
         from y._db.utils.logs import LogCache
         from y.contracts import contract_creation_block_async
+        from y.prices._rpc import _MAX_BALANCE_BATCH
         from y.utils._factory_history import factory_logs
         from y.utils._pool_events import decode_pool_logs
         from y.utils.events import _decode_threads
@@ -531,7 +532,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
                             isinstance(reader, SlipstreamPools),
                         )
                     )
-                    if len(batch) == 1024:
+                    if len(batch) == _MAX_BALANCE_BATCH:
                         yield batch
                         batch = []
                 del decoded

@@ -66,6 +66,41 @@ def test_invalid_cached_event_keeps_validation_error() -> None:
         logs._decode_log(b'["invalid topics"]')
 
 
+@pytest.mark.parametrize("zero", [False, True])
+@pytest.mark.parametrize("removed", [False, True])
+@pytest.mark.parametrize("payload", ["", "0000", "012345", "ff" * 96])
+def test_factory_encoder_preserves_exact_legacy_bytes(
+    event: Log, zero: bool, removed: bool, payload: str
+) -> None:
+    from evmspec import Log as RpcLog
+    from evmspec.data import TransactionIndex
+    from hexbytes import HexBytes
+
+    stored = replace(
+        event,
+        data=HexBytes(payload),
+        removed=removed,
+        blockNumber=BlockNumber(0 if zero else 2**63 - 1),
+        logIndex=LogIndex(0 if zero else 2**32 - 1),
+        transactionIndex=TransactionIndex(0 if zero else 2**32 - 1),
+        transactionHash=TransactionHash("0x" + ("00" if zero else "ab") * 32),
+        topics=(Topic("0x" + ("00" if zero else "01") * 32),),
+    )
+    for value in (stored, RpcLog(**stored)):
+        encoded = logs._encode_factory_log(value)
+        assert encoded == logs._encode_log(Log(**value))
+        assert logs._decode_log(encoded) == stored
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [("blockNumber", None), ("transactionIndex", None), ("removed", 0), ("data", None)],
+)
+def test_factory_encoder_retains_noncanonical_codec(event: Log, field: str, value: object) -> None:
+    restored = replace(event, **{field: value})
+    assert logs._encode_factory_log(restored) == logs._encode_log(Log(**restored))
+
+
 def test_log_preparation_retries_lock_but_propagates_other_errors(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

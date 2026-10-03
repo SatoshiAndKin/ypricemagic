@@ -862,6 +862,7 @@ class UniswapRouterV2(ContractBase):
         from y._db.common import default_filter_threads
         from y._db.utils.logs import LogCache
         from y.contracts import contract_creation_block_async
+        from y.prices._rpc import _MAX_RESERVE_BATCH
         from y.utils._factory_history import factory_logs
         from y.utils._pool_events import decode_pool_logs
         from y.utils.events import _decode_threads
@@ -923,7 +924,7 @@ class UniswapRouterV2(ContractBase):
                             bool(event["stable"]) if "stable" in event else None,
                         )
                     )
-                    if len(batch) == 4096:
+                    if len(batch) == _MAX_RESERVE_BATCH:
                         yield batch
                         batch = []
                 del decoded

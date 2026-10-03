@@ -136,10 +136,11 @@ focused native run passed 413 tests, mypy across 244 source files, and all ten
 compiled-module imports, with 14 source hashes matched to the isolated child
 tree. Its evidence is in `index-metadata-focused-native.json`.
 
-The larger disk-commit experiment is discarded: collecting all eight responses
-before committing reduced fetch/write overlap. The retained implementation
-commits each completed range independently and publishes only its completed
-coverage. Failed startup measurements remain in the archive. The uncapped CPU
+An earlier larger disk-commit experiment reduced fetch/write overlap and was
+discarded at that revision. The latest candidate revisits bounded eight-range
+commits after repairing writer cache churn and canonical event encoding; failed
+and cancelled windows retain prior coverage and never publish an incomplete
+window. Failed startup measurements remain in the archive. The uncapped CPU
 diagnostic matches production's CPU policy and retains 8 GiB without swap; its
 container reached readiness just after 600 seconds, so the acceptance harness
 rejected it. Neither that run nor recovery using its completed test cache counts
@@ -203,3 +204,63 @@ unchanged compiled extensions passed. These are scoped controls in the prior
 native validation container, not a final image build. The fresh empty-cache run
 with connection-local statistics is still in progress; startup, subsequent
 quotes, latest full-native validation, and production acceptance remain gates.
+
+
+The full required native suite at `4569534b` completed with 2,440 passed and
+17 skipped in 86.95 minutes, strict typing across 244 files, and all ten compiled
+imports. The later bounded-window, canonical event encoding, and supported
+2,048-getter V3 batches passed 476 focused native tests and strict typing, with
+an independently reproduced source archive. These controls precede the newest
+batch decoder and do not establish its validation.
+
+On the physical production host, the latest truly empty-cache candidate became
+healthy in 552.53 seconds, inside the unchanged 600-second grace. Canonical raw
+event preparation accounted for 78.40 seconds across 4,986,684 events. Its first
+current Base WETH amount `0.1` still returned HTTP 504 at 300.009 seconds with
+incomplete dense inventories. The cgroup reached its 8 GiB ceiling, recorded
+407 limit events, and recorded no OOM or OOM kill; clean cancellation exited zero.
+The failed report is retained as `ypm-followup-base-remote-empty55.json`. This
+proves cold startup improvement, but fails quote acceptance. Production images,
+providers, and cache volumes were not changed. Further profiling separates
+anonymous memory from file pages and measures quote CPU costs before delivery.
+
+
+Checked canonical aggregate encoding and decoding passed 541 focused native
+controls, strict typing across 244 files, and all ten compiled imports. One
+intermediate test wrongly treated prefixless addresses as invalid; its failed
+run is retained, and the corrected regression preserves the native support.
+The whole-request replay still timed out after 300 seconds, at only 1.997 GiB
+peak and without memory-limit events. Component speedups alone did not establish
+quote recovery.
+
+The subsequent phase trace records 896 individual Balancer vault inventory
+reads competing with dense scans for the same eight native RPC slots. Their
+transport durations total 1,625.30 seconds including overlapping semaphore
+queueing. The trace and independent same-hash balance-batch probe are in
+`current-base-rpc-phase-profile.json`. Balancer's
+[primary vault source](https://github.com/balancer/balancer-v2-monorepo/blob/master/pkg/vault/contracts/PoolTokens.sol)
+confirms that `getPoolTokens` reads registered pool state independently of the
+caller. The next candidate batches only that getter, in at most 128-pool windows,
+retains deployment checks, checks aggregate block and result count, and falls
+back to native individual getters for unavailable members or provider limits.
+This latest change still needs scoped and whole-request verification.
+
+
+The provider-sized getter and code batches, bounded HTTP 413 splitting, Balancer
+vault batches, and ordinary-byte RPC decoding passed 563 focused native tests,
+strict typing across 244 files, and all ten compiled imports. The underlying
+native ABI bytes and values match at the measured limits: 7,500 reserve getters,
+6,250 balance getters, and 8,192 code checks. Payloads for getter aggregates stay
+around 2.4 MB including hexadecimal calldata. Larger getter requests were
+rejected and are not adopted; smaller provider limits still split boundedly at
+the same hash. Ordinary-byte slicing also preserves the native payload type and
+avoids constructing a HexBytes wrapper for every ABI word.
+
+Current Base replays with these changes still reached the single deadline.
+Failures 64, 72 and 74 remain recorded, with no OOM or memory-limit events.
+The last replay used about one CPU core throughout, with no CPU throttling.
+An isolated direct-SQLite comparison returned identical ordered event digests,
+but its gain over the ORM was modest and it is not adopted. Focused per-thread
+profiles are separating event-read and static-metadata CPU costs. These scoped
+passes do not establish end-to-end quote recovery, final-image readiness,
+production deployment, or a successful soak.

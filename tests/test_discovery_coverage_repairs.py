@@ -281,6 +281,76 @@ async def test_factory_scan_only_publishes_completed_ranges(
 
 
 @run_async_test
+@pytest.mark.parametrize("cancel", [False, True])
+async def test_factory_window_failure_retains_prior_coverage_and_restarts_missing_only(
+    monkeypatch: pytest.MonkeyPatch, cancel: bool
+) -> None:
+    import asyncio
+
+    from dank_mids import brownie_patch
+
+    from tests.test_pricing_correctness import Ready
+    from y._db.log_coverage import completed_thru
+    from y.utils import _factory_history as history
+    from y.utils import _log_ranges
+
+    coverage: list[tuple[int, int]] = []
+    requested: list[tuple[int, int]] = []
+    entered = asyncio.Event()
+    failing = True
+
+    class Cache:
+        def __init__(self, *args: object) -> None:
+            pass
+
+        def is_cached_thru(self, start: int) -> int:
+            return completed_thru(start, coverage)
+
+        def set_metadata(self, start: int, end: int) -> None:
+            coverage.append((start, end))
+
+        def select(self, start: int, end: int) -> list[object]:
+            return []
+
+    async def run(function: Any, *args: Any) -> Any:
+        return function(*args)
+
+    async def fetch(addresses: Any, topics: Any, start: int, end: int) -> list[Any]:
+        requested.append((start, end))
+        if failing and start > 80:
+            entered.set()
+            if cancel:
+                await asyncio.Event().wait()
+            raise ConnectionError("second window unavailable")
+        return []
+
+    history.scans.cache_clear()
+    monkeypatch.setattr(brownie_patch, "dank_eth", SimpleNamespace(block_number=Ready(160)))
+    monkeypatch.setattr(history, "LogCache", Cache)
+    monkeypatch.setattr(history, "default_filter_threads", SimpleNamespace(run=run))
+    monkeypatch.setattr(history, "adaptive_logs", fetch)
+    monkeypatch.setattr(history, "bulk_insert", AsyncMock())
+    monkeypatch.setattr(_log_ranges, "indexed_chunk_size", lambda: 10)
+    monkeypatch.setattr(_log_ranges, "sparse_chunk_ceiling", lambda: 10)
+    task = asyncio.create_task(history.factory_logs(FACTORY, [TOPIC, TOKEN], 1, 160))
+    await entered.wait()
+    if cancel:
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+    else:
+        with pytest.raises(ConnectionError, match="second window unavailable"):
+            await task
+    assert completed_thru(1, coverage) == 80
+    assert not history.scans().flights
+    failing = False
+    requested.clear()
+    assert await history.factory_logs(FACTORY, [TOPIC, TOKEN], 1, 160) == []
+    assert requested and all(start > 80 for start, _ in requested)
+    assert completed_thru(1, coverage) == 160
+
+
+@run_async_test
 @pytest.mark.parametrize(
     "event_counts,ceiling,slow_seconds,expected,third",
     [

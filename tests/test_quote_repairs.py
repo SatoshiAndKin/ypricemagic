@@ -1135,3 +1135,59 @@ async def test_balancer_metadata_respects_requested_history_without_live_pool_lo
             )
         ]
     constructor.assert_not_called()
+
+
+@run_async_test
+async def test_balancer_vault_discovery_batches_every_live_pool_and_retains_depth_order(
+    monkeypatch: Any,
+) -> None:
+    from y.prices.dex.balancer import v2
+
+    vault = instance(v2.BalancerV2Vault)
+    vault.address = USD
+    pools = [
+        v2.BalancerV2PoolMetadata(
+            f"0x{index + 1000:040x}", index.to_bytes(32, "big"), 2, BLOCK.number - 1
+        )
+        for index in range(900)
+    ]
+
+    async def metadata(self: Any, block: int) -> AsyncIterator[Any]:
+        assert self is vault and block == BLOCK.number
+        yield pools[:500]
+        yield pools[500:]
+
+    monkeypatch.setattr(v2.BalancerV2Vault, "pool_metadata_batches", metadata)
+    module = importlib.import_module("y.prices.dex.uniswap")
+    monkeypatch.setattr(
+        module, "uniswap_multiplexer", SimpleNamespace(v2_routers={}, v3=None, v3_forks=[], v1=None)
+    )
+    module = importlib.import_module("y.prices.dex.balancer")
+    monkeypatch.setattr(
+        module,
+        "balancer_multiplexer",
+        SimpleNamespace(__v1__=Ready(None), __v2__=Ready(SimpleNamespace(vaults=[vault]))),
+    )
+    monkeypatch.setattr(importlib.import_module("y.prices.stable_swap.curve"), "curve", None)
+    monkeypatch.setattr(_markets, "deployed", AsyncMock(return_value=True))
+    selected: list[bytes] = []
+
+    async def codes(addresses: tuple[str, ...], block: BlockRef) -> tuple[bool, ...]:
+        assert block is BLOCK and len(addresses) <= 128
+        return tuple(int(pool, 16) % 7 != 0 for pool in addresses)
+
+    async def values(target: str, ids: tuple[bytes, ...], block: BlockRef) -> tuple[Any, ...]:
+        assert target == USD and block is BLOCK and len(ids) <= 128
+        selected.extend(ids)
+        return tuple(((TOKEN, USD), (int.from_bytes(pool_id, "big"), 999), 10) for pool_id in ids)
+
+    monkeypatch.setattr(_markets, "deployed_batch", codes)
+    monkeypatch.setattr(_markets, "pool_tokens_batch", values)
+    forbidden = AsyncMock(side_effect=AssertionError("batched discovery entered individual getter"))
+    monkeypatch.setattr(_markets, "state", forbidden)
+    result = await _markets.discover(TOKEN, BLOCK)
+    expected = [pool for index, pool in enumerate(pools) if int(pool.address, 16) % 7 and index]
+    assert [market.pool for market in result] == [pool.address for pool in reversed(expected)]
+    assert set(selected) == {pool.pool_id for pool in pools if int(pool.address, 16) % 7}
+    assert all(market.protocol == "Balancer V2" and market.router == USD for market in result)
+    forbidden.assert_not_awaited()

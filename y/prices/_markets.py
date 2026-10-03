@@ -19,6 +19,7 @@ from y.prices._rpc import (
     deployed,
     deployed_batch,
     optional_read,
+    pool_tokens_batch,
     read,
     reserves_batch,
     state,
@@ -408,13 +409,47 @@ async def discover(
                 if not await deployed(address(vault), block):
                     continue
                 if isinstance(vault, BalancerV2Vault):
-                    pools = [
-                        pool
-                        async for batch in vault.pool_metadata_batches(block.number)
-                        for pool in batch
-                    ]
-                else:
-                    pools = await loaded(collect(vault.pools(block=block.number)), [])
+
+                    async def vault_batches() -> AsyncIterator[list[BalancerV2PoolMetadata]]:
+                        async for batch in vault.pool_metadata_batches(block.number):
+                            for start in range(0, len(batch), 128):
+                                yield batch[start : start + 128]
+
+                    async def vault_snapshots(
+                        batch: list[BalancerV2PoolMetadata],
+                    ) -> list[Market]:
+                        codes = await deployed_batch(tuple(address(pool) for pool in batch), block)
+                        live = [pool for pool, code in zip(batch, codes) if code]
+                        if not live:
+                            return []
+                        values = await pool_tokens_batch(
+                            address(vault), tuple(pool.pool_id for pool in live), block
+                        )
+                        snapshots = []
+                        for pool, value in zip(live, values):
+                            if value is None:
+                                continue
+                            tokens, balances, _ = value
+                            tokens = tuple(map(address, tokens))
+                            if token not in tokens or not balances[tokens.index(token)]:
+                                continue
+                            snapshots.append(
+                                Market(
+                                    "Balancer V2",
+                                    address(pool),
+                                    tokens,
+                                    tuple(map(int, balances)),
+                                    address(vault),
+                                    pool_id=pool.pool_id,
+                                )
+                            )
+                        return snapshots
+
+                    async for snapshots in bounded_async_map(vault_snapshots, vault_batches()):
+                        markets.extend(snapshots)
+                    continue
+
+                pools = await loaded(collect(vault.pools(block=block.number)), [])
 
                 async def balancer_snapshot(pool: Any) -> Market | None:
                     if not await deployed(address(pool), block):

@@ -4,6 +4,7 @@ from collections.abc import Iterable, Sequence
 from functools import lru_cache
 from operator import getitem
 from threading import Lock, local
+from time import monotonic
 from typing import Any, cast
 
 import cachebox
@@ -63,6 +64,35 @@ _encode_generic = json.Encoder().encode
 _encode_log = json.Encoder(enc_hook=enc_hook).encode
 
 
+def _encode_factory_log(log: RpcLog) -> bytes:
+    """Encode canonical RPC fields in the existing JSON array format."""
+    numbers = (log.blockNumber, log.logIndex, log.transactionIndex)
+    if (
+        getattr(type(log), "__struct_fields__", None) == Log.__struct_fields__
+        and isinstance(log.address, Address)
+        and isinstance(log.data, HexBytes)
+        and isinstance(log.transactionHash, HexBytes32)
+        and isinstance(log.topics, (list, tuple))
+        and all(isinstance(topic, HexBytes32) for topic in log.topics)
+        and type(log.removed) is bool
+        and all(isinstance(number, int) and not isinstance(number, bool) for number in numbers)
+    ):
+        return _encode_generic(
+            (
+                tuple(_remove_0x_prefix(topic.strip()) for topic in log.topics),
+                log.address[2:],
+                bytes(log.data).hex(),
+                log.removed,
+                int(cast(BlockNumber, log.blockNumber)),
+                _remove_0x_prefix(log.transactionHash.strip()),
+                int(log.logIndex),
+                int(log.transactionIndex),
+            )
+        )
+    # Keep the original codec's support and errors for noncanonical values.
+    return _encode_log(Log(**log))
+
+
 @lru_cache(maxsize=1)
 def _factory_writer() -> _AsyncExecutorMixin:
     # One connection owns the enlarged SQLite page cache. Sharing the filter
@@ -72,6 +102,7 @@ def _factory_writer() -> _AsyncExecutorMixin:
 
 @db_session_retry_locked
 def _insert_factory_rows(rows: list[tuple[Any, ...]]) -> None:
+    started = monotonic()
     database = cast(Database, getattr(FactoryLog, "_database_"))
     if getattr(database, "provider_name", None) == "sqlite":
         # Bound the page cache at 64 MiB while retaining the existing journal
@@ -96,6 +127,7 @@ def _insert_factory_rows(rows: list[tuple[Any, ...]]) -> None:
         db=database,
         sync=True,
     )
+    logger.debug("factory SQL rows=%s seconds=%.3f", len(rows), monotonic() - started)
 
 
 def _decode_hook_unsafe(typ: type[Any], obj: Any) -> Any:
@@ -315,10 +347,11 @@ async def bulk_insert_factory(logs: list[RpcLog]) -> None:
         return
 
     def prepare() -> list[tuple[Any, ...]]:
+        started = monotonic()
         for log in logs:
             if log.blockNumber is None:
                 raise ValueError("Factory event has no completed block")
-        return [
+        rows = [
             (
                 CHAINID,
                 str(log.address).lower(),
@@ -329,10 +362,12 @@ async def bulk_insert_factory(logs: list[RpcLog]) -> None:
                     _remove_0x_prefix(log.topics[i].strip()) if i < len(log.topics) else ""
                     for i in range(4)
                 ),
-                _encode_log(Log(**log)),
+                _encode_factory_log(log),
             )
             for log in logs
         ]
+        logger.debug("factory prepare rows=%s seconds=%.3f", len(rows), monotonic() - started)
+        return rows
 
     rows = await default_filter_threads.run(prepare)
     await _factory_writer().run(_insert_factory_rows, rows)

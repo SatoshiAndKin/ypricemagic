@@ -1,0 +1,51 @@
+{
+  "chain": "base",
+  "empty_cache": false,
+  "cache_provenance": "own diagnostic empty55 raw-event volume retained after failed quote",
+  "diagnostic_protocol_times": true,
+  "cpu_limit": null,
+  "matches_production_cpu_policy": true,
+  "parallel_inventories": true,
+  "required_base_factory_warmup": true,
+  "provider": "production host existing Base provider, copied from backend configuration without modification",
+  "passed": false,
+  "server_overlay_sha256": "8c80cf7b02db19a4e891d2b02740713f2a488c454caaf466c54fceb53a76c6ee",
+  "overlay_commit": "63e3e4bbf2425693d8b0c280f0fdfff716c5d01a plus bounded-window commits, canonical factory encoding, full supported V3 balance batches and checked canonical batch codec",
+  "overlay_sha256": {
+    "_db/utils/logs.py": "00ea29cab2e9e42153f857ea0c2eba98e30d844f135ae78f3d377cbaeee81740",
+    "prices/dex/balancer/v2.py": "c63a84d41d95c5aadc9421055c5a65a0370e24ceb1890404df0fdc3588c8d825",
+    "prices/_rpc.py": "56cfaaeb5c87dbc378cfa10ca3616ebd54c91266a2e839d03faba479f96c4186",
+    "prices/_markets.py": "42cf36e111cac8de5e210c9be648c98c014e07840fb5cd0d05732b25d7afb034",
+    "prices/dex/uniswap/v2.py": "3e39b900a3385002e88c97303491147bc55acbf4f30cc23e715c35af0fe97e7c",
+    "prices/dex/uniswap/v3.py": "3ddb5c856183294aefa5e20d10aefb194ad73640f06c40fd7caa100b804612a1",
+    "prices/stable_swap/curve.py": "b9817d6b249b9e2bd0a19509d2ebb2ea966aef2c8c23a62ad38d918770c630eb",
+    "utils/_factory_history.py": "f3ea00cf7244ae83b87446eb0a1bf1f665fa3bfcaf411d706b58c1a0b438e63f",
+    "utils/_log_ranges.py": "8b4a7ffdc72597ca01e62395b1b718a06d08d06c828893ff0a99bffc0902791b",
+    "utils/_pool_events.py": "cd7469c25e878ea993241c8f0cd74804abc23ec2a0f71bc015a71b11c2b220aa"
+  },
+  "base_image_installed_fork": "073c7ac801ca36128eb27efc64031851ab6f2101",
+  "proof_scope": "copied own diagnostic cache candidate with ten interpreted runtime overlays with bounded index sampling and static ABI decoding and server runtime priority control, not final production image",
+  "server_runtime_sha256": "811d4088046551efdb246cabfa4492423a0bbc1efb89aa1e080e830ce8a189b7",
+  "startup_seconds": 18.34982897969894,
+  "healthy_within_600": true,
+  "current_weth_amount": {
+    "status": 504,
+    "body": "{\"error\":\"Price lookup timed out after 300 seconds\"}",
+    "seconds": 301.57177436491475,
+    "passed": false
+  },
+  "memory_before_cleanup": "1997402112\nlow 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n",
+  "cleanup_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-03T08:30:17.84164792Z",
+    "FinishedAt": "2026-10-03T08:35:41.454797846Z"
+  }
+}

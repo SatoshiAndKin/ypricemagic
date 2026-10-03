@@ -71,38 +71,60 @@ async def factory_logs(
                 for first in range(missing, horizon + 1, chunk)
             ]
 
-            async def scan(blocks: tuple[int, int]) -> tuple[int, float]:
+            async def scan(blocks: tuple[int, int]) -> tuple[list[Log], float]:
                 first, last = blocks
                 async with get_logs_semaphore[get_running_loop()][last]:
                     covered = await default_filter_threads.run(broad.is_cached_thru, first)
                     if covered >= last:
-                        return 0, 0.0
+                        return [], 0.0
                     first = max(first, covered + 1)
                     started = monotonic()
                     fetched = await adaptive_logs(addresses, factory_topics, first, last)
                     seconds = monotonic() - started
-                # Release the RPC permit before the serialized disk commit so
-                # another factory can fetch while SQLite writes this range.
-                # Each owner still retains at most eight bounded responses.
-                queued_at = monotonic()
-                async with scans().write_lock():
-                    writing_at = monotonic()
-                    await bulk_insert(fetched)
-                    await default_filter_threads.run(broad.set_metadata, first, last)
                 getLogger(__name__).debug(
-                    "factory range addresses=%s from=%s to=%s events=%s fetch_seconds=%.3f "
-                    "write_wait_seconds=%.3f write_seconds=%.3f",
+                    "factory fetch addresses=%s from=%s to=%s events=%s fetch_seconds=%.3f",
                     addresses,
                     first,
                     last,
                     len(fetched),
                     seconds,
+                )
+                return fetched, seconds
+
+            counts: list[tuple[int, float]] = []
+            for offset in range(0, len(ranges), 8):
+                window = ranges[offset : offset + 8]
+                fetched_ranges = await bounded_map(scan, window, workers=8)
+                # Commit one bounded window together. Each range is either
+                # already covered or fetched successfully before publishing
+                # the contiguous interval. Failed/cancelled windows retain
+                # earlier completed coverage without publishing a gap.
+                fetched = [log for rows, _ in fetched_ranges for log in rows]
+                counts.extend((len(rows), seconds) for rows, seconds in fetched_ranges)
+                queued_at = monotonic()
+                async with scans().write_lock():
+                    writing_at = monotonic()
+                    await bulk_insert(fetched)
+                    metadata_at = monotonic()
+                    await default_filter_threads.run(
+                        broad.set_metadata, window[0][0], window[-1][1]
+                    )
+                getLogger(__name__).debug(
+                    "factory window addresses=%s from=%s to=%s events=%s fetch_seconds=%.3f "
+                    "write_wait_seconds=%.3f write_seconds=%.3f "
+                    "raw_write_seconds=%.3f metadata_seconds=%.3f",
+                    addresses,
+                    window[0][0],
+                    window[-1][1],
+                    len(fetched),
+                    max((seconds for _, seconds in fetched_ranges), default=0.0),
                     writing_at - queued_at,
                     monotonic() - writing_at,
+                    metadata_at - writing_at,
+                    monotonic() - metadata_at,
                 )
-                return len(fetched), seconds
+                del fetched, fetched_ranges
 
-            counts = await bounded_map(scan, ranges, workers=8)
             if chunk_size is None:
                 # Grow only after every range committed. Keep dense history
                 # bounded to about 8192 events per concurrent range, without

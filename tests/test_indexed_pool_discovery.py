@@ -234,7 +234,7 @@ async def test_compact_metadata_keeps_all_historical_candidates_without_pool_obj
     assert actual == expected
     result_batches = v3_batches if protocol in ("v3", "slipstream") else batches
     assert all(
-        len(batch) <= (1024 if protocol in ("v3", "slipstream") else 4096)
+        len(batch) <= (6250 if protocol in ("v3", "slipstream") else 7500)
         for batch in result_batches
     )
     assert sum(map(len, v3_batches if protocol in ("v3", "slipstream") else batches)) == len(

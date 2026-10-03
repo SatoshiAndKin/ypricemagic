@@ -1,0 +1,76 @@
+{
+  "scope": "Complete required native command at preceding committed 4569534b; later writer/statistics/window/encoder/V3 batching changes covered by separate focused controls",
+  "run": {
+    "command": [
+      "sh",
+      "-c",
+      "python -m pip install --no-deps --no-build-isolation -e . && mypy && sh /runner/full_suite.sh && python /runner/check_compiled.py"
+    ],
+    "docker_context": "colima-rpc-tune",
+    "builder": "ypricemagic-validation-4168ea425aa6",
+    "complete": true,
+    "started_unix": 1791008710.733147,
+    "source_sha": "4569534bc7079a8caf33ba57a42c8814121e9b32",
+    "source_revision": "HEAD",
+    "source_archive_sha256": "5a432e69d6dac6b4ce75483ebb08eb39ba344c2d0033363abd1ae827354804aa",
+    "image": "sha256:96ec7aab0eb97e9928dedea70edbceeaf3e26e6a4babccc1729fe7f9c5a4c0db",
+    "exit_code": 0,
+    "oom_killed": false,
+    "missing_reports": [],
+    "below_memory_target": true,
+    "elapsed_seconds": 5217.1754331588745
+  },
+  "pytest": {
+    "exit_code": 0,
+    "counts": {
+      "setup:passed": 2451,
+      "call:passed": 2440,
+      "teardown:passed": 2451,
+      "call:skipped": 11,
+      "setup:skipped": 6,
+      "teardown:skipped": 6
+    },
+    "collected": 2457
+  },
+  "compiled_modules": {
+    "y._db.brownie": "/work/y/_db/brownie.cpython-312-aarch64-linux-gnu.so",
+    "y._db.config": "/work/y/_db/config.cpython-312-aarch64-linux-gnu.so",
+    "y._db.decorators": "/work/y/_db/decorators.cpython-312-aarch64-linux-gnu.so",
+    "y._db.utils.stringify": "/work/y/_db/utils/stringify.cpython-312-aarch64-linux-gnu.so",
+    "y.ENVIRONMENT_VARIABLES": "/work/y/ENVIRONMENT_VARIABLES.cpython-312-aarch64-linux-gnu.so",
+    "y.convert": "/work/y/convert.cpython-312-aarch64-linux-gnu.so",
+    "y.exceptions": "/work/y/exceptions.cpython-312-aarch64-linux-gnu.so",
+    "y.networks": "/work/y/networks.cpython-312-aarch64-linux-gnu.so",
+    "y.prices.utils.sense_check": "/work/y/prices/utils/sense_check.cpython-312-aarch64-linux-gnu.so",
+    "y.utils.gather": "/work/y/utils/gather.cpython-312-aarch64-linux-gnu.so"
+  },
+  "container": {
+    "State": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-03T06:25:16.186361705Z",
+      "FinishedAt": "2026-10-03T07:52:06.276419191Z"
+    },
+    "Image": "sha256:96ec7aab0eb97e9928dedea70edbceeaf3e26e6a4babccc1729fe7f9c5a4c0db",
+    "HostConfig": {
+      "Memory": 8589934592,
+      "MemorySwap": 8589934592,
+      "NanoCpus": 4000000000,
+      "PidsLimit": 512,
+      "LogConfig": {
+        "Type": "json-file",
+        "Config": {
+          "max-file": "5",
+          "max-size": "100m"
+        }
+      }
+    }
+  }
+}
