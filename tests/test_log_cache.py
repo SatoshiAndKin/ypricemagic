@@ -96,32 +96,35 @@ async def test_compact_factory_events_reuse_legacy_rows_and_deduplicate(event: L
 
 
 @run_async_test
-async def test_paged_factory_history_is_bounded_ordered_and_complete(event: Log) -> None:
+@pytest.mark.parametrize("limit", [512, 2048, 4096])
+async def test_paged_factory_history_is_bounded_ordered_and_complete(
+    event: Log, limit: int
+) -> None:
     from y._db.common import default_filter_threads
 
     assert event.blockNumber is not None
-    address = Address("0x0000000000000000000000000000000000000002")
+    address = Address(f"0x{limit + 2:040x}")
     events = [
         replace(
             event,
             address=address,
-            transactionHash=TransactionHash("0x" + "cd" * 32),
+            transactionHash=TransactionHash(f"0x{(limit << 32) + i // 256:064x}"),
             blockNumber=BlockNumber(int(event.blockNumber) + i // 256),
             logIndex=LogIndex(i % 256),
         )
-        for i in range(1027)
+        for i in range(8201)
     ]
     from evmspec import Log as RpcLog
 
-    await logs.bulk_insert(cast(list[RpcLog], events[:600]))
-    await logs.bulk_insert_factory(cast(list[RpcLog], events[327:]))
+    await logs.bulk_insert(cast(list[RpcLog], events[:4500]))
+    await logs.bulk_insert_factory(cast(list[RpcLog], events[3700:]))
     cache = logs.LogCache([address], [event.topics[0].hex()])
     pages = []
     after = None
     while page := await default_filter_threads.run(
-        cache.select_page, int(event.blockNumber), int(event.blockNumber) + 5, after
+        cache.select_page, int(event.blockNumber), int(event.blockNumber) + 40, after, limit
     ):
-        assert len(page) <= 512
+        assert len(page) <= limit
         pages.extend(page)
         last = page[-1]
         after = (int(last.blockNumber), int(last.logIndex), last.transactionHash.hex())
@@ -294,3 +297,10 @@ def test_batch_reference_lookup_respects_sql_limit_and_preserves_rows(
     ]
     reads = [sql for sql in statements if sql.lstrip().upper().startswith("SELECT")]
     assert len(reads) == 3, reads
+
+
+@pytest.mark.parametrize("limit", [0, -1, 4097])
+def test_event_pages_reject_unbounded_sizes(limit: int) -> None:
+    cache = logs.LogCache(None, None)
+    with pytest.raises(ValueError, match="event page limit"):
+        cache.select_page(1, 2, limit=limit)

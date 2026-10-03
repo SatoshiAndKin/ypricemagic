@@ -423,9 +423,15 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
 
     @db_session_retry_locked
     def select_page(
-        self, from_block: int, to_block: int, after: tuple[int, int, str] | None = None
+        self,
+        from_block: int,
+        to_block: int,
+        after: tuple[int, int, str] | None = None,
+        limit: int = 512,
     ) -> list[Log]:
-        """Read at most 512 events, even across very sparse completed history."""
+        """Read a bounded event page, even across very sparse completed history."""
+        if not 1 <= limit <= 4096:
+            raise ValueError("event page limit must be between 1 and 4096")
         if after:
             from_block = max(from_block, after[0])
         modern_query = self._factory_query(from_block, to_block)
@@ -445,9 +451,9 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
                 or (block == last_block and index > last_index)
                 or (block == last_block and index == last_index and txhash > last_tx)
             )
-        modern = [_decode_log(row[3]) for row in modern_query.limit(512)]
-        legacy = [_decode_log(row[3]) for row in legacy_query.limit(512)]
-        return self._merge_logs(legacy, modern)[:512]
+        modern = [_decode_log(row[3]) for row in modern_query.limit(limit)]
+        legacy = [_decode_log(row[3]) for row in legacy_query.limit(limit)]
+        return self._merge_logs(legacy, modern)[:limit]
 
     def _factory_query(self, from_block: int, to_block: int) -> "Query[Any, Any]":
         from y._db.utils import utils as db

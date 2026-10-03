@@ -497,7 +497,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
                     if cached_end >= first:
                         after: tuple[int, int, str] | None = None
                         while rows := await default_filter_threads.run(
-                            cache.select_page, first, cached_end, after
+                            cache.select_page, first, cached_end, after, 4096
                         ):
                             yield rows
                             last = rows[-1]

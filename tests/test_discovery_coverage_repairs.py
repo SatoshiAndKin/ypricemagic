@@ -282,17 +282,27 @@ async def test_factory_scan_only_publishes_completed_ranges(
 
 @run_async_test
 @pytest.mark.parametrize(
-    "dense,ceiling,slow_seconds,expected,third",
+    "event_counts,ceiling,slow_seconds,expected,third",
     [
-        (False, 40, 0, 20, 40),
-        (False, 10, 0, 10, 10),
-        (True, 40, 0, 10, 10),
-        (False, 40, 6, 20, 20),
-        (False, 40, 11, 20, 10),
+        ((0, 0, 0), 40, 0, 20, 40),
+        ((1025, 1025, 1025), 40, 0, 20, 40),
+        ((4096, 4096, 4096), 40, 0, 20, 40),
+        ((4097, 4097, 4097), 40, 0, 10, 10),
+        ((8192, 8192, 8192), 40, 0, 10, 10),
+        ((0, 8193, 0), 40, 0, 20, 10),
+        ((0, 0, 0), 10, 0, 10, 10),
+        ((8193, 8193, 8193), 40, 0, 10, 10),
+        ((0, 0, 0), 40, 6, 20, 20),
+        ((0, 0, 0), 40, 11, 20, 10),
     ],
 )
 async def test_factory_windows_grow_after_sparse_success_and_bound_dense_history(
-    monkeypatch: Any, dense: bool, ceiling: int, slow_seconds: float, expected: int, third: int
+    monkeypatch: Any,
+    event_counts: tuple[int, int, int],
+    ceiling: int,
+    slow_seconds: float,
+    expected: int,
+    third: int,
 ) -> None:
     from dank_mids import brownie_patch
 
@@ -325,7 +335,7 @@ async def test_factory_windows_grow_after_sparse_success_and_bound_dense_history
         ranges.append((start, end))
         if len(ranges) > 8:
             clock[0] += slow_seconds
-        return [SimpleNamespace()] * (1025 if dense else 0)
+        return [SimpleNamespace()] * event_counts[min((len(ranges) - 1) // 8, 2)]
 
     history.scans.cache_clear()
     monkeypatch.setattr(history, "monotonic", lambda: clock[0], raising=False)
@@ -349,3 +359,61 @@ async def test_factory_windows_grow_after_sparse_success_and_bound_dense_history
     assert await history.factory_logs(FACTORY, [TOPIC], next_start, next_start + 9) == []
     assert max(last - first + 1 for first, last in ranges[second_count:]) == third
     assert len(ranges) - second_count <= 8
+
+
+@run_async_test
+@pytest.mark.parametrize("cached,empty", [(True, False), (False, False), (True, True)])
+async def test_factory_event_batches_are_bounded_and_reuse_completed_history(
+    monkeypatch: pytest.MonkeyPatch, cached: bool, empty: bool
+) -> None:
+    from y.utils import _factory_history as history
+
+    rows = (
+        []
+        if empty
+        else [
+            SimpleNamespace(
+                blockNumber=10 + index // 1000,
+                logIndex=index,
+                transactionHash=SimpleNamespace(hex=lambda: "0x" + "aa" * 32),
+            )
+            for index in range(8201)
+        ]
+    )
+    reads: list[Any] = []
+    fetches: list[Any] = []
+
+    class Cache:
+        def __init__(self, addresses: Any, topics: Any) -> None:
+            assert addresses == [FACTORY] and topics == [TOPIC]
+
+        def is_cached_thru(self, first: int) -> int:
+            return 20 if cached else 0
+
+        def select_page(self, first: int, last: int, after: Any, limit: int) -> list[Any]:
+            reads.append((first, last, limit))
+            assert last == 20 and limit == 4096
+            index = after[1] + 1 if after else 0
+            return rows[index : index + limit]
+
+    async def run(function: Any, *args: Any) -> Any:
+        return function(*args)
+
+    async def fetch(addresses: Any, topics: Any, first: int, last: int) -> list[Any]:
+        fetches.append((addresses, topics, first, last))
+        assert last == 20
+        return rows
+
+    monkeypatch.setattr(history, "LogCache", Cache)
+    monkeypatch.setattr(history, "default_filter_threads", SimpleNamespace(run=run))
+    monkeypatch.setattr(history, "factory_logs", fetch)
+    batches = [batch async for batch in history.factory_log_batches([FACTORY], [TOPIC], 10, 20)]
+    assert [row for batch in batches for row in batch] == rows
+    assert all(len(batch) <= 4096 for batch in batches)
+    if cached:
+        assert fetches == []
+        assert len(reads) == (1 if empty else 4)
+        assert all(len(batch) <= 4096 for batch in batches)
+    else:
+        assert reads == []
+        assert fetches == [([FACTORY], [TOPIC], 10, 20)]

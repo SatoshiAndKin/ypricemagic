@@ -87,3 +87,30 @@ production proxy excluded Geth from historical logs through an explicit
 128-block log-history setting. A separate infrastructure repair retains
 Ethereum on web3-proxy and Geth's 128-block state limit while correcting log
 eligibility, after matching nonempty pre-Merge event sets against Reth.
+
+Independent router inventories now run concurrently and retain deterministic final
+market ordering. Balancer V2 registration discovery uses compact, historically
+bounded raw events instead of a live current-head loader. Real cold Base
+historical WETH pricing passed in 217.26 seconds, preserving exactly
+`1969.89808`. Ethereum, using the existing web3-proxy Fastest route on the same
+production proxy host, completed required initialization in 488.92 seconds and
+returned the historical USDC amount result in 237.18 seconds, exactly
+`0.9989039883929369`. These are isolated interpreted-overlay candidate results,
+not final-image or deployed-provider configuration proof.
+
+Metadata cache pages now read up to 4096 events with explicit caller limits;
+ordering, legacy/compact deduplication, historical ceilings, and empty results
+are tested. Shared raw scans release their RPC permit before serialized disk
+commits and stabilize dense windows around 8192 events instead of repeatedly
+growing and splitting rejected ranges. Large-range timeouts split immediately;
+ordinary reads and small-range timeouts retain one bounded retry.
+
+The latest focused native run passed 401 tests and strict mypy across 242 files.
+All ten configured modules resolved to native Python 3.12 extension files in
+that isolated child source tree. Its per-file hashes are recorded in
+`parallel-protocol-focused-native.json`. A fresh current-block Base request
+still reached the single 300-second deadline with incomplete factory backfill;
+that failure is retained. The server follow-up is measuring required Base
+factory warmup against the unchanged 600-second startup grace. Complete native
+validation, final production-image builds, merges, deployment, public matrix,
+browser verification, and the 60-minute production soak remain acceptance gates.

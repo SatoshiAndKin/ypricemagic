@@ -615,11 +615,11 @@ async def _prefill_registry_logs(registries: list[Address]) -> None:
         # The eight-range owner remains bounded. Only this sparse registry
         # prefill starts at the same small range as ordinary pool discovery.
         seconds = monotonic() - started
-        if len(rows) > 64:
-            chunk = initial
-        elif seconds > 20:
+        if len(rows) > 4096:
             chunk = max(initial, chunk // 2)
-        elif seconds < 8:
+        elif seconds > 30:
+            chunk = max(initial, chunk // 2)
+        elif seconds < 20:
             chunk = min(ceiling, chunk * 2)
 
 

@@ -889,7 +889,7 @@ class UniswapRouterV2(ContractBase):
                     if cached_end >= first:
                         after: tuple[int, int, str] | None = None
                         while rows := await default_filter_threads.run(
-                            cache.select_page, first, cached_end, after
+                            cache.select_page, first, cached_end, after, 4096
                         ):
                             yield rows
                             last = rows[-1]
@@ -922,7 +922,7 @@ class UniswapRouterV2(ContractBase):
                             bool(event["stable"]) if "stable" in event else None,
                         )
                     )
-                    if len(batch) == 2048:
+                    if len(batch) == 4096:
                         yield batch
                         batch = []
                 del decoded

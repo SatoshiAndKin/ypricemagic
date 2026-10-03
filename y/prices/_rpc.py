@@ -32,7 +32,9 @@ _T = TypeVar("_T")
 
 
 @stuck_coro_debugger
-async def _retry_state_read(request: Callable[[], Awaitable[_T]]) -> _T:
+async def _retry_state_read(
+    request: Callable[[], Awaitable[_T]], *, retry_timeouts: bool = True
+) -> _T:
     """Retry archive misses and one transport timeout at the unchanged block identifier.
 
     Failures during concurrent historical reads can outlast a short retry burst.
@@ -45,7 +47,7 @@ async def _retry_state_read(request: Callable[[], Awaitable[_T]]) -> _T:
         except TimeoutError:
             # One transport retry fits inside the caller's existing deadline.
             # A task cancellation remains CancelledError and is never retried.
-            if transport_timeouts or attempt == 9:
+            if not retry_timeouts or transport_timeouts or attempt == 9:
                 raise
             transport_timeouts += 1
             getLogger(__name__).debug("RPC transport timeout; retrying the same block identifier")

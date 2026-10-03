@@ -107,6 +107,7 @@ async def discover(
     """
     from y import convert
     from y.prices.dex.balancer import balancer_multiplexer
+    from y.prices.dex.balancer.v2 import BalancerV2PoolMetadata, BalancerV2Vault
     from y.prices.dex.solidly import SolidlyRouterBase
     from y.prices.dex.uniswap import uniswap_multiplexer
     from y.prices.dex.uniswap.v2 import UniswapRouterV2, V2PoolMetadata
@@ -170,16 +171,18 @@ async def discover(
     async def collect(iterator: AsyncIterator[Any]) -> list[Any]:
         return [item async for item in iterator]
 
-    for router in uniswap_multiplexer.v2_routers.values():
+    @stuck_coro_debugger
+    async def v2_markets(router: Any) -> list[Market]:
+        markets: list[Market] = []
         protocol = (
             "Velodrome V2"
             if isinstance(router, VelodromeRouterV2)
             else "Solidly" if isinstance(router, SolidlyRouterBase) else "Uniswap V2"
         )
         if first_markets and not allowed(protocol, address(router), address(router.factory)):
-            continue
+            return markets
         if not await deployed(address(router.factory), block):
-            continue
+            return markets
         if isinstance(router, UniswapRouterV2):
 
             async def metadata_snapshot(
@@ -221,7 +224,7 @@ async def discover(
                 snapshots, router.pool_metadata_batches(checksum, block.number)
             ):
                 markets.extend(market for market in batch_markets if market)
-            continue
+            return markets
 
         pools = await loaded(router.get_pools_for(checksum, block=block.number, sync=False), {})
 
@@ -256,16 +259,20 @@ async def discover(
 
         markets.extend(m for m in await bounded_map(lambda p: safely(v2_snapshot, p), pools) if m)
 
-    for router in [uniswap_multiplexer.v3, *uniswap_multiplexer.v3_forks]:
+        return markets
+
+    @stuck_coro_debugger
+    async def v3_markets(router: Any) -> list[Market]:
+        markets: list[Market] = []
         if router is None:
-            continue
+            return markets
         # Slipstream uses the same router class; the pool determines its protocol.
         if first_markets and not allowed(
             "Uniswap V3", "Slipstream", address(router._quoter), address(router._factory)
         ):
-            continue
+            return markets
         if not await deployed(address(router._factory), block):
-            continue
+            return markets
 
         async def v3_batches(batch: list[Any]) -> list[Market | None]:
             # An empty input balance cannot be a sale candidate. Probe the
@@ -338,7 +345,7 @@ async def discover(
                 v3_batches, router.pool_metadata_batches(checksum, block.number)
             ):
                 markets.extend(market for market in batch_markets if market)
-            continue
+            return markets
 
         pools = await loaded(collect(router.pools_for_token(checksum, block.number)), [])
 
@@ -367,6 +374,18 @@ async def discover(
 
         markets.extend(m for m in await bounded_map(lambda p: safely(v3_snapshot, p), pools) if m)
 
+        return markets
+
+    # Factories are independent. Keep their original result order while
+    # overlapping bounded metadata/state batches. The shared chain log and
+    # native-read semaphores still cap RPC concurrency at eight.
+    inventories = await gather_owned(
+        [v2_markets(router) for router in uniswap_multiplexer.v2_routers.values()]
+        + [v3_markets(router) for router in [uniswap_multiplexer.v3, *uniswap_multiplexer.v3_forks]]
+    )
+    for inventory in inventories:
+        markets.extend(inventory)
+
     if curve and allowed("Curve", ""):
         pools = (await loaded(cast(CurveRegistry, curve).__coin_to_pools__, {})).get(checksum, ())
 
@@ -389,12 +408,23 @@ async def discover(
                 continue
             if not await deployed(address(vault), block):
                 continue
-            pools = await loaded(collect(vault.pools(block=block.number)), [])
+            if isinstance(vault, BalancerV2Vault):
+                pools = [
+                    pool
+                    async for batch in vault.pool_metadata_batches(block.number)
+                    for pool in batch
+                ]
+            else:
+                pools = await loaded(collect(vault.pools(block=block.number)), [])
 
             async def balancer_snapshot(pool: Any) -> Market | None:
                 if not await deployed(address(pool), block):
                     return None
-                pool_id = bytes(await pool.__id__)
+                pool_id = (
+                    pool.pool_id
+                    if isinstance(pool, BalancerV2PoolMetadata)
+                    else bytes(await pool.__id__)
+                )
                 tokens, balances, _ = await state(
                     address(vault),
                     "getPoolTokens(bytes32)(address[],uint256[],uint256)",

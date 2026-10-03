@@ -63,10 +63,24 @@ async def _request_logs(args: dict[str, Any]) -> list[Log]:
         async with timeout(30):
             response = await provider.make_request(RPCEndpoint("eth_getLogs"), [args])
         if "error" in response:
-            raise ValueError(response["error"])
+            error = response["error"]
+            if (
+                isinstance(error, dict)
+                and error.get("code") == -32002
+                and error.get("message") == "request timed out"
+            ):
+                # Geth can report its own deadline before the transport expires.
+                # Use the same bounded retry and range splitting as a transport
+                # timeout; do not classify it as missing event history.
+                raise TimeoutError("RPC log request timed out") from ValueError(error)
+            raise ValueError(error)
         return json.decode(json.encode(response["result"]), type=list[Log], dec_hook=_decode_hook)
 
-    return await _retry_state_read(request)
+    # A large timed-out scan has a bounded smaller-range recovery path.
+    # Split it immediately instead of spending another transport deadline on
+    # the same range. Ordinary reads retain their single timeout retry.
+    width = int(args["toBlock"], 16) - int(args["fromBlock"], 16) + 1
+    return await _retry_state_read(request, retry_timeouts=width <= SAFE_RANGE)
 
 
 @stuck_coro_debugger

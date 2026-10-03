@@ -130,11 +130,18 @@ async def test_curve_prefills_provider_history_before_replay(monkeypatch: Any) -
 
 @run_async_test
 @pytest.mark.parametrize(
-    "dense,cached,expected",
-    [(False, 0, [10, 20, 40, 40, 40]), (True, 0, [10] * 13), (False, 1000, [])],
+    "events,seconds,cached,expected",
+    [
+        (0, 0, 0, [10, 20, 40, 40, 40]),
+        (65, 12, 0, [10, 20, 40, 40, 40]),
+        (4096, 19, 0, [10, 20, 40, 40, 40]),
+        (4097, 0, 0, [10] * 13),
+        (0, 25, 0, [10] * 13),
+        (0, 0, 1000, []),
+    ],
 )
 async def test_curve_sparse_prefill_grows_and_reuses_completed_disk_coverage(
-    monkeypatch: Any, dense: bool, cached: int, expected: list[int]
+    monkeypatch: Any, events: int, seconds: float, cached: int, expected: list[int]
 ) -> None:
     from dank_mids import brownie_patch
 
@@ -143,6 +150,8 @@ async def test_curve_sparse_prefill_grows_and_reuses_completed_disk_coverage(
     from y._db.utils import logs
     from y.utils import _factory_history, _log_ranges
 
+    clock = [0.0]
+    monkeypatch.setattr(module, "monotonic", lambda: clock[0])
     scopes = [module.ADDRESS_PROVIDER, "0x0000000000000000000000000000000000000101"]
     coverage = {address: cached for address in scopes}
     calls: list[tuple[int, int, int]] = []
@@ -169,7 +178,8 @@ async def test_curve_sparse_prefill_grows_and_reuses_completed_disk_coverage(
         calls.append((start, end, chunk_size))
         for address in addresses:
             coverage[address] = min(1000, end + 7 * chunk_size)
-        return [object()] * (65 if dense else 0)
+        clock[0] += seconds
+        return [object()] * events
 
     monkeypatch.setattr(_factory_history, "factory_logs", scan)
     await module._prefill_registry_logs(scopes)

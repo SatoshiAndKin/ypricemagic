@@ -119,8 +119,9 @@ async def discover(router: Any, protocol: str, token: Any, block: int) -> list[A
 @pytest.mark.parametrize("protocol", ["v2", "solidly", "velodrome", "v3", "slipstream"])
 @pytest.mark.parametrize("block", [9, 10, 20])
 @pytest.mark.parametrize("cached", [True, False])
+@pytest.mark.parametrize("large_inventory", [False, True])
 async def test_compact_metadata_keeps_all_historical_candidates_without_pool_objects(
-    monkeypatch: Any, protocol: str, block: int, cached: bool
+    monkeypatch: Any, protocol: str, block: int, cached: bool, large_inventory: bool
 ) -> None:
     from y import contracts
     from y._db import common
@@ -128,6 +129,11 @@ async def test_compact_metadata_keeps_all_historical_candidates_without_pool_obj
     from y.utils import events
 
     router, rows, _, _ = setup_discovery(monkeypatch, protocol)
+    if large_inventory:
+        for index in range(8201):
+            row = Event(10, **rows[index % len(rows)])
+            row["pool" if "pool" in row else "pair"] = f"0x{0x990000 + index:040x}"
+            rows.append(row)
     monkeypatch.setattr(contracts, "contract_creation_block_async", AsyncMock(return_value=10))
     constructed = Mock(side_effect=AssertionError("constructed a pool object"))
     monkeypatch.setattr(v2, "UniswapV2Pool", constructed)
@@ -166,15 +172,19 @@ async def test_compact_metadata_keeps_all_historical_candidates_without_pool_obj
                 and row["token0" if self.position == 1 else "token1"] == TOKEN
             ]
 
-        def select_page(self, start: int, end: int, after: Any) -> list[Event]:
+        def select_page(self, start: int, end: int, after: Any, limit: int = 512) -> list[Event]:
             from hexbytes import HexBytes
 
-            selected = [] if after else self.select(start, end)
+            assert limit == 4096
+            selected = self.select(start, end)
             for index, row in enumerate(selected):
                 row.blockNumber = row.block_number
                 row.logIndex = index
                 row.transactionHash = HexBytes("0x01")
-            return selected
+            selected.sort(key=lambda row: (row.blockNumber, row.logIndex))
+            if after:
+                selected = [row for row in selected if (row.blockNumber, row.logIndex) > after[:2]]
+            return selected[:limit]
 
     async def run(function: Any, *args: Any) -> Any:
         return function(*args)
@@ -222,6 +232,11 @@ async def test_compact_metadata_keeps_all_historical_candidates_without_pool_obj
         if row.block_number <= block and TOKEN in (row["token0"], row["token1"])
     }
     assert actual == expected
+    result_batches = v3_batches if protocol in ("v3", "slipstream") else batches
+    assert all(
+        len(batch) <= (1024 if protocol in ("v3", "slipstream") else 4096)
+        for batch in result_batches
+    )
     assert sum(map(len, v3_batches if protocol in ("v3", "slipstream") else batches)) == len(
         expected
     )
@@ -414,7 +429,10 @@ def test_indexed_range_respects_provider_and_explicit_limits(
 
 
 @run_async_test
-async def test_http_range_error_reaches_splitter_without_batch_retry(monkeypatch: Any) -> None:
+@pytest.mark.parametrize("kind", ["http400", "rpc_timeout"])
+async def test_log_range_error_reaches_splitter_without_batch_retry(
+    monkeypatch: Any, kind: str
+) -> None:
     from aiohttp import ClientSession, web
     from web3 import AsyncHTTPProvider
 
@@ -433,9 +451,13 @@ async def test_http_range_error_reaches_splitter_without_batch_retry(monkeypatch
                 {
                     "jsonrpc": "2.0",
                     "id": body["id"],
-                    "error": {"code": 400, "message": "invalid block range given"},
+                    "error": (
+                        {"code": 400, "message": "invalid block range given"}
+                        if kind == "http400"
+                        else {"code": -32002, "message": "request timed out"}
+                    ),
                 },
-                status=400,
+                status=400 if kind == "http400" else 200,
             )
         result = [
             {
@@ -474,10 +496,33 @@ async def test_http_range_error_reaches_splitter_without_batch_retry(monkeypatch
         try:
             logs = await asyncio.wait_for(_log_ranges.adaptive_logs([USD], [], 1, 20001), 5)
             assert [log.blockNumber for log in logs] == [1, 5001, 5002, 10001, 10002, 20001]
-            assert ranges == [(1, 20001), (1, 10001), (1, 5001), (5002, 10001), (10002, 20001)]
+            rejected = [(1, 20001), (1, 10001)]
+            expected = rejected
+            assert ranges == expected + [(1, 5001), (5002, 10001), (10002, 20001)]
         finally:
             await session.close()
             await runner.cleanup()
+
+
+@run_async_test
+async def test_single_block_rpc_timeout_is_bounded_and_propagates(monkeypatch: Any) -> None:
+    from y.utils import _log_ranges
+
+    provider = SimpleNamespace(
+        make_request=AsyncMock(
+            return_value={"error": {"code": -32002, "message": "request timed out"}}
+        )
+    )
+    monkeypatch.setattr(
+        _log_ranges,
+        "dank_web3",
+        SimpleNamespace(eth=SimpleNamespace(w3=SimpleNamespace(provider=provider))),
+    )
+    monkeypatch.setattr(asyncio, "sleep", AsyncMock())
+    with pytest.raises(TimeoutError):
+        await _log_ranges.adaptive_logs([USD], [], 1, 1)
+    assert provider.make_request.await_count == 2
+    assert provider.make_request.await_args_list == [provider.make_request.await_args_list[0]] * 2
 
 
 @run_async_test

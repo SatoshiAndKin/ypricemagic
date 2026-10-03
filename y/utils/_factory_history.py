@@ -1,6 +1,7 @@
 """Share raw factory backfills; instantiate only token-matching pool events."""
 
 from asyncio import Lock, get_running_loop
+from collections.abc import AsyncIterator
 from functools import lru_cache
 from logging import getLogger
 from time import monotonic
@@ -80,24 +81,39 @@ async def factory_logs(
                     started = monotonic()
                     fetched = await adaptive_logs(addresses, factory_topics, first, last)
                     seconds = monotonic() - started
-                    # SQLite has one writer. Keep RPCs concurrent while avoiding
-                    # competing reference-ID reads and event commits here.
-                    async with scans().write_lock():
-                        await bulk_insert(fetched)
-                        await default_filter_threads.run(broad.set_metadata, first, last)
-                    return len(fetched), seconds
+                # Release the RPC permit before the serialized disk commit so
+                # another factory can fetch while SQLite writes this range.
+                # Each owner still retains at most eight bounded responses.
+                queued_at = monotonic()
+                async with scans().write_lock():
+                    writing_at = monotonic()
+                    await bulk_insert(fetched)
+                    await default_filter_threads.run(broad.set_metadata, first, last)
+                getLogger(__name__).debug(
+                    "factory range addresses=%s from=%s to=%s events=%s fetch_seconds=%.3f "
+                    "write_wait_seconds=%.3f write_seconds=%.3f",
+                    addresses,
+                    first,
+                    last,
+                    len(fetched),
+                    seconds,
+                    writing_at - queued_at,
+                    monotonic() - writing_at,
+                )
+                return len(fetched), seconds
 
             counts = await bounded_map(scan, ranges, workers=8)
             if chunk_size is None:
-                # Grow only after every range committed. Dense event histories
-                # return to the initial range to retain a small raw-log window.
+                # Grow only after every range committed. Keep dense history
+                # bounded to about 8192 events per concurrent range, without
+                # repeatedly dropping fast scans back to the initial width.
                 largest = max((count for count, _ in counts), default=0)
                 slowest = max((seconds for _, seconds in counts), default=0.0)
-                if largest > 1024:
-                    next_chunk = initial
+                if largest > 8192:
+                    next_chunk = max(initial, chunk // 2)
                 elif slowest > 10:
                     next_chunk = max(initial, chunk // 2)
-                elif slowest < 5:
+                elif slowest < 5 and largest <= 4096:
                     next_chunk = min(ceiling, chunk * 2)
                 else:
                     next_chunk = chunk
@@ -127,3 +143,31 @@ async def factory_logs(
     key = (*factory_key, start, end)
     rows = await scans().get(key, load)
     return [row for row in rows if topics_cover(topics, [topic.hex() for topic in row.topics])]
+
+
+async def factory_log_batches(
+    addresses: Any, topics: Any, start: int, end: int
+) -> "AsyncIterator[list[Log]]":
+    """Page completed history and backfill only the requested block boundary."""
+    from y.utils._log_ranges import indexed_chunk_size
+
+    cache = LogCache(addresses, topics)
+    first = start
+    while first <= end:
+        covered = await default_filter_threads.run(cache.is_cached_thru, first)
+        cached_end = min(covered, end)
+        if cached_end >= first:
+            after: tuple[int, int, str] | None = None
+            while rows := await default_filter_threads.run(
+                cache.select_page, first, cached_end, after, 4096
+            ):
+                yield rows
+                last = rows[-1]
+                after = (int(last.blockNumber), int(last.logIndex), last.transactionHash.hex())
+            first = cached_end + 1
+        else:
+            last_block = min(first + indexed_chunk_size() - 1, end)
+            rows = await factory_logs(addresses, topics, first, last_block)
+            for offset in range(0, len(rows), 4096):
+                yield rows[offset : offset + 4096]
+            first = last_block + 1
