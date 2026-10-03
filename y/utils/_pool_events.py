@@ -84,11 +84,16 @@ def decode_pool_logs(rows: list[Log]) -> Iterable[Any]:
 
     if not rows:
         return ()
-    if not all(isinstance(row, Log) and row.topics for row in rows):
+    if not all(isinstance(row, Log) for row in rows):
         return decode_logs(rows)
-    first = rows[0]
-    topic = "0x" + first.topics[0].hex().removeprefix("0x")
-    entry = _deployment_topics.get(cast(ChecksumAddress, str(first.address)), {}).get(
+    # evmspec lazily wraps fields on attribute access. Retain each immutable
+    # field once for validation, fingerprinting, and decoding this page.
+    prepared = [(row.address, row.topics, row.data) for row in rows]
+    if any(not topics for _, topics, _ in prepared):
+        return decode_logs(rows)
+    first_address, first_topics, _ = prepared[0]
+    topic = "0x" + first_topics[0].hex().removeprefix("0x")
+    entry = _deployment_topics.get(cast(ChecksumAddress, str(first_address)), {}).get(
         cast(HexStr, topic)
     )
     if entry is None:
@@ -100,33 +105,36 @@ def decode_pool_logs(rows: list[Log]) -> Iterable[Any]:
     indexed_count = len(ordered)
     ordered.extend(field for field in inputs if not field["indexed"])
     fields = tuple((field["name"], field["type"]) for field in ordered)
-    if any(row.address != first.address or row.topics[0] != first.topics[0] for row in rows):
+    if any(addr != first_address or topics[0] != first_topics[0] for addr, topics, _ in prepared):
         return decode_logs(rows)
-    fingerprint = blake2b(json.encode((str(first.address), entry)))
+    fingerprint = blake2b(json.encode((str(first_address), entry)))
     # Only event fields and their ABI affect this metadata. Block selection is
     # still performed by the disk query, and state remains keyed by block hash.
     # Include every word and row boundary so changed pages cannot hit old data.
-    for row in rows:
-        if len(row.topics) != indexed_count + 1:
+    words_and_data = []
+    for _, topics, data in prepared:
+        if len(topics) != indexed_count + 1:
             raise ValueError("Factory event has a different indexed field count")
-        if row.data is None:
+        if data is None:
             raise ValueError("Factory event omitted its ABI data")
-        fingerprint.update(len(row.topics).to_bytes(4, "big"))
-        for word in row.topics:
-            fingerprint.update(bytes(word))
-        fingerprint.update(len(row.data).to_bytes(4, "big"))
-        fingerprint.update(bytes(row.data))
+        topic_words = tuple(bytes(word) for word in topics)
+        data_bytes = bytes(data)
+        fingerprint.update(
+            len(topic_words).to_bytes(4, "big")
+            + b"".join(topic_words)
+            + len(data_bytes).to_bytes(4, "big")
+            + data_bytes
+        )
+        words_and_data.append((topic_words, data_bytes))
     key = fingerprint.digest()
     cache = _metadata_cache()
     if cached := cache.get(key):
         return cached
     decoded = []
-    for row in rows:
-        assert row.data is not None  # Checked for every row before cache lookup.
-        data = bytes(row.data)
-        words = [bytes(value) for value in row.topics[1:]]
+    for topic_words, data_bytes in words_and_data:
+        words = list(topic_words[1:])
         words.extend(
-            data[offset : offset + 32]
+            data_bytes[offset : offset + 32]
             for offset in range(0, 32 * (len(fields) - indexed_count), 32)
         )
         decoded.append(

@@ -332,6 +332,40 @@ def test_batch_decoder_retains_native_return_handlers() -> None:
     assert _rpc._decode_batch_output(encode(["uint256"], [42]), call) == {"balance": 43}
 
 
+@pytest.mark.parametrize(
+    "holder",
+    [
+        "0x" + "00" * 20,
+        "0x" + "ff" * 20,
+        "0x4200000000000000000000000000000000000006",
+        "0x000000000000000000000000000000000000aBcD",
+        "42" * 20,
+        bytes.fromhex("42" * 20),
+    ],
+)
+def test_balance_getter_encoder_matches_native_bytes(holder: Any) -> None:
+    call = Call(ADDRESSES[0], ["balanceOf(address)(uint256)", holder])
+    assert _rpc._getter_call_data(call) == call.data
+
+
+@pytest.mark.parametrize("holder", ["0x" + "zz" * 20, "0x123", True, 123])
+def test_invalid_balance_getter_encoder_retains_native_errors(holder: Any) -> None:
+    call = Call(ADDRESSES[0], ["balanceOf(address)(uint256)", holder])
+    with pytest.raises(Exception) as native:
+        _ = call.data
+    with pytest.raises(type(native.value)):
+        _rpc._getter_call_data(call)
+
+
+@pytest.mark.parametrize(
+    "signature,args",
+    [("getReserves()(uint256,uint256,uint256)", []), ("balanceOf(address)(uint256)", [])],
+)
+def test_other_getter_encoder_retains_native_behavior(signature: str, args: list[Any]) -> None:
+    call = Call(ADDRESSES[0], [signature, *args])
+    assert _rpc._getter_call_data(call) == call.data
+
+
 @pytest.mark.parametrize("count", [0, 1, 17, 4096])
 def test_canonical_aggregate_encoder_matches_native_bytes(count: int) -> None:
     members = [[f"0x{index:040x}", bytes([index % 256]) * (index % 99)] for index in range(count)]

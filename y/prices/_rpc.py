@@ -285,6 +285,20 @@ def _batch_call_data(call: Call) -> bytes:
     )
 
 
+def _getter_call_data(call: Call) -> bytes:
+    """Encode canonical balance getter inputs without repeated ABI validation."""
+    if call.function == "balanceOf(address)(uint256)" and call.args and len(call.args) == 1:
+        holder = call.args[0]
+        if isinstance(holder, str) and len(holder) == 42 and holder.startswith("0x"):
+            try:
+                value = bytes.fromhex(holder[2:])
+            except ValueError:
+                return call.data
+            if len(value) == 20:
+                return call.signature.fourbyte + bytes(12) + value
+    return call.data
+
+
 def _decode_batch_output(output: bytes, call: Call) -> Any:
     """Decode canonical batch results, with the native decoder as the fallback.
 
@@ -512,7 +526,7 @@ async def reserves_batch(addresses: tuple[str, ...], block: BlockRef) -> tuple[A
                 "tryBlockAndAggregate(bool,(address,bytes)[])(uint256,uint256,(bool,bytes)[])",
                 block,
                 False,
-                [[call.target, call.data] for call in calls],
+                [[call.target, _getter_call_data(call)] for call in calls],
             )
         except (TimeoutError, ValueError, ClientResponseError) as exc:
             if len(addresses) <= 1 or not _batch_limit_error(exc):
@@ -579,7 +593,7 @@ async def pool_tokens_batch(
                 "tryBlockAndAggregate(bool,(address,bytes)[])(uint256,uint256,(bool,bytes)[])",
                 block,
                 False,
-                [[call.target, call.data] for call in calls],
+                [[call.target, _getter_call_data(call)] for call in calls],
             )
         except (TimeoutError, ValueError, ClientResponseError) as exc:
             if len(pool_ids) <= 1 or not _batch_limit_error(exc):
@@ -628,7 +642,7 @@ async def balances_batch(requests: tuple[tuple[str, str], ...], block: BlockRef)
                 "tryBlockAndAggregate(bool,(address,bytes)[])(uint256,uint256,(bool,bytes)[])",
                 block,
                 False,
-                [[call.target, call.data] for call in calls],
+                [[call.target, _getter_call_data(call)] for call in calls],
             )
         except (TimeoutError, ValueError, ClientResponseError) as exc:
             if len(requests) <= 1 or not _batch_limit_error(exc):

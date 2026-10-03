@@ -264,3 +264,5 @@ but its gain over the ORM was modest and it is not adopted. Focused per-thread
 profiles are separating event-read and static-metadata CPU costs. These scoped
 passes do not establish end-to-end quote recovery, final-image readiness,
 production deployment, or a successful soak.
+
+The single-access immutable metadata follow-up passed 575 focused native Python 3.12 tests, strict typing across 244 files, and the ten compiled-extension import checks (`single-access-metadata-and-getter-focused-native.json`). It retains each lazily wrapped event field once and combines fingerprint updates without changing fingerprint bytes. Canonical balance getter input bytes match native encoding, with original encoding and errors retained for other values. An isolated 100,000-event physical-host profile reduced metadata decoding from 2.574 to 1.948 seconds with profiling enabled; these are component timings, not API acceptance. The full current quote replay remains a separate required check.
