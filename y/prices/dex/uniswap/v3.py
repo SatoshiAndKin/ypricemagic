@@ -466,7 +466,8 @@ class UniswapV3(a_sync.ASyncGenericBase):
         from y._db.utils.logs import LogCache
         from y.contracts import contract_creation_block_async
         from y.utils._factory_history import factory_logs
-        from y.utils.events import _decode_threads, decode_logs
+        from y.utils._pool_events import decode_pool_logs
+        from y.utils.events import _decode_threads
 
         token = await convert.to_address_async(token)
         # Registers the protocol-specific event ABI without starting a loader.
@@ -513,7 +514,7 @@ class UniswapV3(a_sync.ASyncGenericBase):
                     first = last_block + 1
 
             async for rows in pages():
-                decoded = await _decode_threads.run(decode_logs, rows)
+                decoded = await _decode_threads.run(decode_pool_logs, rows)
                 del rows
                 for event in decoded:
                     pair = str(event["pair" if "pair" in event else "pool"]).lower()

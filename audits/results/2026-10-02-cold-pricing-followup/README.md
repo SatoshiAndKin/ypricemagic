@@ -114,3 +114,33 @@ that failure is retained. The server follow-up is measuring required Base
 factory warmup against the unchanged 600-second startup grace. Complete native
 validation, final production-image builds, merges, deployment, public matrix,
 browser verification, and the 60-minute production soak remain acceptance gates.
+
+Large persisted factory catalogs exposed another #47 regression: without SQLite
+optimizer statistics, rare-token pages used the factory-wide block index instead
+of the existing token index. The deployed `073c7ac8` source reproduces the wrong
+index selection while returning the same event. Bounded index samples repair
+the planner choice without changing filters, schemas, raw events, or ordering.
+On an exclusively owned Base diagnostic cache, all four query variants returned
+the same 1,255 events and ordered digest. A warm unoptimized query took 0.723 s;
+the sampled query took 0.0036 s. Sampling took 0.0014–0.0136 s. Exact normalized
+topic parameters and query plans are recorded in
+`sqlite-token-index-reproduction.json`.
+
+Static factory decoding now follows the registered protocol-specific ABI and
+preserves strict validation, with the generic decoder retained for other ABIs.
+Immutable decoded pages are reused across blocks with both a 65,536-row budget
+and a 128-page limit. Keys include the factory, ABI, and every ordered event word;
+changed data and ABIs cannot reuse stale metadata. Raw events stay on disk, and
+pool state and quotes still use the exact canonical block hash. The latest
+focused native run passed 413 tests, mypy across 244 source files, and all ten
+compiled-module imports, with 14 source hashes matched to the isolated child
+tree. Its evidence is in `index-metadata-focused-native.json`.
+
+The larger disk-commit experiment is discarded: collecting all eight responses
+before committing reduced fetch/write overlap. The retained implementation
+commits each completed range independently and publishes only its completed
+coverage. Failed startup measurements remain in the archive. The uncapped CPU
+diagnostic matches production's CPU policy and retains 8 GiB without swap; its
+container reached readiness just after 600 seconds, so the acceptance harness
+rejected it. Neither that run nor recovery using its completed test cache counts
+as a passing cold-cache result.

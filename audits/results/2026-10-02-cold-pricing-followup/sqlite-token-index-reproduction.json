@@ -1,0 +1,86 @@
+{
+  "deployed_revision": "073c7ac801ca36128eb27efc64031851ab6f2101",
+  "introduced_by": "PR #47 FactoryLog table without sampled SQLite optimizer statistics",
+  "controlled_regression": "same single rare-token row returned correctly, but deployed source selects factory-wide block index; repaired source selects token index",
+  "legacy_api_adapter": "ignore optional page limit in deployed-source test; no query or planner changes",
+  "controlled_deployed_test_failed": true,
+  "repaired_test_passed": true,
+  "measured_event_rows": 1255,
+  "event_results_identical": true,
+  "measurements": [
+    {
+      "predicate": "in",
+      "event_digest": "cd567fefa7d9201b87bf20a40c8388a36f4e215b9012d80167a080b628ec9de5",
+      "plan": [
+        [
+          5,
+          0,
+          0,
+          "SEARCH FactoryLog USING INDEX sqlite_autoindex_FactoryLog_1 (chain=? AND address=? AND block>? AND block<?)"
+        ]
+      ],
+      "rows": 1255,
+      "seconds": 2.2995961690321565
+    },
+    {
+      "predicate": "forced",
+      "event_digest": "cd567fefa7d9201b87bf20a40c8388a36f4e215b9012d80167a080b628ec9de5",
+      "plan": [
+        [
+          5,
+          0,
+          0,
+          "SEARCH FactoryLog USING INDEX idx_factorylog__chain_address_topic0_topic2_block_log_index (chain=? AND address=? AND topic0=? AND topic2=? AND block>? AND block<?)"
+        ],
+        [
+          44,
+          0,
+          0,
+          "USE TEMP B-TREE FOR RIGHT PART OF ORDER BY"
+        ]
+      ],
+      "rows": 1255,
+      "seconds": 0.008908380987122655
+    },
+    {
+      "predicate": "equals",
+      "event_digest": "cd567fefa7d9201b87bf20a40c8388a36f4e215b9012d80167a080b628ec9de5",
+      "plan": [
+        [
+          5,
+          0,
+          0,
+          "SEARCH FactoryLog USING INDEX sqlite_autoindex_FactoryLog_1 (chain=? AND address=? AND block>? AND block<?)"
+        ]
+      ],
+      "rows": 1255,
+      "seconds": 0.7230175139848143
+    },
+    {
+      "predicate": "analyzed",
+      "event_digest": "cd567fefa7d9201b87bf20a40c8388a36f4e215b9012d80167a080b628ec9de5",
+      "plan": [
+        [
+          5,
+          0,
+          0,
+          "SEARCH FactoryLog USING INDEX idx_factorylog__chain_address_topic0_topic2_block_log_index (chain=? AND address=? AND topic0=? AND topic2=? AND block>? AND block<?)"
+        ],
+        [
+          44,
+          0,
+          0,
+          "USE TEMP B-TREE FOR RIGHT PART OF ORDER BY"
+        ]
+      ],
+      "rows": 1255,
+      "seconds": 0.0035652699880301952
+    }
+  ],
+  "statistics_cost_seconds": [
+    0.013572823954746127,
+    0.0013792579993605614,
+    0.0022613040637224913
+  ],
+  "boundary": "native SQLite on exclusively owned diagnostic Base raw-event cache; SQL topic parameters use the production leading-zero normalization"
+}

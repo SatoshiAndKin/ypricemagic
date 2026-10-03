@@ -110,6 +110,7 @@ line_length = 100
 
 [tool.validation]
 protocol_discovery_tests = [
+  "tests/test_pool_event_metadata.py",
   "tests/test_quote_repairs.py",
   "tests/test_amount_quotes.py",
   "tests/test_routing_scaling.py",
@@ -125,6 +126,7 @@ cold_discovery_tests = [
   "tests/prices/stable_swap/test_factory_loading.py",
 ]
 cold_state_tests = [
+  "tests/test_pool_event_metadata.py",
   "tests/test_rpc_state_retry.py",
   "tests/test_indexed_pool_discovery.py",
   "tests/test_reserve_batches.py",

@@ -135,6 +135,65 @@ async def test_paged_factory_history_is_bounded_ordered_and_complete(
     assert historical == events[:256]
 
 
+def test_large_token_filter_uses_selective_index_without_changing_events(
+    event: Log, event_database: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from y._db.utils import utils
+
+    assert event.blockNumber is not None
+    address = Address("0x0000000000000000000000000000000000afA123")
+    rows = [
+        replace(
+            event,
+            address=address,
+            transactionHash=TransactionHash(f"0x{0xABA00000 + i // 256:064x}"),
+            blockNumber=BlockNumber(int(event.blockNumber) + i // 256),
+            logIndex=LogIndex(i % 256),
+            topics=(*event.topics, Topic(f"0x{0x123000 + i:064x}")),
+        )
+        for i in range(8201)
+    ]
+    database = event_database.db
+    with db_session:
+        chain = event_database.Chain(id=CHAINID)
+        for row in rows:
+            event_database.FactoryLog(
+                chain=CHAINID,
+                address=str(address).lower(),
+                block=int(cast(BlockNumber, row.blockNumber)),
+                log_index=int(row.logIndex),
+                txhash=row.transactionHash.hex(),
+                topic0=row.topics[0].strip(),
+                topic1=row.topics[1].strip(),
+                raw=logs._encode_log(row),
+            )
+    monkeypatch.setattr(logs, "FactoryLog", event_database.FactoryLog)
+    monkeypatch.setattr(logs, "DbLog", event_database.Log)
+    monkeypatch.setattr(utils, "get_chain", lambda **kwargs: chain)
+    target = rows[4100]
+    cache = logs.LogCache([address], [event.topics[0].hex(), target.topics[1].hex()])
+    restored = cache.select_page(int(event.blockNumber), int(event.blockNumber) + 40, None, 4096)
+    assert restored == [target]
+    with db_session:
+        # The native SQLite optimizer must use the token index, rather than
+        # scanning an entire factory for an uncommon or absent token.
+        query = (
+            'EXPLAIN QUERY PLAN SELECT block,log_index,txhash,raw FROM "FactoryLog" '
+            "WHERE chain=? AND address IN (?) AND topic0 IN (?) AND topic1 IN (?) "
+            "AND block>=? AND block<=? ORDER BY block,log_index,txhash LIMIT 4096"
+        )
+        parameters = (
+            CHAINID,
+            str(address).lower(),
+            event.topics[0].strip(),
+            target.topics[1].strip(),
+            int(event.blockNumber),
+            int(event.blockNumber) + 40,
+        )
+        plan = database.get_connection().execute(query, parameters).fetchall()
+    assert any("topic1" in row[3] for row in plan), plan
+
+
 @pytest.fixture
 def event_database(monkeypatch: pytest.MonkeyPatch) -> Iterator[ModuleType]:
     from y._db import entities

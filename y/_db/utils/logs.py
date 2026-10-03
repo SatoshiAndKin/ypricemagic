@@ -1,7 +1,9 @@
 import itertools
 import logging
 from collections.abc import Iterable, Sequence
+from functools import lru_cache
 from operator import getitem
+from threading import Lock
 from typing import Any, cast
 
 import cachebox
@@ -15,7 +17,7 @@ from evmspec.data import Address, BlockNumber, HexBytes32, uint
 from evmspec.structs.log import Topic
 from hexbytes import HexBytes
 from msgspec import ValidationError, json
-from pony.orm import commit, select
+from pony.orm import Database, DatabaseError, commit, select
 from pony.orm.core import Query
 
 from y import ENVIRONMENT_VARIABLES as ENVS
@@ -82,6 +84,50 @@ def _decode_hook_unsafe(typ: type[Any], obj: Any) -> Any:
 
 # Match the JSON writer. Decoding cached data must not query or modify the database.
 _decode_log = json.Decoder(type=Log, dec_hook=_decode_hook_unsafe).decode
+
+
+class _FactoryStatistics:
+    """Keep SQLite's bounded index samples current without retaining event rows."""
+
+    def __init__(self) -> None:
+        self.ready = False
+        self.large_sample = False
+        self.pending_rows = 0
+        self.lock = Lock()
+
+    def ensure(self, database: Database, *, added_rows: int = 0) -> None:
+        if getattr(database, "provider_name", None) != "sqlite":
+            return
+        with self.lock:
+            self.pending_rows += added_rows
+            if self.ready and (
+                not added_rows or (self.large_sample and self.pending_rows < 1_000_000)
+            ):
+                return
+            try:
+                # Without statistics SQLite can prefer scanning every raw event
+                # to the selective token index, even for an empty token page.
+                # Limit samples per index instead of scanning the full catalog.
+                database.execute("PRAGMA analysis_limit=1000")
+                database.execute('ANALYZE "FactoryLog"')
+                commit()
+            except DatabaseError as error:
+                logger.warning("factory cache index statistics unavailable: %s", error)
+            else:
+                self.ready = True
+                self.large_sample = self.large_sample or bool(self.pending_rows)
+                self.pending_rows = 0
+
+
+@lru_cache(maxsize=32)
+def _factory_statistics(database: Database) -> _FactoryStatistics:
+    return _FactoryStatistics()
+
+
+@db_session_retry_locked
+def _refresh_factory_statistics(added_rows: int) -> None:
+    database = cast(Database, getattr(FactoryLog, "_database_"))
+    _factory_statistics(database).ensure(database, added_rows=added_rows)
 
 
 def _prepare_log(
@@ -248,6 +294,8 @@ async def bulk_insert_factory(logs: list[RpcLog]) -> None:
         rows,
         sync=True,
     )
+    if len(logs) >= 4096:
+        await default_filter_threads.run(_refresh_factory_statistics, len(logs))
 
 
 # Cache completed IDs once for both synchronous and asynchronous callers.
@@ -432,6 +480,8 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
         """Read a bounded event page, even across very sparse completed history."""
         if not 1 <= limit <= 4096:
             raise ValueError("event page limit must be between 1 and 4096")
+        database = cast(Database, getattr(FactoryLog, "_database_"))
+        _factory_statistics(database).ensure(database)
         if after:
             from_block = max(from_block, after[0])
         modern_query = self._factory_query(from_block, to_block)
