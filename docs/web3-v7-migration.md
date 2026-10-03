@@ -71,3 +71,17 @@ suite are running against the repaired immutable dependencies, with passive
 full-value/path failure reporting and no runtime wrappers.
 These archive runs do not establish empty-cache startup performance. Deployment
 is separate; this migration remains draft pending full acceptance.
+
+
+The debug-allocator full repeat completed 2,310 passing cases and 17 skips with
+exact-equality failures for the yvCurve/IronBank Compound market at blocks
+14,022,560 and 24,601,520. Direct chain probes confirmed that simulating IronBank
+interest accrual before the oracle call changes its Curve virtual-price input
+inside a multicall. Oracle reads now use Dank's existing `no_multicall` contract
+policy; they retain JSON-RPC batching, selectors, retry/error handling and the
+DEBUG-only `y.stuck?` logger's default five-minute interval. The controlled native
+HTTP regression fails before the repair and passes after it. Three complete
+exact-block token-list replays pass unchanged, along with all 827 configured
+focused cases and strict mypy for 242 files. The final complete suite and server
+repin remain required. This final full archive profile used the default 10,000-call
+multicall limit; the SDK archive workload separately caps its groups at 1,000.

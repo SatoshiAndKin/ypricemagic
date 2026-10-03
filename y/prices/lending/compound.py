@@ -7,6 +7,9 @@ import a_sync
 from a_sync.a_sync import HiddenMethodDescriptor
 from brownie import ZERO_ADDRESS, chain
 from brownie.exceptions import VirtualMachineError
+from dank_mids.brownie_patch import dank_web3
+from dank_mids.helpers._controllers import get_controller_for_async_w3
+from eth_utils.address import to_checksum_address
 from multicall import Call
 from web3.exceptions import ContractLogicError
 
@@ -93,6 +96,11 @@ def _oracle_unavailable(exc: Exception) -> bool:
 
 @stuck_coro_debugger
 async def _read(address: str, signature: str | list[str], block: Block | None) -> Any:
+    if isinstance(signature, list) and signature[0] == "getUnderlyingPrice(address)(uint256)":
+        # Lending interest accrual in another simulated call can change Curve
+        # virtual prices used by this oracle. Retain JSON-RPC batching while
+        # isolating the oracle's EVM state from those multicall mutations.
+        get_controller_for_async_w3(dank_web3.eth.w3).no_multicall.add(to_checksum_address(address))
     return await _retry_state_read(lambda: Call(address, signature, block_id=block))
 
 
