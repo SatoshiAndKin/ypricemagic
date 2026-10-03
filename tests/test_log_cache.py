@@ -1,8 +1,10 @@
 """Stored events must decode without reading or writing ORM entities."""
 
 import importlib.util
+import sqlite3
 import sys
 from collections.abc import Iterator
+from pathlib import Path
 from types import ModuleType
 from typing import cast
 from unittest.mock import Mock
@@ -13,7 +15,7 @@ from evmspec.data._main import _decode_hook
 from evmspec.structs.log import Topic
 from msgspec import ValidationError, json
 from msgspec.structs import replace
-from pony.orm import db_session
+from pony.orm import Database, db_session
 
 from tests.test_pricing_correctness import run_async_test
 from y._db.log import Log
@@ -93,6 +95,35 @@ async def test_compact_factory_events_reuse_legacy_rows_and_deduplicate(event: L
     assert restored == [event]
     with db_session:
         assert FactoryLog.select(lambda row: row.address == str(event.address).lower()).count() == 1
+
+
+@run_async_test
+async def test_factory_writer_bounds_cache_without_changing_durability(event: Log) -> None:
+    from y._db.common import default_filter_threads
+    from y._db.entities import FactoryLog
+
+    def settings() -> tuple[int, int, str]:
+        with db_session:
+            connection = getattr(FactoryLog, "_database_").get_connection()
+            return (
+                connection.execute("PRAGMA cache_size").fetchone()[0],
+                connection.execute("PRAGMA synchronous").fetchone()[0],
+                connection.execute("PRAGMA journal_mode").fetchone()[0],
+            )
+
+    writer = logs._factory_writer()
+    before = await writer.run(settings)
+    reader_before = await default_filter_threads.run(settings)
+    await logs.bulk_insert_factory([event])
+    after = await writer.run(settings)
+    assert after[0] == -65536
+    assert after[1:] == before[1:]
+    assert await default_filter_threads.run(settings) == reader_before
+    assert event.blockNumber is not None
+    cache = logs.LogCache(event.address, [event.topics[0].hex()])
+    assert event in await default_filter_threads.run(
+        cache.select, int(event.blockNumber), int(event.blockNumber)
+    )
 
 
 @run_async_test
@@ -192,6 +223,78 @@ def test_large_token_filter_uses_selective_index_without_changing_events(
         )
         plan = database.get_connection().execute(query, parameters).fetchall()
     assert any("topic1" in row[3] for row in plan), plan
+
+
+def test_statistics_refresh_reaches_existing_reader_connections(tmp_path: Path) -> None:
+    filename = tmp_path / "factory.sqlite"
+    writer = sqlite3.connect(filename)
+    reader = sqlite3.connect(filename)
+
+    class ConnectionDatabase:
+        provider_name = "sqlite"
+
+        def __init__(self, connection: sqlite3.Connection) -> None:
+            self.connection = connection
+
+        def get_connection(self) -> sqlite3.Connection:
+            return self.connection
+
+        def execute(self, sql: str) -> sqlite3.Cursor:
+            return self.connection.execute(sql)
+
+    statistics = logs._FactoryStatistics()
+    writer_database = cast(Database, ConnectionDatabase(writer))
+    reader_database = cast(Database, ConnectionDatabase(reader))
+    query = (
+        "EXPLAIN QUERY PLAN SELECT block,log_index,txhash,raw FROM FactoryLog "
+        "WHERE chain=? AND address IN (?) AND topic0 IN (?) AND topic1 IN (?) "
+        "AND block>=? AND block<=? ORDER BY block,log_index,txhash LIMIT 4096"
+    )
+    parameters = (CHAINID, "factory", "event", "target", 1, 100000)
+    try:
+        writer.execute(
+            "CREATE TABLE FactoryLog(chain INTEGER,address TEXT,block INTEGER,log_index INTEGER,"
+            "txhash TEXT,topic0 TEXT,topic1 TEXT,raw BLOB,"
+            "PRIMARY KEY(chain,address,block,log_index,txhash))"
+        )
+        writer.execute(
+            "CREATE INDEX token_index ON FactoryLog(chain,address,topic0,topic1,block,log_index)"
+        )
+        statistics.ensure(writer_database)
+        writer.commit()
+        statistics.ensure(reader_database)
+        initial = reader.execute(query, parameters).fetchall()
+        assert not any("token_index" in row[3] for row in initial), initial
+        writer.executemany(
+            "INSERT INTO FactoryLog VALUES (?,?,?,?,?,?,?,?)",
+            [
+                (
+                    CHAINID,
+                    "factory",
+                    i,
+                    0,
+                    str(i),
+                    "event",
+                    "target" if i == 4000 else str(i),
+                    b"[]",
+                )
+                for i in range(1, 8202)
+            ],
+        )
+        writer.commit()
+        statistics.ensure(writer_database, added_rows=8201)
+        writer.commit()
+        analyzed = writer.execute(query, parameters).fetchall()
+        assert any("token_index" in row[3] for row in analyzed), analyzed
+        statistics.ensure(reader_database)
+        refreshed = reader.execute(query, parameters).fetchall()
+        assert any("token_index" in row[3] for row in refreshed), refreshed
+        assert reader.execute("SELECT block FROM FactoryLog WHERE topic1='target'").fetchall() == [
+            (4000,)
+        ]
+    finally:
+        writer.close()
+        reader.close()
 
 
 @pytest.fixture

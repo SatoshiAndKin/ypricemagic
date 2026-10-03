@@ -1,0 +1,214 @@
+{
+  "scope": "isolated native scratch databases and own completed raw-event copies; no production cache mutations; copy/setup time excluded from write timings; full-size profiles shared the validation VM with the native suite",
+  "harness_error": "profile37 first attempt failed before writing because its scratch directory was missing; original failure retained at /private/tmp/ypm-write-cache-profile37-first.log",
+  "profiles": {
+    "ypm-write-cache-profile36.jsonl": [
+      {
+        "rows": 400000,
+        "indices": [
+          "CREATE INDEX \"idx_factorylog__chain_address_topic0_topic1_block_log_index\" ON \"FactoryLog\" (\"chain\", \"address\", \"topic0\", \"topic1\", \"block\", \"log_index\")",
+          "CREATE INDEX \"idx_factorylog__chain_address_topic0_topic2_block_log_index\" ON \"FactoryLog\" (\"chain\", \"address\", \"topic0\", \"topic2\", \"block\", \"log_index\")"
+        ],
+        "payload_bytes": 167124537
+      },
+      {
+        "cache_kib": 2000,
+        "seconds": 25.20097495499067,
+        "synchronous": 2,
+        "journal": "delete",
+        "rows": 400000,
+        "file_bytes": 539074560
+      },
+      {
+        "cache_kib": 65536,
+        "seconds": 22.44049916206859,
+        "synchronous": 2,
+        "journal": "delete",
+        "rows": 400000,
+        "file_bytes": 539074560
+      },
+      {
+        "cache_kib": 2000,
+        "seconds": 24.526278410921805,
+        "synchronous": 2,
+        "journal": "delete",
+        "rows": 400000,
+        "file_bytes": 539074560
+      },
+      {
+        "cache_kib": 65536,
+        "seconds": 13.028385841986164,
+        "synchronous": 2,
+        "journal": "delete",
+        "rows": 400000,
+        "file_bytes": 539074560
+      }
+    ],
+    "ypm-write-cache-profile37-all.log": [
+      {
+        "rows": 32768,
+        "indices": [
+          "CREATE INDEX \"idx_factorylog__chain_address_topic0_topic1_block_log_index\" ON \"FactoryLog\" (\"chain\", \"address\", \"topic0\", \"topic1\", \"block\", \"log_index\")",
+          "CREATE INDEX \"idx_factorylog__chain_address_topic0_topic2_block_log_index\" ON \"FactoryLog\" (\"chain\", \"address\", \"topic0\", \"topic2\", \"block\", \"log_index\")"
+        ],
+        "payload_bytes": 13710778
+      },
+      {
+        "rows": 32768,
+        "indices": [
+          "CREATE INDEX \"idx_factorylog__chain_address_topic0_topic1_block_log_index\" ON \"FactoryLog\" (\"chain\", \"address\", \"topic0\", \"topic1\", \"block\", \"log_index\")",
+          "CREATE INDEX \"idx_factorylog__chain_address_topic0_topic2_block_log_index\" ON \"FactoryLog\" (\"chain\", \"address\", \"topic0\", \"topic2\", \"block\", \"log_index\")"
+        ],
+        "payload_bytes": 13710778
+      },
+      {
+        "cache_kib": 2000,
+        "seconds": 10.207457144977525,
+        "synchronous": 2,
+        "journal": "delete",
+        "rows": 5020319,
+        "file_bytes": 6769446912
+      },
+      {
+        "cache_kib": 65536,
+        "seconds": 7.870403735083528,
+        "synchronous": 2,
+        "journal": "delete",
+        "rows": 5020319,
+        "file_bytes": 6769446912
+      },
+      {
+        "cache_kib": 65536,
+        "seconds": 17.391640576999635,
+        "synchronous": 2,
+        "journal": "delete",
+        "rows": 5020319,
+        "file_bytes": 6769446912
+      },
+      {
+        "cache_kib": 2000,
+        "seconds": 15.958989027072676,
+        "synchronous": 2,
+        "journal": "delete",
+        "rows": 5020319,
+        "file_bytes": 6769446912
+      }
+    ],
+    "ypm-write-durability-profile40.jsonl": [
+      {
+        "rows": 32768,
+        "indices": [
+          "CREATE INDEX \"idx_factorylog__chain_address_topic0_topic1_block_log_index\" ON \"FactoryLog\" (\"chain\", \"address\", \"topic0\", \"topic1\", \"block\", \"log_index\")",
+          "CREATE INDEX \"idx_factorylog__chain_address_topic0_topic2_block_log_index\" ON \"FactoryLog\" (\"chain\", \"address\", \"topic0\", \"topic2\", \"block\", \"log_index\")"
+        ],
+        "payload_bytes": 13710778
+      },
+      {
+        "case": 0,
+        "cache_kib": 2000,
+        "seconds": 17.557730551925488,
+        "synchronous": 2,
+        "journal": "delete",
+        "inserted_rows": 32768,
+        "total_rows": 5020319
+      },
+      {
+        "case": 1,
+        "cache_kib": 65536,
+        "seconds": 7.19582099292893,
+        "synchronous": 2,
+        "journal": "delete",
+        "inserted_rows": 32768,
+        "total_rows": 5053087
+      },
+      {
+        "case": 2,
+        "cache_kib": 65536,
+        "seconds": 9.576497422996908,
+        "synchronous": 2,
+        "journal": "wal",
+        "inserted_rows": 32768,
+        "total_rows": 5085855
+      },
+      {
+        "case": 3,
+        "cache_kib": 65536,
+        "seconds": 9.26856910600327,
+        "synchronous": 2,
+        "journal": "delete",
+        "inserted_rows": 32768,
+        "total_rows": 5118623
+      },
+      {
+        "case": 4,
+        "cache_kib": 65536,
+        "seconds": 7.282147765974514,
+        "synchronous": 2,
+        "journal": "wal",
+        "inserted_rows": 32768,
+        "total_rows": 5151391
+      },
+      {
+        "case": 5,
+        "cache_kib": 2000,
+        "seconds": 11.800150721915998,
+        "synchronous": 2,
+        "journal": "delete",
+        "inserted_rows": 32768,
+        "total_rows": 5184159
+      }
+    ],
+    "ypm-statistics-connections41.jsonl": [
+      {
+        "before": [
+          [
+            5,
+            0,
+            0,
+            "SEARCH FactoryLog USING INDEX sqlite_autoindex_FactoryLog_1 (chain=? AND address=? AND block>? AND block<?)"
+          ]
+        ]
+      },
+      {
+        "analyzing_connection": [
+          [
+            5,
+            0,
+            0,
+            "SEARCH FactoryLog USING INDEX token1 (chain=? AND address=? AND topic0=? AND topic1=? AND block>? AND block<?)"
+          ],
+          [
+            44,
+            0,
+            0,
+            "USE TEMP B-TREE FOR RIGHT PART OF ORDER BY"
+          ]
+        ],
+        "existing_reader": [
+          [
+            5,
+            0,
+            0,
+            "SEARCH FactoryLog USING INDEX sqlite_autoindex_FactoryLog_1 (chain=? AND address=? AND block>? AND block<?)"
+          ]
+        ]
+      },
+      {
+        "reloaded_reader": [
+          [
+            5,
+            0,
+            0,
+            "SEARCH FactoryLog USING INDEX token1 (chain=? AND address=? AND topic0=? AND topic1=? AND block>? AND block<?)"
+          ],
+          [
+            44,
+            0,
+            0,
+            "USE TEMP B-TREE FOR RIGHT PART OF ORDER BY"
+          ]
+        ]
+      }
+    ]
+  }
+}

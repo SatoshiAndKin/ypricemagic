@@ -175,3 +175,31 @@ there was no OOM, and real SIGTERM completed in 1.64 s. The earlier word-only
 candidate's 300-second failure remains recorded. This is interpreted-overlay
 diagnostic recovery, not empty-cache, final-image, new-block, or production
 acceptance. Those checks and the final complete native rerun remain required.
+
+The next two truly empty-cache candidates still failed the unchanged 600-second
+startup grace. Neither OOMed. Range logs account for about 570 seconds of
+serialized raw-event writes. A single factory writer now bounds the enlarged
+SQLite page cache to 64 MiB instead of multiplying it across filter connections.
+The real schema, JSON event format, journal mode, and full synchronous durability
+remain intact. Scratch and full-size catalog write profiles are retained, with
+their timing variance and shared validation VM scope. A WAL experiment did not
+show a consistent independent write benefit and is not part of the change.
+
+The cold run also exposed a gap in the initial index-statistics repair: updating
+one SQLite connection leaves existing readers with their old query plans.
+An isolated native two-connection reproduction selected the primary index on
+the existing reader after the analyzing connection selected the token index.
+Reloading persisted statistics selected the token index on both. The permanent
+regression fails against the committed original statistics owner and passes with
+connection-local generation tracking. This follows SQLite's documented
+[statistics reload behavior](https://www.sqlite.org/lang_analyze.html).
+Each reader reloads only when its connection or the statistics generation changes.
+Generated Pony SQL was also inspected: the factory projection already omits
+`DISTINCT`, so removing it would have no effect.
+
+The two changed files matched the isolated auxiliary control source hashes;
+454 focused Python 3.12 tests, strict typing across 244 files, and the ten
+unchanged compiled extensions passed. These are scoped controls in the prior
+native validation container, not a final image build. The fresh empty-cache run
+with connection-local statistics is still in progress; startup, subsequent
+quotes, latest full-native validation, and production acceptance remain gates.

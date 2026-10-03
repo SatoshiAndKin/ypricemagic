@@ -3,7 +3,7 @@ import logging
 from collections.abc import Iterable, Sequence
 from functools import lru_cache
 from operator import getitem
-from threading import Lock
+from threading import Lock, local
 from typing import Any, cast
 
 import cachebox
@@ -63,6 +63,41 @@ _encode_generic = json.Encoder().encode
 _encode_log = json.Encoder(enc_hook=enc_hook).encode
 
 
+@lru_cache(maxsize=1)
+def _factory_writer() -> _AsyncExecutorMixin:
+    # One connection owns the enlarged SQLite page cache. Sharing the filter
+    # executor would multiply this budget across its four connections.
+    return make_executor(1, 8, "ypricemagic db executor [factory]")
+
+
+@db_session_retry_locked
+def _insert_factory_rows(rows: list[tuple[Any, ...]]) -> None:
+    database = cast(Database, getattr(FactoryLog, "_database_"))
+    if getattr(database, "provider_name", None) == "sqlite":
+        # Bound the page cache at 64 MiB while retaining the existing journal
+        # and synchronous durability settings. Random token-index writes to a
+        # multi-million-event catalog otherwise churn the default 2 MiB cache.
+        database.execute("PRAGMA cache_size=-65536")
+    _bulk_insert(
+        FactoryLog,
+        (
+            "chain",
+            "address",
+            "block",
+            "log_index",
+            "txhash",
+            "topic0",
+            "topic1",
+            "topic2",
+            "topic3",
+            "raw",
+        ),
+        rows,
+        db=database,
+        sync=True,
+    )
+
+
 def _decode_hook_unsafe(typ: type[Any], obj: Any) -> Any:
     """This decode hook does NOT ensure addresses are checksummed. They must be stored that way."""
     try:
@@ -94,6 +129,26 @@ class _FactoryStatistics:
         self.large_sample = False
         self.pending_rows = 0
         self.lock = Lock()
+        self.generation = 0
+        self.connections = local()
+
+    def _reload(self, database: Database) -> None:
+        connection = database.get_connection()
+        if (
+            getattr(self.connections, "connection", None) is connection
+            and getattr(self.connections, "generation", -1) == self.generation
+        ):
+            return
+        try:
+            # ANALYZE updates the analyzing connection's planner. Other
+            # long-lived readers must reload the persisted samples themselves.
+            database.execute("ANALYZE sqlite_schema")
+            commit()
+        except DatabaseError as error:
+            logger.warning("factory cache index statistics reload unavailable: %s", error)
+        else:
+            self.connections.connection = connection
+            self.connections.generation = self.generation
 
     def ensure(self, database: Database, *, added_rows: int = 0) -> None:
         if getattr(database, "provider_name", None) != "sqlite":
@@ -103,6 +158,7 @@ class _FactoryStatistics:
             if self.ready and (
                 not added_rows or (self.large_sample and self.pending_rows < 1_000_000)
             ):
+                self._reload(database)
                 return
             try:
                 # Without statistics SQLite can prefer scanning every raw event
@@ -117,6 +173,9 @@ class _FactoryStatistics:
                 self.ready = True
                 self.large_sample = self.large_sample or bool(self.pending_rows)
                 self.pending_rows = 0
+                self.generation += 1
+                self.connections.connection = database.get_connection()
+                self.connections.generation = self.generation
 
 
 @lru_cache(maxsize=32)
@@ -276,24 +335,7 @@ async def bulk_insert_factory(logs: list[RpcLog]) -> None:
         ]
 
     rows = await default_filter_threads.run(prepare)
-    await default_filter_threads.run(
-        _bulk_insert,
-        FactoryLog,
-        (
-            "chain",
-            "address",
-            "block",
-            "log_index",
-            "txhash",
-            "topic0",
-            "topic1",
-            "topic2",
-            "topic3",
-            "raw",
-        ),
-        rows,
-        sync=True,
-    )
+    await _factory_writer().run(_insert_factory_rows, rows)
     if len(logs) >= 4096:
         await default_filter_threads.run(_refresh_factory_statistics, len(logs))
 
