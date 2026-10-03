@@ -153,6 +153,11 @@ def _decode_hook_unsafe(typ: type[Any], obj: Any) -> Any:
 _decode_log = json.Decoder(type=Log, dec_hook=_decode_hook_unsafe).decode
 
 
+# Pony invalidates shared translators when fixed topic attributes change.
+# Construct event-page queries serially; database reads and decoding stay parallel.
+_page_query_lock = Lock()
+
+
 class _FactoryStatistics:
     """Keep SQLite's bounded index samples current without retaining event rows."""
 
@@ -584,6 +589,12 @@ class LogCache(DiskCache[Log, LogCacheInfo]):
         return [unique[key] for key in keys], keys[-1] if keys else None
 
     def _page_queries(
+        self, from_block: int, to_block: int, after: tuple[int, int, str] | None, limit: int
+    ) -> tuple["Query[Any, Any]", "Query[Any, Any]"]:
+        with _page_query_lock:
+            return self._page_queries_locked(from_block, to_block, after, limit)
+
+    def _page_queries_locked(
         self, from_block: int, to_block: int, after: tuple[int, int, str] | None, limit: int
     ) -> tuple["Query[Any, Any]", "Query[Any, Any]"]:
         if not 1 <= limit <= 4096:
