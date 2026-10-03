@@ -427,3 +427,37 @@ async def test_orphaned_canonical_hash_is_a_transient_uncached_failure(
     assert rpc.await_count == 2
     assert all(c.kwargs["block_identifier"] == BLOCK.identifier for c in rpc.await_args_list)
     sleep.assert_not_awaited()
+
+
+@run_async_test
+@pytest.mark.parametrize("failure", [False, True])
+async def test_log_reads_preserve_provider_parameters_and_rpc_errors(
+    monkeypatch: pytest.MonkeyPatch, failure: bool
+) -> None:
+    from y.utils import _log_ranges
+
+    error = {"code": -32602, "message": "unsupported filter", "data": {"filter": "original"}}
+    request = AsyncMock(return_value={"error": error} if failure else {"result": []})
+    provider = SimpleNamespace(make_request=request)
+    monkeypatch.setattr(
+        _log_ranges,
+        "dank_web3",
+        SimpleNamespace(eth=SimpleNamespace(w3=SimpleNamespace(provider=provider))),
+    )
+    if failure:
+        with pytest.raises(ValueError) as raised:
+            await _log_ranges.adaptive_logs(TOKEN, [None], BLOCK.number, BLOCK.number + 1)
+        assert raised.value.args == (error,)
+    else:
+        assert await _log_ranges.adaptive_logs(TOKEN, [None], BLOCK.number, BLOCK.number + 1) == []
+    request.assert_awaited_once_with(
+        "eth_getLogs",
+        [
+            {
+                "topics": [None],
+                "fromBlock": hex(BLOCK.number),
+                "toBlock": hex(BLOCK.number + 1),
+                "address": TOKEN,
+            }
+        ],
+    )

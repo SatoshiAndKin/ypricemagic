@@ -2,13 +2,13 @@ aiosqlite @ git+https://github.com/SatoshiAndKin/aiosqlite.git@b8265cce6f09bcc80
 asyncpg>=0.31,<0.32
 bobs_lazy_logging==0.0.5
 cachebox @ git+https://github.com/SatoshiAndKin/cachebox.git@10be25afe46afb32c8135db4d1b8e2d94431b9c1
-cchecksum>=0.0.3,<1
+cchecksum @ git+https://github.com/SatoshiAndKin/cchecksum.git@fff7e1fe87f4679ec96de1cebb1cdd8f5e94be44
 checksum_dict>=2.1.9,<3
 click==8.5.0
-dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@1f76d99a9e727de7a6ed795f1cad9dbeb3db6cfa
-eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@c986066ddd9ae10906a470008d786faab2355cc5
+dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@90baeae436f4d359538b11988c13a86004e2e087
+eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@7e529be8dfc1afa7bda2d6660c8a11c59a653a6e
 eth_retry>=0.2.1
-evmspec>=0.3.4
+evmspec @ git+https://github.com/SatoshiAndKin/evmspec.git@31c8540a14228ca49c77c19d565a6aaee3d0079f
 ez-a-sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@ed3459ee74abec91c7675f57fee4b75595edbfdc
 faster-eth-abi>=5.2.12,<6
 faster-eth-utils
@@ -19,3 +19,4 @@ pony
 pony-stubs==0.5.2
 python-dateutil
 typed-envs>=0.2.2,<0.3
+web3>=7,<8

@@ -1,5 +1,4 @@
 from collections.abc import Callable
-from importlib import import_module
 from logging import DEBUG, getLogger
 from typing import Any, cast
 
@@ -7,13 +6,10 @@ import eth_retry
 from brownie import chain, web3
 from requests import Session
 from requests.adapters import HTTPAdapter
-from web3 import HTTPProvider, Web3
+from web3 import HTTPProvider
+from web3.middleware import ExtraDataToPOAMiddleware as _poa_middleware
+from web3.middleware.base import Web3Middleware
 from web3.types import RPCEndpoint, RPCResponse
-
-try:
-    from web3.middleware.geth_poa import geth_poa_middleware as _poa_middleware
-except ImportError:
-    _poa_middleware = getattr(import_module("web3.middleware"), "ExtraDataToPOAMiddleware")
 
 from y import ENVIRONMENT_VARIABLES as ENVS
 from y.networks import Network
@@ -95,15 +91,14 @@ def should_cache(method: str, params: Any) -> bool:
     return method == "eth_getCode" and params[1] == "latest"
 
 
-def getcode_cache_middleware(
-    make_request: Callable[[RPCEndpoint, Any], RPCResponse], web3: Web3
+def _wrap_getcode_cache(
+    make_request: Callable[[RPCEndpoint, Any], RPCResponse],
 ) -> Callable[[RPCEndpoint, Any], RPCResponse]:
     """
     Middleware for caching eth_getCode calls.
 
     Args:
         make_request: The original request function.
-        web3: The Web3 instance.
 
     Returns:
         A middleware function that caches eth_getCode calls.
@@ -111,8 +106,7 @@ def getcode_cache_middleware(
     Examples:
         >>> from web3 import Web3
         >>> w3 = Web3(Web3.HTTPProvider('http://localhost:8545'))
-        >>> middleware = getcode_cache_middleware(w3.manager.request_blocking, w3)
-        >>> w3.middleware_onion.add(middleware)
+        >>> w3.middleware_onion.add(getcode_cache_middleware)
 
     See Also:
         - :func:`should_cache`
@@ -140,6 +134,18 @@ def getcode_cache_middleware(
             return make_request(method, params)
 
     return middleware
+
+
+class GetCodeCacheMiddleware(Web3Middleware):
+    """Retain the latest-code cache through Web3 v7's request wrapper."""
+
+    def wrap_make_request(
+        self, make_request: Callable[[RPCEndpoint, Any], RPCResponse]
+    ) -> Callable[[RPCEndpoint, Any], RPCResponse]:
+        return _wrap_getcode_cache(make_request)
+
+
+getcode_cache_middleware = GetCodeCacheMiddleware
 
 
 def setup_getcode_cache_middleware() -> None:
@@ -184,7 +190,6 @@ def setup_geth_poa_middleware() -> None:
         >>> setup_geth_poa_middleware()
 
     See Also:
-        - :func:`web3.middleware.geth_poa.geth_poa_middleware`
         - :class:`web3.middleware.ExtraDataToPOAMiddleware`
     """
     try:

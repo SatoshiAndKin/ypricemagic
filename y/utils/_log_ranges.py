@@ -55,13 +55,13 @@ def sparse_chunk_ceiling() -> int:
 @stuck_coro_debugger
 async def _request_logs(args: dict[str, Any]) -> list[Log]:
     """Keep range errors out of Dank's batch retry loop so callers can split."""
-    from y.prices._rpc import _retry_state_read
+    from y.prices._rpc import _request_once, _retry_state_read
 
     provider = dank_web3.eth.w3.provider
 
     async def request() -> list[Log]:
         async with timeout(30):
-            response = await provider.make_request(RPCEndpoint("eth_getLogs"), [args])
+            response = await _request_once(provider, RPCEndpoint("eth_getLogs"), [args])
         if "error" in response:
             error = response["error"]
             if (

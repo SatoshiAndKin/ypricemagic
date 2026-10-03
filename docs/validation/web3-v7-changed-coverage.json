@@ -1,0 +1,45 @@
+{
+  "covered": 40,
+  "statements": 40,
+  "percent": 100.0,
+  "files": {
+    "y/_db/utils/logs.py": {
+      "covered": 4,
+      "statements": 4,
+      "missing": []
+    },
+    "y/exceptions.py": {
+      "covered": 2,
+      "statements": 2,
+      "missing": []
+    },
+    "y/prices/_rpc.py": {
+      "covered": 19,
+      "statements": 19,
+      "missing": []
+    },
+    "y/prices/lending/compound.py": {
+      "covered": 5,
+      "statements": 5,
+      "missing": []
+    },
+    "y/utils/_log_ranges.py": {
+      "covered": 2,
+      "statements": 2,
+      "missing": []
+    },
+    "y/utils/middleware.py": {
+      "covered": 8,
+      "statements": 8,
+      "missing": []
+    },
+    "y/utils/multicall.py": {
+      "covered": 0,
+      "statements": 0,
+      "missing": []
+    }
+  },
+  "source_revision": "8c8387ec15f4f8a119214df5971f10b79cfb6962",
+  "baseline_revision": "cb4a12376b807b1b9f27d9963f0c457edf02fda7",
+  "profile": "Extension-free Python 3.12; 308 focused cases; coverage spans complete pytest.main lifetime"
+}

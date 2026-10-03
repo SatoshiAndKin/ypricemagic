@@ -1,6 +1,6 @@
 """Factory history reuse requires complete compatible disk coverage."""
 
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from types import SimpleNamespace
 from typing import Any, cast
 from unittest.mock import AsyncMock
@@ -18,6 +18,51 @@ FACTORY = "0x0000000000000000000000000000000000228899"
 TOPIC = "0x" + "11" * 32
 TOKEN = "0x" + "22" * 32
 OTHER = "0x" + "33" * 32
+
+
+_TEST_FACTORIES = (
+    FACTORY,
+    "0x0000000000000000000000000000000000229900",
+    "0x0000000000000000000000000000000000550099",
+)
+
+
+def _clear_test_metadata() -> None:
+    from y._db.entities import LogCacheInfo, LogCacheRange
+
+    with db_session:
+        for entity in (LogCacheInfo, LogCacheRange):
+            for row in entity.select(lambda row: row.address in _TEST_FACTORIES):
+                row.delete()
+
+
+@pytest.fixture(autouse=True)
+def isolated_discovery_metadata() -> Iterator[None]:
+    # These tests share the native database with live pricing cases. Only remove
+    # metadata owned by this module, including remnants from an earlier run.
+    _clear_test_metadata()
+    try:
+        yield
+    finally:
+        _clear_test_metadata()
+
+
+def test_metadata_cleanup_preserves_unrelated_factory() -> None:
+    from y._db.entities import LogCacheRange
+
+    unrelated = "0x0000000000000000000000000000000000660099"
+    try:
+        with db_session:
+            LogCache([FACTORY], [TOPIC])._set_metadata(10, 20)
+            LogCache([unrelated], [TOPIC])._set_metadata(10, 20)
+        _clear_test_metadata()
+        with db_session:
+            assert LogCache([FACTORY], [TOPIC])._is_cached_thru(10) == 0
+            assert LogCache([unrelated], [TOPIC])._is_cached_thru(10) == 20
+    finally:
+        with db_session:
+            for row in LogCacheRange.select(lambda row: row.address == unrelated):
+                row.delete()
 
 
 @pytest.mark.parametrize(

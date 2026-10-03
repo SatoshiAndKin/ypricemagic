@@ -6,7 +6,7 @@
 
 int CPyGlobalsInit(void);
 
-extern PyObject *CPyStatics[691];
+extern PyObject *CPyStatics[694];
 extern const char * const CPyLit_Str[];
 extern const char * const CPyLit_Bytes[];
 extern const char * const CPyLit_Int[];
@@ -69,6 +69,7 @@ extern CPyModule *CPyModule_y___exceptions__internal;
 extern CPyModule *CPyModule_y___exceptions;
 extern PyObject *CPyStatic_exceptions___globals;
 extern CPyModule *CPyModule_contextlib;
+extern CPyModule *CPyModule_dank_mids____exceptions;
 extern CPyModule *CPyModule_web3___exceptions;
 extern CPyModule *CPyModule_y___prices___dex___uniswap___v2;
 extern CPyModule *CPyModule_y___networks__internal;
