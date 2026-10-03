@@ -52,6 +52,27 @@ def _metadata_cache() -> _MetadataCache:
     return _MetadataCache()
 
 
+def _decode_static_word(kind: str, word: bytes) -> Any:
+    """Decode fixed factory fields with the ABI codec's padding and range rules."""
+    if len(word) == 32:
+        if kind == "address" and word[:12] == bytes(12):
+            return "0x" + word[12:].hex()
+        if kind == "bytes32":
+            return word
+        value = int.from_bytes(word, "big", signed=kind == "int24")
+        if kind == "uint256":
+            return value
+        if kind == "uint24" and value < 1 << 24:
+            return value
+        if kind == "int24" and -(1 << 23) <= value < 1 << 23:
+            return value
+        if kind == "bool" and value in (0, 1):
+            return bool(value)
+    # Preserve the primary codec's exact validation and exceptions on malformed
+    # words; no invalid padding or out-of-range value becomes valid metadata.
+    return decode([kind], word)[0]
+
+
 def decode_pool_logs(rows: list[Log]) -> Iterable[Any]:
     """Use the registered event ABI, retaining the generic decoder for other logs.
 
@@ -78,8 +99,7 @@ def decode_pool_logs(rows: list[Log]) -> Iterable[Any]:
     ordered = [field for field in inputs if field["indexed"]]
     indexed_count = len(ordered)
     ordered.extend(field for field in inputs if not field["indexed"])
-    types = [field["type"] for field in ordered]
-    names = [field["name"] for field in ordered]
+    fields = tuple((field["name"], field["type"]) for field in ordered)
     if any(row.address != first.address or row.topics[0] != first.topics[0] for row in rows):
         return decode_logs(rows)
     fingerprint = blake2b(json.encode((str(first.address), entry)))
@@ -102,12 +122,18 @@ def decode_pool_logs(rows: list[Log]) -> Iterable[Any]:
         return cached
     decoded = []
     for row in rows:
-        if len(row.topics) != indexed_count + 1:
-            raise ValueError("Factory event has a different indexed field count")
-        if row.data is None:
-            raise ValueError("Factory event omitted its ABI data")
-        payload = b"".join(bytes(value) for value in row.topics[1:]) + bytes(row.data)
-        decoded.append(MappingProxyType(dict(zip(names, decode(types, payload)))))
+        assert row.data is not None  # Checked for every row before cache lookup.
+        data = bytes(row.data)
+        words = [bytes(value) for value in row.topics[1:]]
+        words.extend(
+            data[offset : offset + 32]
+            for offset in range(0, 32 * (len(fields) - indexed_count), 32)
+        )
+        decoded.append(
+            MappingProxyType(
+                {name: _decode_static_word(kind, word) for (name, kind), word in zip(fields, words)}
+            )
+        )
     page = tuple(decoded)
     cache.put(key, page)
     return page

@@ -947,9 +947,13 @@ async def test_compact_v3_discovery_reads_companion_balances_only_for_live_funde
 async def test_independent_factory_discovery_overlaps_and_drains_owned_work(
     monkeypatch: Any, outcome: str
 ) -> None:
+    from y import convert
     from y.prices.dex.uniswap import uniswap_multiplexer
 
     entered_v2, entered_v3, closed_v3 = asyncio.Event(), asyncio.Event(), asyncio.Event()
+    entered_curve, entered_balancer = asyncio.Event(), asyncio.Event()
+    closed_curve, closed_balancer = asyncio.Event(), asyncio.Event()
+    curve_pool, balancer_pool = f"0x{0xD202:040x}", f"0x{0xD203:040x}"
     pair = SimpleNamespace(
         address=f"0x{0xD200:040x}",
         _deploy_block=BLOCK.number - 1,
@@ -960,6 +964,8 @@ async def test_independent_factory_discovery_overlaps_and_drains_owned_work(
     async def pairs(*args: Any, **kwargs: Any) -> list[Any]:
         entered_v2.set()
         await entered_v3.wait()
+        await entered_curve.wait()
+        await entered_balancer.wait()
         if outcome == "failure":
             raise ConnectionError("factory discovery failed")
         if outcome == "cancellation":
@@ -976,6 +982,27 @@ async def test_independent_factory_discovery_overlaps_and_drains_owned_work(
         finally:
             closed_v3.set()
 
+    async def curve_index() -> dict[str, list[str]]:
+        entered_curve.set()
+        try:
+            await entered_v2.wait()
+            if outcome != "success":
+                await asyncio.Future()
+            return {convert.to_address(TOKEN): [curve_pool]}
+        finally:
+            closed_curve.set()
+
+    async def balancer_pools(*args: Any, **kwargs: Any) -> AsyncIterator[Any]:
+        assert kwargs == {"block": BLOCK.number}
+        entered_balancer.set()
+        try:
+            await entered_v2.wait()
+            if outcome != "success":
+                await asyncio.Future()
+            yield SimpleNamespace(address=balancer_pool, __id__=Ready(bytes(32)))
+        finally:
+            closed_balancer.set()
+
     monkeypatch.setattr(
         uniswap_multiplexer,
         "v2_routers",
@@ -991,16 +1018,35 @@ async def test_independent_factory_discovery_overlaps_and_drains_owned_work(
     monkeypatch.setattr(
         importlib.import_module("y.prices.dex.balancer"),
         "balancer_multiplexer",
-        SimpleNamespace(__v1__=Ready(None), __v2__=Ready(None)),
+        SimpleNamespace(
+            __v1__=Ready(None),
+            __v2__=Ready(
+                SimpleNamespace(vaults=[SimpleNamespace(address=USD, pools=balancer_pools)])
+            ),
+        ),
     )
-    monkeypatch.setattr(importlib.import_module("y.prices.stable_swap.curve"), "curve", None)
+    monkeypatch.setattr(
+        importlib.import_module("y.prices.stable_swap.curve"),
+        "curve",
+        SimpleNamespace(__coin_to_pools__=curve_index()),
+    )
     monkeypatch.setattr(_markets, "deployed", AsyncMock(return_value=True))
+    monkeypatch.setattr(
+        _markets,
+        "curve_pool_state",
+        AsyncMock(
+            return_value=_markets.Market("Curve", curve_pool, (TOKEN, USD), (6_000_000, 7_000_000))
+        ),
+    )
 
     async def state(target: str, signature: str, block: BlockRef, *args: Any) -> Any:
         assert block == BLOCK
         if signature.startswith("getReserves"):
             assert target == pair.address
             return (2_000_000, 3_000_000, 0)
+        if signature.startswith("getPoolTokens"):
+            assert target == USD and args == (bytes(32),)
+            return (TOKEN, USD), (8_000_000, 9_000_000), BLOCK.number
         assert signature == "balanceOf(address)(uint256)"
         assert args == (concentrated.address,)
         return 4_000_000 if target == TOKEN else 5_000_000
@@ -1019,10 +1065,14 @@ async def test_independent_factory_discovery_overlaps_and_drains_owned_work(
         else:
             result = await asyncio.wait_for(task, 1)
             assert [(m.protocol, m.pool, m.balances) for m in result] == [
+                ("Balancer V2", balancer_pool, (8_000_000, 9_000_000)),
+                ("Curve", curve_pool, (6_000_000, 7_000_000)),
                 ("Uniswap V3", concentrated.address, (4_000_000, 5_000_000)),
                 ("Uniswap V2", pair.address, (2_000_000, 3_000_000)),
             ]
         assert entered_v2.is_set() and entered_v3.is_set() and closed_v3.is_set()
+        assert entered_curve.is_set() and entered_balancer.is_set()
+        assert closed_curve.is_set() and closed_balancer.is_set()
     finally:
         task.cancel()
         await asyncio.gather(task, return_exceptions=True)

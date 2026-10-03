@@ -135,8 +135,8 @@ def test_metadata_reuse_preserves_changed_events_and_registered_abi(
     row, expected = event(monkeypatch, [("stable", "bool", False, True)])
     cache = metadata._MetadataCache()
     monkeypatch.setattr(metadata, "_metadata_cache", lambda: cache)
-    decoder = Mock(wraps=decode)
-    monkeypatch.setattr(metadata, "decode", decoder)
+    decoder = Mock(wraps=metadata._decode_static_word)
+    monkeypatch.setattr(metadata, "_decode_static_word", decoder)
     first = list(decode_pool_logs([row]))
     later = list(decode_pool_logs([replace(row, blockNumber=BlockNumber(99999))]))
     assert first == later == [expected]
@@ -167,8 +167,8 @@ def test_metadata_cache_eviction_and_oversized_pages_preserve_results(
     row, _ = event(monkeypatch, [("value", "uint256", False, 1)])
     cache = metadata._MetadataCache(max_rows=2, max_pages=2)
     monkeypatch.setattr(metadata, "_metadata_cache", lambda: cache)
-    decoder = Mock(wraps=decode)
-    monkeypatch.setattr(metadata, "decode", decoder)
+    decoder = Mock(wraps=metadata._decode_static_word)
+    monkeypatch.setattr(metadata, "_decode_static_word", decoder)
     for value in (1, 2, 3, 1):
         changed = replace(row, data=Data(encode(["uint256"], [value])))
         assert list(decode_pool_logs([changed])) == [{"value": value}]
@@ -176,3 +176,61 @@ def test_metadata_cache_eviction_and_oversized_pages_preserve_results(
     assert list(decode_pool_logs([row, row, row])) == [{"value": 1}] * 3
     assert list(decode_pool_logs([row, row, row])) == [{"value": 1}] * 3
     assert decoder.call_count == 10
+
+
+@pytest.mark.parametrize(
+    "kind,value",
+    [
+        ("address", TOKEN0),
+        ("address", "0x" + "ff" * 20),
+        ("bytes32", bytes(32)),
+        ("bytes32", bytes.fromhex("ff" * 32)),
+        ("bool", False),
+        ("bool", True),
+        ("uint24", 0),
+        ("uint24", (1 << 24) - 1),
+        ("int24", -(1 << 23)),
+        ("int24", -1),
+        ("int24", 0),
+        ("int24", (1 << 23) - 1),
+        ("uint256", 0),
+        ("uint256", (1 << 256) - 1),
+    ],
+)
+def test_static_words_match_primary_codec_at_numeric_boundaries(kind: str, value: Any) -> None:
+    word = encode([kind], [value])
+    assert metadata._decode_static_word(kind, word) == decode([kind], word)[0]
+    assert (
+        metadata._decode_static_word(kind, word + b"trailing")
+        == decode([kind], word + b"trailing")[0]
+    )
+
+
+@pytest.mark.parametrize("kind", ["address", "bytes32", "bool", "uint24", "int24", "uint256"])
+@pytest.mark.parametrize("length", [0, 1, 31])
+def test_static_words_preserve_primary_codec_truncation_errors(kind: str, length: int) -> None:
+    word = bytes(length)
+    with pytest.raises(DecodingError) as error:
+        decode([kind], word)
+    with pytest.raises(type(error.value)):
+        metadata._decode_static_word(kind, word)
+
+
+@pytest.mark.parametrize(
+    "kind,value",
+    [
+        ("address", 1 << 160),
+        ("address", (1 << 256) - 1),
+        ("bool", 2),
+        ("bool", 1 << 8),
+        ("uint24", 1 << 24),
+        ("int24", 1 << 23),
+        ("int24", (1 << 256) - (1 << 23) - 1),
+    ],
+)
+def test_static_words_preserve_primary_codec_padding_errors(kind: str, value: int) -> None:
+    word = value.to_bytes(32, "big")
+    with pytest.raises(DecodingError) as error:
+        decode([kind], word)
+    with pytest.raises(type(error.value)):
+        metadata._decode_static_word(kind, word)

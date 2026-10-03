@@ -144,3 +144,34 @@ diagnostic matches production's CPU policy and retains 8 GiB without swap; its
 container reached readiness just after 600 seconds, so the acceptance harness
 rejected it. Neither that run nor recovery using its completed test cache counts
 as a passing cold-cache result.
+
+The complete required native suite at preceding revision `82a0543e` finished
+successfully: 2,389 passed, 17 skipped, all ten compiled modules verified, peak
+cgroup memory 3,603,099,648 bytes, and no OOM. The full run took 87.39 minutes.
+`complete-native-preceding-revision.json` preserves its revision and boundaries;
+newer changes still require a complete native run.
+
+The copied-cache current WETH failure persisted after index sampling. Static
+factory ABI decoding now reads validated words directly and retains the primary
+codec for unsupported or malformed fields. Numeric boundaries, truncation, and
+padding retain exact values and exception classes. A host Python 3.12 replay of
+80,000 real events took 1.10–1.11 s with the general codec and 0.047 s with direct
+validated words. Complete protocol inventories and the final candidate ordering
+are unchanged.
+
+The next trace exposed sequential Curve/Balancer work after the dense V2/V3
+inventories. That ordering predates #47 and exists in `69dda57e`. All independent
+protocol inventories now start together under owned cancellation. The expanded
+controlled test requires V2, V3, Curve, and Balancer to enter, verifies exact
+combined depth order, and checks that failures and cancellation drain all four
+producers. All 452 focused native tests, strict typing across 244 files, and ten
+compiled imports passed against an archive reproduced from the current worktree.
+The intermediate missing local set annotation is retained as a failed run.
+
+The copied-cache Base WETH amount `0.1` at current block 52,109,406 then returned
+HTTP 200 in 284.00 s, at price `2668.1196`, using the unchanged native V3 quote.
+Peak cgroup memory was 7,129,616,384 bytes under the 8 GiB cap, swap was zero,
+there was no OOM, and real SIGTERM completed in 1.64 s. The earlier word-only
+candidate's 300-second failure remains recorded. This is interpreted-overlay
+diagnostic recovery, not empty-cache, final-image, new-block, or production
+acceptance. Those checks and the final complete native rerun remain required.
