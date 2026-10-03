@@ -153,9 +153,7 @@ async def test_native_batches_split_payload_limits_and_propagate_other_http_erro
 
 @run_async_test
 async def test_code_probe_splits_payload_limits_at_the_same_hash(monkeypatch: Any) -> None:
-    from web3 import AsyncHTTPProvider
-
-    provider = AsyncHTTPProvider("test")
+    provider = type("Provider", (), {})()
     request = AsyncMock(
         side_effect=[
             ClientResponseError(cast(Any, None), (), status=413),
@@ -163,7 +161,7 @@ async def test_code_probe_splits_payload_limits_at_the_same_hash(monkeypatch: An
             {"result": "0x" + encode(["bool", "bool"], [False, True]).hex()},
         ]
     )
-    monkeypatch.setattr(provider, "make_request", request)
+    provider.make_request = request
     monkeypatch.setattr(dank_web3.eth.w3, "provider", provider)
     assert await _rpc._code_presence(ADDRESSES, BLOCK) == (True, False, True)
     assert [len(call.args[1][0]["data"][2:]) // 64 for call in request.await_args_list] == [3, 1, 2]
@@ -909,12 +907,19 @@ async def test_bounded_http_releases_failed_attempt_and_recovers_with_locked_web
                     if failure == "timeout"
                     else ConnectionError if batch else ClientResponseError
                 )
-            with pytest.raises(expected):
-                await task
-            assert len(observed) == 1
-            assert sessions[0].closed
-            release.set()
-            result = await asyncio.wait_for(read(), 2)
+            if batch and failure == "timeout":
+                # Current pricing retries one transport timeout at the same hash.
+                result = await asyncio.wait_for(task, 2)
+                assert len(observed) == 2
+                assert all(session.closed for session in sessions)
+                release.set()
+            else:
+                with pytest.raises(expected):
+                    await task
+                assert len(observed) == 1
+                assert sessions[0].closed
+                release.set()
+                result = await asyncio.wait_for(read(), 2)
             if batch:
                 assert result == (True, True, True)
             else:
