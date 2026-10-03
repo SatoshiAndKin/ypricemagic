@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any, Final, final
 
 from brownie import Contract as BrownieContract
 from brownie.exceptions import CompilerError
+from dank_mids._exceptions import ExecutionReverted
 from eth_typing import BlockNumber, ChecksumAddress
 from web3.exceptions import ContractLogicError
 
@@ -249,7 +250,7 @@ class CallReverted(Exception):
 
 
 def call_reverted(e: Exception) -> bool:
-    if isinstance(e, ContractLogicError):
+    if isinstance(e, (ContractLogicError, ExecutionReverted)):
         return True
     # Reth's responses for legacy contract execution failures.
     if isinstance(e, ValueError) and e.args and isinstance(response := e.args[0], dict):

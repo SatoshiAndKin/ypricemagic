@@ -97,7 +97,9 @@ required_plugins = ["pytest-timeout"]
 testpaths = ["tests"]
 norecursedirs = ["env", "build", "cache", ".worktrees"]
 # Cold full-suite calls have completed in 1,792.82 seconds.
-# Allow initialization plus historical samples without changing concurrency.
+# Bound live test admission so historical reads retain their transport deadline.
+max_asyncio_tasks = 8
+# Allow initialization plus historical samples.
 timeout = 3600
 asyncio_task_timeout = 3600
 

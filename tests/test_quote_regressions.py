@@ -11,6 +11,7 @@ from typing import Any
 from unittest.mock import AsyncMock, call
 
 import pytest
+from dank_mids.types import Error, PartialResponse
 from eth_abi.abi import encode
 from eth_utils.crypto import keccak
 from hexbytes import HexBytes
@@ -134,6 +135,17 @@ async def test_market_restriction_cache_is_separate_and_descendants_are_unrestri
     [
         (ValueError({"code": -32003, "message": "EVM error: InvalidFEOpcode"}), True),
         (ValueError({"code": -32003, "message": "EVM error: InvalidJump"}), True),
+        (
+            PartialResponse(
+                error=Error(code=-32003, message="EVM error: InvalidFEOpcode")
+            ).exception,
+            True,
+        ),
+        (
+            PartialResponse(error=Error(code=-32003, message="EVM error: InvalidJump")).exception,
+            True,
+        ),
+        (PartialResponse(error=Error(code=-32000, message="out of gas")).exception, False),
         (ValueError({"code": -32003, "message": "EVM error: NotActivated"}), False),
         (ValueError({"code": -32000, "message": "historical state unavailable"}), False),
         (TypeError("unexpected decoder failure"), False),

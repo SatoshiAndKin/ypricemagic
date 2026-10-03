@@ -21,10 +21,17 @@ provider retry layer so the existing pricing retry window and log-range splitter
 continue to own each HTTP attempt. Hash/canonical parameters and batch IDs remain
 unchanged. The stale dict-item typing suppression for historical multicall
 state overrides was removed; the required typed-dict suppression remains.
+Pricing recognizes Dank's typed `ExecutionReverted`, including legacy invalid
+opcode/jump responses, while propagating out-of-gas and unrelated failures.
 
-Migration-specific native checks passed 107 tests, covering the middleware cache,
+Migration-specific native checks passed 164 tests after a fresh extension rebuild,
+covering typed contract reverts, the middleware cache,
 real HTTP batch order and retry counts, canonical selectors, archive-state retries
 and provider range splitting. The configured strict mypy check passed all 241
 source files. The dependency image also passed all 44 Brownie compiled bytecode
-safety and memory regressions. Full native pricing and server acceptance remain
+safety and memory regressions. A separate source coverage run passed the same
+164 cases and covered every changed runtime statement; it is independent of
+compiled-runtime verification. Live pricing tests admit eight cases concurrently
+to retain the existing 30-second transport deadline on bounded validation hosts.
+Full native pricing and server acceptance remain
 required before the migration is ready. Deployment is separate.
