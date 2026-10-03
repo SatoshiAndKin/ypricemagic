@@ -1,87 +1,89 @@
 # Immutable Web3 v7 native stack
 
-This migration starts from fork master `073c7ac8`, retaining its indexed pool
-inventory, bounded cold-state reads, historical state retries and pricing repairs.
-It supports Web3 v7 exclusively.
+The migration retains current fork master
+`cb4a12376b807b1b9f27d9963f0c457edf02fda7`, including its latest pricing,
+discovery, canonical log pagination, indexed inventory and cold-state repairs.
+Web3 v7 is the only supported Web3 major version.
 
-The runtime/build pins are dank-mids `fa4b454fb8d33c2f412709da4daca522cd4f7e47`,
-Brownie `7e529be8dfc1afa7bda2d6660c8a11c59a653a6e`, and evmspec
-`f0df0d9d8e4e7a7000580054ce2c0b6b6193a14c`. The ez-a-sync, aiosqlite,
-cachebox and mypy native repair pins are retained. cchecksum is pinned to
-`fff7e1fe87f4679ec96de1cebb1cdd8f5e94be44`, which keeps the normalized address
-buffer alive through scalar and bulk checksum conversion. Both published 0.4.4
-and 0.4.5 expose a freed-buffer read with Python's debug allocator. The backport
-retains the ABI stack's 0.4.4 requirement. Python 3.11–3.13 Linux ARM64
-validation constraints were resolved anew for these immutable dependencies.
+## Immutable dependencies
 
-The code cache uses Web3 v7's middleware class interface, retaining the public
-`getcode_cache_middleware` builder and the same latest-only cache/retry policy.
-Historical, pending and hash/canonical selectors bypass the code cache as before.
-POA uses `ExtraDataToPOAMiddleware` directly.
+The tested pricing revision is `8c8387ec15f4f8a119214df5971f10b79cfb6962`.
+Its dependency pins are:
+
+| Dependency | Revision |
+| --- | --- |
+| dank-mids | `90baeae436f4d359538b11988c13a86004e2e087` |
+| Brownie | `7e529be8dfc1afa7bda2d6660c8a11c59a653a6e` |
+| evmspec | `31c8540a14228ca49c77c19d565a6aaee3d0079f` |
+| cchecksum | `fff7e1fe87f4679ec96de1cebb1cdd8f5e94be44` |
+| mypy/mypyc | `18a37e099bba69872e38adaee3319c125c97048e` |
+
+Existing immutable ez-a-sync, aiosqlite and cachebox native repairs are retained.
+The cchecksum backport owns its normalization buffer through scalar/bulk conversion
+while retaining the ABI stack's 0.4.4 requirement. Evmspec retains optional
+transaction `blockTimestamp` and replaces unavailable isolated-build requirements.
+Python 3.11–3.13 Linux ARM64 constraint files record the immutable native graph.
+
+## Runtime behavior
+
+The code cache uses Web3 v7's middleware class interface and retains the public
+`getcode_cache_middleware` builder and latest-only cache/retry behavior.
+Historical, pending and hash/canonical selectors bypass the cache. POA uses
+`ExtraDataToPOAMiddleware`.
 
 Bounded reserve/code/log reads use Web3 v7's request encoder/decoder and provider
-HTTP configuration with one owned aiohttp session per attempt. They preserve
-Web3's force-close connector policy, provider headers/auth/timeouts, exact IDs and
-hash/canonical parameters. They avoid Web3 7.16's cancellation-unsafe session-cache
-lock: cancelling a pending executor lock acquisition can leave the cache locked
-and block unrelated later callers. Every completed, failed and cancelled attempt
-closes its session. The existing pricing retry window and log-range splitter own
-each attempt, without Web3's added automatic retry layer.
+configuration with one owned aiohttp session per attempt. Headers, authentication,
+timeouts, force-close connections, exact IDs and hash/canonical parameters are
+preserved. Completed, failed and cancelled attempts close their sessions. This
+avoids Web3 7.16's cancellation-unsafe session-cache lock. Existing pricing retry
+windows and log-range splitting continue to control attempts.
 
-Block references normalize native integers/bytes and POA hex quantities/hashes,
-retaining canonical hash identity on Base. The stale dict-item typing suppression
-for historical multicall state overrides was removed; the required typed-dict
-suppression remains. Pricing recognizes Dank's typed `ExecutionReverted`, including
-legacy invalid opcode/jump responses, while propagating unrelated failures.
+Block references normalize integer/bytes and POA hex quantities/hashes while
+retaining canonical hash identity. Pricing recognizes Dank's typed
+`ExecutionReverted`, including legacy invalid opcode/jump errors, and propagates
+unrelated failures. Synthetic discovery fixtures clear only their three test
+factories; unrelated metadata survives.
 
-The configured focused native suite passed all 803 cases, including controlled
-HTTP cancellation, timeout, recovery with a locked Web3 session cache, batch order,
-exact retry counts, canonical selectors, archive-state retries and range splitting.
-Strict mypy passed all 241 source files. The dependency image passed all 44 Brownie
-compiled bytecode safety and memory regressions. A separate source coverage run
-passed all 189 migration cases and covered all 31 changed executable runtime
-statements (100%); this is independent of compiled-runtime verification. Live tests
-admit eight cases concurrently, preserving the existing 30-second transport deadline.
+Compound oracle reads use Dank's existing `no_multicall` policy. Simulating
+IronBank interest accrual before a Curve-backed oracle read changes its exact
+result inside a multicall. The regression reproduces that drift before the repair.
+The fix retains JSON-RPC batching, block selectors and retry/error handling; three
+complete exact-block token-list replays pass unchanged. The DEBUG-only `y.stuck?`
+logger retains its default five-minute interval.
 
-The immutable Linux ARM64 server image passed health, historical spot prices,
-ordered/duplicate batches, single/mixed amounts and spot-cache preservation on
-Ethereum and Base. Independent native SDK checks preserved raw amounts 1,000,001
-and 2,000,001 and canonical block hashes on both chains. All 333 server tests passed.
-Base's first cold amount request hit the unchanged 300-second deadline while its
-catalog loaded; the same request passed after catalog loading. These checks do not
-prove that empty-cache Base amount requests always finish within that deadline.
+A separate [Pony repair](https://github.com/SatoshiAndKin/ypricemagic/pull/50)
+serializes event-page query construction around translator-cache invalidation.
+Database reads and decoding remain parallel, with unchanged pagination and ranges.
+Its two-thread regression reproduces the same failure on unmodified current master.
 
-The complete native pricing suite remains required. Earlier attempts encountered
-validation-VM disk exhaustion and the original archive provider's exhausted monthly
-capacity. An independent archive run completed 2,310 passing cases and 17 skips,
-with one batch/individual price discrepancy for fOUSG at block 21,578,484. Three
-full token-list replays at that exact block and all ten concurrent historical
-batch/individual tests passed unchanged. A complete repeat captures that token's
-bucket, oracle reads and DEX fallback without relaxing assertions or retry limits.
-The independent run uses an encrypted loopback SSH connection to the operator's
-archive Reth, a separate populated catalog snapshot, eight concurrent cases and a
-1,000-call multicall limit. Default thresholds are verified by controlled SDK tests.
-The repeat also exposed synthetic factory metadata retained by discovery tests
-from earlier runs. Their fixture now clears only their three test factories before
-and after each case; a regression verifies that unrelated metadata survives. All
-23 native cases passed twice against the contaminated database, and strict mypy
-passed 241 files. The final SDK pin passed all 37 hosted native matrix jobs under
-the debug allocator. A fresh Linux ARM64 pricing rebuild and complete original
-suite are running against the repaired immutable dependencies, with passive
-full-value/path failure reporting and no runtime wrappers.
-These archive runs do not establish empty-cache startup performance. Deployment
-is separate; this migration remains draft pending full acceptance.
+## Validation
 
+- Complete freshly compiled Linux ARM64 pricing suite: **2,664 passed, 17 skipped**,
+  with `PYTHONMALLOC=debug` and fault handling enabled. All ten declared pricing
+  native modules were rebuilt; compiled imports are checked separately from source.
+- Separate extension-free source profile: **308 passed**, covering **40/40 changed
+  executable runtime statements (100%)** against current master. Coverage spans
+  the complete cooperative pytest lifetime, including work after pytest-cov teardown.
+- Strict mypy: **246 source files**; all 13 hosted pricing checks pass, including
+  Linux/macOS/Windows Python 3.11–3.13 typing, build, lint and CodeQL.
+- SDK: **33 archive integration cases** passed. Its runtime repair also passed all
+  37 hosted native build/unit/import jobs on Linux/macOS/Windows Python 3.10–3.13,
+  including the repaired macOS 3.10 shutdown crash and debug-allocator checks.
+- Existing Brownie fork: **77 native bytecode-memory/explorer-timeout regressions**
+  passed. cchecksum's native owned-buffer regressions passed all **22 cases**.
+- Fresh isolated evmspec wheels on macOS and Linux ARM64: **365 passed, two existing
+  trace-enum failures** on each. The original compiled schema revision reproduces
+  exactly those two failures; transaction timestamp, block and data repairs pass.
+- Final locked Linux ARM64 server image: **346 passed plus four subtests**, mypy,
+  Ruff, formatting, deptry and lock checks. All eight real Ethereum HTTP scenarios
+  passed, including ordered duplicate batches, single/mixed amounts and spot-cache
+  preservation. Native exact-amount calls retain raw amounts 1,000,001 and 2,000,001
+  with Ethereum block 18,000,000's canonical hash.
 
-The debug-allocator full repeat completed 2,310 passing cases and 17 skips with
-exact-equality failures for the yvCurve/IronBank Compound market at blocks
-14,022,560 and 24,601,520. Direct chain probes confirmed that simulating IronBank
-interest accrual before the oracle call changes its Curve virtual-price input
-inside a multicall. Oracle reads now use Dank's existing `no_multicall` contract
-policy; they retain JSON-RPC batching, selectors, retry/error handling and the
-DEBUG-only `y.stuck?` logger's default five-minute interval. The controlled native
-HTTP regression fails before the repair and passes after it. Three complete
-exact-block token-list replays pass unchanged, along with all 827 configured
-focused cases and strict mypy for 242 files. The final complete suite and server
-repin remain required. This final full archive profile used the default 10,000-call
-multicall limit; the SDK archive workload separately caps its groups at 1,000.
+The full archive suite uses a populated catalog snapshot, eight concurrent cases,
+unchanged assertions/retries and the default 10,000-call multicall limit. The SDK's
+archive batching workload separately caps groups at 1,000; controlled HTTP tests
+verify default thresholds. These runs do not establish empty-cache startup timing.
+Final Base acceptance is deferred at the user's explicit request after provider
+quota exhaustion. No migration PR has been merged or deployed; original drafts
+remain available.
