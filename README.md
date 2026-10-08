@@ -78,3 +78,11 @@ Enjoy!
 
 ### Shoutouts
 Shoutout to [Banteg](https://github.com/banteg) [(@bantg)](https://twitter.com/bantg) and [nymmrx](https://github.com/nymmrx) [(@nymmrx)](https://twitter.com/nymmrx) for their awesome work on [yearn-exporter](https://github.com/yearn/yearn-exporter) that made this library possible.
+
+### Build documentation
+
+Create a Python 3.12 docs environment with `uv venv --python 3.12`, install
+`uv pip install --python .venv/bin/python --require-hashes -r docs/requirements.lock`,
+then run `make docs`. AutoAPI parses source files and writes `docs/_build/html`.
+The build requires no Brownie runtime, RPC endpoint, or secret. CI retains the
+HTML artifact without publishing Pages.
