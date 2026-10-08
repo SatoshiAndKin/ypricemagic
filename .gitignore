@@ -26,3 +26,9 @@ __pycache__/
 *.so
 .worktrees/
 .env
+
+/docs/_build/
+
+/docs/autoapi/
+
+/.venv/

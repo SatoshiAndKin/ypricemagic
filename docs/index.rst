@@ -15,24 +15,24 @@ Time to price some shitcoins!
 
    The main use case for this library is the pricing of shitcoins. `y.get_price` handles that for you.
 
-   .. autofunction:: y.get_price
+   :func:`y.prices.magic.get_price`
 
    
    If you do not know the block number but you know the timestamp at which you need your price, you first need to calculate it using this function:
 
-   .. autofunction:: y.get_block_at_timestamp
+   :func:`y.time.get_block_at_timestamp`
 
    
    Usually, if you need one price you need more than one. The next two functions enable you to price multiple tokens in a streamlined, concurrent manner.
 
-   .. autofunction:: y.get_prices
+   :func:`y.prices.magic.get_prices`
 
-   .. autofunction:: y.map_prices
+   :func:`y.prices.magic.map_prices`
 
 
 There are some powerful tools for interacting with deployed contracts in the `contracts` module.
 
-.. automodule:: y.contracts
+See :doc:`autoapi/y/contracts/index` for the contract API.
 
 
 To learn about the rest of ypricemagic's capabilities, navigate the library structure below.
@@ -41,7 +41,7 @@ To learn about the rest of ypricemagic's capabilities, navigate the library stru
    :maxdepth: 2
    :caption: Contents:
 
-   source/modules.rst
+   autoapi/index
    environment
    caching
    amount-quotes

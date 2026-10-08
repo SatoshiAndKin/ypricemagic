@@ -5,10 +5,10 @@ cachebox @ git+https://github.com/SatoshiAndKin/cachebox.git@10be25afe46afb32c81
 cchecksum @ git+https://github.com/SatoshiAndKin/cchecksum.git@fff7e1fe87f4679ec96de1cebb1cdd8f5e94be44
 checksum_dict>=2.1.9,<3
 click==8.5.0
-dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@33d64a962a2ff2a60f4ddb0d1d17e6b0fbbd89c0
+dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@c3068cb2ec5f5cc529c26b20d48b20ac86fc2ded
 eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@7e529be8dfc1afa7bda2d6660c8a11c59a653a6e
 eth_retry>=0.2.1
-evmspec @ git+https://github.com/SatoshiAndKin/evmspec.git@31c8540a14228ca49c77c19d565a6aaee3d0079f
+evmspec @ git+https://github.com/SatoshiAndKin/evmspec.git@ffd7e2cc096bbfa79dd15d0f0ee0c65f0382c303
 ez-a-sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@ed3459ee74abec91c7675f57fee4b75595edbfdc
 faster-eth-abi>=5.2.12,<6
 faster-eth-utils

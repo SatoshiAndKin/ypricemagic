@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: Checkout code
         id: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # Check out the PR branch
           ref: ${{ github.head_ref }}
@@ -36,13 +36,13 @@ jobs:
           python-version: "3.13"
 
       - name: Mypycify
-        uses: BobTheBuidler/mypycify@v0.3.3
+        uses: BobTheBuidler/mypycify@v0.5.0
         with:
           python-version: "3.13"
           hash-key: |
             pyproject.toml
             setup.py
-            ypricemagic/**/*.py
+            y/**/*.py
           pip-cache-dependency-path: |
             pyproject.toml
             requirements.txt

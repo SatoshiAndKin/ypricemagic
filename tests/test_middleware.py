@@ -2,6 +2,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+from web3.exceptions import Web3ValueError
 
 from y.networks import Network
 from y.utils import middleware
@@ -86,3 +87,45 @@ def test_v7_cache_preserves_latest_only_behavior(
         ((RPCEndpoint("eth_getBalance"), latest),),
         ((RPCEndpoint("eth_getBalance"), latest),),
     ]
+
+
+@pytest.mark.parametrize("named", [False, True])
+def test_setup_poa_repeated_calls_use_one_middleware(
+    monkeypatch: pytest.MonkeyPatch, named: bool
+) -> None:
+    from web3 import Web3
+    from web3.middleware import ExtraDataToPOAMiddleware
+
+    w3 = Web3()
+    if named:
+        w3.middleware_onion.inject(ExtraDataToPOAMiddleware, name="poa", layer=0)
+    monkeypatch.setattr(middleware, "web3", w3)
+    middleware.setup_geth_poa_middleware()
+    middleware.setup_geth_poa_middleware()
+    assert w3.middleware_onion.as_tuple_of_middleware().count(ExtraDataToPOAMiddleware) == 1
+
+
+@pytest.mark.parametrize("error_cls", [ValueError, Web3ValueError])
+@pytest.mark.parametrize("installed_during_injection", [False, True])
+def test_setup_poa_race_and_errors(
+    monkeypatch: pytest.MonkeyPatch, error_cls: type[Exception], installed_during_injection: bool
+) -> None:
+    from unittest.mock import Mock
+
+    from web3.middleware import ExtraDataToPOAMiddleware
+
+    onion = Mock()
+    onion.as_tuple_of_middleware.side_effect = [
+        (),
+        (ExtraDataToPOAMiddleware,) if installed_during_injection else (),
+    ]
+    error = error_cls("provider middleware failure")
+    onion.inject.side_effect = error
+    monkeypatch.setattr(middleware, "web3", SimpleNamespace(middleware_onion=onion))
+    if installed_during_injection:
+        middleware.setup_geth_poa_middleware()
+    else:
+        with pytest.raises(error_cls) as caught:
+            middleware.setup_geth_poa_middleware()
+        assert caught.value is error
+    onion.inject.assert_called_once_with(ExtraDataToPOAMiddleware, layer=0)

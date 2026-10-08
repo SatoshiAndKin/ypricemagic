@@ -7,6 +7,7 @@
 ## Pricing Pipeline
 
 `get_price(token, block)` flow:
+
 1. Zero address check -> None
 2. ypriceAPI external lookup (if configured)
 3. `check_bucket(token)` -> classify token into one of 36 bucket types
