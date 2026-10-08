@@ -31,6 +31,7 @@ This is a known limitation of the test infrastructure, not actual code bugs.
 ### Pre-existing test failures (per-file individual runs)
 
 **tests/prices/test_chainlink.py (5 failures):**
+
 - `test_chainlink_latest[0xa693B19d...]` - ContractLogicError: Polymath POLY Chainlink aggregator deprecated on-chain
 - `test_chainlink_latest[0x459086F2...]` - ContractLogicError: renFIL Chainlink aggregator deprecated on-chain
 - `test_chainlink_latest[0x1C5db575...]` - ContractLogicError: Token's Chainlink aggregator deprecated on-chain
@@ -38,6 +39,7 @@ This is a known limitation of the test infrastructure, not actual code bugs.
 - `test_chainlink_before_feed` - YFI returns price (32445.38) at block before feed deployment; another pricing source resolves it
 
 **tests/classes/test_erc20.py (1 failure):**
+
 - `test_erc20_at_block[0x57Ab1E02...-5761012]` - sUSD at very early block; pre-existing proxy issue
 
 These failures are all caused by on-chain state changes (deprecated contracts) or very old block edge cases, not by our dependency changes.

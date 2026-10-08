@@ -205,7 +205,6 @@ native validation container, not a final image build. The fresh empty-cache run
 with connection-local statistics is still in progress; startup, subsequent
 quotes, latest full-native validation, and production acceptance remain gates.
 
-
 The full required native suite at `4569534b` completed with 2,440 passed and
 17 skipped in 86.95 minutes, strict typing across 244 files, and all ten compiled
 imports. The later bounded-window, canonical event encoding, and supported
@@ -223,7 +222,6 @@ The failed report is retained as `ypm-followup-base-remote-empty55.json`. This
 proves cold startup improvement, but fails quote acceptance. Production images,
 providers, and cache volumes were not changed. Further profiling separates
 anonymous memory from file pages and measures quote CPU costs before delivery.
-
 
 Checked canonical aggregate encoding and decoding passed 541 focused native
 controls, strict typing across 244 files, and all ten compiled imports. One
@@ -244,7 +242,6 @@ caller. The next candidate batches only that getter, in at most 128-pool windows
 retains deployment checks, checks aggregate block and result count, and falls
 back to native individual getters for unavailable members or provider limits.
 This latest change still needs scoped and whole-request verification.
-
 
 The provider-sized getter and code batches, bounded HTTP 413 splitting, Balancer
 vault batches, and ordinary-byte RPC decoding passed 563 focused native tests,

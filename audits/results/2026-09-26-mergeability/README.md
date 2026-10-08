@@ -515,7 +515,6 @@ and a 1,165,754,368-byte peak. All 323 source-file hashes match the validated
 worktree matrix. The fresh audit on this commit has started; native inventory
 comparison and the required full-suite rerun remain pending.
 
-
 ### Historical inventory replay follow-up
 
 The completed `memory-retention-before-312` diagnostic retains 470,546 cold
@@ -620,7 +619,6 @@ hit, supplemented by the separate direct index checks. Exact comparisons are
 in `v3-native-inventory-comparison.json`. The unchanged required full-suite
 command has now started on `d414e7d3`; the fresh audit remains active.
 
-
 ### Completed full suite after the history repair
 
 `full-v3-inventory-312` completes the unchanged required Python 3.12 command
@@ -662,7 +660,6 @@ nine mypy jobs have exactly the same normalized diagnostics as `d414e7d3`:
 zero added or removed. Existing mypy failures remain visible in
 `ci-v3-evidence-diagnostic-comparison.json`. Production source is unchanged.
 The fresh mainnet audit remains active; no final audit coverage is claimed.
-
 
 ## Completed mainnet audit and final assessment
 

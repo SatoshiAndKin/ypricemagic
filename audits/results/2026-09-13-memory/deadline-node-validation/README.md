@@ -88,7 +88,6 @@ includes ten `int(None)` errors in latest-feed cases. Exact errors, unmatched
 IDs, source and dependency hashes, and the analysis helper remain in the linked
 reports. The final full-suite comparison stays incomplete.
 
-
 ### native-deadline
 
 | Revision | Cases | Passed | Failed | Complete execution | Exit |
