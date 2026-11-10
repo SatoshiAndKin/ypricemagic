@@ -5,7 +5,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends build-essential git libgmp-dev curl ca-certificates
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/rustup.sh && \
-    sh /tmp/rustup.sh -y --profile minimal --default-toolchain 1.98.1 --no-modify-path
+    sh /tmp/rustup.sh -y --profile minimal --default-toolchain 1.99.1 --no-modify-path
 ENV PATH="/root/.cargo/bin:${PATH}" CARGO_BUILD_JOBS=4
 WORKDIR /opt/validation
 COPY requirements.txt requirements-dev.txt requirements-build.txt constraints.txt cache-build-dependencies.lock ./
