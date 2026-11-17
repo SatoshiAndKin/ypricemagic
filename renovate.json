@@ -1,4 +1,30 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"]
+  "extends": ["config:recommended"],
+  "enabledManagers": ["custom.regex"],
+  "dependencyDashboard": {
+    "enabled": false
+  },
+  "automerge": false,
+  "ignoreUnstable": true,
+  "prConcurrentLimit": 1,
+  "separateMajorMinor": false,
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^upstream-release\\.txt$/"],
+      "matchStrings": [
+        "(?:^|\\r?\\n)(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)(?:\\r?\\n|$)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "ypricemagic",
+      "packageNameTemplate": "BobTheBuidler/ypricemagic",
+      "versioningTemplate": "semver",
+      "extractVersionTemplate": "^v(?<version>[0-9]+\\.[0-9]+\\.[0-9]+)$"
+    }
+  ],
+  "prBodyNotes": [
+    "Merge the named upstream tag into this branch before merging the PR.",
+    "Validate installed mypyc extensions and pricing with the pinned Brownie and dank-mids stack. Update the ypricemagic-server commit pin and uv.lock after validating the fork revision."
+  ]
 }
