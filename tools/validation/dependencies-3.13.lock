@@ -2,7 +2,7 @@
 # Resolved for the immutable Web3 v7 stack with owned native checksum buffers.
 aiofiles==25.1.0
 aiohappyeyeballs==2.7.1
-aiohttp==3.14.3
+aiohttp==3.14.5
 aiolimiter==1.2.1
 aiosignal==1.4.0
 aiosqlite @ git+https://github.com/SatoshiAndKin/aiosqlite.git@b8265cce6f09bcc8015ea09036f5e05c4546d740
@@ -12,111 +12,111 @@ async-lru-threadsafe==2.0.5
 async-property==0.2.2
 asyncpg==0.31.0
 attrs==26.1.0
-bitarray==3.11.0
-black==26.5.1
+bitarray==3.12.3
+black==26.10.1
 bobs-lazy-logging==0.0.5
 cachebox @ git+https://github.com/SatoshiAndKin/cachebox.git@10be25afe46afb32c8135db4d1b8e2d94431b9c1
 cachetools==6.2.6
 cbor2==5.9.0
 cchecksum @ git+https://github.com/SatoshiAndKin/cchecksum.git@fff7e1fe87f4679ec96de1cebb1cdd8f5e94be44
-certifi==2026.7.22
-charset-normalizer==3.5.1
+certifi==2026.10.23
+charset-normalizer==3.5.2
 checksum-dict==2.1.16
 ckzg==2.1.8
 click==8.5.0
 cloudpickle==3.1.2
-cytoolz==1.1.0
-dank-mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@c3068cb2ec5f5cc529c26b20d48b20ac86fc2ded
+cytoolz==1.2.0
+dank-mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@867fee773aac436a1f1dc0ec1642418b8e61e219
 dictstruct==0.0.9
 eip712==0.3.3
 eth-abi==5.2.0
 eth-account==0.13.7
-eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@7e529be8dfc1afa7bda2d6660c8a11c59a653a6e
+eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@a18710286e855a0e19a5e246051a7d3c4e23ea7c
 eth-event==1.4.10
 eth-hash==0.8.0
 eth-keyfile==0.8.1
 eth-keys==0.8.0
-eth-pydantic-types==0.2.6
+eth-pydantic-types==0.2.7
 eth-retry==0.3.7
 eth-rlp==3.0.0
 eth-typing==5.2.1
 eth-utils==5.3.1
 evmspec @ git+https://github.com/SatoshiAndKin/evmspec.git@ffd7e2cc096bbfa79dd15d0f0ee0c65f0382c303
 execnet==2.1.2
-ez-a-sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@ed3459ee74abec91c7675f57fee4b75595edbfdc
+ez-a-sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@5e904b27249000b918a0f0662df9abdfda103fdd
 faster-eth-abi==5.2.30
 faster-eth-utils==5.3.28
 faster-hexbytes==1.3.8
 frozenlist==1.8.0
 hexbytes==1.3.1
 hypothesis==6.27.3
-idna==3.19
+idna==3.20
 immutables==0.21
 inflection==0.5.1
-iniconfig==2.3.0
+iniconfig==2.3.1
 joblib==1.6.0
 lark==1.3.1
-lazy-object-proxy==1.12.0
+lazy-object-proxy==1.13.0
 librt==0.16.0
 msgspec==0.19.0
 multicall==0.15.2
-multidict==6.8.0
+multidict==6.9.1
 mypy @ git+https://github.com/SatoshiAndKin/mypy.git@18a37e099bba69872e38adaee3319c125c97048e
 mypy-extensions==1.1.0
-numpy==2.5.3
+numpy==2.5.4
 packaging==24.2
 parsimonious==0.10.0
 pathspec==1.1.1
-platformdirs==4.12.2
-pluggy==1.6.0
+platformdirs==4.14.3
+pluggy==1.7.0
 pony==0.7.20
 pony-stubs==0.5.2
 prompt-toolkit==3.0.53
-propcache==0.5.2
+propcache==0.5.4
 psutil==5.9.8
 py==1.11.0
 py-solc-ast==1.2.10
-py-solc-x==2.0.5
-pycryptodome==3.23.0
-pydantic==2.13.5
-pydantic-core==2.46.5
+py-solc-x==2.1.0
+pycryptodome==3.24.1
+pydantic==2.14.2
+pydantic-core==2.50.2
 pygments==2.21.0
 pygments-lexer-solidity==0.7.0
-pytest==9.1.1
+pytest==9.2.0
 pytest-asyncio-cooperative @ git+https://github.com/SatoshiAndKin/pytest-asyncio-cooperative@17677c7145d24c36917036877681eb83225ccdb3
 pytest-timeout==2.2.0
 pytest-xdist==3.8.0
-python-dateutil==2.9.0.post0
-python-dotenv==0.16.0
+python-dateutil==4.0.0
+python-dotenv==1.2.4
 pytokens==0.4.1
-pyunormalize==17.0.0
+pyunormalize==18.0.0
 pyyaml==6.0.3
-regex==2026.9.10
+regex==2026.9.29
 requests==2.34.2
 rlp==5.0.0
-safe-pysha3==1.0.5
+safe-pysha3==1.0.7
 semantic-version==2.10.0
 setuptools==80.10.2
 setuptools-scm==10.2.1
-six==1.17.0
 sortedcontainers==2.4.0
-toolz==1.1.0
+toolz==1.2.0
 tqdm==4.70.1
 typed-envs==0.2.4
 types-cachetools==7.0.0.20260713
-types-python-dateutil==2.9.0.20260807
+types-python-dateutil==2.9.0.20261029
 types-pyyaml==6.0.12.20260906
-types-requests==2.33.0.20260906
+types-requests==2.33.0.20261030
 typing-extensions==4.16.0
 typing-inspection==0.4.4
+tzdata==2026.6
 ujson==6.0.0
-urllib3==2.7.0
+urllib3==2.8.0
 vcs-versioning==2.2.2
 vvm==0.3.2
 vyper==0.4.3
-wcwidth==0.8.3
+wcwidth==0.9.4
 web3==7.16.0
 websockets==15.0.1
 wheel==0.48.0
 wrapt==1.17.3
-yarl==1.24.5
+yarl==1.25.1

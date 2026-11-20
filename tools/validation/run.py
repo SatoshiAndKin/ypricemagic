@@ -265,6 +265,9 @@ def main() -> int:
     parser.add_argument(
         "--env-file", type=Path, help="Docker env file; never copied into reports or images"
     )
+    parser.add_argument(
+        "--dns", action="append", default=[], help="DNS server for the isolated test container"
+    )
     parser.add_argument("--require-report", action="append", default=[])
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
@@ -385,6 +388,8 @@ def main() -> int:
                 "--env=VALIDATION_REPORT=/reports",
                 "--env=PYTHONUNBUFFERED=1",
             ]
+            for resolver in args.dns:
+                create += ["--dns", resolver]
             if args.env_file:
                 create += ["--env-file", str(args.env_file.resolve())]
             create += [
