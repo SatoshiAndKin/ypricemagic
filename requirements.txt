@@ -6,7 +6,7 @@ cchecksum @ git+https://github.com/SatoshiAndKin/cchecksum.git@fff7e1fe87f4679ec
 checksum_dict>=2.1.9,<3
 click==8.5.0
 dank_mids @ git+https://github.com/SatoshiAndKin/dank_mids.git@867fee773aac436a1f1dc0ec1642418b8e61e219
-eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@a18710286e855a0e19a5e246051a7d3c4e23ea7c
+eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@3acc549fc255cd0d8307b2d767d8f31b8aba48fb
 eth_retry>=0.2.1
 evmspec @ git+https://github.com/SatoshiAndKin/evmspec.git@ffd7e2cc096bbfa79dd15d0f0ee0c65f0382c303
 ez-a-sync @ git+https://github.com/SatoshiAndKin/ez-a-sync.git@5e904b27249000b918a0f0662df9abdfda103fdd
