@@ -12,7 +12,7 @@ async-lru-threadsafe==2.0.5
 async-property==0.2.2
 asyncpg==0.31.0
 attrs==26.1.0
-bitarray==3.12.3
+bitarray==3.12.4
 black==26.10.1
 bobs-lazy-logging==0.0.5
 cachebox @ git+https://github.com/SatoshiAndKin/cachebox.git@10be25afe46afb32c8135db4d1b8e2d94431b9c1
@@ -31,7 +31,7 @@ dictstruct==0.0.9
 eip712==0.3.3
 eth-abi==5.2.0
 eth-account==0.13.7
-eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@a18710286e855a0e19a5e246051a7d3c4e23ea7c
+eth-brownie @ git+https://github.com/SatoshiAndKin/brownie.git@3acc549fc255cd0d8307b2d767d8f31b8aba48fb
 eth-event==1.4.10
 eth-hash==0.8.0
 eth-keyfile==0.8.1
@@ -78,8 +78,8 @@ py==1.11.0
 py-solc-ast==1.2.10
 py-solc-x==2.1.0
 pycryptodome==3.24.1
-pydantic==2.14.2
-pydantic-core==2.50.2
+pydantic==2.14.3
+pydantic-core==2.50.4
 pygments==2.21.0
 pygments-lexer-solidity==0.7.0
 pytest==9.2.0
@@ -91,7 +91,7 @@ python-dotenv==1.2.4
 pytokens==0.4.1
 pyunormalize==18.0.0
 pyyaml==6.0.3
-regex==2026.9.29
+regex==2026.11.15
 requests==2.34.2
 rlp==5.0.0
 safe-pysha3==1.0.7
@@ -107,9 +107,9 @@ types-python-dateutil==2.9.0.20261029
 types-pyyaml==6.0.12.20260906
 types-requests==2.33.0.20261030
 typing-extensions==4.16.0
-typing-inspection==0.4.4
+typing-inspection==0.4.5
 tzdata==2026.6
-ujson==6.0.0
+ujson==6.1.0
 urllib3==2.8.0
 vcs-versioning==2.2.2
 vvm==0.3.2
